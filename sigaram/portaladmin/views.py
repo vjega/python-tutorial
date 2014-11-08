@@ -109,7 +109,45 @@ def resourcetype(request):
     #studentresourcetype = {'head':studentresourcetype_head, 
                            #'body':studentresourcetype_body}
     return render(request, 'resource_type.html', 
-                  {"folders":folders,'studentresourcetype':studentresourcetype})
+                  {"folders":folders,'resourcetype':resourcetype})
+
+def subjectlist(request):
+    folders = [{
+        "id": "1",
+        "name" :"பாடம் - 1 (0) "
+        },{
+        "id": "2",
+        "name" :"பாடம் - 2 (2) "
+        },{
+        "id": "3",
+       "name" :"பாடம் - 3 (12) "
+        },{
+        "id": "4",
+       "name" :"பாடம் - 4 (15) "
+        },{
+        "id": "4",
+       "name" :"பாடம் - 5 (15) "
+        },{
+        "id": "4",
+       "name" :"பாடம் - 6 (15) "
+        },{
+        "id": "4",
+       "name" :"பாடம் - 7 (15) "
+        },{
+        "id": "4",
+       "name" :"பாடம் - 8 (15) "
+        },{
+        "id": "4",
+       "name" :"பாடம் - 9 (15) "
+        },{
+        "id": "4",
+       "name" :"பாடம் - 10 (15) "
+        }]
+    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
+    #studentresourcetype = {'head':studentresourcetype_head, 
+                           #'body':studentresourcetype_body}
+    return render(request, 'subjectlist.html', 
+                  {"folders":folders,'subjectlist':subjectlist})
 
 def statisticsstudentslist(request):
     statisticsstudentslist_head = [u'எண்',u'தலைப்பு',
