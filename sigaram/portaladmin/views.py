@@ -97,13 +97,13 @@ def resourcetype(request):
         "name" :"வாசிப்பு"
         },{
         "id": "2",
-        "name" :"P2"
+        "name" :"பட உரையாடல்"
         },{
         "id": "3",
-        "name" :"P3"
+        "name" :"எழுத்து பலகை"
         },{
         "id": "4",
-        "name" :"P4"
+        "name" :"எங்கும்  தமிழோசை"
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
