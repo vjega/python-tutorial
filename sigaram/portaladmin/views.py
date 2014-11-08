@@ -67,9 +67,9 @@ def teacherresourcelist(request):
 
 
 def statisticsstudentslist(request):
-    statisticsstudentslist_head = [u'எண்',u'தலைப்பு',
-                                u'நாள்',u'வகை',u'நீக்கு']
-    statisticsstudentslist_body = models.Teacherresourceinfo.objects.all()
+    statisticsstudentslist_head = [u'எண்',u'புகைப்படம்',
+                                u'பெயர்',u'பயனர் பெயர்',u'மின்னஞ்சல்']
+    statisticsstudentslist_body = models.Studentinfo.getlist()
     statisticsstudentslist = {'head':statisticsstudentslist_head, 
                            'body':statisticsstudentslist_body}
     return render(request, 'statisticsstudentslist.html', 
