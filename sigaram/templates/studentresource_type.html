@@ -14,20 +14,20 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             தொடக்கநிலை வளங்கள்
-                        </div>
+                        <!-- </div>-->
                         <!-- /.panel-heading -->
-                        <div class="panel-body">
+                        <!-- <div class="panel-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover" id="admin-main-tbl">
                                     <thead>
                                         <tr>
-                                            {% for head in studentresource_type.head %}
+                                            {% for head in teacherresourcelist.head %}
                                             <th>{{head}}</th>
                                             {% endfor %}
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% for body in studentresource_type.body %}
+                                        {% for body in teacherresourcelist.body %}
                                         <tr class="gradeX">
                                             <td>{{forloop.counter}}</td>
                                             <td>{% autoescape off %}{{body.resourcetitle}}{% endautoescape %}</td>
@@ -38,9 +38,44 @@
                                         {% endfor %}
                                     </tbody>
                                 </table>
-                            </div>
+                            </div>-->
                             <!-- /.table-responsive -->
-                        </div>
+                        <!-- </div>-->
+                        <div style="width:150px;">
+          	<table width="150" height="82" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td width="50">&nbsp;</td>
+              <td width="50"> <span style="cursor:pointer;" onclick="showdiv('p1');">	<div style="background-image:url(images/emptyicon.gif);width:50px;height:40px;text-align:center;vertical-align:middle;">
+  			                          <h2 class="style1"> P1 </h2>
+		        		            </div>
+                    			</span>
+              </td>
+              <td width="50">&nbsp;</td>
+            </tr>
+            <tr height="41">
+              <td>
+              						<a href="studentresource_type.php?classid=1&section=a">
+                                    <div id="p1a" style="background-image:url(images/emptyicon.gif);width:50px;height:40px;text-align:center;vertical-align:middle;display:none;">
+  			                          <h2 class="style1"> A </h2>
+		        		            </div>
+                                    </a>
+              </td>
+              <td>&nbsp;</td>
+              <td>
+              						<a href="studentresource_type.php?classid=1&section=b">
+              						<div id="p1b" style="background-image:url(images/emptyicon.gif);width:50px;height:40px;text-align:center;vertical-align:middle;display:none;">
+  			                          <h2 class="style1"> B </h2>
+		        		            </div>
+                                    </a>
+              </td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+            </tr>
+          </table>
+          </div>
                         <!-- /.panel-body -->
                     </div>
                     <!-- /.panel -->
