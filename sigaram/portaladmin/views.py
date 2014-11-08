@@ -19,7 +19,7 @@ def home(request):
         }, {
         "color": u"yellow",
         "icon" : u"graduation-cap",
-        "link" : "studentresource_type",
+        "link" : "studentresourcetype",
         "caption": u"மாணவர் வளங்கள்",
         "stat": 125
         }]
@@ -66,13 +66,50 @@ def teacherresourcelist(request):
                   {'teacherresourcelist':teacherresourcelist})
 
 def studentresourcetype(request):
-    studentresourcetype_head = [u'P1',u'P2',
-                                u'P3',u'P4',u'P5']
-    studentresourcetype_body = models.Teacherresourceinfo.objects.all()
-    studentresourcetype = {'head':studentresourcetype_head, 
-                           'body':studentresourcetype_body}
+    folders = [{
+        "id": "p1",
+        "name" :"P1"
+        },{
+        "id": "p2",
+        "name" :"P2"
+        },{
+        "id": "p3",
+        "name" :"P3"
+        },{
+        "id": "p4",
+        "name" :"P4"
+        },{
+        "id": "p5",
+        "name" :"P5"
+        },{
+        "id": "p6",
+        "name" :"P6"
+        }]
+    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
+    #studentresourcetype = {'head':studentresourcetype_head, 
+                           #'body':studentresourcetype_body}
     return render(request, 'studentresource_type.html', 
-                  {'teacherresourcelist':studentresourcetype})
+                  {"folders":folders,'studentresourcetype':studentresourcetype})
+
+def resourcetype(request):
+    folders = [{
+        "id": "1",
+        "name" :"வாசிப்பு"
+        },{
+        "id": "2",
+        "name" :"பட உரையாடல்"
+        },{
+        "id": "3",
+        "name" :"எழுத்து பலகை"
+        },{
+        "id": "4",
+        "name" :"எங்கும்  தமிழோசை"
+        }]
+    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
+    #studentresourcetype = {'head':studentresourcetype_head, 
+                           #'body':studentresourcetype_body}
+    return render(request, 'resource_type.html', 
+                  {"folders":folders,'studentresourcetype':studentresourcetype})
 
 def statistics(request):
     studentslist_head = [u'எண்',u'புகைப்படம்',u'பெயர்',u'பயனர்பெயர்',u'மின்னஞ்சல்']
