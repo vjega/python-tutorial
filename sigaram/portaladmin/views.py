@@ -74,42 +74,9 @@ def studentresourcetype(request):
     return render(request, 'studentresource_type.html', 
                   {'teacherresourcelist':studentresourcetype})
 
-def statisticsstudentslist(request):
-    statisticsstudentslist_head = [u'எண்',u'தலைப்பு',
-                                u'நாள்',u'வகை',u'நீக்கு']
-    statisticsstudentslist_body = models.Teacherresourceinfo.objects.all()
-    statisticsstudentslist = {'head':statisticsstudentslist_head, 
-                           'body':statisticsstudentslist_body}
-    return render(request, 'statisticsstudentslist.html', 
-                  {'statisticsstudentslist':statisticsstudentslist})
-
 def statistics(request):
-    studentslist_head = [u'எண்',u'புகைப்படம்',u'பெயர்',u'பயனர்பெயர்',u'மின்னஞ்சல்','மாற்று','நீக்கு']
-    studentslist_body = [{
-                             'no':1, 
-                             'img':'http://placehold.it/80x80', 
-                             'loginname':'johdoe',
-                             'name' :'John Doe',
-                             'email':'johndoe@acme.com'
-                         },{
-                             'no':2, 
-                             'img':'http://placehold.it/80x80', 
-                             'loginname':'johdoe',
-                             'name' :'John Doe',
-                             'email':'johndoe@acme.com'
-                         },{
-                             'no':3, 
-                             'img':'http://placehold.it/80x80', 
-                             'loginname':'johdoe',
-                             'name' :'John Doe',
-                             'email':'johndoe@acme.com'
-                         },{
-                             'no':4, 
-                             'img':'http://placehold.it/80x80', 
-                             'loginname':'johdoe',
-                             'name' :'John Doe',
-                             'email':'johndoe@acme.com'
-                         }]
+    studentslist_head = [u'எண்',u'புகைப்படம்',u'பெயர்',u'பயனர்பெயர்',u'மின்னஞ்சல்']
+    studentslist_body = models.Studentinfo.getlist() 
     studentslist = {'head':studentslist_head, 'body':studentslist_body}
     return render(request, 'statistics.html', {'studentslist':studentslist})
 
