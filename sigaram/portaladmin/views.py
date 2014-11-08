@@ -65,25 +65,23 @@ def teacherresourcelist(request):
     return render(request, 'teacherresourcelist.html', 
                   {'teacherresourcelist':teacherresourcelist})
 
+def studentresourcetype(request):
+    studentresourcetype_head = [u'P1',u'P2',
+                                u'P3',u'P4',u'P5']
+    studentresourcetype_body = models.Teacherresourceinfo.objects.all()
+    studentresourcetype = {'head':studentresourcetype_head, 
+                           'body':studentresourcetype_body}
+    return render(request, 'studentresource_type.html', 
+                  {'teacherresourcelist':studentresourcetype})
 
 def statisticsstudentslist(request):
-    statisticsstudentslist_head = [u'எண்',u'புகைப்படம்',
-                                u'பெயர்',u'பயனர் பெயர்',u'மின்னஞ்சல்']
-    statisticsstudentslist_body = models.Studentinfo.getlist()
+    statisticsstudentslist_head = [u'எண்',u'தலைப்பு',
+                                u'நாள்',u'வகை',u'நீக்கு']
+    statisticsstudentslist_body = models.Teacherresourceinfo.objects.all()
     statisticsstudentslist = {'head':statisticsstudentslist_head, 
                            'body':statisticsstudentslist_body}
     return render(request, 'statisticsstudentslist.html', 
                   {'statisticsstudentslist':statisticsstudentslist})
-
-def studentresource_type(request):
-    studentresource_type_head = [u'எண்',u'தலைப்பு',
-                                u'நாள்',u'வகை',u'நீக்கு']
-    studentresource_type_body = models.Teacherresourceinfo.objects.all()
-    studentresource_type = {'head':studentresource_type_head, 
-                           'body':studentresource_type_body}
-    return render(request, 'studentresource_type.html', 
-                  {'studentresource_type':studentresource_type})
-
 
 def statistics(request):
     studentslist_head = [u'எண்',u'புகைப்படம்',u'பெயர்',u'பயனர்பெயர்',u'மின்னஞ்சல்','மாற்று','நீக்கு']
