@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     url(r'^forum$',     'sigaram.views.forum', name='forum'),
     url(r'^siteadmin/', include(admin.site.urls)),
     url(r'^admin/',     include('portaladmin.urls')),
+    url(r'^api/',       include('api.urls')),
 )

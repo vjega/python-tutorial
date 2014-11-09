@@ -24,12 +24,14 @@ def home(request):
         "caption": _("Student Resources"),
         "stat": 125
         }]
+    admin_folders = models.AdminFolders.objects.all()
     recent_acitivity_head = [u'எண்',u'வேலைகள்',u'நாள்']
     recent_activity_body = models.Activitylog.recentactivities()
     recent_activities = {'head':recent_acitivity_head,
                          'body':recent_activity_body}
-    return  render(request, 'index.html', {"folders":folders, 
-                                           'recent_activities':recent_activities
+    return  render(request, 'index.html', {"folders":folders,
+                                           "admin_folders":admin_folders,
+                                           "recent_activities":recent_activities
                                            })
 
 def adminlist(request):
