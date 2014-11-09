@@ -37,6 +37,33 @@
                 {% endfor %}
             </div>
             <!-- /.row -->
+            <div class="row">
+                {% for folder in admin_folders%}
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-folder fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="tent-medium">{{folder.folder_name}}</div>
+                                    <div class="tent-medium">{{folder.folder_description}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="{{folder.link}}">
+                            <div class="panel-footer">
+                                <span class="pull-left">மேல் விவரங்களுக்கு</span>
+                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- /.row -->
 {% endblock topcontent %}
 {% block botcontent %}
                 <div class="col-lg-12">
@@ -78,28 +105,52 @@
 {% block morescript %}
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
-{% endblock morescript %}
+<script src="{%static "js/tts.utils.js" %}"></script>
 <script src="{%static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+{% endblock morescript %}
+
 {% block scriptcontent %}
 <script>
     $(document).ready(function(){
         $('#admin-main-tbl').dataTable();
         $("#page-wrapper").on("click", "#new-folder", function(){
                 BootstrapDialog.show({
-                message: 'Hi Apple!',
+                title: 'புதிய கோப்பு',
+                message: $('<form id="newfolderfrm" class="form-horizontal" role="form">'+
+                              '<div class="form-group">'+
+                                '<label for="folder_name" class="col-sm-4 control-label">பெட்டகத்தின் பெயர்</label>'+
+                                '<div class="col-sm-8">'+
+                                  '<input type="text" class="form-control" name="folder_name" id="folder_name" placeholder="Folder name">'+
+                                '</div>'+
+                              '</div>'+
+                              '<div class="form-group">'+
+                                '<label for="remark" class="col-sm-4 control-label">குறிப்பு</label>'+
+                                '<div class="col-sm-8">'+
+                                  '<input type="text" class="form-control" name="remark" id="remark" placeholder="Remark">'+
+                                '</div>'+
+                              '</div>'+
+                                '<div class="form-group">'+
+                                '<label for="order_no" class="col-sm-4 control-label">வரிசை எண்</label>'+
+                                '<div class="col-sm-8">'+
+                                  '<input type="text" class="form-control" name="order_no" id="order_no" placeholder="Folder no">'+
+                                '</div>'+
+                              '</div>'+
+                            '</form>'),
                 buttons: [{
-                    label: 'Button 1'
-                }, {
-                    label: 'Button 2',
+                    label: 'Save',
                     cssClass: 'btn-primary',
                     action: function(){
-                        alert('Hi Orange!');
+                        var data = TTS.utils.serilaizeJson("#newfolderfrm");
+                        $.ajax({
+                            type:'POST',
+                            data: {'data':data},
+                            url : '/api/admin/addfolder'
+                        }).done(function( msg ) {
+                            console.log(msg);
+                            //dialogItself.close();
+                        });
                     }
-                }, {
-                    icon: 'glyphicon glyphicon-ban-circle',
-                    label: 'Button 3',
-                    cssClass: 'btn-warning'
-                }, {
+                    },{
                     label: 'Close',
                     action: function(dialogItself){
                         dialogItself.close();
@@ -114,4 +165,7 @@
 {% block morecss %}
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<style>
+  .modal-backdrop {z-index: 0 !important}
+</style>
 {% endblock morecss %}
