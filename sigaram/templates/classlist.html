@@ -4,7 +4,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2 class="page-header">பள்ளிகள்</h2>
+                    <h2 class="page-header">வகுப்பறைகள்</h2>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -13,7 +13,7 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            பள்ளிகள்
+                            வகுப்பறைகள்
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -21,17 +21,17 @@
                                 <table class="table table-striped table-bordered table-hover" id="admin-main-tbl">
                                     <thead>
                                         <tr>
-                                            {% for head in schoollist.head %}
+                                            {% for head in classlist.head %}
                                             <th>{{head}}</th>
                                             {% endfor %}
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% for body in schoollist.body %}
-                                        <tr class="gradeX" id="{{body.shortname}}">
+                                        {% for folder in folders%}
+                                        <tr class="gradeX" id="{{forloop.counter}}">
                                             <td>{{forloop.counter}}</td>
-                                            <td>{{body.schoolname}}</td>
-                                            <td>{{body.shortname}}</td>
+                                            <td>{{folder.name}}</td>
+                                             <td>{{folder.shortname}}</td>
                                             <td><i class="fa fa-trash fa-fw"></i></td>
                                             <td><i class="fa fa-trash fa-fw"></i></td>
                                         </tr>
@@ -49,26 +49,10 @@
 {% endblock botcontent%}
 
 {% block morescript %}
-<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
-<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<script>
-    $(document).ready(function(){
-        $('#admin-main-tbl').dataTable();
-        $('#admin-main-tbl').on('click', 'tr', function(){
-            window.location = 'classlist?id='+this.id;
-        });
-    });
-</script>
 {% endblock scriptcontent %}
 
 {% block morecss %}
-<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
-<style>
-    #admin-main-tbl tr:hover{
-        cursor: pointer;
-    }
-</style>
 {% endblock morecss %}
