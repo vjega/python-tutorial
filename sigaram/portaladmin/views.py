@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.utils.translation import ugettext as _
 from django.shortcuts import render
 from portaladmin import models
 
@@ -6,21 +7,21 @@ from portaladmin import models
 def home(request):
     folders = [{
         "color": u"primary",
-        "icon" : u"building",
+        "icon" : u"university",
         "link" : "schoollist",
-        "caption": u"பள்ளிகள்",
+        "caption": _("Schools"),
         "stat": 25
         }, {
         "color": u"green",
         "icon" : u"book",
         "link" : "teacherresourcelist",
-        "caption": u"ஆசிரியர் வளங்கள்",
+        "caption": _("Teacher Resources"),
         "stat": 64
         }, {
         "color": u"yellow",
-        "icon" : u"graduation-cap",
+        "icon" : u"book",
         "link" : "studentresourcetype",
-        "caption": u"மாணவர் வளங்கள்",
+        "caption": _("Student Resources"),
         "stat": 125
         }]
     recent_acitivity_head = [u'எண்',u'வேலைகள்',u'நாள்']

@@ -64,7 +64,7 @@ WSGI_APPLICATION = 'sigaram.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST' : 'localhost',
+        'HOST' : '127.0.0.1',
         'USER': 'root',
         'PASSWORD':'jen6969',
         'NAME': 'd60701781'
@@ -93,3 +93,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
