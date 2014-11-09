@@ -28,10 +28,10 @@
                                     </thead>
                                     <tbody>
                                         {% for body in schoollist.body %}
-                                        <tr class="gradeX">
+                                        <tr class="gradeX" id="{{body.shortname}}">
                                             <td>{{forloop.counter}}</td>
                                             <td>{{body.schoolname}}</td>
-                                            <td>{{body.shortname}} {{body.lastname}}</td>
+                                            <td>{{body.shortname}}</td>
                                             <td><i class="fa fa-trash fa-fw"></i></td>
                                             <td><i class="fa fa-trash fa-fw"></i></td>
                                         </tr>
@@ -57,10 +57,18 @@
 <script>
     $(document).ready(function(){
         $('#admin-main-tbl').dataTable();
+        $('#admin-main-tbl').on('click', 'tr', function(){
+            window.location = 'classlist?id='+this.id;
+        });
     });
 </script>
 {% endblock scriptcontent %}
 
 {% block morecss %}
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<style>
+    #admin-main-tbl tr:hover{
+        cursor: pointer;
+    }
+</style>
 {% endblock morecss %}

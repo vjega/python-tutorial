@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.utils.translation import ugettext as _
 from django.shortcuts import render
 from portaladmin import models
 
@@ -6,21 +7,21 @@ from portaladmin import models
 def home(request):
     folders = [{
         "color": u"primary",
-        "icon" : u"building",
+        "icon" : u"university",
         "link" : "schoollist",
-        "caption": u"பள்ளிகள்",
+        "caption": _("Schools"),
         "stat": 25
         }, {
         "color": u"green",
         "icon" : u"book",
         "link" : "teacherresourcelist",
-        "caption": u"ஆசிரியர் வளங்கள்",
+        "caption": _("Teacher Resources"),
         "stat": 64
         }, {
         "color": u"yellow",
-        "icon" : u"graduation-cap",
+        "icon" : u"book",
         "link" : "studentresourcetype",
-        "caption": u"மாணவர் வளங்கள்",
+        "caption": _("Student Resources"),
         "stat": 125
         }]
     recent_acitivity_head = [u'எண்',u'வேலைகள்',u'நாள்']
@@ -109,7 +110,45 @@ def resourcetype(request):
     #studentresourcetype = {'head':studentresourcetype_head, 
                            #'body':studentresourcetype_body}
     return render(request, 'resource_type.html', 
-                  {"folders":folders,'studentresourcetype':studentresourcetype})
+                  {"folders":folders,'resourcetype':resourcetype})
+
+def subjectlist(request):
+    folders = [{
+        "id": "1",
+        "name" :"பாடம் - 1 (0) "
+        },{
+        "id": "2",
+        "name" :"பாடம் - 2 (2) "
+        },{
+        "id": "3",
+       "name" :"பாடம் - 3 (12) "
+        },{
+        "id": "4",
+       "name" :"பாடம் - 4 (15) "
+        },{
+        "id": "4",
+       "name" :"பாடம் - 5 (15) "
+        },{
+        "id": "4",
+       "name" :"பாடம் - 6 (15) "
+        },{
+        "id": "4",
+       "name" :"பாடம் - 7 (15) "
+        },{
+        "id": "4",
+       "name" :"பாடம் - 8 (15) "
+        },{
+        "id": "4",
+       "name" :"பாடம் - 9 (15) "
+        },{
+        "id": "4",
+       "name" :"பாடம் - 10 (15) "
+        }]
+    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
+    #studentresourcetype = {'head':studentresourcetype_head, 
+                           #'body':studentresourcetype_body}
+    return render(request, 'subjectlist.html', 
+                  {"folders":folders,'subjectlist':subjectlist})
 
 def statistics(request):
     studentslist_head = [u'எண்',u'புகைப்படம்',u'பெயர்',u'பயனர்பெயர்',u'மின்னஞ்சல்']
