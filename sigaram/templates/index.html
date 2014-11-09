@@ -10,7 +10,7 @@
             </div>
             <!-- /.row -->
             <div class="row">
-                <div><a>New Folder</a></div><p />
+                <div><a href="#" id="new-folder">New Folder</a></div><p />
                 {% for folder in folders%}
                 <div class="col-lg-3 col-md-6">
                     <div class="panel panel-{{folder.color}}">
@@ -79,15 +79,39 @@
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 {% endblock morescript %}
-
+<script src="{%static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 {% block scriptcontent %}
 <script>
     $(document).ready(function(){
         $('#admin-main-tbl').dataTable();
+        $("#page-wrapper").on("click", "#new-folder", function(){
+                BootstrapDialog.show({
+                message: 'Hi Apple!',
+                buttons: [{
+                    label: 'Button 1'
+                }, {
+                    label: 'Button 2',
+                    cssClass: 'btn-primary',
+                    action: function(){
+                        alert('Hi Orange!');
+                    }
+                }, {
+                    icon: 'glyphicon glyphicon-ban-circle',
+                    label: 'Button 3',
+                    cssClass: 'btn-warning'
+                }, {
+                    label: 'Close',
+                    action: function(dialogItself){
+                        dialogItself.close();
+                    }
+                }]
+            });
+        });
     });
 </script>
 {% endblock scriptcontent %}
 
 {% block morecss %}
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 {% endblock morecss %}
