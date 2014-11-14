@@ -854,7 +854,6 @@ class Studentinfo(models.Model):
         cursor = connection.cursor()
         cursor.execute(sql)
         return dictfetchall(cursor)
-
 class Studentworkspaceinfo(models.Model):
     workspaceid = models.BigIntegerField(primary_key=True)
     workspacetitle = models.CharField(max_length=500)
