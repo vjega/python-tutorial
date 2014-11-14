@@ -78,7 +78,7 @@ LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'), # replace with correct path here
 )
 
-LANGUAGE_CODE = 'ta'
+#LANGUAGE_CODE = 'ta'
 
 TIME_ZONE = 'UTC'
 

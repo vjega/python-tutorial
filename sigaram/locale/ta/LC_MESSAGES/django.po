@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-14 13:40+0000\n"
+"POT-Creation-Date: 2014-11-14 20:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,34 +18,110 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: portaladmin/views.py:13
+#: portaladmin/views.py:17 templates/schoollist.html:8
+#: templates/schoollist.html.py:17
 msgid "Schools"
 msgstr "பள்ளிகள்"
 
-#: portaladmin/views.py:19 templates/base.html:218 templates/base.html.py:233
-#, fuzzy
-#| msgid "Teacher Resources"
+#: portaladmin/views.py:23 templates/base.html:297 templates/base.html.py:312
+#: templates/teacherslist.html:8 templates/teacherslist.html.py:17
 msgid "Teachers"
 msgstr "ஆசிரியர்"
 
-#: portaladmin/views.py:19 portaladmin/views.py:25 templates/base.html:228
-#: templates/base.html.py:233 templates/base.html:236
-#, fuzzy
-#| msgid "Teacher Resources"
+#: portaladmin/views.py:23 portaladmin/views.py:29 templates/base.html:307
+#: templates/base.html.py:312 templates/base.html:315
+#: templates/resource_type.html:8 templates/studentresource_type.html:8
 msgid "Resources"
 msgstr "வளங்கள்"
 
-#: portaladmin/views.py:25
+#: portaladmin/views.py:29
 msgid "Student"
-msgstr ""
+msgstr "மாணவர்"
 
-#: portaladmin/views.py:28
+#: portaladmin/views.py:33 portaladmin/views.py:45 portaladmin/views.py:246
+#: portaladmin/views.py:260 portaladmin/views.py:271 portaladmin/views.py:308
 msgid "Sl No."
+msgstr "எண்"
+
+#: portaladmin/views.py:33
+msgid "Assignments"
 msgstr ""
 
-#: portaladmin/views.py:28
+#: portaladmin/views.py:33 portaladmin/views.py:96
 msgid "Date"
+msgstr "தேதி"
+
+#: portaladmin/views.py:46 portaladmin/views.py:58 portaladmin/views.py:71
+#: portaladmin/views.py:261 portaladmin/views.py:272 portaladmin/views.py:309
+msgid "Photo"
+msgstr "புகைப்படம்"
+
+#: portaladmin/views.py:47 portaladmin/views.py:59 portaladmin/views.py:72
+#: portaladmin/views.py:84 portaladmin/views.py:262 portaladmin/views.py:273
+#: portaladmin/views.py:310
+msgid "Name"
+msgstr "பெயர்"
+
+#: portaladmin/views.py:48 portaladmin/views.py:60 portaladmin/views.py:73
+#: portaladmin/views.py:263 portaladmin/views.py:274 portaladmin/views.py:311
+msgid "User Name"
+msgstr "பயனர் பெயர்"
+
+#: portaladmin/views.py:49 portaladmin/views.py:61 portaladmin/views.py:74
+#: portaladmin/views.py:275 portaladmin/views.py:312
+msgid "Email Id"
+msgstr "மின்னஞ்சல்"
+
+#: portaladmin/views.py:50 portaladmin/views.py:63 portaladmin/views.py:76
+#: portaladmin/views.py:87 portaladmin/views.py:98 portaladmin/views.py:250
+#: portaladmin/views.py:277 portaladmin/views.py:314
+msgid "Delete"
+msgstr "நீக்கு"
+
+#: portaladmin/views.py:62 portaladmin/views.py:75 portaladmin/views.py:86
+#: portaladmin/views.py:249 portaladmin/views.py:264 portaladmin/views.py:276
+#: portaladmin/views.py:313
+msgid "Edit"
+msgstr "மாற்று"
+
+#: portaladmin/views.py:85 portaladmin/views.py:248
+msgid "Short Name"
+msgstr "குறும் பெயர்"
+
+#: portaladmin/views.py:95
+msgid "Title"
 msgstr ""
+
+#: portaladmin/views.py:97
+msgid "Type"
+msgstr ""
+
+#: portaladmin/views.py:183 portaladmin/views.py:186 portaladmin/views.py:189
+#: portaladmin/views.py:192 portaladmin/views.py:195 portaladmin/views.py:198
+#: portaladmin/views.py:201 portaladmin/views.py:204 portaladmin/views.py:207
+#: portaladmin/views.py:210
+msgid "Lession"
+msgstr "பாடம்"
+
+#: portaladmin/views.py:247
+#, fuzzy
+#| msgid "Schools"
+msgid "School Name"
+msgstr "பள்ளிகள்"
+
+#: templates/adminlist.html:8 templates/adminlist.html.py:17
+#: templates/base.html:292
+msgid "Administrators"
+msgstr " நிர்வாகிகள்"
+
+#: templates/adminlist.html:17 templates/classroom.html:17
+#: templates/studentslist.html:17 templates/teacherslist.html:17
+msgid "List"
+msgstr "பட்டியல்"
+
+#: templates/adminlist.html:17
+msgid "Add"
+msgstr "சேர்க்க"
 
 #: templates/base.html:62
 msgid "Home"
@@ -57,39 +133,41 @@ msgstr "அறிவிப்புப் பலகை "
 
 #: templates/base.html:64
 msgid "Forum"
-msgstr ""
+msgstr "கருத்துக்களம் "
 
 #: templates/base.html:65
 msgid "Logout"
-msgstr ""
+msgstr "வெளியேறு "
 
-#: templates/base.html:213
-msgid "Administrators"
-msgstr ""
+#: templates/base.html:66
+msgid "Toggle Language"
+msgstr "மொழியை மாற்று"
 
-#: templates/base.html:223 templates/base.html.py:236
-#, fuzzy
-#| msgid "Student Resources"
+#: templates/base.html:302 templates/base.html.py:315
+#: templates/studentslist.html:8 templates/studentslist.html.py:17
 msgid "Students"
 msgstr "மாணவர்"
 
-#: templates/base.html:243 templates/base.html.py:248 templates/base.html:251
-#: templates/base.html.py:254
+#: templates/base.html:322 templates/base.html.py:327 templates/base.html:330
+#: templates/base.html.py:333 templates/statistics.html:8
+#: templates/statistics.html.py:17
 msgid "Statistics"
-msgstr ""
+msgstr "புள்ளி விவரம்"
 
-#: templates/base.html:248
+#: templates/base.html:327
 msgid "Activities"
-msgstr ""
+msgstr "புகுபதிகை"
 
-#: templates/base.html:251
+#: templates/base.html:330
 msgid "Homework"
-msgstr ""
+msgstr "வீட்டு பாடம்"
 
-#: templates/base.html:254
+#: templates/base.html:333
 msgid "Test"
-msgstr ""
+msgstr "தேர்வு"
 
-#: templates/base.html:260
+#: templates/base.html:339 templates/classlist.html:8
+#: templates/classlist.html.py:17 templates/classroom.html:8
+#: templates/classroom.html.py:17 templates/index.html:8
 msgid "Classrooms"
-msgstr ""
+msgstr "வகுப்பறை"
