@@ -1,0 +1,95 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-11-14 13:40+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: portaladmin/views.py:13
+msgid "Schools"
+msgstr "பள்ளிகள்"
+
+#: portaladmin/views.py:19 templates/base.html:218 templates/base.html.py:233
+#, fuzzy
+#| msgid "Teacher Resources"
+msgid "Teachers"
+msgstr "ஆசிரியர்"
+
+#: portaladmin/views.py:19 portaladmin/views.py:25 templates/base.html:228
+#: templates/base.html.py:233 templates/base.html:236
+#, fuzzy
+#| msgid "Teacher Resources"
+msgid "Resources"
+msgstr "வளங்கள்"
+
+#: portaladmin/views.py:25
+msgid "Student"
+msgstr ""
+
+#: portaladmin/views.py:28
+msgid "Sl No."
+msgstr ""
+
+#: portaladmin/views.py:28
+msgid "Date"
+msgstr ""
+
+#: templates/base.html:62
+msgid "Home"
+msgstr "மூலத் திரை "
+
+#: templates/base.html:63
+msgid "Billboard"
+msgstr "அறிவிப்புப் பலகை "
+
+#: templates/base.html:64
+msgid "Forum"
+msgstr ""
+
+#: templates/base.html:65
+msgid "Logout"
+msgstr ""
+
+#: templates/base.html:213
+msgid "Administrators"
+msgstr ""
+
+#: templates/base.html:223 templates/base.html.py:236
+#, fuzzy
+#| msgid "Student Resources"
+msgid "Students"
+msgstr "மாணவர்"
+
+#: templates/base.html:243 templates/base.html.py:248 templates/base.html:251
+#: templates/base.html.py:254
+msgid "Statistics"
+msgstr ""
+
+#: templates/base.html:248
+msgid "Activities"
+msgstr ""
+
+#: templates/base.html:251
+msgid "Homework"
+msgstr ""
+
+#: templates/base.html:254
+msgid "Test"
+msgstr ""
+
+#: templates/base.html:260
+msgid "Classrooms"
+msgstr ""

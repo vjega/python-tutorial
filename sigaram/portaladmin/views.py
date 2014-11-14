@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from django.utils.translation import ugettext as _
+from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
 from portaladmin import models
 
-# Create your views here.
 def home(request):
+    #activate('ta')
+    #request.session['django_language'] = 'ta'
     folders = [{
         "color": u"primary",
         "icon" : u"university",
@@ -15,16 +16,16 @@ def home(request):
         "color": u"green",
         "icon" : u"book",
         "link" : "teacherresourcelist",
-        "caption": _("Teacher Resources"),
+        "caption": "{0} {1}".format(_("Teachers"),_("Resources")),
         "stat": 64
         }, {
         "color": u"yellow",
         "icon" : u"book",
         "link" : "studentresourcetype",
-        "caption": _("Student Resources"),
+        "caption": "{0} {1}".format(_("Student"), _("Resources")),
         "stat": 125
         }]
-    recent_acitivity_head = [u'எண்',u'வேலைகள்',u'நாள்']
+    recent_acitivity_head = [_("Sl No."),u'வேலைகள்',_("Date")]
     recent_activity_body = models.Activitylog.recentactivities()
     recent_activities = {'head':recent_acitivity_head,
                          'body':recent_activity_body}

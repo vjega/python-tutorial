@@ -66,7 +66,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'HOST' : '127.0.0.1',
         'USER': 'root',
-        'PASSWORD':'jen6969',
+        'PASSWORD':'password',
         'NAME': 'd60701781'
     }
 }
@@ -74,7 +74,11 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
-LANGUAGE_CODE = 'utf-8'
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'), # replace with correct path here
+)
+
+LANGUAGE_CODE = 'ta'
 
 TIME_ZONE = 'UTC'
 

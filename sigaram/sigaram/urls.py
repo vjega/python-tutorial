@@ -1,5 +1,9 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from django.utils import translation
+
+translation.activate('ta')
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'sigaram.views.home', name='home'),
