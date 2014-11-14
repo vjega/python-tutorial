@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load i18n %}
 {% block topcontent %}
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2 class="page-header">மூலத் திரை</h2>
+                    <h2 class="page-header">{% trans "Classrooms" %}</h2>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -12,6 +13,7 @@
             <div class="row">
                 <div><a href="#" id="new-folder">New Folder</a></div><p />
                 {% for folder in folders%}
+                <a href="{{folder.link}}">
                 <div class="col-lg-3 col-md-6">
                     <div class="panel panel-{{folder.color}}">
                         <div class="panel-heading">
@@ -25,15 +27,9 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="{{folder.link}}">
-                            <div class="panel-footer">
-                                <span class="pull-left">மேல் விவரங்களுக்கு</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                <div class="clearfix"></div>
-                            </div>
-                        </a>
                     </div>
                 </div>
+                </a>
                 {% endfor %}
             </div>
             <!-- /.row -->

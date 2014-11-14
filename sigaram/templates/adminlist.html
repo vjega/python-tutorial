@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load i18n %}
 {% block topcontent %}
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2 class="page-header"> நிர்வாகிகள்</h2>
+                    <h2 class="page-header">{% trans "Administrators" %}</h2>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -13,7 +14,7 @@
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                             நிர்வாகிகள் பட்டியல் <span id="add" class="add">(சேர்)</span>
+                            {% trans "Administrators" %} {% trans "List" %} <span id="add" class="add">({% trans "Add" %})</span>
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
