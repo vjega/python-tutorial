@@ -24,4 +24,5 @@ urlpatterns = patterns('',
     url(r'^statistics-assessment$',   views.statistics,   name='statistics'),
     url(r'^classroom$',               views.classroom,    name='classroom'),
     url(r'^billboard$',               views.billboard,    name='billboard'),
+    url(r'^mindmap$',                 views.mindmap,    name='mindmap'),
 )
