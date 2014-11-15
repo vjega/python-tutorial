@@ -339,3 +339,6 @@ def billboard(request):
                          }]
     studentslist = {'head':studentslist_head, 'body':studentslist_body}
     return render(request, 'studentslist.html', {'studentslist':studentslist})
+
+def mindmap(request):
+    return render(request, 'mindmap.html', {})
