@@ -342,3 +342,6 @@ def billboard(request):
 
 def mindmap(request):
     return render(request, 'mindmap.html', {})
+    
+def sticky_notes(request):
+    return render(request, 'sticky_notes.html', {})

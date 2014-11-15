@@ -25,4 +25,5 @@ urlpatterns = patterns('',
     url(r'^classroom$',               views.classroom,    name='classroom'),
     url(r'^billboard$',               views.billboard,    name='billboard'),
     url(r'^mindmap$',                 views.mindmap,    name='mindmap'),
+    url(r'^sticky_notes$',            views.sticky_notes,    name='sticky_notes'),
 )
