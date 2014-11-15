@@ -4,7 +4,7 @@ from django.shortcuts import render
 from portaladmin import models
 def switchlanguage(f):
     def inner(req):
-        activate(req.session['django_language'])
+        activate(req.session.get('django_language','ta'))
         return f(req)
     return inner
 
