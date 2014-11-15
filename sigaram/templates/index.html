@@ -144,7 +144,7 @@ $(document).ready(function(){
     $('#admin-main-tbl').dataTable();
     $("#page-wrapper").on("click", "#new-folder", function(){
         BootstrapDialog.show({
-            title: 'புதிய கோப்பு',
+            title: "{% trans "New Folder" %}",
             message: $($("#newfolder").render()),
             buttons: [{
                 label: 'Save',
@@ -169,9 +169,6 @@ $(document).ready(function(){
         });
     });
 });
-
-
-
 </script>
 {% endblock scriptcontent %}
 

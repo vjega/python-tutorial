@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-14 20:24+0000\n"
+"POT-Creation-Date: 2014-11-15 15:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -171,3 +171,11 @@ msgstr "தேர்வு"
 #: templates/classroom.html.py:17 templates/index.html:8
 msgid "Classrooms"
 msgstr "வகுப்பறை"
+
+#: templates/base.html:344
+msgid "Mindmap"
+msgstr ""
+
+#: templates/index.html:147
+msgid "New Folder"
+msgstr "புதிய கோப்பு"
