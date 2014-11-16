@@ -33,8 +33,8 @@
                                 <td>{{forloop.counter}}</td>
                                 <td>{% autoescape off %}{{body.resourcetitle}}{% endautoescape %}</td>
                                 <td>{{body.createddate}}</td>
-                                <td><i class="fa fa-pencil fa-fw"></i></td>
-                                <td><i class="fa fa-trash fa-fw"></i></td>
+                                <td class="text-center tts-edit"><span class=""><i class="fa fa-pencil"></i></span></td>
+                                <td class="text-center tts-delete"><span class=""><i class="fa fa-trash"></i></span></td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -105,7 +105,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="remark" class="col-sm-4 control-label">{% trans "Short Name" %}</label>
+        <label for="remark" class="col-sm-4 control-label">{% trans "Class" %}</label>
         <div class="col-sm-8">
             <input type="text" class="form-control" name="short_name" id="short_name" 
                 placeholder="{% trans "Short Name" %}">
@@ -180,12 +180,11 @@ TTS.forms.editschool = function() {
 $(document).ready(function(){
     $('#admin-main-tbl').dataTable();
     $('#admin-main-tbl tbody').on('click', 'tr', function(){
-        window.location = 'classlist?id='+this.id;
+        window.location = 'teacherresourcelist?id='+this.id;
     });
     $('#admin-main-tbl tbody tr').on('click', '.tts-edit', function(e){
         e.stopPropagation();
         TTS.forms.editschool();
-        //window.location = 'schoollist';
     });
     $('#admin-main-tbl tbody tr').on('click', '.tts-delete', function(e){
         e.stopPropagation();
