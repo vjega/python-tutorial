@@ -76,7 +76,7 @@
 
 {% block scriptcontent %}
 
-<script id="addschool" type="text/x-jsrender">
+<script id="addteacher" type="text/x-jsrender">
 <form id="newfolderfrm" class="form-horizontal" role="form">
     <div class="form-group">
         <label for="folder_name" class="col-sm-4 control-label">{% trans "School Name" %}</label>
@@ -130,7 +130,7 @@
 </form>
 </script>
 
-<script id="editschool" type="text/x-jsrender">
+<script id="editteacher" type="text/x-jsrender">
 <form id="newfolderfrm" class="form-horizontal" role="form">
     <div class="form-group">
         <label for="folder_name" class="col-sm-4 control-label">{% trans "School Name" %}</label>
@@ -189,8 +189,8 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 TTS.forms.addschool = function() {
     BootstrapDialog.show({
-        title: 'Add School',
-        message: $($('#addschool').render()),
+        title: 'Add Teacher',
+        message: $($('#addteacher').render()),
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
@@ -215,8 +215,8 @@ TTS.forms.addschool = function() {
 };
 TTS.forms.editschool = function() {
     BootstrapDialog.show({
-        title: 'Edit School',
-        message: $($('#editschool').render()),
+        title: 'Edit Teacher',
+        message: $($('#editteacher').render()),
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
@@ -247,7 +247,7 @@ $(document).ready(function(){
     $('#admin-main-tbl tbody tr').on('click', '.tts-edit', function(e){
         e.stopPropagation();
         TTS.forms.editschool();
-        //window.location = 'schoollist';
+        //window.location = 'teacherslist?teacherid'=this.id;
     });
     $('#admin-main-tbl tbody tr').on('click', '.tts-delete', function(e){
         e.stopPropagation();
