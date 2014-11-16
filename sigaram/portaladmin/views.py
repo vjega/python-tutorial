@@ -346,10 +346,10 @@ def billboard(request):
     return render(request, 'portaladmin/studentslist.html', {'studentslist':studentslist})
 
 def mindmap(request):
-    return render(request, 'mindmap.html', {})
+    return render(request, 'portaladmin/mindmap.html', {})
     
 def sticky_notes(request):
-    return render(request, 'sticky_notes.html', {})
+    return render(request, 'portaladmin/sticky_notes.html', {})
     
 def calendar(request):
-    return render(request, 'calendar.html', {})
+    return render(request, 'portaladmin/calendar.html', {})
