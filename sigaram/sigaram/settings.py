@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tastypie',
     'portaladmin',
 )
 
@@ -67,7 +68,7 @@ DATABASES = {
         'HOST' : '127.0.0.1',
         'USER': 'root',
         'PASSWORD':'password',
-        'NAME': 'd60701781'
+        'NAME': 'd60701781',
     }
 }
 
