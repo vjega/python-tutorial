@@ -12,21 +12,21 @@ def switchlanguage(f):
 def home(request):
     folders = [{
         "color": u"primary",
-        "icon" : u"university",
+        "icon" : u"file-text-o",
         "link" : u"schoollist",
-        "caption": _("Schools"),
+        "caption": _("Deliverables"),
         "stat": 25
         }, {
         "color": u"green",
         "icon" : u"book",
         "link" : u"teacherresourcelist",
-        "caption": u"{0} {1}".format(_("Teachers"),_("Resources")),
+        "caption": _("My works"),
         "stat": 64
         }, {
         "color": u"yellow",
-        "icon" : u"book",
+        "icon" : u"pencil-square-o",
         "link" : u"studentresourcetype",
-        "caption": u"{0} {1}".format(_("Student"), _("Resources")),
+        "caption": _("Notes"),
         "stat": 125
         }]
 
