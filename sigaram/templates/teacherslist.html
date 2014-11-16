@@ -2,7 +2,6 @@
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
-<<<<<<< HEAD
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
@@ -55,59 +54,7 @@
     <!-- /.panel -->
 </div>
             <!-- /.col-lg-12 -->
-=======
-        <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2 class="page-header">{% trans "Teachers" %}</h2>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-{% endblock topcontent %}
-{% block botcontent %}
-                <div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                             {% trans "Teachers" %} {% trans "List" %} 
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered table-hover" id="admin-main-tbl">
-                                    <thead>
-                                        <tr>
-                                            {% for head in teacherslist.head %}
-                                            <th>{{head}}</th>
-                                            {% endfor %}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for body in teacherslist.body %}
-                                        <tr class="gradeX">
-                                            <td>{{forloop.counter}}</td>
-                                            {% if body.imageurl != "" %}
-                                            <td><img src="/static/{{body.imageurl}}" height="70" width="70" alt="" /></td>
-                                            {%else%}
-                                            <td><img src="http://placehold.it/70x70" height="70" width="70" alt="" /></td>
-                                            {% endif %}
-                                            <td>{{body.username}}</td>
-                                            <td>{{body.firstname}} {{body.lastname}}</td>
-                                            <td>{{body.emailid}}</td>
-                                            <td><i class="fa fa-pencil fa-fw"></i></td>
-                                            <td><i class="fa fa-trash fa-fw"></i></td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- /.table-responsive -->
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                </div>
-                <!-- /.col-lg-12 -->
->>>>>>> 5c068b08b348050cde615b8a1d7d3becfd742282
+
 {% endblock botcontent%}
 
 {% block morecss %}
@@ -208,7 +155,6 @@
     </div>
 </form>
 </script>
-
 
 <script>
 window.TTS = window.TTS || {}
