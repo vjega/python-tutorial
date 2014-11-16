@@ -71,6 +71,7 @@ def teacherslist(request):
 
 @switchlanguage
 def studentslist(request):
+    schools = models.Schoolinfo.objects.all()
     studentslist_head = [('Sl No.'),
                          _('Photo'),
                          _('Name'),
