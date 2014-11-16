@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
-from portaladmin import models
+from student import models
 def switchlanguage(f):
     def inner(req):
         activate(req.session.get('django_language','ta'))
@@ -35,7 +35,7 @@ def home(request):
     recent_activity_body = models.Activitylog.recentactivities()
     recent_activities = {'head':recent_acitivity_head,
                          'body':recent_activity_body}
-    return  render(request, 'student/index.html', {"folders":folders,
+    return  render(request, 'portalstudent/index.html', {"folders":folders,
                                            "admin_folders":admin_folders,
                                            "recent_activities":recent_activities
                                            })

@@ -1,7 +1,7 @@
 #Portal Routing
 from django.conf.urls import patterns, include, url
 from django.views.generic import RedirectView
-from portaladmin import views
+from student import views
 from tastypie.api import Api
 from portaladmin.api import AdminFoldersResource
 
