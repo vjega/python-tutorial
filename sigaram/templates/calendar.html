@@ -4,7 +4,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2 class="page-header">Sticky Notes</h2>
+                    <h2 class="page-header">Calendar</h2>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -12,11 +12,11 @@
 {% block botcontent %}
                 <div class="col-lg-12">
                     <div class="panel panel-default">
+                        <div class="panel-heading">
+                             Calendar
+                        </div>
                         <!-- /.panel-heading -->
-                        <div id="idAddDemoPostit">Content of the postit 1</div>                  
-                        <div class="classAddDemoPostit">Content of the postit 2</div>
-                        <div class="classAddDemoPostit">Content of the postit 3</div>
-                        <div class="classAddDemoPostit">Content of the postit 4</div>
+                        <div id='calendar'></div>
                         <!-- /.panel-body -->
                     </div>
                     <!-- /.panel -->
@@ -25,18 +25,20 @@
 {% endblock botcontent%}
 
 {% block morescript %}
-<script src="{%static "bower_components/PostItAll/plugin/jquery.postitall.js" %}"></script>
+<script src="{%static "bower_components/moment/min/moment.min.js" %}"></script>
+<script src="{%static "bower_components/fullcalendar/dist/fullcalendar.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
 <script>
-    $(document).ready(function() {
-        $('#idAddDemoPostit').postitall();
-        $('.classAddDemoPostit').postitall();
-    });
+	$(document).ready(function() {
+	    $('#calendar').fullCalendar({
+	        // put your options and callbacks here
+	    })
+	});
 </script>
 {% endblock scriptcontent %}
 
 {% block morecss %}
-<link rel="stylesheet" href="{%static "bower_components/PostItAll/plugin/jquery.postitall.css" %}">
+<link rel="stylesheet" href="{%static "bower_components/fullcalendar/dist/fullcalendar.min.css" %}">
 {% endblock morecss %}

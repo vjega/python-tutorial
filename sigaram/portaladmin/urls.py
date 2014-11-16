@@ -26,4 +26,5 @@ urlpatterns = patterns('',
     url(r'^billboard$',               views.billboard,    name='billboard'),
     url(r'^mindmap$',                 views.mindmap,    name='mindmap'),
     url(r'^sticky_notes$',            views.sticky_notes,    name='sticky_notes'),
+    url(r'^calendar$',                views.calendar,    name='calendar'),
 )
