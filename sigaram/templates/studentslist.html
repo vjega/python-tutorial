@@ -1,4 +1,4 @@
-{% extends 'portaladmin/base.html' %}
+{% extends 'base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
@@ -26,9 +26,9 @@
         <label for="folder_name" class="col-sm-2 control-label">{% trans "Select Section" %}</label>
         <div class="col-sm-1">
             <select name="school_name" class="form-control" id="school_name">
-                <option value="{{school.shortname}}">A</option>
-                <option value="{{school.shortname}}">B</option>
-                <option value="{{school.shortname}}">C</option>
+                {% for school in schools %}
+                <option value="{{school.shortname}}">{{school.schoolname}}</option>
+                {% endfor %}
             </select>
         </div>
     </div>
@@ -104,26 +104,18 @@
 
 <script id="addstudent" type="text/x-jsrender">
 <form id="newfolderfrm" class="form-horizontal" role="form">
-     <div class="row">
-    <div class="form-group" class="col-sm-3">
-        <label for="folder_name" class="col-sm-4 control-label">{% trans "Select School" %}</label>
-        <div class="col-sm-4">
-            <select name="school_name" class="form-control" id="school_name">
-                {% for school in schools%}
-                <option value="{{school.shortname}}">{{school.schoolname}}</option>
-                {% endfor %}
-            </select>
+    <div class="form-group">
+        <label for="folder_name" class="col-sm-4 control-label">{% trans "School Name" %}</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" name="school_name" id="school_name" 
+                placeholder="{% trans "School Name" %}">
         </div>
-    </div>
     </div>
     <div class="form-group">
         <label for="remark" class="col-sm-4 control-label">{% trans "Class" %}</label>
-        <div class="col-sm-4">
-            <select name="school_name" class="form-control" id="school_name">
-                <option value="{{school.shortname}}">A</option>
-                <option value="{{school.shortname}}">B</option>
-                <option value="{{school.shortname}}">C</option>
-            </select>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" name="student_class" id="student_class" 
+                placeholder="{% trans "Class" %}">
         </div>
     </div>
     <div class="form-group">

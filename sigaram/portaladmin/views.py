@@ -81,7 +81,8 @@ def studentslist(request):
                          _('Delete')]
     studentslist_body = models.Studentinfo.getlist()
     studentslist = {'head':studentslist_head, 'body':studentslist_body}
-    return render(request, 'portaladmin/studentslist.html', {'studentslist':studentslist})
+    return render(request, 'portaladmin/studentslist.html', {#'studentslist':studentslist,
+                                                              'schools':schools})
 
 @switchlanguage
 def schoollist(request):
