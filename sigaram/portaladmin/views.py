@@ -35,7 +35,7 @@ def home(request):
     recent_activity_body = models.Activitylog.recentactivities()
     recent_activities = {'head':recent_acitivity_head,
                          'body':recent_activity_body}
-    return  render(request, 'index.html', {"folders":folders,
+    return  render(request, 'portaladmin/index.html', {"folders":folders,
                                            "admin_folders":admin_folders,
                                            "recent_activities":recent_activities
                                            })
@@ -50,7 +50,7 @@ def adminlist(request):
                          _('Delete')]
     adminlist_body = models.Admininfo.getlist()
     adminlist = {'head':adminlist_head, 'body':adminlist_body}
-    return render(request, 'adminlist.html', {'adminlist':adminlist})
+    return render(request, 'portaladmin/adminlist.html', {'adminlist':adminlist})
 
 @switchlanguage
 def teacherslist(request):
@@ -66,7 +66,7 @@ def teacherslist(request):
     teacherslist_body = models.Teacherinfo.getlist()
     teacherslist = {'head':teacherslist_head, 'body':teacherslist_body}
     """
-    return render(request, 'teacherslist.html', {#'teacherslist':teacherslist,
+    return render(request, 'portaladmin/teacherslist.html', {#'teacherslist':teacherslist,
                                                 'schools':schools})
 
 @switchlanguage
@@ -80,7 +80,7 @@ def studentslist(request):
                          _('Delete')]
     studentslist_body = models.Studentinfo.getlist()
     studentslist = {'head':studentslist_head, 'body':studentslist_body}
-    return render(request, 'studentslist.html', {'studentslist':studentslist})
+    return render(request, 'portaladmin/studentslist.html', {'studentslist':studentslist})
 
 @switchlanguage
 def schoollist(request):
@@ -91,7 +91,7 @@ def schoollist(request):
                          _('Delete')]
     schoollist_body = models.Schoolinfo.objects.all()
     schoollist = {'head':schoollist_head, 'body':schoollist_body}
-    return render(request, 'schoollist.html', {'schoollist':schoollist})
+    return render(request, 'portaladmin/schoollist.html', {'schoollist':schoollist})
 
 @switchlanguage
 def teacherresourcelist(request):
@@ -103,7 +103,7 @@ def teacherresourcelist(request):
     teacherresourcelist_body = models.Teacherresourceinfo.objects.all()
     teacherresourcelist = {'head':teacherresourcelist_head, 
                            'body':teacherresourcelist_body}
-    return render(request, 'teacherresourcelist.html', 
+    return render(request, 'portaladmin/teacherresourcelist.html', 
                   {'teacherresourcelist':teacherresourcelist})
 
 @switchlanguage
@@ -130,7 +130,7 @@ def studentresourcetype(request):
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
                            #'body':studentresourcetype_body}
-    return render(request, 'studentresource_type.html', 
+    return render(request, 'portaladmin/studentresource_type.html', 
                   {"folders":folders,'studentresourcetype':studentresourcetype})
 
 @switchlanguage
@@ -138,20 +138,20 @@ def resourcetype(request):
     folders = [{
         "id": "1",
         "name" :"வாசிப்பு",
-        "href" :"subjectlist"
+        "href" :"portaladmin/subjectlist"
         },{
         "id": "2",
         "name" :"பட உரையாடல்",
-        "href" :"subjectlist"
+        "href" :"portaladmin/subjectlist"
         },{
         "id": "3",
         "name" :"எழுத்து பலகை",
-        "href" :"subjectlist"
+        "href" :"portaladmin/subjectlist"
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
                            #'body':studentresourcetype_body}
-    return render(request, 'resource_type.html', 
+    return render(request, 'portaladmin/resource_type.html', 
                   {"folders":folders,'resourcetype':resourcetype})
 
 @switchlanguage
@@ -342,7 +342,7 @@ def billboard(request):
                              'email':'johndoe@acme.com'
                          }]
     studentslist = {'head':studentslist_head, 'body':studentslist_body}
-    return render(request, 'studentslist.html', {'studentslist':studentslist})
+    return render(request, 'portaladmin/studentslist.html', {'studentslist':studentslist})
 
 def mindmap(request):
     return render(request, 'mindmap.html', {})
