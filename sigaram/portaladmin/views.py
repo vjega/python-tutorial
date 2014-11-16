@@ -345,3 +345,6 @@ def mindmap(request):
     
 def sticky_notes(request):
     return render(request, 'sticky_notes.html', {})
+    
+def calendar(request):
+    return render(request, 'calendar.html', {})
