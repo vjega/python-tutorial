@@ -76,7 +76,7 @@
 
 {% block scriptcontent %}
 
-<script id="addschool" type="text/x-jsrender">
+<script id="addteacher" type="text/x-jsrender">
 <form id="newfolderfrm" class="form-horizontal" role="form">
     <div class="form-group">
         <label for="folder_name" class="col-sm-4 control-label">{% trans "School Name" %}</label>
@@ -130,7 +130,7 @@
 </form>
 </script>
 
-<script id="editschool" type="text/x-jsrender">
+<script id="editteacher" type="text/x-jsrender">
 <form id="newfolderfrm" class="form-horizontal" role="form">
     <div class="form-group">
         <label for="folder_name" class="col-sm-4 control-label">{% trans "School Name" %}</label>
@@ -190,7 +190,7 @@ TTS.forms = TTS.forms || {}
 TTS.forms.addschool = function() {
     BootstrapDialog.show({
         title: 'Add Teacher',
-        message: $($('#addschool').render()),
+        message: $($('#addteacher').render()),
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
@@ -216,7 +216,7 @@ TTS.forms.addschool = function() {
 TTS.forms.editschool = function() {
     BootstrapDialog.show({
         title: 'Edit Teacher',
-        message: $($('#editschool').render()),
+        message: $($('#editteacher').render()),
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
