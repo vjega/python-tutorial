@@ -11,7 +11,6 @@
         </div>
 {% endblock topcontent %}
 {% block botcontent %}
-<<<<<<< HEAD
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -40,7 +39,6 @@
                             {% endfor %}
                         </tbody>
                     </table>
-=======
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -75,7 +73,6 @@
                         <!-- /.panel-body -->
                     </div>
                     <!-- /.panel -->
->>>>>>> 5c068b08b348050cde615b8a1d7d3becfd742282
                 </div>
                 <!-- /.table-responsive -->
             </div>
@@ -153,6 +150,13 @@
         <div class="col-sm-8">
             <input type="text" class="form-control" name="description" id="description"
                  placeholder="{% trans "Description" %}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="order_no" class="col-sm-4 control-label">{% trans "Chose File" %}</label>
+        <div class="col-sm-8">
+            <input type="file" class="form-control" name="teacher_photo" id="teacher_photo"
+                 placeholder="{% trans "Chose File" %}">
         </div>
     </div>
 </form>
