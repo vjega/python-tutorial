@@ -54,6 +54,8 @@ def adminlist(request):
 
 @switchlanguage
 def teacherslist(request):
+    schools = models.Schoolinfo.objects.all()
+    """
     teacherslist_head = [('Sl No.'),
                          _('Photo'),
                          _('Name'),
@@ -63,7 +65,9 @@ def teacherslist(request):
                          _('Delete')]
     teacherslist_body = models.Teacherinfo.getlist()
     teacherslist = {'head':teacherslist_head, 'body':teacherslist_body}
-    return render(request, 'teacherslist.html', {'teacherslist':teacherslist})
+    """
+    return render(request, 'teacherslist.html', {#'teacherslist':teacherslist,
+                                                'schools':schools})
 
 @switchlanguage
 def studentslist(request):
