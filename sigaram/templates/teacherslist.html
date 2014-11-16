@@ -247,7 +247,7 @@ $(document).ready(function(){
     $('#admin-main-tbl tbody tr').on('click', '.tts-edit', function(e){
         e.stopPropagation();
         TTS.forms.editschool();
-        //window.location = 'schoollist';
+        //window.location = 'teacherslist?teacherid'=this.id;
     });
     $('#admin-main-tbl tbody tr').on('click', '.tts-delete', function(e){
         e.stopPropagation();
