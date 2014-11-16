@@ -269,7 +269,7 @@ def statistics(request):
                          _('Edit')]
     studentslist_body = models.Studentinfo.getlist() 
     studentslist = {'head':studentslist_head, 'body':studentslist_body}
-    return render(request, 'statistics.html', {'studentslist':studentslist})
+    return render(request, 'portaladmin/statistics.html', {'studentslist':studentslist})
 
 @switchlanguage
 def classroom(request):
@@ -306,7 +306,7 @@ def classroom(request):
                              'email':'johndoe@acme.com'
                          }]
     studentslist = {'head':studentslist_head, 'body':studentslist_body}
-    return render(request, 'classroom.html', {'studentslist':studentslist})
+    return render(request, 'portaladmin/classroom.html', {'studentslist':studentslist})
 
 @switchlanguage
 def billboard(request):
