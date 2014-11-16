@@ -28,6 +28,19 @@ def home(request):
         "link" : u"studentresourcetype",
         "caption": _("Notes"),
         "stat": 125
+        },{
+        "color": u"red",
+        "icon" : u"pencil",
+        "link" : u"studentresourcetype",
+        "caption": _("Written Work"),
+        "stat": 125
+        },
+        {
+        "color": u"green",
+        "icon" : u"desktop",
+        "link" : u"studentresourcetype",
+        "caption": _("Practicals"),
+        "stat": 125
         }]
 
     recent_acitivity_head = [_("Sl No."),_("Assignments"),_("Date")]
