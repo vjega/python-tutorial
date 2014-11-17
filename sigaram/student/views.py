@@ -13,13 +13,13 @@ def home(request):
     folders = [{
         "color": u"primary",
         "icon" : u"file-text-o",
-        "link" : u"schoollist",
+        "link" : u"resourcetype",
         "caption": _("Deliverables"),
         "stat": 25
         }, {
         "color": u"green",
         "icon" : u"book",
-        "link" : u"teacherresourcelist",
+        "link" : u"workspace",
         "caption": _("My works"),
         "stat": 64
         }, {
@@ -52,3 +52,75 @@ def home(request):
                                            "admin_folders":admin_folders,
                                            "recent_activities":recent_activities
                                            })
+@switchlanguage
+def studentresourcetype(request):
+    folders = [{
+        "id": "p1",
+        "name" :"P1"
+        },{
+        "id": "p2",
+        "name" :"P2"
+        },{
+        "id": "p3",
+        "name" :"P3"
+        },{
+        "id": "p4",
+        "name" :"P4"
+        },{
+        "id": "p5",
+        "name" :"P5"
+        },{
+        "id": "p6",
+        "name" :"P6"
+        }]
+    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
+    #studentresourcetype = {'head':studentresourcetype_head, 
+                           #'body':studentresourcetype_body}
+    return render(request, 'portalstudent/studentresource_type.html', 
+                  {"folders":folders,'studentresourcetype':studentresourcetype})
+
+@switchlanguage
+def resourcetype(request):
+    folders = [{
+        "id": "1",
+        "name" :"Reading",
+        "href" :""
+        },{
+        "id": "2",
+        "name" :"Image dialog",
+        "href" :""
+        },{
+        "id": "3",
+        "name" :"Writing board",
+        "href" :""
+        }]
+    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
+    #studentresourcetype = {'head':studentresourcetype_head, 
+                           #'body':studentresourcetype_body}
+    return render(request, 'portalstudent/resource_type.html', 
+                  {"folders":folders,'resourcetype':resourcetype})
+
+@switchlanguage
+def workspace(request):
+    folders = [{
+        "id": "1",
+        "name" :"Character",
+        "href" :""
+        },{
+        "id": "2",
+        "name" :"Photography",
+        "href" :""
+        },{
+        "id": "3",
+        "name" :"Lyrics",
+        "href" :""
+        },{
+        "id": "4",
+        "name" :"Video",
+        "href" :""
+        }]
+    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
+    #studentresourcetype = {'head':studentresourcetype_head, 
+                           #'body':studentresourcetype_body}
+    return render(request, 'portalstudent/workspace.html', 
+                  {"folders":folders,'workspace':workspace})

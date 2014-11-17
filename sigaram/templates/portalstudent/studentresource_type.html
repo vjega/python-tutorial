@@ -1,0 +1,59 @@
+{% extends 'portalstudent/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block topcontent %}
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">{% trans "Resources" %}</h2>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                 {% for folder in folders%}
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-folder fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="tent-medium">{{folder.name}}</div>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="panel-footer">
+                                <a href="resourcetype?classid={{forloop.counter}}&section=a">
+                                <div class="col-xs-6 pull-left text-center">A</div>
+                                </a>
+                                <a href="resourcetype?classid={{forloop.counter}}&section=b">
+                                <div class="col-xs-6 pull-right text-center">B</div>
+                                </a>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- /.row -->
+{% endblock topcontent %}
+
+
+{% block morescript %}
+
+{% endblock morescript %}
+
+{% block scriptcontent %}
+<script>
+    $(document).ready(function(){
+        
+    });
+</script>
+{% endblock scriptcontent %}
+
+{% block morecss %}
+
+{% endblock morecss %}
