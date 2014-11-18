@@ -232,6 +232,7 @@ TTS.forms.editschool = function() {
 };
 
 TTS.forms.renderteacher = function(data){
+    
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center"  
@@ -263,13 +264,21 @@ TTS.forms.renderteacher = function(data){
         t.push("<i class='fa fa-trash fa-lg'></i>");
         dataset.push(t);
     }
-
-    $('#admin-main-tbl').dataTable({
+    if (TTS.forms.table) {
+        TTS.forms.table.fnClearTable();
+        TTS.forms.table.fnAddData(
+            dataset
+        );
+        return true;
+    }
+    TTS.forms.table = $('#admin-main-tbl').dataTable({
         "data":     dataset,
         "columns":  headers
     });
 
 };
+
+
 $(document).ready(function(){
     var url = "/api/admin/teacher/?schoolid="+$("#school_name").val()+"&format=json"
     $.ajax({
@@ -278,7 +287,14 @@ $(document).ready(function(){
     }).done(function(data){
         TTS.forms.renderteacher(data);
     });
-    
+    $("#school_name").change(function(){
+        $.ajax({
+            "url":"/api/admin/teacher/?schoolid="+$("#school_name").val()+"&format=json",
+            "type":"GET"
+        }).done(function(data){
+            TTS.forms.renderteacher(data);
+        });
+    })
     $('#admin-main-tbl tbody').on('click', 'tr', function(){
         window.location = 'classlist?id='+this.id;
     });

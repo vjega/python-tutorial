@@ -25,7 +25,6 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
         serializer = adminserializers.AdminInfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
-
     def create(self, request):
         return Response('"msg":"Created Successfully"')
 
