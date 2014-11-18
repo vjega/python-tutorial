@@ -17,5 +17,5 @@ class TeacherinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Teacherinfo
         fields = ('teacherid',  'username','password',
-                  'firstname','lastname', 'emailid','imageurl'
+                  'firstname','lastname', 'emailid','imageurl','schoolid'
                   )

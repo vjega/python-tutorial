@@ -22,10 +22,7 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
             WHERE li.isdelete=0 
             ORDER BY adminid""";
         queryset = models.Admininfo.objects.raw(sql)
-        print queryset
-        print '*'*80
         serializer = adminserializers.AdminInfoSerializer(queryset, many=True)
-        print serializer.data
         return Response(serializer.data)
 
 
@@ -45,4 +42,12 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
 
 class teacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
-    serializer_class = adminserializers.TeacherinfoSerializer    
+    serializer_class = adminserializers.TeacherinfoSerializer
+    def list(self, request):
+        schoolid =  request.GET.get('schoolid')
+        if schoolid :
+            queryset = models.Teacherinfo.objects.filter(schoolid=schoolid)
+        else:
+            queryset = models.Teacherinfo.objects.all()
+        serializer = adminserializers.TeacherinfoSerializer(queryset, many=True)
+        return Response(serializer.data)
