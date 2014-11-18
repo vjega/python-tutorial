@@ -42,6 +42,7 @@ def home(request):
 
 @switchlanguage
 def adminlist(request):
+    '''
     adminlist_head = [_('Sl No.'),
                          _('Photo'),
                          _('Name'),
@@ -50,7 +51,8 @@ def adminlist(request):
                          _('Delete')]
     adminlist_body = models.Admininfo.getlist()
     adminlist = {'head':adminlist_head, 'body':adminlist_body}
-    return render(request, 'portaladmin/adminlist.html', {'adminlist':adminlist})
+    '''
+    return render(request, 'portaladmin/adminlist.html')
 
 @switchlanguage
 def teacherslist(request):

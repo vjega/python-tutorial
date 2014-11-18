@@ -1,8 +1,14 @@
-#Portal Routing
-from django.conf.urls import patterns, include, url
-from django.views.generic import RedirectView
-from api.views import admin
+from django.conf.urls import url, include
+from django.contrib.auth.models import User
+from rest_framework import routers
 
-urlpatterns = patterns('',
-    url(r'^admin/addfolder$',      admin.addfolder,     name='addfolder'),
-)
+import viewsets
+
+router = routers.DefaultRouter()
+router.register(r'admin',        viewsets.AdmininfoViewSet)
+router.register(r'adminfolders', viewsets.AdminFoldersViewSet)
+
+urlpatterns = [
+    url(r'^', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+]

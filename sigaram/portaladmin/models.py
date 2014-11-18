@@ -104,22 +104,6 @@ class Admininfo(models.Model):
     createdby = models.BigIntegerField()
     createddate = models.DateTimeField()
     
-    @staticmethod
-    def getlist():
-        sql = """SELECT ai.adminid,
-                               ai.firstname,
-                               ai.lastname,
-                               ai.username,
-                               ai.emailid,
-                               ai.imageurl 
-                        FROM `admininfo` ai
-                        INNER JOIN logininfo li on li.username=ai.username 
-                        WHERE li.isdelete=0 
-                        ORDER BY adminid""";
-        cursor = connection.cursor()
-        cursor.execute(sql)
-        return dictfetchall(cursor)
-        
     class Meta:
         managed = False
         db_table = 'admininfo'
