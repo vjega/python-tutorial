@@ -15,7 +15,9 @@
         <div class="col-sm-4">
             <select name="school_name" class="form-control" id="school_name">
                 {% for school in schools%}
-                <option value="{{school.shortname}}">{{school.schoolname}}</option>
+                <option value="{{school.schoolid}}">
+                    {{school.schoolname}}
+                </option>
                 {% endfor %}
             </select>
         </div>
@@ -269,8 +271,9 @@ TTS.forms.renderteacher = function(data){
 
 };
 $(document).ready(function(){
+    var url = "/api/admin/teacher/?schoolid="+$("#school_name").val()+"&format=json"
     $.ajax({
-        "url":"/api/admin/teacher/?format=json",
+        "url":url,
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacher(data);
