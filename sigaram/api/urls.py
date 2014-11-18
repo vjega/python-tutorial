@@ -7,6 +7,8 @@ import viewsets
 router = routers.DefaultRouter()
 router.register(r'admin',        viewsets.AdmininfoViewSet)
 router.register(r'adminfolders', viewsets.AdminFoldersViewSet)
+router.register(r'teacher',      viewsets.teacherViewSet)
+
 
 urlpatterns = [
     url(r'^', include(router.urls)),

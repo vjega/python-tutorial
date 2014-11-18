@@ -43,4 +43,6 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
     queryset = models.AdminFolders.objects.all()
     serializer_class = adminserializers.AdminFolderSerializer
 
-    
+class teacherViewSet(viewsets.ModelViewSet):
+    queryset = models.Teacherinfo.objects.all()
+    serializer_class = adminserializers.TeacherinfoSerializer    

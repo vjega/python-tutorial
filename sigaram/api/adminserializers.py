@@ -12,3 +12,10 @@ class AdminFolderSerializer(serializers.HyperlinkedModelSerializer):
         model = models.AdminFolders
         fields = ('folder_id',  'folder_name','folder_description',
                   'added_date','folder_order')
+
+class TeacherinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Teacherinfo
+        fields = ('teacherid',  'username','password',
+                  'firstname','lastname', 'emailid','imageurl'
+                  )
