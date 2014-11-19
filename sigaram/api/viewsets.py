@@ -84,6 +84,10 @@ class TeacherResourcesViewSet(viewsets.ModelViewSet):
         serializer = adminserializers.TeacherResourcesSerializer(queryset, many=True)
         return Response(serializer.data)
 
+class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
+    queryset = models.Teacherresourceinfo.objects.all()
+    serializer_class = adminserializers.TeacherresourceinfoSerializer
+    
 
 class ResourceinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Resourceinfo.objects.all()

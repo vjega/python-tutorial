@@ -10,6 +10,7 @@ router.register(r'adminfolders', viewsets.AdminFoldersViewSet)
 router.register(r'teacher',      viewsets.teacherViewSet)
 router.register(r'student',      viewsets.studentViewSet)
 router.register(r'teacherresources',      viewsets.TeacherResourcesViewSet)
+router.register(r'teacherresourcesinfo',      viewsets.TeacherresourceinfoViewSet)
 router.register(r'resourceinfo',          viewsets.ResourceinfoViewSet)
 router.register(r'writtenworkinfo',       viewsets.WrittenworkinfoViewSet)
 

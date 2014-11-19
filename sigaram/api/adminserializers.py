@@ -34,6 +34,16 @@ class TeacherResourcesSerializer(serializers.HyperlinkedModelSerializer):
                   'audiourl','videourl','resource_folder_id'
                   )
 
+class  TeacherresourceinfoSerializer(serializers.HyperlinkedModelSerializer):
+      class Meta:
+        model = models.Teacherresourceinfo
+        fields = ('teacherresourceid',  'classid','section',
+                  'chapterid','resourcetype', 'resourcecategory',
+                  'resourcetitle','resourcedescription','documenturl',
+                  'imageurl','audiourl','videourl','schoolid','isapproved',
+                  'createddate')
+
+
 class ResourceinfoSerializer(serializers.HyperlinkedModelSerializer):
       class Meta:
         model = models.Resourceinfo
