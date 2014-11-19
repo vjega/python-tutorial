@@ -50,3 +50,80 @@ class teacherViewSet(viewsets.ModelViewSet):
             queryset = models.Teacherinfo.objects.all()
         serializer = adminserializers.TeacherinfoSerializer(queryset, many=True)
         return Response(serializer.data)
+
+class studentViewSet(viewsets.ModelViewSet):
+    queryset = models.Studentinfo.objects.all()
+    serializer_class = adminserializers.StudentinfoSerializer
+    
+    def list(self, request):
+        schoolid =  request.GET.get('schoolid')
+        classid  =  request.GET.get('classid')
+
+        if schoolid and classid:
+            queryset = models.Studentinfo.objects.filter(schoolid=schoolid, classid=classid)
+        elif schoolid:
+            queryset = models.Studentinfo.objects.filter(schoolid=schoolid)
+        else:
+            queryset = models.Studentinfo.objects.all()
+        
+        serializer = adminserializers.StudentinfoSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+class TeacherResourcesViewSet(viewsets.ModelViewSet):
+    queryset = models.TeacherResources.objects.all()
+    serializer_class = adminserializers.TeacherResourcesSerializer
+    
+    def list(self, request):
+        resource_folder_id =  request.GET.get('resource_folder_id')
+
+        if resource_folder_id:
+            queryset = models.TeacherResources.objects.filter(resource_folder_id=resource_folder_id)
+        else:
+            queryset = models.TeacherResources.objects.all()
+        
+        serializer = adminserializers.TeacherResourcesSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class ResourceinfoViewSet(viewsets.ModelViewSet):
+    queryset = models.Resourceinfo.objects.all()
+    serializer_class = adminserializers.ResourceinfoSerializer
+    
+    def list(self, request):
+        classid   = request.GET.get('classid')
+        section   = request.GET.get('section')
+        chapterid = request.GET.get('chapterid')
+        kwarg = {}
+        kwarg['isdeleted'] = 0
+        if classid:
+            kwarg['classid'] = classid
+        if section:
+            kwarg['section'] = section
+        if chapterid:
+            kwarg['chapterid'] = chapterid
+        
+        queryset = models.Resourceinfo.objects.filter(**kwarg)
+        serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+class WrittenworkinfoViewSet(viewsets.ModelViewSet):
+    queryset = models.Writtenworkinfo.objects.all()
+    serializer_class = adminserializers.WrittenworkinfoSerializer
+    '''
+    def list(self, request):
+        classid   = request.GET.get('classid')
+        section   = request.GET.get('section')
+        chapterid = request.GET.get('chapterid')
+        kwarg = {}
+        kwarg['isdeleted'] = 0
+        if classid:
+            kwarg['classid'] = classid
+        if section:
+            kwarg['section'] = section
+        if chapterid:
+            kwarg['chapterid'] = chapterid
+        
+        queryset = models.Resourceinfo.objects.filter(**kwarg)
+        serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
+        return Response(serializer.data)
+    '''

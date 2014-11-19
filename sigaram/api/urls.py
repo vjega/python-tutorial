@@ -8,7 +8,10 @@ router = routers.DefaultRouter()
 router.register(r'admin',        viewsets.AdmininfoViewSet)
 router.register(r'adminfolders', viewsets.AdminFoldersViewSet)
 router.register(r'teacher',      viewsets.teacherViewSet)
-
+router.register(r'student',      viewsets.studentViewSet)
+router.register(r'teacherresources',      viewsets.TeacherResourcesViewSet)
+router.register(r'resourceinfo',          viewsets.ResourceinfoViewSet)
+router.register(r'writtenworkinfo',       viewsets.WrittenworkinfoViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

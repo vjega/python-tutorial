@@ -17,5 +17,35 @@ class TeacherinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Teacherinfo
         fields = ('teacherid',  'username','password',
-                  'firstname','lastname', 'emailid','imageurl','schoolid'
+                  'firstname','lastname', 'emailid','imageurl','schoolid')
+
+class StudentinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Studentinfo
+        fields = ('studentid',  'username','password',
+                  'firstname','lastname', 'emailid',
+                  'imageurl','schoolid','classid')
+
+class TeacherResourcesSerializer(serializers.HyperlinkedModelSerializer):
+      class Meta:
+        model = models.TeacherResources
+        fields = ('resource_id',  'resourcetype','resourcetitle',
+                  'resourcedescription','documenturl', 'imageurl',
+                  'audiourl','videourl','resource_folder_id'
                   )
+
+class ResourceinfoSerializer(serializers.HyperlinkedModelSerializer):
+      class Meta:
+        model = models.Resourceinfo
+        fields = ('resourceid',  'categoryid','classid',
+                  'section','chapterid', 'resourcetype',
+                  'originaltext','resourcetitle','resourcedescription',
+                  'thumbnailurl','documenturl','imageurl',
+                  'audiourl','videourl'
+                  )
+
+class WrittenworkinfoSerializer(serializers.HyperlinkedModelSerializer):
+      class Meta:
+        model = models.Writtenworkinfo
+        fields = ('writtenworkid',  'writtenworktitle','description',
+                  'writtenimage','schoolid', 'classid','isassigned')
