@@ -27,7 +27,7 @@ class StudentinfoSerializer(serializers.HyperlinkedModelSerializer):
                   'imageurl','schoolid','classid')
 
 class TeacherResourcesSerializer(serializers.HyperlinkedModelSerializer):
-      class Meta:
+    class Meta:
         model = models.TeacherResources
         fields = ('resource_id',  'resourcetype','resourcetitle',
                   'resourcedescription','documenturl', 'imageurl',
@@ -35,7 +35,7 @@ class TeacherResourcesSerializer(serializers.HyperlinkedModelSerializer):
                   )
 
 class  TeacherresourceinfoSerializer(serializers.HyperlinkedModelSerializer):
-      class Meta:
+    class Meta:
         model = models.Teacherresourceinfo
         fields = ('teacherresourceid',  'classid','section',
                   'chapterid','resourcetype', 'resourcecategory','originaltext',
@@ -45,7 +45,7 @@ class  TeacherresourceinfoSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ResourceinfoSerializer(serializers.HyperlinkedModelSerializer):
-      class Meta:
+    class Meta:
         model = models.Resourceinfo
         fields = ('resourceid',  'categoryid','classid',
                   'section','chapterid', 'resourcetype',
@@ -55,7 +55,13 @@ class ResourceinfoSerializer(serializers.HyperlinkedModelSerializer):
                   )
 
 class WrittenworkinfoSerializer(serializers.HyperlinkedModelSerializer):
-      class Meta:
+    class Meta:
         model = models.Writtenworkinfo
         fields = ('writtenworkid',  'writtenworktitle','description',
                   'writtenimage','schoolid', 'classid','isassigned')
+
+class ChapterinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Chapterinfo
+        fields = ('chapterid',  'classid','sectionid',
+                  'chaptername')

@@ -131,3 +131,26 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
         return Response(serializer.data)
     '''
+class ChapterinfoViewSet(viewsets.ModelViewSet):
+    queryset = models.Chapterinfo.objects.all()
+    serializer_class = adminserializers.ChapterinfoSerializer
+    
+    def list(self, request):
+        classid   = request.GET.get('classid')
+        sectionid   = request.GET.get('section')
+        chapterid = request.GET.get('chapterid')
+        kwarg = {}
+        #kwarg['isdeleted'] = 0
+        if classid:
+            kwarg['classid'] = classid
+        if sectionid:
+            kwarg['sectionid'] = sectionid
+        if chapterid:
+            kwarg['chapterid'] = chapterid
+        if len(kwarg):
+            queryset = models.Chapterinfo.objects.filter(**kwarg)
+        else:
+            queryset = models.Chapterinfo.objects.all()
+        serializer = adminserializers.ChapterinfoSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
