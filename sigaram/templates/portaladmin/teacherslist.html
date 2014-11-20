@@ -71,16 +71,22 @@
 <form id="newfolderfrm" class="form-horizontal" role="form">
     <div class="form-group">
         <label for="folder_name" class="col-sm-4 control-label">{% trans "School Name" %}</label>
-        <div class="col-sm-8">
-            <input type="text" class="form-control" name="school_name" id="school_name" 
-                placeholder="{% trans "School Name" %}">
+        <div class="col-sm-4">
+            <select name="school_name" class="form-control" id="school_name">
+                {% for school in schools%}
+                <option value="{{school.schoolid}}">{{school.schoolname}}</option>
+                {% endfor %}
+            </select>
         </div>
     </div>
     <div class="form-group">
         <label for="remark" class="col-sm-4 control-label">{% trans "Class" %}</label>
-        <div class="col-sm-8">
-            <input type="text" class="form-control" name="teacher_class" id="teacher_class" 
-                placeholder="{% trans "Class" %}">
+        <div class="col-sm-4">
+            <select name="classid" class="form-control" id="classid">
+                {% for class in classes %}
+                <option value="{{class.classid}}">{{class.shortname}}</option>
+                {% endfor %}
+            </select>
         </div>
     </div>
     <div class="form-group">

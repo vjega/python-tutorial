@@ -129,7 +129,7 @@
     </div>
     <div class="row">
     <div class="form-group" class="col-sm-2">
-        <label for="folder_name" class="col-sm-3 control-label">{% trans "Select Section" %}</label>
+        <label for="folder_name" class="col-sm-3 control-label">{% trans "Select Division" %}</label>
         <div class="col-sm-2">
             <select name="school_name" class="form-control" id="school_name">
                 <option value="">A</option>
@@ -168,9 +168,9 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-TTS.forms.addschool = function() {
+/*TTS.forms.addschool = function() {
     BootstrapDialog.show({
-        title: 'Edit School',
+        title: 'Add TeacherResource',
         message: $($('#addschool').render()),
         onshown: function(dialogRef){
             alert("Hello");
@@ -199,11 +199,11 @@ TTS.forms.addschool = function() {
             }
         }]
     });
-};
+};*/
 
 TTS.forms.editschool = function() {
     BootstrapDialog.show({
-        title: 'Edit School',
+        title: 'Add TeacherResource',
         onshown: function(dialogRef){
             $('.summernote').summernote();
         },
