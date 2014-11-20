@@ -64,6 +64,7 @@ def teacherslist(request):
 @switchlanguage
 def studentslist(request):
     schools = models.Schoolinfo.objects.all()
+    classes = models.Classinfo.objects.all()
     studentslist_head = [('Sl No.'),
                          _('Photo'),
                          _('Name'),
@@ -73,8 +74,8 @@ def studentslist(request):
                          _('Delete')]
     studentslist_body = models.Studentinfo.getlist()
     studentslist = {'head':studentslist_head, 'body':studentslist_body}
-    return render(request, 'portaladmin/studentslist.html', {#'studentslist':studentslist,
-                                                              'schools':schools})
+    return render(request, 'portaladmin/studentslist.html', {'schools':schools,
+                                                             'classes':classes})
 
 @switchlanguage
 def schoollist(request):
