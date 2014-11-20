@@ -84,7 +84,7 @@
         <div class="col-sm-4">
             <select name="school_name" class="form-control" id="school_name">
                 {% for school in schools%}
-                <option value="{{school.shortname}}">{{school.schoolname}}</option>
+                <option value="{{school.schoolid}}">{{school.schoolname}}</option>
                 {% endfor %}
             </select>
         </div>
@@ -93,10 +93,10 @@
     <div class="form-group">
         <label for="remark" class="col-sm-4 control-label">{% trans "Class" %}</label>
         <div class="col-sm-4">
-            <select name="school_name" class="form-control" id="school_name">
-                <option value="{{school.shortname}}">A</option>
-                <option value="{{school.shortname}}">B</option>
-                <option value="{{school.shortname}}">C</option>
+            <select name="classid" class="form-control" id="classid">
+                {% for class in classes %}
+                <option value="{{class.classid}}">{{class.shortname}}</option>
+                {% endfor %}
             </select>
         </div>
     </div>
