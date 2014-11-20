@@ -15,9 +15,12 @@
         <label for="folder_name" class="col-sm-2 control-label">{% trans "Select School" %}</label>
         <div class="col-sm-2">
             <select name="school_name" class="form-control" id="school_name">
-                {% for school in schools %}
-                <option value="{{school.schoolid}}">{{school.schoolname}}</option>
+               {% for school in schools%}
+                <option value="{{school.schoolid}}">
+                    {{school.schoolname}}
+                </option>
                 {% endfor %}
+
             </select>
         </div>
     </div>
