@@ -106,11 +106,10 @@
     <div class="form-group" class="col-sm-2">
         <label for="folder_name" class="col-sm-3 control-label">{% trans "Select Class" %}</label>
         <div class="col-sm-2">
-            <select name="school_name" class="form-control" id="school_name">
-                <option value="">P1</option>
-                <option value="">P2</option>
-                <option value="">P3</option>
-               
+            <select name="classid" class="form-control" id="classid">
+                {% for class in classes %}
+                <option value="{{class.classid}}">{{class.shortname}}</option>
+                {% endfor %}
             </select>
         </div>
         <span>
@@ -265,7 +264,6 @@ $(document).ready(function(){
         "url":"/api/admin/teacherresourcesinfo/?format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
         TTS.forms.renderteacherresourceinfo(data);
     });
     $('#admin-main-tbl tbody').on('click', 'tr', function(){

@@ -2,13 +2,27 @@
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
-        <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2 class="page-header">{% trans "Statistics" %}</h2>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="page-header">{% trans "Statistics" %}</h2>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <div class="row">
+    <div class="form-group" class="col-sm-3">
+        <label for="folder_name" class="col-sm-4 control-label">{% trans "Select School" %}</label>
+    <div class="col-sm-4">
+        <select name="school_name" class="form-control" id="school_name">
+            {% for school in schools%}
+            <option value="{{school.schoolid}}">
+                {{school.schoolname}}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    </div>
+</div>
 {% endblock topcontent %}
 {% block botcontent %}
                 <div class="col-lg-12">
@@ -20,24 +34,7 @@
                         <div class="panel-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover" id="admin-main-tbl">
-                                    <thead>
-                                        <tr>
-                                            {% for head in studentslist.head %}
-                                            <th>{{head}}</th>
-                                            {% endfor %}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for body in studentslist.body %}
-                                        <tr class="gradeX">
-                                            <td>{{forloop.counter}}</td>
-                                            <td><img src="{{body.imageurl}}" /></td>
-                                            <td>{{body.firstname}}</td>
-                                            <td>{{body.username}}</td>
-                                            <td>{{body.emailid}}</td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
+                                    
                                 </table>
                             </div>
                             <!-- /.table-responsive -->
@@ -48,20 +45,100 @@
                 </div>
                 <!-- /.col-lg-12 -->
 {% endblock botcontent%}
-
-{% block morescript %}
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<style>
+    #addrec:hover, #admin-main-tbl tbody tr:hover{
+        cursor: pointer;
+    }
+</style>
+{% endblock morecss %}
+{{% block morescript %}
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
 <script>
-    $(document).ready(function(){
-        $('#admin-main-tbl').dataTable();
+window.TTS = window.TTS || {};
+TTS.forms = TTS.forms || {};
+TTS.forms.renderstatistics = function(data){
+    
+    var headers = [
+            { "title": "{% trans "Sl No." %}",
+              "class": "text-center"  
+            },
+            { "title": "{% trans "Photo" %}",
+              "class": "text-center"  
+            },
+            { "title": "{% trans "Name" %}" },
+            { "title": "{% trans "Username" %}"}, 
+            { "title": "{% trans "Email Id" %}"}, 
+             
+        ];
+    var dataset = [];
+    
+    var count = 0
+    for(var i in data){
+        var t = [];
+        t.push(++count);
+        if (data[i].imageurl){
+            t.push("<img src='/static/"+data[i].imageurl+"' width='100' height='100'>");
+        } else {
+            t.push("<img src='http://placehold.it/100x100'>");
+        }
+        t.push(data[i].firstname + " "+data[i].lastname);
+        t.push(data[i].username);
+        t.push(data[i].emailid);
+        dataset.push(t);
+    }
+    if (TTS.forms.table) {
+        TTS.forms.table.fnClearTable();
+        TTS.forms.table.fnAddData(
+            dataset
+        );
+        return true;
+    }
+    TTS.forms.table = $('#admin-main-tbl').dataTable({
+        "data":     dataset,
+        "columns":  headers
     });
+
+};
+
+$(document).ready(function(){
+    
+    var url = "/api/admin/student/?schoolid="+$("#school_name").val()+"&format=json"
+    
+    $.ajax({
+        "url":url,
+        "type":"GET"
+    }).done(function(data) {
+        if (data.length) {
+            TTS.forms.renderstatistics(data);
+        } else {
+            TTS.forms.table.fnClearTable();
+        }
+    });
+
+    $("#school_name").change(function(){
+        $.ajax({
+            "url":"/api/admin/student/?schoolid="+$("#school_name").val()+"&format=json",
+            "type":"GET"
+        }).done(function(data){
+            if (data.length) {
+                TTS.forms.renderstatistics(data);
+            } else {
+                TTS.forms.table.fnClearTable();
+            }
+        });
+    });
+    //$('#admin-main-tbl').dataTable();
+});
 </script>
 {% endblock scriptcontent %}
 
-{% block morecss %}
-<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
-{% endblock morecss %}
+

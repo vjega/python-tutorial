@@ -90,6 +90,7 @@ def schoollist(request):
 
 @switchlanguage
 def teacherresourcelist(request):
+    classes = models.Classinfo.objects.all()
     teacherresourcelist_head = [('Sl No.'),
                          _('Title'),
                          _('Date'),
@@ -99,7 +100,7 @@ def teacherresourcelist(request):
     teacherresourcelist = {'head':teacherresourcelist_head, 
                            'body':teacherresourcelist_body}
     return render(request, 'portaladmin/teacherresourcelist.html', 
-                  {'teacherresourcelist':teacherresourcelist})
+                  {'classes':classes})
 
 @switchlanguage
 def studentresourcetype(request):
@@ -256,6 +257,7 @@ def classlist(request):
 
 @switchlanguage
 def statistics(request):
+    schools = models.Schoolinfo.objects.all()
     studentslist_head = [_('Sl No.'),
                          _('Photo'),
                          _('Name'),
@@ -263,7 +265,8 @@ def statistics(request):
                          _('Edit')]
     studentslist_body = models.Studentinfo.getlist() 
     studentslist = {'head':studentslist_head, 'body':studentslist_body}
-    return render(request, 'portaladmin/statistics.html', {'studentslist':studentslist})
+    return render(request, 'portaladmin/statistics.html', {'schools':schools})
+   
 
 @switchlanguage
 def classroom(request):
