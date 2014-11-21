@@ -133,15 +133,15 @@ def resourcetype(request):
     folders = [{
         "id": "1",
         "name" :"வாசிப்பு",
-        "href" :"portaladmin/subjectlist"
+        "href" :"chapterlist"
         },{
         "id": "2",
         "name" :"பட உரையாடல்",
-        "href" :"portaladmin/subjectlist"
+        "href" :"chapterlist"
         },{
         "id": "3",
         "name" :"எழுத்து பலகை",
-        "href" :"portaladmin/subjectlist"
+        "href" :"chapterlist"
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
@@ -176,44 +176,14 @@ def extralist(request):
 
 
 @switchlanguage
-def subjectlist(request):
-    folders = [{
-        "id": "1",
-        "name" :"{0} - 1 (0) ".format(_("Lession"))
-        },{
-        "id": "2",
-        "name" :"{0} - 2 (2) ".format(_("Lession"))
-        },{
-        "id": "3",
-       "name" :"{0} - 3 (12) ".format(_("Lession"))
-        },{
-        "id": "4",
-       "name" :"{0} - 4 (15) ".format(_("Lession"))
-        },{
-        "id": "4",
-       "name" :"{0} - 5 (15) ".format(_("Lession"))
-        },{
-        "id": "4",
-       "name" :"{0} - 6 (15) ".format(_("Lession"))
-        },{
-        "id": "4",
-       "name" :"{0} - 7 (15) ".format(_("Lession"))
-        },{
-        "id": "4",
-       "name" :"{0} - 8 (15) ".format(_("Lession"))
-        },{
-        "id": "4",
-       "name" :"{0} - 9 (15) ".format(_("Lession"))
-        },{
-        "id": "4",
-       "name" :"{0} - 10 (15) ".format(_("Lession"))
-        }]
-    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
-    #studentresourcetype = {'head':studentresourcetype_head, 
-                           #'body':studentresourcetype_body}
-    return render(request, 'subjectlist.html', 
-                  {"folders":folders,'subjectlist':subjectlist})
-
+def chapterlist(request):
+    chapterlist_body = models.Chapterinfo.objects.all()
+    return render(request, 
+                  'portaladmin/chapterlist.html', 
+                  {'chapterlist':chapterlist,
+                   'classid': request.GET.get('classid'),
+                   'section': request.GET.get('section')
+                  })
 
 @switchlanguage
 def classlist(request):
@@ -347,3 +317,15 @@ def sticky_notes(request):
     
 def calendar(request):
     return render(request, 'portaladmin/calendar.html', {})
+
+def studentresourcelist(request):
+    studentslist_head = [_('Sl No.'),
+                         _('Title'),
+                         _('Date'),
+                         _('Type'),
+                         _('Delete')]
+    studentslist_body = models.Studentinfo.getlist() 
+    studentslist = {'head':studentslist_head, 'body':studentslist_body}
+    return render(request, 'portaladmin/studentresourcelist.html', 
+                    {'studentslist':studentslist}
+                )
