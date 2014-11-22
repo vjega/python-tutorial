@@ -268,8 +268,14 @@ $(document).ready(function(){
         console.log(data);
         TTS.forms.renderteacherresourceinfo(data);
     });
+    $('#admin-main-tbl').on('click', 'tbody tr',function(e){
+        e.stopPropagation();
+        console.log("Hello");
+        window.location = 'viewstudentresourcelist.html?categoryid=1&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.classid;
+    });
     $('#admin-main-tbl tbody').on('click', 'tr', function(){
         window.location = 'teacherresourcelist?id='+this.id;
+
     });
     $('#admin-main-tbl tbody tr').on('click', '.tts-edit', function(e){
         e.stopPropagation();

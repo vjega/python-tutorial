@@ -337,8 +337,8 @@ $(document).ready(function(){
         });
     })
 
-    $('#admin-main-tbl tbody').on('click', 'tr', function(){
-        window.location = 'classlist?id='+this.id;
+    $('#admin-main-tbl').on('click', 'tbody tr', function(){
+        window.location = 'studentprofile?studentid='+this.id;
     });
     $('#admin-main-tbl tbody tr').on('click', '.tts-edit', function(e){
         e.stopPropagation();
