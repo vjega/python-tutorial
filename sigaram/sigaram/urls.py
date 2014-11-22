@@ -6,7 +6,7 @@ translation.activate('ta')
 
 urlpatterns = patterns('',
     url(r'^home$',          'sigaram.views.home', name='home'),
-    url(r'^togglelanguage$',    'sigaram.views.togglelanguage', name='togglelanguage'),
+    url(r'^togglelanguage$','sigaram.views.togglelanguage', name='togglelanguage'),
     url(r'^forum$',     'sigaram.views.forum', name='forum'),
     url(r'^siteadmin/', include(admin.site.urls)),
     url(r'^admin/',     include('portaladmin.urls')),
