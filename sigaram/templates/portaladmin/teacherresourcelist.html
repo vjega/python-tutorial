@@ -141,10 +141,10 @@
         </span>
         <span>
             <div class="col-sm-2">
-                <select name="school_name" class="form-control" id="school_name">
-                    <option value="">Lesson 1</option>
-                    <option value="">Lesson 2</option>
-                    <option value="">Lesson 3</option>
+                <select name="chapterid" class="form-control" id="chapterid">
+                    {% for chapters in chapter %}
+                    <option value="{{chapters.chapterid}}">{{chapters.chaptername}}</option>
+                    {% endfor %}
                 </select>
             </div>
         </span>
