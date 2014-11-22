@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
-from django.http import HttpResponse
 from portaladmin import models
 def switchlanguage(f):
     def inner(req):
@@ -92,7 +91,6 @@ def schoollist(request):
 @switchlanguage
 def teacherresourcelist(request):
     classes = models.Classinfo.objects.all()
-    chapter = models.Chapterinfo.objects.all()
     teacherresourcelist_head = [('Sl No.'),
                          _('Title'),
                          _('Date'),
@@ -102,7 +100,7 @@ def teacherresourcelist(request):
     teacherresourcelist = {'head':teacherresourcelist_head, 
                            'body':teacherresourcelist_body}
     return render(request, 'portaladmin/teacherresourcelist.html', 
-                  {'classes':classes,'chapter' : chapter})
+                  {'classes':classes})
 
 @switchlanguage
 def studentresourcetype(request):
@@ -335,6 +333,3 @@ def studentresourcelist(request):
     return render(request, 'portaladmin/studentresourcelist.html', 
                     {'studentslist':studentslist}
                 )
-
-def subjectlist(request):
-    return HttpResponse("To be done later")
