@@ -29,6 +29,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             {% trans "Classrooms" %}
+            <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
@@ -43,11 +44,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for folder in folders%}
+                        {% for class in classinfo%}
                         <tr class="gradeX" id="{{forloop.counter}}">
                             <td>{{forloop.counter}}</td>
-                            <td>{{folder.name}}</td>
-                            <td>{{folder.shortname}}</td>
+                            <td>{{class.classname}}</td>
+                            <td>{{class.shortname}}</td>
                             <td><i class="fa fa-trash fa-fw"></i></td>
                         </tr>
                         {% endfor %}
@@ -63,11 +64,147 @@
     <!-- /.col-lg-12 -->
 {% endblock botcontent%}
 
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<style>
+    #addrec:hover, #admin-main-tbl tbody tr:hover{
+        cursor: pointer;
+    }
+</style>
+{% endblock morecss %}
+
+
 {% block morescript %}
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+
 {% endblock morescript %}
 
 {% block scriptcontent %}
-{% endblock scriptcontent %}
+<script id="editschool" type="text/x-jsrender">
+<form id="newfolderfrm" class="form-horizontal" role="form">
+    <div class="row">
+    <div class="form-group" class="col-sm-3">
+        <label for="folder_name" class="col-sm-4 control-label">{% trans "Select School" %}</label>
+        <div class="col-sm-4">
+            <select name="school_name" class="form-control" id="school_name">
+                {% for school in schools%}
+                <option value="{{school.schoolid}}">
+                    {{school.schoolname}}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    </div>
+     <div class="row">
+    <div class="form-group" class="col-sm-3">
+        <label for="folder_name" class="col-sm-4 control-label">{% trans "Class Name" %}
+        </label>
+        <div class="col-sm-4">
+            <select name="school_name" class="form-control" id="school_name">
+                {% for classinfo in classinfo%}
+                <option value="{{school.schoolid}}">
+                    {{classinfo.classname}}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    </div>
+</form>
+</script>
+<script>
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}
+TTS.forms.editschool = function() {
+    BootstrapDialog.show({
+        title: 'Add Classrooms',
+        onshown: function(dialogRef){
+            $('.summernote').summernote();
+        },
+        message: $($('#editschool').render()),
+        buttons: [{
+            label: 'Save',
+            cssClass: 'btn-primary',
+            action: function(){
+                var data = TTS.utils.serilaizeJson("#newfolderfrm");
+                $.ajax({
+                    type:'POST',
+                    data: {'data':data},
+                    url : '/api/admin/addfolder'
+                }).done(function( msg ) {
+                    console.log(msg);
+                    //dialogItself.close();
+                });
+            }
+            },{
+            label: 'Cancel',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
+        }]
+    });
+};
+/*TTS.forms.renderteacherresourceinfo = function(data){
+    var headers = [
+            { "title": "{% trans "Sl No." %}",
+              "class": "text-center"  
+            },
+            { "title": "{% trans "Title" %}"},
+            { "title": "{% trans "Date" %}" },
+            { "title": "{% trans "Type" %}"}, 
+            { "title": "{% trans "Delete" %}",
+              "class": "text-center"  
+            }, 
+        ];
+    var dataset = [];
+    var count = 0
+    for(var i in data){
+        var t = [];
+        t.push(++count);
+        t.push(data[i].resourcetitle);
+        t.push(data[i].createddate);
+        t.push(data[i].resourcetype);
+        t.push("<i class='fa fa-trash fa-lg'></i>");
+        dataset.push(t);
+    }
 
-{% block morecss %}
-{% endblock morecss %}
+    $('#admin-main-tbl').dataTable({
+        "data":     dataset,
+        "columns":  headers
+    });
+
+};*/
+$(document).ready(function(){
+    $.ajax({
+        "url":"/api/admin/classlist/?format=json",
+        "type":"GET"
+    }).done(function(data){
+        console.log(data);
+        TTS.forms.renderteacherresourceinfo(data);
+    });
+    $('#admin-main-tbl tbody tr').on('click', '.tts-edit', function(e){
+        e.stopPropagation();
+        TTS.forms.editschool();
+    });
+    $('#admin-main-tbl tbody tr').on('click', '.tts-delete', function(e){
+        e.stopPropagation();
+        if (!window.confirm("Do you want to delete this record?")) {
+            return false;
+        }
+        alert("Record Deleted")
+        window.location = 'schoollist';
+    });
+    $("#page-wrapper").on("click", "#addrec", function(){
+        TTS.forms.editschool();
+    });
+});
+
+</script>
+{% endblock scriptcontent %}
