@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
+from django.http import HttpResponse
 from portaladmin import models
 def switchlanguage(f):
     def inner(req):
@@ -42,6 +43,7 @@ def home(request):
 
 @switchlanguage
 def adminlist(request):
+    '''
     adminlist_head = [_('Sl No.'),
                          _('Photo'),
                          _('Name'),
@@ -50,28 +52,20 @@ def adminlist(request):
                          _('Delete')]
     adminlist_body = models.Admininfo.getlist()
     adminlist = {'head':adminlist_head, 'body':adminlist_body}
-    return render(request, 'portaladmin/adminlist.html', {'adminlist':adminlist})
+    '''
+    return render(request, 'portaladmin/adminlist.html')
 
 @switchlanguage
 def teacherslist(request):
     schools = models.Schoolinfo.objects.all()
-    """
-    teacherslist_head = [('Sl No.'),
-                         _('Photo'),
-                         _('Name'),
-                         _('User Name'),
-                         _('Email Id'),
-                         _('Edit'),
-                         _('Delete')]
-    teacherslist_body = models.Teacherinfo.getlist()
-    teacherslist = {'head':teacherslist_head, 'body':teacherslist_body}
-    """
-    return render(request, 'portaladmin/teacherslist.html', {#'teacherslist':teacherslist,
-                                                'schools':schools})
+    
+    return render(request, 'portaladmin/teacherslist.html', 
+                                        {'schools':schools})
 
 @switchlanguage
 def studentslist(request):
     schools = models.Schoolinfo.objects.all()
+    classes = models.Classinfo.objects.all()
     studentslist_head = [('Sl No.'),
                          _('Photo'),
                          _('Name'),
@@ -81,7 +75,8 @@ def studentslist(request):
                          _('Delete')]
     studentslist_body = models.Studentinfo.getlist()
     studentslist = {'head':studentslist_head, 'body':studentslist_body}
-    return render(request, 'portaladmin/studentslist.html', {'studentslist':studentslist})
+    return render(request, 'portaladmin/studentslist.html', {'schools':schools,
+                                                             'classes':classes})
 
 @switchlanguage
 def schoollist(request):
@@ -96,6 +91,8 @@ def schoollist(request):
 
 @switchlanguage
 def teacherresourcelist(request):
+    classes = models.Classinfo.objects.all()
+    chapter = models.Chapterinfo.objects.all()
     teacherresourcelist_head = [('Sl No.'),
                          _('Title'),
                          _('Date'),
@@ -105,7 +102,7 @@ def teacherresourcelist(request):
     teacherresourcelist = {'head':teacherresourcelist_head, 
                            'body':teacherresourcelist_body}
     return render(request, 'portaladmin/teacherresourcelist.html', 
-                  {'teacherresourcelist':teacherresourcelist})
+                  {'classes':classes,'chapter' : chapter})
 
 @switchlanguage
 def studentresourcetype(request):
@@ -139,15 +136,15 @@ def resourcetype(request):
     folders = [{
         "id": "1",
         "name" :"வாசிப்பு",
-        "href" :"portaladmin/subjectlist"
+        "href" :"chapterlist"
         },{
         "id": "2",
         "name" :"பட உரையாடல்",
-        "href" :"portaladmin/subjectlist"
+        "href" :"chapterlist"
         },{
         "id": "3",
         "name" :"எழுத்து பலகை",
-        "href" :"portaladmin/subjectlist"
+        "href" :"chapterlist"
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
@@ -182,47 +179,18 @@ def extralist(request):
 
 
 @switchlanguage
-def subjectlist(request):
-    folders = [{
-        "id": "1",
-        "name" :"{0} - 1 (0) ".format(_("Lession"))
-        },{
-        "id": "2",
-        "name" :"{0} - 2 (2) ".format(_("Lession"))
-        },{
-        "id": "3",
-       "name" :"{0} - 3 (12) ".format(_("Lession"))
-        },{
-        "id": "4",
-       "name" :"{0} - 4 (15) ".format(_("Lession"))
-        },{
-        "id": "4",
-       "name" :"{0} - 5 (15) ".format(_("Lession"))
-        },{
-        "id": "4",
-       "name" :"{0} - 6 (15) ".format(_("Lession"))
-        },{
-        "id": "4",
-       "name" :"{0} - 7 (15) ".format(_("Lession"))
-        },{
-        "id": "4",
-       "name" :"{0} - 8 (15) ".format(_("Lession"))
-        },{
-        "id": "4",
-       "name" :"{0} - 9 (15) ".format(_("Lession"))
-        },{
-        "id": "4",
-       "name" :"{0} - 10 (15) ".format(_("Lession"))
-        }]
-    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
-    #studentresourcetype = {'head':studentresourcetype_head, 
-                           #'body':studentresourcetype_body}
-    return render(request, 'subjectlist.html', 
-                  {"folders":folders,'subjectlist':subjectlist})
-
+def chapterlist(request):
+    chapterlist_body = models.Chapterinfo.objects.all()
+    return render(request, 
+                  'portaladmin/chapterlist.html', 
+                  {'chapterlist':chapterlist,
+                   'classid': request.GET.get('classid'),
+                   'section': request.GET.get('section')
+                  })
 
 @switchlanguage
 def classlist(request):
+    schools = models.Schoolinfo.objects.all()
     folders = [{
         "id": "1",
         "name" :"Primary1",
@@ -251,17 +219,18 @@ def classlist(request):
     classlist_head = [_('Sl No.'),
                       _('School Name'),
                       _('Short Name'),
-                      _('Edit'),
                       _('Delete')]
     classlist = {'head':classlist_head}
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
                            #'body':studentresourcetype_body}
-    return render(request, 'classlist.html', 
-                  {"folders":folders, 'classlist':classlist})
+    return render(request, 'portaladmin/classlist.html', 
+                  {"folders":folders, 'classlist':classlist, 'schools':schools}
+                  )
 
 @switchlanguage
 def statistics(request):
+    schools = models.Schoolinfo.objects.all()
     studentslist_head = [_('Sl No.'),
                          _('Photo'),
                          _('Name'),
@@ -269,7 +238,8 @@ def statistics(request):
                          _('Edit')]
     studentslist_body = models.Studentinfo.getlist() 
     studentslist = {'head':studentslist_head, 'body':studentslist_body}
-    return render(request, 'statistics.html', {'studentslist':studentslist})
+    return render(request, 'portaladmin/statistics.html', {'schools':schools})
+   
 
 @switchlanguage
 def classroom(request):
@@ -306,7 +276,7 @@ def classroom(request):
                              'email':'johndoe@acme.com'
                          }]
     studentslist = {'head':studentslist_head, 'body':studentslist_body}
-    return render(request, 'classroom.html', {'studentslist':studentslist})
+    return render(request, 'portaladmin/classroom.html', {'studentslist':studentslist})
 
 @switchlanguage
 def billboard(request):
@@ -353,3 +323,21 @@ def sticky_notes(request):
     
 def calendar(request):
     return render(request, 'portaladmin/calendar.html', {})
+    
+def recorder(request):
+    return render(request, 'portaladmin/recorder.html', {})
+
+def studentresourcelist(request):
+    studentslist_head = [_('Sl No.'),
+                         _('Title'),
+                         _('Date'),
+                         _('Type'),
+                         _('Delete')]
+    studentslist_body = models.Studentinfo.getlist() 
+    studentslist = {'head':studentslist_head, 'body':studentslist_body}
+    return render(request, 'portaladmin/studentresourcelist.html', 
+                    {'studentslist':studentslist}
+                )
+
+def subjectlist(request):
+    return HttpResponse("To be done later")

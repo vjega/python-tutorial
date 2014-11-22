@@ -1,0 +1,86 @@
+{% extends 'portaladmin/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block topcontent %}
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">Recorder</h2>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+{% endblock topcontent %}
+{% block botcontent %}
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                             Recorder
+                        </div>
+                        <!-- /.panel-heading -->
+                            <div id="recorder-wrap">
+                                <div id="recorder">
+                                    <p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
+                                </div>
+                            </div>
+                            <div id="audio_container">
+                                Once you have made a recording, this text will be replaced with an audio player.
+                            </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+{% endblock botcontent%}
+
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<style>
+    #addrec:hover, #admin-main-tbl tbody tr:hover{
+        cursor: pointer;
+    }
+</style>
+{% endblock morecss %}
+{% block morescript %}
+<!-- script-->
+<script type="text/javascript" src="{% static "bower_components/local-audio-recorder-master/demo/swfobject.js" %}"></script>
+{% endblock morescript %}
+
+{% block scriptcontent %}
+<script>
+function audioReceived(filename, filedata) {
+        filedata = window.atob(filedata);
+        var container = document.getElementById('audio_container');
+        var wrap = document.getElementById('recorder-wrap');
+        var link = document.createElement('a');
+        var audio = document.createElement('audio');
+        var WU = window.URL || window.webkitURL;
+        var blob, recorderHTML;
+        
+        // Extract raw data from Base64-encoded string
+        var ar = new Uint8Array(filedata.length);
+        for(var i=0;i<filedata.length;++i) {
+            ar[i] = filedata.charCodeAt(i);
+        }
+
+        // Put audio data into a blob and set up <audio> tag
+        blob = new Blob([ar], {type:'audio/x-wav'});
+        audio.src = WU.createObjectURL(blob);
+        audio.controls = true;
+
+        container.innerHTML = '';
+        link.href = audio.src;
+        link.appendChild(document.createTextNode('Download this recording'));
+        link.download = filename;
+        container.appendChild(audio);
+        container.appendChild(document.createElement('br'));
+        container.appendChild(document.createElement('br'));
+        container.appendChild(link);
+}
+
+        flashvars = {gateway:'form', 'return':'reset', callback:'audioReceived', format:'wav'};
+        swfobject.embedSWF("{% static "bower_components/local-audio-recorder-master/build/recorder.swf" %}", "recorder", "215", "138", "10.1", "{% static "bower_components/local-audio-recorder-master/demo/expressInstall.swf"  %}", flashvars);
+</script>
+{% endblock scriptcontent %}
+
+
