@@ -310,3 +310,6 @@ def studentresourcelist(request):
     return render(request, 'portaladmin/studentresourcelist.html', 
                     {'studentslist':studentslist}
                 )
+
+def subjectlist(request):
+    return HttpResponse("Not implemented", 404)
