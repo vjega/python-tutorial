@@ -193,7 +193,7 @@ def classlist(request):
     schools = models.Schoolinfo.objects.all()
     classinfo = models.Classinfo.objects.all()
     classlist_head = [_('Sl No.'),
-                      _('class Name'),
+                      _('Class Name'),
                       _('Short Name'),
                       _('Delete')]
     classlist = {'head':classlist_head}
