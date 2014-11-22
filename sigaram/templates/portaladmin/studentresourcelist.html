@@ -270,7 +270,7 @@ $(document).ready(function(){
     });
     $('#admin-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();
-        //console.log("Hello");
+        console.log("Hello");
         window.location = 'viewstudentresourcelist.html?categoryid=1&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.classid;
     });
     $('#admin-main-tbl tbody').on('click', 'tr', function(){

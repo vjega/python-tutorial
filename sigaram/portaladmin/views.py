@@ -103,6 +103,13 @@ def teacherresourcelist(request):
                   {'classes':classes})
 
 @switchlanguage
+def viewteacherresource(request):
+    viewteacherresource_head = [('Sl No.')]
+    viewteacherresource = {'head':viewteacherresource_head }
+                           
+    return render(request, 'portaladmin/viewteacherresource.html')
+
+@switchlanguage
 def studentresourcetype(request):
     folders = [{
         "id": "p1",
