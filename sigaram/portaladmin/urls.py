@@ -31,5 +31,6 @@ urlpatterns = patterns('',
     url(r'^mindmap$',                 views.mindmap,    name='mindmap'),
     url(r'^sticky_notes$',            views.sticky_notes,    name='sticky_notes'),
     url(r'^calendar$',                views.calendar,    name='calendar'),
+    url(r'^Recorder$',                views.recorder,    name='Recorder'),
     (r'^api/admin', include(admin_folders_resources.urls)),
 )
