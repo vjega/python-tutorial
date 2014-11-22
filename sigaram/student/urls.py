@@ -9,4 +9,5 @@ urlpatterns = patterns('',
                                                         name='studentresourcetype'),
     url(r'^resourcetype',           views.resourcetype, name='resourcetype'),
     url(r'^workspace',              views.workspace,    name='workspace'),
+    
 )
