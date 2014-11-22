@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
+from django.http import HttpResponse
 from portaladmin import models
 def switchlanguage(f):
     def inner(req):
@@ -333,3 +334,6 @@ def studentresourcelist(request):
     return render(request, 'portaladmin/studentresourcelist.html', 
                     {'studentslist':studentslist}
                 )
+
+def subjectlist(request):
+    return HttpResponse("To be done later")
