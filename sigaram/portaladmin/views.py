@@ -92,6 +92,7 @@ def schoollist(request):
 @switchlanguage
 def teacherresourcelist(request):
     classes = models.Classinfo.objects.all()
+    chapter = models.Chapterinfo.objects.all()
     teacherresourcelist_head = [('Sl No.'),
                          _('Title'),
                          _('Date'),
@@ -101,7 +102,7 @@ def teacherresourcelist(request):
     teacherresourcelist = {'head':teacherresourcelist_head, 
                            'body':teacherresourcelist_body}
     return render(request, 'portaladmin/teacherresourcelist.html', 
-                  {'classes':classes})
+                  {'classes':classes,'chapter' : chapter})
 
 @switchlanguage
 def studentresourcetype(request):
