@@ -124,3 +124,15 @@ def workspace(request):
                            #'body':studentresourcetype_body}
     return render(request, 'portalstudent/workspace.html', 
                   {"folders":folders,'workspace':workspace})
+@switchlanguage
+def studentslist(request):
+    studentslist_head = [('Sl No.'),
+                         _('Photo'),
+                         _('Name'),
+                         _('User Name'),
+                         _('Email Id'),
+                         _('Edit'),
+                         _('Delete')]
+    studentslist_body = models.Studentinfo.getlist()
+    studentslist = {'head':studentslist_head, 'body':studentslist_body}
+    return render(request, 'portalstudent/studentslist.html')
