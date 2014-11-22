@@ -189,6 +189,16 @@ def chapterlist(request):
                   })
 
 @switchlanguage
+def viewstudentresourcelist(request):
+    viewstudentresourcelist_body = models.Chapterinfo.objects.all()
+    return render(request, 
+                  'portaladmin/viewstudentresourcelist.html', 
+                  {'viewstudentresourcelist':viewstudentresourcelist,
+                   'classid': request.GET.get('classid'),
+                   'section': request.GET.get('section')
+                  })
+
+@switchlanguage
 def classlist(request):
     schools = models.Schoolinfo.objects.all()
     classinfo = models.Classinfo.objects.all()
