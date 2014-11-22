@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
-from django.http import HttpResponse
 from portaladmin import models
 def switchlanguage(f):
     def inner(req):
@@ -92,7 +91,6 @@ def schoollist(request):
 @switchlanguage
 def teacherresourcelist(request):
     classes = models.Classinfo.objects.all()
-    chapter = models.Chapterinfo.objects.all()
     teacherresourcelist_head = [('Sl No.'),
                          _('Title'),
                          _('Date'),
@@ -102,7 +100,7 @@ def teacherresourcelist(request):
     teacherresourcelist = {'head':teacherresourcelist_head, 
                            'body':teacherresourcelist_body}
     return render(request, 'portaladmin/teacherresourcelist.html', 
-                  {'classes':classes,'chapter' : chapter})
+                  {'classes':classes})
 
 @switchlanguage
 def studentresourcetype(request):
@@ -191,33 +189,9 @@ def chapterlist(request):
 @switchlanguage
 def classlist(request):
     schools = models.Schoolinfo.objects.all()
-    folders = [{
-        "id": "1",
-        "name" :"Primary1",
-        "shortname" :"P1"
-        },{
-        "id": "2",
-        "name" :"Primary2",
-        "shortname" :"P2"
-        },{
-        "id": "3",
-        "name" :"Primary3",
-        "shortname" :"P3"
-        },{
-        "id": "4",
-        "name" :"Primary4",
-        "shortname" :"P4"
-        },{
-        "id": "5",
-        "name" :"Primary5",
-        "shortname" :"P5"
-        },{
-        "id": "6",
-        "name" :"Primary6",
-        "shortname" :"P6"
-        }]
+    classinfo = models.Classinfo.objects.all()
     classlist_head = [_('Sl No.'),
-                      _('School Name'),
+                      _('Class Name'),
                       _('Short Name'),
                       _('Delete')]
     classlist = {'head':classlist_head}
@@ -225,7 +199,8 @@ def classlist(request):
     #studentresourcetype = {'head':studentresourcetype_head, 
                            #'body':studentresourcetype_body}
     return render(request, 'portaladmin/classlist.html', 
-                  {"folders":folders, 'classlist':classlist, 'schools':schools}
+                  {"classinfo":classinfo, 'classlist':classlist, 
+                  'schools':schools}
                   )
 
 @switchlanguage
@@ -340,4 +315,4 @@ def studentresourcelist(request):
                 )
 
 def subjectlist(request):
-    return HttpResponse("To be done later")
+    return HttpResponse("Not implemented", 404)

@@ -153,4 +153,3 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             queryset = models.Chapterinfo.objects.all()
         serializer = adminserializers.ChapterinfoSerializer(queryset, many=True)
         return Response(serializer.data)
-    
