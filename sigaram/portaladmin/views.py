@@ -150,10 +150,6 @@ def resourcetype(request):
         "id": "3",
         "name" :"எழுத்து பலகை",
         "href" :"chapterlist"
-        },{
-        "id": "4",
-        "name" :"எங்கும்  தமிழோசை",
-        "href" :"extralist"
         }]
 
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
@@ -167,19 +163,19 @@ def extralist(request):
     folders = [{
         "id": "1",
         "name" :"எழுத்து",
-        "href" :"extralist"
+        "href" :""
         },{
         "id": "2",
         "name" :"பல்லூடகம்",
-        "href" :"extralist"
+        "href" :""
         },{
         "id": "3",
         "name" :"பாடல்",
-        "href" :"extralist"
+        "href" :""
         },{
         "id": "4",
         "name" :"ஒளிப்படக்காட்சி",
-        "href" :"extralist"
+        "href" :""
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
@@ -194,15 +190,6 @@ def chapterlist(request):
     return render(request, 
                   'portaladmin/chapterlist.html', 
                   {'chapterlist':chapterlist,
-                   'classid': request.GET.get('classid'),
-                   'section': request.GET.get('section')
-                  })
-
-def extralist(request):
-    extra_body = models.Chapterinfo.objects.all()
-    return render(request, 
-                  'portaladmin/extralist.html', 
-                  {'chapterlist':extralist,
                    'classid': request.GET.get('classid'),
                    'section': request.GET.get('section')
                   })
