@@ -150,7 +150,12 @@ def resourcetype(request):
         "id": "3",
         "name" :"எழுத்து பலகை",
         "href" :"chapterlist"
+        },{
+        "id": "4",
+        "name" :"எங்கும்  தமிழோசை",
+        "href" :"extralist"
         }]
+
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
                            #'body':studentresourcetype_body}
@@ -162,19 +167,19 @@ def extralist(request):
     folders = [{
         "id": "1",
         "name" :"எழுத்து",
-        "href" :""
+        "href" :"extralist"
         },{
         "id": "2",
         "name" :"பல்லூடகம்",
-        "href" :""
+        "href" :"extralist"
         },{
         "id": "3",
         "name" :"பாடல்",
-        "href" :""
+        "href" :"extralist"
         },{
         "id": "4",
         "name" :"ஒளிப்படக்காட்சி",
-        "href" :""
+        "href" :"extralist"
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
@@ -193,6 +198,15 @@ def chapterlist(request):
                    'section': request.GET.get('section')
                   })
 
+def extralist(request):
+    extra_body = models.Chapterinfo.objects.all()
+    return render(request, 
+                  'portaladmin/extralist.html', 
+                  {'chapterlist':extralist,
+                   'classid': request.GET.get('classid'),
+                   'section': request.GET.get('section')
+                  })
+
 @switchlanguage
 def viewstudentresourcelist(request):
     viewstudentresourcelist_body = models.Chapterinfo.objects.all()
@@ -202,6 +216,18 @@ def viewstudentresourcelist(request):
                    'classid': request.GET.get('classid'),
                    'section': request.GET.get('section')
                   })
+
+@switchlanguage
+def viewstudentwrittenworks(request):
+    viewstudentwrittenworks_head = [('Sl No.'),
+                         _('Name'),
+                         _('Short Name'),
+                         _('Edit'),
+                         _('Delete')]
+    viewstudentwrittenworks_body = models.Schoolinfo.objects.all()
+    viewstudentwrittenworks = {'head':viewstudentwrittenworks_head, 'body':viewstudentwrittenworks_body}
+    return render(request, 'portaladmin/viewstudentwrittenworks.html')
+
 
 @switchlanguage
 def classlist(request):
@@ -352,12 +378,10 @@ def studentprofile(request):
                   {"folders":folders})
 
 def studentassignedresourcelist(request):
-    assigned_head = [_('Sl No.'),
+    '''assigned_head = [_('Sl No.'),
                          _('Title'),
                          _('Type'),
                          _('Date'),
                          _('Note')]
-    studentslist = {'assigned_head':assigned_head}
-    return render(request, 'portaladmin/studentassignedresourcelist.html', 
-                    {'studentslist':studentslist}
-                )
+    studentslist = {'assigned_head':assigned_head}'''
+    return render(request, 'portaladmin/studentassignedresourcelist.html')

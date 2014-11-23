@@ -51,7 +51,7 @@ class ResourceinfoSerializer(serializers.HyperlinkedModelSerializer):
                   'section','chapterid', 'resourcetype',
                   'originaltext','resourcetitle','resourcedescription',
                   'thumbnailurl','documenturl','imageurl',
-                  'audiourl','videourl'
+                  'audiourl','videourl','createddate'
                   )
 
 class WrittenworkinfoSerializer(serializers.HyperlinkedModelSerializer):
@@ -71,3 +71,4 @@ class ClassroominfoSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Classroominfo
         fields = ('classroomid',  'assessmentid','resourceid',
                   'writtenworkid')
+        depth = 2
