@@ -25,6 +25,8 @@ urlpatterns = patterns('portaladmin.views',
     url(r'^chapterlist',              'chapterlist',  name='chapterlist'),
     url(r'^viewstudentresourcelist',  'viewstudentresourcelist',  
                                                       name='viewstudentresourcelist'),
+    url(r'^extralist',              'extralist',  name='extralist'),
+    
     #url(r'^extras',                   views.'extras',       name='extras'),
     #url(r'^statisticsstudentslist$',  views.'statisticsstudentslist',
     url(r'^statistics-activities$',   'statistics',   name='statistics'),
