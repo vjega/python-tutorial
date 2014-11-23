@@ -252,19 +252,30 @@ TTS.forms.renderstudentlist = function(data){
     
     var headers = [
             { "title": "{% trans "Sl No." %}",
-              "class": "text-center"  
+              "class": "text-center",
+              "data" : "slno"  
             },
             { "title": "{% trans "Photo" %}",
-              "class": "text-center"  
+              "class": "text-center",  
+              "data" : "photo"  
             },
-            { "title": "{% trans "Name" %}" },
-            { "title": "{% trans "Username" %}"}, 
-            { "title": "{% trans "Email Id" %}"}, 
-              { "title": "{% trans "Edit" %}",
-              "class": "text-center"  
+            { "title": "{% trans "Name" %}",
+              "data" : "name"  
+            },
+            { "title": "{% trans "Username" %}",
+              "data" : "username"  
+            }, 
+            { "title": "{% trans "Email Id" %}",
+              "data" : "emailid"  
+            }, 
+            { "title": "{% trans "Edit" %}",
+              "class": "text-center",
+              "data" : "edit"  
+
             }, 
             { "title": "{% trans "Delete" %}",
-              "class": "text-center"  
+              "class": "text-center",
+              "data" : "delete"  
             }, 
         ];
     var dataset = [];
@@ -272,17 +283,18 @@ TTS.forms.renderstudentlist = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.push(++count);
+        t.DT_RowId = data[i].studentid;
+        t.slno = ++count;
         if (data[i].imageurl){
-            t.push("<img src='/static/"+data[i].imageurl+"' width='100' height='100'>");
+            t.photo = "<img src='/static/"+data[i].imageurl+"' width='100' height='100'>";
         } else {
-            t.push("<img src='http://placehold.it/100x100'>");
+            t.photo ="<img src='http://placehold.it/100x100'>";
         }
-        t.push(data[i].firstname + " "+data[i].lastname);
-        t.push(data[i].username);
-        t.push(data[i].emailid);
-        t.push("<i class='fa fa-pencil fa-lg'></i>");
-        t.push("<i class='fa fa-trash fa-lg'></i>");
+        t.name = data[i].firstname + " "+data[i].lastname;
+        t.username = data[i].username;
+        t.emailid = data[i].emailid;
+        t.edit = "<i class='fa fa-pencil fa-lg'></i>";
+        t.delete = "<i class='fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
     if (TTS.forms.table) {
@@ -338,7 +350,7 @@ $(document).ready(function(){
     })
 
     $('#admin-main-tbl').on('click', 'tbody tr', function(){
-        window.location = 'studentprofile?studentid=';
+        window.location = 'studentprofile?studentid='+this.id;
     });
     $('#admin-main-tbl tbody tr').on('click', '.tts-edit', function(e){
         e.stopPropagation();
