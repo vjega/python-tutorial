@@ -57,9 +57,9 @@ def adminlist(request):
 @switchlanguage
 def teacherslist(request):
     schools = models.Schoolinfo.objects.all()
-    
+    classes = models.Classinfo.objects.all()
     return render(request, 'portaladmin/teacherslist.html', 
-                                        {'schools':schools})
+                                        {'schools':schools,'classes':classes})
 
 @switchlanguage
 def studentslist(request):
