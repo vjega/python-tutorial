@@ -338,7 +338,7 @@ $(document).ready(function(){
     })
 
     $('#admin-main-tbl').on('click', 'tbody tr', function(){
-        window.location = 'studentprofile?studentid='+this.id;
+        window.location = 'studentprofile?studentid=';
     });
     $('#admin-main-tbl tbody tr').on('click', '.tts-edit', function(e){
         e.stopPropagation();
