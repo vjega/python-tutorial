@@ -57,9 +57,9 @@ def adminlist(request):
 @switchlanguage
 def teacherslist(request):
     schools = models.Schoolinfo.objects.all()
-    
+    classes = models.Classinfo.objects.all()
     return render(request, 'portaladmin/teacherslist.html', 
-                                        {'schools':schools})
+                                        {'schools':schools,'classes':classes})
 
 @switchlanguage
 def studentslist(request):
@@ -333,3 +333,31 @@ def studentresourcelist(request):
 
 def subjectlist(request):
     return HttpResponse("Not implemented", 404)
+
+@switchlanguage
+def studentprofile(request):
+    folders = [{
+        "id": "1",
+        "name" :"Deliverables",
+        "href" :"studentassignedresourcelist"
+        },{
+        "id": "2",
+        "name" :"Writing job",
+        "href" :"viewstudentwrittenworks"
+        }]
+    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
+    #studentresourcetype = {'head':studentresourcetype_head, 
+                           #'body':studentresourcetype_body}
+    return render(request, 'portaladmin/studentprofile.html', 
+                  {"folders":folders})
+
+def studentassignedresourcelist(request):
+    assigned_head = [_('Sl No.'),
+                         _('Title'),
+                         _('Type'),
+                         _('Date'),
+                         _('Note')]
+    studentslist = {'assigned_head':assigned_head}
+    return render(request, 'portaladmin/studentassignedresourcelist.html', 
+                    {'studentslist':studentslist}
+                )

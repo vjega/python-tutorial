@@ -65,3 +65,9 @@ class ChapterinfoSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Chapterinfo
         fields = ('chapterid',  'classid','sectionid',
                   'chaptername')
+
+class ClassroominfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Classroominfo
+        fields = ('classroomid',  'assessmentid','resourceid',
+                  'writtenworkid')

@@ -249,6 +249,9 @@ TTS.forms.renderteacher = function(data){
             { "title": "{% trans "Name" %}" },
             { "title": "{% trans "Username" %}"}, 
             { "title": "{% trans "Email Id" %}"}, 
+            { "title": "{% trans "Edit" %}",
+              "class": "text-center"  
+            },
             { "title": "{% trans "Delete" %}",
               "class": "text-center"  
             }, 
@@ -267,6 +270,7 @@ TTS.forms.renderteacher = function(data){
         t.push(data[i].firstname + " "+data[i].lastname);
         t.push(data[i].username);
         t.push(data[i].emailid);
+        t.push("<i class='fa fa-pencil fa-lg'></i>");
         t.push("<i class='fa fa-trash fa-lg'></i>");
         dataset.push(t);
     }

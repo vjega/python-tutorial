@@ -14,6 +14,7 @@ router.register(r'teacherresourcesinfo',      viewsets.TeacherresourceinfoViewSe
 router.register(r'resourceinfo',          viewsets.ResourceinfoViewSet)
 router.register(r'writtenworkinfo',       viewsets.WrittenworkinfoViewSet)
 router.register(r'chapterinfo',           viewsets.ChapterinfoViewSet)
+router.register(r'adminclassinfo',        viewsets.AdminclassinfoViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
