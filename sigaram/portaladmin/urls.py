@@ -32,12 +32,6 @@ urlpatterns = patterns('portaladmin.views',
     url(r'^statistics-assessment$',   'statistics',   name='statistics'),
     url(r'^classroom$',               'classroom',    name='classroom'),
     url(r'^billboard$',               'billboard',    name='billboard'),
-<<<<<<< HEAD
-    url(r'^mindmap$',                 'mindmap',    name='mindmap'),
-    url(r'^sticky_notes$',            'sticky_notes',    name='sticky_notes'),
-    url(r'^calendar$',                'calendar',    name='calendar'),
-    url(r'^recorder$',                'recorder',    name='recorder'),
-=======
     url(r'^mindmap$',                 'Mindmap',      name='mindmap'),
     url(r'^sticky_notes$',            'sticky_notes', name='sticky_notes'),
     url(r'^calendar$',                'calendar',     name='calendar'),
@@ -45,6 +39,5 @@ urlpatterns = patterns('portaladmin.views',
     url(r'^studentassignedresourcelist',
                                       'studentassignedresourcelist',
                                                       name='studentassignedresourcelist'),
->>>>>>> bf3b7c673b7ec56446a509510d4a3c1f58304565
     #(r'^api/', include(v1_api.urls)),
 )
