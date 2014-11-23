@@ -10,9 +10,9 @@
         <!-- /.col-lg-12 -->
     </div>
     <div class="row">
-    <div class="form-group" class="col-sm-3">
-        <label for="folder_name" class="col-sm-4 control-label">{% trans "Select School" %}</label>
-        <div class="col-sm-4">
+    <div class="form-group" class="col-sm-2">
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Select School" %}</label>
+        <div class="col-sm-2">
             <select name="school_name" class="form-control" id="school_name">
                 {% for school in schools%}
                 <option value="{{school.schoolid}}">
