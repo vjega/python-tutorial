@@ -33,15 +33,17 @@
 {% block scriptcontent %}
 <script>
 	$(document).ready(function() {
+
         function saveMyData(event) {
-            $.post(
+            /*$.post(
                 '/event/save', 
                     {
                         title: event.title,
                         start: event.start,
                         end:   event.end
                     }
-                );
+                );*/
+            console.log(event);
          }
 
 	    var calendar = $('#calendar').fullCalendar({
@@ -63,18 +65,16 @@
                         );
                     }
                     calendar.fullCalendar('unselect');
+                    saveMyData({'title': title, 'start': start, 'end': end});
                 },
-                editable: true,
-                 eventDrop: function(calEvent, jsEvent, view) {
-                        var method = 'POST';
-                        var path = '/test.php';
-                        var params = new Array();
-                        params['id'] = calEvent.id;
-                        params['start'] = calEvent.start;
-                         params['end'] = calEvent.end;
-                         params['title'] = calEvent.title;
-                        post_to_url( path, params, method);
-                }
+                eventDrop: function (event, dayDelta, minuteDelta) {
+                    saveMyData(event);
+                },
+
+                eventResize: function (event, dayDelta, minuteDelta) {
+                     saveMyData(event);
+                 },
+                editable: true
 	    })
 	});
 </script>
