@@ -51,7 +51,7 @@ class ResourceinfoSerializer(serializers.HyperlinkedModelSerializer):
                   'section','chapterid', 'resourcetype',
                   'originaltext','resourcetitle','resourcedescription',
                   'thumbnailurl','documenturl','imageurl',
-                  'audiourl','videourl'
+                  'audiourl','videourl','createddate'
                   )
 
 class WrittenworkinfoSerializer(serializers.HyperlinkedModelSerializer):

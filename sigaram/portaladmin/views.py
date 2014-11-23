@@ -205,6 +205,18 @@ def viewstudentresourcelist(request):
                   })
 
 @switchlanguage
+def viewstudentwrittenworks(request):
+    viewstudentwrittenworks_head = [('Sl No.'),
+                         _('Name'),
+                         _('Short Name'),
+                         _('Edit'),
+                         _('Delete')]
+    viewstudentwrittenworks_body = models.Schoolinfo.objects.all()
+    viewstudentwrittenworks = {'head':viewstudentwrittenworks_head, 'body':viewstudentwrittenworks_body}
+    return render(request, 'portaladmin/viewstudentwrittenworks.html')
+
+
+@switchlanguage
 def classlist(request):
     schools = models.Schoolinfo.objects.all()
     classinfo = models.Classinfo.objects.all()
@@ -353,12 +365,10 @@ def studentprofile(request):
                   {"folders":folders})
 
 def studentassignedresourcelist(request):
-    assigned_head = [_('Sl No.'),
+    '''assigned_head = [_('Sl No.'),
                          _('Title'),
                          _('Type'),
                          _('Date'),
                          _('Note')]
-    studentslist = {'assigned_head':assigned_head}
-    return render(request, 'portaladmin/studentassignedresourcelist.html', 
-                    {'studentslist':studentslist}
-                )
+    studentslist = {'assigned_head':assigned_head}'''
+    return render(request, 'portaladmin/studentassignedresourcelist.html')
