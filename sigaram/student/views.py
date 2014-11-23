@@ -136,3 +136,6 @@ def studentslist(request):
     studentslist_body = models.Studentinfo.getlist()
     studentslist = {'head':studentslist_head, 'body':studentslist_body}
     return render(request, 'portalstudent/studentslist.html')
+
+def assignedresourcelist(request):
+    return render(request, 'portalstudent/assignedresourcelist.html')
