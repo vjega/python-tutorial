@@ -42,5 +42,8 @@ urlpatterns = patterns('portaladmin.views',
     url(r'^studentassignedresourcelist',
                                       'studentassignedresourcelist',
                                                       name='studentassignedresourcelist'),
+    url(r'^viewstudentwork',
+                                      'viewstudentwork',
+                                                      name='viewstudentwork'),
     #(r'^api/', include(v1_api.urls)),
 )
