@@ -160,34 +160,36 @@ class AdminclassinfoViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         sql = """
-        SELECT -- DISTINCT 
+        SELECT DISTINCT 
            cri.classroomid,
            cri.assessmentid, 
            cri.resourceid,
-           -- al.assessmenttype,
-           -- al.assessmenttitle,
+           al.assessmenttype,
+           al.assessmenttitle,
            ri.resourcetype,
            ri.resourcetitle,
-           -- wwi.writtenworktitle,
+           wwi.writtenworktitle,
            cri.writtenworkid, 
-           -- si.firstname,
-           -- si.imageurl,
+           si.firstname,
+           si.imageurl,
            date(cri.posteddate) as posteddate,
            cri.studentid
         FROM classroominfo cri
-        -- LEFT OUTER JOIN assignassessmentinfo aai ON aai.assessmentid = cri.assessmentid 
-        --                AND aai.studentid = cri.studentid 
-        -- LEFT OUTER JOIN assessmentlist al ON al.assessmentid = cri.assessmentid 
-        -- LEFT OUTER JOIN assignresourceinfo ari  ON ari.resourceid = cri.resourceid 
-        --                AND ari.studentid = cri.studentid 
+        LEFT OUTER JOIN assignassessmentinfo aai ON aai.assessmentid = cri.assessmentid 
+                        AND aai.studentid = cri.studentid 
+        LEFT OUTER JOIN assessmentlist al ON al.assessmentid = cri.assessmentid 
+        LEFT OUTER JOIN assignresourceinfo ari  ON ari.resourceid = cri.resourceid 
+                        AND ari.studentid = cri.studentid 
         LEFT OUTER JOIN resourceinfo ri ON ri.resourceid = cri.resourceid
-        -- LEFT OUTER JOIN assignwrittenworkinfo awwi ON awwi.writtenworkid = cri.writtenworkid
-        -- LEFT OUTER JOIN writtenworkinfo wwi ON wwi.writtenworkid = cri.writtenworkid
-        -- LEFT OUTER JOIN logininfo li ON li.loginid = cri.studentid
-        -- LEFT OUTER JOIN studentinfo si ON si.username = li.username
-        -- WHERE ( ari.isclassroom =1 OR 
-        --         aai.isclassroom =1 OR 
-        --        awwi.isclassroom=1 ) 
+        LEFT OUTER JOIN assignwrittenworkinfo awwi ON awwi.writtenworkid = cri.writtenworkid
+        LEFT OUTER JOIN writtenworkinfo wwi ON wwi.writtenworkid = cri.writtenworkid
+        LEFT OUTER JOIN logininfo li ON li.loginid = cri.studentid
+        LEFT OUTER JOIN studentinfo si ON si.username = li.username
+        /*
+        WHERE ( ari.isclassroom =1 OR 
+                 aai.isclassroom =1 OR 
+                awwi.isclassroom=1 ) 
+        */
         ORDER BY cri.classroomid DESC
         """
         queryset = models.Classroominfo.objects.raw(sql)

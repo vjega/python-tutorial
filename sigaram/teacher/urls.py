@@ -5,7 +5,7 @@ from teacher import views
 
 urlpatterns = patterns('',
     url(r'^home$',                    views.home,         name='home'),
-   # url(r'^adminlist$',               views.adminlist,    name='adminlist'),
+    # url(r'^adminlist$',               views.adminlist,    name='adminlist'),
     #url(r'^teacherslist$',            views.teacherslist, name='teacherslist'),
     #url(r'^studentslist$',            views.studentslist, name='studentslist'),
     #url(r'^schoollist$',              views.schoollist,   name='schoollist'),
