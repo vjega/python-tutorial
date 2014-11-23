@@ -378,12 +378,10 @@ def studentprofile(request):
                   {"folders":folders})
 
 def studentassignedresourcelist(request):
-    assigned_head = [_('Sl No.'),
+    '''assigned_head = [_('Sl No.'),
                          _('Title'),
                          _('Type'),
                          _('Date'),
                          _('Note')]
-    studentslist = {'assigned_head':assigned_head}
-    return render(request, 'portaladmin/studentassignedresourcelist.html', 
-                    {'studentslist':studentslist}
-                )
+    studentslist = {'assigned_head':assigned_head}'''
+    return render(request, 'portaladmin/studentassignedresourcelist.html')
