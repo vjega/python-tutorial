@@ -2,6 +2,7 @@
 from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
 from portaladmin import models
+
 def switchlanguage(f):
     def inner(req):
         activate(req.session.get('django_language','ta'))
