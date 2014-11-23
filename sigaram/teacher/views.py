@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
-from portaladmin import models
+from teacher import models
 def switchlanguage(f):
     def inner(req):
         activate(req.session.get('django_language','ta'))
@@ -12,21 +12,30 @@ def switchlanguage(f):
 def home(request):
     folders = [{
         "color": u"primary",
-        "icon" : u"university",
-        "link" : u"schoollist",
-        "caption": _("Schools"),
+        "icon" : u"file-text-o",
+        "link" : u"assignedresourcelist",
+        "caption": _("Deliverables"),
         "stat": 25
         }, {
         "color": u"green",
         "icon" : u"book",
-        "link" : u"teacherresourcelist",
-        "caption": u"{0} {1}".format(_("Teachers"),_("Resources")),
+        "caption": _("My works"),
         "stat": 64
         }, {
         "color": u"yellow",
-        "icon" : u"book",
-        "link" : u"studentresourcetype",
-        "caption": u"{0} {1}".format(_("Student"), _("Resources")),
+        "icon" : u"pencil-square-o",
+        "caption": _("Notes"),
+        "stat": 125
+        },{
+        "color": u"red",
+        "icon" : u"pencil",
+        "caption": _("Written Work"),
+        "stat": 125
+        },
+        {
+        "color": u"green",
+        "icon" : u"desktop",
+        "caption": _("Practicals"),
         "stat": 125
         }]
 
@@ -35,7 +44,17 @@ def home(request):
     recent_activity_body = models.Activitylog.recentactivities()
     recent_activities = {'head':recent_acitivity_head,
                          'body':recent_activity_body}
-    return  render(request, 'teacher/index.html', {"folders":folders,
+    return  render(request, 'portalteacher/index.html', {"folders":folders,
                                            "admin_folders":admin_folders,
                                            "recent_activities":recent_activities
                                            })
+
+@switchlanguage
+def assignedresourcelist(request):
+    assignedresourcelist_head = [('Sl No.'),
+                         _('Name'),
+                         _('Short Name'),
+                         _('Edit'),
+                         _('Delete')]
+    assignedresourcelist = {'head':assignedresourcelist_head}
+    return render(request, 'portalteacher/assignedresourcelist.html')
