@@ -71,3 +71,4 @@ class ClassroominfoSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Classroominfo
         fields = ('classroomid',  'assessmentid','resourceid',
                   'writtenworkid')
+        depth = 2
