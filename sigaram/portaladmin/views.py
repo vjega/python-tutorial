@@ -218,6 +218,18 @@ def viewstudentresourcelist(request):
                   })
 
 @switchlanguage
+def viewstudentwrittenworks(request):
+    viewstudentwrittenworks_head = [('Sl No.'),
+                         _('Name'),
+                         _('Short Name'),
+                         _('Edit'),
+                         _('Delete')]
+    viewstudentwrittenworks_body = models.Schoolinfo.objects.all()
+    viewstudentwrittenworks = {'head':viewstudentwrittenworks_head, 'body':viewstudentwrittenworks_body}
+    return render(request, 'portaladmin/viewstudentwrittenworks.html')
+
+
+@switchlanguage
 def classlist(request):
     schools = models.Schoolinfo.objects.all()
     classinfo = models.Classinfo.objects.all()
