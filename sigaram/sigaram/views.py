@@ -15,7 +15,8 @@ def forum(request):
 def togglelanguage(request):
     """
     """
-    if request.session.get("django_language") == 'en':
+    print request.session.get("django_language")
+    if request.session.get("django_language", 'en') == 'en':
         request.session["django_language"] = 'ta'
     elif request.session.get("django_language") == 'ta':
         request.session["django_language"] = 'en'
