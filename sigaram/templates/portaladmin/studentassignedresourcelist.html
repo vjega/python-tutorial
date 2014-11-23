@@ -56,13 +56,21 @@ TTS.forms = TTS.forms || {}
 TTS.forms.renderstudentwork = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
-              "class": "text-center"  
+              "class": "text-center",
+              "data" : "slno"   
             },
-            { "title": "{% trans "Title" %}" },
-            { "title": "{% trans "Type" %}"}, 
-            { "title": "{% trans "Date" %}"}, 
-            { "title": "{% trans "Nots" %}",
-              "class": "text-center"  
+            { "title": "{% trans "Title" %}",
+              "data" : "title" 
+            },
+            { "title": "{% trans "Type" %}",
+              "data" : "type" 
+            }, 
+            { "title": "{% trans "Date" %}",
+              "data" : "date" 
+            }, 
+            { "title": "{% trans "Note" %}",
+              "class": "text-center",
+              "data" : "note"   
             }, 
         ];
     
@@ -72,19 +80,25 @@ TTS.forms.renderstudentwork = function(data){
     
     for(var i in data){
         var t = [];
-        t.push(++count);
-        t.push(data[i].resourcetitle);
-        t.push(data[i].resourcetype);
-        t.push(data[i].createddate);
-        t.push("<i>{%trans "Note" %}</i>");
+        t.DT_RowId = data[i].resourceid;
+        t.slno = ++count;
+        t.title = data[i].resourcetitle;
+        t.type = data[i].resourcetype;
+        t.date = data[i].createddate;
+        t.note = "<i> Note</i>";
         dataset.push(t);
     }
-
-    $('#admin-main-tbl').dataTable({
+    if (TTS.forms.table) {
+        TTS.forms.table.fnClearTable();
+        TTS.forms.table.fnAddData(
+            dataset
+        );
+        return true;
+    }
+    TTS.forms.table = $('#admin-main-tbl').dataTable({
         "data":     dataset,
         "columns":  headers
     });
-
 };
 $(document).ready(function(){
     $.ajax({
@@ -92,6 +106,9 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstudentwork(data);
+    });
+    $('#admin-main-tbl').on('click', 'tbody tr', function(){
+        window.location = 'viewstudentwork?resourceid='+this.id;
     });
 });
 

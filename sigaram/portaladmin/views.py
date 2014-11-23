@@ -385,3 +385,6 @@ def studentassignedresourcelist(request):
                          _('Note')]
     studentslist = {'assigned_head':assigned_head}'''
     return render(request, 'portaladmin/studentassignedresourcelist.html')
+
+def viewstudentwork(request):
+    return render(request, 'portaladmin/viewstudentwork.html')
