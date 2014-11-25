@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import (ugettext as _, activate)
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from portaladmin import models
 
@@ -10,7 +11,6 @@ def switchlanguage(f):
     return inner
 
 @login_required
-@switchlanguage
 def home(request):
     folders = [{
         "color": u"primary",
@@ -43,7 +43,6 @@ def home(request):
                                            })
 
 @login_required
-@switchlanguage
 def adminlist(request):
     '''
     adminlist_head = [_('Sl No.'),
@@ -58,7 +57,6 @@ def adminlist(request):
     return render(request, 'portaladmin/adminlist.html')
 
 @login_required
-@switchlanguage
 def teacherslist(request):
     schools = models.Schoolinfo.objects.all()
     classes = models.Classinfo.objects.all()
@@ -66,7 +64,7 @@ def teacherslist(request):
                                         {'schools':schools,'classes':classes})
 
 @login_required
-@switchlanguage
+#@switchlanguage
 def studentslist(request):
     schools = models.Schoolinfo.objects.all()
     classes = models.Classinfo.objects.all()
@@ -83,7 +81,6 @@ def studentslist(request):
                                                              'classes':classes})
 
 @login_required
-@switchlanguage
 def schoollist(request):
     schoollist_head = [('Sl No.'),
                          _('Name'),
@@ -95,7 +92,6 @@ def schoollist(request):
     return render(request, 'portaladmin/schoollist.html', {'schoollist':schoollist})
 
 @login_required
-@switchlanguage
 def teacherresourcelist(request):
     classes = models.Classinfo.objects.all()
     teacherresourcelist_head = [('Sl No.'),
@@ -110,7 +106,6 @@ def teacherresourcelist(request):
                   {'classes':classes})
 
 @login_required
-@switchlanguage
 def viewteacherresource(request):
     viewteacherresource_head = [('Sl No.')]
     viewteacherresource = {'head':viewteacherresource_head }
@@ -118,7 +113,6 @@ def viewteacherresource(request):
     return render(request, 'portaladmin/viewteacherresource.html')
 
 @login_required
-@switchlanguage
 def studentresourcetype(request):
     folders = [{
         "id": "p1",
@@ -146,7 +140,6 @@ def studentresourcetype(request):
                   {"folders":folders,'studentresourcetype':studentresourcetype})
 
 @login_required
-@switchlanguage
 def resourcetype(request):
     folders = [{
         "id": "1",
@@ -169,7 +162,6 @@ def resourcetype(request):
                   {"folders":folders,'resourcetype':resourcetype})
 
 @login_required
-@switchlanguage
 def extralist(request):
     folders = [{
         "id": "1",
@@ -196,7 +188,6 @@ def extralist(request):
 
 
 @login_required
-@switchlanguage
 def chapterlist(request):
     chapterlist_body = models.Chapterinfo.objects.all()
     return render(request, 
@@ -207,7 +198,6 @@ def chapterlist(request):
                   })
 
 @login_required
-@switchlanguage
 def viewstudentresourcelist(request):
     viewstudentresourcelist_body = models.Chapterinfo.objects.all()
     return render(request, 
@@ -218,7 +208,6 @@ def viewstudentresourcelist(request):
                   })
 
 @login_required
-@switchlanguage
 def viewstudentwrittenworks(request):
     viewstudentwrittenworks_head = [('Sl No.'),
                          _('Name'),
@@ -231,7 +220,6 @@ def viewstudentwrittenworks(request):
 
 
 @login_required
-@switchlanguage
 def classlist(request):
     schools = models.Schoolinfo.objects.all()
     classinfo = models.Classinfo.objects.all()
@@ -249,7 +237,6 @@ def classlist(request):
                   )
 
 @login_required
-@switchlanguage
 def statistics(request):
     schools = models.Schoolinfo.objects.all()
     studentslist_head = [_('Sl No.'),
@@ -263,7 +250,6 @@ def statistics(request):
    
 
 @login_required
-@switchlanguage
 def classroom(request):
     studentslist_head = [_('Sl No.'),
                          _('Photo'),
@@ -301,7 +287,6 @@ def classroom(request):
     return render(request, 'portaladmin/classroom.html', {'studentslist':studentslist})
 
 @login_required
-@switchlanguage
 def billboard(request):
     studentslist_head = [_('Sl No.'),
                          _('Photo'),
@@ -372,7 +357,6 @@ def subjectlist(request):
     return HttpResponse("Not implemented", 404)
 
 @login_required
-@switchlanguage
 def studentprofile(request):
     folders = [{
         "id": "1",

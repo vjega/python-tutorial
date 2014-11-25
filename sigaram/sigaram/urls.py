@@ -5,6 +5,7 @@ from django.utils import translation
 translation.activate('ta')
 
 urlpatterns = patterns('',
+    url(r'^$',              'sigaram.views.home', name='home'),
     url(r'^home$',          'sigaram.views.home', name='home'),
     url(r'^togglelanguage$','sigaram.views.togglelanguage', name='togglelanguage'),
     url(r'^forum$',     'sigaram.views.forum', name='forum'),
@@ -17,5 +18,5 @@ urlpatterns = patterns('',
 
 urlpatterns += patterns('django.contrib.auth.views',
     url(r'^login/$',  'login',  {'template_name': 'login.html'}, name='mysite_login'),
-    url(r'^logout/$', 'logout', {'next_page': '/'}, name='mysite_logout'),
+    url(r'^logout/$', 'logout', {'next_page': '/login/'}, name='mysite_logout'),
 )

@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 # Create your views here.
 def home(request):
-    return  HttpResponse("Hello Admin Page")
+    return redirect('/admin/home')
 
 def logout(request):
     return HttpResponse("Logging Out of the system")
