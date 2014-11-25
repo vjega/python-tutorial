@@ -9,6 +9,7 @@ def switchlanguage(f):
         return f(req)
     return inner
 
+@login_required
 @switchlanguage
 def home(request):
     folders = [{
@@ -41,6 +42,7 @@ def home(request):
                                            "recent_activities":recent_activities
                                            })
 
+@login_required
 @switchlanguage
 def adminlist(request):
     '''
@@ -55,6 +57,7 @@ def adminlist(request):
     '''
     return render(request, 'portaladmin/adminlist.html')
 
+@login_required
 @switchlanguage
 def teacherslist(request):
     schools = models.Schoolinfo.objects.all()
@@ -62,6 +65,7 @@ def teacherslist(request):
     return render(request, 'portaladmin/teacherslist.html', 
                                         {'schools':schools,'classes':classes})
 
+@login_required
 @switchlanguage
 def studentslist(request):
     schools = models.Schoolinfo.objects.all()
@@ -78,6 +82,7 @@ def studentslist(request):
     return render(request, 'portaladmin/studentslist.html', {'schools':schools,
                                                              'classes':classes})
 
+@login_required
 @switchlanguage
 def schoollist(request):
     schoollist_head = [('Sl No.'),
@@ -89,6 +94,7 @@ def schoollist(request):
     schoollist = {'head':schoollist_head, 'body':schoollist_body}
     return render(request, 'portaladmin/schoollist.html', {'schoollist':schoollist})
 
+@login_required
 @switchlanguage
 def teacherresourcelist(request):
     classes = models.Classinfo.objects.all()
@@ -103,6 +109,7 @@ def teacherresourcelist(request):
     return render(request, 'portaladmin/teacherresourcelist.html', 
                   {'classes':classes})
 
+@login_required
 @switchlanguage
 def viewteacherresource(request):
     viewteacherresource_head = [('Sl No.')]
@@ -110,6 +117,7 @@ def viewteacherresource(request):
                            
     return render(request, 'portaladmin/viewteacherresource.html')
 
+@login_required
 @switchlanguage
 def studentresourcetype(request):
     folders = [{
@@ -137,6 +145,7 @@ def studentresourcetype(request):
     return render(request, 'portaladmin/studentresource_type.html', 
                   {"folders":folders,'studentresourcetype':studentresourcetype})
 
+@login_required
 @switchlanguage
 def resourcetype(request):
     folders = [{
@@ -159,6 +168,7 @@ def resourcetype(request):
     return render(request, 'portaladmin/resource_type.html', 
                   {"folders":folders,'resourcetype':resourcetype})
 
+@login_required
 @switchlanguage
 def extralist(request):
     folders = [{
@@ -185,6 +195,7 @@ def extralist(request):
                   {"folders":folders,'resourcetype':resourcetype})
 
 
+@login_required
 @switchlanguage
 def chapterlist(request):
     chapterlist_body = models.Chapterinfo.objects.all()
@@ -195,6 +206,7 @@ def chapterlist(request):
                    'section': request.GET.get('section')
                   })
 
+@login_required
 @switchlanguage
 def viewstudentresourcelist(request):
     viewstudentresourcelist_body = models.Chapterinfo.objects.all()
@@ -205,6 +217,7 @@ def viewstudentresourcelist(request):
                    'section': request.GET.get('section')
                   })
 
+@login_required
 @switchlanguage
 def viewstudentwrittenworks(request):
     viewstudentwrittenworks_head = [('Sl No.'),
@@ -217,6 +230,7 @@ def viewstudentwrittenworks(request):
     return render(request, 'portaladmin/viewstudentwrittenworks.html')
 
 
+@login_required
 @switchlanguage
 def classlist(request):
     schools = models.Schoolinfo.objects.all()
@@ -234,6 +248,7 @@ def classlist(request):
                   'schools':schools}
                   )
 
+@login_required
 @switchlanguage
 def statistics(request):
     schools = models.Schoolinfo.objects.all()
@@ -247,6 +262,7 @@ def statistics(request):
     return render(request, 'portaladmin/statistics.html', {'schools':schools})
    
 
+@login_required
 @switchlanguage
 def classroom(request):
     studentslist_head = [_('Sl No.'),
@@ -284,6 +300,7 @@ def classroom(request):
     studentslist = {'head':studentslist_head, 'body':studentslist_body}
     return render(request, 'portaladmin/classroom.html', {'studentslist':studentslist})
 
+@login_required
 @switchlanguage
 def billboard(request):
     studentslist_head = [_('Sl No.'),
@@ -321,18 +338,23 @@ def billboard(request):
     studentslist = {'head':studentslist_head, 'body':studentslist_body}
     return render(request, 'portaladmin/studentslist.html', {'studentslist':studentslist})
 
+@login_required
 def mindmap(request):
     return render(request, 'portaladmin/mindmap.html', {})
     
+@login_required
 def sticky_notes(request):
     return render(request, 'portaladmin/sticky_notes.html', {})
     
+@login_required
 def calendar(request):
     return render(request, 'portaladmin/calendar.html', {})
     
+@login_required
 def recorder(request):
     return render(request, 'portaladmin/recorder.html', {})
 
+@login_required
 def studentresourcelist(request):
     studentslist_head = [_('Sl No.'),
                          _('Title'),
@@ -345,9 +367,11 @@ def studentresourcelist(request):
                     {'studentslist':studentslist}
                 )
 
+@login_required
 def subjectlist(request):
     return HttpResponse("Not implemented", 404)
 
+@login_required
 @switchlanguage
 def studentprofile(request):
     folders = [{
@@ -365,6 +389,7 @@ def studentprofile(request):
     return render(request, 'portaladmin/studentprofile.html', 
                   {"folders":folders})
 
+@login_required
 def studentassignedresourcelist(request):
     '''assigned_head = [_('Sl No.'),
                          _('Title'),
@@ -374,5 +399,6 @@ def studentassignedresourcelist(request):
     studentslist = {'assigned_head':assigned_head}'''
     return render(request, 'portaladmin/studentassignedresourcelist.html')
 
+@login_required
 def viewstudentwork(request):
     return render(request, 'portaladmin/viewstudentwork.html')
