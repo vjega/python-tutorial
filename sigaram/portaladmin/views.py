@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from portaladmin import models
 
+
 def switchlanguage(f):
     def inner(req):
         activate(req.session.get('django_language','ta'))

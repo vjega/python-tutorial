@@ -1,0 +1,42 @@
+ERROR:root:admin
+ERROR:root:(1062, "Duplicate entry 'admin' for key 'username'")
+ERROR:root:G0948926L
+ERROR:root:(1062, "Duplicate entry 'G0948926L' for key 'username'")
+ERROR:root:t0008821d
+ERROR:root:(1062, "Duplicate entry 't0008821d' for key 'username'")
+ERROR:root:t0020966f
+ERROR:root:(1062, "Duplicate entry 't0020966f' for key 'username'")
+ERROR:root:ypsp1
+ERROR:root:(1062, "Duplicate entry 'ypsp1' for key 'username'")
+ERROR:root:KYLE
+ERROR:root:(1062, "Duplicate entry 'KYLE' for key 'username'")
+ERROR:root:T0407895G 
+ERROR:root:(1062, "Duplicate entry 'T0407895G ' for key 'username'")
+ERROR:root:T0370763B
+ERROR:root:(1062, "Duplicate entry 'T0370763B' for key 'username'")
+ERROR:root:demo2
+ERROR:root:(1062, "Duplicate entry 'demo2' for key 'username'")
+ERROR:root:
+ERROR:root:The given username must be set
+ERROR:root:Ameera
+ERROR:root:(1062, "Duplicate entry 'Ameera' for key 'username'")
+ERROR:root:Ameera
+ERROR:root:(1062, "Duplicate entry 'Ameera' for key 'username'")
+ERROR:root:T0571766Z 
+ERROR:root:(1062, "Duplicate entry 'T0571766Z ' for key 'username'")
+ERROR:root:T0602772A
+ERROR:root:(1062, "Duplicate entry 'T0602772A' for key 'username'")
+ERROR:root:T0470869A
+ERROR:root:(1062, "Duplicate entry 'T0470869A' for key 'username'")
+ERROR:root:T0470869A
+ERROR:root:(1062, "Duplicate entry 'T0470869A' for key 'username'")
+ERROR:root:t0573170j
+ERROR:root:(1062, "Duplicate entry 't0573170j' for key 'username'")
+ERROR:root:SSK
+ERROR:root:The database backend does not accept 0 as a value for AutoField.
+ERROR:root:Allagoo
+ERROR:root:The database backend does not accept 0 as a value for AutoField.
+ERROR:root:T0103072D
+ERROR:root:(1062, "Duplicate entry 'T0103072D' for key 'username'")
+ERROR:root:jk
+ERROR:root:The database backend does not accept 0 as a value for AutoField.
