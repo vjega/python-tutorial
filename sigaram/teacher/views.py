@@ -65,22 +65,32 @@ def workspace(request):
     folders = [{
         "id": "1",
         "name" :"எழுத்து",
-        "href" :""
+        "href" :"workspacelist"
         },{
         "id": "2",
         "name" :"பல்லூடகம்",
-        "href" :""
+        "href" :"workspacelist"
         },{
         "id": "3",
         "name" :"பாடல்",
-        "href" :""
+        "href" :"workspacelist"
         },{
         "id": "4",
         "name" :"ஒளிப்படக்காட்சி",
-        "href" :""
+        "href" :"workspacelist"
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
                            #'body':studentresourcetype_body}
     return render(request, 'portalteacher/workspace.html', 
                   {"folders":folders,'workspace':workspace})
+
+@switchlanguage
+def workspacelist(request):
+    workspacelist_head = [('Sl No.'),
+                         _('Name'),
+                         _('Short Name'),
+                         _('Edit'),
+                         _('Delete')]
+    workspacelist = {'head':workspacelist_head}
+    return render(request, 'portalteacher/workspacelist.html')

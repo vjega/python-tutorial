@@ -183,7 +183,8 @@ def extralist(request):
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
                            #'body':studentresourcetype_body}
-    return render(request, 'resource_type.html', {"folders":folders})
+    return render(request, 'resource_type.html', 
+                  {"folders":folders,'resourcetype':resourcetype})
 
 
 @login_required
