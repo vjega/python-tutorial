@@ -19,6 +19,7 @@ def home(request):
         }, {
         "color": u"green",
         "icon" : u"book",
+        "link" : u"workspace",
         "caption": _("My works"),
         "stat": 64
         }, {
@@ -58,3 +59,28 @@ def assignedresourcelist(request):
                          _('Delete')]
     assignedresourcelist = {'head':assignedresourcelist_head}
     return render(request, 'portalteacher/assignedresourcelist.html')
+
+@switchlanguage
+def workspace(request):
+    folders = [{
+        "id": "1",
+        "name" :"எழுத்து",
+        "href" :""
+        },{
+        "id": "2",
+        "name" :"பல்லூடகம்",
+        "href" :""
+        },{
+        "id": "3",
+        "name" :"பாடல்",
+        "href" :""
+        },{
+        "id": "4",
+        "name" :"ஒளிப்படக்காட்சி",
+        "href" :""
+        }]
+    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
+    #studentresourcetype = {'head':studentresourcetype_head, 
+                           #'body':studentresourcetype_body}
+    return render(request, 'portalteacher/workspace.html', 
+                  {"folders":folders,'workspace':workspace})
