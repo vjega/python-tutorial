@@ -62,7 +62,7 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
-    #addrec:hover, #admin-main-tbl tbody tr:hover{
+    #addrec:hover, .tts-edit:hover, .tts-delete:hover, #admin-main-tbl tbody tr:hover {
         cursor: pointer;
     }
 </style>
@@ -294,8 +294,8 @@ TTS.forms.renderstudentlist = function(data){
         t.name = data[i].firstname + " "+data[i].lastname;
         t.username = data[i].username;
         t.emailid = data[i].emailid;
-        t.edit = "<i class='fa fa-pencil fa-lg'></i>";
-        t.delete = "<i class='fa fa-trash fa-lg'></i>";
+        t.edit = "<i class='tts-edit fa fa-pencil fa-lg'></i>";
+        t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
     if (TTS.forms.table) {
@@ -353,18 +353,18 @@ $(document).ready(function(){
     $('#admin-main-tbl').on('click', 'tbody tr', function(){
         window.location = 'studentprofile?studentid='+this.id;
     });
-    $('#admin-main-tbl tbody tr').on('click', '.tts-edit', function(e){
+    $('#admin-main-tbl').on('click', '.tts-edit', function(e){
         e.stopPropagation();
         TTS.forms.editschool();
         //window.location = 'teacherslist?teacherid'=this.id;
     });
-    $('#admin-main-tbl tbody tr').on('click', '.tts-delete', function(e){
+    $('#admin-main-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();
         if (!window.confirm("Do you want to delete this record?")) {
             return false;
         }
         alert("Record Deleted")
-        window.location = 'schoollist';
+        window.location = 'studentslist';
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.addschool();

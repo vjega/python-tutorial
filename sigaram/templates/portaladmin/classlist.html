@@ -49,7 +49,7 @@
                             <td>{{forloop.counter}}</td>
                             <td>{{class.classname}}</td>
                             <td>{{class.shortname}}</td>
-                            <td><i class="fa fa-trash fa-fw"></i></td>
+                            <td><i class="tts-delete fa fa-trash fa-fw"></i></td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -69,7 +69,7 @@
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <style>
-    #addrec:hover, #admin-main-tbl tbody tr:hover{
+    #addrec:hover, .tts-delete:hover{
         cursor: pointer;
     }
 </style>
@@ -193,7 +193,7 @@ $(document).ready(function(){
         e.stopPropagation();
         TTS.forms.editschool();
     });
-    $('#admin-main-tbl tbody tr').on('click', '.tts-delete', function(e){
+    $('#admin-main-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();
         if (!window.confirm("Do you want to delete this record?")) {
             return false;
