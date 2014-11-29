@@ -1,5 +1,14 @@
 from django.shortcuts import (render, redirect)
 from django.http import HttpResponse
+from django.views.generic import FormView
+
+
+from forms import SimpleForm
+
+
+class Index1View(FormView):
+    template_name = 'crispy_ex.html'
+    form_class = SimpleForm
 
 # Create your views here.
 def home(request):
@@ -23,3 +32,20 @@ def togglelanguage(request):
     
     return redirect(request.META.get('HTTP_REFERER','/admin/home/'))
      
+def user_landing(request):
+    if str(request.user) == "AnonymousUser": 
+        return redirect('/login')
+    
+    try:
+        group = request.user.groups.all()[0].name
+    except Exception as e:
+        raise(Http404)
+
+    if group == 'Teacher':
+        return redirect('/teacher/home')
+    elif group == 'Student':
+        return redirect('/student/home')
+    elif group == 'Admin':
+        return redirect('/admin/home')
+    else:
+        return redirect('/404')
