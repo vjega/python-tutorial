@@ -101,6 +101,7 @@ class Admininfo(models.Model):
     lastname = models.CharField(max_length=500)
     emailid = models.CharField(max_length=500)
     imageurl = models.CharField(max_length=1000)
+    isdelete = models.IntegerField()
     createdby = models.BigIntegerField()
     createddate = models.DateTimeField()
     
@@ -814,6 +815,7 @@ class Studentinfo(models.Model):
     emailid = models.CharField(max_length=100)
     schoolid = models.BigIntegerField()
     classid = models.BigIntegerField()
+    isdelete = models.IntegerField()
     createdby = models.BigIntegerField()
     createddate = models.DateTimeField()
 
@@ -903,6 +905,7 @@ class Teacherinfo(models.Model):
     imageurl = models.CharField(max_length=1000)
     schoolid = models.BigIntegerField()
     classid = models.BigIntegerField()
+    isdelete = models.IntegerField()
     createdby = models.BigIntegerField()
     createddate = models.DateTimeField()
     isdelete = models.IntegerField(blank=True, null=True)
