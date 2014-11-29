@@ -29,7 +29,8 @@ urlpatterns = patterns('',
     url(r'^admin/',     include('portaladmin.urls')),
     url(r'^student/',   include('student.urls')),
     url(r'^teacher/',   include('teacher.urls')),
-    url(r'^api/admin/',       include('api.urls')),
+    url(r'^api/admin/',       include('api.admin.urls')),
+    url(r'^api/student/',     include('api.student.urls')),
 )
 
 urlpatterns += patterns('django.contrib.auth.views',
