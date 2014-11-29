@@ -10,6 +10,11 @@ urlpatterns = patterns('student.views',
     url(r'^resourcetype',           'resourcetype', name='resourcetype'),
     url(r'^workspace',              'workspace',    name='workspace'),
     url(r'^studentslist',           'studentslist', name='studentslist'),
-    url(r'^assignedresourcelist',  'assignedresourcelist',  
-                                                      name='assignedresourcelist'),
+    url(r'^assignedresourcelist',  	'assignedresourcelist',  
+                                                    name='assignedresourcelist'),
+    url(r'^studentprofile',  		'studentprofile',  
+                                                    name='studentprofile'),
+    url(r'^studentassignedresourcelist','studentassignedresourcelist',  
+                                                    name='studentassignedresourcelist'),
+    
 )

@@ -85,9 +85,9 @@ class Studentinfo(models.Model):
                        si.imageurl 
                 FROM studentinfo si
                 INNER JOIN logininfo li ON li.username=si.username 
-                WHERE -- schoolid = {selectedschoolid} AND 
-                    -- classid = {classid} AND 
-                    isdelete=0 
+                WHERE schoolid = 0 AND 
+                     classid = 1 AND 
+                    si.isdelete=0 
                 ORDER BY studentid"""
         cursor = connection.cursor()
         cursor.execute(sql)
