@@ -823,6 +823,27 @@ class Studentinfo(models.Model):
         managed = False
         db_table = 'studentinfo'
 
+<<<<<<< HEAD
+=======
+    @staticmethod
+    def getlist():
+        sql = """SELECT si.studentid,
+                       si.firstname,
+                       si.username,
+                       si.emailid,
+                       si.classid,
+                       si.imageurl 
+                FROM studentinfo si
+                INNER JOIN logininfo li ON li.username=si.username 
+                WHERE -- schoolid = {selectedschoolid} AND 
+                    -- classid = {classid} AND 
+                    isdelete=0 
+                ORDER BY studentid"""
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        return dictfetchall(cursor)
+        
+>>>>>>> 0f0bf15d20b2f3796f91c9403b83c2d7a575f288
 class Studentworkspaceinfo(models.Model):
     workspaceid = models.BigIntegerField(primary_key=True)
     workspacetitle = models.CharField(max_length=500)

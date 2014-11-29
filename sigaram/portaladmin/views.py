@@ -341,11 +341,11 @@ def subjectlist(request):
 @login_required
 def studentprofile(request):
     folders = [{
-        "id": "1",
+        "id"   : "1",
         "name" :"Deliverables",
         "href" :"studentassignedresourcelist"
         },{
-        "id": "2",
+        "id"   : "2",
         "name" :"Writing job",
         "href" :"viewstudentwrittenworks"
         }]

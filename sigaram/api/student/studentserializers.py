@@ -1,9 +1,20 @@
 from rest_framework import serializers
 from portaladmin import models
 
-class StudentInfoSerializer(serializers.HyperlinkedModelSerializer):
+class StudentinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = models.Admininfo
-        fields = ('adminid',  'firstname','lastname',
-                  'username','emailid','imageurl')
+        model = models.Studentinfo
+        fields = ('studentid',  'username',
+                  'firstname','lastname', 'emailid',
+                  'imageurl','schoolid','classid')
+        
+class ResourceinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Resourceinfo
+        fields = ('resourceid',  'categoryid','classid',
+                  'section','chapterid', 'resourcetype',
+                  'originaltext','resourcetitle','resourcedescription',
+                  'thumbnailurl','documenturl','imageurl',
+                  'audiourl','videourl','createddate'
+                  )
 
