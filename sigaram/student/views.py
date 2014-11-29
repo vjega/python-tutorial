@@ -126,16 +126,33 @@ def workspace(request):
                   {"folders":folders,'workspace':workspace})
 @switchlanguage
 def studentslist(request):
-    studentslist_head = [('Sl No.'),
-                         _('Photo'),
-                         _('Name'),
-                         _('User Name'),
-                         _('Email Id'),
-                         _('Edit'),
-                         _('Delete')]
-    studentslist_body = models.Studentinfo.getlist()
-    studentslist = {'head':studentslist_head, 'body':studentslist_body}
-    return render(request, 'portalstudent/studentslist.html')
+    user = models.Studentinfo.objects.filter(username=request.user.username)[0]
+    return render(request, 'portalstudent/studentslist.html', {'user':user})
 
 def assignedresourcelist(request):
     return render(request, 'portalstudent/assignedresourcelist.html')
+
+def studentprofile(request):
+    folders = [{
+        "id"   :"1",
+        "name" :"Deliverables",
+        "href" :"studentassignedresourcelist"
+        },{
+        "id"   :"2",
+        "name" :"Writing job",
+        "href" :"viewstudentwrittenworks"
+        }]
+    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
+    #studentresourcetype = {'head':studentresourcetype_head, 
+                           #'body':studentresourcetype_body}
+    return render(request, 'portalstudent/studentprofile.html', 
+                  {"folders":folders})
+
+def studentassignedresourcelist(request):
+    '''assigned_head = [_('Sl No.'),
+                         _('Title'),
+                         _('Type'),
+                         _('Date'),
+                         _('Note')]
+    studentslist = {'assigned_head':assigned_head}'''
+    return render(request, 'portalstudent/studentassignedresourcelist.html')

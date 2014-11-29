@@ -1,0 +1,77 @@
+{% extends 'portalstudent/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block topcontent %}
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="page-header">{% trans "Student Profile" %}</h2>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <div class="row">
+    {% for folder in folders%}
+    <a href="{{folder.href}}">
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-yellow">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-folder fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="tent-medium">{{folder.name}}</div>
+
+                    </div>
+                </div>
+            </div>
+         </div>             
+    </div>
+    {% endfor %}
+</div>
+ <!-- /.row -->
+{% endblock topcontent %}
+
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<style>
+  .modal-backdrop {z-index: 0 !important}
+</style>
+{% endblock morecss %}
+
+{% block morescript %}
+<script src="{% static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{% static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+{% endblock morescript %}
+
+{% block scriptcontent %}
+
+<script id="newfolder" type="text/x-jsrender">
+<form id="newfolderfrm" class="form-horizontal" role="form">
+    <div class="form-group">
+        <label for="folder_name" class="col-sm-4 control-label">பெட்டகத்தின் பெயர்</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" name="folder_name" id="folder_name" placeholder="Folder name">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="remark" class="col-sm-4 control-label">குறிப்பு</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" name="remark" id="remark" placeholder="Remark">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="order_no" class="col-sm-4 control-label">வரிசை எண்</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" name="order_no" id="order_no" placeholder="Folder no">
+        </div>
+    </div>
+</form>
+</script>
+
+
+{% endblock scriptcontent %}

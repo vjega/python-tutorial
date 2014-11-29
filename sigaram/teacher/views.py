@@ -14,7 +14,7 @@ def home(request):
         "color": u"primary",
         "icon" : u"file-text-o",
         "link" : u"assignedresourcelist",
-        "caption": _("Deliverables"),
+        "caption": _("Dedication"),
         "stat": 25
         }, {
         "color": u"green",
@@ -25,18 +25,14 @@ def home(request):
         }, {
         "color": u"yellow",
         "icon" : u"pencil-square-o",
-        "caption": _("Notes"),
+        "link" : u"writtenwork",
+        "caption":_("Written Work"),
         "stat": 125
         },{
         "color": u"red",
         "icon" : u"pencil",
-        "caption": _("Written Work"),
-        "stat": 125
-        },
-        {
-        "color": u"green",
-        "icon" : u"desktop",
-        "caption": _("Practicals"),
+        "link" : u"viewassessments",
+        "caption": _("Exercises"),
         "stat": 125
         }]
 
@@ -64,20 +60,24 @@ def assignedresourcelist(request):
 def workspace(request):
     folders = [{
         "id": "1",
-        "name" :"எழுத்து",
-        "href" :"workspacelist"
+        "name" :_("Writing"),
+        "href" :"viewworkspacelist",
+        "type" : "Text"
         },{
         "id": "2",
-        "name" :"பல்லூடகம்",
-        "href" :"workspacelist"
+        "name" :_("Image"),
+        "href" :"viewworkspacelist",
+        "type" : "Image"
         },{
         "id": "3",
-        "name" :"பாடல்",
-        "href" :"workspacelist"
+        "name" :_("Audio"),
+        "href" :"viewworkspacelist",
+        "type" :"Audio"
         },{
         "id": "4",
-        "name" :"ஒளிப்படக்காட்சி",
-        "href" :"workspacelist"
+        "name" :_("Video"),
+        "href" :"viewworkspacelist",
+        "type" : "Video"
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
@@ -86,11 +86,32 @@ def workspace(request):
                   {"folders":folders,'workspace':workspace})
 
 @switchlanguage
-def workspacelist(request):
-    workspacelist_head = [('Sl No.'),
-                         _('Name'),
-                         _('Short Name'),
-                         _('Edit'),
-                         _('Delete')]
-    workspacelist = {'head':workspacelist_head}
-    return render(request, 'portalteacher/workspacelist.html')
+def viewworkspacelist(request):
+   # print request.GET.get('type')
+    return render(request, 'portalteacher/viewworkspacelist.html', {'opt':request.GET.get('type')})
+
+@switchlanguage
+def writtenwork(request):
+    return render(request, 'portalteacher/writtenwork.html')
+
+@switchlanguage
+def viewassessments(request):
+    return render(request, 'portalteacher/viewassessments.html')
+
+@switchlanguage
+def adminlist(request):
+    return render(request, 'portalteacher/adminlist.html')
+
+@switchlanguage
+def teacherslist(request):
+    schools = models.Schoolinfo.objects.all()
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portalteacher/teacherslist.html', 
+                                        {'schools':schools,'classes':classes})
+
+@switchlanguage
+def studentslist(request):
+    schools = models.Schoolinfo.objects.all()
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portalteacher/studentslist.html', {'schools':schools,
+                                                             'classes':classes})
