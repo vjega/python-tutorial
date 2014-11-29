@@ -12,6 +12,9 @@ urlpatterns = patterns('teacher.views',
     									        name='viewworkspacelist'),
     url(r'^writtenwork$', 'writtenwork',        name='writtenwork'),
     url(r'^viewassessments$','viewassessments', name='viewassessments'),
+    url(r'^adminlist$', 'adminlist', 			name='adminlist'),
+    url(r'^teacherslist$','teacherslist', 		name='teacherslist'),
+     url(r'^studentslist$','studentslist', 		name='studentslist'),
 
      
 )

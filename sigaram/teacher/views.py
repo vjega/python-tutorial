@@ -97,3 +97,21 @@ def writtenwork(request):
 @switchlanguage
 def viewassessments(request):
     return render(request, 'portalteacher/viewassessments.html')
+
+@switchlanguage
+def adminlist(request):
+    return render(request, 'portalteacher/adminlist.html')
+
+@switchlanguage
+def teacherslist(request):
+    schools = models.Schoolinfo.objects.all()
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portalteacher/teacherslist.html', 
+                                        {'schools':schools,'classes':classes})
+
+@switchlanguage
+def studentslist(request):
+    schools = models.Schoolinfo.objects.all()
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portalteacher/studentslist.html', {'schools':schools,
+                                                             'classes':classes})

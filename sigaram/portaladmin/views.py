@@ -45,16 +45,6 @@ def home(request):
 
 @login_required
 def adminlist(request):
-    '''
-    adminlist_head = [_('Sl No.'),
-                         _('Photo'),
-                         _('Name'),
-                         _('User Name'),
-                         _('Email Id'),
-                         _('Delete')]
-    adminlist_body = models.Admininfo.getlist()
-    adminlist = {'head':adminlist_head, 'body':adminlist_body}
-    '''
     return render(request, 'portaladmin/adminlist.html')
 
 @login_required
@@ -69,15 +59,6 @@ def teacherslist(request):
 def studentslist(request):
     schools = models.Schoolinfo.objects.all()
     classes = models.Classinfo.objects.all()
-    studentslist_head = [('Sl No.'),
-                         _('Photo'),
-                         _('Name'),
-                         _('User Name'),
-                         _('Email Id'),
-                         _('Edit'),
-                         _('Delete')]
-    studentslist_body = models.Studentinfo.getlist()
-    studentslist = {'head':studentslist_head, 'body':studentslist_body}
     return render(request, 'portaladmin/studentslist.html', {'schools':schools,
                                                              'classes':classes})
 

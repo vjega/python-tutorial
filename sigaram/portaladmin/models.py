@@ -823,23 +823,6 @@ class Studentinfo(models.Model):
         managed = False
         db_table = 'studentinfo'
 
-    @staticmethod
-    def getlist():
-        sql = """SELECT si.studentid,
-                       si.firstname,
-                       si.username,
-                       si.emailid,
-                       si.classid,
-                       si.imageurl 
-                FROM studentinfo si
-                INNER JOIN logininfo li ON li.username=si.username 
-                WHERE -- schoolid = {selectedschoolid} AND 
-                    -- classid = {classid} AND 
-                    isdelete=0 
-                ORDER BY studentid"""
-        cursor = connection.cursor()
-        cursor.execute(sql)
-        return dictfetchall(cursor)
 class Studentworkspaceinfo(models.Model):
     workspaceid = models.BigIntegerField(primary_key=True)
     workspacetitle = models.CharField(max_length=500)
@@ -913,23 +896,6 @@ class Teacherinfo(models.Model):
     class Meta:
         managed = False
         db_table = 'teacherinfo'
-
-    @staticmethod
-    def getlist():
-        sql = """SELECT teacherid,
-                       firstname,
-                       lastname,
-                       username,
-                       emailid,
-                       classid,
-                       imageurl
-                FROM teacherinfo 
-                WHERE -- schoolid = $selectedschoolid AND 
-                      isdelete=0 
-                ORDER BY teacherid""";
-        cursor = connection.cursor()
-        cursor.execute(sql)
-        return dictfetchall(cursor)
 
 class Teacherresourceinfo(models.Model):
     teacherresourceid = models.BigIntegerField(primary_key=True)

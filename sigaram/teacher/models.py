@@ -51,5 +51,64 @@ class AdminFolders(models.Model):
         managed = False
         db_table = 'admin_folders'
 
+class Schoolinfo(models.Model):
+    schoolid = models.BigIntegerField(primary_key=True)
+    schoolname = models.CharField(max_length=500)
+    shortname = models.CharField(max_length=400)
+    description = models.CharField(max_length=1000)
+    schoolimageurl = models.CharField(max_length=1000)
+    createdby = models.BigIntegerField()
+    createddate = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'schoolinfo'
+
+class Classinfo(models.Model):
+    classid = models.BigIntegerField(primary_key=True)
+    classname = models.CharField(max_length=500)
+    shortname = models.CharField(max_length=500)
+    createdby = models.BigIntegerField()
+    createddate = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'classinfo'
+
+class Studentinfo(models.Model):
+    studentid = models.BigIntegerField(primary_key=True)
+    username = models.CharField(unique=True, max_length=100)
+    password = models.CharField(max_length=50)
+    imageurl = models.CharField(max_length=100)
+    firstname = models.CharField(max_length=100)
+    lastname = models.CharField(max_length=100)
+    emailid = models.CharField(max_length=100)
+    schoolid = models.BigIntegerField()
+    classid = models.BigIntegerField()
+    isdelete = models.IntegerField()
+    createdby = models.BigIntegerField()
+    createddate = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'studentinfo'
+
+    @staticmethod
+    def getlist():
+        sql = """SELECT si.studentid,
+                       si.firstname,
+                       si.username,
+                       si.emailid,
+                       si.classid,
+                       si.imageurl 
+                FROM studentinfo si
+                INNER JOIN logininfo li ON li.username=si.username 
+               --  WHERE -- schoolid = {selectedschoolid} AND 
+                    -- classid = {classid} AND 
+                   --  isdelete=0 
+                ORDER BY studentid"""
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        return dictfetchall(cursor)
 
 
