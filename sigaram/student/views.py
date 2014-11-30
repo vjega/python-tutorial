@@ -148,3 +148,6 @@ def studentprofile(request):
 
 def studentassignedresourcelist(request):
     return render(request, 'portalstudent/studentassignedresourcelist.html')
+
+def viewstudentresource(request):
+    return render(request, 'portalstudent/viewstudentresource.html')
