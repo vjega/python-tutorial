@@ -322,13 +322,6 @@ def recorder(request):
 
 @login_required
 def studentresourcelist(request):
-    studentslist_head = [_('Sl No.'),
-                         _('Title'),
-                         _('Date'),
-                         _('Type'),
-                         _('Delete')]
-    studentslist_body = models.Studentinfo.getlist() 
-    studentslist = {'head':studentslist_head, 'body':studentslist_body}
     return render(request, 'portaladmin/studentresourcelist.html', 
                     {'studentslist':studentslist}
                 )
