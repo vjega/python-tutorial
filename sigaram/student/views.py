@@ -82,17 +82,20 @@ def studentresourcetype(request):
 @switchlanguage
 def resourcetype(request):
     folders = [{
-        "id": "1",
-        "name" :"Reading",
-        "href" :"assignedresourcelist"
+        "categoryid" : "0",
+        "id"         : "1",
+        "name"       :"Reading",
+        "href"       :"assignedresourcelist"
         },{
-        "id": "2",
-        "name" :"Image dialog",
-        "href" :""
+        "categoryid" : "1",
+        "id"         : "2",
+        "name"       :"Image dialog",
+        "href"       :"assignedresourcelist"
         },{
-        "id": "3",
-        "name" :"Writing board",
-        "href" :""
+        "categoryid" : "3",
+        "id"         : "3",
+        "name"       :"Writing board",
+        "href"       :"assignedresourcelist"
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
