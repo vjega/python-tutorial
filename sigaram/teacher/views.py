@@ -115,3 +115,18 @@ def studentslist(request):
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/studentslist.html', {'schools':schools,
                                                              'classes':classes})
+
+@switchlanguage
+def classroom(request):
+    return render(request, 'portalteacher/classroom.html')
+
+@switchlanguage
+def myprofile(request):
+    return render(request, 'portalteacher/myprofile.html')
+
+@switchlanguage
+def students(request):
+    schools = models.Schoolinfo.objects.all()
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portalteacher/students.html', {'schools':schools,
+                                                             'classes':classes})
