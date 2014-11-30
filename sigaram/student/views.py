@@ -133,6 +133,7 @@ def assignedresourcelist(request):
     return render(request, 'portalstudent/assignedresourcelist.html')
 
 def studentprofile(request):
+    user = models.Studentinfo.objects.filter(username=request.user.username)[0]
     folders = [{
         "id"   :"1",
         "name" :"Deliverables",
@@ -142,17 +143,8 @@ def studentprofile(request):
         "name" :"Writing job",
         "href" :"viewstudentwrittenworks"
         }]
-    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
-    #studentresourcetype = {'head':studentresourcetype_head, 
-                           #'body':studentresourcetype_body}
     return render(request, 'portalstudent/studentprofile.html', 
-                  {"folders":folders})
+                  {"folders":folders, "user":user})
 
 def studentassignedresourcelist(request):
-    '''assigned_head = [_('Sl No.'),
-                         _('Title'),
-                         _('Type'),
-                         _('Date'),
-                         _('Note')]
-    studentslist = {'assigned_head':assigned_head}'''
     return render(request, 'portalstudent/studentassignedresourcelist.html')
