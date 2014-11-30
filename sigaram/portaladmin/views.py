@@ -221,13 +221,6 @@ def classlist(request):
 @login_required
 def statistics(request):
     schools = models.Schoolinfo.objects.all()
-    studentslist_head = [_('Sl No.'),
-                         _('Photo'),
-                         _('Name'),
-                         _('User Name'),
-                         _('Edit')]
-    studentslist_body = models.Studentinfo.getlist() 
-    studentslist = {'head':studentslist_head, 'body':studentslist_body}
     return render(request, 'portaladmin/statistics.html', {'schools':schools})
    
 
