@@ -6,7 +6,8 @@ from portaladmin import models
 from portaladmin.forms import (AdminForm,
 			       TeacherResourceForm,
                    TeacherListForm,
-                   StudentListForm)	
+                   StudentListForm,
+                   SchoolListForm)	
 
 def switchlanguage(f):
     def inner(req):
@@ -76,7 +77,9 @@ def schoollist(request):
                          _('Delete')]
     schoollist_body = models.Schoolinfo.objects.all()
     schoollist = {'head':schoollist_head, 'body':schoollist_body}
-    return render(request, 'portaladmin/schoollist.html', {'schoollist':schoollist})
+    return render(request, 'portaladmin/schoollist.html',{'schoollist':schoollist,
+                                        "form" : SchoolListForm.SchoolListForm()})
+
 
 @login_required
 def teacherresourcelist(request):
