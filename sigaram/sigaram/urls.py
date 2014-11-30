@@ -2,11 +2,10 @@ from django.conf.urls import patterns, include, url
 from django.shortcuts import redirect
 from django.contrib import admin
 from django.http import Http404
-from views import Index1View
 
 
 urlpatterns = patterns('',
-    url(r'^$',               Index1View.as_view(),  name='home'), #call back
+    url(r'^$',               'sigaram.views.home',  name='home'), #call back
 
     url(r'^togglelanguage$','sigaram.views.togglelanguage', name='togglelanguage'),
     url(r'^forum$',     'sigaram.views.forum', name='forum'),

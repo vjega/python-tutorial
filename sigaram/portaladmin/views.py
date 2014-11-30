@@ -3,7 +3,7 @@ from django.utils.translation import (ugettext as _, activate)
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from portaladmin import models
-
+from portaladmin.forms import AdminForm
 
 def switchlanguage(f):
     def inner(req):
@@ -45,7 +45,7 @@ def home(request):
 
 @login_required
 def adminlist(request):
-    return render(request, 'portaladmin/adminlist.html')
+    return render(request, 'portaladmin/adminlist.html', {"adminform" : AdminForm.AdminForm()})
 
 @login_required
 def teacherslist(request):

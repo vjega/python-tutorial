@@ -7,23 +7,8 @@ import  adminserializers
 
 class AdmininfoViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Admininfo.objects.all()
+    queryset = models.Admininfo.objects.filter(isdelete=0)
     serializer_class = adminserializers.AdminInfoSerializer
-
-    def list(self, request):
-        sql = """SELECT ai.adminid,
-                   ai.firstname,
-                   ai.lastname,
-                   ai.username,
-                   ai.emailid,
-                   ai.imageurl 
-            FROM `admininfo` ai
-            INNER JOIN logininfo li on li.username=ai.username 
-            WHERE li.isdelete=0 
-            ORDER BY adminid""";
-        queryset = models.Admininfo.objects.raw(sql)
-        serializer = adminserializers.AdminInfoSerializer(queryset, many=True)
-        return Response(serializer.data)
 
     def create(self, request):
         return Response('"msg":"Created Successfully"')
@@ -52,7 +37,7 @@ class teacherViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 class studentViewSet(viewsets.ModelViewSet):
-    queryset = models.Studentinfo.objects.all()
+    queryset = models.Studentinfo.objects.filter(isdelete=0)
     serializer_class = adminserializers.StudentinfoSerializer
     
     def list(self, request):
@@ -113,24 +98,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
 class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Writtenworkinfo.objects.all()
     serializer_class = adminserializers.WrittenworkinfoSerializer
-    '''
-    def list(self, request):
-        classid   = request.GET.get('classid')
-        section   = request.GET.get('section')
-        chapterid = request.GET.get('chapterid')
-        kwarg = {}
-        kwarg['isdeleted'] = 0
-        if classid:
-            kwarg['classid'] = classid
-        if section:
-            kwarg['section'] = section
-        if chapterid:
-            kwarg['chapterid'] = chapterid
-        
-        queryset = models.Resourceinfo.objects.filter(**kwarg)
-        serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
-        return Response(serializer.data)
-    '''
+    
 class ChapterinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Chapterinfo.objects.all()
     serializer_class = adminserializers.ChapterinfoSerializer
@@ -195,4 +163,4 @@ class AdminclassinfoViewSet(viewsets.ModelViewSet):
         queryset = models.Classroominfo.objects.raw(sql)
         serializer_class = adminserializers.ClassroominfoSerializer
         serializer = adminserializers.ClassroominfoSerializer(queryset, many=True)        
-        return Response(serializer.data)
+        return Response({"test":"test"})

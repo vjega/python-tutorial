@@ -3,13 +3,6 @@ from django.http import HttpResponse
 from django.views.generic import FormView
 
 
-from forms import SimpleForm
-
-
-class Index1View(FormView):
-    template_name = 'crispy_ex.html'
-    form_class = SimpleForm
-
 # Create your views here.
 def home(request):
     return redirect('/admin/home')
