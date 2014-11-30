@@ -7,7 +7,8 @@ from portaladmin.forms import (AdminForm,
 			       TeacherResourceForm,
                    TeacherListForm,
                    StudentListForm,
-                   SchoolListForm)	
+                   SchoolListForm,
+                   StudentresourceListForm)	
 
 def switchlanguage(f):
     def inner(req):
@@ -326,8 +327,8 @@ def recorder(request):
 @login_required
 def studentresourcelist(request):
     return render(request, 'portaladmin/studentresourcelist.html', 
-                    {'studentslist':studentslist}
-                )
+                    {'studentslist':studentslist,
+                     "form" : StudentresourceListForm.StudentresourceListForm()})
 
 @login_required
 def subjectlist(request):
