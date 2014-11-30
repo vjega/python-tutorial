@@ -29,6 +29,12 @@ class TeacherListForm(forms.Form):
         required = True,
         widget = forms.TextInput({ "placeholder": _("Password")})
     )
+    emailid = forms.CharField(
+        label = _("Email Id"),
+        max_length = 100,
+        required = True,
+        widget = forms.TextInput({ "placeholder": _("Email Id")})
+    )
     teacher_photo = forms.FileField(
         label = _("Choose File"),
         max_length = 100,
