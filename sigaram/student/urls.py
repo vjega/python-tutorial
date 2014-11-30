@@ -18,5 +18,9 @@ urlpatterns = patterns('student.views',
                                                         name='studentassignedresourcelist'),
     url(r'^viewstudentresource',        'viewstudentresource',  
                                                         name='viewstudentresource'),
+    url(r'^viewstudentwrittenworks',    'viewstudentwrittenworks',  
+                                                        name='viewstudentwrittenworks'),
+    url(r'^viewstudentwork',            'viewstudentwork',  
+                                                        name='viewstudentwork'),
     
 )

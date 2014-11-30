@@ -92,3 +92,19 @@ class Studentinfo(models.Model):
         cursor = connection.cursor()
         cursor.execute(sql)
         return dictfetchall(cursor)
+
+class Writtenworkinfo(models.Model):
+    writtenworkid = models.BigIntegerField(primary_key=True)
+    writtenworktitle = models.TextField()
+    description = models.TextField()
+    writtenimage = models.CharField(db_column='writtenImage', max_length=200)  # Field name made lowercase.
+    schoolid = models.IntegerField()
+    classid = models.IntegerField()
+    isassigned = models.IntegerField()
+    createdby = models.BigIntegerField()
+    isdeleted = models.IntegerField()
+    createddate = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'writtenworkinfo'

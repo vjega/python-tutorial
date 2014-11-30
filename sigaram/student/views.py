@@ -84,7 +84,7 @@ def resourcetype(request):
     folders = [{
         "id": "1",
         "name" :"Reading",
-        "href" :""
+        "href" :"assignedresourcelist"
         },{
         "id": "2",
         "name" :"Image dialog",
@@ -151,3 +151,9 @@ def studentassignedresourcelist(request):
 
 def viewstudentresource(request):
     return render(request, 'portalstudent/viewstudentresource.html')
+
+def viewstudentwrittenworks(request):
+    return render(request, 'portalstudent/viewstudentwrittenworks.html')
+
+def viewstudentwork(request):
+    return render(request, 'portalstudent/viewstudentwork.html')
