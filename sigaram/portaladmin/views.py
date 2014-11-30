@@ -5,7 +5,8 @@ from django.shortcuts import render
 from portaladmin import models
 from portaladmin.forms import (AdminForm,
 			       TeacherResourceForm,
-                   TeacherListForm)	
+                   TeacherListForm,
+                   StudentListForm)	
 
 def switchlanguage(f):
     def inner(req):
@@ -62,8 +63,9 @@ def teacherslist(request):
 def studentslist(request):
     schools = models.Schoolinfo.objects.all()
     classes = models.Classinfo.objects.all()
-    return render(request, 'portaladmin/studentslist.html', {'schools':schools,
-                                                             'classes':classes})
+    return render(request, 'portaladmin/studentslist.html', 
+                                      {'schools':schools, 'classes':classes, 
+                                        "form" : StudentListForm.StudentListForm()})           
 
 @login_required
 def schoollist(request):
