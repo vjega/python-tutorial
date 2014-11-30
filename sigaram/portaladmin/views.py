@@ -3,7 +3,9 @@ from django.utils.translation import (ugettext as _, activate)
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from portaladmin import models
-from portaladmin.forms import AdminForm
+from portaladmin.forms import (AdminForm,
+			       TeacherResourceForm,
+                   TeacherListForm)	
 
 def switchlanguage(f):
     def inner(req):
@@ -52,7 +54,8 @@ def teacherslist(request):
     schools = models.Schoolinfo.objects.all()
     classes = models.Classinfo.objects.all()
     return render(request, 'portaladmin/teacherslist.html', 
-                                        {'schools':schools,'classes':classes})
+                                        {'schools':schools,'classes':classes, 
+                                        "form" : TeacherListForm.TeacherListForm()})
 
 @login_required
 #@switchlanguage
@@ -85,7 +88,8 @@ def teacherresourcelist(request):
     teacherresourcelist = {'head':teacherresourcelist_head, 
                            'body':teacherresourcelist_body}
     return render(request, 'portaladmin/teacherresourcelist.html', 
-                  {'classes':classes})
+                  {'classes':classes, 
+                   'form':TeacherResourceForm.TeacherResourceForm()})
 
 @login_required
 def viewteacherresource(request):
