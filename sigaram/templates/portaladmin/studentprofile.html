@@ -76,6 +76,9 @@
 <script>
 $(document).ready(function(){
     $('#admin-main-tbl').dataTable();
+     $('#admin-main-tbl').on('click', 'tbody tr', function(){
+        window.location = 'viewstudentwrittenworks?studentid='+this.id;
+    });
     $("#page-wrapper").on("click", "#new-folder", function(){
         BootstrapDialog.show({
             title: "{% trans "New Folder" %}",
