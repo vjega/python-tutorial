@@ -18,3 +18,10 @@ class ResourceinfoSerializer(serializers.HyperlinkedModelSerializer):
                   'audiourl','videourl','createddate'
                   )
 
+class WrittenworkinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Writtenworkinfo
+        fields = ('writtenworkid',  'writtenworktitle','description',
+                  'writtenimage','schoolid', 'classid','isassigned',
+                  'createddate'
+                  )
