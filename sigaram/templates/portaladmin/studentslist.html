@@ -1,6 +1,7 @@
 {% extends 'portaladmin/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
+{% load crispy_forms_tags %}
 {% block topcontent %}
 <div id="page-wrapper">
     <div class="row">
@@ -46,7 +47,7 @@
         <!-- /.panel-heading -->
         <div class="panel-body">
             <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover" id="admin-main-tbl">
+                <table class="table table-striped table-bordered table-hover" id="student-main-tbl">
                 </table>
             </div>
             <!-- /.table-responsive -->
@@ -62,7 +63,7 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
-    #addrec:hover, .tts-edit:hover, .tts-delete:hover, #admin-main-tbl tbody tr:hover {
+    #addrec:hover, .tts-edit:hover, .tts-delete:hover, #student-main-tbl tbody tr:hover {
         cursor: pointer;
     }
 </style>
@@ -77,66 +78,8 @@
 
 {% block scriptcontent %}
 
-<script id="addstudent" type="text/x-jsrender">
-<form id="newfolderfrm" class="form-horizontal" role="form">
-     <div class="row">
-    <div class="form-group" class="col-sm-3">
-        <label for="folder_name" class="col-sm-4 control-label">{% trans "Select School" %}</label>
-        <div class="col-sm-4">
-            <select name="school_name" class="form-control" id="school_name">
-                {% for school in schools%}
-                <option value="{{school.schoolid}}">{{school.schoolname}}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    </div>
-    <div class="form-group">
-        <label for="remark" class="col-sm-4 control-label">{% trans "Class" %}</label>
-        <div class="col-sm-4">
-            <select name="classid" class="form-control" id="classid">
-                {% for class in classes %}
-                <option value="{{class.classid}}">{{class.shortname}}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="order_no" class="col-sm-4 control-label">{% trans "Name" %}</label>
-        <div class="col-sm-8">
-            <input type="text" class="form-control" name="student_name" id="student_name"
-                 placeholder="{% trans "Name" %}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="order_no" class="col-sm-4 control-label">{% trans "User Name" %}</label>
-        <div class="col-sm-8">
-            <input type="text" class="form-control" name="user_name" id="user_name"
-                 placeholder="{% trans "User Name" %}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="order_no" class="col-sm-4 control-label">{% trans "Password" %}</label>
-        <div class="col-sm-8">
-            <input type="text" class="form-control" name="user_password" id="user_password"
-                 placeholder="{% trans "Password" %}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="order_no" class="col-sm-4 control-label">{% trans "Email Id" %}</label>
-        <div class="col-sm-8">
-            <input type="text" class="form-control" name="email_id" id="email_id"
-                 placeholder="{% trans "Email Id" %}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="order_no" class="col-sm-4 control-label">{% trans "Photo" %}</label>
-        <div class="col-sm-8">
-            <input type="file" class="form-control" name="teacher_photo" id="teacher_photo"
-                 >
-        </div>
-    </div>
-</form>
+<script id="addstudentlist" type="text/x-jsrender">
+{% crispy form %}
 </script>
 
 <script id="editstudent" type="text/x-jsrender">
@@ -144,15 +87,25 @@
     <div class="form-group">
         <label for="folder_name" class="col-sm-4 control-label">{% trans "School Name" %}</label>
         <div class="col-sm-8">
-            <input type="text" class="form-control" name="school_name" id="school_name" 
-                placeholder="{% trans "School Name" %}">
+           <select name="school_name" class="form-control" id="school_name">
+                {% for school in schools%}
+                <option value="{{school.schoolid}}">
+                    {{school.schoolname}}
+                </option>
+                {% endfor %}
+            </select>
         </div>
     </div>
     <div class="form-group">
         <label for="remark" class="col-sm-4 control-label">{% trans "Class" %}</label>
         <div class="col-sm-8">
-            <input type="text" class="form-control" name="student_class" id="student_class" 
-                placeholder="{% trans "Class" %}">
+            <select name="school_name" class="form-control" id="school_name">
+                {% for school in schools%}
+                <option value="{{school.schoolid}}">
+                    {{school.schoolname}}
+                </option>
+                {% endfor %}
+            </select>
         </div>
     </div>
     <div class="form-group">
@@ -199,7 +152,7 @@ TTS.forms = TTS.forms || {}
 TTS.forms.addschool = function() {
     BootstrapDialog.show({
         title: 'Add Student',
-        message: $($('#addstudent').render()),
+        message: $($('#addstudentlist').render()),
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
@@ -305,7 +258,7 @@ TTS.forms.renderstudentlist = function(data){
         );
         return true;
     }
-    TTS.forms.table = $('#admin-main-tbl').dataTable({
+    TTS.forms.table = $('#student-main-tbl').dataTable({
         "data":     dataset,
         "columns":  headers
     });
@@ -350,15 +303,15 @@ $(document).ready(function(){
         });
     })
 
-    $('#admin-main-tbl').on('click', 'tbody tr', function(){
+    $('#student-main-tbl').on('click', 'tbody tr', function(){
         window.location = 'studentprofile?studentid='+this.id;
     });
-    $('#admin-main-tbl').on('click', '.tts-edit', function(e){
+    $('#student-main-tbl').on('click', '.tts-edit', function(e){
         e.stopPropagation();
         TTS.forms.editschool();
         //window.location = 'teacherslist?teacherid'=this.id;
     });
-    $('#admin-main-tbl').on('click', '.tts-delete', function(e){
+    $('#student-main-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();
         if (!window.confirm("Do you want to delete this record?")) {
             return false;

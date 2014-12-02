@@ -44,3 +44,6 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         serializer = studentserializers.ResourceinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
+class WrittenworkinfoViewSet(viewsets.ModelViewSet):
+    queryset = models.Writtenworkinfo.objects.all()
+    serializer_class = studentserializers.WrittenworkinfoSerializer

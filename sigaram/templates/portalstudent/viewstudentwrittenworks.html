@@ -102,13 +102,13 @@ TTS.forms.renderstudentwork = function(data){
 };
 $(document).ready(function(){
     $.ajax({
-        "url":"/api/admin/resourceinfo/?studentid=&studentloginid=&format=json",
+        "url":"/api/student/resourceinfo/?studentid=&studentloginid=&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstudentwork(data);
     });
     $('#admin-main-tbl').on('click', 'tbody tr', function(){
-        window.location = 'viewstudentresource?resourceid='+this.id;
+        window.location = 'viewstudentwork?resourceid='+this.id;
     });
 });
 

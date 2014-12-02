@@ -1,0 +1,120 @@
+{% extends 'portalteacher/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block topcontent %}
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="page-header">{% trans "New Student" %}</h2>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+{% endblock topcontent %}
+{% block botcontent %}
+<div class="col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% trans "Administrators" %} {% trans "List" %} 
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover"
+                                                          id="admin-main-tbl">
+                    <div class="row">
+                        <div class="form-group" class="col-sm-6">
+                            <label for="folder_name" class="col-sm-4 control-label">{% trans "Username" %}
+                            </label>
+                            <div class="col-sm-3">
+                                <input type ="text" class="form-control" name="admin_username" id="admin_username">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group" class="col-sm-6">
+                            <label for="folder_name" class="col-sm-4 control-label">{% trans "First Name" %}</label>
+                            <div class="col-sm-3">
+                                <input type ="text" class="form-control" name="admin_fname" id="admin_fname">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group" class="col-sm-6">
+                            <label for="folder_name" class="col-sm-4 control-label">{% trans "Last Name" %}</label>
+                            <div class="col-sm-3">
+                                <input type ="text" class="form-control" name="admin_lname" id="admin_lname">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group" class="col-sm-6">
+                            <label for="folder_name" class="col-sm-4 control-label">{% trans "Password" %}</label>
+                            <div class="col-sm-3">
+                                <input type ="text" class="form-control" name="admin-pass" id="admin-pass">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group" class="col-sm-6">
+                            <label for="folder_name" class="col-sm-4 control-label">{% trans "Email" %}</label>
+                            <div class="col-sm-3">
+                                <input type ="text" class="form-control" name="email" id="email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group" class="col-sm-6">
+                            <label for="folder_name" class="col-sm-4 control-label">{% trans "Photo" %}</label>
+                            <div class="col-sm-3">
+                               <input type="file" class="form-control" name="admin_photo" id="admin_photo"placeholder="{% trans "Choose File" %}">
+                            </div>
+                        </div>
+                    </div>
+
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+                <!-- /.col-lg-12 -->
+{% endblock botcontent%}
+
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<style>
+    #addrec:hover, .tts-delete:hover{
+        cursor: pointer;
+    }
+</style>
+{% endblock morecss %}
+
+{% block morescript %}
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+{% endblock morescript %}
+
+{% block scriptcontent %}
+
+<script  type="text/x-jsrender">
+
+$(document).ready(function(){
+    $('#admin-main-tbl').on('click', '.tts-delete', function(e){
+        e.stopPropagation();
+        if (!window.confirm("Do you want to delete this record?")) {
+            return false;
+        }
+        alert("Record Deleted")
+        window.location = 'adminlist';
+    });
+
+   
+});
+
+</script>
+{% endblock scriptcontent %}

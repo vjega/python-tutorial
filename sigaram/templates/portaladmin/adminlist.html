@@ -1,8 +1,8 @@
 {% extends 'portaladmin/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
-{% block topcontent %}
 {% load crispy_forms_tags %}
+{% block topcontent %}
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
@@ -15,7 +15,8 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans "Administrators" %} {% trans "List" %} <span id="add" class="add">({% trans "Add" %})</span>
+            {% trans "Administrators" %} {% trans "List" %}
+            <span id="add" class="add">({% trans "Add" %})</span>
              <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
         </div>
         <!-- /.panel-heading -->

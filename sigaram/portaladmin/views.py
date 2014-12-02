@@ -3,7 +3,12 @@ from django.utils.translation import (ugettext as _, activate)
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from portaladmin import models
-from portaladmin.forms import AdminForm
+from portaladmin.forms import (AdminForm,
+			       TeacherResourceForm,
+                   TeacherListForm,
+                   StudentListForm,
+                   SchoolListForm,
+                   StudentresourceListForm)	
 
 def switchlanguage(f):
     def inner(req):
@@ -52,15 +57,17 @@ def teacherslist(request):
     schools = models.Schoolinfo.objects.all()
     classes = models.Classinfo.objects.all()
     return render(request, 'portaladmin/teacherslist.html', 
-                                        {'schools':schools,'classes':classes})
+                                        {'schools':schools,'classes':classes, 
+                                        "form" : TeacherListForm.TeacherListForm()})
 
 @login_required
 #@switchlanguage
 def studentslist(request):
     schools = models.Schoolinfo.objects.all()
     classes = models.Classinfo.objects.all()
-    return render(request, 'portaladmin/studentslist.html', {'schools':schools,
-                                                             'classes':classes})
+    return render(request, 'portaladmin/studentslist.html', 
+                                      {'schools':schools, 'classes':classes, 
+                                        "form" : StudentListForm.StudentListForm()})           
 
 @login_required
 def schoollist(request):
@@ -71,7 +78,9 @@ def schoollist(request):
                          _('Delete')]
     schoollist_body = models.Schoolinfo.objects.all()
     schoollist = {'head':schoollist_head, 'body':schoollist_body}
-    return render(request, 'portaladmin/schoollist.html', {'schoollist':schoollist})
+    return render(request, 'portaladmin/schoollist.html',{'schoollist':schoollist,
+                                        "form" : SchoolListForm.SchoolListForm()})
+
 
 @login_required
 def teacherresourcelist(request):
@@ -85,7 +94,8 @@ def teacherresourcelist(request):
     teacherresourcelist = {'head':teacherresourcelist_head, 
                            'body':teacherresourcelist_body}
     return render(request, 'portaladmin/teacherresourcelist.html', 
-                  {'classes':classes})
+                  {'classes':classes, 
+                   'form':TeacherResourceForm.TeacherResourceForm()})
 
 @login_required
 def viewteacherresource(request):
@@ -221,13 +231,6 @@ def classlist(request):
 @login_required
 def statistics(request):
     schools = models.Schoolinfo.objects.all()
-    studentslist_head = [_('Sl No.'),
-                         _('Photo'),
-                         _('Name'),
-                         _('User Name'),
-                         _('Edit')]
-    studentslist_body = models.Studentinfo.getlist() 
-    studentslist = {'head':studentslist_head, 'body':studentslist_body}
     return render(request, 'portaladmin/statistics.html', {'schools':schools})
    
 
@@ -323,16 +326,9 @@ def recorder(request):
 
 @login_required
 def studentresourcelist(request):
-    studentslist_head = [_('Sl No.'),
-                         _('Title'),
-                         _('Date'),
-                         _('Type'),
-                         _('Delete')]
-    studentslist_body = models.Studentinfo.getlist() 
-    studentslist = {'head':studentslist_head, 'body':studentslist_body}
     return render(request, 'portaladmin/studentresourcelist.html', 
-                    {'studentslist':studentslist}
-                )
+                    {'studentslist':studentslist,
+                     "form" : StudentresourceListForm.StudentresourceListForm()})
 
 @login_required
 def subjectlist(request):
@@ -347,7 +343,7 @@ def studentprofile(request):
         },{
         "id"   : "2",
         "name" :"Writing job",
-        "href" :"viewstudentwrittenworks"
+        "href" :"viewstudentwrittenworks?studentid=%s" % request.GET.get('studentid') 
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 

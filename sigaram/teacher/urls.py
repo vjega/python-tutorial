@@ -14,7 +14,9 @@ urlpatterns = patterns('teacher.views',
     url(r'^viewassessments$','viewassessments', name='viewassessments'),
     url(r'^adminlist$', 'adminlist', 			name='adminlist'),
     url(r'^teacherslist$','teacherslist', 		name='teacherslist'),
-     url(r'^studentslist$','studentslist', 		name='studentslist'),
+    url(r'^studentslist','studentslist', 		name='studentslist'),
+    url(r'^classroom',   'classroom', 		    name='classroom'),
+    url(r'^myprofile',   'myprofile', 		    name='myprofile'),
+    url(r'^students',   'students', 		    name='students'),
 
-     
 )

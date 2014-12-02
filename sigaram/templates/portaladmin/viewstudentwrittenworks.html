@@ -5,7 +5,7 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
-                <h2 class="page-header">{% trans "Student Works" %}</h2>
+                <h2 class="page-header"></h2>
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -13,15 +13,6 @@
 {% block botcontent %}
 <div class="col-lg-12">
     <div class="panel panel-default">
-            <div class="panel-heading">
-                <span id="add" class="add">{% trans "From Date" %}</span>
-                <input type="text" name="From Date">
-                <span id="add" class="add">{% trans "To Date" %}</span>
-                <input type="text" name="From Date"><button type="button">{% trans "Search" %}</button>
-
-            </div>
-
-
         <!-- /.panel-heading -->
             <div role="tabpanel">
                   <!-- Nav tabs -->
@@ -70,9 +61,3 @@
 
 {% endblock morescript %}
 
-{% block scriptcontent %}
-<script type="text/javascript">
-
-</script>
-
-{% endblock scriptcontent %}
