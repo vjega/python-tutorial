@@ -1,6 +1,8 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import serializers
+import json, time
+from api.admin import create_login
 
 from portaladmin import models
 import  adminserializers
@@ -10,8 +12,19 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
     queryset = models.Admininfo.objects.filter(isdelete=0)
     serializer_class = adminserializers.AdminInfoSerializer
 
+    @create_login
     def create(self, request):
-        return Response('"msg":"Created Successfully"')
+        admin = models.Admininfo()
+        admindata =  json.loads(request.DATA.keys()[0])
+        admin.username = admindata.get('username')
+        admin.firstname = admindata.get('firstname')
+        admin.lastname = admindata.get('lastname')
+        admin.emailid = admindata.get('emailid')
+        admin.isdelete = 0
+        admin.createdby = request.user.id
+        admin.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        admin.save()
+        return Response(request.DATA)
 
     def update(self, request, pk=None):
         return Response('"msg":"update"')

@@ -49,29 +49,31 @@
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
-
-<script id="addadmin" type="text/x-jsrender">
-{% crispy adminform %}
+<script id="admin-form" type="text/x-jsrender">
+    {% crispy adminform %}
 </script>
+
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-TTS.forms.addschool = function() {
+TTS.forms.addadmin = function() {
     BootstrapDialog.show({
         title: 'Add Administrator',
-        message: $($('#addadmin').render()),
+        message: $($('#admin-form').render()),
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
             action: function(){
-                var data = TTS.utils.serilaizeJson("#newfolderfrm");
+                var data = TTS.utils.serilaizeJson("#add-admin");
+                console.log(data);
                 $.ajax({
                     type:'POST',
-                    data: {'data':data},
-                    url : '/api/admin/addfolder'
+                    data: data,
+                    url : '/api/admin/admin/'
                 }).done(function( msg ) {
                     console.log(msg);
                     //dialogItself.close();
@@ -140,7 +142,7 @@ $(document).ready(function(){
         window.location = 'adminlist';
     });
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.addschool();
+        TTS.forms.addadmin();
     });
 });
 
