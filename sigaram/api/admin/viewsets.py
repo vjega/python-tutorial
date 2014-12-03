@@ -12,7 +12,7 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
     queryset = models.Admininfo.objects.filter(isdelete=0)
     serializer_class = adminserializers.AdminInfoSerializer
 
-    @create_login
+    @create_login('Admin')
     def create(self, request):
         admin = models.Admininfo()
         admindata =  json.loads(request.DATA.keys()[0])
