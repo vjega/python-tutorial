@@ -239,8 +239,8 @@ class AdminclasslistViewSet(viewsets.ModelViewSet):
     def create(self, request):
         adminclasslist = models.Classinfo()
         classlistdata =  json.loads(request.DATA.keys()[0])
-        adminclasslist.classname = adminclasslist.get('classname')
-        adminclasslist.shortname = adminclasslist.get('shortname')
+        adminclasslist.classname = classlistdata.get('classname')
+        adminclasslist.shortname = classlistdata.get('shortname')
         adminclasslist.createdby = request.user.id
         adminclasslist.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         adminclasslist.save()

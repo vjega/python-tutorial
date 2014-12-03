@@ -3,13 +3,17 @@ from django import forms
 from crispy_forms.helper import FormHelper
 #from crispy_forms.layout import Submit
 class ClassListForm(forms.Form):
-    classname = forms.ChoiceField(
+    classname = forms.CharField(
         label = _("Class Name"),
+        max_length = 100,
         required = True,
+        widget = forms.TextInput({ "placeholder": _("Class Name")})
     )
-    shortname = forms.ChoiceField(
+    shortname = forms.CharField(
         label = _("Short Name"),
+        max_length = 100,
         required = True,
+        widget = forms.TextInput({ "placeholder": _("Short Name")})
     )
     def __init__(self, *args, **kwargs):
         super(ClassListForm, self).__init__(*args, **kwargs)
