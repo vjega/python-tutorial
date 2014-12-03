@@ -9,11 +9,21 @@ from django.contrib.auth.models import User, Group
 import logging
 logging.basicConfig(filename='error.log',level=logging.ERROR)
 
-def add_user(username, password, firstname, lastname, group):
+def add_user(username, password, firstname, lastname, g):
     user = User.objects.create_user(username, email=None, password=password,
                 first_name=firstname, last_name=lastname)
-    user.groups.add(group)
-
+    
+    
+    if int(g) == 0:
+        group = 'Admin'
+    elif int(g) == 1:
+        group = 'Student'
+    elif int(g) == 2:
+        group = 'Teacher'
+    print group
+    f = Group.objects.get(name=group) 
+    f.user_set.add(user)
+    
 def main():
     li = models.Logininfo.objects.filter(isdelete=0)
     for k, u in enumerate(li):
