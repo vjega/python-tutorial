@@ -49,6 +49,22 @@ class teacherViewSet(viewsets.ModelViewSet):
         serializer = adminserializers.TeacherinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
+    def create(self, request):
+        teacher = models.Teacherinfo()
+        teacherdata =  json.loads(request.DATA.keys()[0])
+        teacher.teacherid = teacherdata.get('schoolid')
+        teacher.password = teacherdata.get('classid')
+        teacher.username = teacherdata.get('username')
+        teacher.firstname = teacherdata.get('firstname')
+        teacher.lastname = teacherdata.get('lastname')
+        teacher.emailid = teacherdata.get('emailid')
+        #student.imageurl = studentdata.get('imageurl')
+        teacher.isdelete = 0
+        teacher.createdby = request.user.id
+        teacher.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        teacher.save()
+        return Response(request.DATA)
+
 class studentViewSet(viewsets.ModelViewSet):
     queryset = models.Studentinfo.objects.filter(isdelete=0)
     serializer_class = adminserializers.StudentinfoSerializer
