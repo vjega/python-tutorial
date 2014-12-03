@@ -54,10 +54,19 @@
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}">
-
-</script>
+    
+                                                                                    </script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
 
 {% endblock morescript %}
+
+{% block scriptcontent %}
+<script>
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}
+
+</script>
+
+{% endblock scriptcontent %}
 

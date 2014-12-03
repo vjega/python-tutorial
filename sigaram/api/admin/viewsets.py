@@ -12,7 +12,7 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
     queryset = models.Admininfo.objects.filter(isdelete=0)
     serializer_class = adminserializers.AdminInfoSerializer
 
-    @create_login
+    @create_login('Admin')
     def create(self, request):
         admin = models.Admininfo()
         admindata =  json.loads(request.DATA.keys()[0])
@@ -49,6 +49,22 @@ class teacherViewSet(viewsets.ModelViewSet):
         serializer = adminserializers.TeacherinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
+    def create(self, request):
+        teacher = models.Teacherinfo()
+        teacherdata =  json.loads(request.DATA.keys()[0])
+        teacher.teacherid = teacherdata.get('schoolid')
+        teacher.password = teacherdata.get('classid')
+        teacher.username = teacherdata.get('username')
+        teacher.firstname = teacherdata.get('firstname')
+        teacher.lastname = teacherdata.get('lastname')
+        teacher.emailid = teacherdata.get('emailid')
+        #student.imageurl = studentdata.get('imageurl')
+        teacher.isdelete = 0
+        teacher.createdby = request.user.id
+        teacher.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        teacher.save()
+        return Response(request.DATA)
+
 class studentViewSet(viewsets.ModelViewSet):
     queryset = models.Studentinfo.objects.filter(isdelete=0)
     serializer_class = adminserializers.StudentinfoSerializer
@@ -66,6 +82,21 @@ class studentViewSet(viewsets.ModelViewSet):
         
         serializer = adminserializers.StudentinfoSerializer(queryset, many=True)
         return Response(serializer.data)
+       
+    def create(self, request):
+        student = models.Studentinfo()
+        studentdata =  json.loads(request.DATA.keys()[0])
+        student.schoolid = studentdata.get('schoolid')
+        student.classid = studentdata.get('classid')
+        student.username = studentdata.get('username')
+        student.firstname = studentdata.get('firstname')
+        student.emailid = studentdata.get('emailid')
+        #student.imageurl = studentdata.get('imageurl')
+        student.isdelete = 0
+        student.createdby = request.user.id
+        student.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        student.save()
+        return Response(request.DATA)
 
 class TeacherResourcesViewSet(viewsets.ModelViewSet):
     queryset = models.TeacherResources.objects.all()
@@ -220,3 +251,4 @@ class AdminclasslistViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
+

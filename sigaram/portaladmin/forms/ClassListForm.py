@@ -5,15 +5,11 @@ from crispy_forms.helper import FormHelper
 class ClassListForm(forms.Form):
     classname = forms.ChoiceField(
         label = _("Class Name"),
-        max_length = 100,
         required = True,
-        widget = forms.TextInput({ "placeholder": _("Class Name")})
     )
     shortname = forms.ChoiceField(
         label = _("Short Name"),
-        max_length = 100,
         required = True,
-        widget = forms.TextInput({ "placeholder": _("Short Name")})
     )
     def __init__(self, *args, **kwargs):
         super(ClassListForm, self).__init__(*args, **kwargs)
