@@ -49,6 +49,7 @@
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
@@ -94,15 +95,15 @@ TTS.forms.addschool = function() {
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
-            action: function(){
+            action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-school");
-                console.log(data);
                 $.ajax({
                     type:'POST',
                     data: data,
                     url : '/api/admin/adminschool/'
                 }).done(function( msg ) {
-                    console.log(msg);
+                    dialogItself.close();
+                    location.reload();
                     //dialogItself.close();
                 });
             }

@@ -190,6 +190,7 @@ class AdminschoolViewSet(viewsets.ModelViewSet):
         adminschools.shortname = schooldata.get('shortname')
         adminschools.description = schooldata.get('description')
         adminschools.createdby = request.user.id
+        adminschools.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         adminschools.save()
         return Response(request.DATA)
 
