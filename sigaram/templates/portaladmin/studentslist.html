@@ -74,97 +74,42 @@
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
 
-<script id="addstudentlist" type="text/x-jsrender">
+<script id="student-form" type="text/x-jsrender">
 {% crispy form %}
-</script>
-
-<script id="editstudent" type="text/x-jsrender">
-<form id="newfolderfrm" class="form-horizontal" role="form">
-    <div class="form-group">
-        <label for="folder_name" class="col-sm-4 control-label">{% trans "School Name" %}</label>
-        <div class="col-sm-8">
-           <select name="school_name" class="form-control" id="school_name">
-                {% for school in schools%}
-                <option value="{{school.schoolid}}">
-                    {{school.schoolname}}
-                </option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="remark" class="col-sm-4 control-label">{% trans "Class" %}</label>
-        <div class="col-sm-8">
-            <select name="school_name" class="form-control" id="school_name">
-                {% for school in schools%}
-                <option value="{{school.schoolid}}">
-                    {{school.schoolname}}
-                </option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="order_no" class="col-sm-4 control-label">{% trans "Name" %}</label>
-        <div class="col-sm-8">
-            <input type="text" class="form-control" name="student_name" id="student_name"
-                 placeholder="{% trans "Name" %}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="order_no" class="col-sm-4 control-label">{% trans "User Name" %}</label>
-        <div class="col-sm-8">
-            <input type="text" class="form-control" name="user_name" id="user_name"
-                 placeholder="{% trans "User Name" %}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="order_no" class="col-sm-4 control-label">{% trans "Password" %}</label>
-        <div class="col-sm-8">
-            <input type="text" class="form-control" name="user_password" id="user_password"
-                 placeholder="{% trans "Password" %}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="order_no" class="col-sm-4 control-label">{% trans "Email Id" %}</label>
-        <div class="col-sm-8">
-            <input type="text" class="form-control" name="email_id" id="email_id"
-                 placeholder="{% trans "Email Id" %}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="order_no" class="col-sm-4 control-label">{% trans "Photo" %}</label>
-        <div class="col-sm-8">
-            <input type="file" class="form-control" name="teacher_photo" id="teacher_photo"
-                 >
-        </div>
-    </div>
-</form>
 </script>
 
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-TTS.forms.addschool = function() {
+TTS.forms.addstudent = function() {
     BootstrapDialog.show({
         title: 'Add Student',
-        message: $($('#addstudentlist').render()),
+         onshown: function(dialogRef){
+            //console.log('hi');
+            $("#id_schoolid").html($("#school_name").html());
+            $("#id_classid").html($("#classid").html());
+            //$('.summernote').summernote();
+        },
+        message: $($('#student-form').render()),
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
-            action: function(){
-                var data = TTS.utils.serilaizeJson("#newfolderfrm");
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#add-student");
+                console.log(data);
                 $.ajax({
                     type:'POST',
-                    data: {'data':data},
-                    url : '/api/admin/addfolder'
+                    data: data,
+                    url : '/api/admin/student/'
                 }).done(function( msg ) {
-                    console.log(msg);
-                    //dialogItself.close();
+                    //console.log(msg);
+                    dialogItself.close();
+                    location.reload();
                 });
             }
             },{
@@ -183,14 +128,15 @@ TTS.forms.editschool = function() {
             label: 'Save',
             cssClass: 'btn-primary',
             action: function(){
-                var data = TTS.utils.serilaizeJson("#newfolderfrm");
+                var data = TTS.utils.serilaizeJson("#add-student");
                 $.ajax({
                     type:'POST',
                     data: {'data':data},
                     url : '/api/admin/addfolder'
                 }).done(function( msg ) {
-                    console.log(msg);
-                    //dialogItself.close();
+                    //console.log(msg);
+                    dialogItself.close();
+                    //window.location.reload();
                 });
             }
             },{
@@ -320,7 +266,7 @@ $(document).ready(function(){
         window.location = 'studentslist';
     });
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.addschool();
+        TTS.forms.addstudent();
     });
 });
 
