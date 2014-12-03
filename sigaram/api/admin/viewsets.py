@@ -12,7 +12,7 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
     queryset = models.Admininfo.objects.filter(isdelete=0)
     serializer_class = adminserializers.AdminInfoSerializer
 
-    @create_login('Admin')
+    @create_login
     def create(self, request):
         admin = models.Admininfo()
         admindata =  json.loads(request.DATA.keys()[0])
@@ -52,13 +52,13 @@ class teacherViewSet(viewsets.ModelViewSet):
     def create(self, request):
         teacher = models.Teacherinfo()
         teacherdata =  json.loads(request.DATA.keys()[0])
-        teacher.teacherid = teacherdata.get('schoolid')
-        teacher.password = teacherdata.get('classid')
         teacher.username = teacherdata.get('username')
+        teacher.password = teacherdata.get('password')
         teacher.firstname = teacherdata.get('firstname')
-        teacher.lastname = teacherdata.get('lastname')
+        teacher.schoolid = teacherdata.get('schoolid')
+        teacher.classid = '1' #teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
-        #student.imageurl = studentdata.get('imageurl')
+        #teacher.imageurl = studentdata.get('imageurl')
         teacher.isdelete = 0
         teacher.createdby = request.user.id
         teacher.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
