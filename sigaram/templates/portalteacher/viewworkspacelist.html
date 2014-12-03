@@ -171,7 +171,7 @@ TTS.forms.editschool = function() {
     });
 };
 
-TTS.forms.renderteacherresourceinfo = function(data){
+TTS.forms.renderstudentwrittenwork = function(data){
     var headers = [
                     { "title": "{% trans "Sl No." %}",
                       "class": "text-center"  
@@ -186,9 +186,10 @@ TTS.forms.renderteacherresourceinfo = function(data){
     for(var i in data){
         var t = [];
         t.push(++count);
-        t.push(data[i].resourcetitle);
+        t.push(data[i].writtenworktitle);
         t.push(data[i].createddate);
-        t.push(data[i].resourcetype);
+        t.push(data[i].createddate);
+        t.push(data[i].writtenworktitle);
         dataset.push(t);
     }
 
@@ -200,11 +201,11 @@ TTS.forms.renderteacherresourceinfo = function(data){
 };
 $(document).ready(function(){
     $.ajax({
-        "url":"/api/admin/teacherresourcesinfo/?format=json",
+        "url":"/api/admin/writtenworkinfo/?format=json",
         "type":"GET"
     }).done(function(data){
         //console.log(data);
-        TTS.forms.renderteacherresourceinfo(data);
+        TTS.forms.renderstudentwrittenwork(data);
     });
     $('#admin-main-tbl tbody').on('click', 'tr', function(){
         //window.location = 'teacherresourcelist?id='+this.id;

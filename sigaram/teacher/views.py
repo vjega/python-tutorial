@@ -48,12 +48,6 @@ def home(request):
 
 @switchlanguage
 def assignedresourcelist(request):
-    assignedresourcelist_head = [('Sl No.'),
-                         _('Name'),
-                         _('Short Name'),
-                         _('Edit'),
-                         _('Delete')]
-    assignedresourcelist = {'head':assignedresourcelist_head}
     return render(request, 'portalteacher/assignedresourcelist.html')
 
 @switchlanguage

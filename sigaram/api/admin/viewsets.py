@@ -66,6 +66,21 @@ class studentViewSet(viewsets.ModelViewSet):
         
         serializer = adminserializers.StudentinfoSerializer(queryset, many=True)
         return Response(serializer.data)
+       
+    def create(self, request):
+        student = models.Studentinfo()
+        studentdata =  json.loads(request.DATA.keys()[0])
+        student.schoolid = studentdata.get('schoolid')
+        student.classid = studentdata.get('classid')
+        student.username = studentdata.get('username')
+        student.firstname = studentdata.get('firstname')
+        student.emailid = studentdata.get('emailid')
+        #student.imageurl = studentdata.get('imageurl')
+        student.isdelete = 0
+        student.createdby = request.user.id
+        student.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        student.save()
+        return Response(request.DATA)
 
 class TeacherResourcesViewSet(viewsets.ModelViewSet):
     queryset = models.TeacherResources.objects.all()
@@ -177,3 +192,25 @@ class AdminclassinfoViewSet(viewsets.ModelViewSet):
         serializer_class = adminserializers.ClassroominfoSerializer
         serializer = adminserializers.ClassroominfoSerializer(queryset, many=True)        
         return Response({"test":"test"})
+
+class AdminschoolViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Schoolinfo.objects.all()
+    serializer_class = adminserializers.AdminschoolSerializer
+
+    def create(self, request):
+        adminschools = models.Schoolinfo()
+        schooldata =  json.loads(request.DATA.keys()[0])
+        adminschools.schoolname = schooldata.get('schoolname')
+        adminschools.shortname = schooldata.get('shortname')
+        adminschools.description = schooldata.get('description')
+        adminschools.createdby = request.user.id
+        adminschools.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminschools.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
