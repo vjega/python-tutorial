@@ -71,14 +71,7 @@ def studentslist(request):
 
 @login_required
 def schoollist(request):
-    schoollist_head = [('Sl No.'),
-                         _('Name'),
-                         _('Short Name'),
-                         _('Edit'),
-                         _('Delete')]
-    schoollist_body = models.Schoolinfo.objects.all()
-    schoollist = {'head':schoollist_head, 'body':schoollist_body}
-    return render(request, 'portaladmin/schoollist.html',{'schoollist':schoollist,
+    return render(request, 'portaladmin/schoollist.html',{
                                         "form" : SchoolListForm.SchoolListForm()})
 
 
