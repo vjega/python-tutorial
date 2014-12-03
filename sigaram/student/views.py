@@ -106,21 +106,21 @@ def resourcetype(request):
 @switchlanguage
 def workspace(request):
     folders = [{
-        "id": "1",
+        "id"   : "1",
         "name" :"Character",
-        "href" :""
+        "href" :"workspacelist"
         },{
-        "id": "2",
+        "id"   : "2",
         "name" :"Photography",
-        "href" :""
+        "href" :"workspacelist"
         },{
-        "id": "3",
+        "id"   : "3",
         "name" :"Lyrics",
-        "href" :""
+        "href" :"workspacelist"
         },{
-        "id": "4",
+        "id"   : "4",
         "name" :"Video",
-        "href" :""
+        "href" :"workspacelist"
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
@@ -160,3 +160,6 @@ def viewstudentwrittenworks(request):
 
 def viewstudentwork(request):
     return render(request, 'portalstudent/viewstudentwork.html')
+
+def workspacelist(request):
+    return render(request, 'portalstudent/workspacelist .html')

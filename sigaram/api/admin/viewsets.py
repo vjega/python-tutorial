@@ -177,3 +177,24 @@ class AdminclassinfoViewSet(viewsets.ModelViewSet):
         serializer_class = adminserializers.ClassroominfoSerializer
         serializer = adminserializers.ClassroominfoSerializer(queryset, many=True)        
         return Response({"test":"test"})
+
+class AdminschoolViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Schoolinfo.objects.all()
+    serializer_class = adminserializers.AdminschoolSerializer
+
+    def create(self, request):
+        adminschools = models.Schoolinfo()
+        schooldata =  json.loads(request.DATA.keys()[0])
+        adminschools.schoolname = schooldata.get('schoolname')
+        adminschools.shortname = schooldata.get('shortname')
+        adminschools.description = schooldata.get('description')
+        adminschools.createdby = request.user.id
+        adminschools.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
