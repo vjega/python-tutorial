@@ -150,9 +150,9 @@ TTS.forms.addteacher = function() {
             action: function(){
                 var data = TTS.utils.serilaizeJson("#add-teacher");
                 $.ajax({
-                   // type:'POST',
-                   // data: {'data':data},
-                   // url : '/api/admin/teacher/'
+                   type:'POST',
+                   data: data,
+                   url : '/api/admin/teacher/'
                 }).done(function( msg ) {
                     console.log(msg);
                     //dialogItself.close();
