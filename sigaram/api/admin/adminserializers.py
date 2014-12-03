@@ -78,3 +78,9 @@ class AdminschoolSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Schoolinfo
         fields = ('schoolid',  'schoolname','shortname',
                   'description','schoolimageurl','createdby','createddate')
+
+class AdminclasslistSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Classinfo
+        fields = ('classid',  'classname','shortname',
+                  'createdby','createddate')

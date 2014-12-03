@@ -1,6 +1,7 @@
 {% extends 'portaladmin/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
+{% load crispy_forms_tags %}
 {% block topcontent %}
 <div id="page-wrapper">
     <div class="row">
@@ -35,24 +36,7 @@
         <div class="panel-body">
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover" 
-                    id="admin-main-tbl">
-                    <thead>
-                        <tr>
-                            {% for head in classlist.head %}
-                            <th>{{head}}</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for class in classinfo%}
-                        <tr class="gradeX" id="{{forloop.counter}}">
-                            <td>{{forloop.counter}}</td>
-                            <td>{{class.classname}}</td>
-                            <td>{{class.shortname}}</td>
-                            <td><i class="tts-delete fa fa-trash fa-fw"></i></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
+                    id="classlist-main-tbl">
                 </table>
             </div>
             <!-- /.table-responsive -->
@@ -82,64 +66,33 @@
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<script id="editschool" type="text/x-jsrender">
-<form id="newfolderfrm" class="form-horizontal" role="form">
-    <div class="row">
-    <div class="form-group" class="col-sm-3">
-        <label for="folder_name" class="col-sm-4 control-label">{% trans "Select School" %}</label>
-        <div class="col-sm-4">
-            <select name="school_name" class="form-control" id="school_name">
-                {% for school in schools%}
-                <option value="{{school.schoolid}}">
-                    {{school.schoolname}}
-                </option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    </div>
-     <div class="row">
-    <div class="form-group" class="col-sm-3">
-        <label for="folder_name" class="col-sm-4 control-label">{% trans "Class Name" %}
-        </label>
-        <div class="col-sm-4">
-            <select name="school_name" class="form-control" id="school_name">
-                {% for classinfo in classinfo%}
-                <option value="{{school.schoolid}}">
-                    {{classinfo.classname}}
-                </option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    </div>
-</form>
+<script id="classlist-form" type="text/x-jsrender">
+{% crispy form %}
 </script>
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-TTS.forms.editschool = function() {
+TTS.forms.addclassroom = function() {
     BootstrapDialog.show({
-        title: 'Add Classrooms',
-        onshown: function(dialogRef){
-            $('.summernote').summernote();
-        },
-        message: $($('#editschool').render()),
+        title: 'Add Classroom',
+        message: $($('#classlist-form').render()),
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
-            action: function(){
-                var data = TTS.utils.serilaizeJson("#newfolderfrm");
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#add-classlist");
                 $.ajax({
                     type:'POST',
-                    data: {'data':data},
-                    url : '/api/admin/addfolder'
+                    data: data,
+                    url : '/api/admin/classlist/'
                 }).done(function( msg ) {
-                    console.log(msg);
+                    dialogItself.close();
+                    location.reload();
                     //dialogItself.close();
                 });
             }
@@ -151,49 +104,50 @@ TTS.forms.editschool = function() {
         }]
     });
 };
-/*TTS.forms.renderteacherresourceinfo = function(data){
+
+TTS.forms.renderclassroom = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
-              "class": "text-center"  
+              "class": "text-center" ,
+              "data" : "slno"  
             },
-            { "title": "{% trans "Title" %}"},
-            { "title": "{% trans "Date" %}" },
-            { "title": "{% trans "Type" %}"}, 
+            { "title": "{% trans "Class" %}" ,
+              "data" : "classname"
+            },
+            { "title": "{% trans "Shortname" %}",
+              "data" : "shortname"
+            }, 
             { "title": "{% trans "Delete" %}",
-              "class": "text-center"  
+              "class": "text-center" ,
+              "data" : "delete" 
             }, 
         ];
     var dataset = [];
+    
     var count = 0
     for(var i in data){
         var t = [];
-        t.push(++count);
-        t.push(data[i].resourcetitle);
-        t.push(data[i].createddate);
-        t.push(data[i].resourcetype);
-        t.push("<i class='fa fa-trash fa-lg'></i>");
+        t.slno = ++count;
+        t.classname = data[i].classname;
+        t.shortname = data[i].shortname;
+        t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
-
-    $('#admin-main-tbl').dataTable({
+    $('#classlist-main-tbl').dataTable({
         "data":     dataset,
         "columns":  headers
     });
 
-};*/
+};
+
 $(document).ready(function(){
     $.ajax({
         "url":"/api/admin/classlist/?format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
-        TTS.forms.renderteacherresourceinfo(data);
+        TTS.forms.renderclassroom(data);
     });
-    $('#admin-main-tbl tbody tr').on('click', '.tts-edit', function(e){
-        e.stopPropagation();
-        TTS.forms.editschool();
-    });
-    $('#admin-main-tbl').on('click', '.tts-delete', function(e){
+    $('#classlist-main-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();
         if (!window.confirm("Do you want to delete this record?")) {
             return false;
@@ -202,7 +156,7 @@ $(document).ready(function(){
         window.location = 'schoollist';
     });
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.editschool();
+        TTS.forms.addclassroom();
     });
 });
 
