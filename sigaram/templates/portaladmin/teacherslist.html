@@ -140,9 +140,8 @@ TTS.forms.addteacher = function() {
     BootstrapDialog.show({
         title: 'Add Teacher',
         onshown: function(dialogRef){
-            $("#id_school").html($("#school_name").html());
-            $("#id_classname").html($("#teacherid").html());
-           console.log($("#teacherid"));
+            $("#id_schoolid").html($("#school_name").html());
+            //$("#id_classid").html($("#classid").html());
         },
         message: $($('#addteacher').render()),
         buttons: [{
@@ -151,9 +150,9 @@ TTS.forms.addteacher = function() {
             action: function(){
                 var data = TTS.utils.serilaizeJson("#add-teacher");
                 $.ajax({
-                    type:'POST',
-                    data: {'data':data},
-                    url : '/api/admin/teacher'
+                   // type:'POST',
+                   // data: {'data':data},
+                   // url : '/api/admin/teacher/'
                 }).done(function( msg ) {
                     console.log(msg);
                     //dialogItself.close();
@@ -248,7 +247,7 @@ TTS.forms.renderteacher = function(data){
 
 $(document).ready(function(){
     //var url = "/api/admin/teacher/?schoolid="+$("#school_name").val()+"&format=json"
-    var url = "/api/admin/teacher/?schoolid="+$("#school_name").val()+"&teacherid="+$("#teacherid").val()+"&format=json"
+    var url = "/api/admin/teacher/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json"
     $.ajax({
         "url":url,
         "type":"GET"
