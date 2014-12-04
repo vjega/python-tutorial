@@ -71,6 +71,7 @@ TTS.forms.studentaddschool = function() {
     BootstrapDialog.show({
         title: 'Student Resources',
         onshown: function(dialogRef){
+            updateChapter();
             $('.summernote').summernote();
         },
         message: $($('#studentaddschool').render()),
@@ -126,6 +127,21 @@ TTS.forms.renderteacherresourceinfo = function(data){
     });
 
 };
+
+var updateChapter = function(){
+    $.ajax({
+        'url': "/api/admin/chapterinfo/?classid="+$("#id_classname").val()
+                +"&sectionid="+$("#id_section").val(),
+        'type':'GET'
+    }).done(function(data){
+        console.log(data)
+        opt = "";
+        for (d in data){
+            opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"<option>\n";
+        }
+        $("#id_chapter").html(opt);
+    });
+};
 $(document).ready(function(){
     $.ajax({
         "url":"/api/admin/teacherresourcesinfo/?format=json",
@@ -153,6 +169,13 @@ $(document).ready(function(){
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.studentaddschool();
     });
+    $("body").on('change', '#id_classname', function(){
+        updateChapter();
+    })
+    $("body").on('change', '#id_section', function(){
+        updateChapter();
+    })
+    
 });
 
 </script>

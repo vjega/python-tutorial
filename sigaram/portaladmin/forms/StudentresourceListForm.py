@@ -31,7 +31,6 @@ class StudentresourceListForm(forms.Form):
     chapter         = forms.ChoiceField(
         label    = _("Chapter"),
         required = True,
-        choices  = [(opt.chapterid, opt.chaptername) for opt in models.Chapterinfo.objects.all()],
     )
     short_photo    = forms.FileField(
         label      = _("Short Photo"),
