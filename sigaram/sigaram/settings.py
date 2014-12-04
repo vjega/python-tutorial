@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'crispy_forms',
     'rest_framework',
     'portaladmin',
+    'ajaxuploader',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -85,7 +86,6 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD':'password',
         'NAME': 'd60701781',
-        'OPTIONS': {'init_command': "SET character_set_connection=latin1,collation_connection=latin1_general_cs"}
     }
 }
 
@@ -109,6 +109,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
+#STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 STATIC_URL = '/static/'
 

@@ -15,3 +15,8 @@ def create_login(group):
         return inner
     return outer
 
+def inactivate_user(f):
+    def inner(obj, request):
+        pass
+    return inner
+

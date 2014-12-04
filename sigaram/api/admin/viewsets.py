@@ -12,7 +12,7 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
     queryset = models.Admininfo.objects.filter(isdelete=0)
     serializer_class = adminserializers.AdminInfoSerializer
 
-    @create_login
+    @create_login('Admin')
     def create(self, request):
         admin = models.Admininfo()
         admindata =  json.loads(request.DATA.keys()[0])
@@ -116,6 +116,25 @@ class TeacherResourcesViewSet(viewsets.ModelViewSet):
 class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherresourceinfo.objects.all()
     serializer_class = adminserializers.TeacherresourceinfoSerializer
+
+    def create(self, request):
+        teacherresource = models.Teacherresourceinfo()
+        teacherresourcedata =  json.loads(request.DATA.keys()[0])
+        teacherresource.classid = teacherresourcedata.get('classid')
+        teacherresource.section = teacherresourcedata.get('section')
+        teacherresource.resourcetype = teacherresourcedata.get('resourcetype')
+        teacherresource.resourcecategory = teacherresourcedata.get('resourcecategory')
+        teacherresource.chapterid = teacherresourcedata.get('chapterid')
+        teacherresource.createdby = request.user.id
+        teacherresource.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        teacherresource.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
     
 
 class ResourceinfoViewSet(viewsets.ModelViewSet):
@@ -251,4 +270,3 @@ class AdminclasslistViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
-
