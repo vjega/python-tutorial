@@ -230,3 +230,25 @@ class AdminschoolViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
+
+class AdminclasslistViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Classinfo.objects.all()
+    serializer_class = adminserializers.AdminclasslistSerializer
+
+    def create(self, request):
+        adminclasslist = models.Classinfo()
+        classlistdata =  json.loads(request.DATA.keys()[0])
+        adminclasslist.classname = classlistdata.get('classname')
+        adminclasslist.shortname = classlistdata.get('shortname')
+        adminclasslist.createdby = request.user.id
+        adminclasslist.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminclasslist.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
+

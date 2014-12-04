@@ -8,7 +8,8 @@ from portaladmin.forms import (AdminForm,
                    TeacherListForm,
                    StudentListForm,
                    SchoolListForm,
-                   StudentresourceListForm)	
+                   StudentresourceListForm,
+                   ClassListForm)	
 
 def switchlanguage(f):
     def inner(req):
@@ -207,18 +208,8 @@ def viewstudentwrittenworks(request):
 @login_required
 def classlist(request):
     schools = models.Schoolinfo.objects.all()
-    classinfo = models.Classinfo.objects.all()
-    classlist_head = [_('Sl No.'),
-                      _('Class Name'),
-                      _('Short Name'),
-                      _('Delete')]
-    classlist = {'head':classlist_head}
-    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
-    #studentresourcetype = {'head':studentresourcetype_head, 
-                           #'body':studentresourcetype_body}
     return render(request, 'portaladmin/classlist.html', 
-                  {"classinfo":classinfo, 'classlist':classlist, 
-                  'schools':schools}
+                  {'schools':schools, "form" : ClassListForm.ClassListForm()}
                   )
 
 @login_required
