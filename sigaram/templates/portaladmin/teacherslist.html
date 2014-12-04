@@ -154,8 +154,9 @@ TTS.forms.addteacher = function() {
                    data: data,
                    url : '/api/admin/teacher/'
                 }).done(function( msg ) {
-                    console.log(msg);
-                    //dialogItself.close();
+                    //console.log(msg);
+                    dialogItself.close();
+                    location.reload();
                 });
             }
             },{
