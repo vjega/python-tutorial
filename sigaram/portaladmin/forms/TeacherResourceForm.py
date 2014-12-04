@@ -4,6 +4,11 @@ from crispy_forms.helper import FormHelper
 from portaladmin import models
 #from crispy_forms.layout import Submit
 class TeacherResourceForm(forms.Form):
+    resourcetype  = forms.ChoiceField(
+        label      = _("Category"),
+        required   = True,
+        choices    = [('text', 'Text'), ('audio', 'Audio'),('video','Video'), ('image', 'Image')]
+    )
     resource_file = forms.FileField(
         label      = _("Choose File"),
         max_length = 100,
@@ -24,7 +29,7 @@ class TeacherResourceForm(forms.Form):
         required = True,
         choices  = [('a', 'A'), ('b','B')]
     )
-    division = forms.ChoiceField(
+    resourcecategory = forms.ChoiceField(
         label      = _("Select Division"),
         required   = True,
         choices  = [('0', 'Listening Comprehension'), ('1', 'Sample Lesson Plan')]

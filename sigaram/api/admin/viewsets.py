@@ -120,12 +120,15 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
     def create(self, request):
         teacherresource = models.Teacherresourceinfo()
         teacherresourcedata =  json.loads(request.DATA.keys()[0])
+        teacherresource.schoolid = teacherresourcedata.get('schoolid')
         teacherresource.classid = teacherresourcedata.get('classid')
         teacherresource.section = teacherresourcedata.get('section')
         teacherresource.resourcetype = teacherresourcedata.get('resourcetype')
         teacherresource.resourcecategory = teacherresourcedata.get('resourcecategory')
         teacherresource.chapterid = teacherresourcedata.get('chapterid')
         teacherresource.createdby = request.user.id
+        teacherresource.isapproved = 0
+        teacherresource.isdeleted = 0
         teacherresource.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         teacherresource.save()
         return Response(request.DATA)
