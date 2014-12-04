@@ -33,10 +33,11 @@ class AdminForm(forms.Form):
         required = True,
         widget = forms.TextInput({ "placeholder": _("Email Id")})
     )
-    image = forms.FileField(
+    image = forms.CharField(
         label = _("Photo"),
         max_length = 100,
         required = True,
+        widget = forms.HiddenInput({ "placeholder": _("Email Id")})
     )
     def __init__(self, *args, **kwargs):
         super(AdminForm, self).__init__(*args, **kwargs)
