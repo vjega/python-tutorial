@@ -8,19 +8,25 @@ class TeacherResourceForm(forms.Form):
         max_length = 100,
         required = True,
     )
-    school = forms.ChoiceField(
+    school = forms.CharField(
         label = _("Select School"),
+         max_length = 100,
         required = True,
+        widget = forms.TextInput({ "placeholder": _("User Name")})
     )
-    classname = forms.ChoiceField(
+    classname = forms.CharField(
         label = _("Select Class"),
+         max_length = 100,
         required = True,
+        widget = forms.TextInput({ "placeholder": _("Select Class")})
     )
-    division = forms.ChoiceField(
+    division = forms.CharField(
         label = _("Select Division"),
+         max_length = 100,
         required = True,
+        widget = forms.TextInput({ "placeholder": _("User Name")})
     )
-    part = forms.ChoiceField(
+    part = forms.CharField(
         label = _("Select Part"),
         required = True,
     )

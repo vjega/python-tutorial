@@ -63,7 +63,7 @@ TTS.forms = TTS.forms || {}
 TTS.forms.update_chapter_list = function () {
     var classid = $("#classid").val();
     var section = $("#section").val();
-    var url = "/api/admin/chapterinfo/?classid="+classid+"&section="+section+"&format=json";
+    var url = "/api/admin/teacherresourcesinfo/?classid="+classid+"&section="+section+"&format=json";
     $.ajax({
         url  : url,
         type : "GET"

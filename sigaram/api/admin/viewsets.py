@@ -251,4 +251,3 @@ class AdminclasslistViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
-

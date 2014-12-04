@@ -129,14 +129,17 @@ def studentresourcetype(request):
 def resourcetype(request):
     folders = [{
         "id": "1",
+        "categoryid": "0",
         "name" :"வாசிப்பு",
         "href" :"chapterlist"
         },{
         "id": "2",
+        "categoryid": "1",
         "name" :"பட உரையாடல்",
         "href" :"chapterlist"
         },{
         "id": "3",
+        "categoryid": "2",
         "name" :"எழுத்து பலகை",
         "href" :"chapterlist"
         }]
