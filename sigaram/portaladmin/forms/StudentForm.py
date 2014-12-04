@@ -1,11 +1,14 @@
 from django.utils.translation import (ugettext as _,)
 from django import forms
 from crispy_forms.helper import FormHelper
+from portaladmin import models
 #from crispy_forms.layout import Submit
+
 class StudentListForm(forms.Form):
     schoolid = forms.ChoiceField(
         label = _("Select School"),
         required = True,
+        choices  = [(opt.schoolid, opt.schoolname) for opt in models.Schoolinfo.objects.all()],
     )
     classid = forms.ChoiceField(
         label = _("Select Class"),
