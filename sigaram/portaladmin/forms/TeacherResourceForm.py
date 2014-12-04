@@ -5,34 +5,39 @@ from portaladmin import models
 #from crispy_forms.layout import Submit
 class TeacherResourceForm(forms.Form):
     resource_file = forms.FileField(
-        label = _("Choose File"),
+        label      = _("Choose File"),
         max_length = 100,
-        required = True,
+        required   = True,
     )
     schoolid = forms.ChoiceField(
-        label = _("Select School"),
+        label    = _("Select School"),
         required = True,
         choices  = [(opt.schoolid, opt.schoolname) for opt in models.Schoolinfo.objects.all()],
     )
-    classname = forms.ChoiceField(
-        label = _("Select Class"),
+    classid = forms.ChoiceField(
+        label    = _("Select Class"),
         required = True,
         choices  = [(opt.classid, opt.shortname) for opt in models.Classinfo.objects.all()],
     )
-    division = forms.CharField(
-        label = _("Select Division"),
-        max_length = 100,
+    section      = forms.ChoiceField(
+        label    = _("Select Section"),
         required = True,
-        widget = forms.TextInput({ "placeholder": _("Select Division")})
+        choices  = [('a', 'A'), ('b','B')]
     )
-    part = forms.CharField(
-        label = _("Select Part"),
+    division = forms.ChoiceField(
+        label      = _("Select Division"),
+        required   = True,
+        choices  = [('0', 'Listening Comprehension'), ('1', 'Sample Lesson Plan')]
+    )
+    chapterid = forms.ChoiceField(
+        label    = _("Select Part"),
         required = True,
+        choices  = [('0', 'Chapter1'), ('1', 'Chapter2')]
     )
     heading = forms.CharField(
-        label = _("Heading"),
+        label    = _("Heading"),
         required = True,
-        widget = forms.Textarea({ "class": "summernote"})
+        widget   = forms.Textarea({ "class": "summernote"})
     )
     def __init__(self, *args, **kwargs):
         super(TeacherResourceForm, self).__init__(*args, **kwargs)

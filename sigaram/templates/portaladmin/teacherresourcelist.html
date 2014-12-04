@@ -61,7 +61,7 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-TTS.forms.update_chapter_list = function () {
+/*TTS.forms.update_chapter_list = function () {
     var classid = $("#classid").val();
     var section = $("#section").val();
     var url = "/api/admin/teacherresourcesinfo/?classid="+classid+"&section="+section+"&format=json";
@@ -76,17 +76,17 @@ TTS.forms.update_chapter_list = function () {
         }
         $("#chapterid").html(opt);
     })
-};
+};*/
 
 TTS.forms.addteacherresource = function() {
     BootstrapDialog.show({
         title: 'Add TeacherResource',
         onshown: function(dialogRef){
             $('.summernote').summernote();
-            TTS.forms.update_chapter_list();
-            $("#classid, #section").change(function(){
-                TTS.forms.update_chapter_list();
-            });
+       //     TTS.forms.update_chapter_list();
+         //   $("#classid, #section").change(function(){
+          //      TTS.forms.update_chapter_list();
+            //});
         },
         message: $($('#teacherresource-form').render()),
         buttons: [{
@@ -97,7 +97,7 @@ TTS.forms.addteacherresource = function() {
                 $.ajax({
                     type:'POST',
                     data: data,
-                    url : '/api/admin/teacherresourcesinfo'
+                    url : '/api/admin/teacherresourcesinfo/'
                 }).done(function( msg ) {
                     dialogItself.close();
                     location.reload();
