@@ -12,7 +12,7 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
     queryset = models.Admininfo.objects.filter(isdelete=0)
     serializer_class = adminserializers.AdminInfoSerializer
 
-    @create_login('Admin')
+    @create_login
     def create(self, request):
         admin = models.Admininfo()
         admindata =  json.loads(request.DATA.keys()[0])
@@ -48,6 +48,22 @@ class teacherViewSet(viewsets.ModelViewSet):
             queryset = models.Teacherinfo.objects.all()
         serializer = adminserializers.TeacherinfoSerializer(queryset, many=True)
         return Response(serializer.data)
+
+    def create(self, request):
+        teacher = models.Teacherinfo()
+        teacherdata =  json.loads(request.DATA.keys()[0])
+        teacher.username = teacherdata.get('username')
+        teacher.password = teacherdata.get('password')
+        teacher.firstname = teacherdata.get('firstname')
+        teacher.schoolid = teacherdata.get('schoolid')
+        teacher.classid = '1' #teacherdata.get('classid')
+        teacher.emailid = teacherdata.get('emailid')
+        #teacher.imageurl = studentdata.get('imageurl')
+        teacher.isdelete = 0
+        teacher.createdby = request.user.id
+        teacher.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        teacher.save()
+        return Response(request.DATA)
 
 class studentViewSet(viewsets.ModelViewSet):
     queryset = models.Studentinfo.objects.filter(isdelete=0)
@@ -214,3 +230,25 @@ class AdminschoolViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
+
+class AdminclasslistViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Classinfo.objects.all()
+    serializer_class = adminserializers.AdminclasslistSerializer
+
+    def create(self, request):
+        adminclasslist = models.Classinfo()
+        classlistdata =  json.loads(request.DATA.keys()[0])
+        adminclasslist.classname = classlistdata.get('classname')
+        adminclasslist.shortname = classlistdata.get('shortname')
+        adminclasslist.createdby = request.user.id
+        adminclasslist.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminclasslist.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
+

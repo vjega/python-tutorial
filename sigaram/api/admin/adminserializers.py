@@ -16,7 +16,7 @@ class AdminFolderSerializer(serializers.HyperlinkedModelSerializer):
 class TeacherinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Teacherinfo
-        fields = ('teacherid',  'username','password',
+        fields = ('teacherid',  'username','password','classid',
                   'firstname','lastname', 'emailid','imageurl','schoolid')
 
 class StudentinfoSerializer(serializers.HyperlinkedModelSerializer):
@@ -78,3 +78,9 @@ class AdminschoolSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Schoolinfo
         fields = ('schoolid',  'schoolname','shortname',
                   'description','schoolimageurl','createdby','createddate')
+
+class AdminclasslistSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Classinfo
+        fields = ('classid',  'classname','shortname',
+                  'createdby','createddate')

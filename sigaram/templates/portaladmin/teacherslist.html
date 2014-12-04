@@ -63,6 +63,7 @@
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 {% endblock morescript %}
 
@@ -135,19 +136,23 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-TTS.forms.addschool = function() {
+TTS.forms.addteacher = function() {
     BootstrapDialog.show({
         title: 'Add Teacher',
+        onshown: function(dialogRef){
+            $("#id_schoolid").html($("#school_name").html());
+            //$("#id_classid").html($("#classid").html());
+        },
         message: $($('#addteacher').render()),
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
             action: function(){
-                var data = TTS.utils.serilaizeJson("#newfolderfrm");
+                var data = TTS.utils.serilaizeJson("#add-teacher");
                 $.ajax({
-                    type:'POST',
-                    data: {'data':data},
-                    url : '/api/admin/addfolder'
+                   // type:'POST',
+                   // data: {'data':data},
+                   // url : '/api/admin/teacher/'
                 }).done(function( msg ) {
                     console.log(msg);
                     //dialogItself.close();
@@ -241,7 +246,8 @@ TTS.forms.renderteacher = function(data){
 
 
 $(document).ready(function(){
-    var url = "/api/admin/teacher/?schoolid="+$("#school_name").val()+"&format=json"
+    //var url = "/api/admin/teacher/?schoolid="+$("#school_name").val()+"&format=json"
+    var url = "/api/admin/teacher/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json"
     $.ajax({
         "url":url,
         "type":"GET"
@@ -270,7 +276,7 @@ $(document).ready(function(){
         window.location = 'teacherslist';
     });
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.addschool();
+        TTS.forms.addteacher();
     });
 });
 
