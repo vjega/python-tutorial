@@ -1,6 +1,7 @@
 {% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
+{% load crispy_forms_tags %}
 {% block topcontent %}
     <div id="page-wrapper">
         <div class="row">
@@ -52,6 +53,7 @@
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
 
 {% endblock morescript %}
@@ -126,7 +128,7 @@ TTS.forms.workspace = function() {
             label: 'Save',
             cssClass: 'btn-primary',
             action: function(){
-                var data = TTS.utils.serilaizeJson("#newfolderfrm");
+                var data = TTS.utils.serilaizeJson("#add-workspace");
                 $.ajax({
                     type:'POST',
                     data: {'data':data},

@@ -1,6 +1,7 @@
 {% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
+{% load crispy_forms_tags %}
 {% block topcontent %}
     <div id="page-wrapper">
         <div class="row">
@@ -62,38 +63,28 @@
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}">
 
 </script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
 
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<script id="editschool" type="text/x-jsrender">
-<form id="newfolderfrm" class="form-horizontal" role="form">
-    <div class="row">
-    <div class="form-group" class="col-sm-8">
-        <label for="folder_name" class="col-sm-7 control-label" id ="resource-heade">
-                                                    {% trans "Writing Job" %}</label>
-    </div>
-    </div><br />
-    <div>
-        <textarea class="summernote"></textarea>
-    </div>
-    </div>
-</form>
+<script id="addwrittenwork" type="text/x-jsrender">
+{% crispy form %}
 </script>
 
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 
-TTS.forms.editschool = function() {
+TTS.forms.addwrittenwork = function() {
     BootstrapDialog.show({
-        title: 'Add TeacherResource',
+        title: 'Writing job',
         onshown: function(dialogRef){
             $('.summernote').summernote();
         },
-        message: $($('#editschool').render()),
+        message: $($('#addwrittenwork').render()),
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
@@ -124,7 +115,7 @@ $(document).ready(function(){
     });
     $('#admin-main-tbl tbody tr').on('click', '.tts-edit', function(e){
         e.stopPropagation();
-        TTS.forms.editschool();
+        TTS.forms.addwrittenwork();
     });
     $('#admin-main-tbl tbody tr').on('click', '.tts-delete', function(e){
         e.stopPropagation();
@@ -135,7 +126,7 @@ $(document).ready(function(){
         window.location = 'schoollist';
     });
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.editschool();
+        TTS.forms.addwrittenwork();
     });
 
 
