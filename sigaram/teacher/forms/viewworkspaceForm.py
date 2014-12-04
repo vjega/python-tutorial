@@ -2,7 +2,7 @@ from django.utils.translation import (ugettext as _,)
 from django import forms
 from crispy_forms.helper import FormHelper
 #from crispy_forms.layout import Submit
-class AdminForm(forms.Form):
+class TeacherForm(forms.Form):
     username = forms.CharField(
         label = _("User Name"),
         max_length = 100,

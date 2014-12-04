@@ -51,7 +51,8 @@ def home(request):
 
 @login_required
 def adminlist(request):
-    return render(request, 'portaladmin/adminlist.html', {"adminform" : AdminForm.AdminForm()})
+    return render(request, 'portaladmin/adminlist.html', 
+                                        {"adminform" : AdminForm.AdminForm()})
 
 @login_required
 def teacherslist(request):
@@ -78,24 +79,13 @@ def schoollist(request):
 
 @login_required
 def teacherresourcelist(request):
-    classes = models.Classinfo.objects.all()
-    teacherresourcelist_head = [('Sl No.'),
-                         _('Title'),
-                         _('Date'),
-                         _('Type'),
-                         _('Delete')]
-    teacherresourcelist_body = models.Teacherresourceinfo.objects.all()
-    teacherresourcelist = {'head':teacherresourcelist_head, 
-                           'body':teacherresourcelist_body}
-    return render(request, 'portaladmin/teacherresourcelist.html', 
-                  {'classes':classes, 
-                   'form':TeacherResourceForm.TeacherResourceForm()})
+    return render(request, 'portaladmin/teacherresourcelist.html', {
+                                        'form':TeacherResourceForm.TeacherResourceForm()})
 
 @login_required
 def viewteacherresource(request):
     viewteacherresource_head = [('Sl No.')]
     viewteacherresource = {'head':viewteacherresource_head }
-                           
     return render(request, 'portaladmin/viewteacherresource.html')
 
 @login_required
@@ -129,14 +119,17 @@ def studentresourcetype(request):
 def resourcetype(request):
     folders = [{
         "id": "1",
+        "categoryid": "0",
         "name" :"வாசிப்பு",
         "href" :"chapterlist"
         },{
         "id": "2",
+        "categoryid": "1",
         "name" :"பட உரையாடல்",
         "href" :"chapterlist"
         },{
         "id": "3",
+        "categoryid": "2",
         "name" :"எழுத்து பலகை",
         "href" :"chapterlist"
         }]

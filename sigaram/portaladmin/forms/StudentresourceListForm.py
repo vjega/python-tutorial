@@ -1,13 +1,13 @@
 from django.utils.translation import (ugettext as _,)
 from django import forms
 from crispy_forms.helper import FormHelper
+from portaladmin import models
 #from crispy_forms.layout import Submit
 class StudentresourceListForm(forms.Form):
-    category       = forms.CharField(
+    category       = forms.ChoiceField(
         label      = _("Category"),
-        max_length = 100,
         required   = True,
-        widget     = forms.TextInput({ "placeholder": _("Category")})
+        choices  = [('text', 'Text'), ('audio', 'Audio'),('video','Video'), ('image', 'Image')]
     )
     choose_file    = forms.FileField(
         label      = _("Choose File"),
@@ -17,18 +17,21 @@ class StudentresourceListForm(forms.Form):
     classname    = forms.ChoiceField(
         label    = _("Select Class"),
         required = True,
+        choices  = [(opt.classid, opt.shortname) for opt in models.Classinfo.objects.all()],
     )
     section      = forms.ChoiceField(
         label    = _("Select Section"),
         required = True,
+        choices  = [('a', 'A'), ('b','B')]
     )
-    studentsection = forms.ChoiceField(
-        label      = _("Section"),
+    unit = forms.ChoiceField(
+        label      = _("Unit"),
         required   = True,
     )
-    Area         = forms.ChoiceField(
-        label    = _("Select Area"),
+    chapter         = forms.ChoiceField(
+        label    = _("Chapter"),
         required = True,
+        choices  = [(opt.chapterid, opt.chaptername) for opt in models.Chapterinfo.objects.all()],
     )
     short_photo    = forms.FileField(
         label      = _("Short Photo"),
