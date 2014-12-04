@@ -6,7 +6,7 @@ from portaladmin import models
 from portaladmin.forms import (AdminForm,
 			       TeacherResourceForm,
                    TeacherListForm,
-                   StudentListForm,
+                   StudentForm,
                    SchoolListForm,
                    StudentresourceListForm,
                    ClassListForm)	
@@ -69,7 +69,7 @@ def studentslist(request):
     classes = models.Classinfo.objects.all()
     return render(request, 'portaladmin/studentslist.html', 
                                       {'schools':schools, 'classes':classes, 
-                                        "form" : StudentListForm.StudentListForm()})           
+                                        "form" : StudentForm.StudentForm()})           
 
 @login_required
 def schoollist(request):

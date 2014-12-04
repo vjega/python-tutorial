@@ -4,7 +4,7 @@ from crispy_forms.helper import FormHelper
 from portaladmin import models
 #from crispy_forms.layout import Submit
 
-class StudentListForm(forms.Form):
+class StudentForm(forms.Form):
     schoolid = forms.ChoiceField(
         label = _("Select School"),
         required = True,
@@ -13,6 +13,7 @@ class StudentListForm(forms.Form):
     classid = forms.ChoiceField(
         label = _("Select Class"),
         required = True,
+        choices  = [(opt.classid, opt.shortname) for opt in models.Classinfo.objects.all()],
     )
     firstname = forms.CharField(
         label = _("Name"),
@@ -44,7 +45,7 @@ class StudentListForm(forms.Form):
         required = True,
     )
     def __init__(self, *args, **kwargs):
-        super(StudentListForm, self).__init__(*args, **kwargs)
+        super(StudentForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = 'add-student'
         self.helper.form_class  = 'form-horizontal'

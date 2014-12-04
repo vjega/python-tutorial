@@ -3,18 +3,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from teacher import models
 #from crispy_forms.layout import Submit
-class ViewworkspaceForm(forms.Form):
-    username = forms.CharField(
-        label = _("Title"),
-        max_length = 100,
-        required = True,
-        widget = forms.TextInput({ "placeholder": _("Title")})
-    )
-    password = forms.ChoiceField(
-        label = _("Category"),
-        required = True,
-        choices  = [('text', 'Text'), ('audio', 'Audio'),('video','Video'), ('image', 'Image')]
-    )
+class WrittenworkForm(forms.Form):
     heading = forms.CharField(
         label = _("Heading"),
         required = True,
@@ -22,7 +11,7 @@ class ViewworkspaceForm(forms.Form):
     )
     
     def __init__(self, *args, **kwargs):
-        super(ViewworkspaceForm, self).__init__(*args, **kwargs)
+        super(WrittenworkForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = 'add-workspace'
         self.helper.form_class  = 'form-horizontal'

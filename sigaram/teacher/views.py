@@ -2,6 +2,9 @@
 from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
 from teacher import models
+from teacher.forms import (ViewworkspaceForm,
+                            WrittenworkForm
+                                            )
 def switchlanguage(f):
     def inner(req):
         activate(req.session.get('django_language','ta'))
@@ -82,11 +85,13 @@ def workspace(request):
 @switchlanguage
 def viewworkspacelist(request):
    # print request.GET.get('type')
-    return render(request, 'portalteacher/viewworkspacelist.html', {'opt':request.GET.get('type')})
+    return render(request, 'portalteacher/viewworkspacelist.html', {'opt':request.GET.get('type'),
+                                                 "form" : ViewworkspaceForm.ViewworkspaceForm()})
 
 @switchlanguage
 def writtenwork(request):
-    return render(request, 'portalteacher/writtenwork.html')
+    return render(request, 'portalteacher/writtenwork.html',{
+                                        "form" : WrittenworkForm.WrittenworkForm()})
 
 @switchlanguage
 def viewassessments(request):
