@@ -140,7 +140,7 @@ TTS.forms.addteacher = function() {
     BootstrapDialog.show({
         title: 'Add Teacher',
         onshown: function(dialogRef){
-            $("#id_schoolid").html($("#school_name").html());
+            //$("#id_schoolid").html($("#school_name").html());
             //$("#id_classid").html($("#classid").html());
         },
         message: $($('#addteacher').render()),
@@ -150,12 +150,13 @@ TTS.forms.addteacher = function() {
             action: function(){
                 var data = TTS.utils.serilaizeJson("#add-teacher");
                 $.ajax({
-                   // type:'POST',
-                   // data: {'data':data},
-                   // url : '/api/admin/teacher/'
+                   type:'POST',
+                   data: data,
+                   url : '/api/admin/teacher/'
                 }).done(function( msg ) {
-                    console.log(msg);
-                    //dialogItself.close();
+                    //console.log(msg);
+                    dialogItself.close();
+                    location.reload();
                 });
             }
             },{

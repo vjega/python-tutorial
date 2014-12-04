@@ -51,7 +51,8 @@ def home(request):
 
 @login_required
 def adminlist(request):
-    return render(request, 'portaladmin/adminlist.html', {"adminform" : AdminForm.AdminForm()})
+    return render(request, 'portaladmin/adminlist.html', 
+                                        {"adminform" : AdminForm.AdminForm()})
 
 @login_required
 def teacherslist(request):
