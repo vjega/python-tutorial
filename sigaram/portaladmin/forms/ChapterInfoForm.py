@@ -4,7 +4,7 @@ from crispy_forms.helper import FormHelper
 #from crispy_forms.layout import Submit
 class ChapterInfoForm(forms.Form):
     classid = forms.CharField(
-        label = _("User Name"),
+        label = _("Class Name"),
         max_length = 100,
         required = True,
         widget = forms.TextInput({ "placeholder": _("User Name")})

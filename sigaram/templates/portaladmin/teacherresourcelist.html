@@ -51,10 +51,11 @@
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<script id="add-teacher-resource" type="text/x-jsrender">
+<script id="teacherresource-form" type="text/x-jsrender">
 {% crispy form %}
 </script>
 <script>
@@ -87,18 +88,19 @@ TTS.forms.addteacherresource = function() {
                 TTS.forms.update_chapter_list();
             });
         },
-        message: $($('#add-teacher-resource').render()),
+        message: $($('#teacherresource-form').render()),
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
-            action: function(){
-                var data = TTS.utils.serilaizeJson("#newfolderfrm");
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#add-teacherresource");
                 $.ajax({
                     type:'POST',
-                    data: {'data':data},
-                    url : '/api/admin/addfolder'
+                    data: data,
+                    url : '/api/admin/teacherresourcesinfo'
                 }).done(function( msg ) {
-                    console.log(msg);
+                    dialogItself.close();
+                    location.reload();
                     //dialogItself.close();
                 });
             }
@@ -114,29 +116,38 @@ TTS.forms.addteacherresource = function() {
 TTS.forms.renderteacherresourceinfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
-              "class": "text-center"  
+              "class": "text-center" ,
+              "data" : "slno"  
             },
-            { "title": "{% trans "Title" %}"},
-            { "title": "{% trans "Date" %}" },
-            { "title": "{% trans "Type" %}"}, 
+            { "title": "{% trans "Title" %}",
+              "data" : "resourcetitle"  
+            },
+            { "title": "{% trans "Date" %}",
+              "data" : "date"  
+            },
+            { "title": "{% trans "Type" %}",
+              "class": "text-center" ,
+              "data" : "resourcetype"  
+            },
             { "title": "{% trans "Delete" %}",
-              "class": "text-center"  
-            }, 
+              "class": "text-center" ,
+              "data" : "delete"  
+            },
         ];
     var dataset = [];
     var count = 0
     for(var i in data){
-        var t = [];
-        t.push(++count);
-        t.push(data[i].resourcetitle);
-        t.push(data[i].createddate);
-        t.push(data[i].resourcetype);
-        t.push("<i class='tts-delete fa fa-trash fa-lg'></i>");
+        var t = {};
+        t.slno = ++count;
+        t.resourcetitle = data[i].resourcetitle;
+        t.date = data[i].createddate;
+        t.resourcetype = data[i].resourcetype;
+        t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
 
     $('#teacherresource-main-tbl').dataTable({
-        "data":     dataset,
+        "data"   :  dataset,
         "columns":  headers
     });
 
@@ -147,7 +158,11 @@ $(document).ready(function(){
         "url":"/api/admin/teacherresourcesinfo/?format=json",
         "type":"GET"
     }).done(function(data){
-        TTS.forms.renderteacherresourceinfo(data);
+        if (data.length) {
+            TTS.forms.renderteacherresourceinfo(data);
+        } else {
+            TTS.forms.table.fnClearTable();
+        }
     });
 
     $('#teacherresource-main-tbl').on('click', 'tbody tr',function(e){

@@ -1,6 +1,7 @@
 from django.utils.translation import (ugettext as _,)
 from django import forms
 from crispy_forms.helper import FormHelper
+from portaladmin import models
 #from crispy_forms.layout import Submit
 class TeacherResourceForm(forms.Form):
     resource_file = forms.FileField(
@@ -8,23 +9,21 @@ class TeacherResourceForm(forms.Form):
         max_length = 100,
         required = True,
     )
-    school = forms.CharField(
+    schoolid = forms.ChoiceField(
         label = _("Select School"),
-         max_length = 100,
         required = True,
-        widget = forms.TextInput({ "placeholder": _("User Name")})
+        choices  = [(opt.schoolid, opt.schoolname) for opt in models.Schoolinfo.objects.all()],
     )
-    classname = forms.CharField(
+    classname = forms.ChoiceField(
         label = _("Select Class"),
-         max_length = 100,
         required = True,
-        widget = forms.TextInput({ "placeholder": _("Select Class")})
+        choices  = [(opt.classid, opt.shortname) for opt in models.Classinfo.objects.all()],
     )
     division = forms.CharField(
         label = _("Select Division"),
-         max_length = 100,
+        max_length = 100,
         required = True,
-        widget = forms.TextInput({ "placeholder": _("User Name")})
+        widget = forms.TextInput({ "placeholder": _("Select Division")})
     )
     part = forms.CharField(
         label = _("Select Part"),
@@ -38,6 +37,7 @@ class TeacherResourceForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(TeacherResourceForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.form_id = 'add-teacherresource'
         self.helper.form_class  = 'form-horizontal'
         self.helper.label_class = 'col-sm-4'
         self.helper.field_class = 'col-sm-8'

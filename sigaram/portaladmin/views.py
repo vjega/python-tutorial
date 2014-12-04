@@ -79,24 +79,13 @@ def schoollist(request):
 
 @login_required
 def teacherresourcelist(request):
-    classes = models.Classinfo.objects.all()
-    teacherresourcelist_head = [('Sl No.'),
-                         _('Title'),
-                         _('Date'),
-                         _('Type'),
-                         _('Delete')]
-    teacherresourcelist_body = models.Teacherresourceinfo.objects.all()
-    teacherresourcelist = {'head':teacherresourcelist_head, 
-                           'body':teacherresourcelist_body}
-    return render(request, 'portaladmin/teacherresourcelist.html', 
-                  {'classes':classes, 
-                   'form':TeacherResourceForm.TeacherResourceForm()})
+    return render(request, 'portaladmin/teacherresourcelist.html', {
+                                        'form':TeacherResourceForm.TeacherResourceForm()})
 
 @login_required
 def viewteacherresource(request):
     viewteacherresource_head = [('Sl No.')]
     viewteacherresource = {'head':viewteacherresource_head }
-                           
     return render(request, 'portaladmin/viewteacherresource.html')
 
 @login_required
