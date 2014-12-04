@@ -147,7 +147,7 @@ TTS.forms.addteacher = function() {
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
-            action: function(){
+            action: function(dialogItself ){
                 var data = TTS.utils.serilaizeJson("#add-teacher");
                 $.ajax({
                    type:'POST',
