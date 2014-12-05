@@ -34,7 +34,7 @@ class TeacherResourceForm(forms.Form):
         required     = True,
         choices      = [('0', 'Listening Comprehension'), ('1', 'Sample Lesson Plan')]
     )
-    chapter      = forms.ChoiceField(
+    chapterid    = forms.ChoiceField(
         label    = _("Chapter"),
         required = True,
     )
