@@ -83,11 +83,8 @@ TTS.forms.addteacherresource = function() {
     BootstrapDialog.show({
         title: 'Add TeacherResource',
         onshown: function(dialogRef){
+            updateChapter();
             $('.summernote').summernote();
-       //     TTS.forms.update_chapter_list();
-         //   $("#classid, #section").change(function(){
-          //      TTS.forms.update_chapter_list();
-            //});
         },
         message: $($('#teacherresource-form').render()),
         buttons: [{
@@ -154,6 +151,21 @@ TTS.forms.renderteacherresourceinfo = function(data){
 
 };
 
+var updateChapter = function(){
+    $.ajax({
+        'url': "/api/admin/chapterinfo/?classid="+$("#id_classid").val()
+                +"&sectionid="+$("#id_section").val(),
+        'type':'GET'
+    }).done(function(data){
+        //console.log(data)
+        opt = "";
+        for (d in data){
+            opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"<option>\n";
+        }
+        $("#id_chapterid").html(opt);
+    });
+};
+
 $(document).ready(function(){
     $.ajax({
         "url":"/api/admin/teacherresourcesinfo/?format=json",
@@ -183,6 +195,12 @@ $(document).ready(function(){
 
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.addteacherresource();
+    });
+    $("body").on('change', '#id_classid', function(){
+        updateChapter();
+    });
+    $("body").on('change', '#id_section', function(){
+        updateChapter();
     });
 });
 

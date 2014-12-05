@@ -52,12 +52,12 @@
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
-
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
 
-<script id="studentaddschool" type="text/x-jsrender">
+<script id="studentresource-form" type="text/x-jsrender">
 {% crispy form %}
 </script>
 
@@ -67,26 +67,27 @@
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 
-TTS.forms.studentaddschool = function() {
+TTS.forms.addstudentresource = function() {
     BootstrapDialog.show({
         title: 'Student Resources',
         onshown: function(dialogRef){
             updateChapter();
             $('.summernote').summernote();
         },
-        message: $($('#studentaddschool').render()),
+        message: $($('#studentresource-form').render()),
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
-            action: function(){
-                var data = TTS.utils.serilaizeJson("#newfolderfrm");
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#studentresource");
                 $.ajax({
                     type:'POST',
                     data: {'data':data},
                     url : '/api/admin/addfolder'
                 }).done(function( msg ) {
-                    console.log(msg);
-                    //dialogItself.close();
+                    //console.log(msg);
+                    dialogItself.close();
+                    location.reload();
                 });
             }
             },{
@@ -134,7 +135,7 @@ var updateChapter = function(){
                 +"&sectionid="+$("#id_section").val(),
         'type':'GET'
     }).done(function(data){
-        console.log(data)
+        //console.log(data)
         opt = "";
         for (d in data){
             opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"<option>\n";
@@ -167,7 +168,7 @@ $(document).ready(function(){
         window.location = 'studentresourcelist';
     });
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.studentaddschool();
+        TTS.forms.addstudentresource();
     });
     $("body").on('change', '#id_classname', function(){
         updateChapter();
