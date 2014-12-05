@@ -79,16 +79,18 @@ TTS.forms.addstudentresource = function() {
             label: 'Save',
             cssClass: 'btn-primary',
             action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#studentresource");
+                var data = TTS.utils.serilaizeJson("#add-studentresource");
+                console.log(data);
                 $.ajax({
                     type:'POST',
-                    data: {'data':data},
-                    url : '/api/admin/addfolder'
+                    data: data,
+                    url : '/api/admin/resourceinfo/'
                 }).done(function( msg ) {
                     //console.log(msg);
                     dialogItself.close();
                     location.reload();
                 });
+
             }
             },{
             label: 'Cancel',
@@ -131,16 +133,16 @@ TTS.forms.renderteacherresourceinfo = function(data){
 
 var updateChapter = function(){
     $.ajax({
-        'url': "/api/admin/chapterinfo/?classid="+$("#id_classname").val()
+        'url': "/api/admin/chapterinfo/?classid="+$("#id_classid").val()
                 +"&sectionid="+$("#id_section").val(),
         'type':'GET'
     }).done(function(data){
         //console.log(data)
         opt = "";
         for (d in data){
-            opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"<option>\n";
+            opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"</option>\n";
         }
-        $("#id_chapter").html(opt);
+        $("#id_chapterid").html(opt);
     });
 };
 $(document).ready(function(){

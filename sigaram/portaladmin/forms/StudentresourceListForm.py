@@ -4,7 +4,7 @@ from crispy_forms.helper import FormHelper
 from portaladmin import models
 #from crispy_forms.layout import Submit
 class StudentresourceListForm(forms.Form):
-    category       = forms.ChoiceField(
+    categoryid       = forms.ChoiceField(
         label      = _("Category"),
         required   = True,
         choices  = [('text', 'Text'), ('audio', 'Audio'),('video','Video'), ('image', 'Image')]
@@ -14,7 +14,7 @@ class StudentresourceListForm(forms.Form):
         max_length = 100,
         required   = True,
     )
-    classname    = forms.ChoiceField(
+    classid    = forms.ChoiceField(
         label    = _("Select Class"),
         required = True,
         choices  = [(opt.classid, opt.shortname) for opt in models.Classinfo.objects.all()],
@@ -24,21 +24,27 @@ class StudentresourceListForm(forms.Form):
         required = True,
         choices  = [('a', 'A'), ('b','B')]
     )
-    unit = forms.ChoiceField(
+    resourcetype = forms.ChoiceField(
         label      = _("Unit"),
         required   = True,
+        choices  = [('0', 'Reading Passages'), ('1','Listening Comprehension'),('2','Doodle Board')]
     )
-    chapter         = forms.ChoiceField(
+    chapterid         = forms.ChoiceField(
         label    = _("Chapter"),
         required = True,
     )
-    short_photo    = forms.FileField(
+    thumbnailurl    = forms.FileField(
         label      = _("Short Photo"),
         max_length = 100,
         required   = True,
     )
-    heading      = forms.CharField(
+    documenturl      = forms.CharField(
         label    = _("Heading"),
+        required = True,
+        widget   = forms.Textarea({ "class": "summernote"})
+    )
+    createdby      = forms.CharField(
+        label    = _("Heading-2"),
         required = True,
         widget   = forms.Textarea({ "class": "summernote"})
     )

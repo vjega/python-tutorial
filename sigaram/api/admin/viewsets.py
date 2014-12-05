@@ -164,6 +164,52 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
+
+    def create(self, request):
+        ri = models.Resourceinfo()
+        ridata =  json.loads(request.DATA.keys()[0])
+        
+        category = ridata.get('categoryid')
+        if category == 'text' :
+            categoryid = 0
+        elif category == 'audio':
+            categoryid = 1
+        elif category == 'video':
+            category = 2
+        elif category == 'image':
+            category = 3
+
+
+        ri.categoryid = categoryid
+        ri.classid = int(ridata.get('classid'))
+        ri.section = ridata.get('section')
+        ri.chapterid = ridata.get('chapterid')
+        ri.resourcetype = category
+        ri.chapterid = ridata.get('chapterid')
+        ri.originaltext = "" #ridata.get('originaltext')
+        ri.resourcetitle = "" #ridata.get('resourcetitle')
+        ri.resourcedescription = "" #ridata.get('resourcedescription')
+        ri.thumbnailurl =  "" #ridata.get('thumbnailurl')
+        ri.documenturl = ""
+        ri.imageurl = ""
+        ri.audiourl = ""
+        ri.videourl = ""
+        if category == 'text' : 
+            ri.documenturl = ridata.get('documenturl')
+        elif category == 'image':
+            ri.imageurl = ridata.get('documenturl')
+        elif category == 'audio':    
+            ri.audiourl = ridata.get('documenturl')
+        elif category == 'video':
+            ri.videourl = ridata.get('documenturl')
+        ri.createdby = ridata.get('createdby')
+        ri.createdby = request.user.id
+        ri.isapproved = 0
+        ri.isdeleted = 0
+        ri.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        ri.save()
+        return Response(request.DATA)
+
 class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Writtenworkinfo.objects.all()
     serializer_class = adminserializers.WrittenworkinfoSerializer
