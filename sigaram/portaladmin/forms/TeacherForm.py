@@ -3,7 +3,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from portaladmin import models
 #from crispy_forms.layout import Submit
-class TeacherListForm(forms.Form):
+class TeacherForm(forms.Form):
     schoolid = forms.ChoiceField(
         label = _("Select School"),
         required = True,
@@ -15,10 +15,16 @@ class TeacherListForm(forms.Form):
         choices  = [(opt.classid, opt.shortname) for opt in models.Classinfo.objects.all()],
     )
     firstname = forms.CharField(
-        label = _("Name"),
+        label = _("First Name"),
         max_length = 100,
         required = True,
-        widget = forms.TextInput({ "placeholder": _("Name")})
+        widget = forms.TextInput({ "placeholder": _("First Name")})
+    )
+    lastname = forms.CharField(
+        label = _("Last Name"),
+        max_length = 100,
+        required = True,
+        widget = forms.TextInput({ "placeholder": _("last Name")})
     )
     username = forms.CharField(
         label = _("User Name"),
@@ -44,7 +50,7 @@ class TeacherListForm(forms.Form):
         required = True,
     )
     def __init__(self, *args, **kwargs):
-        super(TeacherListForm, self).__init__(*args, **kwargs)
+        super(TeacherForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = 'add-teacher'
         self.helper.form_class  = 'form-horizontal'

@@ -5,7 +5,7 @@ from django.shortcuts import render
 from portaladmin import models
 from portaladmin.forms import (AdminForm,
 			       TeacherResourceForm,
-                   TeacherListForm,
+                   TeacherForm,
                    StudentForm,
                    SchoolListForm,
                    StudentresourceListForm,
@@ -57,10 +57,9 @@ def adminlist(request):
 @login_required
 def teacherslist(request):
     schools = models.Schoolinfo.objects.all()
-    classes = models.Classinfo.objects.all()
     return render(request, 'portaladmin/teacherslist.html', 
-                                        {'schools':schools,'classes':classes, 
-                                        "form" : TeacherListForm.TeacherListForm()})
+                                        {'schools':schools,
+                                        "form" : TeacherForm.TeacherForm()})
 
 @login_required
 #@switchlanguage
