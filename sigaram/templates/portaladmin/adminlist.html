@@ -68,16 +68,15 @@ TTS.forms.addadmin = function() {
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
-            action: function(){
+            action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-admin");
-                console.log(data);
-                $.ajax({
+                 $.ajax({
                     type:'POST',
                     data: data,
                     url : '/api/admin/admin/'
                 }).done(function( msg ) {
-                    console.log(msg);
-                    //dialogItself.close();
+                    dialogItself.close();
+                    location.reload();
                 });
             }
             },{

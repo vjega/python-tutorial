@@ -89,27 +89,19 @@ TTS.forms = TTS.forms || {}
 TTS.forms.addstudent = function() {
     BootstrapDialog.show({
         title: 'Add Student',
-         onshown: function(dialogRef){
-            //console.log('hi');
-            //$("#id_schoolid").html($("#school_name").html());
-            //$("#id_classid").html($("#classid").html());
-            //$('.summernote').summernote();
-        },
         message: $($('#student-form').render()),
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-student");
-                console.log(data);
                 $.ajax({
                     type:'POST',
                     data: data,
                     url : '/api/admin/student/'
                 }).done(function( msg ) {
-                    //console.log(msg);
                     dialogItself.close();
-                    //location.reload();
+                    location.reload();
                 });
             }
             },{
@@ -134,7 +126,6 @@ TTS.forms.editschool = function() {
                     data: {'data':data},
                     url : '/api/admin/addfolder'
                 }).done(function( msg ) {
-                    //console.log(msg);
                     dialogItself.close();
                     //window.location.reload();
                 });

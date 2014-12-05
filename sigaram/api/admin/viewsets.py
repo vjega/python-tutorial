@@ -83,13 +83,16 @@ class studentViewSet(viewsets.ModelViewSet):
         serializer = adminserializers.StudentinfoSerializer(queryset, many=True)
         return Response(serializer.data)
        
+    @create_login('Student')   
     def create(self, request):
         student = models.Studentinfo()
         studentdata =  json.loads(request.DATA.keys()[0])
         student.schoolid = studentdata.get('schoolid')
         student.classid = studentdata.get('classid')
         student.username = studentdata.get('username')
+        student.password = studentdata.get('password')
         student.firstname = studentdata.get('firstname')
+        student.lastname = studentdata.get('lastname')
         student.emailid = studentdata.get('emailid')
         #student.imageurl = studentdata.get('imageurl')
         student.isdelete = 0
