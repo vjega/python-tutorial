@@ -13,6 +13,30 @@ def dictfetchall(cursor):
         for row in cursor.fetchall()
     ]
 
+class Teacherresourceinfo(models.Model):
+    teacherresourceid = models.BigIntegerField(primary_key=True)
+    classid = models.IntegerField()
+    section = models.CharField(max_length=1)
+    chapterid = models.IntegerField()
+    resourcetype = models.CharField(max_length=200)
+    resourcecategory = models.IntegerField()
+    originaltext = models.TextField(db_column='originalText')  # Field name made lowercase.
+    resourcetitle = models.CharField(max_length=1000)
+    resourcedescription = models.TextField()
+    documenturl = models.CharField(max_length=1000)
+    imageurl = models.CharField(max_length=1000)
+    audiourl = models.CharField(max_length=1000)
+    videourl = models.CharField(max_length=1000)
+    schoolid = models.IntegerField()
+    isapproved = models.IntegerField()
+    isdeleted = models.IntegerField()
+    createdby = models.BigIntegerField()
+    createddate = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'teacherresourceinfo'
+
 class Activitylog(models.Model):
     activityid = models.BigIntegerField(primary_key=True)
     loginid = models.BigIntegerField()
