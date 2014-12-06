@@ -127,12 +127,12 @@ TTS.forms.workspace = function() {
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
-            action: function(){
-                var data = TTS.utils.serilaizeJson("#add-workspace");
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#aadd-workspace");
                 $.ajax({
                     type:'POST',
-                    data: {'data':data},
-                    url : '/api/admin/addfolder'
+                    data:'data',
+                    url :'/api/admin/viewworkspace/'
                 }).done(function( msg ) {
                     console.log(msg);
                     //dialogItself.close();

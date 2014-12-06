@@ -93,6 +93,27 @@ class Studentinfo(models.Model):
         managed = False
         db_table = 'studentinfo'
 
+class Workspaceinfo(models.Model):
+    workspaceid = models.BigIntegerField(primary_key=True)
+    workspacetitle = models.CharField(max_length=500)
+    workspacetype = models.CharField(max_length=200)
+    workspacetext = models.TextField()
+    documenturl = models.CharField(max_length=1000)
+    imageurl = models.CharField(max_length=1000)
+    videourl = models.CharField(max_length=1000)
+    audiourl = models.CharField(max_length=1000)
+    classid = models.BigIntegerField()
+    schoolid = models.BigIntegerField()
+    isassigned = models.IntegerField()
+    isapproved = models.IntegerField()
+    isdeleted = models.IntegerField()
+    postedby = models.BigIntegerField()
+    posteddate = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'workspaceinfo'
+
     @staticmethod
     def getlist():
         sql = """SELECT si.studentid,
