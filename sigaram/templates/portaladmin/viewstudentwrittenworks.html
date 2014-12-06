@@ -75,8 +75,28 @@
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 
-$("#page-wrapper").on("click", "#addrec", function(){
-    TTS.forms.studentwritten-main-tbl();
+$(document).ready(function(){
+    
+
+    $('#studentwritten-main-tbl').on('click', 'tbody tr',function(e){
+        e.stopPropagation();
+        //console.log("Hello");
+        window.location =' viewteacherresource';
+    });
+
+    $('#studentwritten-main-tbl').on('click', '.tts-delete', function(e){
+        e.stopPropagation();
+        if (!window.confirm("Do you want to delete this record?")) {
+            return false;
+        }
+        alert("Record Deleted")
+        window.location = 'schoollist';
+    });
+
+    $("#page-wrapper").on("click", "#addrec", function(){
+        TTS.forms.addteacherresource();
+    });
+   
 });
 
 </script>
