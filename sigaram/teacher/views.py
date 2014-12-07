@@ -269,6 +269,7 @@ def allschoolresourcelist(request):
     return render(request, 'portalteacher/allschoolresourcelist.html', 
                                         {'schools':schools,'classes':classes})
 
+@switchlanguage
 def resource_units(request):
     return render(request, 
                   'portalteacher/resource_units.html', 
@@ -276,3 +277,8 @@ def resource_units(request):
                    'classid': request.GET.get('classid'),
                    'section': request.GET.get('section')
                   })
+
+@switchlanguage
+def resourcelist(request):
+    return render(request, 'portalteacher/resourcelist.html', 
+                    {'resourcelist':resourcelist })

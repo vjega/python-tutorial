@@ -32,7 +32,8 @@ urlpatterns = patterns('teacher.views',
     url(r'^resource_type', 'resource_type',     name='resource_type'),
     url(r'^allschoolresourcelist', 'allschoolresourcelist', 
                                                 name='allschoolresourcelist'),
-     url(r'^resource_units', 'resource_units',  name='resource_units'),
+    url(r'^resource_units', 'resource_units',   name='resource_units'),
+    url(r'^resourcelist', 'resourcelist',       name='resourcelist'),
 
     
 
