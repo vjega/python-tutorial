@@ -22,7 +22,6 @@ urlpatterns = patterns('student.views',
                                                         name='viewstudentwrittenworks'),
     url(r'^viewstudentwork',            'viewstudentwork',  
                                                         name='viewstudentwork'),
-    url(r'^workspacelist',              'workspacelist',  
-                                                        name='workspacelist'),
-    
+    url(r'^worklistinfo',               'worklistinfo',  
+                                                        name='worklistinfo'),
 )

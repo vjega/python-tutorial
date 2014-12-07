@@ -108,19 +108,23 @@ def workspace(request):
     folders = [{
         "id"   : "1",
         "name" :"Character",
-        "href" :"workspacelist"
+        "href" :"worklistinfo",
+        "worktype":"text"
         },{
         "id"   : "2",
         "name" :"Photography",
-        "href" :"workspacelist"
+        "href" :"worklistinfo",
+        "worktype":"image"
         },{
         "id"   : "3",
         "name" :"Lyrics",
-        "href" :"workspacelist"
+        "href" :"worklistinfo",
+        "worktype":"audio"
         },{
         "id"   : "4",
         "name" :"Video",
-        "href" :"workspacelist"
+        "href" :"worklistinfo",
+        "worktype":"video"
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
@@ -161,5 +165,15 @@ def viewstudentwrittenworks(request):
 def viewstudentwork(request):
     return render(request, 'portalstudent/viewstudentwork.html')
 
-def workspacelist(request):
-    return render(request, 'portalstudent/workspacelist .html')
+def worklistinfo(request):
+    worktype=request.GET.get('workspacetype')
+    print worktype
+    if worktype=='text':
+        title=_('Text')
+    elif worktype=='image':
+        title=_('Image')
+    elif worktype=='audio':
+        title=_('Audio')
+    else:
+        title=_('Video')
+    return render(request, 'portalstudent/worklistinfo.html',{"headtitle":title})

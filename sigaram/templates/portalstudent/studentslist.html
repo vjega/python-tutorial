@@ -108,7 +108,6 @@ $(document).ready(function(){
             "url":"/api/student/student/?schoolid={{user.schoolid}}&classid={{user.classid}}&format=json",
             "type":"GET"
     }).done(function(data){
-        console.log(data);
         if (data.length) {
             TTS.forms.renderstudentlist(data);
         } else {
