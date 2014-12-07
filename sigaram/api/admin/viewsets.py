@@ -324,3 +324,34 @@ class AdminclasslistViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
+
+class SavecalendarViewSet(viewsets.ModelViewSet):
+    queryset = models.Calendardetails.objects.all()
+    serializer_class = adminserializers.CalendarSerializer
+
+    def create(self, request):
+        data =  json.loads(request.DATA.keys()[0])
+        calendardetails = models.Calendardetails()
+        
+        calendardetails.calendarid = int(data.get('calendarid'))
+        calendardetails.calendartitle = data.get('calendartitle')
+        calendardetails.startdate = data.get('startdate')
+        calendardetails.enddate = data.get('enddate')
+        calendardetails.starttime = data.get('starttime')
+        calendardetails.endtime = data.get('endtime')
+        calendardetails.createdby = request.user.id
+        calendardetails.isdeleted = 0
+        calendardetails.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        calendardetails.save()
+        
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
+
+class GetcalendardataViewSet(viewsets.ModelViewSet):
+    queryset = models.Calendardetails.objects.all()
+    serializer_class = adminserializers.GetcalendardataSerializer

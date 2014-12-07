@@ -32,49 +32,88 @@
 
 {% block scriptcontent %}
 <script>
+    
+    function saveMyData(event) {
+        var data = {
+            "calendarid" : 3,
+            "calendartitle" : event.title,
+            "startdate" : event.start.format(),
+            "enddate" : event.end.format(),
+            "starttime": event.start.format() +' 01:00',
+            "endtime": event.start.format() +' 02:00' 
+        };
+        $.ajax({
+            type:'POST',
+            data: JSON.stringify(data),
+            url : '/api/admin/savecalendar/'
+        }).done(function( msg ) {
+            alert(msg)
+        });
+    }
+
 	$(document).ready(function() {
-
-        function saveMyData(event) {
-            /*$.post(
-                '/event/save', 
-                    {
-                        title: event.title,
-                        start: event.start,
-                        end:   event.end
-                    }
-                );*/
-            console.log(event);
-         }
-
-	    var calendar = $('#calendar').fullCalendar({
-                selectable: true,
-                selectHelper: true,
-                select: function(start, end, allDay)
-                {
-                    var title = prompt('Event Title:');
-                    if (title)
-                    {
-                        calendar.fullCalendar('renderEvent',
+        //get_callendar_events()
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+        //var callendar_event =  get_callendar_events()
+        //console.log(callendar_event)
+        /*var callendar_event = [
                             {
-                                title: title,
-                                start: start,
-                                end: end,
-                                allDay: allDay
+                                title: "Meeting",
+                                start: new Date(y, m, d, 10, 30),
+                                end: new Date(y, m, d, 11, 00),
+                                allDay: false
                             },
-                            true // make the event "stick"
-                        );
-                    }
-                    calendar.fullCalendar('unselect');
-                    saveMyData({'title': title, 'start': start, 'end': end});
-                },
-                eventDrop: function (event, dayDelta, minuteDelta) {
-                    saveMyData(event);
-                },
+                            {
+                                title: "Lunch",
+                                start: new Date(y, m, d, 12, 0),
+                                end: new Date(y, m, d, 14, 30),
+                                allDay: false
+                            }
+                        ];*/
+	    var calendar = $('#calendar').fullCalendar({
+            selectable: true,
+            selectHelper: true,
+            header:
+            {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            select: function(start, end, allDay)
+            {
+                var title = prompt('Event Title:');
+                if (title)
+                {
+                    calendar.fullCalendar('renderEvent',
+                        {
+                            title: title,
+                            start: start,
+                            end: end,
+                            allDay : allDay
+                            //start_time : start.getTime() / 1000,
+                            //end_time : end.getTime() / 1000,
+                        },
+                        true // make the event "stick"
+                    );
+                }
+                calendar.fullCalendar('unselect');
+                saveMyData({'title': title, 
+                            'start': start, 
+                            'end': end
+                        });
+            },
+            eventDrop: function (event, dayDelta, minuteDelta) {
+                saveMyData(event);
+            },
 
-                eventResize: function (event, dayDelta, minuteDelta) {
-                     saveMyData(event);
-                 },
-                editable: true
+            eventResize: function (event, dayDelta, minuteDelta) {
+                saveMyData(event);
+             },
+            editable: true,
+            events: '/api/admin/getcalendardata/',
 	    })
 	});
 </script>

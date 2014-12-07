@@ -974,3 +974,18 @@ class Writtenworkinfo(models.Model):
     class Meta:
         managed = False
         db_table = 'writtenworkinfo'
+
+class Calendardetails(models.Model):
+    calendarid = models.BigIntegerField(primary_key=True)
+    calendartitle = models.TextField()
+    startdate = models.DateTimeField()
+    enddate = models.DateTimeField()
+    starttime = models.DateTimeField()
+    endtime = models.DateTimeField()
+    createdby = models.BigIntegerField()
+    isdeleted = models.IntegerField()
+    createddate = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'calendardetails'
