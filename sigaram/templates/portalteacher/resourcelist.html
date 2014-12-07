@@ -124,6 +124,7 @@ var updateChapter = function(){
     $.ajax({
         'url': "/api/admin/chapterinfo/?classid="+$("#id_classid").val()
                 +"&sectionid="+$("#id_section").val(),
+                
         'type':'GET'
     }).done(function(data){
         //console.log(data)
