@@ -84,3 +84,9 @@ class AdminclasslistSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Classinfo
         fields = ('classid',  'classname','shortname',
                   'createdby','createddate')
+
+
+class AdminrubricsSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.RubricsHeader
+        fields = ('title','description','teacher','status','ts')

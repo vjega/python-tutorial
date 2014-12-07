@@ -282,3 +282,8 @@ def resource_units(request):
 def resourcelist(request):
     return render(request, 'portalteacher/resourcelist.html', 
                     {'resourcelist':resourcelist })
+
+@switchlanguage
+def rubrics(request):
+    return render(request, 'portalteacher/rubrics.html', 
+                                    {'rubrics':rubrics })
