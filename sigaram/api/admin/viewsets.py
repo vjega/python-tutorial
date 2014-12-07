@@ -347,3 +347,45 @@ class AdminrubricsViewSet(viewsets.ModelViewSet):
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
 
+class AssignresourceinfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Assignresourceinfo.objects.all()
+    serializer_class = adminserializers.AssignresourceinfoSerializer
+
+    def create(self, request):
+        adminassignresource = models.Assignresourceinfo()
+        rubricsdata =  json.loads(request.DATA.keys()[0])
+        adminrubrics.resourceid = rubricsdata.get('resourceid')
+        adminrubrics.IsDelete = rubricsdata.get('IsDelete')
+        adminrubrics.assignedby = rubricsdata.get('assignedby')
+        adminrubrics.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminrubrics.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
+
+class WorkspaceViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Workspaceinfo.objects.all()
+    serializer_class = adminserializers.WorkspaceinfoSerializer
+
+    def create(self, request):
+        adminassignresource = models.Workspaceinfo()
+        rubricsdata =  json.loads(request.DATA.keys()[0])
+        adminrubrics.resourceid = rubricsdata.get('resourceid')
+        adminrubrics.IsDelete = rubricsdata.get('IsDelete')
+        adminrubrics.assignedby = rubricsdata.get('assignedby')
+        adminrubrics.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminrubrics.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
+

@@ -90,3 +90,14 @@ class AdminrubricsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.RubricsHeader
         fields = ('title','description','teacher','status','ts')
+
+class AssignresourceinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Assignresourceinfo
+        fields = ('resourceid','assigneddate','IsDelete','assignedby')
+
+class WorkspaceinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Workspaceinfo
+        fields = ('workspaceid','workspacetitle','workspacetype','posteddate','postedby',
+                                                  'workspacetype','isapproved')
