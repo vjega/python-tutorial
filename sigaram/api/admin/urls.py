@@ -17,9 +17,11 @@ router.register(r'chapterinfo',           viewsets.ChapterinfoViewSet)
 router.register(r'adminclassinfo',        viewsets.AdminclassinfoViewSet)
 router.register(r'adminschool',        	  viewsets.AdminschoolViewSet)
 router.register(r'classlist',             viewsets.AdminclasslistViewSet)
-router.register(r'rubricsheader',         viewsets.AdminrubricsViewSet)
 router.register(r'assignresourceinfo',    viewsets.AssignresourceinfoViewSet)
 router.register(r'workspaceinfo',         viewsets.WorkspaceViewSet)
+router.register(r'rubricsheader',         viewsets.AdminrubricsViewSet)
+router.register(r'savecalendar',          viewsets.SavecalendarViewSet)
+router.register(r'getcalendardata',       viewsets.GetcalendardataViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

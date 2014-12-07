@@ -1,12 +1,14 @@
 {% extends 'portalstudent/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
+{% load crispy_forms_tags %}
 {% block topcontent %}
 <div id="page-wrapper">
     <div class="row">
-        <div class="col-lg-12">
-            <h2 class="page-header">{% trans "Students" %}</h2>
-        </div>
+            <div class="col-lg-12">
+                <h2 class="page-header">{{headtitle}}</h2>
+            </div>
+       
         <!-- /.col-lg-12 -->
     </div>
 {% endblock topcontent %}
@@ -14,13 +16,14 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans "Students" %}
+            {{headtitle}}
+            <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover" 
-                    id="admin-main-tbl">
+                    id="studentwork-main-tbl">
                 </table>
             </div>
             <!-- /.table-responsive -->
@@ -35,8 +38,9 @@
 {% block morecss %}
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <style>
-    #admin-main-tbl tbody tr:hover {
+    #addrec:hover, #studentwork-main-tbl tbody tr:hover {
         cursor: pointer;
     }
 </style>
@@ -45,32 +49,73 @@
 {% block morescript %}
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
-<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}">
+</script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
+<script id="worklist-form" type="text/x-jsrender">
+{% crispy form %}
+</script>
+
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-TTS.forms.renderstudentlist = function(data){
+TTS.forms.addstudentwork = function() {
+    BootstrapDialog.show({
+        title: 'Add Save',
+        onshown: function(dialogRef){
+            $('.summernote').summernote();
+        },
+        message: $($('#worklist-form').render()),
+        buttons: [{
+            label: 'Save',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#add-studentworkspace");
+                $.ajax({
+                    type:'POST',
+                    data: data,
+                    url : '/api/student/studentworkspaceinfo/'
+                }).done(function( msg ) {
+                    dialogItself.close();
+                    location.reload();
+                    //dialogItself.close();
+                });
+            }
+            },{
+            label: 'Cancel',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
+        }]
+    });
+};
+TTS.forms.renderstudentwork = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
               "data" : "slno"  
             },
-            { "title": "{% trans "Photo" %}",
-              "class": "text-center",  
-              "data" : "photo"  
+            { "title": "{% trans "Title" %}",
+              "data" : "title"  
             },
-            { "title": "{% trans "Name" %}",
-              "data" : "name"  
+            { "title": "{% trans "Type" %}",
+              "data" : "type"  
             },
-            { "title": "{% trans "Username" %}",
-              "data" : "username"  
+            { "title": "{% trans "Date" %}",
+              "data" : "date"  
             }, 
-            { "title": "{% trans "Email Id" %}",
-              "data" : "emailid"  
+            { "title": "{% trans "Detail" %}",
+              "class": "text-center" ,
+              "data" : "detail"  
+            }, 
+            { "title": "{% trans "Delete" %}",
+              "class": "text-center" ,
+              "data" : "delete" 
             }, 
         ];
     var dataset = [];
@@ -78,16 +123,13 @@ TTS.forms.renderstudentlist = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.DT_RowId = data[i].studentid;
+        t.DT_RowId = data[i].workspaceid;
         t.slno = ++count;
-        if (data[i].imageurl){
-            t.photo = "<img src='/static/"+data[i].imageurl+"' width='100' height='100'>";
-        } else {
-            t.photo ="<img src='http://placehold.it/100x100'>";
-        }
-        t.name = data[i].firstname + " "+data[i].lastname;
-        t.username = data[i].username;
-        t.emailid = data[i].emailid;
+        t.title = data[i].workspacetitle;
+        t.type = data[i].workspacetype;
+        t.date = data[i].posteddate;
+        t.detail = "<i>View</i>";
+        t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
     if (TTS.forms.table) {
@@ -97,7 +139,7 @@ TTS.forms.renderstudentlist = function(data){
         );
         return true;
     }
-    TTS.forms.table = $('#admin-main-tbl').dataTable({
+    TTS.forms.table = $('#studentwork-main-tbl').dataTable({
         "data":     dataset,
         "columns":  headers
     });
@@ -105,18 +147,16 @@ TTS.forms.renderstudentlist = function(data){
 };
 $(document).ready(function(){
     $.ajax({
-        "url":"/api/student/student/?schoolid={{user.schoolid}}&classid={{user.classid}}&format=json",
+        "url":"/api/student/studentworkspaceinfo/?workspacetype={{workspacetype}}&format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
-        if (data.length) {
-            TTS.forms.renderstudentlist(data);
-        } else {
-            TTS.forms.table.fnClearTable();
-        }
+        TTS.forms.renderstudentwork(data);
     });
-    $('#admin-main-tbl').on('click', 'tbody tr', function(){
-         window.location = 'studentprofile?studentid='+this.id;
+    $('#studentwork-main-tbl').on('click', 'tbody tr', function(){
+        window.location = 'studentviewwork?workspaceid='+this.id;
+    });
+    $("#page-wrapper").on("click", "#addrec", function(){
+        TTS.forms.addstudentwork();
     });
 });
 

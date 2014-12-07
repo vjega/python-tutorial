@@ -2,7 +2,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import serializers
 import json, time
-from api.admin import create_login
+from api.admin import (create_login, 
+                       delete_login)
 
 from portaladmin import models
 import  adminserializers
@@ -29,7 +30,9 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         return Response('"msg":"update"')
 
-    def destroy(self, request, pk=None):
+    @delete_login
+    def destroy(self, request, pk):
+        models.Admininfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
 class AdminFoldersViewSet(viewsets.ModelViewSet):
@@ -389,3 +392,25 @@ class WorkspaceViewSet(viewsets.ModelViewSet):
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
 
+class SavecalendarViewSet(viewsets.ModelViewSet):
+    queryset = models.Calendardetails.objects.all()
+    serializer_class = adminserializers.CalendarSerializer
+
+    def create(self, request):
+        data =  json.loads(request.DATA.keys()[0])
+        calendardetails = models.Calendardetails()
+        
+        calendardetails.calendarid = int(data.get('calendarid'))
+        calendardetails.calendartitle = data.get('calendartitle')
+        calendardetails.startdate = data.get('startdate')
+        calendardetails.enddate = data.get('enddate')
+        calendardetails.starttime = data.get('starttime')
+        calendardetails.endtime = data.get('endtime')
+        calendardetails.createdby = request.user.id
+        calendardetails.isdeleted = 0
+        calendardetails.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        calendardetails.save()
+
+class GetcalendardataViewSet(viewsets.ModelViewSet):
+    queryset = models.Calendardetails.objects.all()
+    serializer_class = adminserializers.GetcalendardataSerializer
