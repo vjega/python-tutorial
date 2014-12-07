@@ -85,6 +85,7 @@ class AdminclasslistSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('classid',  'classname','shortname',
                   'createdby','createddate')
 
+<<<<<<< HEAD
 class CalendarSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Calendardetails
@@ -96,3 +97,10 @@ class GetcalendardataSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Calendardetails
         fields = ('calendarid',  'calendartitle','startdate','enddate',
                   'starttime','endtime','createdby','createddate')
+=======
+
+class AdminrubricsSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.RubricsHeader
+        fields = ('title','description','teacher','status','ts')
+>>>>>>> 7fd5b2a6f1e98c4df8a7828d99814abeda9bce91
