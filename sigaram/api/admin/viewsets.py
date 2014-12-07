@@ -2,7 +2,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import serializers
 import json, time
-from api.admin import create_login
+from api.admin import (create_login, 
+                       delete_login)
 
 from portaladmin import models
 import  adminserializers
@@ -29,7 +30,9 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         return Response('"msg":"update"')
 
-    def destroy(self, request, pk=None):
+    @delete_login
+    def destroy(self, request, pk):
+        models.Admininfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
 class AdminFoldersViewSet(viewsets.ModelViewSet):
