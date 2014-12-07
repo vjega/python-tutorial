@@ -67,9 +67,9 @@
     <div class="panel panel-default">
         <div align="center" class="panel-heading">
             <span id="addrec">
-                <a href="javascript:void()" class="btn btn-success btn-sm"><i class="fa fa-plus-square fa-lg"></i> {% trans "Add" %}</a>
+                <a href="javascript:void(0)" class="btn btn-success btn-sm"><i class="fa fa-plus-square fa-lg"></i> {% trans "Add" %}</a>
             </span>
-            <a href="javascript:void()" class="btn btn-success btn-sm"><i class="fa fa-remove fa-lg"></i> {% trans "Remove" %}</a>
+            <a href="javascript:void(0)" class="btn btn-success btn-sm"><i class="fa fa-remove fa-lg"></i> {% trans "Remove" %}</a>
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
@@ -82,7 +82,7 @@
             </div>
         </div>
         <div align="center" class="panel-footer">
-            <a href="javascript:void()" class="btn btn-success btn-sm"><i class="fa fa-share fa-lg"></i> {% trans "Send" %}</a>
+            <a href="javascript:void(0)" class="btn btn-success btn-sm"><i class="fa fa-share fa-lg"></i> {% trans "Send" %}</a>
         </div>
         <!-- /.panel-body -->
     </div>
@@ -95,17 +95,17 @@
 
 <script id="assessmentassigninglist" type="text/x-jsrender">
 <div class="row">
-    <div class="control-group col-lg-9">
-        <label for="school_name" class="col-sm-2 control-label">{% trans "Select School" %}</label>
+    <div class="control-group col-lg-7">
         <div class="controls">
             <select name="school_name" class="form-control" id="school_name">
+                <option value="all">All</option>
                 {% for school in schools %}
                 <option value="{{school.schoolid}}">{{school.schoolname}}</option>
                 {% endfor %}
             </select>
         </div>
     </div>
-    <div class="control-group col-lg-3">
+    <div class="control-group col-lg-4">
         <div class="controls">
             <select name="classid" class="form-control" id="classid">
                 {% for class in classes %}
@@ -120,20 +120,7 @@
     <div class="col-lg-12">
         <div class="table-responsive">
             <table class="table table-striped table-bordered table-hover" id="assessment-assigning-list">
-                <thead>
-                    <tr role="row">
-                        <th>Select</th>
-                        <th>Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for school in schools %}
-                    <tr>
-                        <td><input type="checkbox" name="schoolname" id="schoolname" value="{{school.schoolid}}" ></td>
-                        <td>{{school.schoolname}}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+                
             </table>
         </div>    
     </div>
@@ -143,21 +130,58 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
+
+TTS.forms.renderstudentlist = function(data){
+    
+    var headers = [
+            
+            { "title": "<input type='checkbox'>",
+              "data" : "student_id"  
+            },
+            { "title": "{% trans "Student Name" %}",
+              "data" : "studentname"  
+            },            
+        ];
+    var dataset = [];
+    
+    var count = 0
+    for(var i in data){
+        var t = [];
+        t.student_id = "<input type='checkbox' name='schoolname' id='"+data[i].studentid+"' value='"+data[i].firstname+" "+data[i].lastname+"' />";
+
+        t.studentname = data[i].firstname+" "+data[i].lastname;
+        dataset.push(t);
+    }
+    if (TTS.forms.table) {
+        TTS.forms.table.fnClearTable();
+        TTS.forms.table.fnAddData(
+            dataset
+        );
+        return true;
+    }
+    TTS.forms.table = $('#assessment-assigning-list').dataTable({
+        "data":     dataset,
+        "columns":  headers
+    });
+
+};
+
+
+
+
 TTS.forms.assessmentassigninglist = function() {
     BootstrapDialog.show({
         title: 'Assessment Assigning List',
         message: $($('#assessmentassigninglist').render()),
         onshown: function(dialogRef){
-            alert("Hello");
+            //alert("Hello");
         },
         buttons: [{
-            label: 'Save',
+            label: 'Add',
             cssClass: 'btn-primary',
-            onshown: function(dialogRef){
-                $('.summernote').summernote();
-            },
             action: function(){
-                var data = TTS.utils.serilaizeJson("#newfolderfrm");
+                //var data = TTS.utils.serilaizeJson("#newfolderfrm");
+                /*var data = '';
                 $.ajax({
                     type:'POST',
                     data: {'data':data},
@@ -165,7 +189,19 @@ TTS.forms.assessmentassigninglist = function() {
                 }).done(function( msg ) {
                     console.log(msg);
                     //dialogItself.close();
+                });*/
+
+                $("input:checkbox[name=schoolname]:checked").each(function () {
+                    var id = $(this).attr("id");
+                    var name = $(this).val();
+
+                    alert("Id: " + id);
+                    alert("Name" + name);
+                    $("#sltStudentList").append('<option value="'+id+'">'+name+'</option>');
+
                 });
+
+
             }
             },{
             label: 'Cancel',
@@ -176,23 +212,27 @@ TTS.forms.assessmentassigninglist = function() {
     });
 };
 
+   
 TTS.forms.renderschoolinfo = function(data){
     var headers = [
             { "title": "{% trans "Heading" %}",
-              "class": "text-center"  
+              "class": "text-center",
+              "data" : "schoolid"
             },
-            { "title": "{% trans "Title" %}"},
+            { "title": "{% trans "Title" %}",
+              "data" : "schoolname"
+            },
         ];
     var dataset = [];
     var count = 0
     for(var i in data){
         var t = [];
-        t.push(++count);
-        t.push(data[i].resourcetitle);
+        t.schoolid = "<input type='checkbox' name='schoolname' id='"+data[i].schoolid+"' value='"+data[i].schoolname+"' />";
+        t.schoolname = data[i].schoolname;
         dataset.push(t);
     }
 
-    $('#admin-main-tbl').dataTable({
+    $('#assessment-assigning-list').dataTable({
         "data":     dataset,
         "columns":  headers
     });
@@ -231,13 +271,26 @@ $(document).ready(function(){
     });
 
     $.ajax({
-        "url":"/api/student/resourcesinfo/?format=json",
+        "url":"/api/admin/adminschool/?format=json",
         "type":"GET"
     }).done(function(data){
         console.log(data);
         TTS.forms.renderschoolinfo(data);
     });
     
+
+    $("body").on("change", "#school_name",function(){
+        $.ajax({
+            "url":"/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json",
+            "type":"GET"
+        }).done(function(data){
+            if (data.length) {
+                TTS.forms.renderstudentlist(data);
+            } else {
+                TTS.forms.table.fnClearTable();
+            }
+        });
+    })
 
     $('#admin-main-tbl tbody').on('click', 'tr', function(){
         window.location = 'teacherresourcelist?id='+this.id;
@@ -246,6 +299,8 @@ $(document).ready(function(){
         TTS.forms.assessmentassigninglist();
     });
     $('.summernote').summernote();
+    
+    
 });
 
 </script>
