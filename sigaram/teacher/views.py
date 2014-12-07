@@ -123,8 +123,95 @@ def myprofile(request):
     return render(request, 'portalteacher/myprofile.html')
 
 @switchlanguage
+def allschoolresourcelist(request):
+    schools = models.Schoolinfo.objects.all()
+    #teacherresourceinfo = models.Teacherresourceinfo.objects.all()
+    return render(request, 'portalteacher/allschoolresourcelist.html', {'schools':schools,
+                                                                        'teacherresourceinfo':teacherresourceinfo})
+
+@switchlanguage
 def students(request):
     schools = models.Schoolinfo.objects.all()
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/students.html', {'schools':schools,
                                                              'classes':classes})
+
+
+@switchlanguage
+def studentresources(request):
+    folders = [{
+        "id": "p1",
+        "name" :"P1"
+        },{
+        "id": "p2",
+        "name" :"P2"
+        },{
+        "id": "p3",
+        "name" :"P3"
+        },{
+        "id": "p4",
+        "name" :"P4"
+        },{
+        "id": "p5",
+        "name" :"P5"
+        },{
+        "id": "p6",
+        "name" :"P6"
+        }]
+    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
+    #studentresourcetype = {'head':studentresourcetype_head, 
+                           #'body':studentresourcetype_body}
+    return render(request, 'portalteacher/studentresources.html', 
+                  {"folders":folders,'studentresources':studentresources})
+
+@switchlanguage
+def studentresourcetype(request):
+    folders = [{
+        "id": "1",
+        "categoryid": "0",
+        "name" :_("Readings"),
+        "href" :"studentresourceunits"
+        },{
+        "id": "2",
+        "categoryid": "1",
+        "name" :_("Animation"),
+        "href" :"studentresourceunits"
+        },{
+        "id": "3",
+        "categoryid": "2",
+        "name" :_("Writing Board"),
+        "href" :"studentresourceunits"
+        }]
+
+    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
+    #studentresourcetype = {'head':studentresourcetype_head, 
+                           #'body':studentresourcetype_body}
+    return render(request, 'portalteacher/studentresourcetype.html', 
+                  {"folders":folders,'studentresourcetype':studentresourcetype})
+
+@switchlanguage
+def studentresourceunits(request):
+    #studentresourceunits_body = models.Chapterinfo.objects.all()
+    return render(request, 
+                  'portalteacher/studentresourceunits.html', 
+                  {'studentresourceunits':studentresourceunits,
+                   'classid': request.GET.get('classid'),
+                   'section': request.GET.get('section')    
+                  })
+
+
+
+@switchlanguage
+def studentresourcelist(request):
+    return render(request, 'portalteacher/studentresourcelist.html', 
+                    {'studentresourcelist':studentresourcelist}) 
+
+
+@switchlanguage
+def assignchapter(request):
+    schools = models.Schoolinfo.objects.all()
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portalteacher/assignchapter.html', 
+                    {'assignchapter':assignchapter,'schools':schools,
+                                             'classes':classes   }) 
+                       
