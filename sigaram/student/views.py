@@ -2,7 +2,6 @@
 from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
 from student import models
-from student.forms import ( ClassListForm)   
 def switchlanguage(f):
     def inner(req):
         activate(req.session.get('django_language','ta'))
@@ -167,9 +166,14 @@ def viewstudentwork(request):
     return render(request, 'portalstudent/viewstudentwork.html')
 
 def worklistinfo(request):
-    workspacetype = request.GET.get('workspacetype')
-    if workspacetype == 'text':
-        title = _('Text')
-    elif workspacetype =='':
-
-    return render(request, 'portalstudent/worklistinfo.html', {'title':cat})
+    worktype=request.GET.get('workspacetype')
+    print worktype
+    if worktype=='text':
+        title=_('Text')
+    elif worktype=='image':
+        title=_('Image')
+    elif worktype=='audio':
+        title=_('Audio')
+    else:
+        title=_('Video')
+    return render(request, 'portalstudent/worklistinfo.html',{"headtitle":title})

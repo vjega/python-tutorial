@@ -2,7 +2,7 @@ from django.utils.translation import (ugettext as _,)
 from django import forms
 from crispy_forms.helper import FormHelper
 #from crispy_forms.layout import Submit
-class StudentWorkSpaceinfo(forms.Form):
+class StudentWorkSpaceForm(forms.Form):
     workspacetype  = forms.ChoiceField(
         label      = _("Category"),
         required   = True,
@@ -20,7 +20,7 @@ class StudentWorkSpaceinfo(forms.Form):
         widget     = forms.Textarea({ "class": "summernote"})
     )
     def __init__(self, *args, **kwargs):
-        super(StudentWorkSpaceinfo, self).__init__(*args, **kwargs)
+        super(StudentWorkSpaceForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = 'add-studentworkspace'
         self.helper.form_class  = 'form-horizontal'
