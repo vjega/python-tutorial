@@ -1,4 +1,4 @@
-{% extends 'portaladmin/base.html' %}
+{% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
@@ -25,10 +25,10 @@
                             </div>
                         </div>
                             <div class="panel-footer">
-                                <a href="studentresourcetype?classid={{forloop.counter}}&section=a">
+                                <a href="resource_units?classid={{forloop.counter}}&section=a">
                                 <div class="col-xs-6 pull-left text-center">A</div>
                                 </a>
-                                <a href="studentresourcetype?classid={{forloop.counter}}&section=b">
+                                <a href="resource_units?classid={{forloop.counter}}&section=b">
                                 <div class="col-xs-6 pull-right text-center">B</div>
                                 </a>
                                 <div class="clearfix"></div>

@@ -268,3 +268,11 @@ def allschoolresourcelist(request):
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/allschoolresourcelist.html', 
                                         {'schools':schools,'classes':classes})
+
+def resource_units(request):
+    return render(request, 
+                  'portalteacher/resource_units.html', 
+                  {'resource_units':resource_units,
+                   'classid': request.GET.get('classid'),
+                   'section': request.GET.get('section')
+                  })
