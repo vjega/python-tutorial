@@ -47,3 +47,40 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
 class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Writtenworkinfo.objects.all()
     serializer_class = studentserializers.WrittenworkinfoSerializer
+
+class Studentworkspaceinfo(viewsets.ModelViewSet):
+
+    queryset = models.Studentworkspaceinfo.objects.all()
+    serializer_class = studentserializers.StudentworkspaceinfoSerializer
+
+    def list(self, request):
+        workspacetype   = request.GET.get('workspacetype')
+        kwarg = {}
+        kwarg['isdeleted'] = 0
+        if workspacetype:
+            kwarg['workspacetype'] = workspacetype
+        
+        
+        queryset = models.Studentworkspaceinfo.objects.filter(**kwarg)
+        serializer = studentserializers.StudentworkspaceinfoSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        studentwork = models.Studentworkspaceinfo()
+        studentworkdata =  json.loads(request.DATA.keys()[0])
+        studentwork.workspacetitle = studentworkdata.get('workspacetitle')
+        studentwork.workspacetype = studentworkdata.get('workspacetype')
+        studentwork.workspacetext = studentworkdata.get('workspacetext')
+        studentwork.classid = studentworkdata.get('classid')
+        studentwork.schoolid = studentworkdata.get('schoolid')
+        studentwork.isassigned = studentworkdata.get('isassigned')
+        studentwork.createdby = request.user.id
+        studentwork.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        studentwork.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')

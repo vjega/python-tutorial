@@ -2,6 +2,7 @@
 from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
 from student import models
+from student.forms import ( ClassListForm)   
 def switchlanguage(f):
     def inner(req):
         activate(req.session.get('django_language','ta'))
@@ -108,19 +109,23 @@ def workspace(request):
     folders = [{
         "id"   : "1",
         "name" :"Character",
-        "href" :"workspacelist"
+        "href" :"worklistinfo",
+        "worktype":"text"
         },{
         "id"   : "2",
         "name" :"Photography",
-        "href" :"workspacelist"
+        "href" :"worklistinfo",
+        "worktype":"image"
         },{
         "id"   : "3",
         "name" :"Lyrics",
-        "href" :"workspacelist"
+        "href" :"worklistinfo",
+        "worktype":"audio"
         },{
         "id"   : "4",
         "name" :"Video",
-        "href" :"workspacelist"
+        "href" :"worklistinfo",
+        "worktype":"video"
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
@@ -161,5 +166,10 @@ def viewstudentwrittenworks(request):
 def viewstudentwork(request):
     return render(request, 'portalstudent/viewstudentwork.html')
 
-def workspacelist(request):
-    return render(request, 'portalstudent/workspacelist .html')
+def worklistinfo(request):
+    workspacetype = request.GET.get('workspacetype')
+    if workspacetype == 'text':
+        title = _('Text')
+    elif workspacetype =='':
+
+    return render(request, 'portalstudent/worklistinfo.html', {'title':cat})

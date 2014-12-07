@@ -93,18 +93,24 @@ class Studentinfo(models.Model):
         cursor.execute(sql)
         return dictfetchall(cursor)
 
-class Writtenworkinfo(models.Model):
-    writtenworkid = models.BigIntegerField(primary_key=True)
-    writtenworktitle = models.TextField()
-    description = models.TextField()
-    writtenimage = models.CharField(db_column='writtenImage', max_length=200)  # Field name made lowercase.
-    schoolid = models.IntegerField()
-    classid = models.IntegerField()
+class Studentworkspaceinfo(models.Model):
+    workspaceid = models.BigIntegerField(primary_key=True)
+    workspacetitle = models.CharField(max_length=500)
+    workspacetype = models.CharField(max_length=200)
+    workspacetext = models.TextField()
+    documenturl = models.CharField(max_length=1000)
+    imageurl = models.CharField(max_length=1000)
+    videourl = models.CharField(max_length=1000)
+    audiourl = models.CharField(max_length=1000)
+    classid = models.BigIntegerField()
+    schoolid = models.BigIntegerField()
     isassigned = models.IntegerField()
-    createdby = models.BigIntegerField()
+    isapproved = models.IntegerField()
     isdeleted = models.IntegerField()
-    createddate = models.DateTimeField()
+    resourceid = models.IntegerField()
+    postedby = models.BigIntegerField()
+    posteddate = models.DateTimeField()
 
     class Meta:
         managed = False
-        db_table = 'writtenworkinfo'
+        db_table = 'studentworkspaceinfo'
