@@ -18,5 +18,26 @@ urlpatterns = patterns('teacher.views',
     url(r'^classroom',   'classroom', 		    name='classroom'),
     url(r'^myprofile',   'myprofile', 		    name='myprofile'),
     url(r'^students',   'students', 		    name='students'),
+    url(r'^studentresources','studentresources',name='studentresources'),
+    url(r'^studentresourcetype', 'studentresourcetype',
+                                                name='studentresourcetype'),
+    url(r'^studentresourceunits', 'studentresourceunits',
+                                                name='studentresourceunits'),
+    url(r'^allschoolresourcelist', 'allschoolresourcelist',    
+                                                name='allschoolresourcelist'),
+    url(r'^studentresourcelist', 'studentresourcelist',    
+                                                name='studentresourcelist'),
+    url(r'^assignchapter', 'assignchapter',     name='assignchapter'),
+    url(r'^resources', 'resources',             name='resources'),
+    url(r'^resource_type', 'resource_type',     name='resource_type'),
+    url(r'^allschoolresourcelist', 'allschoolresourcelist', 
+                                                name='allschoolresourcelist'),
+    url(r'^resource_units', 'resource_units',   name='resource_units'),
+    url(r'^resourcelist', 'resourcelist',       name='resourcelist'),
+    url(r'^rubrics', 'rubrics',                 name='rubrics'),
+
+
+    
+
 
 )

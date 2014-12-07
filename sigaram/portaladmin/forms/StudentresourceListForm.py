@@ -4,17 +4,18 @@ from crispy_forms.helper import FormHelper
 from portaladmin import models
 #from crispy_forms.layout import Submit
 class StudentresourceListForm(forms.Form):
-    categoryid       = forms.ChoiceField(
+    categoryid     = forms.ChoiceField(
         label      = _("Category"),
         required   = True,
-        choices  = [('text', 'Text'), ('audio', 'Audio'),('video','Video'), ('image', 'Image')]
+        choices    = [('text', 'Text'), ('audio', 'Audio'),('video','Video'),
+                         ('image', 'Image')]
     )
     choose_file    = forms.FileField(
         label      = _("Choose File"),
         max_length = 100,
         required   = True,
     )
-    classid    = forms.ChoiceField(
+    classid      = forms.ChoiceField(
         label    = _("Select Class"),
         required = True,
         choices  = [(opt.classid, opt.shortname) for opt in models.Classinfo.objects.all()],
@@ -25,11 +26,11 @@ class StudentresourceListForm(forms.Form):
         choices  = [('a', 'A'), ('b','B')]
     )
     resourcetype = forms.ChoiceField(
-        label      = _("Unit"),
-        required   = True,
+        label    = _("Unit"),
+        required = True,
         choices  = [('0', 'Reading Passages'), ('1','Listening Comprehension'),('2','Doodle Board')]
     )
-    chapterid         = forms.ChoiceField(
+    chapterid    = forms.ChoiceField(
         label    = _("Chapter"),
         required = True,
     )

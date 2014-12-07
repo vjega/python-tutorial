@@ -25,3 +25,11 @@ class WrittenworkinfoSerializer(serializers.HyperlinkedModelSerializer):
                   'writtenimage','schoolid', 'classid','isassigned',
                   'createddate'
                   )
+
+class StudentworkspaceinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Studentworkspaceinfo
+        fields = ('workspaceid',  'workspacetitle','workspacetype',
+                  'workspacetext','schoolid', 'classid','isassigned',
+                  'posteddate'
+                  )
