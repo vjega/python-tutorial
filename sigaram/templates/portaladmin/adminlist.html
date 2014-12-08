@@ -71,6 +71,7 @@ TTS.forms.addadmin = function(form, data) {
     }).done(function( msg ) {
         form.close();
         location.reload();
+        //dialogItself.close();
     });
 }
 
@@ -108,7 +109,7 @@ TTS.forms.showadminform = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-admin");
-                TTS.forms.addadmin(data); 
+                TTS.forms.addadmin(dialogItself, data); 
             }
             },{
             label: 'Cancel',
