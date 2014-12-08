@@ -22,11 +22,17 @@ def inactivate_user(f):
         return f(obj, request, pk)
     return inner
 
-def delete_login(f):
+def delete_login(group):
     def outer(f):
         def inner(obj, request, pk):
-            admin = models.Admininfo.objects.get(pk=pk)
-            login = User.objects.filter(username=admin.username)[0]
+            if group == 'Admin':
+                u = models.Admininfo.objects.get(pk=pk)
+            elif group == 'Teacher':
+                u = models.Teacherinfo.objects.get(pk=pk)
+            elif group == 'Student':
+                u = models.Studentinfo.objects.get(pk=pk)
+
+            login = User.objects.filter(username=u.username)[0]
             login.delete()
             return f(obj, request, pk)
         return inner

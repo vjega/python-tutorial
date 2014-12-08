@@ -30,7 +30,7 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         return Response('"msg":"update"')
 
-    @delete_login
+    @delete_login('Admin')
     def destroy(self, request, pk):
         models.Admininfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
