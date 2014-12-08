@@ -9,7 +9,7 @@ router.register(r'student',        	    viewsets.studentViewSet)
 router.register(r'resourceinfo',   	    viewsets.ResourceinfoViewSet)
 router.register(r'writtenworkinfo',     viewsets.WrittenworkinfoViewSet)
 router.register(r'studentworkspaceinfo',viewsets.Studentworkspaceinfo)
-router.register(r'StudentNotes', 		viewsets.StudentNotesForminfoViewSet)
+router.register(r'studentnotesinfo', 	viewsets.StudentnotesinfoViewSet)
 
 
 urlpatterns = [

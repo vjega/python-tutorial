@@ -2,7 +2,8 @@
 from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
 from student import models
-from student.forms import (StudentWorkForm)
+from student.forms import (StudentWorkForm,
+                           StudentNotesForm)
 
 
 def switchlanguage(f):
@@ -28,20 +29,20 @@ def home(request):
         }, {
         "color": u"yellow",
         "icon" : u"pencil-square-o",
-        "link" : u"studentresourcetype",
+        "link" : u"studentnoteslist",
         "caption": _("Notes"),
         "stat": 125
         },{
         "color": u"red",
         "icon" : u"pencil",
-        "link" : u"studentresourcetype",
+        "link" : u"studentwrittenwork",
         "caption": _("Written Work"),
         "stat": 125
         },
         {
         "color": u"green",
         "icon" : u"desktop",
-        "link" : u"studentresourcetype",
+        "link" : u"studentviewassessments",
         "caption": _("Practicals"),
         "stat": 125
         }]
@@ -185,3 +186,13 @@ def worklistinfo(request):
     
 def studentviewwork(request):
     return render(request, 'portalstudent/studentviewwork.html')
+
+def studentnoteslist(request):
+    return render(request, 'portalstudent/studentnoteslist.html',
+                            {"form" : StudentNotesForm.StudentNotesForm()})
+
+def studentwrittenwork(request):
+    return render(request, 'portalstudent/studentwrittenwork.html')
+
+def studentviewassessments(request):
+    return render(request, 'portalstudent/studentviewassessments.html')

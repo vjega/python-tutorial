@@ -33,3 +33,10 @@ class StudentworkspaceinfoSerializer(serializers.HyperlinkedModelSerializer):
                   'workspacetext','schoolid', 'classid','isassigned',
                   'posteddate'
                   )
+
+class StudentnotesinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Notesinfo
+        fields = ('notesid', 'notestitle','notes',
+                  'isdeleted','createdby', 'createddate'
+                  )

@@ -114,16 +114,3 @@ class Studentworkspaceinfo(models.Model):
     class Meta:
         managed = False
         db_table = 'studentworkspaceinfo'
-
-class Studentnotesinfo(models.Model):
-    notesid       = models.BigIntegerField(primary_key=True)
-    notestitle    = models.CharField(max_length=500)
-    notes         = models.CharField(max_length=200)
-    isdeleted     = models.IntegerField()
-    resourceid    = models.IntegerField()
-    createdby     = models.BigIntegerField()
-    createddate   = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'notesinfo'
