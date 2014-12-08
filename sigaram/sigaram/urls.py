@@ -6,7 +6,7 @@ from django.http import Http404
 
 urlpatterns = patterns('',
     url(r'^$',               'sigaram.views.home',  name='home'), #call back
-
+    url(r'^summernote/',         include('django_summernote.urls')),
     url(r'^togglelanguage$','sigaram.views.togglelanguage', name='togglelanguage'),
     url(r'^forum$',     'sigaram.views.forum', name='forum'),
     url(r'^siteadmin/', include(admin.site.urls)),
