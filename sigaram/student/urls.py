@@ -32,4 +32,6 @@ urlpatterns = patterns('student.views',
                                                         name='studentwrittenwork'),
     url(r'^studentviewassessments',     'studentviewassessments',  
                                                         name='studentviewassessments'),
+    url(r'^studentclassroom',           'studentclassroom',  
+                                                        name='studentclassroom'),
 )

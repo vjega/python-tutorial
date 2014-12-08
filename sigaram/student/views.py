@@ -196,3 +196,6 @@ def studentwrittenwork(request):
 
 def studentviewassessments(request):
     return render(request, 'portalstudent/studentviewassessments.html')
+
+def studentclassroom(request):
+    return render(request, 'portalstudent/studentclassroom.html')
