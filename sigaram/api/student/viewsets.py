@@ -23,6 +23,14 @@ class studentViewSet(viewsets.ModelViewSet):
         
         serializer = studentserializers.StudentinfoSerializer(queryset, many=True)
         return Response(serializer.data)
+    def update(self, request, pk=None):
+        student = models.Studentinfo.objects.get(pk=pk)
+        data = json.loads(request.DATA.keys()[0])
+        student.firstname = data.get('username')
+        student.lastname = data.get('lastname')
+        student.emailid = data.get("emailid")
+        student.save()
+        return Response(request.DATA)
 
 class ResourceinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Resourceinfo.objects.all()

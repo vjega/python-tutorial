@@ -128,7 +128,7 @@ TTS.forms.editschool = function(id, data) {
                 var data = TTS.utils.serilaizeJson("#add-student");
                 $.ajax({
                     type:'PUT',
-                    data: {'data':data},
+                    data: data,
                     url : '/api/student/student/'+id
                 }).done(function( msg ) {
                     dialogItself.close();
