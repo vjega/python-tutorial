@@ -106,6 +106,9 @@ class studentViewSet(viewsets.ModelViewSet):
         student.save()
         return Response(request.DATA)
 
+    def update(self, request, pk=None):
+        return Response(pk)
+
 class TeacherResourcesViewSet(viewsets.ModelViewSet):
     queryset = models.TeacherResources.objects.all()
     serializer_class = adminserializers.TeacherResourcesSerializer

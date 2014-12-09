@@ -112,19 +112,24 @@ TTS.forms.addstudent = function() {
         }]
     });
 };
-TTS.forms.editschool = function() {
+TTS.forms.editschool = function(id, data) {
     BootstrapDialog.show({
         title: 'Edit Student',
-        message: $($('#editstudent').render()),
+        message: $($('#student-form').render()),
+        onshown: function(){
+            $("#add-student").find("input,select").each(function(){
+                $(this).val(data[this['name']]);
+            });
+        },
         buttons: [{
-            label: 'Save',
+            label: 'Update',
             cssClass: 'btn-primary',
             action: function(){
                 var data = TTS.utils.serilaizeJson("#add-student");
                 $.ajax({
-                    type:'POST',
+                    type:'PUT',
                     data: {'data':data},
-                    url : '/api/admin/addfolder'
+                    url : '/api/student/student/'+id
                 }).done(function( msg ) {
                     dialogItself.close();
                     //window.location.reload();
@@ -245,8 +250,13 @@ $(document).ready(function(){
     });
     $('#student-main-tbl').on('click', '.tts-edit', function(e){
         e.stopPropagation();
-        TTS.forms.editschool();
-        //window.location = 'teacherslist?teacherid'=this.id;
+        var id = $(this).parent().parent().prop('id');
+        $.ajax({
+            url: '/api/student/student/'+id,
+            type: 'GET'
+        }).done(function(data){
+            TTS.forms.editschool(id,data);
+        })
     });
     $('#student-main-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();
