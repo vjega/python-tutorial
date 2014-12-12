@@ -1,12 +1,12 @@
+
+DROP TABLE  IF EXISTS `d60701781`.`calendardetails`;
 CREATE TABLE  `d60701781`.`calendardetails` (
-  `calendarid` bigint(20) NOT NULL AUTO_INCREMENT,
-  `calendartitle` text NOT NULL,
-   startdate datetime NOT NULL,
-    enddate datetime NOT NULL,
-    starttime datetime NOT NULL,
-    endtime datetime NOT NULL,
-    `createdby` bigint(20) NOT NULL,
-    isdeleted int(11) NOT NULL,
-  `createddate` datetime NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `title` text NOT NULL,
+   start datetime NOT NULL,
+   end datetime NOT NULL,
+   `createdby` bigint(20) NOT NULL,
+   isdeleted int(11) NOT NULL,
+   `createddate` datetime NOT NULL,
   PRIMARY KEY (`calendarid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=102722 DEFAULT CHARSET=utf8

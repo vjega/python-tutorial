@@ -395,25 +395,18 @@ class WorkspaceViewSet(viewsets.ModelViewSet):
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
 
-class SavecalendarViewSet(viewsets.ModelViewSet):
+class CalendarViewSet(viewsets.ModelViewSet):
     queryset = models.Calendardetails.objects.all()
     serializer_class = adminserializers.CalendarSerializer
 
     def create(self, request):
-        data =  json.loads(request.DATA.keys()[0])
-        calendardetails = models.Calendardetails()
-        
-        calendardetails.calendarid = int(data.get('calendarid'))
-        calendardetails.calendartitle = data.get('calendartitle')
-        calendardetails.startdate = data.get('startdate')
-        calendardetails.enddate = data.get('enddate')
-        calendardetails.starttime = data.get('starttime')
-        calendardetails.endtime = data.get('endtime')
-        calendardetails.createdby = request.user.id
-        calendardetails.isdeleted = 0
-        calendardetails.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
-        calendardetails.save()
-
-class GetcalendardataViewSet(viewsets.ModelViewSet):
-    queryset = models.Calendardetails.objects.all()
-    serializer_class = adminserializers.GetcalendardataSerializer
+        cal = models.Calendardetails()
+        data = {k:v[0] for k,v in dict(request.DATA).items()}
+        cal.title = data.get('title')
+        cal.start = data.get('start')
+        cal.end = data.get('end')
+        cal.isdeleted = 0
+        cal.createdby = request.user.id
+        cal.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        cal.save()
+        return Response(request.DATA)

@@ -35,45 +35,21 @@
     
     function saveMyData(event) {
         var data = {
-            "calendarid" : 3,
-            "calendartitle" : event.title,
-            "startdate" : event.start.format(),
-            "enddate" : event.end.format(),
-            "starttime": event.start.format() +' 01:00',
-            "endtime": event.start.format() +' 02:00' 
+            "title" : event.title,
+            "start" : event.start.format()+'T00:00Z',
+            "end" : event.end.format()+'T00:00Z'
         };
         $.ajax({
             type:'POST',
-            data: JSON.stringify(data),
-            url : '/api/admin/savecalendar/'
+            data: data,
+            url : '/api/admin/calendar/'
         }).done(function( msg ) {
             alert(msg)
         });
     }
 
 	$(document).ready(function() {
-        //get_callendar_events()
-        var date = new Date();
-        var d = date.getDate();
-        var m = date.getMonth();
-        var y = date.getFullYear();
-        //var callendar_event =  get_callendar_events()
-        //console.log(callendar_event)
-        /*var callendar_event = [
-                            {
-                                title: "Meeting",
-                                start: new Date(y, m, d, 10, 30),
-                                end: new Date(y, m, d, 11, 00),
-                                allDay: false
-                            },
-                            {
-                                title: "Lunch",
-                                start: new Date(y, m, d, 12, 0),
-                                end: new Date(y, m, d, 14, 30),
-                                allDay: false
-                            }
-                        ];*/
-	    var calendar = $('#calendar').fullCalendar({
+        var calendar = $('#calendar').fullCalendar({
             selectable: true,
             selectHelper: true,
             header:
@@ -98,12 +74,13 @@
                         },
                         true // make the event "stick"
                     );
-                }
+                
                 calendar.fullCalendar('unselect');
                 saveMyData({'title': title, 
                             'start': start, 
                             'end': end
                         });
+                }
             },
             eventDrop: function (event, dayDelta, minuteDelta) {
                 saveMyData(event);
@@ -113,7 +90,9 @@
                 saveMyData(event);
              },
             editable: true,
-            events: '/api/admin/getcalendardata/',
+            events: {
+                url:'/api/admin/calendar/'
+            },
 	    })
 	});
 </script>
