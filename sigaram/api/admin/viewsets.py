@@ -401,7 +401,9 @@ class CalendarViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         cal = models.Calendardetails()
-        data = {k:v[0] for k,v in dict(request.DATA).items()}
+        data = json.loads(dict(request.DATA).keys()[0])
+        #return Response({})
+        #data = {k:v[0] for k,v in dict(request.DATA).items()}
         cal.title = data.get('title')
         cal.start = data.get('start')
         cal.end = data.get('end')

@@ -37,9 +37,14 @@
 {% block scriptcontent %}
 <script>
     $(document).ready(function() {
-        $('.classAddDemoPostit').postitall({
-            position        : 'relative',
-            savable         : true
+        $('.classAddDemoPostit').each(function(x){
+            console.log(x);
+            $(this).postitall({
+                savable         : true,
+                posY : 220*x,
+                posX : 50,
+                position : 'absolute'
+            });
         });
     });
 
@@ -56,7 +61,7 @@
             'textcolor'       : '#333333',
             'backgroundcolor' : '#FFFC7F',
             'description'     : 'New created',
-            'newPostit'       : true
+            'newPostit'       : true,
         });
     });
 

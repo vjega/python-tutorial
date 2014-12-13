@@ -9,7 +9,8 @@ from portaladmin.forms import (AdminForm,
                    StudentForm,
                    SchoolListForm,
                    StudentresourceListForm,
-                   ClassListForm)	
+                   ClassListForm,
+                   CalendarForm,)	
 
 def switchlanguage(f):
     def inner(req):
@@ -294,7 +295,7 @@ def sticky_notes(request):
     
 @login_required
 def calendar(request):
-    return render(request, 'portaladmin/calendar.html', {})
+    return render(request, 'portaladmin/calendar.html', {"calendarform" : CalendarForm.CalendarForm()})
     
 @login_required
 def recorder(request):
