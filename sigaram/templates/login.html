@@ -2,14 +2,17 @@
 {% load crispy_forms_tags %}
 
 {% block topcontent %}
-<br/><br/><br/><br/><br/>
 {% endblock topcontent %}
 
 {% block botcontent %}
-<form action="{% url "mysite_login" %}" method="post" accept-charset="utf-8">
-    {{ form|crispy }}
-    {% csrf_token %}
-    <input type="hidden" name="next" value="{{ next }}" />
-    <input class="btn btn-default" type="submit" value="Login" />
-</form>
+<div class="row">
+    <div class="col-md-3 col-md-offset-8">
+        <form>
+            {{ form|crispy }}
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}" />
+            <input class="btn btn-default" type="submit" value="Login" />
+        </form>
+    </div>
+</div>
 {% endblock botcontent %}

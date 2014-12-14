@@ -18,7 +18,7 @@ def switchlanguage(f):
         return f(req)
     return inner
 
-@login_required
+#@login_required
 def home(request):
     folders = [{
         "color": u"primary",
@@ -285,7 +285,7 @@ def billboard(request):
     studentslist = {'head':studentslist_head, 'body':studentslist_body}
     return render(request, 'portaladmin/studentslist.html', {'studentslist':studentslist})
 
-@login_required
+#@login_required
 def mindmap(request):
     return render(request, 'portaladmin/mindmap.html', {})
     

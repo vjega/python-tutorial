@@ -60,20 +60,51 @@
 {% endblock botcontent%}
 
 {% block morescript %}
-  <script src="{%static "bower_components/jquery-ui/jquery-ui.min.js" %}"></script>
-  <script src="{%static "bower_components/raphael/raphael.js" %}"></script>
-  <script src="{%static "bower_components/buzzmap/buzzmap.js" %}"></script>
+<script id="admin-form" type="text/x-jsrender">
+    <textarea id="summernote"></textarea>
+</script>
+<script src="{%static "bower_components/jquery-ui/jquery-ui.min.js" %}"></script>
+<script src="{%static "bower_components/raphael/raphael.js" %}"></script>
+<script src="{%static "bower_components/buzzmap/buzzmap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
 
 {% endblock morescript %}
 
 {% block scriptcontent %}
 <script>
+window.TTS = window.TTS || {};
+TTS.forms = TTS.forms || {}; 
 $(document).ready(function(){
   $('#container').buzzmap({
     structure: '#structure',
     editable: true,
   });
-})
+});
+
+TTS.forms.mindmap = function(node){
+   BootstrapDialog.show({
+        title: 'Add Administrator',
+        message: $($('#admin-form').render()),
+        onshown: function(){
+          $('#summernote').val(node.label()).summernote();
+        },
+        buttons: [{
+            label: 'Update Text',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+              node.label("<span>"+$('#summernote').code()+"<span>");
+              dialogItself.close();   
+            }
+            },{
+            label: 'Cancel',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
+        }]
+    });
+};
 </script>
 {% endblock scriptcontent %}
 
@@ -82,8 +113,10 @@ $(document).ready(function(){
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 -->
 <link rel="stylesheet" href="{%static "bower_components/buzzmap/styles.css" %}" />
-<style>
 
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<style>
 #instr {
   clear:left;
   padding-left:1em;

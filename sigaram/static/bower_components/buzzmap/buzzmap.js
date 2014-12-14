@@ -206,7 +206,8 @@
   // edit node
 	Node.prototype.edit = function ()
 	{
-		var thisnode = this;
+		/*
+        var thisnode = this;
     
     thisnode.editing = true;
     
@@ -278,7 +279,11 @@
       return false;
     }).appendTo(thisnode.el);
 		return false;
-	};
+	*/
+    TTS.forms.mindmap(this);
+
+
+  };
   
   Node.prototype.removeNode = function ()
 	{
