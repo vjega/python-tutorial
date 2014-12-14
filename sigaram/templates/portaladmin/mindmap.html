@@ -4,56 +4,16 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h2 class="page-header">Mindmap</h2>
+            <h2 class="page-header">Mindmap <input type="button" class='btn btn-primary' id="mindmap-save" value="Save" /></h2>
+            <code>
+              Double Click to edit &amp; add a new node.
+              Single Click to collapse/hide or select a node
+            </code>
         </div>
         <!-- /.col-lg-12 -->
     </div>
 {% endblock topcontent %}
 {% block botcontent %}
-<ul id="structure">
-    <li><div><span>buzzmap</span></div>
-
-      <ul>
-        <li><div><span>Resources</span></div>
-
-          <ul>
-            <li><div><span><a href="http://raphaeljs.com/" target="_blank">Raphaël</a></span></div></li> 
-            <li><div><span><a href="http://jquery.com/" target="_blank">jQuery</a></span></div></li> 
-            <li><div><span><a href="http://jqueryui.com/" target="_blank">jQueryUI</a></span></div></li>
-            <li><div><span><a href="https://github.com/kennethkufluk/js-mindmap" target="_blank">js-mindmap</a></span></div></li>
-          </ul>
-
-        </li>
-        <li><div><span><a href="https://github.com/marcelklehr/buzzmap/zipball/master">Download</a></span></div></li>
-        <li><div><span>Features</span></div>
-
-          <ul>
-            <li><div><span>Mindmapping</span></div></li> 
-            <li><div><span>Brainstorming</span></div></li> 
-            <li><div><span>Editing</span></div></li>
-            <li><div><span>Visualisation</span></div></li>
-          </ul>
-
-        </li>
-        <li><div><span>Files</span></div>
-          <ul>
-          <li><div><span><a href="index.html" target="_blank">index.html</a></span></div></li> 
-            <li><div><span><a href="buzzmap.js" target="_blank">buzzmap.js</a></span></div></li> 
-            <li><div><span><a href="styles.css" target="_blank">styles.css</a></span></div></li>
-            <li><div><span><a href="raphael.min.js" target="_blank">raphael.min.js</a></span></div></li>
-            <li><div><span><a href="README.md" target="_blank">README</a></span></div></li>
-            <li><div><span><a href="LICENSE" target="_blank">LICENSE</a></span></div></li>
-          </ul>
-        </li>
-
-        <li><div><span>Licence</span></div>
-          <ul>
-            <li><div><span>MIT Licence</span></div></li> 
-            <li><div><span><a href="LICENSE" target="_blank">Conditions</a></span></div></li>
-          </ul>
-      </ul>
-    </li>
-  </ul>
 <div id="container">
   
 </div>
@@ -75,11 +35,35 @@
 {% block scriptcontent %}
 <script>
 window.TTS = window.TTS || {};
+TTS.global = TTS.global || {}; 
 TTS.forms = TTS.forms || {}; 
 $(document).ready(function(){
-  $('#container').buzzmap({
-    structure: '#structure',
-    editable: true,
+  $.ajax({
+    url:'/api/admin/mindmap/3',
+    type: 'GET'
+  }).done(function(data){
+    TTS.global.buzzmapdoc = $('#container').buzzmap({
+      structure: JSON.stringify(data['mapdata']),
+      editable: true
+    });
+  });
+  
+
+  $("#mindmap-save").click(function(){
+    var postdata = {}
+    postdata['mapdata'] = TTS.global.buzzmapdoc.serialize();
+    postdata['title'] = 'Hard coded title';
+
+    console.log(postdata);
+    $.ajax({
+      type:'POST',
+      url : '/api/admin/mindmap/',
+      data : postdata
+    }).done(function(data){
+      console.log(data);
+    }).error(function(msg,err){
+
+    })
   });
 });
 
@@ -96,8 +80,28 @@ TTS.forms.mindmap = function(node){
             action: function(dialogItself){
               node.label("<span>"+$('#summernote').code()+"<span>");
               dialogItself.close();   
-            }
-            },{
+            }},
+            {
+            label: 'Add New Node',
+            action: function(dialogItself){
+                var newnode = node.obj.addNode(node);
+                newnode.label("<span>Untitled Node</span>");
+                //alert("Adding a new Node");
+                dialogItself.close();
+            }},
+            {
+            label: 'Delete Node',
+            action: function(dialogItself){
+                if(!node.obj.parent){;
+                  alert("Root cannot be deleted");
+                  dialogItself.close();
+                  return null;
+                };
+                node.removeNode();
+                node.obj.animate();
+                dialogItself.close();
+            }},
+            {
             label: 'Cancel',
             action: function(dialogItself){
                 dialogItself.close();

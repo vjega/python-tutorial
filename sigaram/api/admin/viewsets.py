@@ -412,3 +412,18 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         cal.save()
         return Response(request.DATA)
+
+class MindmapViewSet(viewsets.ModelViewSet):
+    queryset = models.Mindmap.objects.all()
+    serializer_class = adminserializers.MindmapSerializer
+
+    def create(self, request):
+        mm = models.Mindmap()
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        mm.title = data.get('title')
+        mm.mapdata = data.get('mapdata')
+        mm.isdelete = 0
+        mm.createdby = 1 #request.user.id
+        mm.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        mm.save()
+        return Response(request.DATA)

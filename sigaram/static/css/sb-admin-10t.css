@@ -7,7 +7,7 @@
 }
 
 #side-menu > li > a {
-    font-size: 24px;
+    font-size: 18px;
 }
 
 .tent-circle {
@@ -21,17 +21,21 @@
     clip: rect(0px,100px,100px,0px);  
 }  
 
-.navbar {
-    background:#01427A url('../../images/banner.jpg') no-repeat fixed top left;
-    background-size: 100% 18%; 
-    height:110px;
-}
-
 .sidebar {
-    margin-top:111px;
+    position:absolute;
 }
 
 #wrapper > nav > ul {
-    margin-top:111px
+    /*margin-top:111px*/
 }
 
+.navbar-brand {
+    width:300px;
+    height:110px;
+    background: url(img/10logo.png); /* no-repeat center center fixed; */
+    
+    /*-webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;*/
+}

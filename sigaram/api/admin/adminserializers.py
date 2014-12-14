@@ -105,3 +105,8 @@ class WorkspaceinfoSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Workspaceinfo
         fields = ('workspaceid','workspacetitle','workspacetype','posteddate','postedby',
                                                   'workspacetype','isapproved')
+
+class MindmapSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Mindmap
+        fields = ('id','title','mapdata')

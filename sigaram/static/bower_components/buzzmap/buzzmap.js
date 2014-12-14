@@ -82,15 +82,15 @@
     var thisnode = this;
     
 	  // Define Properties
-		this.obj      = obj;// Buzzmap object
-		this.parent   = parent;
-		this.children = [];
+	this.obj      = obj;// Buzzmap object
+	this.parent   = parent;
+	this.children = [];
     
     // Vectors
     this.x = 1;
-		this.y = 1;
-		this.dx = 0;
-		this.dy = 0;
+	this.y = 1;
+	this.dx = 0;
+	this.dy = 0;
     
     // Define States
     this.visible = false;
@@ -99,10 +99,10 @@
     this.hasPosition = false;// node position calculated?
     
     // create the node element
-		this.el = $('<div></div>');
-		this.el.css('position', 'absolute');
-		this.el.addClass('node');
-		this.obj.el.append(this.el);
+	this.el = $('<div></div>');
+	this.el.css('position', 'absolute');
+	this.el.addClass('node');
+	this.obj.el.append(this.el);
     this.el.hide();
     
     // label
@@ -186,7 +186,7 @@
     }
     return $(':eq(0)', this.el).html();
   };
-  
+ 
   // serialize
 	Node.prototype.serialize = function() {
     return JSON.stringify(this.toJSON());
@@ -198,7 +198,7 @@
 		var json = {"label":$(this.el).html(),"children":[]};
 		var count = 0;
 		$.each(this.children, function () {
-      json.children.push(this.toJSON());
+            json.children.push(this.toJSON());
 		});
 		return json;
 	};
@@ -399,12 +399,12 @@
 		var stepAngle = Math.PI*2/this.children.length;
 		var parent = this;
 		$.each(this.children, function (i) {
-			if (this.visible)
-        return;
-      var angle = i * stepAngle;
-      var x = (100 * Math.cos(angle)) + parent.x;
-      var y = (100 * Math.sin(angle)) + parent.y;
-      this.setPosition(x,y);
+		  if (this.visible)
+            return;
+          var angle = i * stepAngle;
+          var x = (100 * Math.cos(angle)) + parent.x;
+          var y = (100 * Math.sin(angle)) + parent.y;
+          this.setPosition(x,y);
 		});
 		// update my position
 		return this.updatePosition();
@@ -746,6 +746,9 @@
     };
     
     // jQuery selector
+    //console.log(obj.options.structure);
+    //console.log(typeof(obj.options.structure));
+    /*
     var $data = $(obj.options.structure).filter('ul');
     if($data.length > 0) {
       var addLI = function () {
@@ -757,15 +760,14 @@
       };
       $('>li', $data).each(addLI);
       return buzz();
-    }
-    
+    }*/
     // can this be JSON?
     if(typeof(obj.options.structure) !== 'string')
       throw new Error('Buzzmap: Couldn\'t interpret the passed structure');
-    
     // serialized JSON data
     try {
       var map = JSON.parse(obj.options.structure);
+      map = JSON.parse(map);
       var nodeCreate = function (parent, children) {
         $.each(children, function (index, n) {
           if(!n.label || !n.children) return;
