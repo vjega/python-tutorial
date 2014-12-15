@@ -19,13 +19,7 @@ def home(request):
         "link" : u"assignedresourcelist",
         "caption": _("Dedication"),
         "stat": 25
-        }, {
-        "color": u"green",
-        "icon" : u"book",
-        "link" : u"workspace",
-        "caption": _("My works"),
-        "stat": 64
-        }, {
+        },{
         "color": u"yellow",
         "icon" : u"pencil-square-o",
         "link" : u"writtenwork",
@@ -53,34 +47,6 @@ def home(request):
 def assignedresourcelist(request):
     return render(request, 'portalteacher/assignedresourcelist.html')
 
-@switchlanguage
-def workspace(request):
-    folders = [{
-        "id": "1",
-        "name" :_("Writing"),
-        "href" :"viewworkspacelist",
-        "type" : "Text"
-        },{
-        "id": "2",
-        "name" :_("Image"),
-        "href" :"viewworkspacelist",
-        "type" : "Image"
-        },{
-        "id": "3",
-        "name" :_("Audio"),
-        "href" :"viewworkspacelist",
-        "type" :"Audio"
-        },{
-        "id": "4",
-        "name" :_("Video"),
-        "href" :"viewworkspacelist",
-        "type" : "Video"
-        }]
-    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
-    #studentresourcetype = {'head':studentresourcetype_head, 
-                           #'body':studentresourcetype_body}
-    return render(request, 'portalteacher/workspace.html', 
-                  {"folders":folders,'workspace':workspace})
 
 @switchlanguage
 def viewworkspacelist(request):
