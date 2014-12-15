@@ -39,3 +39,7 @@
     -o-background-size: cover;
     background-size: cover;*/
 }
+
+#top-header{
+    background: blue url(img/10tsecondlogo.png) no-repeat right center ;
+}
