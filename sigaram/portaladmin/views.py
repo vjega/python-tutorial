@@ -345,3 +345,6 @@ def studentassignedresourcelist(request):
 @login_required
 def viewstudentwork(request):
     return render(request, 'portaladmin/viewstudentwork.html')
+
+def mindmapnew(request):
+    return HttpResponse("Todo")
