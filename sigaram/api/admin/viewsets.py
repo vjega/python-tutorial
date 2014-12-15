@@ -2,9 +2,10 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import serializers
 import json, time
+from django.db.models import Q
 from api.admin import (create_login, 
                        delete_login)
-
+from django.db.models import Q
 from portaladmin import models
 import  adminserializers
 
@@ -98,11 +99,18 @@ class studentViewSet(viewsets.ModelViewSet):
     def list(self, request):
         schoolid =  request.GET.get('schoolid')
         classid  =  request.GET.get('classid')
+        schoolids  =  request.GET.get('schoolids')
 
         if schoolid and classid:
             queryset = models.Studentinfo.objects.filter(schoolid=schoolid, classid=classid)
         elif schoolid:
             queryset = models.Studentinfo.objects.filter(schoolid=schoolid)
+        elif schoolids:
+            schools = schoolids.split(",")
+            q = Q() 
+            for s in schools:
+                q |= Q(schoolid=s) 
+            queryset = models.Studentinfo.objects.filter(q, classid=classid)
         else:
             queryset = models.Studentinfo.objects.all()
         

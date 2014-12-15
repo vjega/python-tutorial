@@ -3,7 +3,8 @@ from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
 from teacher import models
 from teacher.forms import (ViewworkspaceForm,
-                            RubricsForm)   
+                            RubricsForm,
+                            WrittenworkForm)   
 
 def switchlanguage(f):
     def inner(req):
@@ -19,13 +20,7 @@ def home(request):
         "link" : u"assignedresourcelist",
         "caption": _("Dedication"),
         "stat": 25
-        }, {
-        "color": u"green",
-        "icon" : u"book",
-        "link" : u"workspace",
-        "caption": _("My works"),
-        "stat": 64
-        }, {
+        },{
         "color": u"yellow",
         "icon" : u"pencil-square-o",
         "link" : u"writtenwork",
@@ -53,34 +48,6 @@ def home(request):
 def assignedresourcelist(request):
     return render(request, 'portalteacher/assignedresourcelist.html')
 
-@switchlanguage
-def workspace(request):
-    folders = [{
-        "id": "1",
-        "name" :_("Writing"),
-        "href" :"viewworkspacelist",
-        "type" : "Text"
-        },{
-        "id": "2",
-        "name" :_("Image"),
-        "href" :"viewworkspacelist",
-        "type" : "Image"
-        },{
-        "id": "3",
-        "name" :_("Audio"),
-        "href" :"viewworkspacelist",
-        "type" :"Audio"
-        },{
-        "id": "4",
-        "name" :_("Video"),
-        "href" :"viewworkspacelist",
-        "type" : "Video"
-        }]
-    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
-    #studentresourcetype = {'head':studentresourcetype_head, 
-                           #'body':studentresourcetype_body}
-    return render(request, 'portalteacher/workspace.html', 
-                  {"folders":folders,'workspace':workspace})
 
 @switchlanguage
 def viewworkspacelist(request):
@@ -182,6 +149,11 @@ def studentresourcetype(request):
         "categoryid": "2",
         "name" :_("Writing Board"),
         "href" :"studentresourceunits"
+        },{
+        "id": "3",
+        "categoryid": "2",
+        "name" :_("composition"),
+        "href" :"extras"
         }]
 
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
@@ -189,6 +161,32 @@ def studentresourcetype(request):
                            #'body':studentresourcetype_body}
     return render(request, 'portalteacher/studentresourcetype.html', 
                   {"folders":folders,'studentresourcetype':studentresourcetype})
+
+@switchlanguage
+def extras(request):
+    folders = [{
+        "id": "1",
+        "categoryid": "0",
+        "name" :_("writing"),
+        "href" :"extrasviewlist"
+        },{
+        "id": "2",
+        "categoryid": "1",
+        "name" :_("Multimedia"),
+        "href" :"extrasviewlist"
+        },{
+        "id": "3",
+        "categoryid": "2",
+        "name" :_("Songs"),
+        "href" :"extrasviewlist"
+        },{
+        "id": "3",
+        "categoryid": "2",
+        "name" :_("Olippatakkatci"),
+        "href" :"extrasviewlist"
+        }]
+    return render(request, 'portalteacher/extras.html', 
+                  {"folders":folders,'extras':extras})
 
 @switchlanguage
 def studentresourceunits(request):
@@ -214,13 +212,16 @@ def assignchapter(request):
                                              'classes':classes   }) 
 
 @switchlanguage
+def assignresource(request):
+    schools = models.Schoolinfo.objects.all()
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portalteacher/assignresource.html', 
+                    {'assignresource':assignresource,'schools':schools,
+                                             'classes':classes   })
+
+@switchlanguage
 def resources(request):
     folders = [{
-        "id": "1",
-        "categoryid": "0",
-        "name" :_("Hearing observation"),
-        "href" :"resource_type"
-        },{
         "id": "2",
         "categoryid": "1",
         "name" :_("Sing notes"),
@@ -283,6 +284,11 @@ def resource_units(request):
 def resourcelist(request):
     return render(request, 'portalteacher/resourcelist.html', 
                     {'resourcelist':resourcelist })
+
+@switchlanguage
+def extraslist(request):
+    return render(request, 'portalteacher/extraslist.html', 
+                    {'extraslist':extraslist })
 
 @switchlanguage
 def rubrics(request):

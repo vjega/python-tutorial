@@ -15,7 +15,7 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans "Resources" %} &nbsp; <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
+            {% trans "Resources" %} 
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
@@ -108,9 +108,9 @@ TTS.forms.renderteacherresourceinfo = function(data){
     for(var i in data){
         var t = [];
         t.push(++count);
-        t.push(data[i].resourcetitle);
+        t.push("<p class='col-sm-3 pull-left'><img src="+data[i].thumbnailurl+"></p> " + data[i].resourcetitle);
         t.push(data[i].createddate);
-        t.push("<i class='fa fa-share fa-2x'></i>");
+        t.push("<a href='javascript:void(0)' class='assignment' id='"+data[i].teacherresourceid+"' ><i class='fa fa-share fa-2x'></i></a>");
         dataset.push(t);
     }
 
@@ -168,6 +168,11 @@ $(document).ready(function(){
     $("body").on('change', '#id_section', function(){
         updateChapter();
     })
+
+    $('#studetresource-main-tbl').on('click', '.assignment',function(e){
+        e.stopPropagation();
+        window.location = 'assignresource.html?categoryid=1&chapterid=1&classid='+TTS.classid+'&section='+TTS.classid+'&resourceid='+this.id;
+    });    
     
 });
 
