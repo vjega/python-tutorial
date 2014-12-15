@@ -213,6 +213,14 @@ def assignchapter(request):
                                              'classes':classes   }) 
 
 @switchlanguage
+def assignresource(request):
+    schools = models.Schoolinfo.objects.all()
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portalteacher/assignresource.html', 
+                    {'assignresource':assignresource,'schools':schools,
+                                             'classes':classes   })
+
+@switchlanguage
 def resources(request):
     folders = [{
         "id": "1",
