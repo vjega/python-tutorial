@@ -1,6 +1,7 @@
 {% extends 'portaladmin/base.html' %}
 {% load i18n %}
 {% load staticfiles %}
+{% load crispy_forms_tags %}
 {% block topcontent %}
         <div id="page-wrapper">
             <div class="row">
@@ -26,96 +27,110 @@
 {% endblock botcontent%}
 
 {% block morescript %}
+
 <script src="{%static "bower_components/moment/min/moment.min.js" %}"></script>
 <script src="{%static "bower_components/fullcalendar/dist/fullcalendar.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
+<script id="cal-form" type="text/x-jsrender">
+    {% crispy calendarform %}
+</script>
 <script>
-    
-    function saveMyData(event) {
-        var data = {
-            "calendarid" : 3,
-            "calendartitle" : event.title,
-            "startdate" : event.start.format(),
-            "enddate" : event.end.format(),
-            "starttime": event.start.format() +' 01:00',
-            "endtime": event.start.format() +' 02:00' 
-        };
-        $.ajax({
-            type:'POST',
-            data: JSON.stringify(data),
-            url : '/api/admin/savecalendar/'
-        }).done(function( msg ) {
-            alert(msg)
-        });
-    }
+window.TTS = window.TTS || {}
+window.TTS.forms = window.TTS.forms || {}
+TTS.forms.showcalform = function(start, end, allDay) {
+    console.log('start:',start);
+    console.log('end:',end);
+    console.log('allDay:',allDay);
+    BootstrapDialog.show({
+        title: 'Add Event',
+        message: $($('#cal-form').render()),
+        onshown: function(){
+            $('#id_title').val("New Event");
+            $('#id_start').val(start.format());
+            $('#id_end').val(end.format());
 
-	$(document).ready(function() {
-        //get_callendar_events()
-        var date = new Date();
-        var d = date.getDate();
-        var m = date.getMonth();
-        var y = date.getFullYear();
-        //var callendar_event =  get_callendar_events()
-        //console.log(callendar_event)
-        /*var callendar_event = [
-                            {
-                                title: "Meeting",
-                                start: new Date(y, m, d, 10, 30),
-                                end: new Date(y, m, d, 11, 00),
-                                allDay: false
-                            },
-                            {
-                                title: "Lunch",
-                                start: new Date(y, m, d, 12, 0),
-                                end: new Date(y, m, d, 14, 30),
-                                allDay: false
-                            }
-                        ];*/
-	    var calendar = $('#calendar').fullCalendar({
-            selectable: true,
-            selectHelper: true,
-            header:
-            {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-            },
-            select: function(start, end, allDay)
-            {
-                var title = prompt('Event Title:');
-                if (title)
-                {
-                    calendar.fullCalendar('renderEvent',
-                        {
-                            title: title,
-                            start: start,
-                            end: end,
-                            allDay : allDay
-                            //start_time : start.getTime() / 1000,
-                            //end_time : end.getTime() / 1000,
-                        },
-                        true // make the event "stick"
-                    );
-                }
-                calendar.fullCalendar('unselect');
-                saveMyData({'title': title, 
-                            'start': start, 
-                            'end': end
-                        });
-            },
-            eventDrop: function (event, dayDelta, minuteDelta) {
-                saveMyData(event);
-            },
+            //alert("Cal Shown");
+        },
+        buttons: [{
+            label: 'Save',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                //var data = TTS.utils.serilaizeJson("#save-cal");
+                //TTS.forms.addadmin(dialogItself, data);
+                TTS.forms.saveCal() 
+            }
+            },{
+            label: 'Cancel',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
+        }]
+    });
+};
+TTS.forms.saveCal = function () {
+    var data = TTS.utils.serilaizeJson("#cal-event");
+    console.log(data);
+    $.ajax({
+        type:'POST',
+        data: data,
+        url : '/api/admin/calendar/'
+    }).done(function( msg ) {
+        data = JSON.parse(data);
+        TTS.forms.calendar.fullCalendar('renderEvent',
+        {
+            title: data.title,
+            start: data.start,
+            end: data.end
+        },
+        true // make the event "stick"
+        );
+    });
+}
 
-            eventResize: function (event, dayDelta, minuteDelta) {
-                saveMyData(event);
-             },
-            editable: true,
-            events: '/api/admin/getcalendardata/',
-	    })
-	});
+$(document).ready(function() {
+    TTS.forms.calendar = $('#calendar').fullCalendar({
+        selectable: true,
+        selectHelper: true,
+        header:
+        {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay'
+        },
+        select: function(start, end, allDay)
+        {
+            TTS.forms.showcalform(start, end, allDay);
+        },
+        eventDrop: function (event, dayDelta, minuteDelta) {
+            //TTS.forms.saveCal(event);
+            console.log("Event Drop");
+        },
+
+        eventResize: function (event, dayDelta, minuteDelta) {
+            //TTS.forms.saveCal(event);
+            console.log("Resize");
+        },
+        eventClick: function(calEvent, jsEvent, view) {
+
+            alert('Event: ' + calEvent.title);
+            alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+            alert('View: ' + view.name);
+
+            // change the border color just for fun
+            $(this).css('border-color', 'red');
+
+        },
+        editable: true,
+        events: {
+            url:'/api/admin/calendar/'
+        },
+    })
+});
 </script>
 {% endblock scriptcontent %}
 

@@ -9,7 +9,8 @@ from portaladmin.forms import (AdminForm,
                    StudentForm,
                    SchoolListForm,
                    StudentresourceListForm,
-                   ClassListForm)	
+                   ClassListForm,
+                   CalendarForm,)	
 
 def switchlanguage(f):
     def inner(req):
@@ -17,7 +18,7 @@ def switchlanguage(f):
         return f(req)
     return inner
 
-@login_required
+#@login_required
 def home(request):
     folders = [{
         "color": u"primary",
@@ -284,7 +285,7 @@ def billboard(request):
     studentslist = {'head':studentslist_head, 'body':studentslist_body}
     return render(request, 'portaladmin/studentslist.html', {'studentslist':studentslist})
 
-@login_required
+#@login_required
 def mindmap(request):
     return render(request, 'portaladmin/mindmap.html', {})
     
@@ -294,7 +295,7 @@ def sticky_notes(request):
     
 @login_required
 def calendar(request):
-    return render(request, 'portaladmin/calendar.html', {})
+    return render(request, 'portaladmin/calendar.html', {"calendarform" : CalendarForm.CalendarForm()})
     
 @login_required
 def recorder(request):
