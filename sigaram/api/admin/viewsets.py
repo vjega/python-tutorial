@@ -351,7 +351,16 @@ class AdminschoolViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        return Response('"msg":"update"')
+        adminschools = models.Schoolinfo.objects.get(pk=pk)
+        schooldata =  json.loads(request.DATA.keys()[0])
+        adminschools.schoolname = schooldata.get('schoolname')
+        adminschools.shortname = schooldata.get('shortname')
+        adminschools.description = schooldata.get('description')
+        adminschools.createdby = request.user.id
+        adminschools.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminschools.save()
+        return Response(request.DATA)
+
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')

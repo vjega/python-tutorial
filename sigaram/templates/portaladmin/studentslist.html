@@ -112,37 +112,6 @@ TTS.forms.addstudent = function() {
         }]
     });
 };
-TTS.forms.editschool = function(id, data) {
-    BootstrapDialog.show({
-        title: 'Edit Student',
-        message: $($('#student-form').render()),
-        onshown: function(){
-            $("#add-student").find("input,select").each(function(){
-                $(this).val(data[this['name']]);
-            });
-        },
-        buttons: [{
-            label: 'Update',
-            cssClass: 'btn-primary',
-            action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-student");
-                $.ajax({
-                    type:'PUT',
-                    data: data,
-                    url : '/api/admin/student/'+id
-                }).done(function( msg ) {
-                    dialogItself.close();
-                    location.reload();
-                });
-            }
-            },{
-            label: 'Cancel',
-            action: function(dialogItself){
-                dialogItself.close();
-            }
-        }]
-    });
-};
 
 TTS.forms.renderstudentlist = function(data){
     
