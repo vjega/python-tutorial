@@ -505,6 +505,8 @@ class StudentAssignResource(viewsets.ModelViewSet):
         data = json.loads(dict(request.DATA).keys()[0]);
         students = data.get('students');
         resource = data.get('resource');
+        rubricid = data.get('rubricid');
+        assigntext = data.get('assigntext');
         print resource
         print students
         print resource, students
@@ -513,6 +515,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
                 ar = models.Assignresourceinfo()
                 ar.resourceid = int(r)
                 ar.studentid = int(s)
+                ar.assigntext = str(assigntext)
                 ar.isanswered = 0
                 ar.issaved = 0
                 ar.isrecord = 0
@@ -523,7 +526,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
                 ar.assignedby = 1 #request.user.userid
                 ar.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
                 ar.isdelete = 0
-                ar.rubric_id = 0
+                ar.rubric_id = int(rubricid)
                 ar.old_edit = 0
                 ar.save()   
         
