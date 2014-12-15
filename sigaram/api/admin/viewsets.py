@@ -70,6 +70,27 @@ class teacherViewSet(viewsets.ModelViewSet):
         teacher.save()
         return Response(request.DATA)
 
+    def update(self, request, pk=None):
+        teacher = models.Teacherinfo.objects.get(pk=pk)
+        teacherdata =  json.loads(request.DATA.keys()[0])
+        teacher.username = teacherdata.get('username')
+        teacher.lastname = teacherdata.get('lastname')
+        teacher.password = teacherdata.get('password')
+        teacher.firstname = teacherdata.get('firstname')
+        teacher.schoolid = teacherdata.get('schoolid')
+        #teacher.classid = '1' #teacherdata.get('classid')
+        teacher.emailid = teacherdata.get('emailid')
+        teacher.save()
+        return Response(request.DATA)
+
+    @delete_login('Teacher')
+    def destroy(self, request, pk):
+        teacher = models.Teacherinfo.objects.get(pk=pk)
+        teacher.isdelete = 1
+        teacher.save()
+        return Response('"msg":"delete"')
+
+
 class studentViewSet(viewsets.ModelViewSet):
     queryset = models.Studentinfo.objects.filter(isdelete=0)
     serializer_class = adminserializers.StudentinfoSerializer
@@ -108,6 +129,13 @@ class studentViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk=None):
         return Response(pk)
+
+    @delete_login('Student')
+    def destroy(self, request, pk):
+        student = models.Studentinfo.objects.get(pk=pk)
+        student.isdelete = 1
+        student.save()
+        return Response('"msg":"delete"')
 
 class TeacherResourcesViewSet(viewsets.ModelViewSet):
     queryset = models.TeacherResources.objects.all()
