@@ -168,22 +168,22 @@ def extras(request):
         "id": "1",
         "categoryid": "0",
         "name" :_("writing"),
-        "href" :"extrasviewlist"
+        "href" :"extraslist"
         },{
         "id": "2",
         "categoryid": "1",
         "name" :_("Multimedia"),
-        "href" :"extrasviewlist"
+        "href" :"extraslist"
         },{
         "id": "3",
         "categoryid": "2",
         "name" :_("Songs"),
-        "href" :"extrasviewlist"
+        "href" :"extraslist"
         },{
         "id": "3",
         "categoryid": "2",
         "name" :_("Olippatakkatci"),
-        "href" :"extrasviewlist"
+        "href" :"extraslist"
         }]
     return render(request, 'portalteacher/extras.html', 
                   {"folders":folders,'extras':extras})
