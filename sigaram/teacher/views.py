@@ -3,7 +3,8 @@ from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
 from teacher import models
 from teacher.forms import (ViewworkspaceForm,
-                            RubricsForm)   
+                            RubricsForm,
+                            WrittenworkForm)   
 
 def switchlanguage(f):
     def inner(req):
@@ -148,6 +149,11 @@ def studentresourcetype(request):
         "categoryid": "2",
         "name" :_("Writing Board"),
         "href" :"studentresourceunits"
+        },{
+        "id": "3",
+        "categoryid": "2",
+        "name" :_("composition"),
+        "href" :"extras"
         }]
 
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
@@ -155,6 +161,32 @@ def studentresourcetype(request):
                            #'body':studentresourcetype_body}
     return render(request, 'portalteacher/studentresourcetype.html', 
                   {"folders":folders,'studentresourcetype':studentresourcetype})
+
+@switchlanguage
+def extras(request):
+    folders = [{
+        "id": "1",
+        "categoryid": "0",
+        "name" :_("writing"),
+        "href" :"extrasviewlist"
+        },{
+        "id": "2",
+        "categoryid": "1",
+        "name" :_("Multimedia"),
+        "href" :"extrasviewlist"
+        },{
+        "id": "3",
+        "categoryid": "2",
+        "name" :_("Songs"),
+        "href" :"extrasviewlist"
+        },{
+        "id": "3",
+        "categoryid": "2",
+        "name" :_("Olippatakkatci"),
+        "href" :"extrasviewlist"
+        }]
+    return render(request, 'portalteacher/extras.html', 
+                  {"folders":folders,'extras':extras})
 
 @switchlanguage
 def studentresourceunits(request):
@@ -190,11 +222,6 @@ def assignresource(request):
 @switchlanguage
 def resources(request):
     folders = [{
-        "id": "1",
-        "categoryid": "0",
-        "name" :_("Hearing observation"),
-        "href" :"resource_type"
-        },{
         "id": "2",
         "categoryid": "1",
         "name" :_("Sing notes"),
@@ -257,6 +284,11 @@ def resource_units(request):
 def resourcelist(request):
     return render(request, 'portalteacher/resourcelist.html', 
                     {'resourcelist':resourcelist })
+
+@switchlanguage
+def extraslist(request):
+    return render(request, 'portalteacher/extraslist.html', 
+                    {'extraslist':extraslist })
 
 @switchlanguage
 def rubrics(request):
