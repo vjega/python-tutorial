@@ -128,7 +128,17 @@ class studentViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        return Response(pk)
+        student = models.Studentinfo.objects.get(pk=pk)
+        studentdata =  json.loads(request.DATA.keys()[0])
+        student.username = studentdata.get('username')
+        student.lastname = studentdata.get('lastname')
+        student.password = studentdata.get('password')
+        student.firstname = studentdata.get('firstname')
+        student.schoolid = studentdata.get('schoolid')
+        #teacher.classid = '1' #teacherdata.get('classid')
+        student.emailid = studentdata.get('emailid')
+        student.save()
+        return Response(request.DATA)
 
     @delete_login('Student')
     def destroy(self, request, pk):
