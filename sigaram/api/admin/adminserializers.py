@@ -84,3 +84,29 @@ class AdminclasslistSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Classinfo
         fields = ('classid',  'classname','shortname',
                   'createdby','createddate')
+
+class CalendarSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Calendardetails
+        fields = ('id',  'title','start','end')
+
+class AdminrubricsSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.RubricsHeader
+        fields = ('title','description','teacher','status','ts')
+
+class AssignresourceinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Assignresourceinfo
+        fields = ('resourceid','assigneddate','IsDelete','assignedby')
+
+class WorkspaceinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Workspaceinfo
+        fields = ('workspaceid','workspacetitle','workspacetype','posteddate','postedby',
+                                                  'workspacetype','isapproved')
+
+class MindmapSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Mindmap
+        fields = ('id','title','mapdata')

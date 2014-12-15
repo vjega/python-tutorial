@@ -2,6 +2,10 @@
 from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
 from student import models
+from student.forms import (StudentWorkForm,
+                           StudentNotesForm)
+
+
 def switchlanguage(f):
     def inner(req):
         activate(req.session.get('django_language','ta'))
@@ -25,20 +29,20 @@ def home(request):
         }, {
         "color": u"yellow",
         "icon" : u"pencil-square-o",
-        "link" : u"studentresourcetype",
+        "link" : u"studentnoteslist",
         "caption": _("Notes"),
         "stat": 125
         },{
         "color": u"red",
         "icon" : u"pencil",
-        "link" : u"studentresourcetype",
+        "link" : u"studentwrittenwork",
         "caption": _("Written Work"),
         "stat": 125
         },
         {
         "color": u"green",
         "icon" : u"desktop",
-        "link" : u"studentresourcetype",
+        "link" : u"studentviewassessments",
         "caption": _("Practicals"),
         "stat": 125
         }]
@@ -167,7 +171,6 @@ def viewstudentwork(request):
 
 def worklistinfo(request):
     worktype=request.GET.get('workspacetype')
-    print worktype
     if worktype=='text':
         title=_('Text')
     elif worktype=='image':
@@ -176,4 +179,23 @@ def worklistinfo(request):
         title=_('Audio')
     else:
         title=_('Video')
-    return render(request, 'portalstudent/worklistinfo.html',{"headtitle":title})
+    return render(request, 'portalstudent/worklistinfo.html',
+                            {"headtitle":title,
+                             "workspacetype":worktype,
+                             "form" : StudentWorkForm.StudentWorkForm()})
+    
+def studentviewwork(request):
+    return render(request, 'portalstudent/studentviewwork.html')
+
+def studentnoteslist(request):
+    return render(request, 'portalstudent/studentnoteslist.html',
+                            {"form" : StudentNotesForm.StudentNotesForm()})
+
+def studentwrittenwork(request):
+    return render(request, 'portalstudent/studentwrittenwork.html')
+
+def studentviewassessments(request):
+    return render(request, 'portalstudent/studentviewassessments.html')
+
+def studentclassroom(request):
+    return render(request, 'portalstudent/studentclassroom.html')

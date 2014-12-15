@@ -2,9 +2,10 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import serializers
 import json, time
-from api.admin import create_login
 from django.db.models import Q
-
+from api.admin import (create_login, 
+                       delete_login)
+from django.db.models import Q
 from portaladmin import models
 import  adminserializers
 
@@ -30,7 +31,9 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         return Response('"msg":"update"')
 
-    def destroy(self, request, pk=None):
+    @delete_login('Admin')
+    def destroy(self, request, pk):
+        models.Admininfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
 class AdminFoldersViewSet(viewsets.ModelViewSet):
@@ -110,6 +113,9 @@ class studentViewSet(viewsets.ModelViewSet):
         student.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         student.save()
         return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response(pk)
 
 class TeacherResourcesViewSet(viewsets.ModelViewSet):
     queryset = models.TeacherResources.objects.all()
@@ -332,3 +338,100 @@ class AdminclasslistViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
+
+class AdminrubricsViewSet(viewsets.ModelViewSet):
+
+    queryset = models.RubricsHeader.objects.all()
+    serializer_class = adminserializers.AdminrubricsSerializer
+
+    def create(self, request):
+        adminrubrics = models.Rubricsheader()
+        rubricsdata =  json.loads(request.DATA.keys()[0])
+        adminrubrics.title = rubricsdata.get('title')
+        adminrubrics.description = rubricsdata.get('description')
+        adminrubrics.teacher = rubricsdata.get('teacher')
+        adminrubrics.status = rubricsdata.get('status')
+        adminrubrics.ts = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminrubrics.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
+
+class AssignresourceinfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Assignresourceinfo.objects.all()
+    serializer_class = adminserializers.AssignresourceinfoSerializer
+
+    def create(self, request):
+        adminassignresource = models.Assignresourceinfo()
+        rubricsdata =  json.loads(request.DATA.keys()[0])
+        adminrubrics.resourceid = rubricsdata.get('resourceid')
+        adminrubrics.IsDelete = rubricsdata.get('IsDelete')
+        adminrubrics.assignedby = rubricsdata.get('assignedby')
+        adminrubrics.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminrubrics.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
+
+class WorkspaceViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Workspaceinfo.objects.all()
+    serializer_class = adminserializers.WorkspaceinfoSerializer
+
+    def create(self, request):
+        adminassignresource = models.Workspaceinfo()
+        rubricsdata =  json.loads(request.DATA.keys()[0])
+        adminrubrics.resourceid = rubricsdata.get('resourceid')
+        adminrubrics.IsDelete = rubricsdata.get('IsDelete')
+        adminrubrics.assignedby = rubricsdata.get('assignedby')
+        adminrubrics.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminrubrics.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
+
+class CalendarViewSet(viewsets.ModelViewSet):
+    queryset = models.Calendardetails.objects.all()
+    serializer_class = adminserializers.CalendarSerializer
+
+    def create(self, request):
+        cal = models.Calendardetails()
+        data = json.loads(dict(request.DATA).keys()[0])
+        #return Response({})
+        #data = {k:v[0] for k,v in dict(request.DATA).items()}
+        cal.title = data.get('title')
+        cal.start = data.get('start')
+        cal.end = data.get('end')
+        cal.isdeleted = 0
+        cal.createdby = request.user.id
+        cal.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        cal.save()
+        return Response(request.DATA)
+
+class MindmapViewSet(viewsets.ModelViewSet):
+    queryset = models.Mindmap.objects.all()
+    serializer_class = adminserializers.MindmapSerializer
+
+    def create(self, request):
+        mm = models.Mindmap()
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        mm.title = data.get('title')
+        mm.mapdata = data.get('mapdata')
+        mm.isdelete = 0
+        mm.createdby = 1 #request.user.id
+        mm.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        mm.save()
+        return Response(request.DATA)

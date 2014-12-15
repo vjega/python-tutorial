@@ -2,7 +2,8 @@
 from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
 from teacher import models
-from teacher.forms import (ViewworkspaceForm)   
+from teacher.forms import (ViewworkspaceForm,
+                            RubricsForm)   
 
 def switchlanguage(f):
     def inner(req):
@@ -277,6 +278,7 @@ def allschoolresourcelist(request):
     return render(request, 'portalteacher/allschoolresourcelist.html', 
                                         {'schools':schools,'classes':classes})
 
+@switchlanguage
 def resource_units(request):
     return render(request, 
                   'portalteacher/resource_units.html', 
@@ -284,3 +286,13 @@ def resource_units(request):
                    'classid': request.GET.get('classid'),
                    'section': request.GET.get('section')
                   })
+
+@switchlanguage
+def resourcelist(request):
+    return render(request, 'portalteacher/resourcelist.html', 
+                    {'resourcelist':resourcelist })
+
+@switchlanguage
+def rubrics(request):
+    return render(request, 'portalteacher/rubrics.html',{'rubrics':rubrics,
+                            "form" : RubricsForm.RubricsForm() })

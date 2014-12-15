@@ -1,0 +1,15 @@
+{
+  "name": "buzzmap",
+  "homepage": "https://github.com/marcelklehr/buzzmap",
+  "version": "2.0.3",
+  "_release": "2.0.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.0.3",
+    "commit": "444a264456fc37f53a118c3ff8940d1a5761605e"
+  },
+  "_source": "git://github.com/marcelklehr/buzzmap.git",
+  "_target": "~2.0.3",
+  "_originalSource": "marcelklehr/buzzmap",
+  "_direct": true
+}

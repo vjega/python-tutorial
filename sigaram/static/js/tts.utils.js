@@ -10,5 +10,8 @@ TTS.utils.serilaizeJson =  function (form){
     $.map(unindexed_array, function(n, i){
         indexed_array[n['name']] = n['value'];
     });
+    $.map($(".summernote"), function(n, i){
+        indexed_array[n['name']] = $(n).code();
+    })
     return JSON.stringify(indexed_array);
 };

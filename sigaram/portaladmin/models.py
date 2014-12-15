@@ -974,3 +974,26 @@ class Writtenworkinfo(models.Model):
     class Meta:
         managed = False
         db_table = 'writtenworkinfo'
+
+class Calendardetails(models.Model):
+    title = models.TextField()
+    start = models.DateTimeField()
+    end = models.DateTimeField()
+    createdby = models.BigIntegerField()
+    isdeleted = models.IntegerField()
+    createddate = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'calendardetails'
+
+class Mindmap(models.Model):
+    title = models.CharField(max_length=200)
+    mapdata  = models.TextField()
+    createdby = models.BigIntegerField()
+    isdelete = models.IntegerField()
+    createddate = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'mindmap'

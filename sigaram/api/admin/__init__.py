@@ -1,5 +1,7 @@
 import json
 from django.contrib.auth.models import User, Group
+from portaladmin import models
+
 def create_login(group):
     def outer(f):
         def inner(obj, request):
@@ -16,7 +18,22 @@ def create_login(group):
     return outer
 
 def inactivate_user(f):
-    def inner(obj, request):
-        pass
+    def inner(obj, request, pk):
+        return f(obj, request, pk)
     return inner
 
+def delete_login(group):
+    def outer(f):
+        def inner(obj, request, pk):
+            if group == 'Admin':
+                u = models.Admininfo.objects.get(pk=pk)
+            elif group == 'Teacher':
+                u = models.Teacherinfo.objects.get(pk=pk)
+            elif group == 'Student':
+                u = models.Studentinfo.objects.get(pk=pk)
+
+            login = User.objects.filter(username=u.username)[0]
+            login.delete()
+            return f(obj, request, pk)
+        return inner
+    return outer

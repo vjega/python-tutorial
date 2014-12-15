@@ -1,0 +1,23 @@
+
+DROP TABLE  IF EXISTS `d60701781`.`calendardetails`;
+CREATE TABLE  `d60701781`.`calendardetails` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `title` text NOT NULL,
+   start datetime NOT NULL,
+   end datetime NOT NULL,
+   `createdby` bigint(20) NOT NULL,
+   isdeleted int(11) NOT NULL,
+   `createddate` datetime NOT NULL,
+  PRIMARY KEY (`calendarid`)
+) ENGINE=MyISAM AUTO_INCREMENT=102722 DEFAULT CHARSET=utf8
+
+
+CREATE TABLE mindmap (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `title` varchar(200) NOT NULL DEFAULT '',
+    `mapdata` text,
+    `isdelete` tinyint(4) DEFAULT '0',
+    `createdby` bigint(20) NOT NULL,
+    `createddate` datetime NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8

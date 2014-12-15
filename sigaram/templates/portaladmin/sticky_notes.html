@@ -21,7 +21,7 @@
                                 <div class="classAddDemoPostit" id="post_it_all_1">Content of the postit 1</div>
                                 <div class="classAddDemoPostit" id="post_it_all_2">Content of the postit 2</div>
                                 <div class="classAddDemoPostit" id="post_it_all_3">Content of the postit 3</div>
-                                <div class="classAddDemoPostit" id="post_it_all_4">Content of the postit 4</div>
+                                <div class="classAddDemoPostit" id="post_it_all_4"><a href="#">Hello<strong>Bold</strong></a></div>
                             </div>
                         <!-- /.panel-body -->
                     </div>
@@ -37,9 +37,14 @@
 {% block scriptcontent %}
 <script>
     $(document).ready(function() {
-        $('.classAddDemoPostit').postitall({
-            position        : 'relative',
-            savable         : true
+        $('.classAddDemoPostit').each(function(x){
+            console.log(x);
+            $(this).postitall({
+                savable         : true,
+                posY : 220*x,
+                posX : 50,
+                position : 'absolute'
+            });
         });
     });
 
@@ -56,7 +61,7 @@
             'textcolor'       : '#333333',
             'backgroundcolor' : '#FFFC7F',
             'description'     : 'New created',
-            'newPostit'       : true
+            'newPostit'       : true,
         });
     });
 

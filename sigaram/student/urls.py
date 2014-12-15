@@ -1,7 +1,7 @@
 #Portal Routing
 from django.conf.urls import patterns, include, url
 from django.views.generic import RedirectView
-from student import views
+#from student import views
 
 urlpatterns = patterns('student.views',
     url(r'^home$',                      'home',         name='home'),
@@ -24,4 +24,14 @@ urlpatterns = patterns('student.views',
                                                         name='viewstudentwork'),
     url(r'^worklistinfo',               'worklistinfo',  
                                                         name='worklistinfo'),
+    url(r'^studentviewwork',            'studentviewwork',  
+                                                        name='studentviewwork'),
+    url(r'^studentnoteslist',           'studentnoteslist',  
+                                                        name='studentnoteslist'),
+    url(r'^studentwrittenwork',         'studentwrittenwork',  
+                                                        name='studentwrittenwork'),
+    url(r'^studentviewassessments',     'studentviewassessments',  
+                                                        name='studentviewassessments'),
+    url(r'^studentclassroom',           'studentclassroom',  
+                                                        name='studentclassroom'),
 )

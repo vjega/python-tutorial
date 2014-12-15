@@ -31,10 +31,15 @@ urlpatterns = patterns('teacher.views',
     url(r'^resources', 'resources',             name='resources'),
     url(r'^resource_type', 'resource_type',     name='resource_type'),
     url(r'^allschoolresourcelist', 'allschoolresourcelist', 
-                                                name='allschoolresourcelist'),
-     url(r'^resource_units', 'resource_units',  name='resource_units'),
-     url(r'^assignresource', 'assignresource',  name='assignresource'),
-     
+    url(r'^resource_units', 'resource_units',   name='resource_units'),
+    url(r'^assignresource', 'assignresource',   name='assignresource'),
+    url(r'^resource_units', 'resource_units',   name='resource_units'),
+    url(r'^resourcelist', 'resourcelist',       name='resourcelist'),
+    url(r'^rubrics', 'rubrics',                 name='rubrics'),
+
+
+    
+>>>>>>> de98e45beea4843216ec30e9796b90e03c3ef506
 
 
 )

@@ -63,55 +63,6 @@
 {% crispy form %}
 </script>
 
-<script id="editschool" type="text/x-jsrender">
-<form id="newfolderfrm" class="form-horizontal" role="form">
-    <div class="row">
-    <div class="form-group" class="col-sm-8">
-        <label for="folder_name" class="col-sm-7 control-label" id ="resource-heade">{% trans "New Storage" %}</label>
-    </div>
-    </div><br />
-   
-    
-    <div class="row">
-    <div class="form-group" class="col-sm-4">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Title" %}</label>
-        <div class="col-sm-2">
-            <input type ='text'>
-        </div>        
-    </div>
-    </div>    
-    <div class="row">
-    <div class="form-group" class="col-sm-4">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Category" %}</label>
-        <div class="col-sm-2">
-           <select name="school_name" class="form-control" id="resource-type">
-                <option value="text">text</option>
-                <option value="audio">Audio</option>
-                <option value="video">Video</option>
-                <option value="image">Image</option>
-            </select>
-        </div>
-    </div>
-    </div>   
-    <div class="row">
-    <div class="form-group" class="col-sm-2">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "remark" %}</label>
-    </div>
-    </div>
-    <div>
-        <textarea class="summernote"></textarea>
-    </div>
-    <div class="form-group">
-        <label for="order_no" class="col-sm-3 control-label">{% trans "Choose File" %}</label>
-        <div class="col-sm-6">
-            <input type="file" class="form-control" name="teacher_photo" id="teacher_photo"
-                 placeholder="{% trans "Choose File" %}">
-        </div>
-    </div>
-    </div>
-</form>
-</script>
-
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
@@ -162,22 +113,22 @@ TTS.forms.renderstudentwrittenwork = function(data){
     for(var i in data){
         var t = [];
         t.push(++count);
-        t.push(data[i].writtenworktitle);
-        t.push(data[i].createddate);
-        t.push(data[i].createddate);
-        t.push(data[i].writtenworktitle);
+        t.push(data[i].workspacetitle);
+        t.push(data[i].workspacetype);
+        t.push(data[i].posteddate);
+        t.push(data[i].workspaceid);
         dataset.push(t);
     }
 
     $('#workspace-main-tbl').dataTable({
-        //"data":     dataset,
+        "data":     dataset,
         "columns":  headers
     });
 
 };
 $(document).ready(function(){
     $.ajax({
-        "url":"/api/admin/writtenworkinfo/?format=json",
+        "url":"/api/admin/workspaceinfo/?format=json",
         "type":"GET"
     }).done(function(data){
         //console.log(data);
