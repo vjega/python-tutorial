@@ -33,6 +33,7 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
 
     @delete_login('Admin')
     def destroy(self, request, pk):
+        print pk
         models.Admininfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
@@ -434,4 +435,37 @@ class MindmapViewSet(viewsets.ModelViewSet):
         mm.createdby = 1 #request.user.id
         mm.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         mm.save()
+        return Response(request.DATA)
+
+
+class StudentAssignResource(viewsets.ModelViewSet):
+    queryset = models.Assignresourceinfo.objects.all()
+    serializer_class = adminserializers.MindmapSerializer
+
+    def create(self, request):
+        data = json.loads(dict(request.DATA).keys()[0]);
+        students = data.get('students');
+        resource = data.get('resource');
+        print resource
+        print students
+        print resource, students
+        for r in resource:
+            for s in students:
+                ar = models.Assignresourceinfo()
+                ar.resourceid = int(r)
+                ar.studentid = int(s)
+                ar.isanswered = 0
+                ar.issaved = 0
+                ar.isrecord = 0
+                ar.answerrating = 0
+                ar.isbillboard = 0
+                ar.isclassroom = 0
+                ar.answereddate = '1910-01-01'
+                ar.assignedby = 1 #request.user.userid
+                ar.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+                ar.isdelete = 0
+                ar.rubric_id = 0
+                ar.old_edit = 0
+                ar.save()   
+        
         return Response(request.DATA)
