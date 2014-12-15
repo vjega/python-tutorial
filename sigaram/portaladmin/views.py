@@ -2,6 +2,7 @@
 from django.utils.translation import (ugettext as _, activate)
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from django.http import HttpResponse
 from portaladmin import models
 from portaladmin.forms import (AdminForm,
 			       TeacherResourceForm,
@@ -286,11 +287,7 @@ def billboard(request):
     return render(request, 'portaladmin/studentslist.html', {'studentslist':studentslist})
 
 @login_required
-def mindmap(request):
-    return render(request, 'portaladmin/mindmap.html', {})
-
-@login_required
-def mindmapview(request, id):
+def mindmapedit(request, id):
     return render(request, 'portaladmin/mindmap.html', {})
     
 @login_required
@@ -346,5 +343,9 @@ def studentassignedresourcelist(request):
 def viewstudentwork(request):
     return render(request, 'portaladmin/viewstudentwork.html')
 
-def mindmapnew(request):
-    return HttpResponse("Todo")
+def mindmaplist(request):
+    return render(request, "portaladmin/mindmaplist.html", {})
+
+@login_required
+def mindmapedit(request):
+    return render(request, 'portaladmin/mindmap.html', {})
