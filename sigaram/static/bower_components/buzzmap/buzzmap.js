@@ -58,7 +58,7 @@
     }
   };
   
-  function Line(obj, startNode, endNode)
+    function Line(obj, startNode, endNode)
 	{
 		this.obj = obj;
 		this.start = startNode;
@@ -77,108 +77,106 @@
 		                       .attr({stroke: this.strokeStyle, opacity: this.strokeOpacity, 'stroke-width': this.strokeWidth});
 	};
   
-	var Node = function (obj, parent, label)
-	{
-    var thisnode = this;
+	var Node = function (obj, parent, label) {
+        var thisnode = this;
+        
+    	  // Define Properties
+    	this.obj      = obj;// Buzzmap object
+    	this.parent   = parent;
+    	this.children = [];
+        
+        // Vectors
+        this.x = 1;
+    	this.y = 1;
+    	this.dx = 0;
+    	this.dy = 0;
+        
+        // Define States
+        this.visible = false;
+        this.editing = false;
+        this.dragging = false;
+        this.hasPosition = false;// node position calculated?
     
-	  // Define Properties
-	this.obj      = obj;// Buzzmap object
-	this.parent   = parent;
-	this.children = [];
-    
-    // Vectors
-    this.x = 1;
-	this.y = 1;
-	this.dx = 0;
-	this.dy = 0;
-    
-    // Define States
-    this.visible = false;
-    this.editing = false;
-    this.dragging = false;
-    this.hasPosition = false;// node position calculated?
-    
-    // create the node element
-	this.el = $('<div></div>');
-	this.el.css('position', 'absolute');
-	this.el.addClass('node');
-	this.obj.el.append(this.el);
-    this.el.hide();
-    
-    // label
-    this.label(label);
-    
-    // root node?
-    if(!this.parent)// THE (INVISIBLE) ALMIGHTY ROOT NODE! (It will kick you in the ass, watch out! I have warned you...)
-    {
-      this.el.addClass('active');
-    }else {
-      this.parent.children.push(this);
-      
-      if(!this.parent.parent){ // Some normal, (visible) root node
-        this.el.addClass('active');
-        this.el.addClass('root');
-      }
-      else{ // Some normal child node
-        this.obj.lines[this.obj.lines.length] = new Line(obj, this, parent);
-      }
-    }
-    
-    // click
-		this.el.mouseup(function () {
-      if(thisnode.dragging == true ||thisnode.editing == true)
-        return true;
-      
-			if(thisnode.obj.options.editable !== true)
-			{
-        thisnode.toggleChildren();
-        return true;
-      }
-      
-      // edit mode: little puffer time for enabling dblclick
-      window.setTimeout(function() {
-        if(thisnode.editing == true)
-          return true;
-        thisnode.toggleChildren();
-      },250);
-      
-      return true;
-		});
-    
-    // drag
-		this.el.draggable({
-      cancel: ':input,option,button,a',
-      start: function() {
-        thisnode.dragging = true;
-      },
-			drag: function () {
-        thisnode.obj.trigger('ondrag', thisnode);
-				thisnode.obj.animate();
-			},
-      stop: function() {
-        thisnode.dragging = false;
-      }
-		});
+        // create the node element
+    	this.el = $('<div></div>');
+    	this.el.css('position', 'absolute');
+    	this.el.addClass('node');
+    	this.obj.el.append(this.el);
+        this.el.hide();
+        
+        // label
+        this.label(label);
+        
+        // root node?
+        if(!this.parent)// THE (INVISIBLE) ALMIGHTY ROOT NODE! (It will kick you in the ass, watch out! I have warned you...)
+        {
+          this.el.addClass('active');
+        }else {
+          this.parent.children.push(this);
+          
+          if(!this.parent.parent){ // Some normal, (visible) root node
+            this.el.addClass('active');
+            this.el.addClass('root');
+          }
+          else{ // Some normal child node
+            this.obj.lines[this.obj.lines.length] = new Line(obj, this, parent);
+          }
+        }
+        
+        // click
+        this.el.mouseup(function () {
+            if(thisnode.dragging == true ||thisnode.editing == true)
+                return true;
+          
+    		if(thisnode.obj.options.editable !== true)
+    		{
+                thisnode.toggleChildren();
+                return true;
+            }
+          
+            // edit mode: little puffer time for enabling dblclick
+            window.setTimeout(function() {
+                if(thisnode.editing == true)
+                    return true;
+                thisnode.toggleChildren();
+            },250);
+          
+            return true;
+    	});
+        
+        // drag
+    	this.el.draggable({
+            cancel: ':input,option,button,a',
+            start: function() {
+                thisnode.dragging = true;
+            },
+            drag: function () {
+            thisnode.obj.trigger('ondrag', thisnode);
+    				thisnode.obj.animate();
+    		},
+            stop: function() {
+                thisnode.dragging = false;
+            }
+    	});
 
-		// edit
-		if(this.obj.options.editable === true) {
-			this.el.dblclick(function (event) {
-				thisnode.edit();
-        event.preventDefault();
-			});
-		}
-	};
+    	// edit
+    	if(this.obj.options.editable === true) {
+    		this.el.dblclick(function (event) {
+    			thisnode.edit();
+                event.preventDefault();
+    		});
+    	}
+    };
   
-  Node.prototype.toggleChildren = function () {
+    Node.prototype.toggleChildren = function () {
 			// toggle active
-			if(this.children.length > 0 && this.parent.parent)
-			{
-				this.el.toggleClass('active');
-        this.obj.animate();
-				return false;
-			}
-			return true;
-  };
+		if(this.children.length > 0 && this.parent.parent) {
+		    this.el.toggleClass('active');
+            this.obj.animate();
+			return false;
+		}
+		return true;
+    };
   
   Node.prototype.label = function(label) {
     if(typeof(label) !== 'undefined') {
@@ -767,7 +765,7 @@
     // serialized JSON data
     try {
       var map = JSON.parse(obj.options.structure);
-      map = JSON.parse(map);
+      //map = JSON.parse(map);
       var nodeCreate = function (parent, children) {
         $.each(children, function (index, n) {
           if(!n.label || !n.children) return;

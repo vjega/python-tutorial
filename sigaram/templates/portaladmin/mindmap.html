@@ -37,7 +37,7 @@
 <script src="{%static "bower_components/buzzmap/buzzmap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
-<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{%static  "bower_components/summernote/dist/summernote.min.js" %}"></script>
 
 {% endblock morescript %}
 
@@ -64,7 +64,7 @@ TTS.forms = TTS.forms || {};
 $(document).ready(function(){
   if (getUrlParameter("new")==="true") {
       TTS.global.buzzmapdoc = $('#container').buzzmap({
-          structure: JSON.stringify(JSON.stringify({"label":"<span>Buzzmap</span>","children":[{"label":"<span>Untitled</span>","children":[]}]})),
+          structure: JSON.stringify({"label":"<span>Buzzmap</span>","children":[{"label":"<span>Untitled</span>","children":[]}]}),
           editable: true
       });
   } else {
@@ -74,7 +74,7 @@ $(document).ready(function(){
     }).done(function(data){
       $("#maptitle").val(data['title']);
       TTS.global.buzzmapdoc = $('#container').buzzmap({
-        structure: JSON.stringify(data['mapdata']),
+        structure: data['mapdata'],
         editable: true
       });
     });
