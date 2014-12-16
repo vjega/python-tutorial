@@ -300,3 +300,21 @@ def extraslist(request):
 def rubrics(request):
     return render(request, 'portalteacher/rubrics.html',{'rubrics':rubrics,
                             "form" : RubricsForm.RubricsForm() })
+
+@switchlanguage
+def statistics(request):
+    folders = [{
+        "id": "1",
+        "name" :_("Login statistics"),
+        "href" :"statisticsstudentslist"
+        },{
+        "id": "2",
+        "name" :_("Deliverables statistics"),
+        "href" :"statisticsstudentslist"
+        },{
+        "id": "3",
+        "name" :_("Exercises Statistics"),
+        "href" :"statisticsstudentslist"
+        }]
+    return render(request, 'portalteacher/statistics.html', 
+                  {"folders":folders,'statistics':statistics})
