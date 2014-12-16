@@ -287,8 +287,14 @@ def resourcelist(request):
 
 @switchlanguage
 def extraslist(request):
-    return render(request, 'portalteacher/extraslist.html', 
-                    {'extraslist':extraslist })
+    #studentresourceunits_body = models.Chapterinfo.objects.all()
+    return render(request, 
+                  'portalteacher/extraslist.html', 
+                  {'extraslist':extraslist,
+                   'classid': request.GET.get('classid'),
+                   'section': request.GET.get('section')    
+                  })
+
 
 @switchlanguage
 def rubrics(request):
