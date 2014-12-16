@@ -33,6 +33,7 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
 
     @delete_login('Admin')
     def destroy(self, request, pk):
+        print pk
         models.Admininfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
@@ -70,6 +71,27 @@ class teacherViewSet(viewsets.ModelViewSet):
         teacher.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         teacher.save()
         return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        teacher = models.Teacherinfo.objects.get(pk=pk)
+        teacherdata =  json.loads(request.DATA.keys()[0])
+        teacher.username = teacherdata.get('username')
+        teacher.lastname = teacherdata.get('lastname')
+        teacher.password = teacherdata.get('password')
+        teacher.firstname = teacherdata.get('firstname')
+        teacher.schoolid = teacherdata.get('schoolid')
+        #teacher.classid = '1' #teacherdata.get('classid')
+        teacher.emailid = teacherdata.get('emailid')
+        teacher.save()
+        return Response(request.DATA)
+
+    @delete_login('Teacher')
+    def destroy(self, request, pk):
+        teacher = models.Teacherinfo.objects.get(pk=pk)
+        teacher.isdelete = 1
+        teacher.save()
+        return Response('"msg":"delete"')
+
 
 class studentViewSet(viewsets.ModelViewSet):
     queryset = models.Studentinfo.objects.filter(isdelete=0)
@@ -115,7 +137,24 @@ class studentViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        return Response(pk)
+        student = models.Studentinfo.objects.get(pk=pk)
+        studentdata =  json.loads(request.DATA.keys()[0])
+        student.username = studentdata.get('username')
+        student.lastname = studentdata.get('lastname')
+        student.password = studentdata.get('password')
+        student.firstname = studentdata.get('firstname')
+        student.schoolid = studentdata.get('schoolid')
+        #teacher.classid = '1' #teacherdata.get('classid')
+        student.emailid = studentdata.get('emailid')
+        student.save()
+        return Response(request.DATA)
+
+    @delete_login('Student')
+    def destroy(self, request, pk):
+        student = models.Studentinfo.objects.get(pk=pk)
+        student.isdelete = 1
+        student.save()
+        return Response('"msg":"delete"')
 
 class TeacherResourcesViewSet(viewsets.ModelViewSet):
     queryset = models.TeacherResources.objects.all()
@@ -313,7 +352,16 @@ class AdminschoolViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        return Response('"msg":"update"')
+        adminschools = models.Schoolinfo.objects.get(pk=pk)
+        schooldata =  json.loads(request.DATA.keys()[0])
+        adminschools.schoolname = schooldata.get('schoolname')
+        adminschools.shortname = schooldata.get('shortname')
+        adminschools.description = schooldata.get('description')
+        adminschools.createdby = request.user.id
+        adminschools.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminschools.save()
+        return Response(request.DATA)
+
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
@@ -434,4 +482,52 @@ class MindmapViewSet(viewsets.ModelViewSet):
         mm.createdby = 1 #request.user.id
         mm.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         mm.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        mm = models.Mindmap.objects.get(pk=pk)  
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        mm.title = data.get('title')
+        mm.mapdata = data.get('mapdata')
+        mm.isdelete = 0
+        mm.createdby = 1 #request.user.id
+        mm.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        mm.save()
+        return Response(request.DATA)
+        
+
+
+class StudentAssignResource(viewsets.ModelViewSet):
+    queryset = models.Assignresourceinfo.objects.all()
+    serializer_class = adminserializers.MindmapSerializer
+
+    def create(self, request):
+        data = json.loads(dict(request.DATA).keys()[0]);
+        students = data.get('students');
+        resource = data.get('resource');
+        rubricid = data.get('rubricid');
+        assigntext = data.get('assigntext');
+        print resource
+        print students
+        print resource, students
+        for r in resource:
+            for s in students:
+                ar = models.Assignresourceinfo()
+                ar.resourceid = int(r)
+                ar.studentid = int(s)
+                ar.assigntext = str(assigntext)
+                ar.isanswered = 0
+                ar.issaved = 0
+                ar.isrecord = 0
+                ar.answerrating = 0
+                ar.isbillboard = 0
+                ar.isclassroom = 0
+                ar.answereddate = '1910-01-01'
+                ar.assignedby = 1 #request.user.userid
+                ar.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+                ar.isdelete = 0
+                ar.rubric_id = int(rubricid)
+                ar.old_edit = 0
+                ar.save()   
+        
         return Response(request.DATA)

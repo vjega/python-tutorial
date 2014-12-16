@@ -26,12 +26,13 @@ def delete_login(group):
     def outer(f):
         def inner(obj, request, pk):
             if group == 'Admin':
+                print pk
                 u = models.Admininfo.objects.get(pk=pk)
             elif group == 'Teacher':
                 u = models.Teacherinfo.objects.get(pk=pk)
             elif group == 'Student':
                 u = models.Studentinfo.objects.get(pk=pk)
-
+            
             login = User.objects.filter(username=u.username)[0]
             login.delete()
             return f(obj, request, pk)

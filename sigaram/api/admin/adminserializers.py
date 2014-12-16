@@ -93,7 +93,7 @@ class CalendarSerializer(serializers.HyperlinkedModelSerializer):
 class AdminrubricsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.RubricsHeader
-        fields = ('title','description','teacher','status','ts')
+        fields = ('slno','title','description','teacher','status','ts')
 
 class AssignresourceinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

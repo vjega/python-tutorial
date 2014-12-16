@@ -9,8 +9,17 @@
               Double Click to edit &amp; add a new node.
               Single Click to collapse/hide or select a node
             </code>
+
         </div>
         <!-- /.col-lg-12 -->
+    </div>
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="form-group">
+          <label for="maptitle">Map Title</label>
+          <input type="email" class="form-control" id="maptitle" value="Untitled">
+        </div> 
+      </div>
     </div>
 {% endblock topcontent %}
 {% block botcontent %}
@@ -34,33 +43,56 @@
 
 {% block scriptcontent %}
 <script>
+
+function getUrlParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+}  
+
 window.TTS = window.TTS || {};
 TTS.global = TTS.global || {}; 
 TTS.forms = TTS.forms || {}; 
 $(document).ready(function(){
-  $.ajax({
-    url:'/api/admin/mindmap/3',
-    type: 'GET'
-  }).done(function(data){
-    TTS.global.buzzmapdoc = $('#container').buzzmap({
-      structure: JSON.stringify(data['mapdata']),
-      editable: true
+  if (getUrlParameter("new")==="true") {
+      TTS.global.buzzmapdoc = $('#container').buzzmap({
+          structure: JSON.stringify(JSON.stringify({"label":"<span>Buzzmap</span>","children":[{"label":"<span>Untitled</span>","children":[]}]})),
+          editable: true
+      });
+  } else {
+    $.ajax({
+      url:'/api/admin/mindmap/'+getUrlParameter("editid"),
+      type: 'GET'
+    }).done(function(data){
+      $("#maptitle").val(data['title']);
+      TTS.global.buzzmapdoc = $('#container').buzzmap({
+        structure: JSON.stringify(data['mapdata']),
+        editable: true
+      });
     });
-  });
-  
+  }  
 
   $("#mindmap-save").click(function(){
     var postdata = {}
     postdata['mapdata'] = TTS.global.buzzmapdoc.serialize();
-    postdata['title'] = 'Hard coded title';
-
+    postdata['title'] = $("#maptitle").val();
+    var type = (getUrlParameter("new")==="true") ? "POST" : "PUT";
+    var url  = (getUrlParameter("new")==="true") ? '/api/admin/mindmap/' : '/api/admin/mindmap/'+getUrlParameter("editid")
     console.log(postdata);
     $.ajax({
-      type:'POST',
-      url : '/api/admin/mindmap/',
+      type:type,
+      url : url,
       data : postdata
     }).done(function(data){
-      console.log(data);
+      window.location = "/admin/mindmaplist"
     }).error(function(msg,err){
 
     })
@@ -69,7 +101,7 @@ $(document).ready(function(){
 
 TTS.forms.mindmap = function(node){
    BootstrapDialog.show({
-        title: 'Add Administrator',
+        title: 'Add MindMap',
         message: $($('#admin-form').render()),
         onshown: function(){
           $('#summernote').val(node.label()).summernote();
