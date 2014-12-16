@@ -1,12 +1,11 @@
 {% extends 'portaladmin/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
-{% load crispy_forms_tags %}
 {% block topcontent %}
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h2 class="page-header">{% trans "Administrators" %}</h2>
+            <h2 class="page-header">{% trans "MindMaps" %}</h2>
         </div>
         <!-- /.col-lg-12 -->
     </div>
@@ -15,7 +14,7 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans "Administrators" %} {% trans "List" %}
+            {% trans "MindMaps" %} {% trans "List" %}
             <span id="add" class="add">({% trans "Add" %})</span>
              <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
         </div>
@@ -54,37 +53,10 @@
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<script id="admin-form" type="text/x-jsrender">
-    {% crispy adminform %}
-</script>
 
 <script>
 window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
-
-/* ADMIN Crud Starts Here*/
-TTS.forms.addadmin = function(form, data) {
-    $.ajax({
-        type:'POST',
-        data: data,
-        url : '/api/admin/admin/'
-    }).done(function( msg ) {
-        form.close();
-        location.reload();
-        //dialogItself.close();
-    });
-}
-
-TTS.forms.ediadmin = function(form, id, data) {
-    $.ajax({
-        type:'PUT',
-        data: data,
-        url : '/api/admin/admin/'+id
-    }).done(function( msg ) {
-        form.close();
-        location.reload();
-    });
-}
 
 TTS.forms.deladmin = function(id) {
     console.log(id);
@@ -98,27 +70,7 @@ TTS.forms.deladmin = function(id) {
         alert("Something Bad Happended");
     });
 }
-/* End of Admin CRUD */
 
-TTS.forms.showadminform = function() {
-    BootstrapDialog.show({
-        title: 'Add Administrator',
-        message: $($('#admin-form').render()),
-        buttons: [{
-            label: 'Save',
-            cssClass: 'btn-primary',
-            action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-admin");
-                TTS.forms.addadmin(dialogItself, data); 
-            }
-            },{
-            label: 'Cancel',
-            action: function(dlg){
-                dlg.close();
-            }
-        }]
-    });
-};
 
 TTS.forms.renderadmin = function(data){
     var headers = [
@@ -126,20 +78,12 @@ TTS.forms.renderadmin = function(data){
               "class": "text-center",
               "data" : "slno"  
             },
-            { "title": "{% trans "Photo" %}",
-              "class": "text-center",
-              "data" : "image"  
-
-            },
+            
             { "title": "{% trans "Name" %}",
-              "data" : "name"
-            },
-            { "title": "{% trans "Username" %}",
-              "data" : "username"
+              "data" : "title"
             }, 
-            { "title": "{% trans "Email Id" %}",
-              "data" : "emaiid"
-
+            { "title": "{% trans "Name" %}",
+              "data" : "edi"
             }, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center",
@@ -152,16 +96,10 @@ TTS.forms.renderadmin = function(data){
     var count = 0
     for(var i in data){
         var t = {};
-        t.DT_RowId = data[i].adminid;
+        t.DT_RowId = data[i].id;
         t.slno = ++count;
-        if (data[i].imageurl){
-            t.image = "<img src='/static/"+data[i].imageurl+"' width='100' height='100'>";
-        } else {
-            t.image = "<img src='http://placehold.it/100x100'>";
-        }
-        t.name = data[i].firstname + " "+data[i].lastname;
-        t.username = data[i].username;
-        t.emaiid = data[i].emailid;
+        t.title = data[i].title;
+        t.edi = "<span class='tts-edit'><i class='fa fa-pencil fa-lg'></i></span>";
         t.del = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);
     }
@@ -174,7 +112,7 @@ TTS.forms.renderadmin = function(data){
 };
 $(document).ready(function(){
     $.ajax({
-        "url":"/api/admin/admin/?format=json",
+        "url":"/api/admin/mindmap/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderadmin(data);
@@ -188,7 +126,11 @@ $(document).ready(function(){
         window.location.reload();
     });
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.showadminform();
+        window.location = "/admin/mindmapedit?new=true"
+    });
+    $("#page-wrapper").on("click", ".tts-edit", function(e){
+        e.stopPropagation;
+        window.location = "/admin/mindmapedit?editid="+$(this).parent().parent().prop("id");
     });
 });
 

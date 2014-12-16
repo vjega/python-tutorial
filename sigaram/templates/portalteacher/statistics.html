@@ -5,15 +5,14 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2 class="page-header">{%trans "Student" %}  {%trans "Resources" %}</h2>
+                    <h2 class="page-header">{%trans "Statistics" %} </h2>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
             <div class="row">
                 {% for folder in folders%}
-                <a href="
-                {{folder.href}}?categoryid={{folder.categoryid}}&classid={{forloop.counter}}&section=a">
+                <a href="{{folder.href}}">
                 <div class="col-lg-3 col-md-6">
                     <div class="panel panel-yellow">
                         <div class="panel-heading">

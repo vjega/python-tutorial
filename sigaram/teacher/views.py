@@ -287,10 +287,34 @@ def resourcelist(request):
 
 @switchlanguage
 def extraslist(request):
-    return render(request, 'portalteacher/extraslist.html', 
-                    {'extraslist':extraslist })
+    #studentresourceunits_body = models.Chapterinfo.objects.all()
+    return render(request, 
+                  'portalteacher/extraslist.html', 
+                  {'extraslist':extraslist,
+                   'classid': request.GET.get('classid'),
+                   'section': request.GET.get('section')    
+                  })
+
 
 @switchlanguage
 def rubrics(request):
     return render(request, 'portalteacher/rubrics.html',{'rubrics':rubrics,
                             "form" : RubricsForm.RubricsForm() })
+
+@switchlanguage
+def statistics(request):
+    folders = [{
+        "id": "1",
+        "name" :_("Login statistics"),
+        "href" :"statisticsstudentslist"
+        },{
+        "id": "2",
+        "name" :_("Deliverables statistics"),
+        "href" :"statisticsstudentslist"
+        },{
+        "id": "3",
+        "name" :_("Exercises Statistics"),
+        "href" :"statisticsstudentslist"
+        }]
+    return render(request, 'portalteacher/statistics.html', 
+                  {"folders":folders,'statistics':statistics})
