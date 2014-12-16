@@ -29,7 +29,6 @@
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
-
 {% endblock morescript %}
 
 {% block botcontent %}
@@ -386,8 +385,8 @@ TTS.forms.ressave = function(){
     data.students = [];
     data.rubricid = 0;
     data.assigntext = $(".summernote").code();
-    if($("#set_rubric_id").val()){
-        data.rubricid = $("#set_rubric_id").val();
+    if(getUrlParameter('resourceid')){
+        data.resource = getUrlParameter('resourceid');
     }
     if($("#set_rubric_id").val()){
         data.rubricid = $("#set_rubric_id").val();
@@ -400,7 +399,7 @@ TTS.forms.ressave = function(){
         type:"POST",
         data: JSON.stringify(data)
     }).done(function(data){
-        console.log(data);
+        //console.log(data);
     }).error(function(err, msg){
         alert("I didnt save the data");
     });
@@ -479,7 +478,19 @@ $(document).ready(function(){
     });
 
 });
-
+function getUrlParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+} 
 </script>
 
 {% endblock scriptcontent %}
