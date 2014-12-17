@@ -110,4 +110,3 @@ class MindmapSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Mindmap
         fields = ('id','title','mapdata')
-

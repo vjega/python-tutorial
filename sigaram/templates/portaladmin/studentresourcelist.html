@@ -61,12 +61,27 @@
 {% crispy form %}
 </script>
 
-
-
 <script>
+function getUrlParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+} 
+
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-
+TTS.categoryid = getUrlParameter('categoryid');
+TTS.chapterid = getUrlParameter('chapterid');
+TTS.classid = getUrlParameter('classid');
+TTS.section = getUrlParameter('section');
 TTS.forms.addstudentresource = function() {
     BootstrapDialog.show({
         title: 'Student Resources',
@@ -86,7 +101,7 @@ TTS.forms.addstudentresource = function() {
                     data: data,
                     url : '/api/admin/resourceinfo/'
                 }).done(function( msg ) {
-                    //console.log(msg);
+                    console.log(msg);
                     dialogItself.close();
                     location.reload();
                 });
@@ -100,7 +115,7 @@ TTS.forms.addstudentresource = function() {
         }]
     });
 };
-TTS.forms.renderteacherresourceinfo = function(data){
+TTS.forms.renderstudentresourceinfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center"  
@@ -147,15 +162,15 @@ var updateChapter = function(){
 };
 $(document).ready(function(){
     $.ajax({
-        "url":"/api/admin/teacherresourcesinfo/?format=json",
+        "url":"/api/admin/resourceinfo/?categoryid="+TTS.categoryid+"&chapterid="+TTS.chapterid+"&classid="+TTS.classid+"&section="+TTS.section+"&format=json",
         "type":"GET"
     }).done(function(data){
-        TTS.forms.renderteacherresourceinfo(data);
+        TTS.forms.renderstudentresourceinfo(data);
     });
     $('#studetresource-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();
         //console.log("Hello");
-        window.location = 'viewstudentresourcelist.html?categoryid=1&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.classid;
+        window.location = 'viewstudentresourcelist.html';
     });
     $('#studetresource-main-tbl tbody').on('click', 'tr', function(){
         window.location = 'teacherresourcelist?id='+this.id;

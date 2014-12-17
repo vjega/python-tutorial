@@ -109,7 +109,20 @@ def studentresourcetype(request):
         },{
         "id": "p6",
         "name" :"P6"
-        }]
+        },{
+        "id": "s1",
+        "name" :"S1"
+        },{
+        "id": "s2",
+        "name" :"S2"
+        },{
+        "id": "s3",
+        "name" :"S3"
+        },{
+        "id": "s4",
+        "name" :"S4"
+        }
+        ]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
                            #'body':studentresourcetype_body}
@@ -134,12 +147,16 @@ def resourcetype(request):
         "name" :"எழுத்து பலகை",
         "href" :"chapterlist"
         }]
-
+    classid = request.GET.get('classid')
+    section = request.GET.get('section')
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
                            #'body':studentresourcetype_body}
     return render(request, 'portaladmin/resource_type.html', 
-                  {"folders":folders,'resourcetype':resourcetype})
+                  {"folders":folders,
+                   "resourcetype":resourcetype,
+                   "classid":classid,
+                   "section":section})
 
 @login_required
 def extralist(request):

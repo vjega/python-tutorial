@@ -56,10 +56,27 @@
 
 {% block scriptcontent %}
 <script>
+
+function getUrlParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+}  
+
+
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-TTS.classid = "{{classid}}";
-TTS.section = "{{section}}";
+TTS.categoryid = getUrlParameter('categoryid');
+TTS.classid = getUrlParameter('classid');
+TTS.section = getUrlParameter('section');
 TTS.forms.renderchapterinfo = function(data){
      var headers = [
             { "title": "&nbsp;",
@@ -71,6 +88,7 @@ TTS.forms.renderchapterinfo = function(data){
     var count = 0
     for(var i in data){
         var t = [];
+        t.DT_RowId = data[i].chapterid;
         t.push("<i class='fa fa-book fa-2x'></i>");
         t.push(data[i].chaptername);
         dataset.push(t);
@@ -84,7 +102,7 @@ TTS.forms.renderchapterinfo = function(data){
 };
 $(document).ready(function(){
     $.ajax({
-        "url":"/api/admin/chapterinfo/?format=json",
+        "url":"/api/admin/chapterinfo/?classid="+TTS.classid+"&section="+TTS.section+"&format=json",
         "type":"GET"
     }).done(function(data){
         //console.log(data);
@@ -93,7 +111,7 @@ $(document).ready(function(){
     $('#admin-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();
         //console.log("Hello");
-        window.location = 'studentresourcelist.html?categoryid=1&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.classid;
+        window.location = 'studentresourcelist.html?categoryid='+TTS.categoryid+'&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.section;
     });
     /*
     $('#admin-main-tbl tbody tr').on('click', '.tts-edit', function(e){

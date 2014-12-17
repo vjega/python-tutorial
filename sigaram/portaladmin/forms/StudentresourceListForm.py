@@ -34,20 +34,20 @@ class StudentresourceListForm(forms.Form):
         label    = _("Chapter"),
         required = True,
     )
-    thumbnailurl    = forms.FileField(
+    thumbnailurl   = forms.FileField(
         label      = _("Short Photo"),
         max_length = 100,
         required   = True,
     )
-    documenturl      = forms.CharField(
-        label    = _("Heading"),
-        required = True,
-        widget   = forms.Textarea({ "class": "summernote"})
+    resourcetitle = forms.CharField(
+        label     = _("Heading"),
+        required  = True,
+        widget    = forms.Textarea({ "class": "summernote"})
     )
-    createdby      = forms.CharField(
-        label    = _("Heading-2"),
-        required = True,
-        widget   = forms.Textarea({ "class": "summernote"})
+    originaltext  = forms.CharField(
+        label     = _("Heading-2"),
+        required  = True,
+        widget    = forms.Textarea({ "class": "summernote"})
     )
     def __init__(self, *args, **kwargs):
         super(StudentresourceListForm, self).__init__(*args, **kwargs)

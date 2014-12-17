@@ -216,14 +216,16 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
             kwarg['chapterid'] = chapterid
         
         queryset = models.Resourceinfo.objects.filter(**kwarg)
+        print queryset.query
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
 
     def create(self, request):
         ri = models.Resourceinfo()
-        ridata =  json.loads(request.DATA.keys()[0])
-        
+        #print request.DATA, type(request.DATA)
+        ridata =  json.loads(dict(request.DATA).keys()[0])
+        print ridata
         category = ridata.get('categoryid')
         if category == 'text' :
             categoryid = 0
@@ -241,23 +243,22 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         ri.chapterid = ridata.get('chapterid')
         ri.resourcetype = category
         ri.chapterid = ridata.get('chapterid')
-        ri.originaltext = "" #ridata.get('originaltext')
-        ri.resourcetitle = "" #ridata.get('resourcetitle')
-        ri.resourcedescription = "" #ridata.get('resourcedescription')
-        ri.thumbnailurl =  "" #ridata.get('thumbnailurl')
+        ri.resourcetitle = ridata.get('resourcetitle')
+        ri.resourcedescription = ridata.get('resourcedescription', "")
+        ri.thumbnailurl =  ridata.get('thumbnailurl', "")
         ri.documenturl = ""
         ri.imageurl = ""
         ri.audiourl = ""
         ri.videourl = ""
         if category == 'text' : 
-            ri.documenturl = ridata.get('documenturl')
+            ri.documenturl = ridata.get('documenturl',"")
         elif category == 'image':
-            ri.imageurl = ridata.get('documenturl')
+            ri.imageurl = ridata.get('documenturl',"")
         elif category == 'audio':    
-            ri.audiourl = ridata.get('documenturl')
+            ri.audiourl = ridata.get('documenturl',"")
         elif category == 'video':
-            ri.videourl = ridata.get('documenturl')
-        ri.createdby = ridata.get('createdby')
+            ri.videourl = ridata.get('documenturl',"")
+        ri.originaltext = ridata.get('originaltext',"")
         ri.createdby = request.user.id
         ri.isapproved = 0
         ri.isdeleted = 0
@@ -286,9 +287,9 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
         if chapterid:
             kwarg['chapterid'] = chapterid
         if len(kwarg):
-            queryset = models.Chapterinfo.objects.filter(**kwarg)
+            queryset = models.Chapterinfo.objects.filter(**kwarg).order_by('chaptername')
         else:
-            queryset = models.Chapterinfo.objects.all()
+            queryset = models.Chapterinfo.objects.all().order_by('chaptername')
         serializer = adminserializers.ChapterinfoSerializer(queryset, many=True)
         return Response(serializer.data)
  
@@ -500,6 +501,32 @@ class MindmapViewSet(viewsets.ModelViewSet):
 class StudentAssignResource(viewsets.ModelViewSet):
     queryset = models.Assignresourceinfo.objects.all()
     serializer_class = adminserializers.MindmapSerializer
+
+    def list(self, request):
+        sql = '''
+        SELECT ari.assignedid as id,
+               ri.resourceid,
+               resourcetitle,
+               date(assigneddate) as createddate,
+               resourcetype,
+               thumbnailurl,
+               ari.studentid 
+        FROM assignresourceinfo ari
+        INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
+        WHERE isdeleted=0
+              AND ari.studentid=299 
+              AND ari.IsDelete=0 
+              AND ri.categoryid=0 
+              AND isanswered=0 and issaved=0 
+              AND ari.assigneddate  BETWEEN '2010-01-01' AND '2014-12-31'  
+        GROUP BY resourceid 
+        ORDER BY assigneddate DESC'''
+        queryset = models.Classroominfo.objects.raw(sql)
+        for row in queryset:
+            print row
+        #serializer_class = adminserializers.ClassroominfoSerializer
+        #serializer = adminserializers.ClassroominfoSerializer(queryset, many=True)        
+        return Response({"test":"test"})
 
     def create(self, request):
         data = json.loads(dict(request.DATA).keys()[0]);
