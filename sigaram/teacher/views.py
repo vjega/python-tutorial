@@ -318,3 +318,12 @@ def statistics(request):
         }]
     return render(request, 'portalteacher/statistics.html', 
                   {"folders":folders,'statistics':statistics})
+
+@switchlanguage
+def statisticsstudentslist(request):
+    return render(request, 'portalteacher/statisticsstudentslist.html' )
+
+@switchlanguage
+def rubric_edit(request):
+    return render(request, 'portalteacher/rubric_edit.html' )
+                  

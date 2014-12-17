@@ -94,6 +94,26 @@ TTS.forms.addrubrics = function() {
             action: function(dialogItself){
                 dialogItself.close();
             }
+        },{
+            label: 'column',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
+        },{
+            label: '<input type ="text">',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
+        },{
+            label: 'Paragraph',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
+        },{
+            label: '<input type ="text">',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
         }]
     });
 };
@@ -145,7 +165,9 @@ $(document).ready(function(){
         alert("Record Deleted")
     });
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.addrubrics();
+        //TTS.forms.addrubrics();
+        window.location = 'rubric_edit';
+
     });
    
 });
