@@ -1,7 +1,6 @@
 {% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
-{% load crispy_forms_tags %}
 {% block topcontent %}
     <div id="page-wrapper">
         <div class="row">
@@ -57,66 +56,12 @@
 
 {% block scriptcontent %}
 
-<script id="rubrics-form" type="text/x-jsrender">
-{% crispy form %}
-</script>
 
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 
-TTS.forms.addrubrics = function() {
-    BootstrapDialog.show({
-        title: 'Rubrics',
-        onshown: function(dialogRef){
-            $('.summernote').summernote();
-        },
-        message: $($('#rubrics-form').render()),
-        buttons: [{
-            label: 'Create',
-            cssClass: 'btn-primary',
-            action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-rubrics");
-                console.log(data);
-                $.ajax({
-                    type:'POST',
-                    data: data,
-                    url : '/api/admin/rubrics/'
-                }).done(function( msg ) {
-                    //console.log(msg);
-                    dialogItself.close();
-                    location.reload();
-                });
 
-            }
-            },{
-            label: 'Excel Import',
-            action: function(dialogItself){
-                dialogItself.close();
-            }
-        },{
-            label: 'column',
-            action: function(dialogItself){
-                dialogItself.close();
-            }
-        },{
-            label: '<input type ="text">',
-            action: function(dialogItself){
-                dialogItself.close();
-            }
-        },{
-            label: 'Paragraph',
-            action: function(dialogItself){
-                dialogItself.close();
-            }
-        },{
-            label: '<input type ="text">',
-            action: function(dialogItself){
-                dialogItself.close();
-            }
-        }]
-    });
-};
 TTS.forms.renderrubricsinfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
@@ -151,6 +96,7 @@ TTS.forms.renderrubricsinfo = function(data){
 };
 
 $(document).ready(function(){
+    
     $.ajax({
         "url":"/api/admin/rubricsheader/?format=json",
         "type":"GET"

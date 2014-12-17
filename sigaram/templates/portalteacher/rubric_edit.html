@@ -1,6 +1,7 @@
 {% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
+{% load crispy_forms_tags %}
 {% block topcontent %}
 <div id="page-wrapper">
 <div class="row">
@@ -20,32 +21,18 @@
             {% trans "Rupriks" %} 
         </div>
         <!-- /.panel-heading -->
-        <div class="panel-body" id ="addrec">
-            <div class="table-responsive">
-                <div  id ="editschool">
-                    <form id="rubric-main-tbl" class="form-horizontal" role="form">
-                        <div class="form-group">
-                            <label for="order_no" class="col-sm-2 control-label">{% trans "Title" %}</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" name="user_name" id="user_name"
-                                     placeholder="{% trans "Title" %}">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="order_no" class="col-sm-2 control-label">{% trans "User Name" %}</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" name="user_name" id="user_name"
-                                     placeholder="{% trans "User Name" %}">
-                            </div>
-                        </div>
-                        <div>
-                            <textarea class="summernote"></textarea>
-                        </div><br /><br />
-                    </form>
-                </div>
-            </div>
-            <!-- /.table-responsive -->
+        <div class="gentable" id ="rub_mtx_head rub_mtx_rows">
+            {% crispy form %}
         </div>
+        <table class="form-horizontal">
+            <tr>
+                <td>&nbsp;&nbsp;Column</td><td><input type ="text" id="r-row"></td>
+                 <td> &nbsp;&nbsp;Paragraph</td><td><input type ="text"id="r-col"></td>
+                 <td id ="">&nbsp;&nbsp;<button class ="btn btn-primary " id = "createTable">Create</button></td>
+                 <td>&nbsp;&nbsp;<button class ="btn btn-primary">Excel Import</button></td>
+
+            </tr>
+        </table>
         <!-- /.panel-body -->
     </div>
     <!-- /.panel -->
@@ -75,55 +62,25 @@
 {% endblock morescript %}
 
 {% block scriptcontent %}
+<script id="rubrics-form" type="text/x-jsrender">
 
+</script>
 
 
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-TTS.forms.editschool = function() {
-    BootstrapDialog.show({
-        title: 'Add TeacherResource',
-        onshown: function(dialogRef){
-            $('.summernote').summernote();
-        },
-        message: $($('#editschool').render()),
-        buttons: [{
-            label: 'Save',
-            cssClass: 'btn-primary',
-            action: function(){
-                var data = TTS.utils.serilaizeJson("#newfolderfrm");
-                $.ajax({
-                    type:'POST',
-                    data: {'data':data},
-                    url : '/api/admin/addfolder'
-                }).done(function( msg ) {
-                    console.log(msg);
-                    //dialogItself.close();
-                });
-            }
-            },{
-            label: 'Cancel',
-            action: function(dialogItself){
-                dialogItself.close();
-            }
-        }]
-    });
-};
-
-
-
-
 
 $(document).ready(function(){
+    $('.summernote').summernote();
+    $('#createTable').on('click',function(){
+        alert("hi");
+    var rows = parseInt($('#r-row').val());
+    var cols = parseInt($('#r-col').val());
+    var tabelms = "<div style='text-align:center'><input type='button' value='Add a row before' onclick='add_row(0)' /><input type='button' value='Add a row after' onclick='add_row(1)'/><input type='button' value='Add a col before' onclick='add_col(0)' /><input type='button' value='Add a col after' onclick='add_col(1)' /><input type='button' value='Delete a row' onclick='del_row()' /><input type='button' value='Delete a column' onclick='del_col()' /></div>";
+    tabelms += "<table style='width:90%' id='gentable' align='center'>";
 
-    $('#admin-main-tbl').on('click', 'tbody tr', function(){
-       // window.location = 'studentprofile?studentid='+this.id;
-    });
- 
-    $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.editschool();
-    });
+     });
 });
 
 </script>
