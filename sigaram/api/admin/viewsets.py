@@ -216,7 +216,6 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
             kwarg['chapterid'] = chapterid
         
         queryset = models.Resourceinfo.objects.filter(**kwarg)
-        print queryset.query
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 

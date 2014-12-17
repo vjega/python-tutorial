@@ -80,17 +80,20 @@ TTS.section = getUrlParameter('section');
 TTS.forms.renderchapterinfo = function(data){
      var headers = [
             { "title": "&nbsp;",
-              "class": "text-center"  
+              "class": "text-center",
+              "data":"icon"  
             },
-            { "title": "{% trans "Title" %}"},
+            { "title": "{% trans "Title" %}",
+              "data" :"title"
+            },
         ];
     var dataset = [];
     var count = 0
     for(var i in data){
-        var t = [];
+        var t = {};
         t.DT_RowId = data[i].chapterid;
-        t.push("<i class='fa fa-book fa-2x'></i>");
-        t.push(data[i].chaptername);
+        t.icon = "<i class='fa fa-book fa-2x'></i>";
+        t.title = data[i].chaptername;
         dataset.push(t);
     }
 

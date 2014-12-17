@@ -125,7 +125,20 @@ def studentresources(request):
         },{
         "id": "p6",
         "name" :"P6"
-        }]
+        },{
+        "id": "s1",
+        "name" :"S1"
+        },{
+        "id": "s2",
+        "name" :"S2"
+        },{
+        "id": "s3",
+        "name" :"S3"
+        },{
+        "id": "s4",
+        "name" :"S4"
+        }
+        ]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
                            #'body':studentresourcetype_body}
@@ -155,12 +168,17 @@ def studentresourcetype(request):
         "name" :_("composition"),
         "href" :"extras"
         }]
-
+    classid = request.GET.get('classid')
+    section = request.GET.get('section')
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
                            #'body':studentresourcetype_body}
     return render(request, 'portalteacher/studentresourcetype.html', 
-                  {"folders":folders,'studentresourcetype':studentresourcetype})
+                  {"folders":folders,
+                  "studentresourcetype":studentresourcetype,
+                  "classid":classid,
+                  "section":section}
+                  )
 
 @switchlanguage
 def extras(request):
