@@ -298,8 +298,7 @@ def extraslist(request):
 
 @switchlanguage
 def rubrics(request):
-    return render(request, 'portalteacher/rubrics.html',{'rubrics':rubrics,
-                            "form" : RubricsForm.RubricsForm() })
+    return render(request, 'portalteacher/rubrics.html')
 
 @switchlanguage
 def statistics(request):
@@ -325,5 +324,6 @@ def statisticsstudentslist(request):
 
 @switchlanguage
 def rubric_edit(request):
-    return render(request, 'portalteacher/rubric_edit.html' )
+    return render(request, 'portalteacher/rubric_edit.html' ,{'rubric_edit':rubric_edit,
+                            "form" : RubricsForm.RubricsForm() })
                   
