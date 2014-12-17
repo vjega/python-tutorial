@@ -59,14 +59,7 @@
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
-                <li><a href='home'>{% trans "Home" %} <i class="fa fa-home fa-lg"></i></a></li>
-                <li><a href='studentresources'>{% trans "StudentResource" %}
-                <i class="fa fa-list fa-lg"></i></a></li>
-                <li><a href='resources'>{% trans "TeachersResource" %}
-                <i class="fa fa-list fa-lg"></i></a></li>
-                <li><a href='billboard'>{% trans "Billboard" %} <i class="fa fa-list fa-lg"></i></a></li>
-                <li><a href='../forum'>{% trans "Forum" %} <i class="fa fa-comments fa-lg"></i></a></li>
-                <li><a href='rubrics'>{% trans "Rupriks table" %} <i class="fa fa-sign-out fa-lg"></i></a></li>
+               
                 <li><a href='../logout'>{% trans "Logout" %} <i class="fa fa-sign-out fa-lg"></i></a></li>
                 <li><a href='../togglelanguage'>{% trans "Toggle Language" %} <i class="fa fa-language fa-lg"></i></a></li>
                 <li class="dropdown">
@@ -292,6 +285,23 @@
                             </div>
                             <!-- /input-group -->
                         </li>
+                
+               
+                        <li>
+                            <a class="active" href='home'>
+                                <i class="fa fa-list fa-lg"></i>{% trans "Home" %}
+                             </a>
+                        </li>
+                         <li>
+                            <a class="active" href='studentresources'>
+                                <i class="fa fa-list fa-lg"></i>{% trans "StudentResource" %}
+                             </a>
+                        </li>
+                        <li>
+                            <a class="active" href='resources'>
+                                <i class="fa fa-list fa-lg"></i>{% trans "TeachersResource" %}
+                             </a>
+                        </li>
                         <li>
                             <a class="active" href="adminlist">
                                 <i class="fa fa-group fa-fw"></i>{% trans "Administrators" %}
@@ -317,7 +327,22 @@
                                 <i class="fa fa-user fa-fw"></i>{% trans "About me" %}
                             </a>
                         </li>
-                         <li>
+                        <li>
+                            <a class="active" href="../forum">
+                                <i class="fa fa-building fa-fw"></i>{% trans "Forum" %}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="active" href="rubrics">
+                                <i class="fa fa-building fa-fw"></i>{% trans "Rupriks table" %}
+                            </a>
+                        </li>
+                          <li>
+                            <a class="active" href="billboard">
+                                <i class="fa fa-building fa-fw"></i>{% trans "Billboard" %}
+                            </a>
+                        </li>
+                        <li>
                             <a class="active" href="statistics">
                                 <i class="fa fa-building fa-fw"></i>{% trans "Statistics" %}
                             </a>
