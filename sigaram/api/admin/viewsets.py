@@ -520,6 +520,21 @@ class StudentAssignResource(viewsets.ModelViewSet):
     queryset = models.Assignresourceinfo.objects.all()
     serializer_class = adminserializers.MindmapSerializer
 
+    def update(self, request, pk=pk):
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        ari = models.Assignresourceinfo.objects.get(pk=pk)
+        ari.originaltext = data.originaltext
+        ari.answertext = data.answertext
+        ari.answerurl = data.answerurl
+        ari.isrecord = 1
+        if data.get('isanswered'):
+            ari.isanswered = data.isanswered
+            ari.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        if data.get('issaved'):
+            ari.issaved = data.issaved
+        ari.studentid = data.studentid
+        ari.save()
+
     def list(self, request):
         sql = '''
         SELECT assignedid AS id,
