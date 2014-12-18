@@ -109,7 +109,7 @@ TTS.forms.showadminform = function() {
         title: 'Add Administrator',
         message: $($('#admin-form').render()),
         onshown: function(){
-            TTS.forms.upload('#file-uploader');
+            TTS.forms.upload();
         },
         buttons: [{
             label: 'Save',
@@ -183,20 +183,18 @@ TTS.forms.renderadmin = function(data){
 TTS.forms.upload = function(elm) {
     console.log(elm);
     var uploader = new qq.FileUploader({
-        action: "/ajax-upload",
-        element: elm[0],
-        multiple: true,
+        action: "/admin/ajax-img-upload",
+        element: $('#file-uploader')[0],
+        multiple: false,
         onComplete: function(id, fileName, responseJSON) {
             if(responseJSON.success) {
-                alert("success!");
+                $("#id_image").val(responseJSON.path.replace('static/', ''));
             } else {
                 alert("upload failed!");
             }
         },
         onAllComplete: function(uploads) {
-            // uploads is an array of maps
             // the maps look like this: {file: FileObject, response: JSONServerResponse}
-            alert("All complete!");
         },
         params: {
             'csrf_token': '{{ csrf_token }}',

@@ -22,6 +22,7 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
         admin.firstname = admindata.get('firstname')
         admin.lastname = admindata.get('lastname')
         admin.emailid = admindata.get('emailid')
+        admin.imageurl = admindata.get('image')
         admin.isdelete = 0
         admin.createdby = request.user.id
         admin.createddate = time.strftime('%Y-%m-%d %H:%M:%S')

@@ -11,13 +11,18 @@ from portaladmin.forms import (AdminForm,
                    SchoolListForm,
                    StudentresourceListForm,
                    ClassListForm,
-                   CalendarForm,)	
+                   CalendarForm,)
+from ajaxuploader.views import AjaxFileUploader
+from ajaxuploader.backends.easythumbnails import EasyThumbnailUploadBackend
 
 def switchlanguage(f):
     def inner(req):
         activate(req.session.get('django_language','ta'))
         return f(req)
     return inner
+
+
+admin_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/admins', backend=EasyThumbnailUploadBackend, DIMENSIONS=(250, 250))
 
 @login_required
 def home(request):
