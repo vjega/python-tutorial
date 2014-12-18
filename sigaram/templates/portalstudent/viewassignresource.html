@@ -30,10 +30,10 @@
                 <div>
                     <h3>{% trans "Title" %}:</h3>
                 </div><br />
-                <div>
-                    <span><label>வாள் விளையாட்டு </label></span>
+                <div id="resource-title">
+                    வாள் விளையாட்டு
                 </div><br />
-                <div>
+                <div id="view-resource">
                      <a href="javascript:void(0)" onclick="window.open('http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/studentresources/12771A-L3-RP5(HA).swf','wdwSearch','top=100,left=100,width=1024,height=768,scrollbars=1,menu=0');">View</a>
                 </div><br />
                 <div>
@@ -58,12 +58,9 @@
                     </div>                                                                    
                 </div> <br />
 
-                <div id="recorder-wrap"><br />
+                <div id="recorder-wrap">
                     <div id="recorder">
                         <p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
-                    </div>
-                    <div id="audio_container">
-                        Once you have made a recording, this text will be replaced with an audio player.
                     </div>
                 </div>
                 
@@ -106,6 +103,19 @@
 {% block scriptcontent %}
 
 <script>
+
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}   
+
+
+TTS.forms.renderresourceinfo = function(data){
+    $("#resource-title").html(data.resourcetitle);
+    $("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.videourl+"');\" >View</a>");
+};
+function openwindow(videourl) {
+    window.open("http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
+}
+
 $(document).ready(function(){
     $('.summernote').summernote();
     $('#recorder-wrap').hide();
@@ -115,7 +125,16 @@ $(document).ready(function(){
     $('#hide-recorder').on("click",function(){
         $('#recorder-wrap').hide();
     });
+    $.ajax({
+        "url":"/api/student/resourceinfo/5/?format=json",
+        "type":"GET"
+    }).done(function(data){
+        console.log(data);
+        TTS.forms.renderresourceinfo(data);
+    });
 });
+
+
 
 function audioReceived(filename, filedata) {
         filedata = window.atob(filedata);
