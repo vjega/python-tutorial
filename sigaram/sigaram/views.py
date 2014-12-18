@@ -1,9 +1,11 @@
 from django.shortcuts import (render, redirect)
 from django.http import HttpResponse
 from django.views.generic import FormView
+from ajaxuploader.views import AjaxFileUploader
 
+#an imported view function from ajaxuplod
+import_uploader = AjaxFileUploader()
 
-# Create your views here.
 def home(request):
     return redirect('/admin/home')
 
