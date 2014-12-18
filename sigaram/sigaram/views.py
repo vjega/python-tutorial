@@ -2,8 +2,6 @@ from django.shortcuts import (render, redirect)
 from django.http import HttpResponse
 from django.views.generic import FormView
 
-
-# Create your views here.
 def home(request):
     return redirect('/admin/home')
 
