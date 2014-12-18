@@ -68,7 +68,28 @@
 <script id="rubrics-form" type="text/x-jsrender">
 
 </script>
-
+<style>
+    td, th{
+        color: #000;
+    }
+    .tblhead {
+        border:1px solid grey;background-color:#c0d0d0!important;color:#000;
+    }
+    .tblbody {
+        border:0 none;background-color:black!important;color:#000;
+    }
+    .fulltext{
+        border:none;
+    }
+    .headtext{
+        width:90%;
+        background-color:#d0d0d0;
+    }
+    .bodytext{
+        width:98%;
+        background-color:#fff;
+    }
+</style>
 
 <script>
 window.TTS = window.TTS || {}
@@ -76,12 +97,108 @@ TTS.forms = TTS.forms || {}
 TTS.forms.addtable = function() {
     var rows = parseInt($('#r-row').val());
     var cols = parseInt($('#r-col').val());
-    var tabelms = "<div style='text-align:center'><input type='button' value='Add a row before' onclick='add_row(0)' /><input type='button' value='Add a row after' onclick='add_row(1)'/><input type='button' value='Add a col before' onclick='add_col(0)' /><input type='button' value='Add a col after' onclick='add_col(1)' /><input type='button' value='Delete a row' onclick='del_row()' /><input type='button' value='Delete a column' onclick='del_col()' /></div>";
-    tabelms += "<table style='width:90%' id='gentable' align='center'>";
-    tabelms += "<tr class='rub_mtx_head rub_mtx_rows'><td class='tblhead'>&nbsp;</td>";
-    tabelms += "<tr><td colspan='"+cols+"'><input type='button'  onclick='send_rubrics()' value='Send' /></td></tr></table>";
-    $('#dyntable').html(tabelms);
+    var tabelms = "<br/><div style='text-align:center'><input type='button' class = 'btn btn-primary' class = 'btn btn-primary' value='Add a row before' id='add_row_before' />&nbsp;<input type='button' class = 'btn btn-primary' value='Add a row after' id='add_row_after'/>&nbsp;<input type='button'class = 'btn btn-primary' value='Add a col before' id='add_col' />&nbsp;&nbsp;<input type='button' class = 'btn btn-primary'  value='Add a col after' id='add_col1' />&nbsp;<input type='button' class = 'btn btn-primary' value='Delete a row' id='del_row' />&nbsp;<input type='button'class = 'btn btn-primary'  value='Delete a column' id='del_col' /></div><br/>";
+        tabelms += "<table style='width:90%' id='gentable' align='center'>";
+        tabelms += "<tr class='rub_mtx_head rub_mtx_rows'><td class='tblhead'>&nbsp;</td>";
+        for (var j=0; j<=cols; j++) {
+            tabelms += "<td class='tblhead'>"+(j===cols?"Total":"<input type='checkbox' class='col_mod' id='col-"+j+"' id='makeradio_col(id)' /><input type='text' class='fulltext headtext'>")+"</td>";
+        }
+        tabelms += "</tr>";
+        
+        for (var i=0; i<rows; i++) {
+            tabelms += "<tr class='rub_mtx_body rub_mtx_rows'><td class='tblhead'><input type='checkbox' class='row_mod' id='row-"+i+"' id='makeradio_row(id)' /><input type='text' class='fulltext headtext'></td>";
+            for (var j=0; j<cols; j++) {
+                tabelms += "<td class='tblbody'><input type='text' class='fulltext bodytext'></td>";
+            }
+            tabelms += "<td class='tblhead'>-/-</td></tr>";
+        }
+        tabelms += "<tr><td colspan='"+cols+"'><input type='button' class ='btn btn-primary' onclick='send_rubrics()' value='Send' /></td></tr></table>";
+        $('#dyntable').html(tabelms);
 };
+
+TTS.forms.add_row_after = function(after) {
+    if (!$("input:checked.row_mod").length) {
+        alert("Make a selection");
+        return false;
+    }
+    var arr = $("input:checked.row_mod").attr("id").split("-");
+    var row_idx = parseInt(arr[1])+parseInt(after);
+    $("table#gentable").children().children("tr").eq(row_idx).after(TTS.forms._make_row());
+    //Resetting the id for further row modification
+        $(".row_mod").each(function(ind) {
+        $(this).attr("id", "row-"+ind);
+    });
+    //Add one column
+    $("#r-row").val(parseInt($("#r-row").val())+1);
+};
+
+TTS.forms._make_row = function() {
+    var cols = parseInt($('#r-col').val());
+    var _temp = "<tr class='rub_mtx_body rub_mtx_rows'><td class='tblhead'><input class='row_mod' type='checkbox' id='makeradio_row' /><input type='text' class='fulltext headtext'/></td>";
+    for (var i=0; i<cols; i++) {
+        _temp += "<td class='tblbody'><input type='text' class='fulltext bodytext'/></td>";
+    }
+    _temp += "<td class='tblhead'>-/-</td>";
+    return _temp;
+};
+
+TTS.forms.makeradio_row = function() {
+    $(".row_mod").attr("checked", false);
+    $("#"+id).attr("checked", true);
+};
+
+TTS.forms.add_col1 = function (after) {
+    if (!$("input:checked.col_mod").length) {
+        alert("Make a selection");
+        return false;
+    }
+    var arr = $("input:checked.col_mod").attr("id").split("-");
+    var temp = parseInt(arr[1])+1+parseInt(after);
+    $(".rub_mtx_rows td:nth-child("+temp+")").each(function(cnt) {
+    $(this).after("<td class='"+(cnt?"tblbody' >":"tblhead' ><input type='checkbox' class='col_mod' onclick='makeradio_col(id)' />")+
+     "<input type='text' class='fulltext "+(cnt?"":"headtext")+"' /></td>");
+    });
+    //Resetting the id for further col modification
+    $(".col_mod").each(function(ind) {
+        $(this).attr("id", "col-"+ind);
+    });
+    //Add one column
+    $("#r-col").val(parseInt($("#r-col").val())+1);
+}
+
+TTS.forms.del_row  = function () {
+    if (!$("input:checked.row_mod").length) {
+        alert("Make a selection");
+        return false;
+    }
+    var arr = $("input:checked.row_mod").attr("id").split("-");
+    var row_idx = parseInt(arr[1])+1;
+    $("table#gentable").children().children("tr").eq(row_idx).remove();
+    //Resetting the id for further row modification
+    $(".row_mod").each(function(ind) {
+        $(this).attr("id", "row-"+ind);
+    });
+    //Add one column
+    $("#r-row").val(parseInt($("#r-row").val())-1);
+}
+
+TTS.forms.del_column = function () {
+    if (!$("input:checked.col_mod").length) {
+        alert("Make a selection");
+        return false;
+    }
+    var arr = $("input:checked.col_mod").attr("id").split("-");
+    var temp = parseInt(arr[1])+2;
+    $(".rub_mtx_rows td:nth-child("+temp+")").each(function(cnt) {
+        $(this).remove();
+    });
+    //Resetting the id for further col modification
+    $(".col_mod").each(function(ind) {
+        $(this).attr("id", "col-"+ind);
+    });
+    //Add one column
+    $("#r-col").val(parseInt($("#r-col").val())-1);
+}
 
 $(document).ready(function(){
     $('.summernote').summernote();
@@ -89,6 +206,24 @@ $(document).ready(function(){
     $('#createTable').on('click',function(){
         TTS.forms.addtable();
      });
+    $('body').on('click','#add_row_after', function(){
+        TTS.forms.add_row_after();
+     });
+    $('body').on('click','#makeradio_row', function(){
+        TTS.forms.makeradio_row();
+     });
+
+    $('body').on('click','#del_row', function(){
+        TTS.forms.del_row();
+    });
+
+    $('body').on('click','#del_col', function(){
+        TTS.forms.del_column();
+    });
+    
+   $('body').on('click','#add_col1', function(){
+        TTS.forms.add_col1();
+    });
 });
 
 </script>
