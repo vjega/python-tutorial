@@ -370,6 +370,23 @@ class AdminclasslistViewSet(viewsets.ModelViewSet):
 
     queryset = models.Classinfo.objects.all()
     serializer_class = adminserializers.AdminclasslistSerializer
+    def list(self,request):
+        classid   = request.GET.get('classid')
+        section   = request.GET.get('section')
+        chapterid = request.GET.get('chapterid')
+        kwarg = {}
+        if classid:
+            kwarg['classid'] = classid
+        if section:
+            kwarg['section'] = section
+        if chapterid:
+            kwarg['chapterid'] = chapterid
+        if len(kwarg):
+            queryset = models.Classinfo.objects.filter(**kwarg)
+        else:
+            queryset = models.Classinfo.objects.all()
+        serializer = adminserializers.AdminclasslistSerializer(queryset, many=True)
+        return Response(serializer.data)
 
     def create(self, request):
         adminclasslist = models.Classinfo()
