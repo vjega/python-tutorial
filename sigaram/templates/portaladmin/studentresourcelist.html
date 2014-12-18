@@ -86,6 +86,7 @@ TTS.forms.addstudentresource = function() {
     BootstrapDialog.show({
         title: 'Student Resources',
         onshown: function(dialogRef){
+            updateClass();
             updateChapter();
             $('.summernote').summernote();
         },
@@ -95,13 +96,13 @@ TTS.forms.addstudentresource = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-studentresource");
-                console.log(data);
+                //console.log(data);
                 $.ajax({
                     type:'POST',
                     data: data,
                     url : '/api/admin/resourceinfo/'
                 }).done(function( msg ) {
-                    console.log(msg);
+                  //  console.log(msg);
                     dialogItself.close();
                     location.reload();
                 });
@@ -149,10 +150,10 @@ TTS.forms.renderstudentresourceinfo = function(data){
 var updateChapter = function(){
     $.ajax({
         'url': "/api/admin/chapterinfo/?classid="+$("#id_classid").val()
-                +"&sectionid="+$("#id_section").val(),
+                +"&section="+$("#id_section").val(),
         'type':'GET'
     }).done(function(data){
-        //console.log(data)
+        console.log(data)
         opt = "";
         for (d in data){
             opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"</option>\n";
@@ -160,6 +161,36 @@ var updateChapter = function(){
         $("#id_chapterid").html(opt);
     });
 };
+
+var updateselectedChapter = function(){
+    $.ajax({
+        'url': "/api/admin/chapterinfo/?classid="+TTS.classid
+                +"&section="+TTS.section+"&chapterid="+TTS.chapterid,
+        'type':'GET'
+    }).done(function(data){
+        console.log(data)
+        opt = "";
+        for (d in data){
+            opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"</option>\n";
+        }
+        $("#id_chapterid").html(opt);
+    });
+};
+
+var updateClass = function(){
+    $.ajax({
+        'url': "/api/admin/classlist/?classid="+TTS.classid,
+        'type':'GET'
+    }).done(function(data){
+        //console.log(data)
+        opt = "";
+        for (d in data){
+            opt += "<option value='"+data[d].classid+"'>"+data[d].shortname+"</option>\n";
+        }
+        $("#id_classid").html(opt);
+    });
+};
+
 $(document).ready(function(){
     $.ajax({
         "url":"/api/admin/resourceinfo/?categoryid="+TTS.categoryid+"&chapterid="+TTS.chapterid+"&classid="+TTS.classid+"&section="+TTS.section+"&format=json",
@@ -169,7 +200,6 @@ $(document).ready(function(){
     });
     $('#studetresource-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();
-        //console.log("Hello");
         window.location = 'viewstudentresourcelist.html';
     });
     $('#studetresource-main-tbl tbody').on('click', 'tr', function(){
@@ -186,8 +216,10 @@ $(document).ready(function(){
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.addstudentresource();
+        updateClass();
+        updateselectedChapter();
     });
-    $("body").on('change', '#id_classname', function(){
+    $("body").on('change', '#id_classid', function(){
         updateChapter();
     })
     $("body").on('change', '#id_section', function(){
