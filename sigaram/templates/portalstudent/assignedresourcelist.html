@@ -47,7 +47,7 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="completed">
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover" id="resource-list-completed">
+                            <table class="table table-striped table-bordered table-hover" id="resource-list-answered">
                             </table>
                         </div>
                     </div>
@@ -104,32 +104,63 @@
                 },
                
             ];
-        var dataset = [];
-        var count = 0
+        var dataset_new = [];
+        var dataset_saved = [];
+        var dataset_answered = [];
+        var count_new = 0
+        var count_saved = 0
+        var count_answered = 0
         for(var i in data){
-            var t = [];
-            t.slno=++count;
-            t.title=data[i].resourcetitle;
-            t.date=data[i].assigneddate;
-            t.type=data[i].resourcetype;
-            t.note="<a id='"+data[i].resourceid+"' class='addnote' href='javascript:void(0)'>{% trans "Note" %}</a>";
-            dataset.push(t);
+            if (!i.issaved && !i.isanswered) {
+                var t = [];
+                t.slno=++count_new;
+                t.title=data[i].resourcetitle;
+                t.date=data[i].createddate;
+                t.type=data[i].resourcetype;
+                t.note="<a id='"+data[i].resourceid+"' class='addnote' href='javascript:void(0)'>{% trans "Note" %}</a>";
+                dataset_new.push(t);
+            }
+            if (i.issaved && !i.isanswered) {
+                var t = [];
+                t.slno=++count_saved;
+                t.title=data[i].resourcetitle;
+                t.date=data[i].createddate;
+                t.type=data[i].resourcetype;
+                t.note="<a id='"+data[i].resourceid+"' class='addnote' href='javascript:void(0)'>{% trans "Note" %}</a>";
+                dataset_saved.push(t);
+            }
+            if (i.isanswered) {
+                var t = [];
+                t.slno=++count_answered;
+                t.title=data[i].resourcetitle;
+                t.date=data[i].createddate;
+                t.type=data[i].resourcetype;
+                t.note="<a id='"+data[i].resourceid+"' class='addnote' href='javascript:void(0)'>{% trans "Note" %}</a>";
+                dataset_answered.push(t);
+            }
         }
 
         $('#resource-list-new').dataTable({
-            "data":     dataset,
+            "data":     dataset_new,
             "columns":  headers
         });
-
+        $('#resource-list-saved').dataTable({
+            "data":     dataset_saved,
+            "columns":  headers
+        });
+        $('#resource-list-answered').dataTable({
+            "data":     dataset_answered,
+            "columns":  headers
+        });
     };
 
 $(document).ready(function(){
-    /*$.ajax({
-        "url":"/api/admin/teacherresourcesinfo/?format=json",
+    $.ajax({
+        "url":"/api/admin/studentassignresource/?format=json",
         "type":"GET"
     }).done(function(data){
-        TTS.forms.renderteacherresourceinfo(data);
-    });*/
+        TTS.forms.assignedstudentresource(data);
+    });
     /*var data =  [
                     {
                         "resourceid": 194, 
