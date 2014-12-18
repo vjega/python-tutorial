@@ -26,13 +26,16 @@
         </div>
         <table class="form-horizontal">
             <tr>
-                <td>&nbsp;&nbsp;Column</td><td><input type ="text" id="r-row"></td>
-                 <td> &nbsp;&nbsp;Paragraph</td><td><input type ="text"id="r-col"></td>
-                 <td id ="">&nbsp;&nbsp;<button class ="btn btn-primary " id = "createTable">Create</button></td>
-                 <td>&nbsp;&nbsp;<button class ="btn btn-primary">Excel Import</button></td>
-
+                <td>&nbsp;&nbsp; Column</td><td><input type='text' id='r-row' ></td>
+                <td>&nbsp;&nbsp; Paragraph</td><td><input type='text' id='r-col'></td>
+                <td>&nbsp;&nbsp;<input type='button'class ="btn btn-primary " id="createTable" value= ' Create '/></td>
+                <td>&nbsp;&nbsp;<input type='button' class ="btn btn-primary "id ="ShowExcelfiles" value=' Excel Import'/>
+                </td>
             </tr>
         </table>
+        <div id='dyntable' style='background-color:#eef700'>
+ 
+        </div>
         <!-- /.panel-body -->
     </div>
     <!-- /.panel -->
@@ -70,16 +73,21 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-
-$(document).ready(function(){
-    $('.summernote').summernote();
-    $('#createTable').on('click',function(){
-        alert("hi");
+TTS.forms.addtable = function() {
     var rows = parseInt($('#r-row').val());
     var cols = parseInt($('#r-col').val());
     var tabelms = "<div style='text-align:center'><input type='button' value='Add a row before' onclick='add_row(0)' /><input type='button' value='Add a row after' onclick='add_row(1)'/><input type='button' value='Add a col before' onclick='add_col(0)' /><input type='button' value='Add a col after' onclick='add_col(1)' /><input type='button' value='Delete a row' onclick='del_row()' /><input type='button' value='Delete a column' onclick='del_col()' /></div>";
     tabelms += "<table style='width:90%' id='gentable' align='center'>";
+    tabelms += "<tr class='rub_mtx_head rub_mtx_rows'><td class='tblhead'>&nbsp;</td>";
+    tabelms += "<tr><td colspan='"+cols+"'><input type='button'  onclick='send_rubrics()' value='Send' /></td></tr></table>";
+    $('#dyntable').html(tabelms);
+};
 
+$(document).ready(function(){
+    $('.summernote').summernote();
+   
+    $('#createTable').on('click',function(){
+        TTS.forms.addtable();
      });
 });
 
