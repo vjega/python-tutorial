@@ -517,11 +517,11 @@ class MindmapViewSet(viewsets.ModelViewSet):
 
 class StudentAssignResource(viewsets.ModelViewSet):
     queryset = models.Assignresourceinfo.objects.all()
-    serializer_class = adminserializers.MindmapSerializer
+    #serializer_class = adminserializers.MindmapSerializer
 
     def list(self, request):
         sql = '''
-        SELECT ari.assignedid as id,
+        SELECT assignedid AS id,
                ri.resourceid,
                resourcetitle,
                date(assigneddate) as createddate,

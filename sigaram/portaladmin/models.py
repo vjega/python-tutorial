@@ -215,7 +215,7 @@ class Assignassessmentinfo(models.Model):
 
 
 class Assignresourceinfo(models.Model):
-    assignedid = models.BigIntegerField(primary_key=True)
+    assignedid = models.BigIntegerField(db_column='assignedid', primary_key=True)
     resourceid = models.BigIntegerField()
     studentid = models.BigIntegerField()
     assigntext = models.TextField()
