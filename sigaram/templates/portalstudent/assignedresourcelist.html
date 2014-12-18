@@ -80,6 +80,82 @@
 </script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script>
+    window.TTS = window.TTS || {}
+    TTS.forms = TTS.forms || {}   
 
+    TTS.forms.assignedstudentresource = function(data){
+        var headers = [
+                { "title": "{% trans "Sl No." %}",
+                  "class": "text-center" ,
+                  "data" :"slno"
+                },
+                { "title": "{% trans "Title" %}",
+                  "data" :"title"
+                },
+                { "title": "{% trans "Date" %}",
+                  "data" :"date"
+                },
+                { "title": "{% trans "Type" %}" ,
+                  "data" :"type"
+                },
+                { "title": "{% trans "Note" %}",
+                  "data" :"note"
+                },
+               
+            ];
+        var dataset = [];
+        var count = 0
+        for(var i in data){
+            var t = [];
+            t.slno=++count;
+            t.title=data[i].resourcetitle;
+            t.date=data[i].assigneddate;
+            t.type=data[i].resourcetype;
+            t.note="<a id='"+data[i].resourceid+"' class='addnote' href='javascript:void(0)'>{% trans "Note" %}</a>";
+            dataset.push(t);
+        }
+
+        $('#resource-list-new').dataTable({
+            "data":     dataset,
+            "columns":  headers
+        });
+
+    };
+
+$(document).ready(function(){
+    /*$.ajax({
+        "url":"/api/admin/teacherresourcesinfo/?format=json",
+        "type":"GET"
+    }).done(function(data){
+        TTS.forms.renderteacherresourceinfo(data);
+    });*/
+    var data =  [
+                    {
+                        "resourceid": 194, 
+                        "resourcetitle": "<p><span style='color: rgb(0, 0, 255);'>திருடன் </span></p>",
+                        "assigneddate": "2011-08-25 12:27:59", 
+                        "resourcetype": "text", 
+                        "thumbnailurl": "studentresources/thumbnail/4241B-L9-RP1(HA).jpg"
+                    },
+                    {
+                        "resourceid": 275, 
+                        "resourcetitle": "<p><span style='color: rgb(0, 0, 255);'>திருடன் </span></p>",
+                        "assigneddate": "2011-08-25 12:27:59", 
+                        "resourcetype": "text", 
+                        "thumbnailurl": "studentresources/thumbnail/4241B-L9-RP1(HA).jpg"
+                    }
+                ];
+
+                 TTS.forms.assignedstudentresource(data);
+
+    $('body').on('click', '.addnote',function(e){
+        e.stopPropagation();
+        //console.log(this.id);
+        window.location = 'viewassignresource.php?resourceid='+this.id+'&categoryid=0';
+    });                 
+});
+
+</script>
 {% endblock morescript %}
 

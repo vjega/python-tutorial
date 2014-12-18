@@ -199,3 +199,6 @@ def studentviewassessments(request):
 
 def studentclassroom(request):
     return render(request, 'portalstudent/studentclassroom.html')
+
+def viewassignresource(request):
+    return render(request, 'portalstudent/viewassignresource.html')    

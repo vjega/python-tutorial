@@ -1,0 +1,153 @@
+{% extends 'portalstudent/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block topcontent %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header">{% trans "Deliverables" %}</h2>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+{% endblock topcontent %}
+
+{% block morescript %}
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<!-- script-->
+<script type="text/javascript" src="{% static "bower_components/local-audio-recorder-master/demo/swfobject.js" %}"></script>
+{% endblock morescript %}
+
+{% block botcontent %}
+<div class="col-lg-12">
+    <div class="panel panel-default">
+               <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover"
+                     id="admin-main-tbl">
+                <div>
+                    <h3>{% trans "Title" %}:</h3>
+                </div><br />
+                <div>
+                    <span><label>வாள் விளையாட்டு </label></span>
+                </div><br />
+                <div>
+                     <a href="javascript:void(0)" onclick="window.open('http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/studentresources/12771A-L3-RP5(HA).swf','wdwSearch','top=100,left=100,width=1024,height=768,scrollbars=1,menu=0');">View</a>
+                </div><br />
+                <div>
+                    <h3>{% trans "Note" %}:</h3>
+                </div><br />
+                <!--div class="form-group"> 
+                        <label>{% trans "Answer" %} {% trans "Type" %}</label>
+                        <select id="answer-type" name="answer-type">
+                            <option value="text">Text</option>
+                            <option value="audio">Audio</option>
+                        </select>
+                </div--> 
+                <div class="form-group"> 
+                    <div class="col-sm-2">
+                        <input id="show-recorder" type="radio" value="1" name="isaudio"> 
+                        <label for="show-recorder">Record</label> 
+                    </div>
+                    <div class="col-sm-2">
+                        <input id="hide-recorder" type="radio" value="2" 
+                                            name="isaudio" checked="checked">
+                        <label for="hide-recorder">None</label> 
+                    </div>                                                                    
+                </div> <br />
+
+                <div id="recorder-wrap"><br />
+                    <div id="recorder">
+                        <p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
+                    </div>
+                    <div id="audio_container">
+                        Once you have made a recording, this text will be replaced with an audio player.
+                    </div>
+                </div>
+                
+                <div class="form-group"> 
+                    <label>{% trans "Answer" %}</label>
+                </div> 
+                <div class="form-group">
+                    <textarea class="summernote"></textarea>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success btn-lg">{% trans 'Save' %}</button>
+                    <button class="btn btn-success btn-lg">{% trans 'Send' %}</button>
+                </div>                    
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+<!-- /.col-lg-12 -->
+{% endblock botcontent%}
+
+{% block morecss %}
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<style>
+    #addrec:hover, #admin-main-tbl tbody tr:hover{
+        cursor: pointer;
+    }
+    .text_area{
+        width:70%;
+        height:50px;
+    }
+</style>
+{% endblock morecss %}
+
+
+{% block scriptcontent %}
+
+<script>
+$(document).ready(function(){
+    $('.summernote').summernote();
+    $('#recorder-wrap').hide();
+    $('#show-recorder').on("click",function(){
+        $('#recorder-wrap').show();
+    });
+    $('#hide-recorder').on("click",function(){
+        $('#recorder-wrap').hide();
+    });
+});
+
+function audioReceived(filename, filedata) {
+        filedata = window.atob(filedata);
+        var container = document.getElementById('audio_container');
+        var wrap = document.getElementById('recorder-wrap');
+        var link = document.createElement('a');
+        var audio = document.createElement('audio');
+        var WU = window.URL || window.webkitURL;
+        var blob, recorderHTML;
+        
+        // Extract raw data from Base64-encoded string
+        var ar = new Uint8Array(filedata.length);
+        for(var i=0;i<filedata.length;++i) {
+            ar[i] = filedata.charCodeAt(i);
+        }
+
+        // Put audio data into a blob and set up <audio> tag
+        blob = new Blob([ar], {type:'audio/x-wav'});
+        audio.src = WU.createObjectURL(blob);
+        audio.controls = true;
+
+        container.innerHTML = '';
+        link.href = audio.src;
+        link.appendChild(document.createTextNode('Download this recording'));
+        link.download = filename;
+        container.appendChild(audio);
+        container.appendChild(document.createElement('br'));
+        container.appendChild(document.createElement('br'));
+        container.appendChild(link);
+}
+
+        flashvars = {gateway:'form', 'return':'reset', callback:'audioReceived', format:'wav'};
+        swfobject.embedSWF("{% static "bower_components/local-audio-recorder-master/build/recorder.swf" %}", "recorder", "215", "138", "10.1", "{% static "bower_components/local-audio-recorder-master/demo/expressInstall.swf"  %}", flashvars);
+</script>
+{% endblock scriptcontent %}
