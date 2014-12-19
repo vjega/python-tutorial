@@ -999,12 +999,12 @@ class Mindmap(models.Model):
         db_table = 'mindmap'
 
 class stickynotes(models.Model):
-    title = models.CharField(max_length=200)
-    mapdata  = models.TextField()
+    color = models.BigIntegerField()
+    xyz = models.IntegerField()
     createdby = models.BigIntegerField()
-    isdelete = models.IntegerField()
+    isdeleted = models.IntegerField()
     createddate = models.DateTimeField()
 
     class Meta:
         managed = False
-        db_table = 'mindmap'
+        db_table = 'stickynotes'
