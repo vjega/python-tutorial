@@ -67,6 +67,7 @@ class teacherViewSet(viewsets.ModelViewSet):
         teacher.schoolid = teacherdata.get('schoolid')
         teacher.classid = '1' #teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
+        teacher.imageurl = teacherdata.get('imageurl')
         #teacher.imageurl = studentdata.get('imageurl')
         teacher.isdelete = 0
         teacher.createdby = request.user.id
