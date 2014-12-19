@@ -17,6 +17,7 @@
 
 <div class="col-lg-12">
     <div class="panel panel-default">
+    <form enctype="multipart/form-data" action="" method="POST"> 
         <div class="panel-heading">
             {% trans "Rupriks" %} 
         </div>
@@ -29,11 +30,18 @@
                 <td>&nbsp;&nbsp; Column</td><td><input type='text' id='r-row' ></td>
                 <td>&nbsp;&nbsp; Paragraph</td><td><input type='text' id='r-col'></td>
                 <td>&nbsp;&nbsp;<input type='button'class ="btn btn-primary " id="createTable" value= ' Create '/></td>
-                <td>&nbsp;&nbsp;<input type='button' class ="btn btn-primary "id ="ShowExcelfiles" value=' Excel Import'/>
+                <td>&nbsp;&nbsp;<input type='button' class ="btn btn-primary "id ="showexcelfile" value=' Excel Import'/>
                 </td>
             </tr>
-        </table>
-        <div id='dyntable' style='background-color:#eef700'>
+            <tr>
+                <td colspan='6' id='filedialog' style='display:none'>
+                    <input type='file' name='excelfile' id='excelfile' />
+                    <input type='submit' id='uploadexcel' value='Upload' >
+                    </form>
+                </td>
+            </tr>
+        </table><br />
+        <div id='dyntable' style='background-color:#ADFF2F'>
  
         </div>
         <!-- /.panel-body -->
@@ -116,6 +124,20 @@ TTS.forms.addtable = function() {
         $('#dyntable').html(tabelms);
 };
 
+TTS.forms.makeradio_row = function(id) {
+    $(".row_mod").attr("checked", false);
+    $("#"+id).attr("checked", true);
+};
+
+TTS.forms.makeradio_col = function(id) {
+    $(".col_mod").attr("checked", false);
+    $("#"+id).attr("checked", true);
+};
+
+TTS.forms.showexcelfile = function () {
+    $("#filedialog").show();
+}
+
 TTS.forms.add_row_after = function(after) {
     if (!$("input:checked.row_mod").length) {
         alert("Make a selection");
@@ -142,11 +164,6 @@ TTS.forms._make_row = function() {
     return _temp;
 };
 
-TTS.forms.makeradio_row = function() {
-    $(".row_mod").attr("checked", false);
-    $("#"+id).attr("checked", true);
-};
-
 TTS.forms.add_col1 = function (after) {
     if (!$("input:checked.col_mod").length) {
         alert("Make a selection");
@@ -154,9 +171,9 @@ TTS.forms.add_col1 = function (after) {
     }
     var arr = $("input:checked.col_mod").attr("id").split("-");
     var temp = parseInt(arr[1])+1+parseInt(after);
-    $(".rub_mtx_rows td:nth-child("+temp+")").each(function(cnt) {
-    $(this).after("<td class='"+(cnt?"tblbody' >":"tblhead' ><input type='checkbox' class='col_mod' onclick='makeradio_col(id)' />")+
-     "<input type='text' class='fulltext "+(cnt?"":"headtext")+"' /></td>");
+   $(".rub_mtx_rows td:nth-child("+temp+")").each(function(cnt) {
+        $(this).after("<td class='"+(cnt?"tblbody' >":"tblhead' ><input type='checkbox' class='col_mod' onclick='makeradio_col(id)' />")+
+                      "<input type='text' class='fulltext "+(cnt?"":"headtext")+"' /></td>");
     });
     //Resetting the id for further col modification
     $(".col_mod").each(function(ind) {
@@ -212,7 +229,10 @@ $(document).ready(function(){
     $('body').on('click','#makeradio_row', function(){
         TTS.forms.makeradio_row();
      });
-
+    $('body').on('click','#makeradio_row', function(){
+        TTS.forms.makeradio_col();
+    });
+    
     $('body').on('click','#del_row', function(){
         TTS.forms.del_row();
     });
@@ -224,6 +244,11 @@ $(document).ready(function(){
    $('body').on('click','#add_col1', function(){
         TTS.forms.add_col1();
     });
+
+   $('#showexcelfile').on('click',function(){
+        TTS.forms.showexcelfile();
+     });
+   
 });
 
 </script>

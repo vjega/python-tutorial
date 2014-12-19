@@ -13,7 +13,7 @@ from portaladmin.forms import (AdminForm,
                    ClassListForm,
                    CalendarForm,)
 from ajaxuploader.views import AjaxFileUploader
-#from ajaxuploader.backends.easythumbnails import EasyThumbnailUploadBackend
+from ajaxuploader.backends.easythumbnails import EasyThumbnailUploadBackend
 
 def switchlanguage(f):
     def inner(req):
