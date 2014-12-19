@@ -22,7 +22,9 @@ def switchlanguage(f):
     return inner
 
 
-admin_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/admins', backend=EasyThumbnailUploadBackend, DIMENSIONS=(250, 250))
+admin_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/admins', 
+                                      #backend=EasyThumbnailUploadBackend, 
+                                      DIMENSIONS=(250, 250))
 
 @login_required
 def home(request):

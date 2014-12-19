@@ -6,6 +6,7 @@ from django.db.models import Q
 from api.admin import (create_login, 
                        delete_login)
 from django.db.models import Q
+from django.db import connection
 from portaladmin import models
 import  adminserializers
 
@@ -517,7 +518,24 @@ class MindmapViewSet(viewsets.ModelViewSet):
 
 class StudentAssignResource(viewsets.ModelViewSet):
     queryset = models.Assignresourceinfo.objects.all()
-    #serializer_class = adminserializers.MindmapSerializer
+    serializer_class = adminserializers.MindmapSerializer
+
+    def update(self, request, pk=None):
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        print data
+        ari = models.Assignresourceinfo.objects.get(pk=pk)
+        ari.originaltext = data.get('originaltext')
+        ari.answertext = data.get('answertext')
+        ari.answerurl = data.get('answerurl')
+        ari.isrecord = 1
+        if data.get('isanswered'):
+            ari.isanswered = data.get('isanswered')
+            ari.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        if data.get('issaved'):
+            ari.issaved = data.get('issaved')
+        ari.studentid = request.user.id
+        ari.save()
+        return Response({'msg':True})
 
     def list(self, request):
         sql = '''
@@ -527,7 +545,9 @@ class StudentAssignResource(viewsets.ModelViewSet):
                date(assigneddate) as createddate,
                resourcetype,
                thumbnailurl,
-               ari.studentid 
+               ari.studentid,
+               ari.isanswered,
+               ari.issaved
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         WHERE isdeleted=0
@@ -538,12 +558,17 @@ class StudentAssignResource(viewsets.ModelViewSet):
               AND ari.assigneddate  BETWEEN '2010-01-01' AND '2014-12-31'  
         GROUP BY resourceid 
         ORDER BY assigneddate DESC'''
-        queryset = models.Classroominfo.objects.raw(sql)
-        for row in queryset:
-            print row
-        #serializer_class = adminserializers.ClassroominfoSerializer
-        #serializer = adminserializers.ClassroominfoSerializer(queryset, many=True)        
-        return Response({"test":"test"})
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        #print dir(cursor)
+        #result = cursor.fetchall()
+        #print return [
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
 
     def create(self, request):
         data = json.loads(dict(request.DATA).keys()[0]);

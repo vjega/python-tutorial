@@ -86,8 +86,11 @@ TTS.forms.addstudentresource = function() {
     BootstrapDialog.show({
         title: 'Student Resources',
         onshown: function(dialogRef){
+            $("#id_section").val(TTS.section);
             updateClass();
             updateChapter();
+            updateselectedChapter();
+            //updatesection();
             $('.summernote').summernote();
         },
         message: $($('#studentresource-form').render()),
@@ -153,7 +156,7 @@ var updateChapter = function(){
                 +"&section="+$("#id_section").val(),
         'type':'GET'
     }).done(function(data){
-        console.log(data)
+        //console.log(data)
         opt = "";
         for (d in data){
             opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"</option>\n";
@@ -168,7 +171,7 @@ var updateselectedChapter = function(){
                 +"&section="+TTS.section+"&chapterid="+TTS.chapterid,
         'type':'GET'
     }).done(function(data){
-        console.log(data)
+        //console.log(TTS.section)
         opt = "";
         for (d in data){
             opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"</option>\n";
@@ -176,7 +179,10 @@ var updateselectedChapter = function(){
         $("#id_chapterid").html(opt);
     });
 };
-
+//var updatesection = function(){
+    //console.log(TTS.section)
+  //  $("#id_section").html('hi');
+//};
 var updateClass = function(){
     $.ajax({
         'url': "/api/admin/classlist/?classid="+TTS.classid,
@@ -216,8 +222,9 @@ $(document).ready(function(){
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.addstudentresource();
-        updateClass();
-        updateselectedChapter();
+        //updateClass();
+        //updateselectedChapter();
+        //updatesection();
     });
     $("body").on('change', '#id_classid', function(){
         updateChapter();
