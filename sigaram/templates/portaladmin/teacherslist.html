@@ -78,6 +78,9 @@ TTS.forms.addteacher = function() {
     BootstrapDialog.show({
         title: 'Add Teacher',
         message: $($('#teacher-form').render()),
+        onshown: function(){
+            TTS.forms.upload();
+        },
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
