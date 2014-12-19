@@ -24,6 +24,7 @@ router.register(r'calendar',              viewsets.CalendarViewSet)
 router.register(r'mindmap',               viewsets.MindmapViewSet)
 router.register(r'mindmap',               viewsets.MindmapViewSet)
 router.register(r'stickynotes',           viewsets.StickynotesResource)
+router.register(r'studentassignresource', viewsets.StudentAssignResource)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

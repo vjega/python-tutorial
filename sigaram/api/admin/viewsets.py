@@ -10,6 +10,17 @@ from django.db import connection
 from portaladmin import models
 import  adminserializers
 
+def loginname_to_userid(usertype, username):
+
+    if usertype=='Admin':
+        m = models.Admininfo.objects.filter(username=username)[0]
+    elif usertype=='Teacher':
+        m = models.Teacherinfo.objects.filter(username=username)[0]
+    elif usertype=='Student':
+        m = models.Studentinfo.objects.filter(username=username)[0]
+
+    return m.studentid
+
 class AdmininfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Admininfo.objects.filter(isdelete=0)
@@ -522,7 +533,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
 
     def update(self, request, pk=None):
         data = {k:v[0] for k, v in dict(request.DATA).items()}
-        print data
+        #print data
         ari = models.Assignresourceinfo.objects.get(pk=pk)
         ari.originaltext = data.get('originaltext')
         ari.answertext = data.get('answertext')
@@ -551,15 +562,17 @@ class StudentAssignResource(viewsets.ModelViewSet):
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         WHERE isdeleted=0
-              AND ari.studentid=299 
+              AND ari.studentid=%d
               AND ari.IsDelete=0 
               AND ri.categoryid=0 
               AND isanswered=0 and issaved=0 
               AND ari.assigneddate  BETWEEN '2010-01-01' AND '2014-12-31'  
         GROUP BY resourceid 
-        ORDER BY assigneddate DESC'''
+        ORDER BY assigneddate DESC''' % loginname_to_userid('Student', 'T0733732E') 
         cursor = connection.cursor()
+        #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
+        #cursor.execute(sql, "3680")
         #print dir(cursor)
         #result = cursor.fetchall()
         #print return [
