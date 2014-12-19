@@ -67,6 +67,7 @@ class teacherViewSet(viewsets.ModelViewSet):
         teacher.schoolid = teacherdata.get('schoolid')
         teacher.classid = '1' #teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
+        teacher.imageurl = teacherdata.get('imageurl')
         #teacher.imageurl = studentdata.get('imageurl')
         teacher.isdelete = 0
         teacher.createdby = request.user.id
@@ -152,7 +153,7 @@ class studentViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     @delete_login('Student')
-    def destroy(self, request, pk):
+    def destroy(self, request, pk=None):
         student = models.Studentinfo.objects.get(pk=pk)
         student.isdelete = 1
         student.save()

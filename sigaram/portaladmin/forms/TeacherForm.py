@@ -36,7 +36,7 @@ class TeacherForm(forms.Form):
         label = _("Password"),
         max_length = 100,
         required = True,
-        widget = forms.TextInput({ "placeholder": _("Password")})
+        widget = forms.PasswordInput({ "placeholder": _("Password")})
     )
     emailid = forms.CharField(
         label = _("Email Id"),
@@ -44,10 +44,11 @@ class TeacherForm(forms.Form):
         required = True,
         widget = forms.TextInput({ "placeholder": _("Email Id")})
     )
-    imageurl = forms.FileField(
-        label = _("Choose File"),
+    imageurl = forms.CharField(
+        label = _("Photo"),
         max_length = 100,
         required = True,
+        widget = forms.HiddenInput({ "placeholder": _("Email Id")})
     )
     def __init__(self, *args, **kwargs):
         super(TeacherForm, self).__init__(*args, **kwargs)
