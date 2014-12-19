@@ -997,3 +997,14 @@ class Mindmap(models.Model):
     class Meta:
         managed = False
         db_table = 'mindmap'
+
+class stickynotes(models.Model):
+    color = models.BigIntegerField()
+    xyz = models.IntegerField()
+    createdby = models.BigIntegerField()
+    isdeleted = models.IntegerField()
+    createddate = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'stickynotes'

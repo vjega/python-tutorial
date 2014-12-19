@@ -17,11 +17,8 @@
                                 <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
                             </div>
                         <!-- /.panel-heading -->
-                            <div id="post_it_contaniner">
-                                <div class="classAddDemoPostit" id="post_it_all_1">Content of the postit 1</div>
-                                <div class="classAddDemoPostit" id="post_it_all_2">Content of the postit 2</div>
-                                <div class="classAddDemoPostit" id="post_it_all_3">Content of the postit 3</div>
-                                <div class="classAddDemoPostit" id="post_it_all_4"><a href="#">Hello<strong>Bold</strong></a></div>
+                            <div id="main_container">dasdsadsadsadsa
+                                <!-- <?php //echo $notes?> -- >
                             </div>
                         <!-- /.panel-body -->
                     </div>
@@ -31,45 +28,100 @@
 {% endblock botcontent%}
 
 {% block morescript %}
-<script src="{%static "bower_components/PostItAll/plugin/jquery.postitall.js" %}"></script>
+<script type="text/javascript">
+    var matched, browser;
+
+    jQuery.uaMatch = function( ua ) {
+        ua = ua.toLowerCase();
+
+        var match = /(chrome)[ \/]([\w.]+)/.exec( ua ) ||
+            /(webkit)[ \/]([\w.]+)/.exec( ua ) ||
+            /(opera)(?:.*version|)[ \/]([\w.]+)/.exec( ua ) ||
+            /(msie) ([\w.]+)/.exec( ua ) ||
+            ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec( ua ) ||
+            [];
+
+        return {
+            browser: match[ 1 ] || "",
+            version: match[ 2 ] || "0"
+        };
+    };
+
+    matched = jQuery.uaMatch( navigator.userAgent );
+    browser = {};
+
+    if ( matched.browser ) {
+        browser[ matched.browser ] = true;
+        browser.version = matched.version;
+    }
+
+    // Chrome is Webkit, but Webkit is also Safari.
+    if ( browser.chrome ) {
+        browser.webkit = true;
+    } else if ( browser.webkit ) {
+        browser.safari = true;
+    }
+
+    jQuery.browser = browser;    
+</script>
+
+<script type="text/javascript" src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{% static "bower_components/sticky_note/fancybox/jquery.fancybox-1.2.6.pack.js" %}"></script>
+<script type="text/javascript" src="{% static "bower_components/sticky_note/script.js" %}"></script>
+<!--
+<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.min.js"></script>
+-->
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<script>
-    $(document).ready(function() {
-        $('.classAddDemoPostit').each(function(x){
-            console.log(x);
-            $(this).postitall({
-                savable         : true,
-                posY : 220*x,
-                posX : 50,
-                position : 'absolute'
-            });
-        });
-    });
+<script id="template-open" type="text/x-jquery-tmpl">
 
-    var json = {
-            "post_it_all_1" : "Hai i am first",
-            "post_it_all_2" : "Hai i am secound",
-            "post_it_all_3" : "Hai i am third",
-            "post_it_all_4" : "Hai i am fourth",
-    }
+<h3 class="popupTitle">Add a new note</h3>
+<!-- The preview: -->
+<div id="previewNote" class="note yellow" style="z-index: 1; left: 35px; top: 136px;">
+    <div class="body"></div>
+    <div class="author"></div>
+    <span class="data"></span>
+</div>
 
-    $("#page-wrapper").on("click", "#addrec", function(){
-        
-        $('#post_it_contaniner').postitall({
-            'textcolor'       : '#333333',
-            'backgroundcolor' : '#FFFC7F',
-            'description'     : 'New created',
-            'newPostit'       : true,
-        });
+<div id="noteData"> <!-- Holds the form -->
+<form action="" method="post" class="note-form">
+
+<label for="note-body">Text of the note</label>
+<textarea name="note-body" id="note-body" class="pr-body" cols="30" rows="6"></textarea>
+
+<label for="note-name">Your name</label>
+<input type="text" name="note-name" id="note-name" class="pr-author" value="" />
+
+<label>Color</label> <!-- Clicking one of the divs changes the color of the preview -->
+<div class="color yellow"></div>
+<div class="color blue"></div>
+<div class="color green"></div>
+
+<!-- The green submit button: -->
+<a id="note-submit" href="" class="green-button">Submit</a>
+
+</form>
+</div>
+</script>
+
+
+<script type="text/javascript">
+$("#page-wrapper").on("click", "#addrec", function(){
+        var template = $.templates("#template-open");
+        htmlOutput = template.render();
+        $("#main_container").html(htmlOutput);
     });
 
 </script>
+
 {% endblock scriptcontent %}
 
 {% block morecss %}
-<link rel="stylesheet" href="{%static "bower_components/PostItAll/plugin/jquery.postitall.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "bower_components/sticky_note/styles.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "bower_components/sticky_note/fancybox/jquery.fancybox-1.2.6.css" %}" />
 <style>
     #addrec:hover, #admin-main-tbl tbody tr:hover{
         cursor: pointer;
