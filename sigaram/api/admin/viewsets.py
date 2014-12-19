@@ -575,3 +575,21 @@ class StudentAssignResource(viewsets.ModelViewSet):
                 ar.save()   
         
         return Response(request.DATA)
+
+class StickynotesResource(viewsets.ModelViewSet):
+    queryset = models.stickynotes.objects.all()
+    serializer_class = adminserializers.StickynotesSerializer
+
+    def create(self, request):
+        cal = models.stickynotes()
+        data = json.loads(dict(request.DATA).keys()[0])
+        #return Response({})
+        #data = {k:v[0] for k,v in dict(request.DATA).items()}
+        cal.title = data.get('title')
+        cal.start = data.get('start')
+        cal.end = data.get('end')
+        cal.isdeleted = 0
+        cal.createdby = request.user.id
+        cal.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        cal.save()
+        return Response(request.DATA)
