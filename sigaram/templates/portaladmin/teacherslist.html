@@ -83,7 +83,6 @@ TTS.forms.addteacher = function(form, data) {
         data: data,
         url : '/api/admin/teacher/'
     }).done(function( msg ) {
-        console.log(data)
         form.close();
         location.reload();
         //dialogItself.close();
