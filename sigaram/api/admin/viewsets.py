@@ -619,3 +619,29 @@ class StickynotesResource(viewsets.ModelViewSet):
         stickynotes.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         stickynotes.save()
         return Response(request.DATA)
+
+class StudentinfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Studentinfo.objects.all()
+    serializer_class = adminserializers.StudentinfoSerializer
+
+    def create(self, request):
+        studentinfo = models.studentinfo()
+        studentdata =  json.loads(request.DATA.keys()[0])
+        studentinfo.studentid = rubricsdata.get('studentid')
+        studentinfo.firstname = rubricsdata.get('firstname')
+        studentinfo.lastname = rubricsdata.get('lastname')
+        studentinfo.username = rubricsdata.get('username')
+        studentinfo.emailid = rubricsdata.get('emailid')
+        studentinfo.schoolid = rubricsdata.get('schoolid')
+        studentinfo.classid = rubricsdata.get('classid')
+        studentinfo.password = rubricsdata.get('password')
+        studentinfo.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        studentinfo.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
