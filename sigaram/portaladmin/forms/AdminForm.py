@@ -13,7 +13,7 @@ class AdminForm(forms.Form):
         label = _("Password"),
         max_length = 100,
         required = True,
-        widget = forms.TextInput({ "placeholder": _("Password")})
+        widget = forms.PasswordInput({ "placeholder": _("Password")})
     )
     firstname = forms.CharField(
         label = "%s %s"%(_("First"),_("Name")),
