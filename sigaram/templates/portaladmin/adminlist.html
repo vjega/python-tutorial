@@ -188,7 +188,7 @@ TTS.forms.upload = function(elm) {
         multiple: false,
         onComplete: function(id, fileName, responseJSON) {
             if(responseJSON.success) {
-                $("#id_image").val(responseJSON.path.replace('^static/', ''));
+                $("#id_image").val(responseJSON.path.replace('static/', ''));
             } else {
                 alert("upload failed!");
             }
