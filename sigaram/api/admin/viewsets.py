@@ -152,7 +152,7 @@ class studentViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     @delete_login('Student')
-    def destroy(self, request, pk):
+    def destroy(self, request, pk=None):
         student = models.Studentinfo.objects.get(pk=pk)
         student.isdelete = 1
         student.save()
@@ -520,7 +520,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
     queryset = models.Assignresourceinfo.objects.all()
     serializer_class = adminserializers.MindmapSerializer
 
-    def update(self, request, pk=pk):
+    def update(self, request, pk=None):
         data = {k:v[0] for k, v in dict(request.DATA).items()}
         ari = models.Assignresourceinfo.objects.get(pk=pk)
         ari.originaltext = data.originaltext
