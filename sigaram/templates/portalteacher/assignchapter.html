@@ -390,7 +390,7 @@ TTS.forms.renderresourceinfo = function(data){
     var count = 0;
     for(var i in data){
         var t = [];
-        t.push("<input type='checkbox' class='case' name='schoolname' id='"+data[i].resourceid+"' value='"+data[i].resourceid+"' />");
+        t.push("<input type='checkbox' class='checkresourceid' name='schoolname' id='"+data[i].resourceid+"' value='"+data[i].resourceid+"' />");
         t.push("<p class='col-sm-2 pull-left'><img src="+data[i].thumbnailurl+"></p> " + data[i].resourcetitle);
         dataset.push(t);
     }
@@ -403,7 +403,7 @@ TTS.forms.renderresourceinfo = function(data){
 
 TTS.forms.ressave = function(){
     
-    if (!$(".case:checked").length){
+    if (!$(".checkresourceid:checked").length){
         alert("Select atleast one resource");
     }
     if (!$(".case:checked").length){
@@ -418,7 +418,7 @@ TTS.forms.ressave = function(){
     if($("#set_rubric_id").val()){
         data.rubricid = $("#set_rubric_id").val();
     }
-    $(".case:checked").each(function(){
+    $(".checkresourceid:checked").each(function(){
         data.resource.push($(this).prop("id"));
     });
     $("#sltStudentList>option").each(function(){
