@@ -10,10 +10,11 @@ class StudentresourceListForm(forms.Form):
         choices    = [('text', 'Text'), ('audio', 'Audio'),('video','Video'),
                          ('image', 'Image')]
     )
-    choose_file    = forms.FileField(
-        label      = _("Choose File"),
+    image = forms.CharField(
+        label = _("Photo"),
         max_length = 100,
-        required   = True,
+        required = True,
+        widget = forms.HiddenInput({ "placeholder": _("Email Id")})
     )
     classid      = forms.ChoiceField(
         label    = _("Select Class"),
