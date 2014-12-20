@@ -4,7 +4,8 @@ from django.shortcuts import render
 from teacher import models
 from teacher.forms import (ViewworkspaceForm,
                             RubricsForm,
-                            WrittenworkForm)   
+                            WrittenworkForm,
+                            StudentForm)   
 
 def switchlanguage(f):
     def inner(req):
@@ -80,7 +81,8 @@ def studentslist(request):
     schools = models.Schoolinfo.objects.all()
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/studentslist.html', {'schools':schools,
-                                                             'classes':classes})
+                                    'classes':classes,"form" : StudentForm.StudentForm()})
+                                                             
 
 @switchlanguage
 def classroom(request):

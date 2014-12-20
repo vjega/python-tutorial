@@ -78,6 +78,7 @@ class teacherViewSet(viewsets.ModelViewSet):
         teacher.schoolid = teacherdata.get('schoolid')
         teacher.classid = '1' #teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
+        teacher.imageurl = teacherdata.get('imageurl')
         #teacher.imageurl = studentdata.get('imageurl')
         teacher.isdelete = 0
         teacher.createdby = request.user.id
@@ -163,7 +164,7 @@ class studentViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     @delete_login('Student')
-    def destroy(self, request, pk):
+    def destroy(self, request, pk=None):
         student = models.Studentinfo.objects.get(pk=pk)
         student.isdelete = 1
         student.save()
@@ -631,3 +632,29 @@ class StickynotesResource(viewsets.ModelViewSet):
         stickynotes.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         stickynotes.save()
         return Response(request.DATA)
+
+class StudentinfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Studentinfo.objects.all()
+    serializer_class = adminserializers.StudentinfoSerializer
+
+    def create(self, request):
+        studentinfo = models.studentinfo()
+        studentdata =  json.loads(request.DATA.keys()[0])
+        studentinfo.studentid = rubricsdata.get('studentid')
+        studentinfo.firstname = rubricsdata.get('firstname')
+        studentinfo.lastname = rubricsdata.get('lastname')
+        studentinfo.username = rubricsdata.get('username')
+        studentinfo.emailid = rubricsdata.get('emailid')
+        studentinfo.schoolid = rubricsdata.get('schoolid')
+        studentinfo.classid = rubricsdata.get('classid')
+        studentinfo.password = rubricsdata.get('password')
+        studentinfo.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        studentinfo.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
