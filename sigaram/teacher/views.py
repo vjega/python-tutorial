@@ -1,17 +1,31 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
+from django.http import HttpResponse
 from teacher import models
 from teacher.forms import (ViewworkspaceForm,
                             RubricsForm,
                             WrittenworkForm,
-                            StudentForm)   
+                            StudentForm) 
+
+from ajaxuploader.views import AjaxFileUploader  
 
 def switchlanguage(f):
     def inner(req):
         activate(req.session.get('django_language','ta'))
         return f(req)
     return inner
+
+admin_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/admins', 
+                                      #backend=EasyThumbnailUploadBackend, 
+                                      DIMENSIONS=(250, 250))
+teacher_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/teachers', 
+                                      #backend=EasyThumbnailUploadBackend, 
+                                      DIMENSIONS=(250, 250))
+
+student_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/teachers', 
+                                      #backend=EasyThumbnailUploadBackend, 
+                                      DIMENSIONS=(250, 250))
 
 @switchlanguage
 def home(request):
