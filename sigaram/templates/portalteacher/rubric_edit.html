@@ -84,7 +84,7 @@
         border:1px solid grey;background-color:#ccc!important;color:#000;
     }
     .tblbody {
-        border:0 none;background-color:#ccc!important;color:#000;
+        border:0 none;background-color:#fff!importan;color:#000;
     }
     .fulltext{
         border:none;
@@ -170,11 +170,8 @@ TTS.forms.add_col = function (placement) {
         return false;
     }
 
-    console.log('start');
     var arr = $("input:checked.col_mod").attr("id").split("-");
-    console.log(arr);
     var temp = parseInt(arr[1])+1+parseInt(placement);
-    console.log(temp);
     $(".rub_mtx_rows td:nth-child("+temp+")").each(function(cnt) {
         $(this).after("<td class='"+(cnt?"tblbody' >":"tblhead' ><input type='checkbox' class='col_mod' />")+
             "<input type='text' class='fulltext "+(cnt?"":"headtext")+"' /></td>");
