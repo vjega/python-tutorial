@@ -101,6 +101,30 @@ TTS.forms.addstudent = function(form, data) {
     });
 }
 
+TTS.forms.showstudentform = function() {
+    BootstrapDialog.show({
+        title: 'Add Student',
+        message: $($('#student-form').render()),
+        onshown: function(){
+            TTS.forms.upload();
+        },
+        buttons: [{
+            label: 'Save',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#add-student");
+                TTS.forms.addteacher(dialogItself, data); 
+            }
+            },{
+            label: 'Cancel',
+            action: function(dlg){
+                dlg.close();
+            }
+        }]
+    });
+};
+
+
 TTS.forms.editstudent = function(id, data) {
     BootstrapDialog.show({
         title: 'Edit Student',
@@ -149,7 +173,8 @@ TTS.forms.renderstudentlist = function(data){
             },
             { "title": "{% trans "Username" %}",
               "data" : "username"  
-            }, 
+
+               }, 
             { "title": "{% trans "Email Id" %}",
               "data" : "emailid"  
             }, 
@@ -258,7 +283,7 @@ $(document).ready(function(){
     
     });    
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.addstudent();
+        TTS.forms.showstudentform();
     });
 });
 

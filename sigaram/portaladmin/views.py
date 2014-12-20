@@ -29,7 +29,7 @@ teacher_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/teachers',
                                       #backend=EasyThumbnailUploadBackend, 
                                       DIMENSIONS=(250, 250))
 
-student_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/teachers', 
+student_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/students', 
                                       #backend=EasyThumbnailUploadBackend, 
                                       DIMENSIONS=(250, 250))
 @login_required
