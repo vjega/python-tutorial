@@ -95,6 +95,7 @@ TTS.forms.addstudent = function(form, data) {
         data: data,
         url : '/api/admin/student/'
     }).done(function( msg ) {
+        console.log(data)
         form.close();
         location.reload();
         //dialogItself.close();
@@ -113,7 +114,7 @@ TTS.forms.showstudentform = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-student");
-                TTS.forms.addteacher(dialogItself, data); 
+                TTS.forms.addstudent(dialogItself, data); 
             }
             },{
             label: 'Cancel',
@@ -158,7 +159,6 @@ TTS.forms.editstudent = function(id, data) {
 };
 
 TTS.forms.renderstudentlist = function(data){
-    
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
@@ -166,7 +166,7 @@ TTS.forms.renderstudentlist = function(data){
             },
             { "title": "{% trans "Photo" %}",
               "class": "text-center",  
-              "data" : "photo"  
+              "data" : "image"  
             },
             { "title": "{% trans "Name" %}",
               "data" : "name"  
@@ -220,6 +220,32 @@ TTS.forms.renderstudentlist = function(data){
     });
 
 };
+
+TTS.forms.upload = function(elm) {
+    console.log(elm);
+    var uploader = new qq.FileUploader({
+        action: "/admin/student-img-upload",
+        element: $('#file-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#id_imageurl").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
+    });
+};
+
+
 $(document).ready(function(){
     var url = "/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json"
     $.ajax({

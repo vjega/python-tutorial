@@ -143,7 +143,7 @@ class studentViewSet(viewsets.ModelViewSet):
         student.firstname = studentdata.get('firstname')
         student.lastname = studentdata.get('lastname')
         student.emailid = studentdata.get('emailid')
-        #student.imageurl = studentdata.get('imageurl')
+        student.imageurl = studentdata.get('imageurl')
         student.isdelete = 0
         student.createdby = request.user.id
         student.createddate = time.strftime('%Y-%m-%d %H:%M:%S')

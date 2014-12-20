@@ -22,7 +22,7 @@ class AdminForm(forms.Form):
         widget = forms.TextInput({ "placeholder": "%s %s"%(_("First"),_("Name"))})
     )
     lastname = forms.CharField(
-        label = _("Last Name"),
+        label = "%s %s"%(_("last"),_("Name")),
         max_length = 100,
         required = True,
         widget = forms.TextInput({ "placeholder": "%s %s"%(_("Last"),_("Name"))})

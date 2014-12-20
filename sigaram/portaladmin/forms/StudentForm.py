@@ -16,16 +16,16 @@ class StudentForm(forms.Form):
         choices  = [(opt.classid, opt.shortname) for opt in models.Classinfo.objects.all()],
     )
     firstname = forms.CharField(
-        label = _("Name"),
+        label = "%s %s"%(_("First"),_("Name")),
         max_length = 100,
         required = True,
-        widget = forms.TextInput({ "placeholder": _("First Name")})
+        widget = forms.TextInput({ "placeholder": "%s %s"%(_("First"),_("Name"))})
     )
     lastname = forms.CharField(
-        label = _("Name"),
+        label = "%s %s"%(_("last"),_("Name")),
         max_length = 100,
         required = True,
-        widget = forms.TextInput({ "placeholder": _("last Name")})
+        widget = forms.TextInput({ "placeholder": "%s %s"%(_("Last"),_("Name"))})
     )
     username = forms.CharField(
         label = _("User Name"),
@@ -37,7 +37,7 @@ class StudentForm(forms.Form):
         label = _("Password"),
         max_length = 100,
         required = True,
-        widget = forms.TextInput({ "placeholder": _("Password")})
+        widget = forms.PasswordInput({ "placeholder": _("Password")})
     )
     emailid = forms.CharField(
         label = _("Email Id"),
