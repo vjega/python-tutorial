@@ -27,13 +27,10 @@
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover"
                      id="admin-main-tbl">
-                <input type="hidden" value="" id="assignedresourceid">
                 <div>
                     <h3>{% trans "Title" %}:</h3>
                 </div><br />
-                <div id="resource-title">
-                    வாள் விளையாட்டு
-                </div><br />
+                <div id="resource-title"></div><br />
                 <div id="view-resource">
                      <a href="javascript:void(0)" onclick="window.open('http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/studentresources/12771A-L3-RP5(HA).swf','wdwSearch','top=100,left=100,width=1024,height=768,scrollbars=1,menu=0');">View</a>
                 </div><br />
@@ -47,16 +44,15 @@
                             <option value="audio">Audio</option>
                         </select>
                 </div--> 
-                <div class="form-group"> 
-                    <div class="col-sm-2">
-                        <input id="show-recorder" type="radio" class="isaudio" value="audio" name="isaudio"> 
-                        <label for="show-recorder">Record</label> 
-                    </div>
-                    <div class="col-sm-2">
-                        <input id="hide-recorder" type="radio" value="text" 
-                                            name="isaudio" class="isaudio" checked="checked">
-                        <label for="hide-recorder">None</label> 
-                    </div>                                                                    
+                <div class="form-group">
+                    {% trans "Answer" %} {% trans "Type" %}
+                </div>
+                <div class="form-group">
+                    <input id="show-recorder" type="radio" class="isaudio" value="audio" name="isaudio"> 
+                    <label for="show-recorder">Audio</label> 
+                    <input id="hide-recorder" type="radio" value="text" 
+                                        name="isaudio" class="isaudio" checked="checked">
+                    <label for="hide-recorder">Text</label> 
                 </div> <br />
 
                 <div id="recorder-wrap">
@@ -71,7 +67,7 @@
                     <label>{% trans "Answer" %}</label>
                 </div> 
                 <div class="form-group">
-                    <textarea class="summernote"></textarea>
+                    <textarea class="summernote text_area"></textarea>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-success btn-lg" id="res-save">{% trans 'Save' %}</button>
@@ -99,6 +95,7 @@
         width:70%;
         height:50px;
     }
+
 </style>
 {% endblock morecss %}
 
@@ -111,21 +108,17 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}   
 
 
-TTS.forms.renderresourceinfo = function(data){
+TTS.forms.renderassignedresourceinfo = function(data){
+    $(".summernote").code(data.answertext);
     $("#resource-title").html(data.resourcetitle);
     $("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.videourl+"');\" >View</a>");
-};
-TTS.forms.renderassignedresourceinfo = function(data){
-    $(".summernote").code("your text");
-    //$("#resource-title").html(data.resourcetitle);
-    //$("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.videourl+"');\" >View</a>");
 };
 function openwindow(videourl) {
     window.open("http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
 }
 TTS.forms.ressave = function(savesend){
     var data = {};
-    var assignedresourceid = $("#assignedresourceid").val();
+    var assignedid = getUrlParameter('assignedid');
     data.originaltext = $(".summernote").code();
     data.answertext = $(".summernote").code();
     data.answerurl = 'test/test.url';
@@ -147,11 +140,12 @@ TTS.forms.ressave = function(savesend){
         data.isanswered = 0;
 
     $.ajax({
-        url:"/api/admin/studentassignresource/"+assignedresourceid+"/",
+        url:"/api/admin/studentassignresource/"+assignedid+"/",
         type:"PUT",
         data: data
     }).done(function(data){
-        console.log(data);
+        if(data.msg)
+            window.location = 'assignedresourcelist.php';
     }).error(function(err, msg){
         alert("I didnt save the data");
     });
@@ -166,16 +160,8 @@ $(document).ready(function(){
         $('#recorder-wrap').hide();
     });
 
-    var data = getUrlParameter('data');
-    var res = data.split('_');
-    $("#assignedresourceid").val(res[1]);
-    $.ajax({
-        "url":"/api/student/resourceinfo/"+res[2]+"/?format=json",
-        "type":"GET"
-    }).done(function(data){
-        console.log(data);
-        TTS.forms.renderresourceinfo(data);
-    });
+    var assignedid = getUrlParameter('assignedid');
+
     $("#res-save").click(function(){
         TTS.forms.ressave('save');
     });
@@ -183,10 +169,10 @@ $(document).ready(function(){
         TTS.forms.ressave('send');
     });
     $.ajax({
-        "url":"/api/student/studentassignresource/"+res[1]+"/?format=json",
+        "url":"/api/admin/studentassignresource/"+assignedid+"/?format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
+        //console.log(data);
         TTS.forms.renderassignedresourceinfo(data);
     });
 });

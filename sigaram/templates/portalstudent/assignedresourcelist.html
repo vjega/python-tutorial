@@ -14,35 +14,41 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
             <div class="panel-heading">
-
-                <div class='col-md-4'>    
+            <div class="row">
+                <div class='col-lg-4'>    
                     <div class="form-group">
-                        <label>{% trans "From Date" %}: </label>
+                        <div class="col-lg-4">
+                            <label>{% trans "From Date" %}: </label>
+                        </div>    
                         <div class='input-group date' id='fromdatepicker'>
-                            <input type='text' class="form-control" />
+                            <input type='text' class="form-control" data-date-format="YYYY/MM/DD" />
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
                     </div>
                 </div>
-                <div class='col-md-4'>
+                <div class='col-lg-4'>    
                     <div class="form-group">
-                        <label>{% trans "To Date" %}: </label>
+                        <div class="col-lg-4">
+                            <label>{% trans "To Date" %}: </label>
+                        </div>
                         <div class='input-group date' id='todatepicker'>
-                            <input type='text' class="form-control" />
+                            <input type='text' class="form-control" data-date-format="YYYY/MM/DD" />
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
                     </div>
                 </div>    
-                <div class="form-group">
-                    <button class="btn" type="button">{% trans "Search" %}</button>
+                <div class='col-lg-2'>
+                    <div class="form-group">
+                        <button class="btn btn-success" id="date-search" type="button">{% trans "Search" %}</button>
+                    </div>
                 </div>
-                
             </div>
-
+            </div>
+            <br /><br />
 
         <!-- /.panel-heading -->
             <div role="tabpanel">
@@ -86,6 +92,7 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<link rel="stylesheet" href="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/master/build/css/bootstrap-datetimepicker.min.css">
 <style>
     .resourcelist tbody tr:hover{
         cursor: pointer;
@@ -102,6 +109,8 @@
 </script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{%static "bower_components/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js" %}"></script>
+<script src="{%static "bower_components/bootstrap-datetimepicker/src/js/locales/bootstrap-datetimepicker.es.js" %}"></script>
 <script>
     window.TTS = window.TTS || {}
     TTS.forms = TTS.forms || {}   
@@ -136,7 +145,7 @@
            
             if (!data[i].issaved && !data[i].isanswered) {
                 var t = [];
-                t.DT_RowId = "row_"+data[i].id+"_"+data[i].resourceid; 
+                t.DT_RowId = data[i].id;
                 t.slno=++count_new;
                 t.title=data[i].resourcetitle;
                 t.date=data[i].createddate;
@@ -146,7 +155,7 @@
             }
             if (data[i].issaved && !data[i].isanswered) {
                 var t = [];
-                t.DT_RowId = "row_"+data[i].id+"_"+data[i].resourceid; 
+                t.DT_RowId = data[i].id;
                 t.slno=++count_saved;
                 t.title=data[i].resourcetitle;
                 t.date=data[i].createddate;
@@ -156,7 +165,7 @@
             }
             if (data[i].isanswered) {
                 var t = [];
-                t.DT_RowId = "row_"+data[i].id+"_"+data[i].resourceid; 
+                t.DT_RowId = data[i].id;
                 t.slno=++count_answered;
                 t.title=data[i].resourcetitle;
                 t.date=data[i].createddate;
@@ -189,20 +198,33 @@ $(document).ready(function(){
     });
     $('.resourcelist').on('click','tr',function(e){
         e.stopPropagation();
-        window.location = 'viewassignresource.php?data='+this.id;
+        window.location = 'viewassignresource.php?assignedid='+this.id;
     });
     $('#fromdatepicker').datetimepicker({
-        pickTime: false
+        pickTime: true
     });
     $('#todatepicker').datetimepicker({
-        pickTime: false
+        pickTime: true
     });
-    $("#fromdatepicker").on("dp.change",function (e) {
+    /*$("#fromdatepicker").on("dp.change",function (e) {
        $('#todatepicker').data("DateTimePicker").setMinDate(e.date);
     });
     $("#todatepicker").on("dp.change",function (e) {
        $('#fromdatepicker').data("DateTimePicker").setMaxDate(e.date);
+    });*/
+
+    $('#date-search').click(function(){
+        //alert($("#fromdatepicker input").val());
+        var fromdate = $("#fromdatepicker input").val();
+        var todate = $("#todatepicker input").val();
+        $.ajax({
+            "url":"/api/admin/studentassignresource/?fdate="+fromdate+"&tdate="+todate+"&format=json",
+            "type":"GET"
+        }).done(function(data){
+            TTS.forms.assignedstudentresource(data);
+        });
     });
+
 });
 
 </script>

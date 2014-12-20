@@ -12,14 +12,16 @@ import  adminserializers
 
 def loginname_to_userid(usertype, username):
 
-    if usertype=='Admin':
+    if usertype =='Admin':
         m = models.Admininfo.objects.filter(username=username)[0]
-    elif usertype=='Teacher':
+        return m.adminid
+    elif usertype =='Teacher':
         m = models.Teacherinfo.objects.filter(username=username)[0]
-    elif usertype=='Student':
+        return m.teacherid
+    elif usertype =='Student':
         m = models.Studentinfo.objects.filter(username=username)[0]
+        return m.studentid
 
-    return m.studentid
 
 class AdmininfoViewSet(viewsets.ModelViewSet):
 
@@ -549,6 +551,11 @@ class StudentAssignResource(viewsets.ModelViewSet):
         return Response({'msg':True})
 
     def list(self, request):
+        datecond = ''
+        if request.GET.get('fdate') and request.GET.get('tdate'):
+            datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+                request.GET.get('tdate'))
+
         sql = '''
         SELECT assignedid AS id,
                ri.resourceid,
@@ -565,16 +572,18 @@ class StudentAssignResource(viewsets.ModelViewSet):
               AND ari.studentid=%d
               AND ari.IsDelete=0 
               AND ri.categoryid=0 
-              AND ari.assigneddate  BETWEEN '2010-01-01' AND '2014-12-31'  
+              %s
         GROUP BY resourceid 
-        ORDER BY assigneddate DESC''' % loginname_to_userid('Student', 'T0733732E') 
+        ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
+        print sql
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
         #cursor.execute(sql, "3680")
         #print dir(cursor)
         #result = cursor.fetchall()
         #print return [
+        
         desc = cursor.description
         result =  [
                 dict(zip([col[0] for col in desc], row))
@@ -586,10 +595,12 @@ class StudentAssignResource(viewsets.ModelViewSet):
         sql = '''
         SELECT assignedid AS id,
                ri.resourceid,
+               ri.videourl,
                resourcetitle,
                date(assigneddate) as createddate,
                resourcetype,
                thumbnailurl,
+               ari.answertext,
                ari.studentid,
                ari.isanswered,
                ari.issaved
@@ -633,6 +644,126 @@ class StudentAssignResource(viewsets.ModelViewSet):
                 ar.save()   
         
         return Response(request.DATA)
+
+
+class TeacherStudentAssignResource(viewsets.ModelViewSet):
+    queryset = models.Assignresourceinfo.objects.all()
+    serializer_class = adminserializers.MindmapSerializer
+
+    def update(self, request, pk=None):
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        #print data
+        ari = models.Assignresourceinfo.objects.get(pk=pk)
+        ari.originaltext = data.get('originaltext')
+        ari.answertext = data.get('answertext')
+        ari.answerurl = data.get('answerurl')
+        ari.isrecord = 1
+        if data.get('isanswered'):
+            ari.isanswered = data.get('isanswered')
+            ari.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        if data.get('issaved'):
+            ari.issaved = data.get('issaved')
+        ari.save()
+        return Response({'msg':True})
+
+    def list(self, request):
+        datecond = ''
+        if request.GET.get('fdate') and request.GET.get('tdate'):
+            datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+                request.GET.get('tdate'))
+
+        sql = '''
+        SELECT assignedid AS id,
+               ri.resourceid,
+               resourcetitle,
+               date(assigneddate) as createddate,
+               resourcetype,
+               thumbnailurl,
+               ari.studentid,
+               ari.isanswered,
+               ari.issaved
+        FROM assignresourceinfo ari
+        INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
+        WHERE isdeleted=0
+              AND ari.assignedby=%d
+              AND ari.IsDelete=0 
+              AND ri.categoryid=0 
+              %s
+        GROUP BY resourceid 
+        ORDER BY assigneddate DESC''' % (loginname_to_userid('Teacher', 'sheela'), datecond)
+
+        #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
+        cursor = connection.cursor()
+        print sql
+        #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
+        cursor.execute(sql)
+        #cursor.execute(sql, "3680")
+        #print dir(cursor)
+        #result = cursor.fetchall()
+        #print return [
+        
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+    def retrieve(self, request, pk=None):
+        sql = '''
+        SELECT assignedid AS id,
+               ri.resourceid,
+               ri.videourl,
+               resourcetitle,
+               date(assigneddate) as createddate,
+               resourcetype,
+               thumbnailurl,
+               ari.answertext,
+               ari.studentid,
+               ari.isanswered,
+               ari.issaved
+        FROM assignresourceinfo ari
+        INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
+        WHERE assignedid = %s
+        ''' % pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
+        print result
+        return Response(result)
+
+    def create(self, request):
+        data = json.loads(dict(request.DATA).keys()[0]);
+        students = data.get('students');
+        resource = data.get('resource');
+        rubricid = data.get('rubricid');
+        assigntext = data.get('assigntext');
+        print resource
+        print students
+        print resource, students
+        for r in resource:
+            for s in students:
+                ar = models.Assignresourceinfo()
+                ar.resourceid = int(r)
+                ar.studentid = int(s)
+                ar.assigntext = str(assigntext)
+                ar.isanswered = 0
+                ar.issaved = 0
+                ar.isrecord = 0
+                ar.answerrating = 0
+                ar.isbillboard = 0
+                ar.isclassroom = 0
+                ar.answereddate = '1910-01-01'
+                ar.assignedby = 1 #request.user.userid
+                ar.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+                ar.isdelete = 0
+                ar.rubric_id = int(rubricid)
+                ar.old_edit = 0
+                ar.save()   
+        
+        return Response(request.DATA)
+
+
 
 class StickynotesResource(viewsets.ModelViewSet):
     queryset = models.stickynotes.objects.all()
