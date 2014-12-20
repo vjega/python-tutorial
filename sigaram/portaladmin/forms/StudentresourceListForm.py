@@ -10,7 +10,7 @@ class StudentresourceListForm(forms.Form):
         choices    = [('text', 'Text'), ('audio', 'Audio'),('video','Video'),
                          ('image', 'Image')]
     )
-    image = forms.CharField(
+    thumbnailurl = forms.CharField(
         label = _("Photo"),
         max_length = 100,
         required = True,
@@ -35,18 +35,13 @@ class StudentresourceListForm(forms.Form):
         label    = _("Chapter"),
         required = True,
     )
-    thumbnailurl   = forms.FileField(
-        label      = _("Short Photo"),
-        max_length = 100,
-        required   = True,
-    )
     resourcetitle = forms.CharField(
-        label     = _("Heading"),
+        label     = _("Title"),
         required  = True,
         widget    = forms.Textarea({ "class": "summernote"})
     )
-    originaltext  = forms.CharField(
-        label     = _("Heading-2"),
+    resourcedescription  = forms.CharField(
+        label     = _("Note"),
         required  = True,
         widget    = forms.Textarea({ "class": "summernote"})
     )
