@@ -45,7 +45,7 @@ class StudentForm(forms.Form):
         required = True,
         widget = forms.TextInput({ "placeholder": _("Email Id")})
     )
-    image = forms.CharField(
+    imageurl = forms.CharField(
         label = _("Photo"),
         max_length = 100,
         required = True,

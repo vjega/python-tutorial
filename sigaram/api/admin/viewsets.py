@@ -158,8 +158,8 @@ class studentViewSet(viewsets.ModelViewSet):
         student.password = studentdata.get('password')
         student.firstname = studentdata.get('firstname')
         student.schoolid = studentdata.get('schoolid')
-        #teacher.classid = '1' #teacherdata.get('classid')
         student.emailid = studentdata.get('emailid')
+        student.imageurl = studentdata.get('imageurl')
         student.save()
         return Response(request.DATA)
 

@@ -115,9 +115,3 @@ class StickynotesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Mindmap
         fields = ('id','text','name')
-
-class StudentinfoSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = models.Studentinfo
-        fields = ('studentid','firstname','lastname','username','emailid','schoolid',
-                                                                'classid','password')
