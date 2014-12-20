@@ -19,7 +19,7 @@
     <div class="panel panel-default">
     <form enctype="multipart/form-data" action="" method="POST"> 
         <div class="panel-heading">
-            {% trans "Rupriks" %} 
+            {% trans "Rubrics" %} 
         </div>
         <!-- /.panel-heading -->
         <div class="gentable" id ="rub_mtx_head rub_mtx_rows">
@@ -81,10 +81,10 @@
         color: #000;
     }
     .tblhead {
-        border:1px solid grey;background-color:#c0d0d0!important;color:#000;
+        border:1px solid grey;background-color:#ccc!important;color:#000;
     }
     .tblbody {
-        border:0 none;background-color:black!important;color:#000;
+        border:0 none;background-color:#ccc!important;color:#000;
     }
     .fulltext{
         border:none;
@@ -105,7 +105,7 @@ TTS.forms = TTS.forms || {}
 TTS.forms.addtable = function() {
     var rows = parseInt($('#r-row').val());
     var cols = parseInt($('#r-col').val());
-    var tabelms = "<br/><div style='text-align:center'><input type='button' class = 'btn btn-primary' class = 'btn btn-primary' value='Add a row before' id='add_row_before' />&nbsp;<input type='button' class = 'btn btn-primary' value='Add a row after' id='add_row_after'/>&nbsp;<input type='button'class = 'btn btn-primary' value='Add a col before' id='add_col' />&nbsp;&nbsp;<input type='button' class = 'btn btn-primary'  value='Add a col after' id='add_col1' />&nbsp;<input type='button' class = 'btn btn-primary' value='Delete a row' id='del_row' />&nbsp;<input type='button'class = 'btn btn-primary'  value='Delete a column' id='del_col' /></div><br/>";
+    var tabelms = "<br/><div style='text-align:center'><input type='button' class = 'btn btn-primary' class = 'btn btn-primary' value='Add a row before' id='add_row_before' />&nbsp;<input type='button' class = 'btn btn-primary' value='Add a row after' id='add_row_after'/>&nbsp;<input type='button'class = 'btn btn-primary' value='Add a col before' id='add_col_before' />&nbsp;&nbsp;<input type='button' class = 'btn btn-primary'  value='Add a col after' id='add_col_after' />&nbsp;<input type='button' class = 'btn btn-primary' value='Delete a row' id='del_row' />&nbsp;<input type='button'class = 'btn btn-primary'  value='Delete a column' id='del_col' /></div><br/>";
         tabelms += "<table style='width:90%' id='gentable' align='center'>";
         tabelms += "<tr class='rub_mtx_head rub_mtx_rows'><td class='tblhead'>&nbsp;</td>";
         for (var j=0; j<=cols; j++) {
@@ -138,7 +138,7 @@ TTS.forms.showexcelfile = function () {
     $("#filedialog").show();
 }
 
-TTS.forms.add_row_after = function(after) {
+TTS.forms.add_row = function(after) {
     if (!$("input:checked.row_mod").length) {
         alert("Make a selection");
         return false;
@@ -164,22 +164,27 @@ TTS.forms._make_row = function() {
     return _temp;
 };
 
-TTS.forms.add_col1 = function (after) {
+TTS.forms.add_col = function (placement) {
     if (!$("input:checked.col_mod").length) {
         alert("Make a selection");
         return false;
     }
+
+    console.log('start');
     var arr = $("input:checked.col_mod").attr("id").split("-");
-    var temp = parseInt(arr[1])+1+parseInt(after);
-   $(".rub_mtx_rows td:nth-child("+temp+")").each(function(cnt) {
-        $(this).after("<td class='"+(cnt?"tblbody' >":"tblhead' ><input type='checkbox' class='col_mod' onclick='makeradio_col(id)' />")+
-                      "<input type='text' class='fulltext "+(cnt?"":"headtext")+"' /></td>");
+    console.log(arr);
+    var temp = parseInt(arr[1])+1+parseInt(placement);
+    console.log(temp);
+    $(".rub_mtx_rows td:nth-child("+temp+")").each(function(cnt) {
+        $(this).after("<td class='"+(cnt?"tblbody' >":"tblhead' ><input type='checkbox' class='col_mod' />")+
+            "<input type='text' class='fulltext "+(cnt?"":"headtext")+"' /></td>");
+        
     });
     //Resetting the id for further col modification
     $(".col_mod").each(function(ind) {
         $(this).attr("id", "col-"+ind);
     });
-    //Add one column
+    //Add one column in the text box
     $("#r-col").val(parseInt($("#r-col").val())+1);
 }
 
@@ -222,13 +227,20 @@ $(document).ready(function(){
    
     $('#createTable').on('click',function(){
         TTS.forms.addtable();
-     });
+    });
+
     $('body').on('click','#add_row_after', function(){
-        TTS.forms.add_row_after();
-     });
+        TTS.forms.add_row(1);
+    });
+
+    $('body').on('click','#add_row_before', function(){
+        TTS.forms.add_row(0);
+    });
+
     $('body').on('click','#makeradio_row', function(){
         TTS.forms.makeradio_row();
-     });
+    });
+
     $('body').on('click','#makeradio_row', function(){
         TTS.forms.makeradio_col();
     });
@@ -241,11 +253,15 @@ $(document).ready(function(){
         TTS.forms.del_column();
     });
     
-   $('body').on('click','#add_col1', function(){
-        TTS.forms.add_col1();
+    $('body').on('click','#add_col_after', function(){
+        TTS.forms.add_col(1);
     });
 
-   $('#showexcelfile').on('click',function(){
+    $('body').on('click','#add_col_before', function(){
+        TTS.forms.add_col(0);
+    });
+
+    $('#showexcelfile').on('click',function(){
         TTS.forms.showexcelfile();
      });
    

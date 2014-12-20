@@ -25,8 +25,6 @@ urlpatterns = patterns('teacher.views',
                                                 name='studentresourceunits'),
     url(r'^extras',       'extras',             name='extras'),
     url(r'^extraslist',  'extraslist',          name='extraslist'),
-
-    
     url(r'^allschoolresourcelist', 'allschoolresourcelist',    
                                                 name='allschoolresourcelist'),
     url(r'^studentresourcelist', 'studentresourcelist',    

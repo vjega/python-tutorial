@@ -124,8 +124,8 @@ TTS.forms.ressave = function(){
     data.answerurl = 'test/test.url';
     data.answertype = $(".isaudio:checked").val();
     data.isrecord = 0;
-    data.isanswered = 1;
-    data.issaved = 0;
+    data.isanswered = 0;
+    data.issaved = 1;
 
     $.ajax({
         url:"/api/admin/studentassignresource/"+getUrlParameter('resourceid')+"/",
@@ -147,8 +147,11 @@ $(document).ready(function(){
         $('#recorder-wrap').hide();
     });
 
+    var data = getUrlParameter('data');
+    var res = data.split('_');
+
     $.ajax({
-        "url":"/api/student/resourceinfo/"+getUrlParameter('resourceid')+"/?format=json",
+        "url":"/api/student/resourceinfo/"+res[2]+"/?format=json",
         "type":"GET"
     }).done(function(data){
         console.log(data);

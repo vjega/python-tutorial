@@ -1,7 +1,7 @@
 from django.utils.translation import (ugettext as _,)
 from django import forms
 from crispy_forms.helper import FormHelper
-from portaladmin import models
+from teacher import models
 #from crispy_forms.layout import Submit
 
 class StudentForm(forms.Form):
@@ -16,16 +16,16 @@ class StudentForm(forms.Form):
         choices  = [(opt.classid, opt.shortname) for opt in models.Classinfo.objects.all()],
     )
     firstname = forms.CharField(
-        label = "%s %s"%(_("First"),_("Name")),
+        label = _("Name"),
         max_length = 100,
         required = True,
-        widget = forms.TextInput({ "placeholder": "%s %s"%(_("First"),_("Name"))})
+        widget = forms.TextInput({ "placeholder": _("First Name")})
     )
     lastname = forms.CharField(
-        label = "%s %s"%(_("last"),_("Name")),
+        label = _("Name"),
         max_length = 100,
         required = True,
-        widget = forms.TextInput({ "placeholder": "%s %s"%(_("Last"),_("Name"))})
+        widget = forms.TextInput({ "placeholder": _("last Name")})
     )
     username = forms.CharField(
         label = _("User Name"),
@@ -37,7 +37,7 @@ class StudentForm(forms.Form):
         label = _("Password"),
         max_length = 100,
         required = True,
-        widget = forms.PasswordInput({ "placeholder": _("Password")})
+        widget = forms.TextInput({ "placeholder": _("Password")})
     )
     emailid = forms.CharField(
         label = _("Email Id"),
@@ -54,7 +54,7 @@ class StudentForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(StudentForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_id = 'add-student'
+        self.helper.form_id = 'add-student-teacher'
         self.helper.form_class  = 'form-horizontal'
         self.helper.label_class = 'col-sm-4'
         self.helper.field_class = 'col-sm-8'

@@ -10,6 +10,17 @@ from django.db import connection
 from portaladmin import models
 import  adminserializers
 
+def loginname_to_userid(usertype, username):
+
+    if usertype=='Admin':
+        m = models.Admininfo.objects.filter(username=username)[0]
+    elif usertype=='Teacher':
+        m = models.Teacherinfo.objects.filter(username=username)[0]
+    elif usertype=='Student':
+        m = models.Studentinfo.objects.filter(username=username)[0]
+
+    return m.studentid
+
 class AdmininfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Admininfo.objects.filter(isdelete=0)
@@ -67,6 +78,7 @@ class teacherViewSet(viewsets.ModelViewSet):
         teacher.schoolid = teacherdata.get('schoolid')
         teacher.classid = '1' #teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
+        teacher.imageurl = teacherdata.get('imageurl')
         #teacher.imageurl = studentdata.get('imageurl')
         teacher.isdelete = 0
         teacher.createdby = request.user.id
@@ -131,7 +143,7 @@ class studentViewSet(viewsets.ModelViewSet):
         student.firstname = studentdata.get('firstname')
         student.lastname = studentdata.get('lastname')
         student.emailid = studentdata.get('emailid')
-        #student.imageurl = studentdata.get('imageurl')
+        student.imageurl = studentdata.get('imageurl')
         student.isdelete = 0
         student.createdby = request.user.id
         student.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -146,13 +158,13 @@ class studentViewSet(viewsets.ModelViewSet):
         student.password = studentdata.get('password')
         student.firstname = studentdata.get('firstname')
         student.schoolid = studentdata.get('schoolid')
-        #teacher.classid = '1' #teacherdata.get('classid')
         student.emailid = studentdata.get('emailid')
+        student.imageurl = studentdata.get('imageurl')
         student.save()
         return Response(request.DATA)
 
     @delete_login('Student')
-    def destroy(self, request, pk):
+    def destroy(self, request, pk=None):
         student = models.Studentinfo.objects.get(pk=pk)
         student.isdelete = 1
         student.save()
@@ -522,7 +534,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
 
     def update(self, request, pk=None):
         data = {k:v[0] for k, v in dict(request.DATA).items()}
-        print data
+        #print data
         ari = models.Assignresourceinfo.objects.get(pk=pk)
         ari.originaltext = data.get('originaltext')
         ari.answertext = data.get('answertext')
@@ -551,15 +563,17 @@ class StudentAssignResource(viewsets.ModelViewSet):
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         WHERE isdeleted=0
-              AND ari.studentid=299 
+              AND ari.studentid=%d
               AND ari.IsDelete=0 
               AND ri.categoryid=0 
               AND isanswered=0 and issaved=0 
               AND ari.assigneddate  BETWEEN '2010-01-01' AND '2014-12-31'  
         GROUP BY resourceid 
-        ORDER BY assigneddate DESC'''
+        ORDER BY assigneddate DESC''' % loginname_to_userid('Student', 'T0733732E') 
         cursor = connection.cursor()
+        #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
+        #cursor.execute(sql, "3680")
         #print dir(cursor)
         #result = cursor.fetchall()
         #print return [
@@ -634,4 +648,29 @@ class StickynotesResource(viewsets.ModelViewSet):
     def destroy(self, request, pk):
         print pk
         models.stickynotes.objects.get(pk=pk).delete()
+
+class StudentinfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Studentinfo.objects.all()
+    serializer_class = adminserializers.StudentinfoSerializer
+
+    def create(self, request):
+        studentinfo = models.studentinfo()
+        studentdata =  json.loads(request.DATA.keys()[0])
+        studentinfo.studentid = rubricsdata.get('studentid')
+        studentinfo.firstname = rubricsdata.get('firstname')
+        studentinfo.lastname = rubricsdata.get('lastname')
+        studentinfo.username = rubricsdata.get('username')
+        studentinfo.emailid = rubricsdata.get('emailid')
+        studentinfo.schoolid = rubricsdata.get('schoolid')
+        studentinfo.classid = rubricsdata.get('classid')
+        studentinfo.password = rubricsdata.get('password')
+        studentinfo.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        studentinfo.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
         return Response('"msg":"delete"')

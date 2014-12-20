@@ -62,6 +62,7 @@
 {% block morecss %}
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
 <style>
     #addrec:hover, .tts-edit:hover, .tts-delete:hover, #student-main-tbl tbody tr:hover {
         cursor: pointer;
@@ -70,6 +71,7 @@
 {% endblock morecss %}
 
 {% block morescript %}
+<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
@@ -80,38 +82,49 @@
 {% block scriptcontent %}
 
 <script id="student-form" type="text/x-jsrender">
+<div id="file-uploader">File Uploader Comes Here...</div> 
 {% crispy form %}
 </script>
 
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-TTS.forms.addstudent = function() {
+TTS.forms.addstudent = function(form, data) {
+    $.ajax({
+        type:'POST',
+        data: data,
+        url : '/api/admin/student/'
+    }).done(function( msg ) {
+        form.close();
+        location.reload();
+        //dialogItself.close();
+    });
+}
+
+TTS.forms.showstudentform = function() {
     BootstrapDialog.show({
         title: 'Add Student',
         message: $($('#student-form').render()),
+        onshown: function(){
+            TTS.forms.upload();
+        },
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-student");
-                $.ajax({
-                    type:'POST',
-                    data: data,
-                    url : '/api/admin/student/'
-                }).done(function( msg ) {
-                    dialogItself.close();
-                    location.reload();
-                });
+                TTS.forms.addstudent(dialogItself, data); 
             }
             },{
             label: 'Cancel',
-            action: function(dialogItself){
-                dialogItself.close();
+            action: function(dlg){
+                dlg.close();
             }
         }]
     });
 };
+
+
 TTS.forms.editstudent = function(id, data) {
     BootstrapDialog.show({
         title: 'Edit Student',
@@ -145,7 +158,6 @@ TTS.forms.editstudent = function(id, data) {
 };
 
 TTS.forms.renderstudentlist = function(data){
-    
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
@@ -153,13 +165,14 @@ TTS.forms.renderstudentlist = function(data){
             },
             { "title": "{% trans "Photo" %}",
               "class": "text-center",  
-              "data" : "photo"  
+              "data" : "image"  
             },
             { "title": "{% trans "Name" %}",
               "data" : "name"  
             },
             { "title": "{% trans "Username" %}",
               "data" : "username"  
+
             }, 
             { "title": "{% trans "Email Id" %}",
               "data" : "emailid"  
@@ -181,10 +194,10 @@ TTS.forms.renderstudentlist = function(data){
         var t = [];
         t.DT_RowId = data[i].studentid;
         t.slno = ++count;
-        if (data[i].imageurl){
-            t.photo = "<img src='/static/"+data[i].imageurl+"' width='100' height='100'>";
+       if (data[i].imageurl){
+            t.image = "<img src='/static/"+data[i].imageurl+"' width='100' height='100'>";
         } else {
-            t.photo ="<img src='http://placehold.it/100x100'>";
+            t.image = "<img src='http://placehold.it/100x100'>";
         }
         t.name = data[i].firstname + " "+data[i].lastname;
         t.username = data[i].username;
@@ -206,6 +219,32 @@ TTS.forms.renderstudentlist = function(data){
     });
 
 };
+
+TTS.forms.upload = function(elm) {
+    console.log(elm);
+    var uploader = new qq.FileUploader({
+        action: "/admin/student-img-upload",
+        element: $('#file-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#id_imageurl").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
+    });
+};
+
+
 $(document).ready(function(){
     var url = "/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json"
     $.ajax({
@@ -269,7 +308,7 @@ $(document).ready(function(){
     
     });    
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.addstudent();
+        TTS.forms.showstudentform();
     });
 });
 
