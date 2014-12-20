@@ -39,6 +39,7 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
 <style>
     #addrec:hover, #teacherresource-main-tbl tbody tr:hover, .tts-delete:hover{
         cursor: pointer;
@@ -47,6 +48,7 @@
 {% endblock morecss %}
 
 {% block morescript %}
+<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
@@ -57,6 +59,7 @@
 
 {% block scriptcontent %}
 <script id="teacherresource-form" type="text/x-jsrender">
+<div id="file-uploader">File Uploader Comes Here...</div> 
 {% crispy form %}
 </script>
 <script>
@@ -78,34 +81,38 @@ TTS.forms = TTS.forms || {}
         $("#chapterid").html(opt);
     })
 };*/
-
-TTS.forms.addteacherresource = function() {
+TTS.forms.addteacherresource = function(form, data) {
+    $.ajax({
+        type:'POST',
+        data: data,
+        url : '/api/admin/teacherresourcesinfo/'
+    }).done(function( msg ) {
+        console.log(data)
+        form.close();
+        location.reload();
+        //dialogItself.close();
+    });
+}
+TTS.forms.showteacherresource = function() {
     BootstrapDialog.show({
         title: 'Add TeacherResource',
-        onshown: function(dialogRef){
-            updateChapter();
-            $('.summernote').summernote();
-        },
         message: $($('#teacherresource-form').render()),
+        onshown: function(){
+            TTS.forms.upload();
+            $('.summernote').summernote();
+            updateChapter();
+        },
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-teacherresource");
-                $.ajax({
-                    type:'POST',
-                    data: data,
-                    url : '/api/admin/teacherresourcesinfo/'
-                }).done(function( msg ) {
-                    dialogItself.close();
-                    location.reload();
-                    //dialogItself.close();
-                });
+                TTS.forms.addteacherresource(dialogItself, data); 
             }
             },{
             label: 'Cancel',
-            action: function(dialogItself){
-                dialogItself.close();
+            action: function(dlg){
+                dlg.close();
             }
         }]
     });
@@ -151,6 +158,30 @@ TTS.forms.renderteacherresourceinfo = function(data){
 
 };
 
+TTS.forms.upload = function(elm) {
+    console.log(elm);
+    var uploader = new qq.FileUploader({
+        action: "/admin/student-teacherres-upload",
+        element: $('#file-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#id_fileurl").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
+    });
+};
+
 var updateChapter = function(){
     $.ajax({
         'url': "/api/admin/chapterinfo/?classid="+$("#id_classid").val()
@@ -190,11 +221,11 @@ $(document).ready(function(){
             return false;
         }
         alert("Record Deleted")
-        window.location = 'schoollist';
+        window.location = 'teacherresourcelist';
     });
 
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.addteacherresource();
+        TTS.forms.showteacherresource();
     });
     $("body").on('change', '#id_classid', function(){
         updateChapter();

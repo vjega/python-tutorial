@@ -47,5 +47,7 @@ urlpatterns = patterns('portaladmin.views',
     url(r'^admin-img-upload$',        'admin_img_uploader',   name="admin_ajax_upload"),
     url(r'^teacher-img-upload$',      'teacher_img_uploader', name="teacher_ajax_upload"),
     url(r'^student-img-upload$',      'student_img_uploader',  name="student-img-upload"),
+    url(r'^student-studentres-upload$', 'student_studentres_uploader',  name="student-studentres-upload"),
+    url(r'^student-teacherres-upload$', 'student_teacherres_uploader',  name="student-teacherres-uploader"),
     #(r'^api/', include(v1_api.urls)),
 )

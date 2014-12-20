@@ -37,6 +37,7 @@
 {% block morecss %}
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <style>
     #addrec:hover, #studetresource-main-tbl tbody tr:hover,.tts-delete:hover{
@@ -47,6 +48,7 @@
 
 
 {% block morescript %}
+<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
@@ -58,6 +60,7 @@
 {% block scriptcontent %}
 
 <script id="studentresource-form" type="text/x-jsrender">
+<div id="file-uploader">File Uploader Comes Here...</div> 
 {% crispy form %}
 </script>
 
@@ -82,64 +85,79 @@ TTS.categoryid = getUrlParameter('categoryid');
 TTS.chapterid = getUrlParameter('chapterid');
 TTS.classid = getUrlParameter('classid');
 TTS.section = getUrlParameter('section');
-TTS.forms.addstudentresource = function() {
+
+TTS.forms.addstudentresource = function(form, data) {
+    $.ajax({
+        type:'POST',
+        data: data,
+        url : '/api/admin/resourceinfo/'
+    }).done(function( msg ) {
+        console.log(data)
+        form.close();
+        location.reload();
+        //dialogItself.close();
+    });
+}
+
+TTS.forms.showstudentresource = function() {
     BootstrapDialog.show({
-        title: 'Student Resources',
+        title: 'Add Student Resources',
+        message: $($('#studentresource-form').render()),
         onshown: function(dialogRef){
             $("#id_section").val(TTS.section);
             updateClass();
             updateChapter();
             updateselectedChapter();
+            TTS.forms.upload();
             //updatesection();
             $('.summernote').summernote();
         },
-        message: $($('#studentresource-form').render()),
+        
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-studentresource");
-                //console.log(data);
-                $.ajax({
-                    type:'POST',
-                    data: data,
-                    url : '/api/admin/resourceinfo/'
-                }).done(function( msg ) {
-                  //  console.log(msg);
-                    dialogItself.close();
-                    location.reload();
-                });
-
+                TTS.forms.addstudentresource(dialogItself, data); 
             }
             },{
             label: 'Cancel',
-            action: function(dialogItself){
-                dialogItself.close();
+            action: function(dlg){
+                dlg.close();
             }
         }]
     });
 };
+
 TTS.forms.renderstudentresourceinfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
-              "class": "text-center"  
+              "class": "text-center" ,
+              "data" : "slno"
             },
-            { "title": "{% trans "Title" %}"},
-            { "title": "{% trans "Date" %}" },
-            { "title": "{% trans "Type" %}"}, 
+            { "title": "{% trans "Title" %}",
+              "data" : "title"
+            },
+            { "title": "{% trans "Date" %}",
+              "data" :"date"
+            },
+            { "title": "{% trans "Type" %}",
+              "data" :"type"
+            }, 
             { "title": "{% trans "Delete" %}",
-              "class": "text-center"  
+              "class": "text-center",  
+              "data":"delete"
             }, 
         ];
     var dataset = [];
     var count = 0
     for(var i in data){
         var t = [];
-        t.push(++count);
-        t.push(data[i].resourcetitle);
-        t.push(data[i].createddate);
-        t.push(data[i].resourcetype);
-        t.push("<i class='tts-delete fa fa-trash fa-lg'></i>");
+        t.slno=++count;
+        t.title=data[i].resourcetitle;
+        t.date=data[i].createddate;
+        t.type=data[i].resourcetype;
+        t.delete="<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
 
@@ -148,6 +166,30 @@ TTS.forms.renderstudentresourceinfo = function(data){
         "columns":  headers
     });
 
+};
+
+TTS.forms.upload = function(elm) {
+    console.log(elm);
+    var uploader = new qq.FileUploader({
+        action: "/admin/student-teacherres-upload",
+        element: $('#file-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#id_thumbnailurl").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
+    });
 };
 
 var updateChapter = function(){
@@ -221,7 +263,7 @@ $(document).ready(function(){
         window.location = 'studentresourcelist';
     });
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.addstudentresource();
+        TTS.forms.showstudentresource();
         //updateClass();
         //updateselectedChapter();
         //updatesection();
