@@ -9,11 +9,17 @@ class TeacherResourceForm(forms.Form):
         required   = True,
         choices    = [('text', 'Text'), ('audio', 'Audio'),('video','Video'), ('image', 'Image')]
     )
-    resource_file = forms.FileField(
+    image = forms.CharField(
+        label = _("Choose File"),
+        max_length = 100,
+        required = True,
+        widget = forms.HiddenInput({ "placeholder": _("Email Id")})
+    )
+    """resource_file = forms.FileField(
         label      = _("Choose File"),
         max_length = 100,
         required   = True,
-    )
+    )"""
     schoolid = forms.ChoiceField(
         label    = _("Select School"),
         required = True,
