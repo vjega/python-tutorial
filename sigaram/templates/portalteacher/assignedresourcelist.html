@@ -113,7 +113,7 @@
         var count = 0
         for(var i in data){
             var t = [];
-            t.DT_RowId = data[i].id;
+            t.DT_RowId = data[i].resourceid;
             t.slno=++count;
             t.title=data[i].resourcetitle;
             t.date=data[i].createddate;
@@ -129,14 +129,14 @@
 
 $(document).ready(function(){
     $.ajax({
-        "url":"/api/admin/assignedresourcelist/?format=json",
+        "url":"/api/admin/teacherassignedresource/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.assignedstudentresource(data);
     });
     $('.resourcelist').on('click','tr',function(e){
         e.stopPropagation();
-        window.location = 'viewassignresource.php?assignedid='+this.id;
+        window.location = 'viewassignresource.php?resourceid='+this.id;
     });
     $('#fromdatepicker').datetimepicker({
         pickTime: true
@@ -156,7 +156,7 @@ $(document).ready(function(){
         var fromdate = $("#fromdatepicker input").val();
         var todate = $("#todatepicker input").val();
         $.ajax({
-            "url":"/api/admin/assignedresourcelist/?fdate="+fromdate+"&tdate="+todate+"&format=json",
+            "url":"/api/admin/teacherassignedresource/?fdate="+fromdate+"&tdate="+todate+"&format=json",
             "type":"GET"
         }).done(function(data){
             TTS.forms.assignedstudentresource(data);
