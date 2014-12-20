@@ -45,7 +45,7 @@ class StudentForm(forms.Form):
         required = True,
         widget = forms.TextInput({ "placeholder": _("Email Id")})
     )
-    image = forms.CharField(
+    imageurl = forms.CharField(
         label = _("Photo"),
         max_length = 100,
         required = True,
@@ -54,7 +54,7 @@ class StudentForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(StudentForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_id = 'add-student'
+        self.helper.form_id = 'add-student-teacher'
         self.helper.form_class  = 'form-horizontal'
         self.helper.label_class = 'col-sm-4'
         self.helper.field_class = 'col-sm-8'
