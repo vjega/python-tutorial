@@ -113,5 +113,5 @@ class MindmapSerializer(serializers.HyperlinkedModelSerializer):
 
 class StickynotesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = models.Mindmap
-        fields = ('id','text','name')
+        model = models.stickynotes
+        fields = ('id','stickytext','color','name')

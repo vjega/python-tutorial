@@ -5,7 +5,7 @@
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            <h2 class="page-header">{% trans "Students" %}</h2>
+            <h2 class="page-header">{% trans "Login statistics" %}</h2>
         </div>
         <!-- /.col-lg-12 -->
     </div>
@@ -41,7 +41,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             {% trans "Students" %} {% trans "List" %}
-            
+            <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
@@ -61,6 +61,7 @@
 {% block morecss %}
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
 <style>
     #addrec:hover, .tts-edit:hover, .tts-delete:hover, #student-main-tbl tbody tr:hover {
         cursor: pointer;
@@ -69,10 +70,12 @@
 {% endblock morecss %}
 
 {% block morescript %}
+<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
@@ -80,6 +83,74 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
+TTS.forms.addstudent = function(form, data) {
+    $.ajax({
+        type:'POST',
+        data: data,
+        url : '/api/admin/student/'
+    }).done(function( msg ) {
+        form.close();
+        location.reload();
+        //dialogItself.close();
+    });
+}
+
+TTS.forms.showstudentform = function() {
+    BootstrapDialog.show({
+        title: 'Add Student',
+        message: $($('#student-form').render()),
+        onshown: function(){
+            TTS.forms.upload();
+        },
+        buttons: [{
+            label: 'Save',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#add-student");
+                TTS.forms.addstudent(dialogItself, data); 
+            }
+            },{
+            label: 'Cancel',
+            action: function(dlg){
+                dlg.close();
+            }
+        }]
+    });
+};
+
+
+TTS.forms.editstudent = function(id, data) {
+    BootstrapDialog.show({
+        title: 'Edit Student',
+        message: $($('#student-form').render()),
+        onshown: function(){
+            $("#add-student").find("input,select").each(function(){
+                $(this).val(data[this['name']]);
+            });
+        },
+        buttons: [{
+            label: 'Update',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#add-student");
+                $.ajax({
+                    type:'PUT',
+                    data: data,
+                    url : '/api/admin/student/'+id
+                }).done(function( msg ) {
+                    dialogItself.close();
+                    location.reload();
+                });
+            }
+            },{
+            label: 'Cancel',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
+        }]
+    });
+};
+
 TTS.forms.renderstudentlist = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
@@ -100,7 +171,15 @@ TTS.forms.renderstudentlist = function(data){
             { "title": "{% trans "Email Id" %}",
               "data" : "emailid"  
             }, 
-            
+            { "title": "{% trans "Edit" %}",
+              "class": "text-center",
+              "data" : "edit"  
+
+            }, 
+            { "title": "{% trans "Delete" %}",
+              "class": "text-center",
+              "data" : "delete"  
+            }, 
         ];
     var dataset = [];
     
@@ -117,7 +196,8 @@ TTS.forms.renderstudentlist = function(data){
         t.name = data[i].firstname + " "+data[i].lastname;
         t.username = data[i].username;
         t.emailid = data[i].emailid;
-       
+        t.edit = "<i class='tts-edit fa fa-pencil fa-lg'></i>";
+        t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
     if (TTS.forms.table) {
@@ -132,6 +212,30 @@ TTS.forms.renderstudentlist = function(data){
         "columns":  headers
     });
 
+};
+
+TTS.forms.upload = function(elm) {
+    console.log(elm);
+    var uploader = new qq.FileUploader({
+        action: "/admin/student-img-upload",
+        element: $('#file-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#id_imageurl").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
+    });
 };
 
 
@@ -161,7 +265,7 @@ $(document).ready(function(){
         });
     })
 
-    $("#classid").change(function(){
+     $("#classid").change(function(){
         $.ajax({
             "url":"/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json",
             "type":"GET"
@@ -173,7 +277,33 @@ $(document).ready(function(){
             }
         });
     })
-      
+
+    $('#student-main-tbl').on('click', 'tbody tr', function(){
+        window.location = 'studentprofile?studentid='+this.id;
+    });
+    $('#student-main-tbl').on('click', '.tts-edit', function(e){
+        e.stopPropagation();
+        var id = $(this).parent().parent().prop('id');
+        $.ajax({
+            url: '/api/admin/student/'+id,
+            type: 'GET'
+        }).done(function(data){
+            TTS.forms.editstudent(id,data);
+        })
+    });
+    $('#student-main-tbl').on('click', '.tts-delete', function(e){
+        e.stopPropagation();
+        if (!window.confirm("Do you want to delete this record?")) {
+            return false;
+        }
+        //console.log($(this).parent().parent().parent().prop("id"))
+        TTS.forms.delteacher($(this).parent().parent().prop("id"));
+        window.location.reload();
+    
+    });    
+    $("#page-wrapper").on("click", "#addrec", function(){
+        TTS.forms.showstudentform();
+    });
 });
 
 </script>

@@ -198,6 +198,8 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         teacherresource.classid = teacherresourcedata.get('classid')
         teacherresource.section = teacherresourcedata.get('section')
         teacherresource.resourcetype = teacherresourcedata.get('resourcetype')
+        teacherresource.resourcetitle = teacherresourcedata.get('resourcetitle')
+        teacherresource.documenturl = teacherresourcedata.get('documenturl')
         teacherresource.resourcecategory = teacherresourcedata.get('resourcecategory')
         teacherresource.chapterid = teacherresourcedata.get('chapterid')
         teacherresource.createdby = request.user.id
@@ -772,8 +774,7 @@ class StickynotesResource(viewsets.ModelViewSet):
     def create(self, request):
         stickynotes = models.stickynotes()
         data = json.loads(dict(request.DATA).keys()[0])
-        print data
-        #stickynotes.text = data.get('text')
+        stickynotes.stickytext = data.get('stickytext')
         stickynotes.name = data.get('name')
         stickynotes.xyz = data.get('xyz')
         stickynotes.color = data.get('color')
@@ -782,6 +783,23 @@ class StickynotesResource(viewsets.ModelViewSet):
         stickynotes.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         stickynotes.save()
         return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        stickynotes = models.stickynotes.objects.get(pk=pk)
+        data =  json.loads(request.DATA.keys()[0])
+        stickynotes.stickytext = data.get('stickytext')
+        stickynotes.name = data.get('name')
+        stickynotes.xyz = data.get('xyz')
+        stickynotes.color = data.get('color')
+        stickynotes.isdeleted = 0
+        stickynotes.createdby = request.user.id
+        stickynotes.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        stickynotes.save()
+        return Response(request.DATA)
+
+    def destroy(self, request, pk):
+        print pk
+        models.stickynotes.objects.get(pk=pk).delete()
 
 class StudentinfoViewSet(viewsets.ModelViewSet):
 
