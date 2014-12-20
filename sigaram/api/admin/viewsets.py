@@ -619,6 +619,25 @@ class StickynotesResource(viewsets.ModelViewSet):
     queryset = models.stickynotes.objects.all()
     serializer_class = adminserializers.StickynotesSerializer
 
+    def list(self, request):
+        sql = '''
+        SELECT s.id,
+            s.stickytext,
+            s.color,
+            group_concat(sc.stickycomment SEPARATOR "~") as comments
+        FROM stickynotes s
+        LEFT JOIN stickycomments sc ON sc.stickyid = s.id
+        GROUP BY s.id, 
+                 s.stickytext,
+                 s.color''' 
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
     def create(self, request):
         stickynotes = models.stickynotes()
         data = json.loads(dict(request.DATA).keys()[0])
@@ -646,8 +665,8 @@ class StickynotesResource(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def destroy(self, request, pk):
-        print pk
         models.stickynotes.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
 
 class StudentinfoViewSet(viewsets.ModelViewSet):
 
@@ -674,3 +693,20 @@ class StudentinfoViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
+
+
+class StickyCommentsResource(viewsets.ModelViewSet):
+    queryset = models.stickycomments.objects.all()
+    serializer_class = adminserializers.StickyCommentsSerializer
+
+    def create(self, request):
+        stickycomments = models.stickycomments()
+        data = json.loads(dict(request.DATA).keys()[0])
+        stickycomments.stickyid = data.get('stickyid')
+        stickycomments.stickycomment = data.get('stickycomment')
+        stickycomments.commentby = request.user.username
+        stickycomments.isdeleted = 0
+        stickycomments.createdby = request.user.id
+        stickycomments.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        stickycomments.save()
+        return Response(request.DATA)

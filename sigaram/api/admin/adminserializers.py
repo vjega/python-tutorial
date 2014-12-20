@@ -115,3 +115,8 @@ class StickynotesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.stickynotes
         fields = ('id','stickytext','color','name')
+        
+class StickyCommentsSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.stickycomments
+        fields = ('id','stickyid','stickycomment','commentby')

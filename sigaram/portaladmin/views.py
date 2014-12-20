@@ -12,7 +12,8 @@ from portaladmin.forms import (AdminForm,
                    StudentresourceListForm,
                    ClassListForm,
                    CalendarForm,
-                   StickyForm)
+                   StickyForm,
+                   StickyCommentForm)
 from ajaxuploader.views import AjaxFileUploader
 #from ajaxuploader.backends.easythumbnails import EasyThumbnailUploadBackend
 
@@ -323,7 +324,10 @@ def mindmapedit(request, id):
     
 @login_required
 def sticky_notes(request):
-    return render(request, 'portaladmin/sticky_notes.html', {'form':StickyForm.StickyForm()})
+    return render(request, 'portaladmin/sticky_notes.html', 
+                                        {'form':StickyForm.StickyForm(),
+                                         'Cform':StickyCommentForm.StickyCommentForm()
+                                         })
     
 @login_required
 def calendar(request):
