@@ -9,7 +9,7 @@ class TeacherResourceForm(forms.Form):
         required   = True,
         choices    = [('text', 'Text'), ('audio', 'Audio'),('video','Video'), ('image', 'Image')]
     )
-    image = forms.CharField(
+    documenturl = forms.CharField(
         label = _("Choose File"),
         max_length = 100,
         required = True,
@@ -44,7 +44,7 @@ class TeacherResourceForm(forms.Form):
         label    = _("Chapter"),
         required = True,
     )
-    heading = forms.CharField(
+    resourcetitle = forms.CharField(
         label    = _("Heading"),
         required = True,
         widget   = forms.Textarea({ "class": "summernote"})

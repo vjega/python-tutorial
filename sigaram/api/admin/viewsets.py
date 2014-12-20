@@ -196,6 +196,8 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         teacherresource.classid = teacherresourcedata.get('classid')
         teacherresource.section = teacherresourcedata.get('section')
         teacherresource.resourcetype = teacherresourcedata.get('resourcetype')
+        teacherresource.resourcetitle = teacherresourcedata.get('resourcetitle')
+        teacherresource.documenturl = teacherresourcedata.get('documenturl')
         teacherresource.resourcecategory = teacherresourcedata.get('resourcecategory')
         teacherresource.chapterid = teacherresourcedata.get('chapterid')
         teacherresource.createdby = request.user.id
