@@ -41,7 +41,9 @@ urlpatterns = patterns('teacher.views',
     url(r'^rubrics$',        'rubrics',          name='rubrics'),
     url(r'^statistics$',     'statistics',       name='statistics'),
     url(r'^statisticsstudentslist$', 'statisticsstudentslist',
-                                                name='statisticsstudentslist'),
+                                                 name='statisticsstudentslist'),
     url(r'^rubric_edit$', 'rubric_edit',         name='rubric_edit'),
+    url(r'^viewassignresource',         'viewassignresource',  
+                                                 name='viewassignresource'),
 
 )

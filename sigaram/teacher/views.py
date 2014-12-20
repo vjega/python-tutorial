@@ -378,3 +378,5 @@ def rubric_edit(request):
     return render(request, 'portalteacher/rubric_edit.html' ,{'rubric_edit':rubric_edit,
                             "form" : RubricsForm.RubricsForm() })
                   
+def viewassignresource(request):
+    return render(request, 'portalteacher/viewassignresource.html')                      
