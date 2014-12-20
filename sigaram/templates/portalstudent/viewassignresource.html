@@ -27,6 +27,7 @@
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover"
                      id="admin-main-tbl">
+                <input type="hidden" value="" id="assignedresourceid">
                 <div>
                     <h3>{% trans "Title" %}:</h3>
                 </div><br />
@@ -73,8 +74,8 @@
                     <textarea class="summernote"></textarea>
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-success btn-lg" id="res-send">{% trans 'Save' %}</button>
-                    <button class="btn btn-success btn-lg">{% trans 'Send' %}</button>
+                    <button class="btn btn-success btn-lg" id="res-save">{% trans 'Save' %}</button>
+                    <button class="btn btn-success btn-lg" id="res-send">{% trans 'Send' %}</button>
                 </div>                    
                 </table>
             </div>
@@ -114,21 +115,39 @@ TTS.forms.renderresourceinfo = function(data){
     $("#resource-title").html(data.resourcetitle);
     $("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.videourl+"');\" >View</a>");
 };
+TTS.forms.renderassignedresourceinfo = function(data){
+    $(".summernote").code("your text");
+    //$("#resource-title").html(data.resourcetitle);
+    //$("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.videourl+"');\" >View</a>");
+};
 function openwindow(videourl) {
     window.open("http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
 }
-TTS.forms.ressave = function(){
+TTS.forms.ressave = function(savesend){
     var data = {};
+    var assignedresourceid = $("#assignedresourceid").val();
     data.originaltext = $(".summernote").code();
     data.answertext = $(".summernote").code();
     data.answerurl = 'test/test.url';
     data.answertype = $(".isaudio:checked").val();
-    data.isrecord = 0;
-    data.isanswered = 0;
-    data.issaved = 1;
+    
+    if(data.answertype == 'audio')
+        data.isrecord = 0;
+    else
+        data.isrecord = 0;
+
+    if(savesend == 'save')
+        data.issaved = 1;
+    else
+        data.issaved = 0;
+
+    if(savesend == 'send')
+        data.isanswered = 1;
+    else
+        data.isanswered = 0;
 
     $.ajax({
-        url:"/api/admin/studentassignresource/"+getUrlParameter('resourceid')+"/",
+        url:"/api/admin/studentassignresource/"+assignedresourceid+"/",
         type:"PUT",
         data: data
     }).done(function(data){
@@ -149,7 +168,7 @@ $(document).ready(function(){
 
     var data = getUrlParameter('data');
     var res = data.split('_');
-
+    $("#assignedresourceid").val(res[1]);
     $.ajax({
         "url":"/api/student/resourceinfo/"+res[2]+"/?format=json",
         "type":"GET"
@@ -157,8 +176,18 @@ $(document).ready(function(){
         console.log(data);
         TTS.forms.renderresourceinfo(data);
     });
+    $("#res-save").click(function(){
+        TTS.forms.ressave('save');
+    });
     $("#res-send").click(function(){
-        TTS.forms.ressave();
+        TTS.forms.ressave('send');
+    });
+    $.ajax({
+        "url":"/api/student/studentassignresource/"+res[1]+"/?format=json",
+        "type":"GET"
+    }).done(function(data){
+        console.log(data);
+        TTS.forms.renderassignedresourceinfo(data);
     });
 });
 

@@ -14,11 +14,33 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
             <div class="panel-heading">
-                <span id="add" class="add">{% trans "From Date" %}</span>
-                <input type="text" name="From Date">
-                <span id="add" class="add">{% trans "To Date" %}</span>
-                <input type="text" name="From Date"><button type="button">{% trans "Search" %}</button>
 
+                <div class='col-md-4'>    
+                    <div class="form-group">
+                        <label>{% trans "From Date" %}: </label>
+                        <div class='input-group date' id='fromdatepicker'>
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-4'>
+                    <div class="form-group">
+                        <label>{% trans "To Date" %}: </label>
+                        <div class='input-group date' id='todatepicker'>
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>    
+                <div class="form-group">
+                    <button class="btn" type="button">{% trans "Search" %}</button>
+                </div>
+                
             </div>
 
 
@@ -111,7 +133,8 @@
         var count_saved = 0
         var count_answered = 0
         for(var i in data){
-            if (!i.issaved && !i.isanswered) {
+           
+            if (!data[i].issaved && !data[i].isanswered) {
                 var t = [];
                 t.DT_RowId = "row_"+data[i].id+"_"+data[i].resourceid; 
                 t.slno=++count_new;
@@ -121,7 +144,7 @@
                 //t.note="<a id='"+data[i].resourceid+"' class='addnote' href='viewassignresource.php?resourceid=66&categoryid=0'>{% trans "Note" %}</a>";
                 dataset_new.push(t);
             }
-            if (i.issaved && !i.isanswered) {
+            if (data[i].issaved && !data[i].isanswered) {
                 var t = [];
                 t.DT_RowId = "row_"+data[i].id+"_"+data[i].resourceid; 
                 t.slno=++count_saved;
@@ -131,7 +154,7 @@
                 //t.note="<a id='"+data[i].resourceid+"' class='addnote' href='javascript:void(0)'>{% trans "Note" %}</a>";
                 dataset_saved.push(t);
             }
-            if (i.isanswered) {
+            if (data[i].isanswered) {
                 var t = [];
                 t.DT_RowId = "row_"+data[i].id+"_"+data[i].resourceid; 
                 t.slno=++count_answered;
@@ -167,7 +190,19 @@ $(document).ready(function(){
     $('.resourcelist').on('click','tr',function(e){
         e.stopPropagation();
         window.location = 'viewassignresource.php?data='+this.id;
-    });                 
+    });
+    $('#fromdatepicker').datetimepicker({
+        pickTime: false
+    });
+    $('#todatepicker').datetimepicker({
+        pickTime: false
+    });
+    $("#fromdatepicker").on("dp.change",function (e) {
+       $('#todatepicker').data("DateTimePicker").setMinDate(e.date);
+    });
+    $("#todatepicker").on("dp.change",function (e) {
+       $('#fromdatepicker').data("DateTimePicker").setMaxDate(e.date);
+    });
 });
 
 </script>

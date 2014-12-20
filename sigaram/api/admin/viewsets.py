@@ -545,7 +545,6 @@ class StudentAssignResource(viewsets.ModelViewSet):
             ari.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
         if data.get('issaved'):
             ari.issaved = data.get('issaved')
-        ari.studentid = request.user.id
         ari.save()
         return Response({'msg':True})
 
@@ -566,7 +565,6 @@ class StudentAssignResource(viewsets.ModelViewSet):
               AND ari.studentid=%d
               AND ari.IsDelete=0 
               AND ri.categoryid=0 
-              AND isanswered=0 and issaved=0 
               AND ari.assigneddate  BETWEEN '2010-01-01' AND '2014-12-31'  
         GROUP BY resourceid 
         ORDER BY assigneddate DESC''' % loginname_to_userid('Student', 'T0733732E') 
@@ -582,6 +580,27 @@ class StudentAssignResource(viewsets.ModelViewSet):
                 dict(zip([col[0] for col in desc], row))
                 for row in cursor.fetchall()
             ]
+        return Response(result)
+
+    def retrieve(self, request, pk=None):
+        sql = '''
+        SELECT assignedid AS id,
+               ri.resourceid,
+               resourcetitle,
+               date(assigneddate) as createddate,
+               resourcetype,
+               thumbnailurl,
+               ari.studentid,
+               ari.isanswered,
+               ari.issaved
+        FROM assignresourceinfo ari
+        INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
+        WHERE assignedid = %s
+        ''' % pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
+        print result
         return Response(result)
 
     def create(self, request):
