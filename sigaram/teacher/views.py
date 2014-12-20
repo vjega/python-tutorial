@@ -367,7 +367,11 @@ def statistics(request):
 
 @switchlanguage
 def statisticsstudentslist(request):
-    return render(request, 'portalteacher/statisticsstudentslist.html' )
+    schools = models.Schoolinfo.objects.all()
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portalteacher/statisticsstudentslist.html', 
+                                        {'schools':schools, 'classes':classes, 
+                                        "form" : StudentForm.StudentForm()} )
 
 @switchlanguage
 def rubric_edit(request):
