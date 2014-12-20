@@ -194,12 +194,24 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
     def create(self, request):
         teacherresource = models.Teacherresourceinfo()
         teacherresourcedata =  json.loads(request.DATA.keys()[0])
+        restype = teacherresourcedata.get('resourcetype')
         teacherresource.schoolid = teacherresourcedata.get('schoolid')
         teacherresource.classid = teacherresourcedata.get('classid')
         teacherresource.section = teacherresourcedata.get('section')
-        teacherresource.resourcetype = teacherresourcedata.get('resourcetype')
+        teacherresource.resourcetype = restype
         teacherresource.resourcetitle = teacherresourcedata.get('resourcetitle')
-        teacherresource.documenturl = teacherresourcedata.get('documenturl')
+        teacherresource.documenturl = "" #teacherresourcedata.get('documenturl')
+        teacherresource.imageurl = "" #teacherresourcedata.get('imageurl')
+        teacherresource.audiourl = "" #teacherresourcedata.get('audiourl')
+        teacherresource.videourl = "" #teacherresourcedata.get('videourl')
+        if restype == "text":
+            teacherresource.documenturl = teacherresourcedata.get('fileurl')
+        elif restype == "audio":
+            teacherresource.audiourl = teacherresourcedata.get('fileurl')
+        elif restype == "image":
+            teacherresource.imageurl = teacherresourcedata.get('fileurl')
+        elif restype == "video":
+            teacherresource.videourl = teacherresourcedata.get('fileurl')
         teacherresource.resourcecategory = teacherresourcedata.get('resourcecategory')
         teacherresource.chapterid = teacherresourcedata.get('chapterid')
         teacherresource.createdby = request.user.id

@@ -9,7 +9,7 @@ class TeacherResourceForm(forms.Form):
         required   = True,
         choices    = [('text', 'Text'), ('audio', 'Audio'),('video','Video'), ('image', 'Image')]
     )
-    documenturl = forms.CharField(
+    fileurl = forms.CharField(
         label = _("Choose File"),
         max_length = 100,
         required = True,
