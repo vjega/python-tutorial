@@ -87,6 +87,7 @@ TTS.forms.addteacherresource = function(form, data) {
         data: data,
         url : '/api/admin/teacherresourcesinfo/'
     }).done(function( msg ) {
+        console.log(data)
         form.close();
         location.reload();
         //dialogItself.close();
@@ -99,13 +100,14 @@ TTS.forms.showteacherresource = function() {
         onshown: function(){
             TTS.forms.upload();
             $('.summernote').summernote();
+            updateChapter();
         },
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-teacherresource");
-                TTS.forms.addadmin(dialogItself, data); 
+                TTS.forms.addteacherresource(dialogItself, data); 
             }
             },{
             label: 'Cancel',
@@ -159,12 +161,12 @@ TTS.forms.renderteacherresourceinfo = function(data){
 TTS.forms.upload = function(elm) {
     console.log(elm);
     var uploader = new qq.FileUploader({
-        action: "/admin/student_teacherres_uploader",
+        action: "/admin/student-teacherres-upload",
         element: $('#file-uploader')[0],
         multiple: false,
         onComplete: function(id, fileName, responseJSON) {
             if(responseJSON.success) {
-                $("#id_image").val(responseJSON.path.replace('static/', ''));
+                $("#id_documenturl").val(responseJSON.path.replace('static/', ''));
             } else {
                 alert("upload failed!");
             }
@@ -219,7 +221,7 @@ $(document).ready(function(){
             return false;
         }
         alert("Record Deleted")
-        window.location = 'schoollist';
+        window.location = 'teacherresourcelist';
     });
 
     $("#page-wrapper").on("click", "#addrec", function(){
