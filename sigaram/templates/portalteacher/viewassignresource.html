@@ -1,4 +1,4 @@
-{% extends 'portalstudent/base.html' %}
+{% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
@@ -14,7 +14,7 @@
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <style>
-    #addrec:hover, #admin-main-tbl tbody tr:hover{
+    #addrec:hover, #admin-main-tbl tbody tr:hover, #view-answer:hover{
         cursor: pointer;
     }
     .text_area{
@@ -122,6 +122,10 @@ $(document).ready(function(){
     }).done(function(data){
         TTS.forms.renderstudentlist(data);
     });
+    $("#studentlist").on("click", ".cgreen", function(){
+        var studentid = $(this).parent().parent().prop("id");
+        window.location = 'viewassignmentanswer.php?resourceid='+resourceid+'&studentid='+studentid;
+    });
 });
 
 
@@ -150,9 +154,9 @@ TTS.forms.renderstudentlist = function(data){
         if (!data[i].issaved && !data[i].isanswered) 
             t.note = "<i class=\"fa fa-star fa-lg cred\"></i>" ;
         if (data[i].issaved && !data[i].isanswered) 
-            t.note = "<i class=\"fa fa-star fa-lg cgreen\"></i>" ;
-        if (data[i].isanswered) 
             t.note = "<i class=\"fa fa-star fa-lg cyellow\"></i>" ;
+        if (data[i].isanswered) 
+            t.note = "<i id=\"view-answer\" class=\"fa fa-star fa-lg cgreen\"></i>" ;
         
         dataset.push(t);
     }
