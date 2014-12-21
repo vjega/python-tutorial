@@ -1,92 +1,28 @@
-{% extends 'portalstudent/base.html' %}
+{% extends 'portalforum/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
+{% load crispy_forms_tags %}
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h3 class="page-header"><a href="#" id="new-folder">New Folder</a></h3>
-
+        <h2 class="page-header">{% trans "Teacher Resource" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
-<!-- /.row -->
-<div class="row">
-    <p />
-    {% for folder in folders%}
-    <a href="{{folder.link}}">
-    <div class="col-lg-3 col-md-6">
-        <div class="panel panel-{{folder.color}}">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-{{folder.icon}} fa-5x"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div class="tent-medium">{{folder.stat}}</div>
-                        <div class="tent-medium">{{folder.caption}}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    </a>
-    {% endfor %}
-</div>
-<!-- /.row -->
-<div class="row">
-    {% for folder in admin_folders%}
-    <div class="col-lg-3 col-md-6">
-        <div class="panel panel-yellow">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-folder fa-5x"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div class="tent-medium">{{folder.folder_name}}</div>
-                        <div class="tent-medium">{{folder.folder_description}}</div>
-                    </div>
-                </div>
-            </div>
-            <a href="{{folder.link}}">
-                <div class="panel-footer">
-                    <span class="pull-left">மேல் விவரங்களுக்கு</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
-        </div>
-    </div>
-    {% endfor %}
-</div>
-<!-- /.row -->
 {% endblock topcontent %}
+
 {% block botcontent %}
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            சமீபத்திய நிகழ்வுகள்
+            {% trans "Teacher Resource" %} &nbsp; <span id="addrec">
+                <i class="fa fa-plus-square fa-lg"></i></span>
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
             <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover" id="admin-main-tbl">
-                    <thead>
-                        <tr>
-                            {% for head in recent_activities.head %}
-                            <th>{{head}}</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for body in recent_activities.body %}
-                        <tr class="gradeX">
-                            <td>{{body.no}}</td>
-                            <td>{{body.job}}</td>
-                            <td>{{body.date}}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
+                <table class="table table-striped table-bordered table-hover" 
+                    id="teacherresource-main-tbl">
                 </table>
             </div>
             <!-- /.table-responsive -->
@@ -101,75 +37,206 @@
 {% block morecss %}
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
 <style>
-  .modal-backdrop {z-index: 0 !important}
+    #addrec:hover, #teacherresource-main-tbl tbody tr:hover, .tts-delete:hover{
+        cursor: pointer;
+    }
 </style>
 {% endblock morecss %}
 
 {% block morescript %}
-<script src="{% static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
-<script src="{% static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
-<script src="{% static "js/tts.utils.js" %}"></script>
+<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
-
-<script id="newfolder" type="text/x-jsrender">
-<form id="newfolderfrm" class="form-horizontal" role="form">
-    <div class="form-group">
-        <label for="folder_name" class="col-sm-4 control-label">பெட்டகத்தின் பெயர்</label>
-        <div class="col-sm-8">
-            <input type="text" class="form-control" name="folder_name" id="folder_name" placeholder="Folder name">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="remark" class="col-sm-4 control-label">குறிப்பு</label>
-        <div class="col-sm-8">
-            <input type="text" class="form-control" name="remark" id="remark" placeholder="Remark">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="order_no" class="col-sm-4 control-label">வரிசை எண்</label>
-        <div class="col-sm-8">
-            <input type="text" class="form-control" name="order_no" id="order_no" placeholder="Folder no">
-        </div>
-    </div>
-</form>
+<script id="student-form" type="text/x-jsrender">
+<div id="file-uploader">File Uploader Comes Here...</div> 
+{% crispy form %}
 </script>
+
 
 <script>
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}
+/*TTS.forms.update_chapter_list = function () {
+    var classid = $("#classid").val();
+    var section = $("#section").val();
+    var url = "/api/admin/teacherresourcesinfo/?classid="+classid+"&section="+section+"&format=json";
+    $.ajax({
+        url  : url,
+        type : "GET"
+    })
+    .done(function(data){
+        var opt = "";
+        for (var d in data){
+            opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"</option>";
+        }
+        $("#chapterid").html(opt);
+    })
+};*/
+TTS.forms.addteacherresource = function(form, data) {
+    $.ajax({
+        type:'POST',
+        data: data,
+        url : '/api/admin/teacherresourcesinfo/'
+    }).done(function( msg ) {
+        console.log(data)
+        form.close();
+        location.reload();
+        //dialogItself.close();
+    });
+}
+TTS.forms.showteacherresource = function() {
+    BootstrapDialog.show({
+        title: 'Add TeacherResource',
+        message: $($('#teacherresource-form').render()),
+        onshown: function(){
+            TTS.forms.upload();
+            $('.summernote').summernote();
+            updateChapter();
+        },
+        buttons: [{
+            label: 'Save',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#add-teacherresource");
+                TTS.forms.addteacherresource(dialogItself, data); 
+            }
+            },{
+            label: 'Cancel',
+            action: function(dlg){
+                dlg.close();
+            }
+        }]
+    });
+};
+
+TTS.forms.renderteacherresourceinfo = function(data){
+    var headers = [
+            { "title": "{% trans "Sl No." %}",
+              "class": "text-center" ,
+              "data" : "slno"  
+            },
+            { "title": "{% trans "Topics" %}",
+              "data" : "resourcetitle"  
+            },
+            { "title": "{% trans "Total Topics" %}",
+              "data" : "date"  
+            },
+            { "title": "{% trans "Last author" %}",
+              "class": "text-center" ,
+              "data" : "resourcetype"  
+            },
+            { "title": "{% trans "By Last Day" %}",
+              "class": "text-center" ,
+              "data" : "delete"  
+            },
+        ];
+    var dataset = [];
+    var count = 0
+    for(var i in data){
+        var t = {};
+        t.slno = ++count;
+        t.DT_RowId = data[i].teacherresourceid;
+        t.resourcetitle = data[i].resourcetitle;
+        t.date = data[i].createddate;
+        t.resourcetype = data[i].resourcetype;
+        t.delete = "<i  fa-lg'></i>";
+        dataset.push(t);
+    }
+
+    $('#teacherresource-main-tbl').dataTable({
+        
+        "columns":  headers
+    });
+
+};
+
+TTS.forms.upload = function(elm) {
+    console.log(elm);
+    var uploader = new qq.FileUploader({
+        action: "/admin/student-teacherres-upload",
+        element: $('#file-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#id_fileurl").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
+    });
+};
+
+var updateChapter = function(){
+    $.ajax({
+        'url': "/api/admin/chapterinfo/?classid="+$("#id_classid").val()
+                +"&sectionid="+$("#id_section").val(),
+        'type':'GET'
+    }).done(function(data){
+        //console.log(data)
+        opt = "";
+        for (d in data){
+            opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"<option>\n";
+        }
+        $("#id_chapterid").html(opt);
+    });
+};
+
 $(document).ready(function(){
-    $('#admin-main-tbl').dataTable();
-    $("#page-wrapper").on("click", "#new-folder", function(){
-        BootstrapDialog.show({
-            title: "{% trans "New Folder" %}",
-            message: $($("#newfolder").render()),
-            buttons: [{
-                label: 'Save',
-                cssClass: 'btn-primary',
-                action: function(){
-                    var data = TTS.utils.serilaizeJson("#newfolderfrm");
-                    $.ajax({
-                        type:'POST',
-                        data: {'data':data},
-                        url : '/api/admin/addfolder'
-                    }).done(function( msg ) {
-                        console.log(msg);
-                        //dialogItself.close();
-                    });
-                }
-                },{
-                label: 'Close',
-                action: function(dialogItself){
-                    dialogItself.close();
-                }
-            }]
-        });
+    $.ajax({
+        "url":"/api/admin/teacherresourcesinfo/?format=json",
+        "type":"GET"
+    }).done(function(data){
+        if (data.length) {
+            TTS.forms.renderteacherresourceinfo(data);
+        } else {
+            TTS.forms.table.fnClearTable();
+        }
+    });
+
+    $('#teacherresource-main-tbl').on('click', 'tbody tr',function(e){
+        e.stopPropagation();
+        //console.log("Hello");
+        window.location =' viewteacherresource?teacherresourceid='+this.id;
+    });
+
+    $('#teacherresource-main-tbl').on('click', '.tts-delete', function(e){
+        e.stopPropagation();
+        if (!window.confirm("Do you want to delete this record?")) {
+            return false;
+        }
+        alert("Record Deleted")
+        window.location = 'teacherresourcelist';
+    });
+
+    $("#page-wrapper").on("click", "#addrec", function(){
+        TTS.forms.showteacherresource();
+    });
+    $("body").on('change', '#id_classid', function(){
+        updateChapter();
+    });
+    $("body").on('change', '#id_section', function(){
+        updateChapter();
     });
 });
+
 </script>
+
 {% endblock scriptcontent %}
-
-
