@@ -324,7 +324,7 @@ def billboard(request):
                              'email':'johndoe@acme.com'
                          }]
     studentslist = {'head':studentslist_head, 'body':studentslist_body}
-    return render(request, 'portaladmin/studentslist.html', {'studentslist':studentslist})
+    return render(request, 'portaladmin/billboard.html')
 
 @login_required
 def mindmapedit(request, id):

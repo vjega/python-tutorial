@@ -11,6 +11,8 @@ def logout(request):
 def forum(request):
     return HttpResponse("Forum module will be taken up later")
 
+def billboard(request):
+    return HttpResponse("Billboard module will be taken up later")
     
 def togglelanguage(request):
     """
