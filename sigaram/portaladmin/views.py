@@ -332,7 +332,7 @@ def mindmapedit(request, id):
     
 @login_required
 def sticky_notes(request):
-    return render(request, 'portaladmin/sticky_notes.html', 
+    return render(request, 'portaladmin/stickynotes.html', 
                                         {'form':StickyForm.StickyForm(),
                                          'Cform':StickyCommentForm.StickyCommentForm()
                                          })
