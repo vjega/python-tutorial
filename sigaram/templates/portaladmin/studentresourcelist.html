@@ -153,6 +153,7 @@ TTS.forms.renderstudentresourceinfo = function(data){
     var count = 0
     for(var i in data){
         var t = [];
+        t.DT_RowId = data[i].resourceid;
         t.slno=++count;
         t.title=data[i].resourcetitle;
         t.date=data[i].createddate;
@@ -272,7 +273,7 @@ $(document).ready(function(){
     });
     $('#studetresource-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();
-        window.location = 'viewstudentresourcelist.html';
+        window.location = 'viewstudentresourcelist?resourceid='+this.id;
     });
     $('#studetresource-main-tbl tbody').on('click', 'tr', function(){
         window.location = 'teacherresourcelist?id='+this.id;
