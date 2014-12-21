@@ -1,26 +1,25 @@
 {% extends 'portaladmin/base.html' %}
 {% load staticfiles %}
 {% block topcontent %}
-<div id="page-wrapper">
-    <div class="row">
-        <div class="col-lg-12">
-            <h2 class="page-header">Mindmap <input type="button" class='btn btn-primary' id="mindmap-save" value="Save" /></h2>
-            <code>
-              Double Click to edit &amp; add a new node.
-              Single Click to collapse/hide or select a node
-            </code>
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">Mindmap <input type="button" class='btn btn-primary' id="mindmap-save" value="Save" /></h2>
+        <code>
+          Double Click to edit &amp; add a new node.
+          Single Click to collapse/hide or select a node
+        </code>
 
-        </div>
-        <!-- /.col-lg-12 -->
     </div>
-    <div class="row">
-      <div class="col-lg-4">
-        <div class="form-group">
-          <label for="maptitle">Map Title</label>
-          <input type="email" class="form-control" id="maptitle" value="Untitled">
-        </div> 
-      </div>
-    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row">
+  <div class="col-lg-4">
+    <div class="form-group">
+      <label for="maptitle">Map Title</label>
+      <input type="email" class="form-control" id="maptitle" value="Untitled">
+    </div> 
+  </div>
+</div>
 {% endblock topcontent %}
 {% block botcontent %}
 <div id="container">
