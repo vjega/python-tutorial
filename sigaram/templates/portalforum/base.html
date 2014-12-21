@@ -1,0 +1,139 @@
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Dash</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{%static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="{%static "bower_components/metisMenu/dist/metisMenu.min.css" %}" rel="stylesheet">
+
+    <!-- Timeline CSS -->
+    <!-- link href="css/plugins/timeline.css" rel="stylesheet" -->
+
+    <!-- Custom CSS -->
+    <link href="{%static "css/sb-admin-2.css" %}" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <!-- link href="css/plugins/morris.css" rel="stylesheet" -->
+
+    <!-- Custom Fonts -->
+    <link href="{%static "bower_components/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet" type="text/css">
+    {% block morecss %}{% endblock %}
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body class="orange-yellow">
+
+    <div id="wrapper" class="pattern-minimal">
+        <!-- user menu top -->
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="" id="navbar-top">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="" target="_blank"><i class="fa fa-user"></i> username</a>
+                        </li>
+                        <li><a href="" target="_blank"><i class="fa fa-sign-out"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="header blue-green">
+            <div class="container-fluid t-sm-bg">
+                <div class="row">
+                    <div class="col-sm-8"><img src="{%static "img/10t-logo.png" %}" alt="" class="img-responsive "></div>
+                    <div class="col-sm4 text-right"><img src="{%static "img/10t-partnet.png" %}" alt=""></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- navbar-static-side -->
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse">
+                <ul class="nav" id="side-menu">
+                    <li>
+                        <a class="active" href="home">
+                            <i class="fa fa-home fa-fw"></i> {% trans "Home" %}
+                        </a>
+                    </li> 
+                    
+                    <li>
+                        <a class="active" href="billboard">
+                            <i class="fa fa-list fa-fw"></i> {% trans "Billboard" %}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="active" href="../forum">
+                            <i class="fa fa-comments fa-fw"></i> {% trans "Forum" %}
+                        </a>
+                    </li> 
+                    <li>
+                        <a class="active" href="studentslist">
+                            <i class="fa fa-user fa-fw"></i>{% trans "Students" %}
+                        </a>
+                    </li>
+                    <li>
+                       <a class="active" href="studentresourcetype">
+                            <i class="fa fa-book fa-fw"></i>{% trans "Students" %} {% trans "Resources" %}
+                       </a>
+                    </li>
+                    <li>
+                        <a class="active" href="studentclassroom">
+                            <i class="fa fa-building fa-fw"></i>{% trans "Classrooms" %}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.sidebar-collapse -->
+        </div>
+        <!-- /.navbar-static-side -->
+
+        <div id="page-wrapper" class="pattern-minimal">
+            {% block topcontent %}{% endblock %}
+            {% block botcontent %}{% endblock %}
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+    {% block more %}{% endblock %}
+    <!-- jQuery -->
+    <script src="{%static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{%static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="{%static "bower_components/metisMenu/dist/metisMenu.min.js" %}"></script>
+    {% block morescript %}{% endblock %}
+    <!-- Morris Charts JavaScript -->
+    <!-- script src="js/plugins/morris/raphael.min.js"></script -->
+    <!-- script src="js/plugins/morris/morris.min.js"></script -->
+    <!-- script src="js/plugins/morris/morris-data.js"></script -->
+
+    <script src="{%static "js/sb-admin-2.js" %}"></script>
+    {% block scriptcontent %}{% endblock %} 
+</body>
+
+</html>
