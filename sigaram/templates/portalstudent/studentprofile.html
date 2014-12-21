@@ -2,14 +2,13 @@
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
-<div id="page-wrapper">
-    <div class="row">
-        <div class="col-lg-12">
-            <h2 class="page-header">{% trans "Student Profile" %}</h2>
-        </div>
-        <!-- /.col-lg-12 -->
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Student Profile" %}</h2>
     </div>
-    <div class="row">
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row">
     {% for folder in folders%}
     <a href="{{folder.href}}?studentid={{user.studentid}}">
     <div class="col-lg-3 col-md-6">
@@ -25,7 +24,7 @@
                     </div>
                 </div>
             </div>
-         </div>             
+         </div>
     </div>
     {% endfor %}
 </div>
