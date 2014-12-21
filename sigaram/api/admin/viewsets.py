@@ -881,6 +881,9 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
     serializer_class = adminserializers.MindmapSerializer
 
     def retrieve(self, request, pk=None):
+        studentcond = ''
+        if request.GET.get('studentid'):
+            studentcond = "AND ari.studentid = " + request.GET.get('studentid')
 
         sql = '''
         SELECT assignedid AS id,
@@ -892,7 +895,7 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
                date(assigneddate) as createddate,
                resourcetype,
                thumbnailurl,
-               ari.answereddate,
+               date(ari.answereddate) as answereddate,
                ari.answertext,
                ari.originaltext,
                ari.studentid,
@@ -906,8 +909,9 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
               AND ari.resourceid=%s
               AND ari.IsDelete=0 
               AND ri.categoryid=0
+              %s
         GROUP BY ari.studentid
-        ORDER BY assigneddate DESC''' % (loginname_to_userid('Teacher', 'sheela'), pk)
+        ORDER BY assigneddate DESC''' % (loginname_to_userid('Teacher', 'sheela'), pk, studentcond)
 
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
