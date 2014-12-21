@@ -726,6 +726,7 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         sql = '''
         SELECT assignedid AS id,
+
                ri.resourceid,
                ri.videourl,
                resourcetitle,
@@ -738,12 +739,11 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
                ari.issaved
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
-        WHERE assignedid = %s
+        WHERE ari.resourceid = %s
         ''' % pk
         cursor = connection.cursor()
         cursor.execute(sql)
         result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
-        print result
         return Response(result)
 
     def create(self, request):
