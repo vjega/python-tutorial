@@ -143,6 +143,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
     for(var i in data){
         var t = {};
         t.slno = ++count;
+        t.DT_RowId = data[i].teacherresourceid;
         t.resourcetitle = data[i].resourcetitle;
         t.date = data[i].createddate;
         t.resourcetype = data[i].resourcetype;
@@ -211,7 +212,7 @@ $(document).ready(function(){
     $('#teacherresource-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();
         //console.log("Hello");
-        window.location =' viewteacherresource';
+        window.location =' viewteacherresource?teacherresourceid='+this.id;
     });
 
     $('#teacherresource-main-tbl').on('click', '.tts-delete', function(e){
