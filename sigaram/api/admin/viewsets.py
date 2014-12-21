@@ -788,7 +788,8 @@ class StickynotesResource(viewsets.ModelViewSet):
         SELECT s.id,
             s.stickytext,
             s.color,
-            group_concat(sc.stickycomment SEPARATOR "~") as comments
+            group_concat(sc.stickycomment SEPARATOR "~") as comments,
+            group_concat(sc.commentby SEPARATOR "~") as commentby
         FROM stickynotes s
         LEFT JOIN stickycomments sc ON sc.stickyid = s.id
         GROUP BY s.id, 
