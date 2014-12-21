@@ -64,6 +64,8 @@ TTS.forms = TTS.forms || {}
 TTS.forms.renderteacherresourceinfo = function(data){
 
     $("#resource-title").html(data.resourcetitle);
+    //console.log(data.resourcetype)
+
     $("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.videourl+"');\" >View</a>");
 };
 function openwindow(videourl) {
@@ -90,7 +92,7 @@ $(document).ready(function(){
         "url":"/api/admin/teacherresourcesinfo/"+teacherresourceid+"/?format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
+       // console.log(data);
         TTS.forms.renderteacherresourceinfo(data);
     });
 });

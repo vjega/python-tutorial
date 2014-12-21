@@ -331,7 +331,7 @@ def mindmapedit(request, id):
     return render(request, 'portaladmin/mindmap.html', {})
     
 @login_required
-def sticky_notes(request):
+def stickynotes(request):
     return render(request, 'portaladmin/stickynotes.html', 
                                         {'form':StickyForm.StickyForm(),
                                          'Cform':StickyCommentForm.StickyCommentForm()
