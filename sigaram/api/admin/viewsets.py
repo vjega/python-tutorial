@@ -274,19 +274,19 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         ri.chapterid = ridata.get('chapterid')
         ri.resourcetitle = ridata.get('resourcetitle')
         ri.resourcedescription = ridata.get('resourcedescription', "")
-        ri.thumbnailurl =  ridata.get('thumbnailurl', "")
+        ri.thumbnailurl = ""# ridata.get('thumbnailurl', "")
         ri.documenturl = ""
         ri.imageurl = ""
         ri.audiourl = ""
         ri.videourl = ""
         if category == 'text' : 
-            ri.documenturl = ridata.get('documenturl',"")
+            ri.documenturl = ridata.get('fileurl',"")
         elif category == 'image':
-            ri.imageurl = ridata.get('documenturl',"")
+            ri.imageurl = ridata.get('fileurl',"")
         elif category == 'audio':    
-            ri.audiourl = ridata.get('documenturl',"")
+            ri.audiourl = ridata.get('fileurl',"")
         elif category == 'video':
-            ri.videourl = ridata.get('documenturl',"")
+            ri.videourl = ridata.get('fileurl',"")
         ri.originaltext = ridata.get('originaltext',"")
         ri.createdby = request.user.id
         ri.isapproved = 0

@@ -10,6 +10,12 @@ class StudentresourceListForm(forms.Form):
         choices    = [('text', 'Text'), ('audio', 'Audio'),('video','Video'),
                          ('image', 'Image')]
     )
+    fileurl = forms.CharField(
+        label = _("Photo"),
+        max_length = 100,
+        required = True,
+        widget = forms.HiddenInput({ "placeholder": _("Email Id")})
+    )
     thumbnailurl = forms.CharField(
         label = _("Photo"),
         max_length = 100,

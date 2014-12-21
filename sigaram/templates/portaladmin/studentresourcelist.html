@@ -61,6 +61,7 @@
 
 <script id="studentresource-form" type="text/x-jsrender">
 <div id="file-uploader">File Uploader Comes Here...</div> 
+<div id="img-uploader">File Uploader Comes Here...</div> 
 {% crispy form %}
 </script>
 
@@ -173,6 +174,30 @@ TTS.forms.upload = function(elm) {
     var uploader = new qq.FileUploader({
         action: "/admin/student-teacherres-upload",
         element: $('#file-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#id_fileurl").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
+    });
+};
+
+TTS.forms.upload = function(elm) {
+    console.log(elm);
+    var uploader = new qq.FileUploader({
+        action: "/admin/student-teacherres-upload",
+        element: $('#img-uploader')[0],
         multiple: false,
         onComplete: function(id, fileName, responseJSON) {
             if(responseJSON.success) {
