@@ -5,4 +5,5 @@ from django.views.generic import RedirectView
 
 urlpatterns = patterns('forum.views',
     url(r'^home$','index',name='forum_home'),
+    url(r'^index','index',name='index'),
 )
