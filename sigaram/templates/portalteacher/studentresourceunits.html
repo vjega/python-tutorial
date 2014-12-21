@@ -115,11 +115,11 @@ $(document).ready(function(){
     });
     $('#admin-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();
-         window.location = 'studentresourcelist.html?categoryid='+TTS.categoryid+'&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.section;
+         window.location = 'studentresourcelist?categoryid='+TTS.categoryid+'&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.section;
     });
     $('#admin-main-tbl').on('click', '.assignment',function(e){
         e.stopPropagation();
-        window.location = 'assignchapter.html?categoryid=1&classid='+TTS.classid+'&section='+TTS.classid;
+        window.location = 'assignchapter?categoryid=1&classid='+TTS.classid+'&section='+TTS.classid;
     });
     
     /*

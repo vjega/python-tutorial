@@ -18,6 +18,9 @@
     #addrec:hover, #admin-main-tbl tbody tr:hover{
         cursor: pointer;
     }
+    .note-editable{
+        height: 80px;
+    }
 </style>
 {% endblock morecss %}
 
@@ -43,7 +46,7 @@
         <textarea class="summernote"></textarea>
     </div>
     <div class="form-group">
-       <button class="btn btn-success" id="connect-rubrics"><i class="fa fa-link fa-lg"></i> {% trans "Connect" %} {% trans "Rubrics" %}</button>
+       <button class="btn btn-primary" id="connect-rubrics"><i class="fa fa-link fa-lg"></i> {% trans "Connect" %} {% trans "Rubrics" %}</button>
     </div>
     <div class="form-group" id="set_rubric_text">
             
@@ -72,9 +75,9 @@
     <div class="panel panel-default">
         <div align="center" class="panel-heading">
             <span id="addrec">
-                <a href="javascript:void(0)" class="btn btn-success btn-sm"><i class="fa fa-plus-square fa-lg"></i> {% trans "Add" %}</a>
+                <a href="javascript:void(0)" class="btn btn-primary btn-sm"><i class="fa fa-plus-square fa-lg"></i> {% trans "Add" %}</a>
             </span>
-            <a href="javascript:void(0)" class="btn btn-success btn-sm" id="removeStudent"><i class="fa fa-remove fa-lg"></i> {% trans "Remove" %}</a>
+            <a href="javascript:void(0)" class="btn btn-primary btn-sm" id="removeStudent"><i class="fa fa-remove fa-lg"></i> {% trans "Remove" %}</a>
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
@@ -87,7 +90,7 @@
             </div>
         </div>
         <div align="center" class="panel-footer">
-            <button class="btn btn-success btn-sm" id="res-send"><i class="fa fa-share fa-lg"></i> {% trans "Send" %}</button>
+            <button class="btn btn-primary btn-sm" id="res-send"><i class="fa fa-share fa-lg"></i> {% trans "Send" %}</button>
         </div>
         <!-- /.panel-body -->
     </div>
@@ -102,7 +105,7 @@
 <div class="row">
     <div class="control-group col-lg-7">
         <div class="controls">
-            <button class="btn btn-success" id="choose-rubric"> {% trans "Select" %}</button>
+            <button class="btn btn-primary" id="choose-rubric"> {% trans "Select" %}</button>
         </div>
     </div>
 </div>
@@ -390,7 +393,7 @@ TTS.forms.renderresourceinfo = function(data){
     for(var i in data){
         var t = [];
         t.push("<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].resourceid+"' value='"+data[i].resourceid+"' />");
-        t.push("<p class='col-sm-2 pull-left'><img src="+data[i].thumbnailurl+"></p> " + data[i].resourcetitle);
+        t.push("<p class='col-sm-2 pull-left'><img src=http://10tsigaram.com/dbinterface/"+data[i].thumbnailurl+"></p> " + data[i].resourcetitle);
         dataset.push(t);
     }
 
@@ -428,14 +431,17 @@ TTS.forms.ressave = function(){
         type:"POST",
         data: JSON.stringify(data)
     }).done(function(data){
-        console.log(data);
+        //console.log(data);
+        window.location = 'studentresourceunits?categoryid=0&classid=1&section=a';
     }).error(function(err, msg){
         alert("I didnt save the data");
     });
 }
 $(document).ready(function(){
+    var classid   = TTS.forms.getUrlParameter('classid');
+    var section   = TTS.forms.getUrlParameter('section');
     $.ajax({
-        "url":"/api/admin/resourceinfo/?format=json",
+        "url":"/api/admin/resourceinfo/?classid="+classid+"&section="+section+"&format=json",
         "type":"GET"
     }).done(function(data){
         //console.log(data);
@@ -513,7 +519,18 @@ $(document).ready(function(){
     });
 
 });
-
+TTS.forms.getUrlParameter = function(sParam) {
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+}
 </script>
 
 {% endblock scriptcontent %}
