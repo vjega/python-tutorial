@@ -39,6 +39,9 @@ student_studentres_uploader = AjaxFileUploader(UPLOAD_DIR='static/studentres')
 
 student_teacherres_uploader = AjaxFileUploader(UPLOAD_DIR='static/teacherres')
 
+def layoutdemo(request):
+    return render(request, 'portaladmin/layoutdemo.html')
+
 @login_required
 def home(request):
     folders = [{

@@ -1,7 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
 {% load staticfiles %}
 {% load i18n %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en" >
+
 <head>
 
     <meta charset="utf-8">
@@ -10,28 +12,26 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+    <title>Dash</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="{%static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}" rel="stylesheet">
 
     <!-- MetisMenu CSS -->
-    <link href="{%static "css/plugins/metisMenu/metisMenu.min.css" %}" rel="stylesheet">
+    <link href="{%static "bower_components/metisMenu/dist/metisMenu.min.css" %}" rel="stylesheet">
 
     <!-- Timeline CSS -->
-    <link href="{%static "css/plugins/timeline.css" %}" rel="stylesheet">
-    {% block morecss %}{% endblock %}
+    <!-- link href="css/plugins/timeline.css" rel="stylesheet" -->
+
     <!-- Custom CSS -->
     <link href="{%static "css/sb-admin-2.css" %}" rel="stylesheet">
-    
-    <!-- Custom CSS -->
-    <link href="{%static "css/sb-admin-10t.css" %}" rel="stylesheet">
+
     <!-- Morris Charts CSS -->
-    <link href="{%static "css/plugins/morris.css" %}" rel="stylesheet">
+    <!-- link href="css/plugins/morris.css" rel="stylesheet" -->
 
     <!-- Custom Fonts -->
     <link href="{%static "bower_components/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet" type="text/css">
-
+    {% block morecss %}{% endblock %}
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -41,157 +41,154 @@
 
 </head>
 
-<body>
+<body class="orange-yellow">
 
-    <div id="wrapper">
-
-        <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" id="top-header" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html"></a>
-            </div>
-            <!-- /.navbar-header -->
-
-            <ul class="nav navbar-top-links navbar-right">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+    <div id="wrapper" class="pattern-minimal">
+        <!-- user menu top -->
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="" id="navbar-top">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="" target="_blank"><i class="fa fa-user"></i> username</a>
                         </li>
-                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a href="../logout/"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                        </li>
-                    </ul>
-                </li>
-                <li><a href='../togglelanguage'><i class="fa fa-language fa-lg"></i> <i class="fa fa-caret-down"></i></a></li>
-                <li><a href='../logout/'><i class="fa fa-sign-out fa-lg"></i></a></li>
-            </ul>
-            <!-- /.navbar-top-links -->
-
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
-                        <li>
-                            <a class="active" href="home">
-                                <i class="fa fa-home fa-fw"></i> {% trans "Home" %}
-                            </a>
-                        </li> 
-                        
-                        <li>
-                            <a class="active" href="billboard">
-                                <i class="fa fa-list fa-fw"></i> {% trans "Billboard" %}
-                            </a>
-                        </li>
-                        <li>
-                            <a class="active" href="../forum">
-                                <i class="fa fa-comments fa-fw"></i> {% trans "Forum" %}
-                            </a>
-                        </li> 
-                        <li>
-                            <a class="active" href="adminlist">
-                                <i class="fa fa-users fa-fw"></i> {% trans "Administrators" %}
-                            </a>
-                        </li>
-                        <li>
-                            <a class="active" href="teacherslist">
-                                <i class="fa fa-female fa-fw"></i>{% trans "Teachers" %}
-                            </a>
-                        </li>
-                        <li>
-                            <a class="active" href="studentslist">
-                                <i class="fa fa-user fa-fw"></i>{% trans "Students" %}
-                            </a>
-                        </li>
-                        <li>
-                            <a class="active" href="#">
-                                <i class="fa fa-book fa-fw"></i>{% trans "Resources" %}
-                                <span class="fa arrow"></span>
-                            </a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="teacherresourcelist">{% trans "Teachers" %} {% trans "Resources" %}</a>
-                                </li>
-                                <li>
-                                    <a href="studentresourcetype">{% trans "Students" %} {% trans "Resources" %}</a>
-                                </li>
-                            </ul>
-                        </li>
-                        
-                        <li>
-                            <a class="active" href="#">
-                                <i class="fa fa-bar-chart-o fa-fw"></i>{% trans "Statistics" %}
-                                <span class="fa arrow"></span>
-                            </a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="statistics-activities">{% trans "Activities" %} {% trans "Statistics" %}</a>
-                                </li>
-                                <li>
-                                    <a href="statistics-assignment">{% trans "Homework" %} {% trans "Statistics" %}</a>
-                                </li>
-                                <li>
-                                    <a href="statistics-assessment">{% trans "Test" %} {% trans "Statistics" %}</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a class="active" href="classroom">
-                                <i class="fa fa-building fa-fw"></i>{% trans "Classrooms" %}
-                            </a>
-                        </li>
-                        <li>
-                            <a class="active" href="mindmaplist">
-                                <i class="fa fa-lightbulb-o fa-fw"></i>{% trans "Mindmap" %}
-                            </a>
-                        </li>
-                        <li>
-                            <a class="active" href="sticky_notes">
-                                <i class="fa fa-tablet fa-fw"></i>{% trans "Sticky notes" %}
-                            </a>
-                        </li>
-                        <li>
-                            <a class="active" href="calendar">
-                                <i class="fa fa-calendar fa-fw"></i>{% trans "Calendar" %}
-                            </a>
-                        </li>
-                        <li>
-                            <a class="active" href="recorder">
-                                <i class="fa fa-microphone fa-fw"></i>{% trans "Recorder" %}
-                            </a>
+                        <li><a href="" target="_blank"><i class="fa fa-sign-out"></i></a>
                         </li>
                     </ul>
                 </div>
-                <!-- /.sidebar-collapse -->
             </div>
-            <!-- /.navbar-static-side -->
-        </nav>
-        {% block topcontent %}{% endblock %}
-        {% block botcontent %}{% endblock %}
         </div>
-        <!-- /#page-wrapper -->    
+
+        <!-- Header -->
+        <header class="header blue-green">
+            <div class="container-fluid t-sm-bg">
+                <div class="row">
+                    <div class="col-sm-8"><img src="{%static "img/10t-logo.png" %}" alt="" class="img-responsive "></div>
+                    <div class="col-sm4 text-right"><img src="{%static "img/10t-partnet.png" %}" alt=""></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- navbar-static-side -->
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse">
+                <ul class="nav" id="side-menu">
+                    <li>
+                        <a class="active" href="home">
+                            <i class="fa fa-home fa-fw"></i> {% trans "Home" %}
+                        </a>
+                    </li> 
+                        
+                    <li>
+                        <a class="active" href="billboard">
+                            <i class="fa fa-list fa-fw"></i> {% trans "Billboard" %}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="active" href="../forum">
+                            <i class="fa fa-comments fa-fw"></i> {% trans "Forum" %}
+                        </a>
+                    </li> 
+                    <li>
+                        <a class="active" href="adminlist">
+                            <i class="fa fa-users fa-fw"></i> {% trans "Administrators" %}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="active" href="teacherslist">
+                            <i class="fa fa-female fa-fw"></i>{% trans "Teachers" %}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="active" href="studentslist">
+                            <i class="fa fa-user fa-fw"></i>{% trans "Students" %}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="active" href="#">
+                            <i class="fa fa-book fa-fw"></i>{% trans "Resources" %}
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="teacherresourcelist">{% trans "Teachers" %} {% trans "Resources" %}</a>
+                            </li>
+                            <li>
+                                <a href="studentresourcetype">{% trans "Students" %} {% trans "Resources" %}</a>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li>
+                        <a class="active" href="#">
+                            <i class="fa fa-bar-chart-o fa-fw"></i>{% trans "Statistics" %}
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="statistics-activities">{% trans "Activities" %} {% trans "Statistics" %}</a>
+                            </li>
+                            <li>
+                                <a href="statistics-assignment">{% trans "Homework" %} {% trans "Statistics" %}</a>
+                            </li>
+                            <li>
+                                <a href="statistics-assessment">{% trans "Test" %} {% trans "Statistics" %}</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="active" href="classroom">
+                            <i class="fa fa-building fa-fw"></i>{% trans "Classrooms" %}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="active" href="mindmaplist">
+                            <i class="fa fa-lightbulb-o fa-fw"></i>{% trans "Mindmap" %}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="active" href="sticky_notes">
+                            <i class="fa fa-tablet fa-fw"></i>{% trans "Sticky notes" %}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="active" href="calendar">
+                            <i class="fa fa-calendar fa-fw"></i>{% trans "Calendar" %}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="active" href="recorder">
+                            <i class="fa fa-microphone fa-fw"></i>{% trans "Recorder" %}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.sidebar-collapse -->
+        </div>
+        <!-- /.navbar-static-side -->
+
+        <div id="page-wrapper" class="pattern-minimal">
+            {% block topcontent %}{% endblock %}
+            {% block botcontent %}{% endblock %}
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
     </div>
     <!-- /#wrapper -->
-
+    {% block more %}{% endblock %}
     <!-- jQuery -->
-    <script src="{%static "js/jquery.js" %}"></script>
+    <script src="{%static "bower_components/jquery/dist/jquery.min.js" %}"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="{%static "js/bootstrap.min.js" %}"></script>
+    <script src="{%static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
-    <script src="{%static "js/plugins/metisMenu/metisMenu.js" %}"></script>
+    <script src="{%static "bower_components/metisMenu/dist/metisMenu.min.js" %}"></script>
     {% block morescript %}{% endblock %}
-    <!-- Custom Theme JavaScript -->
+    <!-- Morris Charts JavaScript -->
+    <!-- script src="js/plugins/morris/raphael.min.js"></script -->
+    <!-- script src="js/plugins/morris/morris.min.js"></script -->
+    <!-- script src="js/plugins/morris/morris-data.js"></script -->
+
     <script src="{%static "js/sb-admin-2.js" %}"></script>
     {% block scriptcontent %}{% endblock %} 
 </body>
