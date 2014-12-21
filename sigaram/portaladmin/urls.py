@@ -49,5 +49,6 @@ urlpatterns = patterns('portaladmin.views',
     url(r'^student-img-upload$',      'student_img_uploader',  name="student-img-upload"),
     url(r'^student-studentres-upload$', 'student_studentres_uploader',  name="student-studentres-upload"),
     url(r'^student-teacherres-upload$', 'student_teacherres_uploader',  name="student-teacherres-uploader"),
+    url(r'^layoutdemo$', 'layoutdemo',  name="layoutdemo"),
     #(r'^api/', include(v1_api.urls)),
 )

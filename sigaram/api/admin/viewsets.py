@@ -738,12 +738,11 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
                ari.issaved
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
-        WHERE assignedid = %s
+        WHERE ari.resourceid = %s
         ''' % pk
         cursor = connection.cursor()
         cursor.execute(sql)
         result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
-        print result
         return Response(result)
 
     def create(self, request):
@@ -875,3 +874,52 @@ class StickyCommentsResource(viewsets.ModelViewSet):
         stickycomments.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         stickycomments.save()
         return Response(request.DATA)
+
+
+class AssignedResourceStudents(viewsets.ModelViewSet):
+    queryset = models.Assignresourceinfo.objects.all()
+    serializer_class = adminserializers.MindmapSerializer
+
+    def retrieve(self, request, pk=None):
+
+        sql = '''
+        SELECT assignedid AS id,
+               ari.assignedby,
+               ri.resourceid,
+               si.firstname,
+               si.lastname,
+               resourcetitle,
+               date(assigneddate) as createddate,
+               resourcetype,
+               thumbnailurl,
+               ari.studentid,
+               ari.isanswered,
+               ari.issaved
+        FROM assignresourceinfo ari
+        INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
+        INNER JOIN  studentinfo si on si.studentid = ari.studentid 
+        WHERE isdeleted=0
+              AND ari.assignedby=%d
+              AND ari.resourceid=%s
+              AND ari.IsDelete=0 
+              AND ri.categoryid=0
+        GROUP BY ari.studentid
+        ORDER BY assigneddate DESC''' % (loginname_to_userid('Teacher', 'sheela'), pk)
+
+        #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
+        cursor = connection.cursor()
+        print sql
+        #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
+        cursor.execute(sql)
+        #cursor.execute(sql, "3680")
+        #print dir(cursor)
+        #result = cursor.fetchall()
+        #print return [
+        
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+

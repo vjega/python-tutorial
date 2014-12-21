@@ -2,17 +2,43 @@
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
-    <div id="page-wrapper">
-        <div class="row">
-            <div class="col-lg-12">
-                <h2 class="page-header">{% trans "Deliverables" %}</h2>
-            </div>
-            <!-- /.col-lg-12 -->
-        </div>
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Deliverables" %}</h2>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
 {% endblock topcontent %}
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<style>
+    #addrec:hover, #admin-main-tbl tbody tr:hover{
+        cursor: pointer;
+    }
+    .text_area{
+        width:70%;
+        height:50px;
+    }
+    .str-example{
+        font-size: 16px;   
+    }
+    .cred{
+        color: red;
+    }
+    .cgreen{
+        color: green;
+    }
+    .cyellow{
+        color: yellow;
+    }
+</style>
+{% endblock morecss %}
 
 {% block morescript %}
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
@@ -34,12 +60,16 @@
                 <div id="resource-title"></div><br />
                 <div id="view-resource">
                      <a href="javascript:void(0)" onclick="window.open('http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/studentresources/12771A-L3-RP5(HA).swf','wdwSearch','top=100,left=100,width=1024,height=768,scrollbars=1,menu=0');">View</a>
-                </div><br />
-                <div>
-                    <h3>{% trans "Answer" %}:</h3>
-                </div><br />
-                <div id="resource-answer"></div><br />
+                </div>
                 </table>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 str-example">
+                    <div class="col-lg-6"></div>
+                    <div class="col-lg-2"><i class="fa fa-star fa-lg cred"></i> {% trans "Start" %}</div>
+                    <div class="col-lg-2"><i class="fa fa-star fa-lg cgreen"></i> {% trans "End" %}</div>
+                    <div class="col-lg-2"><i class="fa fa-star fa-lg cyellow"></i> {% trans "Middle" %}</div>
+                </div>
             </div>
             <!-- /.table-responsive -->
              <div class="panel-body">
@@ -59,22 +89,6 @@
 <!-- /.col-lg-12 -->
 {% endblock botcontent%}
 
-{% block morecss %}
-<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
-<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
-<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
-<style>
-    #addrec:hover, #admin-main-tbl tbody tr:hover{
-        cursor: pointer;
-    }
-    .text_area{
-        width:70%;
-        height:50px;
-    }
-
-</style>
-{% endblock morecss %}
-
 
 {% block scriptcontent %}
 
@@ -85,7 +99,6 @@ TTS.forms = TTS.forms || {}
 
 
 TTS.forms.renderassignedresourceinfo = function(data){
-    $("#resource-answer").html(data.answertext);
     $("#resource-title").html(data.resourcetitle);
     $("#view-resource").html("<a href='#' onclick=\"TTS.forms.openwindow('"+data.videourl+"');\" >View</a>");
 };
@@ -95,22 +108,20 @@ TTS.forms.openwindow = function(videourl) {
 };
 
 $(document).ready(function(){
-    var assignedid = TTS.forms.getUrlParameter('assignedid');
+    var resourceid = TTS.forms.getUrlParameter('resourceid');
     $.ajax({
-        "url":"/api/admin/studentassignresource/"+assignedid+"/?format=json",
+        "url":"/api/admin/teacherassignedresource/"+resourceid+"/?format=json",
         "type":"GET"
     }).done(function(data){
         console.log(data);
         TTS.forms.renderassignedresourceinfo(data);
     });
     $.ajax({
-        "url":"/api/student/student/?format=json",
+        "url":"/api/admin/assignedresourcestudents/"+resourceid+"?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstudentlist(data);
     });
-    
-
 });
 
 
@@ -123,15 +134,26 @@ TTS.forms.renderstudentlist = function(data){
             { "title": "{% trans "Name" %}",
               "data" : "name"  
             },
+            { "title": "{% trans "Note" %}",
+              "class": "text-center",
+              "data" : "note"  
+            },
         ];
     var dataset = [];
     
-    var count = 0
+    var count = 0;
     for(var i in data){
         var t = [];
         t.DT_RowId = data[i].studentid;
         t.slno = ++count;
         t.name = data[i].firstname + " "+data[i].lastname;
+        if (!data[i].issaved && !data[i].isanswered) 
+            t.note = "<i class=\"fa fa-star fa-lg cred\"></i>" ;
+        if (data[i].issaved && !data[i].isanswered) 
+            t.note = "<i class=\"fa fa-star fa-lg cgreen\"></i>" ;
+        if (data[i].isanswered) 
+            t.note = "<i class=\"fa fa-star fa-lg cyellow\"></i>" ;
+        
         dataset.push(t);
     }
 
