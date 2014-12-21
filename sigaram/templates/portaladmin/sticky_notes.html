@@ -21,9 +21,9 @@
         <!-- /.panel-heading -->
         <div class="panel-body">
             <div class="table-responsive">
-               <div class="table table-striped table-bordered table-hover"
-                     id="sticky-placeholder">
-                </div> 
+               <table class="table table-striped table-bordered table-hover"
+                     id="admin-main-tbl">
+                </table> 
             </div>
             <!-- /.table-responsive -->
         </div>
@@ -141,7 +141,7 @@
     padding: 4px;
     box-shadow: 1px 1px 1px 1px #d3d3d3;
     overflow:hidden;
-    cursor:default;
+    cursor:move;
     font-family:Trebuchet MS,Tahoma,Myriad Pro,Arial,Verdana,sans-serif;
     font-size:14px;
 }
@@ -150,7 +150,6 @@
     height: 18px;
     width: 140px;
     margin-bottom: 5px;
-    cursor: move;
 }
 
 .sticky_footer {
@@ -290,6 +289,7 @@ TTS.forms.showstickyform = function() {
 
     color_div +="</div>";
     color_div +="</div>";
+    var select_color ='yellow';
     BootstrapDialog.show({
         title: 'Add Sticky note',
         message: $($('#sticky-form').render() + color_div),
@@ -297,7 +297,7 @@ TTS.forms.showstickyform = function() {
             $('.summernote').summernote();
             $(".color").on("click", function(){
                 var clsclr = $(this).prop("class").split(" ");
-                var select_color = findColor(colors, clsclr) ? findColor(colors, clsclr) : 'yellow';
+                select_color = findColor(colors, clsclr) ;
                 $("#preview_color").removeAttr("class");
                 $("#preview_color").attr("class",select_color);
             });
@@ -308,7 +308,6 @@ TTS.forms.showstickyform = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-sticky");
-                var select_color = $("#preview_color").attr("class");
                 data = JSON.parse(data);
                 data['color'] = select_color;
                 TTS.forms.addstickynote(dialogItself, JSON.stringify(data)); 
@@ -331,31 +330,12 @@ function findColor(cls, color) {
   }
 }
 
-TTS.forms.editstickyform = function(edit_id, content, color) {
-   var colors = ["yellow", "blue", "green","purple", "pink", "grey","red", "orange", "maroon", "gold"];
-    var color_div = "<div class='color_container'>"+
-                        "<div id='preview_color' class='"+color+"'>Preview</div>"+
-                        "<div class='control-label col-sm-4'>color</div>"+
-                        "<div class='control-label col-sm-8 color_values'>";
-    for (var i = 0; i < colors.length; i++) { 
-       color_div += "<div class='color "+colors[i]+"' name='"+colors[i]+"' ></div>";
-    }
-
-    color_div +="</div>";
-    color_div +="</div>";
-
+TTS.forms.editstickyform = function(edit_id,content,color) {
     BootstrapDialog.show({
         title: 'Edit Sticky note',
-        message: $($('#sticky-form').render() + color_div),
+        message: $($('#sticky-form').render()),
         onshown: function(){
-            $('.summernote').summernote().code(content);
-
-           $(".color").on("click", function(){
-                var clsclr = $(this).prop("class").split(" ");
-                var select_color = findColor(colors, clsclr) ? findColor(colors, clsclr) : 'yellow';
-                $("#preview_color").removeAttr("class");
-                $("#preview_color").attr("class",select_color);
-            });
+            $('.summernote').summernote(content);
         },
         buttons: [{
             label: 'Update',
@@ -363,7 +343,7 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-student");
                 data = JSON.parse(data);
-                data['color'] = $("#preview_color").attr("class");
+                data['color'] = color;
                 $.ajax({
                     type:'PUT',
                     data: JSON.stringify(data),
@@ -383,6 +363,7 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
 };
 
 TTS.forms.delstickynotes = function(id) {
+    console.log(id);
     $.ajax({
         type:'DELETE',
         url : '/api/admin/stickynotes/'+id
@@ -433,19 +414,19 @@ TTS.forms.renderstickynotes = function(data){
     for(var i in data){
         sticky_html += "<div id='sticky_note_"+data[i].id+"' class='sticky_note "+data[i].color+"'>";
         sticky_html += "<div class='sticky_header "+data[i].color+"_header'>";
-        sticky_html += "<span class='pull-right deleterec'  name='"+data[i].id+"'><i class='fa fa-trash'></i></span>&nbsp;";
-        sticky_html += "<span class='pull-right editrec'  name='"+data[i].id+"'><i class='fa fa-pencil'></i></span> &nbsp;";
+        sticky_html += "<span id='deleterec' name='"+data[i].id+"'><i class='fa fa-trash'></i></span>";
+        sticky_html += "<span id='editrec' name='"+data[i].id+"'><i class='fa fa-pencil'></i></span> &nbsp;";
         sticky_html += "</div>";
-        sticky_html += "<div  name='"+data[i].color+"' src='"+data[i].id+"' class='sticky_content'>"+data[i].stickytext+"</div>";
-        sticky_html += "<div  class='sticky_footer'>";
-        sticky_html += "<span class='pull-right sticky_comment' id='sticky_comment_"+data[i].id+"' name='"+data[i].id+"'><i class='fa fa-comment'></i></span>";
+        sticky_html += "<div id='sticky_content_"+data[i].id+"' name='"+data[i].color+"' class='sticky_content'>"+data[i].stickytext+"</div>";
+        sticky_html += "<div id='sticky_footer' class='sticky_footer'>";
+        sticky_html += "<span class = 'sticky_comment' name='"+data[i].id+"'><i class='fa fa-comment'></i></span>";
         var com = []
         if (data[i].comments !==  null) {
             com = data[i].comments.split("~");
         }
         if (com.length) {
             sticky_html += "<div class='comment_icon'>";
-            sticky_html += "<span class='show_comments' src='"+com.length+"' name='"+data[i].id+"'><i class='fa fa-caret-right'></i></span>";
+            sticky_html += "<span id='show_comments' src='"+com.length+"' name='"+data[i].id+"'><i class='fa fa-caret-right'></i></span>";
             sticky_html += "</div>";
             sticky_html += "<div id='comment'>Comment ("+com.length+")</div>";
             sticky_html += "<div class='slidingDiv' id='slidingDiv_"+data[i].id+"'>";
@@ -459,7 +440,7 @@ TTS.forms.renderstickynotes = function(data){
         sticky_html += "</div>";
         sticky_html += "</div>";
     }
-    $('#sticky-placeholder').html(sticky_html); 
+        $('#admin-main-tbl').html(sticky_html); 
 };
 
 //?stickyid=1
@@ -480,17 +461,16 @@ $(document).ready(function(){
 });
 
 function load_onclick_events (){
-    $(".sticky_header").parent().draggable().resizable()
+    $(".sticky_note").draggable().resizable();
     
-    $("#sticky-placeholder").on("click", ".editrec", function(){
-        var elm = $(this).parent().parent().find(".sticky_content")[0];
-        var elText = $(elm).text();
-        var color = $(elm).attr("name");
-        var stickyid = $(elm).attr("src");
-        TTS.forms.editstickyform(stickyid,elText,color);
+    $(".sticky_header").on("click", "#editrec", function(){
+        var edit_id = $(this).attr("name");
+        var content = $("#sticky_content_"+edit_id).html();
+        var color = $("#sticky_content_"+edit_id).attr("name");
+        TTS.forms.editstickyform(edit_id,content,color);
     });
 
-    $("#sticky-placeholder").on("click", ".deleterec", function(){
+    $(".sticky_header").on("click", "#deleterec", function(){
         if (!window.confirm("Do you want to delete this record?")) {
             return false;
         }
@@ -499,15 +479,12 @@ function load_onclick_events (){
         window.location.reload();
     });
 
-    $("#sticky-placeholder").on("click", ".sticky_comment", function(){
+    $(".sticky_footer").on("click", "#sticky_comment", function(){
         var sticky_id = $(this).attr("name");
         TTS.forms.showstickycommentform(sticky_id);
     });
 
-    $("#sticky-placeholder").on("click", ".show_comments", function(){
-       console.log($(this).html());
-       
-       /*
+    $(".comment_icon").on("click", "#show_comments", function(){
        var sticky_id = $(this).attr("name");
        var no_comment = $(this).attr("src");
        size = (20*no_comment)
@@ -516,7 +493,6 @@ function load_onclick_events (){
        $("#slidingDiv_"+sticky_id).show(1000);
        //$("#show_comments").find('i').toggleClass('fa-caret-right fa-caret-top')
        //TTS.forms.showstickycommentform(sticky_id);
-       */
     });
 
     /*$(".comment_icon").on("click", "#show_comments", function(){
