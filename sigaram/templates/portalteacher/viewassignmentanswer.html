@@ -1,4 +1,4 @@
-{% extends 'portalstudent/base.html' %}
+{% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
@@ -10,9 +10,7 @@
 </div>
 {% endblock topcontent %}
 {% block morecss %}
-<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
-<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <style>
     #addrec:hover, #admin-main-tbl tbody tr:hover, #view-answer:hover{
         cursor: pointer;
@@ -24,11 +22,8 @@
 {% endblock morecss %}
 
 {% block morescript %}
-<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
-<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
-<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
 <!-- script-->
 <script type="text/javascript" src="{% static "bower_components/local-audio-recorder-master/demo/swfobject.js" %}"></script>
 {% endblock morescript %}
@@ -141,6 +136,11 @@ TTS.forms = TTS.forms || {}
 
 TTS.forms.renderassignedresourceinfo = function(data){
     $("#resource-title").html(data.resourcetitle);
+    $("#assigned-date").html(data.createddate);
+    $("#answerd-date").html(data.answereddate);
+    $("#student-name").html(data.firstname+" "+data.firstname);
+    $("#student-answer").html(data.answertext);    
+    $("#original-text").html(data.originaltext);    
     $("#view-resource").html("<a href='#' onclick=\"TTS.forms.openwindow('"+data.videourl+"');\" >View</a>");
 };
 
@@ -150,63 +150,16 @@ TTS.forms.renderassignedresourceinfo = function(data){
 
 $(document).ready(function(){
     var resourceid = TTS.forms.getUrlParameter('resourceid');
+    var studentid = TTS.forms.getUrlParameter('studentid');
+
     $.ajax({
-        "url":"/api/admin/teacherassignedresource/"+resourceid+"/?format=json",
+        "url":"/api/admin/assignedresourcestudents/"+resourceid+"/?studentid="+studentid+"format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
         TTS.forms.renderassignedresourceinfo(data);
     });
-    $.ajax({
-        "url":"/api/admin/assignedresourcestudents/"+resourceid+"?format=json",
-        "type":"GET"
-    }).done(function(data){
-        TTS.forms.renderstudentlist(data);
-    });
-    $("#studentlist").on("click", ".cgreen", function(){
-        var studentid = $(this).parent().parent().prop("id");
-        window.location = 'viewassignmentanswer.php?resourceid='+resourceid+'&studentid='+studentid;
-    });
+
 });
-
-
-TTS.forms.renderstudentlist = function(data){
-    var headers = [
-            { "title": "{% trans "Sl No." %}",
-              "class": "text-center",
-              "data" : "slno"  
-            },
-            { "title": "{% trans "Name" %}",
-              "data" : "name"  
-            },
-            { "title": "{% trans "Note" %}",
-              "class": "text-center",
-              "data" : "note"  
-            },
-        ];
-    var dataset = [];
-    
-    var count = 0;
-    for(var i in data){
-        var t = [];
-        t.DT_RowId = data[i].studentid;
-        t.slno = ++count;
-        t.name = data[i].firstname + " "+data[i].lastname;
-        if (!data[i].issaved && !data[i].isanswered) 
-            t.note = "<i class=\"fa fa-star fa-lg cred\"></i>" ;
-        if (data[i].issaved && !data[i].isanswered) 
-            t.note = "<i class=\"fa fa-star fa-lg cyellow\"></i>" ;
-        if (data[i].isanswered) 
-            t.note = "<i id=\"view-answer\" class=\"fa fa-star fa-lg cgreen\"></i>" ;
-        
-        dataset.push(t);
-    }
-
-    TTS.forms.table = $('#studentlist').dataTable({
-        "data":     dataset,
-        "columns":  headers
-    });
-}
 
 TTS.forms.getUrlParameter = function(sParam) {
     var sPageURL = window.location.search.substring(1);
