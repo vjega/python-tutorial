@@ -24,6 +24,15 @@
     .str-example{
         font-size: 16px;   
     }
+    .cred{
+        color: red;
+    }
+    .cgreen{
+        color: green;
+    }
+    .cyellow{
+        color: yellow;
+    }
 </style>
 {% endblock morecss %}
 
@@ -56,10 +65,10 @@
             </div>
             <div class="row">
                 <div class="col-lg-12 str-example">
-                    <div class="col-lg-9"></div>
-                    <div class="col-lg-1">{% trans "Start" %}</div>
-                    <div class="col-lg-1">{% trans "End" %}</div>
-                    <div class="col-lg-1">{% trans "Middle" %}</div>
+                    <div class="col-lg-6"></div>
+                    <div class="col-lg-2"><i class="fa fa-star fa-lg cred"></i> {% trans "Start" %}</div>
+                    <div class="col-lg-2"><i class="fa fa-star fa-lg cgreen"></i> {% trans "End" %}</div>
+                    <div class="col-lg-2"><i class="fa fa-star fa-lg cyellow"></i> {% trans "Middle" %}</div>
                 </div>
             </div>
             <!-- /.table-responsive -->
@@ -108,13 +117,11 @@ $(document).ready(function(){
         TTS.forms.renderassignedresourceinfo(data);
     });
     $.ajax({
-        "url":"/api/student/student/?format=json",
+        "url":"/api/admin/assignedresourcestudents/"+resourceid+"?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstudentlist(data);
     });
-    
-
 });
 
 
@@ -127,15 +134,26 @@ TTS.forms.renderstudentlist = function(data){
             { "title": "{% trans "Name" %}",
               "data" : "name"  
             },
+            { "title": "{% trans "Note" %}",
+              "class": "text-center",
+              "data" : "note"  
+            },
         ];
     var dataset = [];
     
-    var count = 0
+    var count = 0;
     for(var i in data){
         var t = [];
         t.DT_RowId = data[i].studentid;
         t.slno = ++count;
         t.name = data[i].firstname + " "+data[i].lastname;
+        if (!data[i].issaved && !data[i].isanswered) 
+            t.note = "<i class=\"fa fa-star fa-lg cred\"></i>" ;
+        if (data[i].issaved && !data[i].isanswered) 
+            t.note = "<i class=\"fa fa-star fa-lg cgreen\"></i>" ;
+        if (data[i].isanswered) 
+            t.note = "<i class=\"fa fa-star fa-lg cyellow\"></i>" ;
+        
         dataset.push(t);
     }
 
