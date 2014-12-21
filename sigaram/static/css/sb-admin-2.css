@@ -474,3 +474,7 @@ background: linear-gradient(to right,  rgba(255,175,75,1) 0%,rgba(170,234,9,1) 1
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', endColorstr='#aaea09',GradientType=1 ); /* IE6-8 */
 
 }
+
+.modal-backdrop {
+    z-index :0 !important;
+}
