@@ -1001,7 +1001,7 @@ class Mindmap(models.Model):
 class stickynotes(models.Model):
     stickytext = models.CharField(max_length=200)
     name  = models.TextField()
-    color = models.BigIntegerField()
+    color = models.TextField()
     xyz = models.IntegerField()
     createdby = models.BigIntegerField()
     isdeleted = models.IntegerField()
@@ -1010,3 +1010,15 @@ class stickynotes(models.Model):
     class Meta:
         managed = False
         db_table = 'stickynotes'
+
+class stickycomments(models.Model):
+    stickyid = models.IntegerField()
+    stickycomment = models.CharField(max_length=200)
+    commentby  = models.TextField()
+    createdby = models.BigIntegerField()
+    isdeleted = models.IntegerField()
+    createddate = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'stickycomments'

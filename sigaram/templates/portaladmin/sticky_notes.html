@@ -165,25 +165,66 @@
 }
 
 #editrec{
-    float: left;
-    margin-left: 3px;
+    float: right;
+    margin: 0 5px;
+    cursor: default;
+}
+
+#editrec:hover{
+    color :#FFF;
 }
 
 #deleterec{
     float: right;
     margin-right: 3px;
+    cursor: default;
 }
+
+#deleterec:hover{
+    color :#FFF;
+}
+
 
 #sticky_comment{
     float: right;
     margin-right: 3px;
+    cursor: default;
+}
+
+#sticky_comment:hover{
+    color :gray;
 }
 
 .sticky_content {
     height: 95px;
-    overflow: auto;
+    overflow-x: auto;
 }
 
+.color{
+    cursor:pointer;
+    float:left;
+    height: 15px;
+    width: 15px;
+    margin: 0 5px 0 0;
+}
+
+.color_container{
+    font-weight: bold;
+    height: 15px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    text-align: center;
+    width: 568px;
+}
+
+#preview_color{
+    height: 100px;
+    left: 76px;
+    line-height: 100px;
+    position: absolute;
+    top: 65px;
+    width: 100px;
+}
 </style>
 {% endblock morecss %}
 
@@ -201,6 +242,10 @@
 {% block scriptcontent %}
 <script id="sticky-form" type="text/x-jsrender">
     {% crispy form %}
+</script>
+
+<script id="stickycomment-form" type="text/x-jsrender">
+    {% crispy Cform %}
 </script>
 
 <script>
@@ -222,18 +267,39 @@ TTS.forms.addstickynote = function(form, data) {
 }
 
 TTS.forms.showstickyform = function() {
+    var colors = ["yellow", "blue", "green","purple", "pink", "grey","red", "orange", "maroon", "gold"];
+    var color_div = "<div class='color_container'>"+
+                        "<div id='preview_color' class='yellow'>Preview</div>"+
+                        "<div class='control-label col-sm-4'>color</div>"+
+                        "<div class='control-label col-sm-8 color_values'>";
+    for (var i = 0; i < colors.length; i++) { 
+       color_div += "<div class='color "+colors[i]+"' name='"+colors[i]+"' ></div>";
+    }
+
+    color_div +="</div>";
+    color_div +="</div>";
+    var select_color ='yellow';
     BootstrapDialog.show({
         title: 'Add Sticky note',
-        message: $($('#sticky-form').render()),
+        message: $($('#sticky-form').render() + color_div),
         onshown: function(){
             $('.summernote').summernote();
+            $(".color").on("click", function(){
+                var clsclr = $(this).prop("class").split(" ");
+                select_color = findColor(colors, clsclr) ;
+                $("#preview_color").removeAttr("class");
+                $("#preview_color").attr("class",select_color);
+            });
         },
+
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-sticky");
-                TTS.forms.addstickynote(dialogItself, data); 
+                data = JSON.parse(data);
+                data['color'] = select_color;
+                TTS.forms.addstickynote(dialogItself, JSON.stringify(data)); 
             }
             },{
             label: 'Cancel',
@@ -243,6 +309,15 @@ TTS.forms.showstickyform = function() {
         }]
     });
 };
+
+function findColor(cls, color) {
+  for (c in cls) {
+    for (cs in color) {
+       if (cls[c] === color[cs])
+         return cls[c];
+    }
+  }
+}
 
 TTS.forms.editstickyform = function(edit_id,content) {
     BootstrapDialog.show({
@@ -287,15 +362,30 @@ TTS.forms.delstickynotes = function(id) {
     });
 }
 
-TTS.forms.showstickycommentform = function(sticky_id) {
+TTS.forms.addstickycomment = function(form, data) {
+    $.ajax({
+        type:'POST',
+        data: data,
+        url : '/api/admin/stickycomments/'
+    }).done(function( msg ) {
+        form.close();
+        location.reload();
+        //dialogItself.close();
+    });
+}
+
+TTS.forms.showstickycommentform = function(stickyid) {
     BootstrapDialog.show({
         title: 'Add Sticky Comment',
+        message: $($('#stickycomment-form').render()),
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
             action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-sticky");
-                TTS.forms.addstickynote(dialogItself, data); 
+                var data = TTS.utils.serilaizeJson("#add-stickycomment");
+                data = JSON.parse(data);
+                data['stickyid'] = stickyid;
+                TTS.forms.addstickycomment(dialogItself, JSON.stringify(data)); 
             }
             },{
             label: 'Cancel',
@@ -311,17 +401,33 @@ TTS.forms.renderstickynotes = function(data){
     for(var i in data){
         sticky_html += "<div class='sticky_note "+data[i].color+"'>";
         sticky_html += "<div class='sticky_header "+data[i].color+"_header'>";
-        sticky_html += "<span id='editrec' name='"+data[i].id+"'><i class='fa fa-pencil'></i></span> &nbsp;";
         sticky_html += "<span id='deleterec' name='"+data[i].id+"'><i class='fa fa-trash'></i></span>";
+        sticky_html += "<span id='editrec' name='"+data[i].id+"'><i class='fa fa-pencil'></i></span> &nbsp;";
         sticky_html += "</div>";
         sticky_html += "<div id='sticky_content_"+data[i].id+"' class='sticky_content'>"+data[i].stickytext+"</div>";
         sticky_html += "<div id='sticky_footer' class='sticky_footer'>";
-        sticky_html += "<span id='sticky_comment' name='"+data[i].id+"'><i class='fa fa-comment-o'></i></span>";
+        sticky_html += "<span id='sticky_comment' name='"+data[i].id+"'><i class='fa fa-comment'></i></span>";
+        var com = []
+        if (data[i].comments !==  null) {
+            com = data[i].comments.split("~");
+        }
+        if (com.length) {
+            sticky_html += "<div id='comment'>Comment ("+com.length+")</div>";
+            sticky_html += "<div class='slidingDiv' style='display: block;'><ul>";
+            for (i in com){
+                sticky_html += "<li>"+com[i]+"</li>";
+            }
+            sticky_html += "</ul></div>";
+        } else {
+            sticky_html += "<div id='comment'>No comment</div>";
+        }
         sticky_html += "</div>";
         sticky_html += "</div>";
     }
         $('#admin-main-tbl').html(sticky_html); 
 };
+
+//?stickyid=1
 
 $(document).ready(function(){
     $("#page-wrapper").on("click", "#addrec", function(){
@@ -360,6 +466,7 @@ function sample_test (){
         var sticky_id = $(this).attr("name");
         TTS.forms.showstickycommentform(sticky_id);
     });
+
 }
 </script>
 {% endblock scriptcontent %}
