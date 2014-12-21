@@ -892,6 +892,9 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
                date(assigneddate) as createddate,
                resourcetype,
                thumbnailurl,
+               ari.answereddate,
+               ari.answertext,
+               ari.originaltext,
                ari.studentid,
                ari.isanswered,
                ari.issaved
