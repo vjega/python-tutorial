@@ -78,12 +78,15 @@ TTS.forms.renderteacherresourceinfo = function(data){
         $("#view-resource").hide();
     else 
         $("#view-resource").show();
-    $("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.videourl+"');\" >View</a>");
+    if(data.resourcetype == 'video')
+        $("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.videourl+"');\" >View</a>");
+    else 
+        $("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.videourl+"');\" >View</a>");
 };
 function openwindow(videourl) {
     window.open("http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
 }
-
+http://www.10tsigaram.com/dbinterface/extras/14test_.wav
 function getUrlParameter(sParam)
 {
     var sPageURL = window.location.search.substring(1);
@@ -104,7 +107,7 @@ $(document).ready(function(){
         "url":"/api/admin/resourceinfo/"+resourceid+"/?format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
+        //console.log(data);
         TTS.forms.renderteacherresourceinfo(data);
     });
 });
