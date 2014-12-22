@@ -1,9 +1,9 @@
 from django.utils.translation import (ugettext as _,)
 from django import forms
 from crispy_forms.helper import FormHelper
-from forum import models
+
 #from crispy_forms.layout import Submit
-class Forum(forums.Form):
+class ForumsForm(forms.Form):
     heading = forms.CharField(
         label = _("Heading"),
         required = True,
@@ -11,7 +11,7 @@ class Forum(forums.Form):
     )
     
     def __init__(self, *args, **kwargs):
-        super(forums, self).__init__(*args, **kwargs)
+        super(ForumsForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = 'add-forum'
         self.helper.form_class  = 'form-horizontal'
