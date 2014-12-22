@@ -29,6 +29,7 @@ router.register(r'teacherassignedresource', viewsets.TeacherStudentAssignResourc
 router.register(r'assignedresourcestudents',viewsets.AssignedResourceStudents)
 router.register(r'studentinfo',      	  	viewsets.StudentinfoViewSet)
 router.register(r'stickycomments',          viewsets.StickyCommentsResource)
+router.register(r'Bulletinboard',           viewsets.Bulletinboard)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

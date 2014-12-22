@@ -926,3 +926,7 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
             ]
         return Response(result)
 
+
+class Bulletinboard(viewsets.ModelViewSet):
+    queryset = models.Bulletinboardinfo.objects.all()
+    serializer_class = adminserializers.BulletinboardinfoSerializer

@@ -120,3 +120,8 @@ class StickyCommentsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.stickycomments
         fields = ('id','stickyid','stickycomment','commentby')
+
+class BulletinboardinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Bulletinboardinfo
+        fields = ('messagetitle','message','posteddate','postedby')
