@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponse
 from forum import models
-from forum.forms import (forums)
+from forum.forms import (ForumsForm)
 
 def index(request):
-    return render(request, 'portalforum/index.html')
+    return render(request, 'portalforum/index.html', {"form" : ForumsForm.ForumsForm()})
