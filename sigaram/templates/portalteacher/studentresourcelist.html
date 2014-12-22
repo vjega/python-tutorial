@@ -124,7 +124,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
     for(var i in data){
         var t = [];
         t.push(++count);
-        t.push("<p class='col-sm-3 pull-left'><img src="+data[i].thumbnailurl+"></p> " + data[i].resourcetitle);
+        t.push("<p class='col-sm-3 pull-left'><img src=http://10tsigaram.com/dbinterface/"+data[i].thumbnailurl+"></p> " + data[i].resourcetitle);
         t.push(data[i].createddate);
         t.push("<a href='javascript:void(0)' class='assignment' id='"+data[i].teacherresourceid+"' ><i class='fa fa-share fa-2x'></i></a>");
         dataset.push(t);
