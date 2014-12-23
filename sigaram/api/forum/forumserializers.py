@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from portalforum import models
+from portaladmin import models
 
-class StudentinfoSerializer(serializers.HyperlinkedModelSerializer):
+class ForuminfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = models.Studentinfo
-        fields = ('studentid',  'username',
-                  'firstname','lastname', 'emailid',
-                  'imageurl','schoolid','classid')
+        model = models.Foruminfo
+        fields = ('forumid',  'forumname','totaltopic',
+                  'totalpost','createdby', 'createddate',
+                  'lastpostedby','lastposteddate','isdelete')
         

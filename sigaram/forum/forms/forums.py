@@ -1,18 +1,17 @@
 from django.utils.translation import (ugettext as _,)
 from django import forms
 from crispy_forms.helper import FormHelper
-
+from forum import models
 #from crispy_forms.layout import Submit
-class ForumsForm(forms.Form):
-    forumname = forms.CharField(
-        label = _("Title"),
-        max_length = 100,
+class Forum(forums.Form):
+    heading = forms.CharField(
+        label = _("Heading"),
         required = True,
-        widget = forms.TextInput({ "placeholder": _("Title")})
+        widget = forms.Textarea({ "class": "summernote"})
     )
     
     def __init__(self, *args, **kwargs):
-        super(ForumsForm, self).__init__(*args, **kwargs)
+        super(forums, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = 'add-forum'
         self.helper.form_class  = 'form-horizontal'
