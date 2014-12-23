@@ -140,7 +140,8 @@ TTS.forms.renderfourminfo = function(data){
     var dataset = [];
     var count = 0
     for(var i in data){
-        var t = {};
+        var t = [];
+        t.DT_RowId = data[i].forumid;
         t.slno = ++count;
         t.forumname = data[i].forumname;
         t.totaltopic = data[i].totaltopic;
@@ -169,8 +170,9 @@ $(document).ready(function(){
         }
     });
   
-    $('body').on('click','.topice', function(){
+    $('#forum-main-tbl').on('click', 'tbody tr', function(){
         window.location ='viewtopic?forumid='+this.id;
+        //console.log(this.id);
     });
 
     $("#page-wrapper").on("click", "#addrec", function(){

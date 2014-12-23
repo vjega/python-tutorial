@@ -123,30 +123,31 @@ TTS.forms.renderviewfourminfo = function(data){
               "data" : "slno"  
             },
             { "title": "{% trans "Topics" %}",
-              "data" : "forumname" ,
+              "data" : "topicname" ,
               "class": "viewtopic" 
             },
             { "title": "{% trans "Total Comments" %}",
-              "data" : "totaltopic"  
+              "data" : "totalpost"  
             },
             { "title": "{% trans "Last author" %}",
               "class": "text-center" ,
-              "data" : "lastpostedby"  
+              "data" : "firstname"  
             },
             { "title": "{% trans "By Last Day" %}",
               "class": "text-center" ,
-              "data" : "createddate"  
+              "data" : "lastposteddate"  
             },
         ];
     var dataset = [];
     var count = 0
     for(var i in data){
         var t = {};
+        t.DT_RowId = data[i].forumid;
         t.slno = ++count;
-        t.forumname = data[i].forumname;
-        t.totaltopic = data[i].totaltopic;
-        t.lastpostedby = data[i].lastpostedby;
-        t.createddate = data[i].createddate;
+        t.topicname = data[i].topicname;
+        t.totalpost = data[i].totalpost;
+        t.firstname = data[i].firstname;
+        t.lastposteddate = data[i].lastposteddate;
         dataset.push(t);
     }
 
@@ -157,10 +158,9 @@ TTS.forms.renderviewfourminfo = function(data){
 
 };
 
-
 $(document).ready(function(){
     $.ajax({
-        "url":"/api/forum/foruminfo/?format=json",
+        "url":"/api/forum/topicinfo/?forumid="+TTS.utils.getUrlParameter("forumid")+"&format=json",
         "type":"GET"
     }).done(function(data){
         if (data.length) {
@@ -171,7 +171,7 @@ $(document).ready(function(){
     });
 
     $('body').on('click','.viewtopic', function(){
-       window.location ='viewpost?forumname='+this.id;
+       window.location ='viewpost?forumid='+this.id;
     });
 
     $("#page-wrapper").on("click", "#addrec", function(){
