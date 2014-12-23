@@ -1,11 +1,10 @@
 {% extends 'portalforum/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
-{% load crispy_forms_tags %}
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Teacher Resource" %}</h2>
+        <h2 class="page-header">{% trans "Forum" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -15,14 +14,17 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans "Teacher Resource" %} &nbsp; <span id="addrec">
-                <i class="fa fa-plus-square fa-lg"></i></span>
+            {% trans "Forum" %}
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover" 
                     id="forum-main-tbl">
+                </table>
+                <table class="table table-striped table-bordered table-hover" 
+                    id="forum-reply-tbl">
+                    <tr><td>Reply</td></tr>
                 </table>
             </div>
             <!-- /.table-responsive -->
@@ -57,10 +59,6 @@
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<script id="fourm" type="text/x-jsrender">
-{% crispy form %}
-</script>
-
 
 <script>
 window.TTS = window.TTS || {}
@@ -81,7 +79,7 @@ TTS.forms = TTS.forms || {}
         $("#chapterid").html(opt);
     })
 };*/
-TTS.forms.addtfourms = function(form, data) {
+TTS.forms.addviewpost = function(form, data) {
     $.ajax({
         type:'POST',
         data: data,
@@ -93,7 +91,7 @@ TTS.forms.addtfourms = function(form, data) {
         //dialogItself.close();
     });
 }
-TTS.forms.showfourms = function() {
+TTS.forms.showviewpost = function() {
     BootstrapDialog.show({
         title: 'New Conversation',
         message: $($('#fourm').render()),
@@ -104,7 +102,7 @@ TTS.forms.showfourms = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-forum");
-                TTS.forms.addtfourms(dialogItself, data); 
+                TTS.forms.addviewpost(dialogItself, data); 
             }
             },{
             label: 'Cancel',
@@ -115,22 +113,21 @@ TTS.forms.showfourms = function() {
     });
 };
 
-TTS.forms.renderfourminfo = function(data){
+TTS.forms.renderviewforum = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center" ,
               "data" : "slno"  
             },
             { "title": "{% trans "Topics" %}",
-              "data" : "forumname" , 
-              "class": "topice"
+              "data" : "forumname"  
             },
             { "title": "{% trans "Total Topics" %}",
               "data" : "totaltopic"  
             },
             { "title": "{% trans "Last author" %}",
               "class": "text-center" ,
-              "data" : "createdby"  
+              "data" : "lastpostedby"  
             },
             { "title": "{% trans "By Last Day" %}",
               "class": "text-center" ,
@@ -144,7 +141,7 @@ TTS.forms.renderfourminfo = function(data){
         t.slno = ++count;
         t.forumname = data[i].forumname;
         t.totaltopic = data[i].totaltopic;
-        t.createdby = data[i].createdby;
+        t.lastpostedby = data[i].lastpostedby;
         t.createddate = data[i].createddate;
         dataset.push(t);
     }
@@ -163,18 +160,36 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         if (data.length) {
-            TTS.forms.renderfourminfo(data);
+            TTS.forms.renderviewforum(data);
         } else {
             TTS.forms.table.fnClearTable();
         }
     });
-  
-    $('body').on('click','.topice', function(){
-        window.location ='viewtopic?forumid='+this.id;
+
+    $('#forum-main-tbl').on('click', 'tbody tr',function(e){
+        e.stopPropagation();
+        //console.log("Hello");
+       // window.location =' viewpost?forumid='+this.id;
+    });
+
+    $('#forum-reply-tbl').on('click', 'tbody tr',function(e){
+        e.stopPropagation();
+        //console.log("Hello");
+       // window.location =' viewpost?forumid='+this.id;
+    });
+
+   
+    $('#forum-main-tbl').on('click', '.tts-delete', function(e){
+        e.stopPropagation();
+        if (!window.confirm("Do you want to delete this record?")) {
+            return false;
+        }
+        alert("Record Deleted")
+        window.location = 'teacherresourcelist';
     });
 
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.showfourms();
+        //TTS.forms.showviewpost();
     });
    
 });

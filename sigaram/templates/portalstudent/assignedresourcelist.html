@@ -149,7 +149,6 @@
                 t.title=data[i].resourcetitle;
                 t.date=data[i].createddate;
                 t.type=data[i].resourcetype;
-                //t.note="<a id='"+data[i].resourceid+"' class='addnote' href='viewassignresource.php?resourceid=66&categoryid=0'>{% trans "Note" %}</a>";
                 dataset_new.push(t);
             }
             if (data[i].issaved && !data[i].isanswered) {
@@ -159,7 +158,6 @@
                 t.title=data[i].resourcetitle;
                 t.date=data[i].createddate;
                 t.type=data[i].resourcetype;
-                //t.note="<a id='"+data[i].resourceid+"' class='addnote' href='javascript:void(0)'>{% trans "Note" %}</a>";
                 dataset_saved.push(t);
             }
             if (data[i].isanswered) {
@@ -169,7 +167,6 @@
                 t.title=data[i].resourcetitle;
                 t.date=data[i].createddate;
                 t.type=data[i].resourcetype;
-                //t.note="<a id='"+data[i].resourceid+"' class='addnote' href='javascript:void(0)'>{% trans "Note" %}</a>";
                 dataset_answered.push(t);
             }
         }
@@ -197,7 +194,7 @@ $(document).ready(function(){
     });
     $('.resourcelist').on('click','tr',function(e){
         e.stopPropagation();
-        window.location = 'viewassignresource.php?assignedid='+this.id;
+        window.location = 'viewassignresource?assignedid='+this.id;
     });
     $('#fromdatepicker').datetimepicker({
         pickTime: false

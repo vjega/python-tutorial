@@ -135,7 +135,7 @@ $(document).ready(function(){
     });
     $('.resourcelist').on('click','tr',function(e){
         e.stopPropagation();
-        window.location = 'viewassignresource.php?resourceid='+this.id;
+        window.location = 'viewassignresource?resourceid='+this.id;
     });
     $('#fromdatepicker').datetimepicker({
         pickTime: true

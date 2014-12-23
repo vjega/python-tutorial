@@ -126,7 +126,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
         t.push(++count);
         t.push("<p class='col-sm-3 pull-left'><img src=http://10tsigaram.com/dbinterface/"+data[i].thumbnailurl+"></p> " + data[i].resourcetitle);
         t.push(data[i].createddate);
-        t.push("<a href='javascript:void(0)' class='assignment' id='"+data[i].teacherresourceid+"' ><i class='fa fa-share fa-2x'></i></a>");
+        t.push("<a href='javascript:void(0)' class='assignment' id='"+data[i].resourceid+"' ><i class='fa fa-share fa-2x'></i></a>");
         dataset.push(t);
     }
 
@@ -161,7 +161,7 @@ $(document).ready(function(){
     $('#studetresource-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();
         //console.log("Hello");
-        window.location = 'viewstudentresourcelist.html?categoryid=1&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.classid;
+        window.location = 'studentresourcelist?categoryid=1&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.section;
     });
     $('#studetresource-main-tbl tbody').on('click', 'tr', function(){
         window.location = 'teacherresourcelist?id='+this.id;
@@ -187,7 +187,7 @@ $(document).ready(function(){
 
     $('#studetresource-main-tbl').on('click', '.assignment',function(e){
         e.stopPropagation();
-        window.location = 'assignresource.html?categoryid=1&chapterid=1&classid='+TTS.classid+'&section='+TTS.classid+'&resourceid='+this.id;
+        window.location = 'assignresource?categoryid=1&chapterid=1&classid='+TTS.classid+'&section='+TTS.section+'&resourceid='+this.id;
     });    
     
 });

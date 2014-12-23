@@ -552,15 +552,21 @@ class StudentAssignResource(viewsets.ModelViewSet):
         data = {k:v[0] for k, v in dict(request.DATA).items()}
         #print data
         ari = models.Assignresourceinfo.objects.get(pk=pk)
+        
         ari.originaltext = data.get('originaltext')
         ari.answertext = data.get('answertext')
-        ari.answerurl = data.get('answerurl')
-        ari.isrecord = 1
+
+        if data.get('answerurl'):
+            ari.answerurl = data.get('answerurl')
+            ari.isrecord = 1
+
         if data.get('isanswered'):
             ari.isanswered = data.get('isanswered')
             ari.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
+
         if data.get('issaved'):
             ari.issaved = data.get('issaved')
+        
         ari.save()
         return Response({'msg':True})
 
@@ -569,7 +575,6 @@ class StudentAssignResource(viewsets.ModelViewSet):
         if request.GET.get('fdate') and request.GET.get('tdate'):
             datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
                 request.GET.get('tdate'))
-
         sql = '''
         SELECT assignedid AS id,
                ri.resourceid,
@@ -929,7 +934,6 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
                 for row in cursor.fetchall()
             ]
         return Response(result)
-
 
 class Bulletinboard(viewsets.ModelViewSet):
     queryset = models.Bulletinboardinfo.objects.all()
