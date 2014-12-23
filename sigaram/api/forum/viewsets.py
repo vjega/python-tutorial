@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import serializers
+from django.db import connection
 
 from portaladmin import models
 import forumserializers
@@ -52,7 +53,30 @@ class TopicinfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Topicinfo.objects.all()
     serializer_class = forumserializers.TopicinfoSerializer
-
+    
+    def list(self, request):
+        forumid = request.GET.get('forumid')
+        sql = """
+        SELECT topicid,
+                forumid,
+                topicname,
+                totalpost,
+                date(lastposteddate) as lastposteddate,
+                firstname,
+                totalpost 
+        FROM topicinfo ti 
+        LEFT OUTER JOIN logininfo li ON li.loginid = ti.lastpostedby 
+        WHERE ti.forumid=%s
+        ORDER BY topicid """ % forumid
+        cursor = connection.cursor()
+        #print sql
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
     def create(self, request):
         topicinfo = models.Topicinfo()
         topicinfodata =  json.loads(request.DATA.keys()[0])
