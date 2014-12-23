@@ -3499,7 +3499,7 @@
 
           $imageBtn.click(function (event) {
             event.preventDefault();
-
+            event.stopPropagation();
             deferred.resolve($imageUrl.val());
             $imageDialog.modal('hide');
           });
