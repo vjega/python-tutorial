@@ -3,10 +3,11 @@ from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
 from django.http import HttpResponse
 from teacher import models
-from teacher.forms import (ViewworkspaceForm,
-                            RubricsForm,
+from teacher.forms import ( RubricsForm,
                             WrittenworkForm,
-                            StudentForm) 
+                            StudentForm,
+                            #ViewworkspaceForm
+                            ) 
 
 from ajaxuploader.views import AjaxFileUploader  
 
