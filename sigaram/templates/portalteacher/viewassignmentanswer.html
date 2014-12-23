@@ -197,33 +197,29 @@ TTS.forms.editanswer = function() {
                     alert("nothing to save");
                     return false;
                 }
-                dialogItself.close();
-                alert("Saved");
-                return false;
                 /*alert($("#assignedid").val());
                 alert($("#student-answer").html());
                 alert(x);
                 alert(modtext);
-                return false;
+                return false;*/
+                var assign_id = $("#assignedid").val()
                 var data = {
-                    assign_id : $("#assignedid").val(),
                     fulltext : $("#student-answer").html(),
                     orig : x,
                     modified : modtext,
                     type : "2"
                 }
-                var data = TTS.utils.serilaizeJson("#add-studentresource");
-                console.log(data);
                 $.ajax({
                     type:'POST',
                     data: data,
-                    url : '/api/admin/saveeditedanswer/'
+                    url : '/api/admin/assignedresourcestudents/'+assign_id
                 }).done(function( msg ) {
-                    //console.log(msg);
+                    console.log(msg);
                     dialogItself.close();
+                    return false;
                     location.reload();
                 });
-                $.post("../dbinterface/ajax_editor.php",{submit:"new", data:JSON.stringify(dataobj)},function(data){
+                /*$.post("../dbinterface/ajax_editor.php",{submit:"new", data:JSON.stringify(dataobj)},function(data){
                     $("#student-answer").html(data);
                     alert("Saved");
                 });
