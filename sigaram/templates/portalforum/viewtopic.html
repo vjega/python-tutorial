@@ -1,10 +1,11 @@
 {% extends 'portalforum/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
+{% load crispy_forms_tags %}
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Teacher Resource" %}</h2>
+        <h2 class="page-header">{% trans "Forums" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -14,14 +15,14 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans "Teacher Resource" %} &nbsp; <span id="addrec">
+            {% trans "Forums" %} &nbsp; <span id="addrec">
                 <i class="fa fa-plus-square fa-lg"></i></span>
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover" 
-                    id="forum-main-tbl">
+                    id="viewforum-main-tbl">
                 </table>
             </div>
             <!-- /.table-responsive -->
@@ -39,7 +40,7 @@
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
 <style>
-    #addrec:hover, #forum-main-tbl tbody tr:hover, .tts-delete:hover{
+    #addrec:hover, #viewforum-main-tbl tbody tr:hover, .tts-delete:hover{
         cursor: pointer;
     }
 </style>
@@ -56,6 +57,10 @@
 {% endblock morescript %}
 
 {% block scriptcontent %}
+
+<script id="newtopic" type="text/x-jsrender">
+{% crispy form %}
+</script>
 
 <script>
 window.TTS = window.TTS || {}
@@ -76,7 +81,7 @@ TTS.forms = TTS.forms || {}
         $("#chapterid").html(opt);
     })
 };*/
-TTS.forms.addteacherresource = function(form, data) {
+TTS.forms.addviewfourm = function(form, data) {
     $.ajax({
         type:'POST',
         data: data,
@@ -88,18 +93,19 @@ TTS.forms.addteacherresource = function(form, data) {
         //dialogItself.close();
     });
 }
-TTS.forms.showteacherresource = function() {
+TTS.forms.showviewfourm = function() {
     BootstrapDialog.show({
-        title: 'New Conversation',
-        message: $($('#fourm').render()),
+        title: 'Forum',
+        message: $($('#newtopic').render()),
         onshown: function(){
+            $('.summernote').summernote();
         },
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
             action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-forum");
-                TTS.forms.addteacherresource(dialogItself, data); 
+                var data = TTS.utils.serilaizeJson("#newtopic-forum");
+                TTS.forms.addviewfourm(dialogItself, data); 
             }
             },{
             label: 'Cancel',
@@ -110,14 +116,15 @@ TTS.forms.showteacherresource = function() {
     });
 };
 
-TTS.forms.renderteacherresourceinfo = function(data){
+TTS.forms.renderviewfourminfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center" ,
               "data" : "slno"  
             },
             { "title": "{% trans "Topics" %}",
-              "data" : "forumname"  
+              "data" : "forumname" ,
+              "class": "viewtopic" 
             },
             { "title": "{% trans "Total Comments" %}",
               "data" : "totaltopic"  
@@ -143,7 +150,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
         dataset.push(t);
     }
 
-    $('#forum-main-tbl').dataTable({
+    $('#viewforum-main-tbl').dataTable({
         "data":     dataset,
         "columns":  headers
     });
@@ -157,29 +164,18 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         if (data.length) {
-            TTS.forms.renderteacherresourceinfo(data);
+            TTS.forms.renderviewfourminfo(data);
         } else {
             TTS.forms.table.fnClearTable();
         }
     });
 
-    $('#forum-main-tbl').on('click', 'tbody tr',function(e){
-        e.stopPropagation();
-        //console.log("Hello");
-        window.location =' viewpost?forumid='+this.id;
-    });
-
-    $('#forum-main-tbl').on('click', '.tts-delete', function(e){
-        e.stopPropagation();
-        if (!window.confirm("Do you want to delete this record?")) {
-            return false;
-        }
-        alert("Record Deleted")
-        window.location = 'teacherresourcelist';
+    $('body').on('click','.viewtopic', function(){
+       window.location ='viewpost?forumname='+this.id;
     });
 
     $("#page-wrapper").on("click", "#addrec", function(){
-        //TTS.forms.showteacherresource();
+        TTS.forms.showviewfourm();
     });
    
 });
