@@ -10,7 +10,6 @@
 </div>
 {% endblock topcontent %}
 {% block morecss %}
-<link href="{%static "bower_components/jquery-ui/themes/ui-lightness/jquery-ui.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
     #addrec:hover, #admin-main-tbl tbody tr:hover, #view-answer:hover{
@@ -23,7 +22,6 @@
 {% endblock morecss %}
 
 {% block morescript %}
-<script src="{% static "bower_components/jquery-ui/jquery-ui.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <!-- script-->
@@ -31,6 +29,7 @@
 {% endblock morescript %}
 
 {% block botcontent %}
+<input type="hidden" value="" name="assignedid" id="assignedid">
 <div id='dialog'></div>
 <div class="col-lg-12">
     <div class="panel panel-default">
@@ -138,6 +137,7 @@ TTS.forms = TTS.forms || {}
 
 
 TTS.forms.renderassignedresourceinfo = function(data){
+    $("#assignedid").val(data[0].id);
     $("#resource-title").html(data[0].resourcetitle);
     $("#assigned-date").html(data[0].createddate);
     $("#answerd-date").html(data[0].answereddate);
@@ -151,6 +151,98 @@ TTS.forms.renderassignedresourceinfo = function(data){
     window.open("http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
 };*/
 
+TTS.forms.getSelectionHtml = function() {        
+    var html = "";
+    if (typeof window.getSelection != "undefined") {
+        var sel = window.getSelection();
+        if (sel.rangeCount) {
+            var container = document.createElement("div");
+            for (var i = 0, len = sel.rangeCount; i < len; ++i) {
+                container.appendChild(sel.getRangeAt(i).cloneContents());
+            }
+            html = container.innerHTML;
+        }
+    } else if (typeof document.selection != "undefined") {
+        if (document.selection.type == "Text") {
+            html = document.selection.createRange().htmlText;
+        }
+    }
+    return html;
+};
+
+
+TTS.forms.editanswer = function() {
+    var x = TTS.forms.getSelectionHtml();
+    //console.log(x); return false;
+    if(x=="")
+        return false;
+    
+    var html = "<textarea id='edittext' style='width:100%;height:140px'>"+x.replace(/<\/?[^>]+>/gi, '')+"</textarea>";
+
+    BootstrapDialog.show({
+        title: 'Edit Text',
+        onshown: function(dialogRef){
+            //updateChapter();
+            //$('.summernote').summernote();
+        },
+        message: html,
+        buttons: [{
+            label: 'Save',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+
+                var modtext = $("#edittext").val();
+                if(modtext==""){
+                    dialogItself.close();
+                    alert("nothing to save");
+                    return false;
+                }
+                dialogItself.close();
+                alert("Saved");
+                return false;
+                alert($("#assignedid").val());
+                alert($("#student-answer").html());
+                alert(x);
+                alert(modtext);
+                return false;
+                /*var dataobj = {
+                    assign_id : $("#student-answer").parent().attr("id"),
+                    fulltext : $("#student-answer").html(),
+                    orig : x,
+                    modified : modtext,
+                    loginid  : <?php echo $_SESSION['loginid'] ; ?>,
+                    type : "2"
+                }
+                $.post("../dbinterface/ajax_editor.php",{submit:"new", data:JSON.stringify(dataobj)},function(data){
+                    $("#student-answer").html(data);
+                    alert("Saved");
+                });
+                $(this).dialog("close");
+
+
+
+                var data = TTS.utils.serilaizeJson("#add-studentresource");
+                console.log(data);
+                $.ajax({
+                    type:'POST',
+                    data: data,
+                    url : '/api/admin/resourceinfo/'
+                }).done(function( msg ) {
+                    //console.log(msg);
+                    dialogItself.close();
+                    location.reload();
+                });*/
+
+            }
+            },{
+            label: 'Cancel',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
+        }]
+    });
+};
+
 $(document).ready(function(){
     var resourceid = TTS.forms.getUrlParameter('resourceid');
     var studentid = TTS.forms.getUrlParameter('studentid');
@@ -162,113 +254,9 @@ $(document).ready(function(){
         console.log(data);
         TTS.forms.renderassignedresourceinfo(data);
     });
-
-    function getSelectionHtml() {
-        var html = "";
-        if (typeof window.getSelection != "undefined") {
-            var sel = window.getSelection();
-            if (sel.rangeCount) {
-                var container = document.createElement("div");
-                for (var i = 0, len = sel.rangeCount; i < len; ++i) {
-                    container.appendChild(sel.getRangeAt(i).cloneContents());
-                }
-                html = container.innerHTML;
-            }
-        } else if (typeof document.selection != "undefined") {
-            if (document.selection.type == "Text") {
-                html = document.selection.createRange().htmlText;
-            }
-        }
-        return html;
-    }
-
+    
     $("#student-answer,#student-answer p").on("mouseup", function(){
-        var x = getSelectionHtml();
-        //console.log(x); return false;
-        if(x=="") {
-            return false;
-        }
-        var html = "<textarea id='edittext' style='width:98%;height:140px'>"+x.replace(/<\/?[^>]+>/gi, '')+"</textarea>";
-
-        $("#dialog").html(html).dialog({
-            title : "Edit Text",
-            position : [350,100] ,
-            width:600,
-            height:280,
-            modal: true,
-            buttons : {
-                save : function(){
-
-                    /*var modtext = $("#edittext").val();
-                    if(modtext==""){
-                        $(this).dialog("close");
-                        alert("nothing to save");
-                        return false;
-                    }
-                    var dataobj = {
-                        assign_id : $("#student-answer").parent().attr("id"),
-                        fulltext : $("#student-answer").html(),
-                        orig : x,
-                        modified : modtext,
-                        loginid  : <?php echo $_SESSION['loginid'] ; ?>,
-                        type : "2"
-                    }
-
-                    $.ajax({
-                        "url":"/api/admin/assignedresourcestudents/"+resourceid+"/?studentid="+studentid+"&format=json",
-                        "type":"GET"
-                    }).done(function(data){
-                        console.log(data);
-                        TTS.forms.renderassignedresourceinfo(data);
-                    });
-
-                    $.post("../dbinterface/ajax_editor.php",{submit:"new", data:JSON.stringify(dataobj)},function(data){
-                        $("#student-answer").html(data);
-                        alert("Saved");
-                    });
-
-                    $(this).dialog("close");*/
-                },  
-                cancel : function(){
-                    $(this).dialog("close");
-                } 
-            }
-        });                    
-
-        /*$("#dialog").html(html).dialog({
-            title : "Edit Text",
-            position :  ['right','top'] ,
-            width:600,
-            height:280,
-            modal: true,
-            buttons : {
-                
-                save : function(){
-                            var modtext = $("#edittext").val();
-                            if(modtext==""){
-                                $(this).dialog("close");
-                                alert("nothing to save");
-                                return false;
-                            }
-                            var dataobj = {
-                                assign_id : $("#student-answer").parent().attr("id"),
-                                fulltext : $("#student-answer").html(),
-                                orig : x,
-                                modified : modtext,
-                                loginid  : <?php echo $_SESSION['loginid'] ; ?>,
-                                type : "2"
-                            }
-                            $.post("../dbinterface/ajax_editor.php",{submit:"new", data:JSON.stringify(dataobj)},function(data){
-                                $("#student-answer").html(data);
-                                alert("Saved");
-                            });
-                            $(this).dialog("close");
-                      },  
-                cancel : function(){
-                            $(this).dialog("close");
-                      } 
-            }
-        });*/
+        TTS.forms.editanswer();
     });
 
 });

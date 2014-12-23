@@ -161,7 +161,7 @@ $(document).ready(function(){
     $('#studetresource-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();
         //console.log("Hello");
-        window.location = 'viewstudentresourcelist.html?categoryid=1&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.classid;
+        window.location = 'viewstudentresourcelist?categoryid=1&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.section;
     });
     $('#studetresource-main-tbl tbody').on('click', 'tr', function(){
         window.location = 'teacherresourcelist?id='+this.id;
@@ -187,7 +187,7 @@ $(document).ready(function(){
 
     $('#studetresource-main-tbl').on('click', '.assignment',function(e){
         e.stopPropagation();
-        window.location = 'assignresource.html?categoryid=1&chapterid=1&classid='+TTS.classid+'&section='+TTS.classid+'&resourceid='+this.id;
+        window.location = 'assignresource?categoryid=1&chapterid=1&classid='+TTS.classid+'&section='+TTS.section+'&resourceid='+this.id;
     });    
     
 });
