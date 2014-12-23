@@ -81,7 +81,7 @@ TTS.forms = TTS.forms || {}
         $("#chapterid").html(opt);
     })
 };*/
-TTS.forms.addteacherresource = function(form, data) {
+TTS.forms.addtfourms = function(form, data) {
     $.ajax({
         type:'POST',
         data: data,
@@ -93,7 +93,7 @@ TTS.forms.addteacherresource = function(form, data) {
         //dialogItself.close();
     });
 }
-TTS.forms.showteacherresource = function() {
+TTS.forms.showfourms = function() {
     BootstrapDialog.show({
         title: 'New Conversation',
         message: $($('#fourm').render()),
@@ -104,7 +104,7 @@ TTS.forms.showteacherresource = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-forum");
-                TTS.forms.addteacherresource(dialogItself, data); 
+                TTS.forms.addtfourms(dialogItself, data); 
             }
             },{
             label: 'Cancel',
@@ -115,14 +115,15 @@ TTS.forms.showteacherresource = function() {
     });
 };
 
-TTS.forms.renderteacherresourceinfo = function(data){
+TTS.forms.renderfourminfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center" ,
               "data" : "slno"  
             },
             { "title": "{% trans "Topics" %}",
-              "data" : "forumname"  
+              "data" : "forumname" , 
+              "class": "topice"
             },
             { "title": "{% trans "Total Topics" %}",
               "data" : "totaltopic"  
@@ -162,29 +163,18 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         if (data.length) {
-            TTS.forms.renderteacherresourceinfo(data);
+            TTS.forms.renderfourminfo(data);
         } else {
             TTS.forms.table.fnClearTable();
         }
     });
-
-    $('#forum-main-tbl').on('click', 'tbody tr',function(e){
-        e.stopPropagation();
-        console.log("Hello");
-        window.location ='viewtopic?forumid=';
-    });
-
-    $('#forum-main-tbl').on('click', '.tts-delete', function(e){
-        e.stopPropagation();
-        if (!window.confirm("Do you want to delete this record?")) {
-            return false;
-        }
-        alert("Record Deleted")
-        window.location = 'teacherresourcelist';
+  
+    $('body').on('click','.topice', function(){
+        window.location ='viewtopic?forumid='+this.id;
     });
 
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.showteacherresource();
+        TTS.forms.showfourms();
     });
    
 });
