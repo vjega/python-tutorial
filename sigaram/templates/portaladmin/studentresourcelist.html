@@ -42,6 +42,12 @@
     #addrec:hover, #studetresource-main-tbl tbody tr:hover,.tts-delete:hover{
         cursor: pointer;
     }
+    img{
+        width:40px;
+        height:40px;
+        margin-right:5px;
+        display-inline-block;
+    }
 </style>
 {% endblock morecss %}
 
@@ -150,14 +156,19 @@ TTS.forms.renderstudentresourceinfo = function(data){
               "class": "text-center",  
               "data":"delete"
             }, 
-        ];
+    ];
     var dataset = [];
     var count = 0
     for(var i in data){
         var t = [];
         t.DT_RowId = data[i].resourceid;
         t.slno=++count;
-        t.title=data[i].resourcetitle;
+        if (data[i].thumbnailurl){
+            t.title = "<img src='/static/"+data[i].thumbnailurl+"'>"+data[i].resourcetitle;
+        } else {
+            t.title = "<img src='http://placehold.it/100x100'>"+data[i].resourcetitle;
+        }
+        //t.title="<img src=../static/"+data[i].thumbnailurl+">"+data[i].resourcetitle;
         t.date=data[i].createddate;
         t.type=data[i].resourcetype;
         t.delete="<i class='tts-delete fa fa-trash fa-lg'></i>";
@@ -174,7 +185,7 @@ TTS.forms.renderstudentresourceinfo = function(data){
 TTS.forms.file = function(elm) {
     console.log(elm);
     var uploader = new qq.FileUploader({
-        action: "/admin/student-teacherres-upload",
+        action: "/admin/student-studentres-upload",
         element: $('#file-uploader')[0],
         multiple: false,
         onComplete: function(id, fileName, responseJSON) {
@@ -198,7 +209,7 @@ TTS.forms.file = function(elm) {
 TTS.forms.thumb = function(elm) {
     console.log(elm);
     var uploader2 = new qq.FileUploader({
-        action: "/admin/student-teacherres-upload",
+        action: "/admin/student-studentres-upload",
         element: $('#img-uploader')[0],
         multiple: false,
         onComplete: function(id, fileName, responseJSON) {
