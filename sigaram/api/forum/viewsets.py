@@ -46,3 +46,102 @@ class ForuminfoViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
+
+
+class TopicinfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Topicinfo.objects.all()
+    serializer_class = forumserializers.TopicinfoSerializer
+
+    def create(self, request):
+        topicinfo = models.Topicinfo()
+        topicinfodata =  json.loads(request.DATA.keys()[0])
+        topicinfo.topicid = topicinfodata.get('topicid')
+        topicinfo.forumid = topicinfodata.get('forumid')
+        topicinfo.topicname = topicinfodata.get('topicname')
+        topicinfo.totaltopic = topicinfodata.get('totaltopic',0)
+        topicinfo.totalpost = topicinfodata.get('totalpost',0)
+        topicinfo.createdby = request.user.id
+        topicinfo.lastpostedby = topicinfodata.get('lastpostedby',0)
+        topicinfo.lastposteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        topicinfo.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        topicinfo.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
+
+
+class PostreplyinfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Postreplyinfo.objects.all()
+    serializer_class = forumserializers.PostreplyinfoSerializer
+
+    def create(self, request):
+        postreplyinfo = models.Postreplyinfo()
+        postreplydata =  json.loads(request.DATA.keys()[0])
+        postreplyinfo.postreplyid = postreplydata.get('postreplyid')
+        postreplyinfo.postid = postreplydata.get('postid')
+        postreplyinfo.postdetails = postreplydata.get('postdetails')
+        postreplyinfo.postedby = postreplydata.get('postedby',0)
+        postreplyinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        postreplyinfo.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
+
+
+class PostinfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Postinfo.objects.all()
+    serializer_class = forumserializers.PostinfoSerializer
+
+    def create(self, request):
+        postinfo = models.Postinfo()
+        postinfodata =  json.loads(request.DATA.keys()[0])
+        postinfo.postid = postinfodata.get('postid')
+        postinfo.topicid = postinfodata.get('topicid')
+        postinfo.forumid = postinfodata.get('forumid')
+        postinfo.postdetails = postinfodata.get('postdetails',0)
+        postinfo.postedby = postinfodata.get('postedby',0)
+        postinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        postinfo.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
+
+
+class ActivitylogViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Activitylog.objects.all()
+    serializer_class = forumserializers.ActivitylogSerializer
+
+    def create(self, request):
+        activitylog = models.Activitylog()
+        activitylogdata =  json.loads(request.DATA.keys()[0])
+        activitylog.activityid = activitylogdata.get('activityid')
+        activitylog.loginid = activitylogdata.get('loginid')
+        activitylog.pagename = activitylogdata.get('pagename')
+        activitylog.operation = activitylogdata.get('operation',0)
+        activitylog.usertype = activitylogdata.get('usertype',0)
+        activitylog.stringsentence = activitylogdata.get('stringsentence',0)
+        activitylog.updateddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        activitylog.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
