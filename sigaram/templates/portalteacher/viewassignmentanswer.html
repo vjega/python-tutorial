@@ -200,19 +200,29 @@ TTS.forms.editanswer = function() {
                 dialogItself.close();
                 alert("Saved");
                 return false;
-                alert($("#assignedid").val());
+                /*alert($("#assignedid").val());
                 alert($("#student-answer").html());
                 alert(x);
                 alert(modtext);
                 return false;
-                /*var dataobj = {
-                    assign_id : $("#student-answer").parent().attr("id"),
+                var data = {
+                    assign_id : $("#assignedid").val(),
                     fulltext : $("#student-answer").html(),
                     orig : x,
                     modified : modtext,
-                    loginid  : <?php echo $_SESSION['loginid'] ; ?>,
                     type : "2"
                 }
+                var data = TTS.utils.serilaizeJson("#add-studentresource");
+                console.log(data);
+                $.ajax({
+                    type:'POST',
+                    data: data,
+                    url : '/api/admin/saveeditedanswer/'
+                }).done(function( msg ) {
+                    //console.log(msg);
+                    dialogItself.close();
+                    location.reload();
+                });
                 $.post("../dbinterface/ajax_editor.php",{submit:"new", data:JSON.stringify(dataobj)},function(data){
                     $("#student-answer").html(data);
                     alert("Saved");
