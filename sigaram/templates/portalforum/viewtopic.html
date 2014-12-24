@@ -58,7 +58,7 @@
 
 {% block scriptcontent %}
 
-<script id="newtopic" type="text/x-jsrender">
+<script id="viewtopic" type="text/x-jsrender">
 {% crispy form %}
 </script>
 
@@ -85,7 +85,7 @@ TTS.forms.addviewfourm = function(form, data) {
     $.ajax({
         type:'POST',
         data: data,
-        url : '/api/forum/foruminfo/'
+        url : '/api/forum/topicinfo/'
     }).done(function( msg ) {
         console.log(data)
         form.close();
@@ -96,7 +96,7 @@ TTS.forms.addviewfourm = function(form, data) {
 TTS.forms.showviewfourm = function() {
     BootstrapDialog.show({
         title: 'Forum',
-        message: $($('#newtopic').render()),
+        message: $($('#viewtopic').render()),
         onshown: function(){
             $('.summernote').summernote();
         },
@@ -104,7 +104,10 @@ TTS.forms.showviewfourm = function() {
             label: 'Save',
             cssClass: 'btn-primary',
             action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#newtopic-forum");
+                var data = TTS.utils.serilaizeJson("#viewtopic-forum");
+                data = JSON.parse(data);
+                data['forumid'] = TTS.utils.getUrlParameter("forumid");
+                data = JSON.stringify(data);
                 TTS.forms.addviewfourm(dialogItself, data); 
             }
             },{
@@ -170,8 +173,9 @@ $(document).ready(function(){
         }
     });
 
-    $('body').on('click','.viewtopic', function(){
-       window.location ='viewpost?forumid='+this.id;
+    $('#viewforum-main-tbl').on('click', 'tbody tr', function(){
+        window.location ='viewpost?forumid='+this.id+'&topicid=';
+        //console.log(this.id);
     });
 
     $("#page-wrapper").on("click", "#addrec", function(){

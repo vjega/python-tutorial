@@ -83,7 +83,7 @@ TTS.forms.addviewpost = function(form, data) {
     $.ajax({
         type:'POST',
         data: data,
-        url : '/api/forum/foruminfo/'
+        url : '/api/forum/postinfo/'
     }).done(function( msg ) {
         console.log(data)
         form.close();
@@ -102,6 +102,9 @@ TTS.forms.showviewpost = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-forum");
+                data = JSON.parse(data);
+                data['topicid'] = TTS.utils.getUrlParameter("topicid");
+                data = JSON.stringify(data);
                 TTS.forms.addviewpost(dialogItself, data); 
             }
             },{
@@ -119,17 +122,13 @@ TTS.forms.renderviewforum = function(data){
               "class": "text-center" ,
               "data" : "slno"  
             },
-            { "title": "{% trans "Topics" %}",
+            { "title": "{% trans "Comments" %}",
               "data" : "forumname"  
             },
-            { "title": "{% trans "Total Topics" %}",
+            { "title": "{% trans "Author" %}",
               "data" : "totaltopic"  
             },
-            { "title": "{% trans "Last author" %}",
-              "class": "text-center" ,
-              "data" : "lastpostedby"  
-            },
-            { "title": "{% trans "By Last Day" %}",
+            { "title": "{% trans "Writing Day" %}",
               "class": "text-center" ,
               "data" : "createddate"  
             },
@@ -138,11 +137,11 @@ TTS.forms.renderviewforum = function(data){
     var count = 0
     for(var i in data){
         var t = {};
+        t.DT_RowId = data[i].topicid;
         t.slno = ++count;
-        t.forumname = data[i].forumname;
-        t.totaltopic = data[i].totaltopic;
-        t.lastpostedby = data[i].lastpostedby;
-        t.createddate = data[i].createddate;
+        t.postdetails = data[i].postdetails;
+        t.firstname = data[i].firstname;
+        t.posteddate = data[i].posteddate;
         dataset.push(t);
     }
 
@@ -156,7 +155,7 @@ TTS.forms.renderviewforum = function(data){
 
 $(document).ready(function(){
     $.ajax({
-        "url":"/api/forum/foruminfo/?format=json",
+        "url":"/api/forum/postinfo/?topicid="+TTS.utils.getUrlParameter("topicid")+"&format=json",
         "type":"GET"
     }).done(function(data){
         if (data.length) {
