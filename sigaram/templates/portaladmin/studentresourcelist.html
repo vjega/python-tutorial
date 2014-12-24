@@ -59,8 +59,8 @@
 {% block scriptcontent %}
 
 <script id="studentresource-form" type="text/x-jsrender">
-<div id="file-uploader">File Uploader Comes Here...</div> 
-<div id="img-uploader">File Uploader Comes Here...</div> 
+<div id="file-uploader"></div> 
+<div id="img-uploader"></div> 
 {% crispy form %}
 </script>
 
@@ -108,8 +108,10 @@ TTS.forms.showstudentresource = function() {
             updateClass();
             updateChapter();
             updateselectedChapter();
-            TTS.forms.upload();
-            //updatesection();
+            TTS.forms.file();
+            TTS.forms.thumb();
+            $("#file-uploader .qq-upload-button").html("Upload Resource").addClass("btn btn-primary btn-lg");
+            $("#img-uploader .qq-upload-button").html("Upload Thumbnail").addClass("btn btn-success btn-lg");
             $('.summernote').summernote();
         },
         
@@ -169,7 +171,7 @@ TTS.forms.renderstudentresourceinfo = function(data){
 
 };
 
-TTS.forms.upload = function(elm) {
+TTS.forms.file = function(elm) {
     console.log(elm);
     var uploader = new qq.FileUploader({
         action: "/admin/student-teacherres-upload",
@@ -193,7 +195,7 @@ TTS.forms.upload = function(elm) {
     });
 };
 
-TTS.forms.upload = function(elm) {
+TTS.forms.thumb = function(elm) {
     console.log(elm);
     var uploader = new qq.FileUploader({
         action: "/admin/student-teacherres-upload",
