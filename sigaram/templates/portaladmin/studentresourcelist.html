@@ -110,8 +110,8 @@ TTS.forms.showstudentresource = function() {
             updateselectedChapter();
             TTS.forms.file();
             TTS.forms.thumb();
-            $("#file-uploader .qq-upload-button").html("Upload Resource").addClass("btn btn-primary btn-lg");
-            $("#img-uploader .qq-upload-button").html("Upload Thumbnail").addClass("btn btn-success btn-lg");
+            $("#file-uploader .qq-upload-button"); //.html("Upload Resource").addClass("btn btn-primary btn-lg");
+            $("#img-uploader .qq-upload-button"); //.html("Upload Thumbnail").addClass("btn btn-success btn-lg");
             $('.summernote').summernote();
         },
         
@@ -197,7 +197,7 @@ TTS.forms.file = function(elm) {
 
 TTS.forms.thumb = function(elm) {
     console.log(elm);
-    var uploader = new qq.FileUploader({
+    var uploader2 = new qq.FileUploader({
         action: "/admin/student-teacherres-upload",
         element: $('#img-uploader')[0],
         multiple: false,
