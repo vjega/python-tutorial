@@ -273,7 +273,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         ri.chapterid = ridata.get('chapterid')
         ri.resourcetitle = ridata.get('resourcetitle')
         ri.resourcedescription = ridata.get('resourcedescription', "")
-        ri.thumbnailurl = ""# ridata.get('thumbnailurl', "")
+        ri.thumbnailurl = ridata.get('thumbnailurl', "")
         ri.documenturl = ""
         ri.imageurl = ""
         ri.audiourl = ""
