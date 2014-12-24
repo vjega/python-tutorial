@@ -4,7 +4,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from portaladmin import models
 from forum.forms import (ForumsForm,
-						NewtopicForm)
+						NewtopicForm,
+						NewpostForm)
 
 def index(request):
     return render(request, 'portalforum/index.html', {"form" : ForumsForm.ForumsForm()})
@@ -14,4 +15,4 @@ def viewtopic(request):
    return render(request, 'portalforum/viewtopic.html',{"form" : NewtopicForm.NewtopicForm()})
 
 def viewpost(request):
-    return render(request, 'portalforum/viewpost.html')
+    return render(request, 'portalforum/viewpost.html',{"form" : NewpostForm.NewpostForm()})

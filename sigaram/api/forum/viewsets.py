@@ -56,6 +56,7 @@ class TopicinfoViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         forumid = request.GET.get('forumid')
+        forumname = request.GET.get('forumname')
         sql = """
         SELECT topicid,
                 forumid,
@@ -107,9 +108,12 @@ class PostreplyinfoViewSet(viewsets.ModelViewSet):
     def create(self, request):
         postreplyinfo = models.Postreplyinfo()
         postreplydata =  json.loads(request.DATA.keys()[0])
-        postreplyinfo.postreplyid = postreplydata.get('postreplyid')
-        postreplyinfo.postid = postreplydata.get('postid')
-        postreplyinfo.postdetails = postreplydata.get('postdetails')
+        #print '^'*80
+        #print postreplydata
+        #print request.DATA
+        postreplyinfo.postreplyid = postreplydata.get('postreplyid',0)
+        postreplyinfo.postid = postreplydata.get('postid',0)
+        postreplyinfo.postdetails = postreplydata.get('postdetails',0)
         postreplyinfo.postedby = postreplydata.get('postedby',0)
         postreplyinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         postreplyinfo.save()
@@ -126,8 +130,8 @@ class PostinfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Postinfo.objects.all()
     serializer_class = forumserializers.PostinfoSerializer
-    
     def list(self, request):
+        postid = request.GET.get('postid')
         topicid = request.GET.get('topicid')
         sql = """
         SELECT  postid,
