@@ -341,9 +341,10 @@ class Bulletinboardinfo(models.Model):
            LIMIT 2""";
         cursor = connection.cursor()
         cursor.execute(sql)
-        return dictfetchall(cursor)
-
-
+        x = dictfetchall(cursor)
+        print '^'*80
+        print x
+        return x
 
 class Bulletinmappinginfo(models.Model):
     bulletinmappingid = models.BigIntegerField(primary_key=True)

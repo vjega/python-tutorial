@@ -77,34 +77,9 @@ TTS.forms.addexam = function(form, data) {
     });
 }
 
-TTS.forms.ediadmin = function(form, id, data) {
-    $.ajax({
-        type:'PUT',
-        data: data,
-        url : '/api/admin/admin/'+id
-    }).done(function( msg ) {
-        form.close();
-        location.reload();
-    });
-}
-
-TTS.forms.deladmin = function(id) {
-    console.log(id);
-    $.ajax({
-        type:'DELETE',
-        url : '/api/admin/admin/'+id
-    }).done(function( msg ) {
-        dialogItself.close();
-        location.reload();
-    }).error(function(msg){
-        alert("Something Bad Happended");
-    });
-}
-/* End of Admin CRUD */
-
-TTS.forms.showadminform = function() {
+TTS.forms.showexamform = function() {
     BootstrapDialog.show({
-        title: 'Add Administrator',
+        title: 'Add Exam',
         message: $($('#admin-form').render()),
         onshown: function(){
             TTS.forms.upload();
