@@ -48,7 +48,6 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
 
     @delete_login('Admin')
     def destroy(self, request, pk):
-        print pk
         models.Admininfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
@@ -254,7 +253,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         ri = models.Resourceinfo()
         #print request.DATA, type(request.DATA)
         ridata =  json.loads(dict(request.DATA).keys()[0])
-        print ridata
+        #print ridata
         category = ridata.get('categoryid')
         if category == 'text' :
             categoryid = 0
@@ -274,7 +273,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         ri.chapterid = ridata.get('chapterid')
         ri.resourcetitle = ridata.get('resourcetitle')
         ri.resourcedescription = ridata.get('resourcedescription', "")
-        ri.thumbnailurl = ""# ridata.get('thumbnailurl', "")
+        ri.thumbnailurl = ridata.get('thumbnailurl', "")
         ri.documenturl = ""
         ri.imageurl = ""
         ri.audiourl = ""
@@ -597,7 +596,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
         GROUP BY resourceid 
         ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
-        print sql
+        #print sql
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
         #cursor.execute(sql, "3680")
@@ -632,7 +631,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
         cursor = connection.cursor()
         cursor.execute(sql)
         result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
-        print result
+        #print result
         return Response(result)
 
     def create(self, request):
@@ -641,9 +640,9 @@ class StudentAssignResource(viewsets.ModelViewSet):
         resource = data.get('resource');
         rubricid = data.get('rubricid');
         assigntext = data.get('assigntext');
-        print resource
-        print students
-        print resource, students
+       # print resource
+        #print students
+       # print resource, students
         for r in resource:
             for s in students:
                 ar = models.Assignresourceinfo()
@@ -715,7 +714,7 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
 
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
-        print sql
+        #3print sql
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
         #cursor.execute(sql, "3680")
@@ -758,9 +757,9 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         resource = data.get('resource');
         rubricid = data.get('rubricid');
         assigntext = data.get('assigntext');
-        print resource
-        print students
-        print resource, students
+        #print resource
+        #print students
+        #print resource, students
         for r in resource:
             for s in students:
                 ar = models.Assignresourceinfo()
@@ -922,7 +921,7 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
 
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
-        print sql
+        #print sql
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
         #cursor.execute(sql, "3680")
@@ -940,3 +939,49 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
 class Bulletinboard(viewsets.ModelViewSet):
     queryset = models.Bulletinboardinfo.objects.all()
     serializer_class = adminserializers.BulletinboardinfoSerializer
+
+    def list(self, request):
+        sql = """
+        SELECT  bulletinboardinfo.bulletinboardid, 
+                messagetitle,
+                message,
+                logininfo.firstname AS postedby, 
+                DATE( posteddate ) AS posteddate, 
+                imageurl 
+        FROM bulletinboardinfo 
+        INNER JOIN bulletinmappinginfo ON bulletinboardinfo.bulletinboardid = bulletinmappinginfo.bulletinboardid
+        INNER JOIN logininfo ON logininfo.loginid = bulletinboardinfo.postedby 
+        INNER JOIN teacherinfo ON teacherinfo.username = logininfo.username 
+        WHERE (viewtype =0 ) OR (viewtype =2) 
+        -- AND bulletinmappinginfo.adminid =$loginid
+        GROUP BY bulletinboardinfo.bulletinboardid 
+        """
+        cursor = connection.cursor()
+        #print sql
+        #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
+        cursor.execute(sql)
+        #cursor.execute(sql, "3680")
+        #print dir(cursor)
+        #result = cursor.fetchall()
+        #print return [
+        
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+    def create(self, request):
+        announcement = models.Bulletinboardinfo()
+        data = json.loads(dict(request.DATA).keys()[0])
+        announcement.messagetitle = data.get('messagetitle')
+        announcement.message = data.get('message')
+        announcement.schoolid = data.get('schoolid')
+        announcement.classid = data.get('classid')
+        announcement.postedby = request.user.id
+        announcement.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        announcement.save()
+        return Response(request.DATA)
+
+

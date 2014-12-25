@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponse
 from portaladmin import models
+from django.utils.safestring import mark_safe
+
 from portaladmin.forms import (AdminForm,
 			       TeacherResourceForm,
                    TeacherForm,
@@ -13,7 +15,9 @@ from portaladmin.forms import (AdminForm,
                    ClassListForm,
                    CalendarForm,
                    StickyForm,
-                   StickyCommentForm)
+                   StickyCommentForm,
+                   AnnouncementForm
+                    )
 from ajaxuploader.views import AjaxFileUploader
 #from ajaxuploader.backends.easythumbnails import EasyThumbnailUploadBackend
 
@@ -65,13 +69,17 @@ def home(request):
         }]
 
     recent_acitivity_head = [_("Sl No."),_("Assignments"),_("Date")]
+    announcement_head = [_("Sl No."),_("Title"),_("Date")]
     admin_folders = models.AdminFolders.objects.all()
+    announcement_body = models.Bulletinboardinfo.announcement()
     recent_activity_body = models.Activitylog.recentactivities()
     recent_activities = {'head':recent_acitivity_head,
                          'body':recent_activity_body}
+    announcement = {'body':announcement_body}
     return  render(request, 'portaladmin/index.html', {"folders":folders,
                                            "admin_folders":admin_folders,
-                                           "recent_activities":recent_activities
+                                           "recent_activities":recent_activities,
+                                           "announcement":announcement
                                            })
 
 @login_required
@@ -392,3 +400,8 @@ def mindmaplist(request):
 @login_required
 def mindmapedit(request):
     return render(request, 'portaladmin/mindmap.html', {})
+
+@login_required
+def bulletinboardlist(request):
+    return render(request, 'portaladmin/bulletinboardlist.html', {"form" : AnnouncementForm.AnnouncementForm()})
+

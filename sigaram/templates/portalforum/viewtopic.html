@@ -58,7 +58,7 @@
 
 {% block scriptcontent %}
 
-<script id="newtopic" type="text/x-jsrender">
+<script id="viewtopic" type="text/x-jsrender">
 {% crispy form %}
 </script>
 
@@ -85,7 +85,7 @@ TTS.forms.addviewfourm = function(form, data) {
     $.ajax({
         type:'POST',
         data: data,
-        url : '/api/forum/foruminfo/'
+        url : '/api/forum/topicinfo/'
     }).done(function( msg ) {
         console.log(data)
         form.close();
@@ -96,7 +96,7 @@ TTS.forms.addviewfourm = function(form, data) {
 TTS.forms.showviewfourm = function() {
     BootstrapDialog.show({
         title: 'Forum',
-        message: $($('#newtopic').render()),
+        message: $($('#viewtopic').render()),
         onshown: function(){
             $('.summernote').summernote();
         },
@@ -104,7 +104,11 @@ TTS.forms.showviewfourm = function() {
             label: 'Save',
             cssClass: 'btn-primary',
             action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#newtopic-forum");
+                var data = TTS.utils.serilaizeJson("#viewtopic-forum");
+                data = JSON.parse(data);
+                data['forumid'] = TTS.utils.getUrlParameter("forumid");
+                data['forumname'] = TTS.utils.getUrlParameter("forumname");
+                data = JSON.stringify(data);
                 TTS.forms.addviewfourm(dialogItself, data); 
             }
             },{
@@ -123,30 +127,32 @@ TTS.forms.renderviewfourminfo = function(data){
               "data" : "slno"  
             },
             { "title": "{% trans "Topics" %}",
-              "data" : "forumname" ,
-              "class": "viewtopic" 
+              "data" : "topicname" ,
+              "class": "viewtopicname" 
             },
             { "title": "{% trans "Total Comments" %}",
-              "data" : "totaltopic"  
+              "data" : "totalpost"  
             },
             { "title": "{% trans "Last author" %}",
               "class": "text-center" ,
-              "data" : "lastpostedby"  
+              "data" : "firstname"  
             },
             { "title": "{% trans "By Last Day" %}",
               "class": "text-center" ,
-              "data" : "createddate"  
+              "data" : "lastposteddate"  
             },
         ];
     var dataset = [];
     var count = 0
     for(var i in data){
         var t = {};
+        t.DT_RowId = data[i].forumid;
+        t.DTT_RowId = data[i].topicid;
         t.slno = ++count;
-        t.forumname = data[i].forumname;
-        t.totaltopic = data[i].totaltopic;
-        t.lastpostedby = data[i].lastpostedby;
-        t.createddate = data[i].createddate;
+        t.topicname = data[i].topicname;
+        t.totalpost = data[i].totalpost;
+        t.firstname = data[i].firstname;
+        t.lastposteddate = data[i].lastposteddate;
         dataset.push(t);
     }
 
@@ -157,10 +163,9 @@ TTS.forms.renderviewfourminfo = function(data){
 
 };
 
-
 $(document).ready(function(){
     $.ajax({
-        "url":"/api/forum/foruminfo/?format=json",
+        "url":"/api/forum/topicinfo/?forumid="+TTS.utils.getUrlParameter("forumid")+"&format=json",
         "type":"GET"
     }).done(function(data){
         if (data.length) {
@@ -170,8 +175,10 @@ $(document).ready(function(){
         }
     });
 
-    $('body').on('click','.viewtopic', function(){
-       window.location ='viewpost?forumname='+this.id;
+    $('#viewforum-main-tbl').on('click', 'tbody tr', function(){
+        window.location ='viewpost?forumid='+this.id+'&topicid='+this.id+'&topicname='+$($(this).find(".viewtopicname")[0]).text()+'&forumname='+TTS.utils.getUrlParameter("forumname");
+        //console.log(this.id);
+       
     });
 
     $("#page-wrapper").on("click", "#addrec", function(){

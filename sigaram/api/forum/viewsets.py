@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import serializers
+from django.db import connection
 
 from portaladmin import models
 import forumserializers
@@ -29,7 +30,7 @@ class ForuminfoViewSet(viewsets.ModelViewSet):
     def create(self, request):
         foruminfo = models.Foruminfo()
         forumdata =  json.loads(request.DATA.keys()[0])
-        foruminfo.forumid = forumdata.get('forumid')
+        foruminfo.forumid = forumdata.get('forumid',0)
         foruminfo.forumname = forumdata.get('forumname')
         foruminfo.totaltopic = forumdata.get('totaltopic',0)
         foruminfo.totalpost = forumdata.get('totalpost',0)
@@ -53,12 +54,36 @@ class TopicinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Topicinfo.objects.all()
     serializer_class = forumserializers.TopicinfoSerializer
 
+    def list(self, request):
+        forumid = request.GET.get('forumid')
+        forumname = request.GET.get('forumname')
+        sql = """
+        SELECT topicid,
+                forumid,
+                topicname,
+                totalpost,
+                date(lastposteddate) as lastposteddate,
+                firstname,
+                totalpost 
+        FROM topicinfo ti 
+        LEFT OUTER JOIN logininfo li ON li.loginid = ti.lastpostedby 
+        WHERE ti.forumid=%s
+        ORDER BY topicid """ % forumid
+        cursor = connection.cursor()
+        #print sql
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
     def create(self, request):
         topicinfo = models.Topicinfo()
         topicinfodata =  json.loads(request.DATA.keys()[0])
-        topicinfo.topicid = topicinfodata.get('topicid')
-        topicinfo.forumid = topicinfodata.get('forumid')
-        topicinfo.topicname = topicinfodata.get('topicname')
+        topicinfo.topicid = topicinfodata.get('topicid',0)
+        topicinfo.forumid = topicinfodata.get('forumid',0)
+        topicinfo.topicname = topicinfodata.get('topicname',0)
         topicinfo.totaltopic = topicinfodata.get('totaltopic',0)
         topicinfo.totalpost = topicinfodata.get('totalpost',0)
         topicinfo.createdby = request.user.id
@@ -83,9 +108,12 @@ class PostreplyinfoViewSet(viewsets.ModelViewSet):
     def create(self, request):
         postreplyinfo = models.Postreplyinfo()
         postreplydata =  json.loads(request.DATA.keys()[0])
-        postreplyinfo.postreplyid = postreplydata.get('postreplyid')
-        postreplyinfo.postid = postreplydata.get('postid')
-        postreplyinfo.postdetails = postreplydata.get('postdetails')
+        #print '^'*80
+        #print postreplydata
+        #print request.DATA
+        postreplyinfo.postreplyid = postreplydata.get('postreplyid',0)
+        postreplyinfo.postid = postreplydata.get('postid',0)
+        postreplyinfo.postdetails = postreplydata.get('postdetails',0)
         postreplyinfo.postedby = postreplydata.get('postedby',0)
         postreplyinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         postreplyinfo.save()
@@ -102,13 +130,37 @@ class PostinfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Postinfo.objects.all()
     serializer_class = forumserializers.PostinfoSerializer
+    def list(self, request):
+        postid = request.GET.get('postid')
+        topicid = request.GET.get('topicid')
+        sql = """
+        SELECT  postid,
+                topicid,
+                forumid,
+                postdetails,
+                date(posteddate) as posteddate,
+                firstname 
+        FROM postinfo pf
+        left outer join logininfo lf on lf.loginid = pf.postedby 
+        where pf.topicid=%s
+        order by postid  """ % topicid
+
+        cursor = connection.cursor()
+        print sql
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
 
     def create(self, request):
         postinfo = models.Postinfo()
         postinfodata =  json.loads(request.DATA.keys()[0])
-        postinfo.postid = postinfodata.get('postid')
-        postinfo.topicid = postinfodata.get('topicid')
-        postinfo.forumid = postinfodata.get('forumid')
+        postinfo.postid = postinfodata.get('postid',0)
+        postinfo.topicid = postinfodata.get('topicid',0)
+        postinfo.forumid = postinfodata.get('forumid',0)
         postinfo.postdetails = postinfodata.get('postdetails',0)
         postinfo.postedby = postinfodata.get('postedby',0)
         postinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')

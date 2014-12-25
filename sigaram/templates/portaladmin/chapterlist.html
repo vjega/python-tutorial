@@ -112,8 +112,8 @@ $(document).ready(function(){
     });
     $('#admin-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();
-        //console.log("Hello");
-        window.location = 'studentresourcelist.html?categoryid='+TTS.categoryid+'&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.section;
+        console.log(TTS.categoryid);
+        window.location = 'studentresourcelist?categoryid='+TTS.categoryid+'&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.section;
     });
     /*
     $('#admin-main-tbl tbody tr').on('click', '.tts-edit', function(e){

@@ -5,9 +5,9 @@ from django.views.generic import RedirectView
 
 urlpatterns = patterns('forum.views',
     url(r'^home$','index',name='forum_home'),
-    url(r'^index','index',name='index'),
-    url(r'^viewtopic','viewtopic',name='viewtopic'),
-    url(r'^viewpost','viewpost',name='viewpost'),
+    url(r'^index$','index',name='index'),
+    url(r'^viewtopic$','viewtopic',name='viewtopic'),
+    url(r'^viewpost$','viewpost',name='viewpost'),
     
 
 )
