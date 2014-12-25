@@ -970,3 +970,16 @@ class Bulletinboard(viewsets.ModelViewSet):
             ]
         return Response(result)
 
+    def create(self, request):
+        announcement = models.Bulletinboardinfo()
+        data = json.loads(dict(request.DATA).keys()[0])
+        announcement.messagetitle = data.get('messagetitle')
+        announcement.message = data.get('message')
+        announcement.schoolid = data.get('schoolid')
+        announcement.classid = data.get('classid')
+        announcement.postedby = request.user.id
+        announcement.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        announcement.save()
+        return Response(request.DATA)
+
+

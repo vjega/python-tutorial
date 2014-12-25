@@ -15,7 +15,9 @@ from portaladmin.forms import (AdminForm,
                    ClassListForm,
                    CalendarForm,
                    StickyForm,
-                   StickyCommentForm)
+                   StickyCommentForm,
+                   AnnouncementForm
+                    )
 from ajaxuploader.views import AjaxFileUploader
 #from ajaxuploader.backends.easythumbnails import EasyThumbnailUploadBackend
 
@@ -401,5 +403,5 @@ def mindmapedit(request):
 
 @login_required
 def bulletinboardlist(request):
-    return render(request, 'portaladmin/bulletinboardlist.html', {})
+    return render(request, 'portaladmin/bulletinboardlist.html', {"form" : AnnouncementForm.AnnouncementForm()})
 
