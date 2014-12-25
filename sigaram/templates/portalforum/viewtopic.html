@@ -107,6 +107,7 @@ TTS.forms.showviewfourm = function() {
                 var data = TTS.utils.serilaizeJson("#viewtopic-forum");
                 data = JSON.parse(data);
                 data['forumid'] = TTS.utils.getUrlParameter("forumid");
+                data['forumname'] = TTS.utils.getUrlParameter("forumname");
                 data = JSON.stringify(data);
                 TTS.forms.addviewfourm(dialogItself, data); 
             }
@@ -127,7 +128,7 @@ TTS.forms.renderviewfourminfo = function(data){
             },
             { "title": "{% trans "Topics" %}",
               "data" : "topicname" ,
-              "class": "viewtopic" 
+              "class": "viewtopicname" 
             },
             { "title": "{% trans "Total Comments" %}",
               "data" : "totalpost"  
@@ -146,6 +147,7 @@ TTS.forms.renderviewfourminfo = function(data){
     for(var i in data){
         var t = {};
         t.DT_RowId = data[i].forumid;
+        t.DTT_RowId = data[i].topicid;
         t.slno = ++count;
         t.topicname = data[i].topicname;
         t.totalpost = data[i].totalpost;
@@ -174,8 +176,9 @@ $(document).ready(function(){
     });
 
     $('#viewforum-main-tbl').on('click', 'tbody tr', function(){
-        window.location ='viewpost?forumid='+this.id+'&topicid=';
+        window.location ='viewpost?forumid='+this.id+'&topicid='+this.id+'&topicname='+$($(this).find(".viewtopicname")[0]).text()+'&forumname='+TTS.utils.getUrlParameter("forumname");
         //console.log(this.id);
+       
     });
 
     $("#page-wrapper").on("click", "#addrec", function(){
