@@ -18,7 +18,7 @@ def home(request):
         "color": u"primary",
         "icon" : u"file-text-o",
         "link" : u"resourcetype",
-        "caption": _("Deliverables"),
+        "caption": _("Assignments"),
         "stat": 25
         }, {
         "color": u"green",

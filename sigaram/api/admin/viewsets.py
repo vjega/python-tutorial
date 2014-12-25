@@ -549,11 +549,13 @@ class StudentAssignResource(viewsets.ModelViewSet):
 
     def update(self, request, pk=None):
         data = {k:v[0] for k, v in dict(request.DATA).items()}
-        #print data
+        print data
         ari = models.Assignresourceinfo.objects.get(pk=pk)
         
-        ari.originaltext = data.get('originaltext')
         ari.answertext = data.get('answertext')
+
+        if data.get('originaltext'):
+            ari.originaltext = data.get('originaltext')
 
         if data.get('answerurl'):
             ari.answerurl = data.get('answerurl')
@@ -937,3 +939,49 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
 class Bulletinboard(viewsets.ModelViewSet):
     queryset = models.Bulletinboardinfo.objects.all()
     serializer_class = adminserializers.BulletinboardinfoSerializer
+
+    def list(self, request):
+        sql = """
+        SELECT  bulletinboardinfo.bulletinboardid, 
+                messagetitle,
+                message,
+                logininfo.firstname AS postedby, 
+                DATE( posteddate ) AS posteddate, 
+                imageurl 
+        FROM bulletinboardinfo 
+        INNER JOIN bulletinmappinginfo ON bulletinboardinfo.bulletinboardid = bulletinmappinginfo.bulletinboardid
+        INNER JOIN logininfo ON logininfo.loginid = bulletinboardinfo.postedby 
+        INNER JOIN teacherinfo ON teacherinfo.username = logininfo.username 
+        WHERE (viewtype =0 ) OR (viewtype =2) 
+        -- AND bulletinmappinginfo.adminid =$loginid
+        GROUP BY bulletinboardinfo.bulletinboardid 
+        """
+        cursor = connection.cursor()
+        #print sql
+        #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
+        cursor.execute(sql)
+        #cursor.execute(sql, "3680")
+        #print dir(cursor)
+        #result = cursor.fetchall()
+        #print return [
+        
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+    def create(self, request):
+        announcement = models.Bulletinboardinfo()
+        data = json.loads(dict(request.DATA).keys()[0])
+        announcement.messagetitle = data.get('messagetitle')
+        announcement.message = data.get('message')
+        announcement.schoolid = data.get('schoolid')
+        announcement.classid = data.get('classid')
+        announcement.postedby = request.user.id
+        announcement.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        announcement.save()
+        return Response(request.DATA)
+
+

@@ -14,18 +14,10 @@
 
     <title>10t Sigaram</title>
 
-    <!-- Bootstrap Core CSS -->
     <link href="{%static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}" rel="stylesheet">
 
-    <!-- MetisMenu CSS -->
-    <!-- link href="{%static "bower_components/metisMenu/dist/metisMenu.min.css" %}" rel="stylesheet" -->
 
-    <!-- Custom CSS -->
     <link href="{%static "css/sb-admin-2.css" %}" rel="stylesheet">
-
-    <!-- Custom Fonts -->
-    <!-- link href="font-awesome/css/font-awesome.min.css" %}" rel="stylesheet" type="text/css" -->
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -34,12 +26,12 @@
     <![endif]-->
 
     <!--[if gte IE 9]>
-  <style type="text/css">
-    .gradient {
-       filter: none;
-    }
-  </style>
-<![endif]-->
+      <style type="text/css">
+        .gradient {
+           filter: none;
+        }
+      </style>
+    <![endif]-->
 
 </head>
 
@@ -61,7 +53,6 @@
                                     <form action="{% url "mysite_login" %}" method="post" accept-charset="utf-8">
                                         {{ form|crispy }}
                                         {% csrf_token %}
-                                        <input type="hidden" name="next" value="{{ next }}" />
                                         <input class="btn btn-primary" type="submit" value="Login" />
                                     </form>
                                 </div>
