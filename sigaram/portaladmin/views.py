@@ -397,3 +397,8 @@ def mindmaplist(request):
 @login_required
 def mindmapedit(request):
     return render(request, 'portaladmin/mindmap.html', {})
+
+@login_required
+def bulletinboardlist(request):
+    return render(request, 'portaladmin/bulletinboardlist.html', {})
+

@@ -937,3 +937,36 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
 class Bulletinboard(viewsets.ModelViewSet):
     queryset = models.Bulletinboardinfo.objects.all()
     serializer_class = adminserializers.BulletinboardinfoSerializer
+
+    def list(self, request):
+        sql = """
+        SELECT  bulletinboardinfo.bulletinboardid, 
+                messagetitle,
+                message,
+                logininfo.firstname AS postedby, 
+                DATE( posteddate ) AS posteddate, 
+                imageurl 
+        FROM bulletinboardinfo 
+        INNER JOIN bulletinmappinginfo ON bulletinboardinfo.bulletinboardid = bulletinmappinginfo.bulletinboardid
+        INNER JOIN logininfo ON logininfo.loginid = bulletinboardinfo.postedby 
+        INNER JOIN teacherinfo ON teacherinfo.username = logininfo.username 
+        WHERE (viewtype =0 ) OR (viewtype =2) 
+        -- AND bulletinmappinginfo.adminid =$loginid
+        GROUP BY bulletinboardinfo.bulletinboardid 
+        """
+        cursor = connection.cursor()
+        #print sql
+        #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
+        cursor.execute(sql)
+        #cursor.execute(sql, "3680")
+        #print dir(cursor)
+        #result = cursor.fetchall()
+        #print return [
+        
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
