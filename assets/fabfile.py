@@ -4,5 +4,5 @@ env.user = 'root'
 env.hosts = ['siva-tech.com']
 def deploy():
     print "Deploying at Siva-tech.com ..."
-    run('cd /root/portal;git pull origin master')
+    run('cd /root/portal && git pull origin master')
     print "Deplyment complete"
