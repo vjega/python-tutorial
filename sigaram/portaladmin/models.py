@@ -35,7 +35,7 @@ class Activitylog(models.Model):
 
     @staticmethod
     def recentactivities():
-        sql = """SELECT operation,
+        sql = """SELECT DISTINCT operation,
                     stringsentence,
                     updateddate 
             FROM activitylog al
@@ -321,6 +321,28 @@ class Bulletinboardinfo(models.Model):
     class Meta:
         managed = False
         db_table = 'bulletinboardinfo'
+
+    @staticmethod
+    def announcement ():
+        sql = """SELECT bbi.bulletinboardid,
+                  messagetitle,
+                  message,
+                  li.firstname AS postedby,
+                  DATE( posteddate ) AS posteddate,
+                  imageurl
+           FROM bulletinboardinfo bbi
+           INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
+           INNER JOIN logininfo li ON li.loginid = bbi.postedby
+           INNER JOIN teacherinfo ti ON ti.username = li.username
+           WHERE (viewtype =0 ) OR (viewtype =2)
+           -- AND bmi.adminid ={$loginid}
+           GROUP BY bbi.bulletinboardid
+           ORDER by bbi.bulletinboardid DESC
+           LIMIT 2""";
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        return dictfetchall(cursor)
+
 
 
 class Bulletinmappinginfo(models.Model):

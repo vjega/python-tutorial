@@ -80,9 +80,9 @@
                     <tbody>
                         {% for body in recent_activities.body %}
                         <tr class="gradeX">
-                            <td>{{body.no}}</td>
-                            <td>{{body.job}}</td>
-                            <td>{{body.date}}</td>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{body.stringsentence}}</td>
+                            <td>{{body.updateddate}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -101,7 +101,7 @@
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
-            <div class="list-group">
+            <!-- <div class="list-group">
                 <a href="#" class="list-group-item">
                     <i class="fa fa-comment fa-fw"></i> New Comment
                     <span class="pull-right text-muted small"><em>4 minutes ago</em>
@@ -147,6 +147,26 @@
                     <span class="pull-right text-muted small"><em>Yesterday</em>
                     </span>
                 </a>
+            </div>-->
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover" id="admin-main-tbl">
+                    <thead>
+                        <tr>
+                            {% for head in announcement.head %}
+                            <th>{{head}}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for body in announcement.body %}
+                        <tr class="gradeX">
+                            <td>{{forloop.counter}}</td>
+                            <td>{{body.messagetitle}}</td>
+                            <td>{{body.posteddate}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
             <!-- /.list-group -->
             <a href="#" class="btn btn-default btn-block">View All Alerts</a>
