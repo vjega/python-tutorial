@@ -102,6 +102,7 @@
         <!-- /.panel-heading -->
         <div class="panel-body">
             <div class="list-group">
+            {% autoescape off %}
             {% for body in announcement.body %}
                 <a class="list-group-item">
                     <i class="fa fa-bullhorn fa-fw"></i> 
@@ -110,6 +111,7 @@
                     </span>
                 </a>
             {% endfor announcement.body %}
+            {% endautoescape %}
             </div>
             <!-- /.list-group -->
             <a href="bulletinboardlist" class="btn btn-default btn-block">View All Announcement</a>
@@ -124,6 +126,7 @@
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
   .modal-backdrop {z-index: 0 !important}
+  p {display:inline;}
 </style>
 {% endblock morecss %}
 
