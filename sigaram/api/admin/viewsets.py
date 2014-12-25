@@ -549,11 +549,13 @@ class StudentAssignResource(viewsets.ModelViewSet):
 
     def update(self, request, pk=None):
         data = {k:v[0] for k, v in dict(request.DATA).items()}
-        #print data
+        print data
         ari = models.Assignresourceinfo.objects.get(pk=pk)
         
-        ari.originaltext = data.get('originaltext')
         ari.answertext = data.get('answertext')
+
+        if data.get('originaltext'):
+            ari.originaltext = data.get('originaltext')
 
         if data.get('answerurl'):
             ari.answerurl = data.get('answerurl')

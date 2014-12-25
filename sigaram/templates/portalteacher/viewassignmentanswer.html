@@ -18,6 +18,16 @@
     #assignment-answer .col-lg-12 {
         margin: 5px 0;
     }
+    #student-answer{
+        font-family: anjal inaimathi sch book,inaimathi sch book,monospace;
+        font-size: 15px;
+        font-weight: bold;
+    }
+    .tc {
+        color: #40c040 !important;
+        cursor: pointer;
+        display: inline;
+    }
 </style>
 {% endblock morecss %}
 
@@ -207,12 +217,13 @@ TTS.forms.editanswer = function() {
                     fulltext : $("#student-answer").html(),
                     orig : x,
                     modified : modtext,
-                    type : "2"
+                    type : "2",
+                    answertext : 'ld<div class="tc" id="54999b223b61a">fg</div>skdjfl sdlkf glsd <div class="tc" id="54999b223b61a">fg</div>'
                 }
                 $.ajax({
-                    type:'POST',
+                    type:'PUT',
                     data: data,
-                    url : '/api/admin/assignedresourcestudents/'+assign_id
+                    url : '/api/admin/studentassignresource/'+assign_id
                 }).done(function( msg ) {
                     console.log(msg);
                     dialogItself.close();
@@ -264,6 +275,55 @@ $(document).ready(function(){
     $("#student-answer,#student-answer p").on("mouseup", function(){
         TTS.forms.editanswer();
     });
+
+    alert(TTS.utils.guid());
+
+
+    $(".tc,.sc").on("click", function(event){
+        alert("ssdfasdf");
+        event.stopPropagation();
+        var self = this;
+        alert($(self).attr("id")); 
+        var dataobj = {
+            assign_id : $("#edit_box").parent().attr("id").split("-")[1],
+            spanid : $(self).attr("id")
+        };
+        /*$.post("../dbinterface/get_edit_text.php", {submit:"more", data:JSON.stringify(dataobj)}, function(data) {
+            $("#dialog").dialog("destroy").html(data).dialog({
+            title : "Choose/Add Correction",
+            position: ["right","top"],
+            width:600,
+            height:280,
+            modal: true,
+            buttons : {
+                "Add more corrections" : function(){
+                    $("#correction").val($(self).text())
+                    $("#cover").show();                        
+                 },
+                "Save corrections" : function(){
+                        var dataobj = {
+                            assign_id : $("#corr-tbl td").eq(0).text(),
+                            span_id : $("#corr-tbl td").eq(1).text(),
+                            studentid : <?php echo $studentid; ?>,
+                            orig : $("#corr-tbl td").eq(2).text(),
+                            new_txt : $("#correction").val(),
+                            loginid  : <?php echo $_SESSION['loginid'] ; ?>,
+                            type : "2"
+                        };
+                        $.post("../dbinterface/ajax_editor.php",{submit:"more", data:JSON.stringify(dataobj)},function(data){
+                            //$("#edit_box").html(data);
+                        });
+                        alert("Saved");
+                        $(this).dialog("close");
+                      },      
+                Close : function(){
+                            $(this).dialog("close");
+                      }
+            }         
+            })  
+        });*/
+    });
+    
 
 });
 
