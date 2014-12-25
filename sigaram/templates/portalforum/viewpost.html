@@ -23,7 +23,7 @@
                 <table class="table table-striped table-bordered table-hover" 
                     id="forum-main-tbl">
                 </table>
-                <div><button class="btn btn-primary center-block" id="reply">Reply</button></div>
+                <div><button class="btn btn-primary center-block" id="allreply">Reply</button></div>
                 
             </div>
             <!-- /.table-responsive -->
@@ -93,7 +93,21 @@ TTS.forms.addviewpost = function(form, data) {
         //dialogItself.close();
     });
 }
-TTS.forms.showviewpost = function() {
+
+TTS.forms.allreplypost = function(form, data) {
+    $.ajax({
+        type:'POST',
+        data: data,
+        url : '/api/forum/postinfo/'
+    }).done(function( msg ) {
+        console.log(data)
+        form.close();
+        location.reload();
+        //dialogItself.close();
+    });
+}
+
+TTS.forms.replysingle = function(topicid, postid) {
     BootstrapDialog.show({
         title: 'New Conversation',
         message: $($('#replytopic').render()),
@@ -109,8 +123,9 @@ TTS.forms.showviewpost = function() {
                 var jdata = JSON.parse(data);
                 console.log(jdata);
                 //adding a new key
-                jdata['postid'] = TTS.utils.getUrlParameter("postid");
-                console.log(jdata);
+                jdata['topicid'] = topicid;
+                jdata['postid'] = postid;
+                //console.log(jdata);
                 var sdata = JSON.stringify(jdata);
                 console.log(sdata);
                 TTS.forms.addviewpost(dialogItself, sdata); 
@@ -123,6 +138,38 @@ TTS.forms.showviewpost = function() {
         }]
     });
 };
+
+
+TTS.forms.replyall = function(forumid) {
+    BootstrapDialog.show({
+        title: 'New Conversation',
+        message: $($('#replytopic').render()),
+        onshown: function(){
+            $('.summernote').summernote();
+        },
+        buttons: [
+            {
+                label: 'Save',
+                cssClass: 'btn-primary',
+                action: function(dialogItself){
+                    var data = TTS.utils.serilaizeJson("#reply-post");
+                    var jdata = JSON.parse(data);
+                    //adding a new key
+                    jdata['forumid'] = forumid;
+                    var sdata = JSON.stringify(jdata);
+                    TTS.forms.allreplypost(dialogItself, sdata); 
+                }
+            }, {
+                label: 'Cancel',
+                action: function(dlg){
+                    dlg.close();
+                }
+            }
+        ]
+    });
+};
+
+
 
 TTS.forms.renderviewforum = function(data){
     var headers = [
@@ -140,16 +187,26 @@ TTS.forms.renderviewforum = function(data){
               "class": "text-center" ,
               "data" : "posteddate"  
             },
+            { "title": "{% trans "Reply" %}",
+              "class": "singlereply" ,
+              "data" : "reply"  
+            },
+            { "title": "{% trans "View" %}",
+              "class": "text-center" ,
+              "data" : "view"  
+            },
         ];
     var dataset = [];
     var count = 0
     for(var i in data){
         var t = {};
-        t.DT_RowId = data[i].topicid;
+        t.DT_RowId = data[i].postid;
         t.slno = ++count;
         t.postdetails = data[i].postdetails;
         t.firstname = data[i].firstname;
         t.posteddate = data[i].posteddate;
+        t.reply = "<i class='tts-reply fa fa-reply fa-lg'></i>";
+        t.view = "<a herf class=''>view</a>";
         dataset.push(t);
     }
 
@@ -184,8 +241,14 @@ $(document).ready(function(){
         window.location = 'teacherresourcelist';
     });
 
-    $("#page-wrapper").on("click", "#reply", function(){
-        TTS.forms.showviewpost();
+    $("#page-wrapper").on("click", "#allreply", function(){
+        TTS.forms.replyall(TTS.utils.getUrlParameter("forumid"));
+    });
+
+    $("#page-wrapper").on("click", ".singlereply", function(){
+        console.log($(this).parent().prop("id"));
+        TTS.forms.replysingle(TTS.utils.getUrlParameter("postid"), $(this).parent().prop("id"));
+
     });
    
 });

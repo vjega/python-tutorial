@@ -108,11 +108,11 @@ class PostreplyinfoViewSet(viewsets.ModelViewSet):
     def create(self, request):
         postreplyinfo = models.Postreplyinfo()
         postreplydata =  json.loads(request.DATA.keys()[0])
-        #print '^'*80
-        #print postreplydata
-        #print request.DATA
+        print '^'*80
+        print postreplydata
+        print request.DATA
         postreplyinfo.postreplyid = postreplydata.get('postreplyid',0)
-        postreplyinfo.postid = postreplydata.get('postid',0)
+        postreplyinfo.postid = postreplydata.get('topicid',0)
         postreplyinfo.postdetails = postreplydata.get('postdetails',0)
         postreplyinfo.postedby = postreplydata.get('postedby',0)
         postreplyinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -133,6 +133,7 @@ class PostinfoViewSet(viewsets.ModelViewSet):
     def list(self, request):
         postid = request.GET.get('postid')
         topicid = request.GET.get('topicid')
+        forumid = request.GET.get('forumid')
         sql = """
         SELECT  postid,
                 topicid,
@@ -146,7 +147,7 @@ class PostinfoViewSet(viewsets.ModelViewSet):
         order by postid  """ % topicid
 
         cursor = connection.cursor()
-        print sql
+        #print sql
         cursor.execute(sql)
         desc = cursor.description
         result =  [

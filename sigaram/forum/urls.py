@@ -8,6 +8,7 @@ urlpatterns = patterns('forum.views',
     url(r'^index$','index',name='index'),
     url(r'^viewtopic$','viewtopic',name='viewtopic'),
     url(r'^viewpost$','viewpost',name='viewpost'),
+    url(r'^forum$','forum',name='forum'),
     
 
 )

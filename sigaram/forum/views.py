@@ -8,7 +8,10 @@ from forum.forms import (ForumsForm,
 						NewpostForm)
 
 def index(request):
-    return render(request, 'portalforum/index.html', {"form" : ForumsForm.ForumsForm()})
+    return render(request, 'portalforum/index.html')
+
+def forum(request):
+    return render(request, 'portalforum/forum.html', {"form" : ForumsForm.ForumsForm()})
 
 def viewtopic(request):
    foruminfo = models.Foruminfo.objects.all()
