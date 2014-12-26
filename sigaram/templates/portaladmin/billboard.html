@@ -161,17 +161,45 @@ TTS.forms.renderadmin = function(data){
         } else {
             t.imageurl = "<img src='http://placehold.it/100x100'>";
         }
-
+        var link = "";
+        
         if (data[i]. resourceid !== 0){
            t.typebillboard = "மாணவர் பெட்டகம்";
+           link = $('#admin-main-tbl').on('click', 'tbody tr', function(){
+                     window.location = 'billviewassignmentanswer?resourceid=';
+            });
+
         } else if (data[i]. writtenworkid !== 0){
             t.typebillboard = "எழுத்து பாடம்";
-        } else if (data[i].assessmenttype !== 1) {
+             link = $('#admin-main-tbl').on('click', 'tbody tr', function(){
+                     window.location = 'billviewwrittenworkanswer?writtenworkid=';
+            });
+
+        } else if (data[i].assessmenttype !== 0) {
+            t.typebillboard = "நிரப்புக";
+             link = $('#admin-main-tbl').on('click', 'tbody tr', function(){
+                     window.location = 'billfillinganswerrating?assessmentid=';
+            });
+
+        }
+        else if (data[i].assessmenttype !== 1) {
             t.typebillboard = "சரியான விடை";
-        }else if (data[i].assessmenttype !== 2 ) {
+             link = $('#admin-main-tbl').on('click', 'tbody tr', function(){
+                     window.location = 'billchooseanswerrating?assessmentid=';
+            });
+
+        } else if (data[i].assessmenttype !== 2 ) {
             t.typebillboard = "கட்டுரை";
+             link = $('#admin-main-tbl').on('click', 'tbody tr', function(){
+                     window.location = 'billcomprehensionanswerrating?assessmentid=';
+            });
+
         }else if (data[i].assessmenttype !== 3 ) {
             t.typebillboard = "open ended";
+             link = $('#admin-main-tbl').on('click', 'tbody tr', function(){
+                     window.location = 'billopenendedanswerrating?assessmentid=';
+            });
+
         }
         //t.typebillboard = data[i].typebillboard;
         t.firstname = data[i].firstname;

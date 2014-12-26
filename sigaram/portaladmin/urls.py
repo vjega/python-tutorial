@@ -59,5 +59,20 @@ urlpatterns = patterns('portaladmin.views',
     url(r'^bulletinboard$',             'bulletinboard', name="bulletinboard"),
     url(r'^layoutdemo$',                'layoutdemo',    name="layoutdemo"),
     url(r'^billboard$',                 'billboard',     name="billboard"),
+
+    url(r'^billviewassignmentanswer$',  'billviewassignmentanswer', 
+                                                         name="billviewassignmentanswer"),
+    url(r'^billviewwrittenworkanswer$', 'billviewwrittenworkanswer', 
+                                                         name="billviewwrittenworkanswer"),
+    url(r'^billfillinganswerrating$',   'billfillinganswerrating',    
+                                                         name="billfillinganswerrating"),
+    url(r'^billchooseanswerrating$',    'billchooseanswerrating', 
+                                                         name="billchooseanswerrating"),
+    url(r'^billcomprehensionanswerrating$', 'billcomprehensionanswerrating',
+                                                         name="billcomprehensionanswerrating"),
+    url(r'^billopenendedanswerrating$', 'billopenendedanswerrating',
+                                                         name="billopenendedanswerrating"),
+
+    
     #(r'^api/', include(v1_api.urls)),
 )
