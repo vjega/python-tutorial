@@ -38,7 +38,6 @@
 {% block botcontent %}
 <input type="hidden" id="set_rubric_id" name="rub_id" value="" />
 <div class="row">
-    <div class="row">
     <div>    
         <label>Select Any Users</label>
         <span>
@@ -49,21 +48,17 @@
             </select>
         </span>
     </div><br />
-    <div class="col-lg-8">
-        <div class="panel panel-default">
-            <!-- /.panel-heading -->
-            <div class="panel-body">
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered table-hover" id="admin-main-tbl">
-                    </table>
-                </div>
-                <!-- /.table-responsive -->
-            </div>
-            <!-- /.panel-body -->
-        </div>
-        <!-- /.panel -->
-    </div><br />
 </div>
+<div class="row">
+    <div class="col-lg-8">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover"  id="admin-main-tbl">
+                
+            </table>
+        </div>    
+    </div>
+</div>
+
 <div class="row">
     <div><input id="uploadurl" type="file" name="uploadurl"></div><br />
     <div class="form-group" class="col-sm-2">
@@ -114,6 +109,7 @@ TTS.forms.renderadmin = function(data){
         "data":     dataset,
         "columns":  headers
     });
+    $('#admin-main-tbl').dataTable().fnDestroy();
 
 };
 
@@ -136,15 +132,15 @@ TTS.forms.renderteacher = function(data){
     for(var i in data){
         var t = [];
         t.id = "<input type='checkbox' class='case' name='schoolname' id='"+data[i].teacherid+"' value='"+data[i].teacherid+"' />";
-        t.firstname = ++count;
-        t.lastname = ++count;
+        t.firstname = data[i].firstname;
+        t.lastname = data[i].lastname;
         dataset.push(t);
     }
     $('#admin-main-tbl').dataTable({
         "data":     dataset,
         "columns":  headers
     });
-
+    $('#admin-main-tbl').dataTable().fnDestroy();
 };
 
 $(document).ready(function(){ 
@@ -167,7 +163,8 @@ $(document).ready(function(){
             });
 
         }
-        console.log($('#category').val())
+        $('#admin-main-tbl').dataTable().fnDestroy();
+
     });
 
 });
