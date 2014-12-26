@@ -440,5 +440,5 @@ def bulletinboard(request):
     return render(request, 'portaladmin/bulletinboard.html')
 
 @login_required
-def bulletinboard(request):
+def billboard(request):
     return render(request, 'portaladmin/billboard.html')
