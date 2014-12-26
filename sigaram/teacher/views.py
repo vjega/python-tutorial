@@ -35,7 +35,7 @@ def home(request):
         "color": u"primary",
         "icon" : u"file-text-o",
         "link" : u"assignedresourcelist",
-        "caption": _("Dedication"),
+        "caption": _("Assignment"),
         "stat": 25
         },{
         "color": u"yellow",
