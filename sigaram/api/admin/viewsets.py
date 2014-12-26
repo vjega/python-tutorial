@@ -1010,7 +1010,8 @@ class BillboardViewSet(viewsets.ModelViewSet):
             AND asm.studentid = bbi.studentid 
         LEFT OUTER JOIN assessmentlist asl ON asl.assessmentid = bbi.assessmentid 
         LEFT OUTER JOIN billboardratinginfo bbri ON bbri.billboardid = bbi.billboardid 
-        LEFT OUTER JOIN assignresourceinfo ari ON ari.resourceid = bbi.resourceid AND ari.studentid = bbi.studentid 
+        LEFT OUTER JOIN assignresourceinfo ari ON ari.resourceid = bbi.resourceid 
+            AND ari.studentid = bbi.studentid 
         LEFT OUTER JOIN resourceinfo ri ON ri.resourceid = bbi.resourceid
         LEFT OUTER JOIN assignwrittenworkinfo awi on awi.writtenworkid = bbi.writtenworkid
         LEFT OUTER JOIN writtenworkinfo on writtenworkinfo.writtenworkid = bbi.writtenworkid

@@ -132,7 +132,7 @@ TTS.forms.renderadmin = function(data){
               "data" : "imageurl"  
             },
             { "title": "{% trans "Category" %}",
-              "data" : "username"
+              "data" : "typebillboard"
             }, 
             { "title": "{% trans "Student" %}",
               "data" : "firstname"
@@ -150,7 +150,6 @@ TTS.forms.renderadmin = function(data){
             }, 
         ];
     var dataset = [];
-    
     var count = 0
     for(var i in data){
         var t = {};
@@ -158,11 +157,33 @@ TTS.forms.renderadmin = function(data){
         t.slno = ++count;
         t.resourcetitle = data[i].resourcetitle;
         if (data[i].imageurl){
-            t.imageurl = "<img src='/static/" + data[i].imageurl + data[i].firstname+"' width='100' height='100'>";
+            t.imageurl = "<img src='/static/" + data[i].imageurl+ "' width='100' height='100'>"+ data[i].firstname;
         } else {
             t.imageurl = "<img src='http://placehold.it/100x100'>";
         }
-        t.username = data[i].username;
+        var link = "";
+
+        if (data[i].resourceid !== 0){
+           t.typebillboard = "<a herf ='billviewassignmentanswer?resourceid="+data[i].resourceid+"&studentid= ='>மாணவர் பெட்டகம்</a>";
+
+        } else if (data[i].writtenworkid !== 0){
+            t.typebillboard = "<a href='billviewwrittenworkanswer?resourceid='>எழுத்து பாடம்</a>";
+                    
+
+        } else if (data[i].assessmenttype !== 0) {
+            t.typebillboard = "<a herf ='billfillinganswerrating?assessmentid='>நிரப்புக</a>";
+             
+        }
+        else if (data[i].assessmenttype !== 1) {
+            t.typebillboard = "<a herf ='billchooseanswerrating?assessmentid='>சரியான விடை</a>";
+             
+        } else if (data[i].assessmenttype !== 2 ) {
+            t.typebillboard = "<a herf ='billcomprehensionanswerrating?assessmentid='>கட்டுரை</a>";
+
+        }else if (data[i].assessmenttype !== 3 ) {
+            t.typebillboard = "<a herf ='billopenendedanswerrating?assessmentid='>open ended</a>";
+        }
+        //t.typebillboard = data[i].typebillboard;
         t.firstname = data[i].firstname;
         t.posteddate = data[i].posteddate;
         t.rating = data[i].rating;

@@ -442,3 +442,27 @@ def bulletinboard(request):
 @login_required
 def billboard(request):
     return render(request, 'portaladmin/billboard.html')
+
+@login_required
+def billviewassignmentanswer(request):
+    return render(request, 'portaladmin/billviewassignmentanswer.html')
+
+@login_required
+def billviewwrittenworkanswer(request):
+    return render(request, 'portaladmin/billviewwrittenworkanswer.html')
+
+@login_required
+def billfillinganswerrating(request):
+    return render(request, 'portaladmin/billfillinganswerrating.html')
+
+@login_required
+def billchooseanswerrating(request):
+    return render(request, 'portaladmin/billchooseanswerrating.html')
+
+@login_required
+def billcomprehensionanswerrating(request):
+    return render(request, 'portaladmin/billcomprehensionanswerrating.html')
+
+@login_required
+def billopenendedanswerrating(request):
+    return render(request, 'portaladmin/billopenendedanswerrating.html')
