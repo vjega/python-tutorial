@@ -23,6 +23,7 @@ from ajaxuploader.views import AjaxFileUploader
 
 def switchlanguage(f):
     def inner(req):
+        print req.session.get('django_language')
         activate(req.session.get('django_language','ta'))
         return f(req)
     return inner
@@ -47,6 +48,7 @@ def layoutdemo(request):
     return render(request, 'portaladmin/layoutdemo.html')
 
 @login_required
+@switchlanguage
 def home(request):
     folders = [{
         "color": u"primary",
@@ -83,11 +85,13 @@ def home(request):
                                            })
 
 @login_required
+@switchlanguage
 def adminlist(request):
     return render(request, 'portaladmin/adminlist.html', 
                                         {"adminform" : AdminForm.AdminForm()})
 
 @login_required
+@switchlanguage
 def teacherslist(request):
     schools = models.Schoolinfo.objects.all()
     return render(request, 'portaladmin/teacherslist.html', 
@@ -95,7 +99,7 @@ def teacherslist(request):
                                         "form" : TeacherForm.TeacherForm()})
 
 @login_required
-#@switchlanguage
+@switchlanguage
 def studentslist(request):
     schools = models.Schoolinfo.objects.all()
     classes = models.Classinfo.objects.all()
@@ -104,23 +108,27 @@ def studentslist(request):
                                         "form" : StudentForm.StudentForm()})           
 
 @login_required
+@switchlanguage
 def schoollist(request):
     return render(request, 'portaladmin/schoollist.html',{
                                         "form" : SchoolListForm.SchoolListForm()})
 
 
 @login_required
+@switchlanguage
 def teacherresourcelist(request):
     return render(request, 'portaladmin/teacherresourcelist.html', {
                                         'form':TeacherResourceForm.TeacherResourceForm()})
 
 @login_required
+@switchlanguage
 def viewteacherresource(request):
     viewteacherresource_head = [('Sl No.')]
     viewteacherresource = {'head':viewteacherresource_head }
     return render(request, 'portaladmin/viewteacherresource.html')
 
 @login_required
+@switchlanguage
 def studentresourcetype(request):
     folders = [{
         "id": "p1",
@@ -161,6 +169,7 @@ def studentresourcetype(request):
                   {"folders":folders,'studentresourcetype':studentresourcetype})
 
 @login_required
+@switchlanguage
 def resourcetype(request):
     folders = [{
         "id": "1",
@@ -190,6 +199,7 @@ def resourcetype(request):
                    "section":section})
 
 @login_required
+@switchlanguage
 def extralist(request):
     folders = [{
         "id": "1",
@@ -216,6 +226,7 @@ def extralist(request):
 
 
 @login_required
+@switchlanguage
 def chapterlist(request):
     chapterlist_body = models.Chapterinfo.objects.all()
     return render(request, 
@@ -226,6 +237,7 @@ def chapterlist(request):
                   })
 
 @login_required
+@switchlanguage
 def viewstudentresourcelist(request):
     viewstudentresourcelist_body = models.Chapterinfo.objects.all()
     return render(request, 
@@ -248,6 +260,7 @@ def viewstudentwrittenworks(request):
 
 
 @login_required
+@switchlanguage
 def classlist(request):
     schools = models.Schoolinfo.objects.all()
     return render(request, 'portaladmin/classlist.html', 
@@ -255,12 +268,14 @@ def classlist(request):
                   )
 
 @login_required
+@switchlanguage
 def statistics(request):
     schools = models.Schoolinfo.objects.all()
     return render(request, 'portaladmin/statistics.html', {'schools':schools})
    
 
 @login_required
+@switchlanguage
 def classroom(request):
     studentslist_head = [_('Sl No.'),
                          _('Photo'),
@@ -298,6 +313,7 @@ def classroom(request):
     return render(request, 'portaladmin/classroom.html', {'studentslist':studentslist})
 
 @login_required
+@switchlanguage
 def billboard(request):
     studentslist_head = [_('Sl No.'),
                          _('Photo'),
@@ -335,10 +351,12 @@ def billboard(request):
     return render(request, 'portaladmin/billboard.html')
 
 @login_required
+@switchlanguage
 def mindmapedit(request, id):
     return render(request, 'portaladmin/mindmap.html', {})
     
 @login_required
+@switchlanguage
 def stickynotes(request):
     return render(request, 'portaladmin/stickynotes.html', 
                                         {'form':StickyForm.StickyForm(),
@@ -346,24 +364,29 @@ def stickynotes(request):
                                          })
     
 @login_required
+@switchlanguage
 def calendar(request):
     return render(request, 'portaladmin/calendar.html', {"calendarform" : CalendarForm.CalendarForm()})
     
 @login_required
+@switchlanguage
 def recorder(request):
     return render(request, 'portaladmin/recorder.html', {})
 
 @login_required
+@switchlanguage
 def studentresourcelist(request):
     return render(request, 'portaladmin/studentresourcelist.html', 
                     {'studentslist':studentslist,
                      "form" : StudentresourceListForm.StudentresourceListForm()})
 
 @login_required
+@switchlanguage
 def subjectlist(request):
     return HttpResponse("Not implemented", 404)
 
 @login_required
+@switchlanguage
 def studentprofile(request):
     folders = [{
         "id"   : "1",
@@ -381,6 +404,7 @@ def studentprofile(request):
                   {"folders":folders})
 
 @login_required
+@switchlanguage
 def studentassignedresourcelist(request):
     '''assigned_head = [_('Sl No.'),
                          _('Title'),
@@ -391,24 +415,30 @@ def studentassignedresourcelist(request):
     return render(request, 'portaladmin/studentassignedresourcelist.html')
 
 @login_required
+@switchlanguage
 def viewstudentwork(request):
     return render(request, 'portaladmin/viewstudentwork.html')
 
+@login_required
+@switchlanguage
 def mindmaplist(request):
     return render(request, "portaladmin/mindmaplist.html", {})
 
 @login_required
+@switchlanguage
 def mindmapedit(request):
     return render(request, 'portaladmin/mindmap.html', {})
 
 @login_required
+@switchlanguage
 def bulletinboardlist(request):
     return render(request, 'portaladmin/bulletinboardlist.html', {"form" : AnnouncementForm.AnnouncementForm()})
 
 @login_required
+@switchlanguage
 def bulletinboard(request):
     return render(request, 'portaladmin/bulletinboard.html')
 
 @login_required
-def bulletinboard(request):
+def billboard(request):
     return render(request, 'portaladmin/billboard.html')
