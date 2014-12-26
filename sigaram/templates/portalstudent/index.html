@@ -80,9 +80,9 @@
                     <tbody>
                         {% for body in recent_activities.body %}
                         <tr class="gradeX">
-                            <td>{{body.no}}</td>
-                            <td>{{body.job}}</td>
-                            <td>{{body.date}}</td>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{body.stringsentence}}</td>
+                            <td>{{body.updateddate}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
