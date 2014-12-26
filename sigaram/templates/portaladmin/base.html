@@ -55,11 +55,23 @@
             <div class="container-fluid">
                 <div class="" id="navbar-top">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href=""><i class="fa fa-user"></i>
-                            Welcome {{ user.get_username }} [Admin]
-                        </a>
+                        <li>
+                            <a href="">
+                                <i class="fa fa-user"></i>
+                                Welcome {{ user.get_username }} [Admin]
+                            </a>
                         </li>
-                        <li><a href="../logout"><i class="fa fa-sign-out"></i>Logout</a>
+                        <li>
+                            <a href="../togglelanguage">
+                                <i class="fa fa-user"></i>
+                                Change Language
+                            </a>
+                        </li>
+                        <li>
+                            <a href="../logout">
+                                <i class="fa fa-sign-out"></i>
+                                Logout
+                            </a>
                         </li>
                     </ul>
                 </div>
