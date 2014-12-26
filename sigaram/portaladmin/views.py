@@ -405,3 +405,6 @@ def mindmapedit(request):
 def bulletinboardlist(request):
     return render(request, 'portaladmin/bulletinboardlist.html', {"form" : AnnouncementForm.AnnouncementForm()})
 
+@login_required
+def bulletinboard(request):
+    return render(request, 'portaladmin/bulletinboard.html')

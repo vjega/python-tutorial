@@ -50,6 +50,7 @@ urlpatterns = patterns('portaladmin.views',
     url(r'^student-studentres-upload$', 'student_studentres_uploader',  name="student-studentres-upload"),
     url(r'^student-teacherres-upload$', 'student_teacherres_uploader',  name="student-teacherres-uploader"),
     url(r'^bulletinboardlist$',         'bulletinboardlist',            name="bulletinboardlist"),
-    url(r'^layoutdemo$', 'layoutdemo',  name="layoutdemo"),
+    url(r'^bulletinboard$',             'bulletinboard',                name="bulletinboard"),
+    url(r'^layoutdemo$',                'layoutdemo',                   name="layoutdemo"),
     #(r'^api/', include(v1_api.urls)),
 )
