@@ -132,7 +132,7 @@ TTS.forms.renderadmin = function(data){
               "data" : "imageurl"  
             },
             { "title": "{% trans "Category" %}",
-              "data" : "username"
+              "data" : "typebillboard"
             }, 
             { "title": "{% trans "Student" %}",
               "data" : "firstname"
@@ -150,7 +150,6 @@ TTS.forms.renderadmin = function(data){
             }, 
         ];
     var dataset = [];
-    
     var count = 0
     for(var i in data){
         var t = {};
@@ -158,11 +157,23 @@ TTS.forms.renderadmin = function(data){
         t.slno = ++count;
         t.resourcetitle = data[i].resourcetitle;
         if (data[i].imageurl){
-            t.imageurl = "<img src='/static/" + data[i].imageurl + data[i].firstname+"' width='100' height='100'>";
+            t.imageurl = "<img src='/static/" + data[i].imageurl+ "' width='100' height='100'>"+ data[i].firstname;
         } else {
             t.imageurl = "<img src='http://placehold.it/100x100'>";
         }
-        t.username = data[i].username;
+
+        if (data[i]. resourceid !== 0){
+           t.typebillboard = "மாணவர் பெட்டகம்";
+        } else if (data[i]. writtenworkid !== 0){
+            t.typebillboard = "எழுத்து பாடம்";
+        } else if (data[i].assessmenttype !== 1) {
+            t.typebillboard = "சரியான விடை";
+        }else if (data[i].assessmenttype !== 2 ) {
+            t.typebillboard = "கட்டுரை";
+        }else if (data[i].assessmenttype !== 3 ) {
+            t.typebillboard = "open ended";
+        }
+        //t.typebillboard = data[i].typebillboard;
         t.firstname = data[i].firstname;
         t.posteddate = data[i].posteddate;
         t.rating = data[i].rating;
