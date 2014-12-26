@@ -245,7 +245,7 @@ $(document).ready(function(){
         TTS.forms.replyall(TTS.utils.getUrlParameter("forumid"));
     });
 
-    $("#page-wrapper").on("click", ".singlereply", function(){
+    $("#wrapper").on("click", ".singlereply", function(){
         console.log($(this).parent().prop("id"));
         TTS.forms.replysingle(TTS.utils.getUrlParameter("postid"), $(this).parent().prop("id"));
 

@@ -125,3 +125,10 @@ class BulletinboardinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Bulletinboardinfo
         fields = ('messagetitle','message','posteddate','postedby')
+
+class BillboardSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Billboardinfo
+        fields = ('billboardid','assessmentid','resourceid','writtenworkid',
+                  'studentid','votescount','lastvotedby','lastvoteddate','postedby',
+                                                                        'posteddate')

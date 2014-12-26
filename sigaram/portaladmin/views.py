@@ -408,3 +408,7 @@ def bulletinboardlist(request):
 @login_required
 def bulletinboard(request):
     return render(request, 'portaladmin/bulletinboard.html')
+
+@login_required
+def bulletinboard(request):
+    return render(request, 'portaladmin/billboard.html')
