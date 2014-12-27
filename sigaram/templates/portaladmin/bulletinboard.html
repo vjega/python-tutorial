@@ -42,15 +42,23 @@
 {% block botcontent %}
 <div class="row">
     <div class="col-lg-6">
-        <input id="uploadurl" type="file" name="uploadurl"></div><br />
-        <div class="form-group" class="col-sm-2">
-            <label for="folder_name" class="col-sm-2 control-label">{% trans "Title" %}</label>
-        </div><br />
-        <div class="form-group">
-            <textarea class="summernote"></textarea>
-        </div>
-    </div>          <!-- /.col-lg-12 -->
+        <input id="uploadurl" type="file" name="uploadurl">
+    </div><br />
+    <div class="form-group" class="col-sm-2">
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Title" %}</label>
+    </div>
+    <div class="form-group">
+        <textarea class="summernote"></textarea>
+    </div>
 </div>
+<div class="row">
+    <div class="form-group" class="col-sm-2">
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Title" %}</label>
+    </div><br />
+    <div class="form-group">
+        <textarea class="summernote"></textarea>
+    </div>
+</div>          <!-- /.col-lg-12 -->
 {% endblock botcontent%}
 
 {% block morecss %}
