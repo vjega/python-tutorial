@@ -16,7 +16,9 @@ from portaladmin.forms import (AdminForm,
                    CalendarForm,
                    StickyForm,
                    StickyCommentForm,
-                   AnnouncementForm
+                   AnnouncementForm,
+                   BillviewassignmentanswerForm,
+                   BillcomprehensionanswerratingForm
                     )
 from ajaxuploader.views import AjaxFileUploader
 #from ajaxuploader.backends.easythumbnails import EasyThumbnailUploadBackend
@@ -437,7 +439,9 @@ def bulletinboardlist(request):
 @login_required
 @switchlanguage
 def bulletinboard(request):
-    return render(request, 'portaladmin/bulletinboard.html')
+    schools = models.Schoolinfo.objects.all()
+    return render(request, 'portaladmin/bulletinboard.html',
+                                        {'schools':schools })
 
 @login_required
 def billboard(request):
@@ -445,7 +449,7 @@ def billboard(request):
 
 @login_required
 def billviewassignmentanswer(request):
-    return render(request, 'portaladmin/billviewassignmentanswer.html')
+    return render(request, 'portaladmin/billviewassignmentanswer.html',{"form":BillviewassignmentanswerForm.BillviewassignmentanswerForm()})
 
 @login_required
 def billviewwrittenworkanswer(request):
@@ -461,7 +465,8 @@ def billchooseanswerrating(request):
 
 @login_required
 def billcomprehensionanswerrating(request):
-    return render(request, 'portaladmin/billcomprehensionanswerrating.html')
+    return render(request, 'portaladmin/billcomprehensionanswerrating.html',
+                        {"form":BillcomprehensionanswerratingForm.BillcomprehensionanswerratingForm})
 
 @login_required
 def billopenendedanswerrating(request):

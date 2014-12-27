@@ -98,7 +98,11 @@ class AdminrubricsSerializer(serializers.HyperlinkedModelSerializer):
 class AssignresourceinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Assignresourceinfo
-        fields = ('resourceid','assigneddate','IsDelete','assignedby')
+        fields = ('resourceid','studentid','assigntext','isanswered','assigneddate',
+                    'isdelete','assignedby','issaved','originaltext','answertext','answerurl',
+                    'isrecord','replyformat','isbillboard','isclassroom','answereddate',
+                    'assignedby','assigneddate','isdelete','rubric_id','rubric_marks',
+                    'rubric_n_mark','old_edit')
 
 class WorkspaceinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -121,7 +125,7 @@ class StickyCommentsSerializer(serializers.HyperlinkedModelSerializer):
         model = models.stickycomments
         fields = ('id','stickyid','stickycomment','commentby')
 
-class BulletinboardinfoSerializer(serializers.HyperlinkedModelSerializer):
+class BulletinboardlistinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Bulletinboardinfo
         fields = ('messagetitle','message','posteddate','postedby')
@@ -139,3 +143,17 @@ class EditingtextSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('editingid', 'editid', 'spanid', 'previoustext', 'edittext', 'editedby', 
                   'editeddate', 'editedplace', 'typeofresource', 'usertype', 'isapproved', 
                                                                   'isrejected', 'oritxtrep');
+class BulletinboardSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Classschoolmappinginfo
+        fields = ('classid','schoolid')
+
+class BulletinboardSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Classschoolmappinginfo
+        fields = ('classid','schoolid')
+
+class BulletinmappinginfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Bulletinmappinginfo
+        fields = ('bulletinboardid','viewtype','schoolid','classid','adminid','teacherid',)
