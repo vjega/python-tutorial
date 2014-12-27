@@ -22,15 +22,15 @@ router.register(r'workspaceinfo',         	viewsets.WorkspaceViewSet)
 router.register(r'rubricsheader',         	viewsets.AdminrubricsViewSet)
 router.register(r'calendar',              	viewsets.CalendarViewSet)
 router.register(r'mindmap',               	viewsets.MindmapViewSet)
-router.register(r'mindmap',               	viewsets.MindmapViewSet)
 router.register(r'stickynotes',           	viewsets.StickynotesResource)
 router.register(r'studentassignresource', 	viewsets.StudentAssignResource)
 router.register(r'teacherassignedresource', viewsets.TeacherStudentAssignResource)
 router.register(r'assignedresourcestudents',viewsets.AssignedResourceStudents)
 router.register(r'studentinfo',      	  	viewsets.StudentinfoViewSet)
 router.register(r'stickycomments',          viewsets.StickyCommentsResource)
-router.register(r'Bulletinboard',           viewsets.Bulletinboard)
+router.register(r'bulletinboardlist',       viewsets.Bulletinboardlist)
 router.register(r'billboard',           	viewsets.BillboardViewSet)
+router.register(r'bulletinboard',       	viewsets.Bulletinboard)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

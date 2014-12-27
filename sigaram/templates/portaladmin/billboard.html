@@ -163,26 +163,28 @@ TTS.forms.renderadmin = function(data){
         }
         var link = "";
 
-        if (data[i].resourceid !== 0){
-           t.typebillboard = "<a herf ='billviewassignmentanswer?resourceid="+data[i].resourceid+"&studentid= ='>மாணவர் பெட்டகம்</a>";
+        if (data[i].resourceid){
+           t.typebillboard = "<a href='billviewassignmentanswer?resourceid="+data[i].resourceid+"&studentid="+ data[i].studentid+"'>மாணவர் பெட்டகம்</a>";
 
         } else if (data[i].writtenworkid !== 0){
             t.typebillboard = "<a href='billviewwrittenworkanswer?resourceid='>எழுத்து பாடம்</a>";
                     
 
-        } else if (data[i].assessmenttype !== 0) {
-            t.typebillboard = "<a herf ='billfillinganswerrating?assessmentid='>நிரப்புக</a>";
-             
-        }
-        else if (data[i].assessmenttype !== 1) {
-            t.typebillboard = "<a herf ='billchooseanswerrating?assessmentid='>சரியான விடை</a>";
-             
-        } else if (data[i].assessmenttype !== 2 ) {
-            t.typebillboard = "<a herf ='billcomprehensionanswerrating?assessmentid='>கட்டுரை</a>";
+        } else if (data[i].assessmentid){
+            if (data[i].assessmenttype == 0) {
+                t.typebillboard = "<a href ='billfillinganswerrating?assessmentid='>நிரப்புக</a>";
+                 
+            } else if (data[i].assessmenttype == 1) {
+                t.typebillboard = "<a href ='billchooseanswerrating?assessmentid='>சரியான விடை</a>";
+                 
+            } else if (data[i].assessmenttype == 2 ) {
+                t.typebillboard = "<a href ='billcomprehensionanswerrating?assessmentid='>கட்டுரை</a>";
 
-        }else if (data[i].assessmenttype !== 3 ) {
-            t.typebillboard = "<a herf ='billopenendedanswerrating?assessmentid='>open ended</a>";
+            } else if (data[i].assessmenttype == 3 ) {
+                t.typebillboard = "<a href ='billopenendedanswerrating?assessmentid='>open ended</a>";
+            }
         }
+
         //t.typebillboard = data[i].typebillboard;
         t.firstname = data[i].firstname;
         t.posteddate = data[i].posteddate;

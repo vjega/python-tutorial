@@ -461,13 +461,13 @@ class AssignresourceinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.AssignresourceinfoSerializer
 
     def create(self, request):
-        adminassignresource = models.Assignresourceinfo()
-        rubricsdata =  json.loads(request.DATA.keys()[0])
-        adminrubrics.resourceid = rubricsdata.get('resourceid')
-        adminrubrics.IsDelete = rubricsdata.get('IsDelete')
-        adminrubrics.assignedby = rubricsdata.get('assignedby')
-        adminrubrics.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
-        adminrubrics.save()
+        assignresourceinfo = models.Assignresourceinfo()
+        assigndata =  json.loads(request.DATA.keys()[0])
+        assignresourceinfo.resourceid = assigndata.get('resourceid')
+        assignresourceinfo.isdelete = 0 #assigndata.get('IsDelete')
+        assignresourceinfo.assignedby = assigndata.get('assignedby')
+        assignresourceinfo.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        assignresourceinfo.save()
         return Response(request.DATA)
 
     def update(self, request, pk=None):
@@ -569,6 +569,29 @@ class StudentAssignResource(viewsets.ModelViewSet):
             ari.issaved = data.get('issaved')
         
         ari.save()
+
+        assignedid  = pk;
+        spanid      = data.get('spanid');
+        fulltext    = data.get('fulltext');
+        orig        = data.get('orig');
+        modified    = data.get('modified');
+        usertype    = data.get('type');
+        answertext  = data.get('answertext');
+
+        ar = models.Editingtext()
+        ar.editid       = int(assignedid)
+        ar.spanid       = str(spanid)
+        ar.previoustext = str(orig)
+        ar.edittext     = str(modified)
+        ar.typeofresource = 0
+        ar.isapproved   = 0
+        ar.isrejected   = 0
+        ar.editedby     = loginname_to_userid('Teacher', 'sheela')
+        ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
+        ar.usertype     = str(usertype)
+
+        ar.save()
+
         return Response({'msg':True})
 
     def list(self, request):
@@ -581,6 +604,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
                ri.resourceid,
                resourcetitle,
                date(assigneddate) as createddate,
+               date(answereddate) as answereddate,
                resourcetype,
                thumbnailurl,
                ari.studentid,
@@ -594,7 +618,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
               AND ri.categoryid=0 
               %s
         GROUP BY resourceid 
-        ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
+        ORDER BY answereddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
         #print sql
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
@@ -937,35 +961,28 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
             ]
         return Response(result)
 
-class Bulletinboard(viewsets.ModelViewSet):
+class Bulletinboardlist(viewsets.ModelViewSet):
     queryset = models.Bulletinboardinfo.objects.all()
-    serializer_class = adminserializers.BulletinboardinfoSerializer
+    serializer_class = adminserializers.BulletinboardlistinfoSerializer
 
     def list(self, request):
         sql = """
-        SELECT  bulletinboardinfo.bulletinboardid, 
-                messagetitle,
-                message,
-                logininfo.firstname AS postedby, 
-                DATE( posteddate ) AS posteddate, 
-                imageurl 
-        FROM bulletinboardinfo 
-        INNER JOIN bulletinmappinginfo ON bulletinboardinfo.bulletinboardid = bulletinmappinginfo.bulletinboardid
-        INNER JOIN logininfo ON logininfo.loginid = bulletinboardinfo.postedby 
-        INNER JOIN teacherinfo ON teacherinfo.username = logininfo.username 
+        SELECT  bi.bulletinboardid, 
+                bi.messagetitle,
+                bi.message,
+                li.firstname AS postedby, 
+                DATE(bi.posteddate ) AS posteddate, 
+                ti.imageurl 
+        FROM bulletinboardinfo bi
+        INNER JOIN bulletinmappinginfo bmi ON bmi.bulletinboardid = bi.bulletinboardid
+        INNER JOIN logininfo li ON li.loginid = bi.postedby 
+        INNER JOIN teacherinfo ti ON ti.username = li.username 
         WHERE (viewtype =0 ) OR (viewtype =2) 
-        -- AND bulletinmappinginfo.adminid =$loginid
-        GROUP BY bulletinboardinfo.bulletinboardid 
+        -- AND bmi.adminid ='3866'
+        GROUP BY bmi.bulletinboardid 
         """
         cursor = connection.cursor()
-        #print sql
-        #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
-        #cursor.execute(sql, "3680")
-        #print dir(cursor)
-        #result = cursor.fetchall()
-        #print return [
-        
         desc = cursor.description
         result =  [
                 dict(zip([col[0] for col in desc], row))
@@ -1054,4 +1071,30 @@ class BillboardViewSet(viewsets.ModelViewSet):
         return Response('"msg":"delete"')
 
 
-
+class Bulletinboard(viewsets.ModelViewSet):
+    queryset = models.Classschoolmappinginfo.objects.all()
+    serializer_class = adminserializers.BulletinboardSerializer
+    
+    def list(self, request):
+        schoolid =  request.GET.get('schoolid')
+        if schoolid:
+            wherecond = "WHERE csmi.schoolid=%s" % schoolid
+        else:
+            wherecond = ""
+        sql = """
+        SELECT  ci.shortname,
+                si.shortname AS schoolname,
+                csmi.classschoolmappingid AS classid 
+        FROM classschoolmappinginfo csmi
+        INNER JOIN classinfo ci ON ci.classid = csmi.classid 
+        INNER JOIN schoolinfo si ON si.schoolid = csmi.schoolid 
+        %s 
+        ORDER BY ci.classid """ % wherecond;
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
