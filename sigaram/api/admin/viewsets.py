@@ -461,13 +461,13 @@ class AssignresourceinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.AssignresourceinfoSerializer
 
     def create(self, request):
-        adminassignresource = models.Assignresourceinfo()
-        rubricsdata =  json.loads(request.DATA.keys()[0])
-        adminrubrics.resourceid = rubricsdata.get('resourceid')
-        adminrubrics.IsDelete = rubricsdata.get('IsDelete')
-        adminrubrics.assignedby = rubricsdata.get('assignedby')
-        adminrubrics.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
-        adminrubrics.save()
+        assignresourceinfo = models.Assignresourceinfo()
+        assigndata =  json.loads(request.DATA.keys()[0])
+        assignresourceinfo.resourceid = assigndata.get('resourceid')
+        assignresourceinfo.isdelete = 0 #assigndata.get('IsDelete')
+        assignresourceinfo.assignedby = assigndata.get('assignedby')
+        assignresourceinfo.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        assignresourceinfo.save()
         return Response(request.DATA)
 
     def update(self, request, pk=None):
