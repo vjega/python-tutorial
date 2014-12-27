@@ -26,7 +26,7 @@ TTS.utils.guid = function() {
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
            s4() + '-' + s4() + s4() + s4();
   };
-})();
+}
 
 TTS.utils.getUrlParameter =  function (sParam) {
     var sPageURL = window.location.search.substring(1);

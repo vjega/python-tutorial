@@ -5,32 +5,60 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Announcement" %}</h2>
+        <h2 class="page-header">{% trans "Exam" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
+<div class="row">
+    <div>    
+        <label>Select Any Users</label>
+        <span>
+            <select id="category">
+                <option value="admin">Administrator</option>
+                <option value="teacher">Teacher</option>
+                <option value="schools">Schools</option>
+            </select>
+        </span>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {% trans "Announcement " %}
+                <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover"
+                         id="admin-main-tbl">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock topcontent %}
 {% block botcontent %}
-<div class="col-lg-12">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            {% trans "Announcement " %}
-            <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
-        </div>
-        <!-- /.panel-heading -->
-        <div class="panel-body">
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover"
-                     id="admin-main-tbl">
-                </table>
-            </div>
-            <!-- /.table-responsive -->
-        </div>
-        <!-- /.panel-body -->
+<div class="row">
+    <div class="col-lg-6">
+        <input id="uploadurl" type="file" name="uploadurl">
+    </div><br />
+    <div class="form-group" class="col-sm-2">
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Title" %}</label>
     </div>
-    <!-- /.panel -->
+    <div class="form-group">
+        <textarea class="summernote"></textarea>
+    </div>
 </div>
-                <!-- /.col-lg-12 -->
+<div class="row">
+    <div class="form-group" class="col-sm-2">
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Title" %}</label>
+    </div><br />
+    <div class="form-group">
+        <textarea class="summernote"></textarea>
+    </div>
+</div>          <!-- /.col-lg-12 -->
 {% endblock botcontent%}
 
 {% block morecss %}
@@ -57,11 +85,6 @@
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<script id="announcement-form" type="text/x-jsrender">
-    <div id="file-uploader">File Uploader Comes Here...</div> 
-    {% crispy form %}
-</script>
-
 <script>
 window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
@@ -158,6 +181,7 @@ TTS.forms.renderannouncement = function(data){
 };
 
 $(document).ready(function(){
+    $('.summernote').summernote();
     $.ajax({
         "url":"/api/admin/Bulletinboard/?format=json",
         "type":"GET"

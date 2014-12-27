@@ -16,5 +16,5 @@ class ForumsForm(forms.Form):
         self.helper = FormHelper()
         self.helper.form_id = 'add-forum'
         self.helper.form_class  = 'form-horizontal'
-        self.helper.label_class = 'col-sm-4'
-        self.helper.field_class = 'col-sm-8'
+        self.helper.label_class = 'col-sm-1'
+        self.helper.field_class = 'col-sm-11'

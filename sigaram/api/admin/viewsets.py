@@ -985,3 +985,72 @@ class Bulletinboard(viewsets.ModelViewSet):
         return Response(request.DATA)
 
 
+class BillboardViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Billboardinfo.objects.all()
+    serializer_class = adminserializers.BillboardSerializer
+
+    def list(self, request):
+        sql = """
+        SELECT distinct bbi.assessmentid, 
+                bbri.rating,
+                bbi.resourceid,
+                asl.assessmenttype,
+                asl.assessmenttitle,
+                ri.resourcetype,
+                ri.resourcetitle,
+                writtenworkinfo.writtenworktitle,
+                bbi.writtenworkid, 
+                studentinfo.firstname,
+                studentinfo.imageurl,
+                date(bbi.posteddate) as posteddate,
+                bbi.studentid 
+        FROM billboardinfo bbi
+        LEFT OUTER JOIN assignassessmentinfo asm ON asm.assessmentid = bbi.assessmentid 
+            AND asm.studentid = bbi.studentid 
+        LEFT OUTER JOIN assessmentlist asl ON asl.assessmentid = bbi.assessmentid 
+        LEFT OUTER JOIN billboardratinginfo bbri ON bbri.billboardid = bbi.billboardid 
+        LEFT OUTER JOIN assignresourceinfo ari ON ari.resourceid = bbi.resourceid 
+            AND ari.studentid = bbi.studentid 
+        LEFT OUTER JOIN resourceinfo ri ON ri.resourceid = bbi.resourceid
+        LEFT OUTER JOIN assignwrittenworkinfo awi on awi.writtenworkid = bbi.writtenworkid
+        LEFT OUTER JOIN writtenworkinfo on writtenworkinfo.writtenworkid = bbi.writtenworkid
+        LEFT OUTER JOIN logininfo on logininfo.loginid = bbi.studentid
+        LEFT OUTER JOIN studentinfo on studentinfo.username=logininfo.username
+        WHERE ( ari.isbillboard =1 OR asm.isbillboard =1 OR awi.isbillboard=1 ) 
+        ORDER BY bbi.billboardid desc  """ 
+
+        cursor = connection.cursor()
+        print sql
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+    def create(self, request):
+        billboard = models.Billboardinfo()
+        billboarddata =  json.loads(request.DATA.keys()[0])
+        billboard.billboardid = billboarddata.get('billboardid')
+        billboard.assessmentid = billboarddata.get('assessmentid')
+        billboard.resourceid = billboarddata.get('resourceid')
+        billboard.writtenworkid = billboarddata.get('writtenworkid',0)
+        billboard.studentid = billboarddata.get('studentid',0)
+        billboard.votescount = billboarddata.get('votescount',0)
+        billboard.lastvotedby = billboarddata.get('lastvotedby',0)
+        billboard.postedby = billboarddata.get('postedby',0)
+        billboard.lastvoteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        billboard.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        billboard.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
+
+
+

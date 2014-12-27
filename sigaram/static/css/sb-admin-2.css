@@ -2,6 +2,7 @@
 html, body {
   height: 100%;
   position: relative;
+  color:#444;
 }
 
 .footer{
@@ -46,7 +47,7 @@ body {
 #page-wrapper {
     padding: 0 15px;
     min-height: 568px;
-    background-color: #fff;
+    /*background-color: #fff;*/
 }
 .form-horizontal .control-label {
     text-align: left;
@@ -65,7 +66,7 @@ body {
         position: inherit;
         margin: 0 0 0 250px;
         padding: 0 30px;
-        border-left: 1px solid #e7e7e7;
+        /*border-left: 1px solid #e7e7e7;*/
     }
 }
 .navbar-top-links {
@@ -477,4 +478,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', end
 
 .modal-backdrop {
     z-index :0 !important;
+}
+
+.note-editable{
+    background-color: #fff!important;
+    height:100%;
 }

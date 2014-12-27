@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.views.generic import FormView
 
 def home(request):
-    return redirect('/admin/home')
+    return user_landing(request)
 
 def logout(request):
     return HttpResponse("Logging Out of the system")

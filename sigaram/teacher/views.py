@@ -3,6 +3,7 @@ from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
 from django.http import HttpResponse
 from teacher import models
+from portaladmin import models as pmodels
 from teacher.forms import ( RubricsForm,
                             WrittenworkForm,
                             StudentForm,
@@ -34,7 +35,7 @@ def home(request):
         "color": u"primary",
         "icon" : u"file-text-o",
         "link" : u"assignedresourcelist",
-        "caption": _("Dedication"),
+        "caption": _("Assignment"),
         "stat": 25
         },{
         "color": u"yellow",
@@ -55,10 +56,11 @@ def home(request):
     recent_activity_body = models.Activitylog.recentactivities()
     recent_activities = {'head':recent_acitivity_head,
                          'body':recent_activity_body}
+    announcement = pmodels.Bulletinboardinfo.announcement()
     return  render(request, 'portalteacher/index.html', {"folders":folders,
                                            "admin_folders":admin_folders,
-                                           "recent_activities":recent_activities
-                                           })
+                                           "recent_activities":recent_activities,
+                                           "announcement":announcement})
 
 @switchlanguage
 def assignedresourcelist(request):
