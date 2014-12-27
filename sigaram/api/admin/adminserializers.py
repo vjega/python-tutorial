@@ -132,3 +132,10 @@ class BillboardSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('billboardid','assessmentid','resourceid','writtenworkid',
                   'studentid','votescount','lastvotedby','lastvoteddate','postedby',
                                                                         'posteddate')
+
+class EditingtextSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Editingtext
+        fields = ('editingid', 'editid', 'spanid', 'previoustext', 'edittext', 'editedby', 
+                  'editeddate', 'editedplace', 'typeofresource', 'usertype', 'isapproved', 
+                                                                  'isrejected', 'oritxtrep');
