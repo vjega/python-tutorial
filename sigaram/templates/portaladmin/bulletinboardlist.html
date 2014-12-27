@@ -159,7 +159,7 @@ TTS.forms.renderannouncement = function(data){
 
 $(document).ready(function(){
     $.ajax({
-        "url":"/api/admin/Bulletinboard/?format=json",
+        "url":"/api/admin/bulletinboardlist/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderannouncement(data);

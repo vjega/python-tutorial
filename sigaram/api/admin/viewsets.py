@@ -936,35 +936,28 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
             ]
         return Response(result)
 
-class Bulletinboard(viewsets.ModelViewSet):
+class Bulletinboardlist(viewsets.ModelViewSet):
     queryset = models.Bulletinboardinfo.objects.all()
-    serializer_class = adminserializers.BulletinboardinfoSerializer
+    serializer_class = adminserializers.BulletinboardlistinfoSerializer
 
     def list(self, request):
         sql = """
-        SELECT  bulletinboardinfo.bulletinboardid, 
-                messagetitle,
-                message,
-                logininfo.firstname AS postedby, 
-                DATE( posteddate ) AS posteddate, 
-                imageurl 
-        FROM bulletinboardinfo 
-        INNER JOIN bulletinmappinginfo ON bulletinboardinfo.bulletinboardid = bulletinmappinginfo.bulletinboardid
-        INNER JOIN logininfo ON logininfo.loginid = bulletinboardinfo.postedby 
-        INNER JOIN teacherinfo ON teacherinfo.username = logininfo.username 
+        SELECT  bi.bulletinboardid, 
+                bi.messagetitle,
+                bi.message,
+                li.firstname AS postedby, 
+                DATE(bi.posteddate ) AS posteddate, 
+                ti.imageurl 
+        FROM bulletinboardinfo bi
+        INNER JOIN bulletinmappinginfo bmi ON bmi.bulletinboardid = bi.bulletinboardid
+        INNER JOIN logininfo li ON li.loginid = bi.postedby 
+        INNER JOIN teacherinfo ti ON ti.username = li.username 
         WHERE (viewtype =0 ) OR (viewtype =2) 
-        -- AND bulletinmappinginfo.adminid =$loginid
-        GROUP BY bulletinboardinfo.bulletinboardid 
+        -- AND bmi.adminid ='3866'
+        GROUP BY bmi.bulletinboardid 
         """
         cursor = connection.cursor()
-        #print sql
-        #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
-        #cursor.execute(sql, "3680")
-        #print dir(cursor)
-        #result = cursor.fetchall()
-        #print return [
-        
         desc = cursor.description
         result =  [
                 dict(zip([col[0] for col in desc], row))
@@ -1053,4 +1046,30 @@ class BillboardViewSet(viewsets.ModelViewSet):
         return Response('"msg":"delete"')
 
 
-
+class Bulletinboard(viewsets.ModelViewSet):
+    queryset = models.Classschoolmappinginfo.objects.all()
+    serializer_class = adminserializers.BulletinboardSerializer
+    
+    def list(self, request):
+        schoolid =  request.GET.get('schoolid')
+        if schoolid:
+            wherecond = "WHERE csmi.schoolid=%s" % schoolid
+        else:
+            wherecond = ""
+        sql = """
+        SELECT  ci.shortname,
+                si.shortname AS schoolname,
+                csmi.classschoolmappingid AS classid 
+        FROM classschoolmappinginfo csmi
+        INNER JOIN classinfo ci ON ci.classid = csmi.classid 
+        INNER JOIN schoolinfo si ON si.schoolid = csmi.schoolid 
+        %s 
+        ORDER BY ci.classid """ % wherecond;
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
