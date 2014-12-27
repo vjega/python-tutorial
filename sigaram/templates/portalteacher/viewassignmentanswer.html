@@ -23,10 +23,13 @@
         font-size: 15px;
         font-weight: bold;
     }
-    .tc {
+    span.tc, span.sc {
         color: #40c040 !important;
         cursor: pointer;
         display: inline;
+    }
+    span.tc:hover, span.sc:hover {
+        background-color: yellow !important;
     }
 </style>
 {% endblock morecss %}
@@ -36,6 +39,7 @@
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <!-- script-->
 <script type="text/javascript" src="{% static "bower_components/local-audio-recorder-master/demo/swfobject.js" %}"></script>
+<script src="{%static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block botcontent %}
@@ -139,6 +143,16 @@
 
 
 {% block scriptcontent %}
+<script id="editanswerlist" type="text/x-jsrender">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover" id="edit-answer-list">                    
+                </table>
+            </div>    
+        </div>
+    </div>
+</script>
 
 <script>
 
@@ -160,6 +174,126 @@ TTS.forms.renderassignedresourceinfo = function(data){
 /*TTS.forms.openwindow = function(videourl) {
     window.open("http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
 };*/
+
+TTS.forms.editanswerlist = function(spanid){
+
+    var assignedid = $("#assignedid").val();
+    var dataobj = {
+        assignedid : assignedid,
+        spanid : spanid
+    };
+
+    //alert(spanid + " --> " + assignedid);
+ 
+    BootstrapDialog.show({
+        title: 'Choose/Add Correction',
+        onshown: function(dialogRef){
+            //updateChapter();
+            //$('.summernote').summernote();
+        },
+        message: $($('#editanswerlist').render()),
+        onshown: function(dialogRef){
+            $.ajax({
+                "url":"/api/admin/adminschool/?format=json",
+                "type":"GET"
+            }).done(function(data){
+                //console.log(data);
+                TTS.forms.renderschoolinfo(data);
+            });
+        },
+        buttons:  [{
+                        label: 'Add more corrections',
+                        cssClass: 'btn-primary',
+                        action: function(dialogItself){
+
+                            /*var modtext = $("#edittext").val();
+                            if(modtext==""){
+                                dialogItself.close();
+                                alert("nothing to save");
+                                return false;
+                            }
+
+                            var uid         = TTS.utils.guid();
+                            var assign_id   = $("#assignedid").val();
+                            var fulltext    = $("#student-answer").html();
+                            var origtext    = x;
+                            var modified    = modtext;
+                            var type        = 2;
+                            var answertext  = TTS.forms.marktext(fulltext,origtext,uid,type);
+                            
+                            var data = {
+                                spanid      : uid,
+                                fulltext    : fulltext,
+                                orig        : origtext,
+                                modified    : modified,
+                                type        : type,
+                                answertext  : answertext
+                            }
+
+                            $.ajax({
+                                type:'PUT',
+                                data: data,
+                                url : '/api/admin/studentassignresource/'+assign_id
+                            }).done(function(msg) {
+                                console.log(msg);
+                                dialogItself.close();
+                                alert("Answer corrected successfully");
+                                location.reload();
+                            });*/
+                        }
+                   },
+                   {
+                        label: 'Save corrections',
+                        cssClass: 'btn-primary',
+                        action: function(dialogItself){
+                            //dialogItself.close();
+                        }
+                   },
+                   {
+                        label: 'Close',
+                        cssClass: 'btn-primary',
+                        action: function(dialogItself){
+                            dialogItself.close();
+                        }
+                   }]
+    });
+
+
+    /*$.post("../dbinterface/get_edit_text.php", {submit:"more", data:JSON.stringify(dataobj)}, function(data) {
+        $("#dialog").dialog("destroy").html(data).dialog({
+        title : "Choose/Add Correction",
+        position: ["right","top"],
+        width:600,
+        height:280,
+        modal: true,
+        buttons : {
+            "Add more corrections" : function(){
+                $("#correction").val($(self).text())
+                $("#cover").show();                        
+             },
+            "Save corrections" : function(){
+                    var dataobj = {
+                        assign_id : $("#corr-tbl td").eq(0).text(),
+                        span_id : $("#corr-tbl td").eq(1).text(),
+                        studentid : <?php echo $studentid; ?>,
+                        orig : $("#corr-tbl td").eq(2).text(),
+                        new_txt : $("#correction").val(),
+                        loginid  : <?php echo $_SESSION['loginid'] ; ?>,
+                        type : "2"
+                    };
+                    $.post("../dbinterface/ajax_editor.php",{submit:"more", data:JSON.stringify(dataobj)},function(data){
+                        //$("#edit_box").html(data);
+                    });
+                    alert("Saved");
+                    $(this).dialog("close");
+                  },      
+            Close : function(){
+                        $(this).dialog("close");
+                  }
+        }         
+        })  
+    });*/
+};
 
 TTS.forms.getSelectionHtml = function() {        
     var html = "";
@@ -207,49 +341,34 @@ TTS.forms.editanswer = function() {
                     alert("nothing to save");
                     return false;
                 }
-                /*alert($("#assignedid").val());
-                alert($("#student-answer").html());
-                alert(x);
-                alert(modtext);
-                return false;*/
-                var assign_id = $("#assignedid").val()
+
+                var uid         = TTS.utils.guid();
+                var assign_id   = $("#assignedid").val();
+                var fulltext    = $("#student-answer").html();
+                var origtext    = x;
+                var modified    = modtext;
+                var type        = 2;
+                var answertext  = TTS.forms.marktext(fulltext,origtext,uid,type);
+                
                 var data = {
-                    fulltext : $("#student-answer").html(),
-                    orig : x,
-                    modified : modtext,
-                    type : "2",
-                    answertext : 'ld<div class="tc" id="54999b223b61a">fg</div>skdjfl sdlkf glsd <div class="tc" id="54999b223b61a">fg</div>'
+                    spanid      : uid,
+                    fulltext    : fulltext,
+                    orig        : origtext,
+                    modified    : modified,
+                    type        : type,
+                    answertext  : answertext
                 }
+
                 $.ajax({
                     type:'PUT',
                     data: data,
                     url : '/api/admin/studentassignresource/'+assign_id
-                }).done(function( msg ) {
+                }).done(function(msg) {
                     console.log(msg);
                     dialogItself.close();
-                    return false;
+                    alert("Answer corrected successfully");
                     location.reload();
                 });
-                /*$.post("../dbinterface/ajax_editor.php",{submit:"new", data:JSON.stringify(dataobj)},function(data){
-                    $("#student-answer").html(data);
-                    alert("Saved");
-                });
-                $(this).dialog("close");
-
-
-
-                var data = TTS.utils.serilaizeJson("#add-studentresource");
-                console.log(data);
-                $.ajax({
-                    type:'POST',
-                    data: data,
-                    url : '/api/admin/resourceinfo/'
-                }).done(function( msg ) {
-                    //console.log(msg);
-                    dialogItself.close();
-                    location.reload();
-                });*/
-
             }
             },{
             label: 'Cancel',
@@ -260,9 +379,25 @@ TTS.forms.editanswer = function() {
     });
 };
 
+TTS.forms.marktext = function(original, marker, uid, usertype){
+    //alert(original+" --> "+marker+" --> "+uid+" --> "+usertype);
+    if(usertype == 1)
+        usertype = 'sc';
+
+    if(usertype == 2)
+        usertype = 'tc'
+
+    original = original.replace(/\r?\n|\r/g,"");
+    original = original.trim();
+    marker = marker.replace(/\r?\n|\r/g,"");
+    marker = marker.trim();
+    var res = original.replace(marker, "<span id='"+uid+"' class='"+usertype+"'>"+marker+"</span>"); 
+    return res;
+};
+
 $(document).ready(function(){
-    var resourceid = TTS.forms.getUrlParameter('resourceid');
-    var studentid = TTS.forms.getUrlParameter('studentid');
+    var resourceid = TTS.utils.getUrlParameter('resourceid');
+    var studentid = TTS.utils.getUrlParameter('studentid');
 
     $.ajax({
         "url":"/api/admin/assignedresourcestudents/"+resourceid+"/?studentid="+studentid+"&format=json",
@@ -272,73 +407,18 @@ $(document).ready(function(){
         TTS.forms.renderassignedresourceinfo(data);
     });
     
-    $("#student-answer,#student-answer p").on("mouseup", function(){
+    $("#student-answer,#student-answer p").on("mouseup", function(event){
+        //event.stopPropagation();
         TTS.forms.editanswer();
     });
 
-    alert(TTS.utils.guid());
-
-
-    $(".tc,.sc").on("click", function(event){
-        alert("ssdfasdf");
-        event.stopPropagation();
-        var self = this;
-        alert($(self).attr("id")); 
-        var dataobj = {
-            assign_id : $("#edit_box").parent().attr("id").split("-")[1],
-            spanid : $(self).attr("id")
-        };
-        /*$.post("../dbinterface/get_edit_text.php", {submit:"more", data:JSON.stringify(dataobj)}, function(data) {
-            $("#dialog").dialog("destroy").html(data).dialog({
-            title : "Choose/Add Correction",
-            position: ["right","top"],
-            width:600,
-            height:280,
-            modal: true,
-            buttons : {
-                "Add more corrections" : function(){
-                    $("#correction").val($(self).text())
-                    $("#cover").show();                        
-                 },
-                "Save corrections" : function(){
-                        var dataobj = {
-                            assign_id : $("#corr-tbl td").eq(0).text(),
-                            span_id : $("#corr-tbl td").eq(1).text(),
-                            studentid : <?php echo $studentid; ?>,
-                            orig : $("#corr-tbl td").eq(2).text(),
-                            new_txt : $("#correction").val(),
-                            loginid  : <?php echo $_SESSION['loginid'] ; ?>,
-                            type : "2"
-                        };
-                        $.post("../dbinterface/ajax_editor.php",{submit:"more", data:JSON.stringify(dataobj)},function(data){
-                            //$("#edit_box").html(data);
-                        });
-                        alert("Saved");
-                        $(this).dialog("close");
-                      },      
-                Close : function(){
-                            $(this).dialog("close");
-                      }
-            }         
-            })  
-        });*/
+    $("#student-answer").on("click","span.tc,span.sc", function(event){
+        //event.stopPropagation();
+        var spanid = $(this).attr("id");
+        TTS.forms.editanswerlist(spanid);
     });
-    
-
 });
 
-TTS.forms.getUrlParameter = function(sParam) {
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++) 
-    {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam) 
-        {
-            return sParameterName[1];
-        }
-    }
-}
 </script>
 
 {% endblock scriptcontent %}

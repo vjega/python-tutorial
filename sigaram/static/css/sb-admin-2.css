@@ -479,3 +479,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', end
 .modal-backdrop {
     z-index :0 !important;
 }
+
+.note-editable{
+    background-color: #fff!important;
+    height:100%;
+}

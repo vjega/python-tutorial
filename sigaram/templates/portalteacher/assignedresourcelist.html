@@ -133,7 +133,7 @@ $(document).ready(function(){
     }).done(function(data){
         TTS.forms.assignedstudentresource(data);
     });
-    $('.resourcelist').on('click','tr',function(e){
+    $('.resourcelist').on('click','tbody tr',function(e){
         e.stopPropagation();
         window.location = 'viewassignresource?resourceid='+this.id;
     });

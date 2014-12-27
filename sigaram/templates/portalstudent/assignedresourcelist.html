@@ -115,6 +115,7 @@
     TTS.forms = TTS.forms || {}   
 
     TTS.forms.assignedstudentresource = function(data){
+
         var headers = [
                 { "title": "{% trans "Sl No." %}",
                   "class": "text-center" ,
@@ -129,11 +130,9 @@
                 { "title": "{% trans "Type" %}" ,
                   "data" :"type"
                 },
-                /*{ "title": "{% trans "Note" %}",
-                  "data" :"note"
-                },*/
-               
             ];
+
+
         var dataset_new = [];
         var dataset_saved = [];
         var dataset_answered = [];
@@ -156,7 +155,7 @@
                 t.DT_RowId = data[i].id;
                 t.slno=++count_saved;
                 t.title=data[i].resourcetitle;
-                t.date=data[i].createddate;
+                t.date=data[i].answereddate;
                 t.type=data[i].resourcetype;
                 dataset_saved.push(t);
             }
@@ -165,7 +164,7 @@
                 t.DT_RowId = data[i].id;
                 t.slno=++count_answered;
                 t.title=data[i].resourcetitle;
-                t.date=data[i].createddate;
+                t.date=data[i].answereddate;
                 t.type=data[i].resourcetype;
                 dataset_answered.push(t);
             }
@@ -192,7 +191,7 @@ $(document).ready(function(){
     }).done(function(data){
         TTS.forms.assignedstudentresource(data);
     });
-    $('.resourcelist').on('click','tr',function(e){
+    $('.resourcelist').on('click','tbody tr',function(e){
         e.stopPropagation();
         window.location = 'viewassignresource?assignedid='+this.id;
     });
