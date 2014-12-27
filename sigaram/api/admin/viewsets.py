@@ -569,6 +569,29 @@ class StudentAssignResource(viewsets.ModelViewSet):
             ari.issaved = data.get('issaved')
         
         ari.save()
+
+        assignedid  = pk;
+        spanid      = data.get('spanid');
+        fulltext    = data.get('fulltext');
+        orig        = data.get('orig');
+        modified    = data.get('modified');
+        usertype    = data.get('type');
+        answertext  = data.get('answertext');
+
+        ar = models.Editingtext()
+        ar.editid       = int(assignedid)
+        ar.spanid       = str(spanid)
+        ar.previoustext = str(orig)
+        ar.edittext     = str(modified)
+        ar.typeofresource = 0
+        ar.isapproved   = 0
+        ar.isrejected   = 0
+        ar.editedby     = loginname_to_userid('Teacher', 'sheela')
+        ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
+        ar.usertype     = str(usertype)
+
+        ar.save()
+
         return Response({'msg':True})
 
     def list(self, request):
@@ -581,6 +604,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
                ri.resourceid,
                resourcetitle,
                date(assigneddate) as createddate,
+               date(answereddate) as answereddate,
                resourcetype,
                thumbnailurl,
                ari.studentid,
@@ -594,7 +618,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
               AND ri.categoryid=0 
               %s
         GROUP BY resourceid 
-        ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
+        ORDER BY answereddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
         #print sql
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
