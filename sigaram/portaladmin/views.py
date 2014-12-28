@@ -79,7 +79,7 @@ def home(request):
     recent_activity_body = models.Activitylog.recentactivities()
     recent_activities = {'head':recent_acitivity_head,
                          'body':recent_activity_body}
-    announcement = {'body':announcement_body}
+    announcement = {'head':announcement_head ,'body':announcement_body}
     return  render(request, 'portaladmin/index.html', {"folders":folders,
                                            "admin_folders":admin_folders,
                                            "recent_activities":recent_activities,
