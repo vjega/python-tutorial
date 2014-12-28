@@ -4,7 +4,9 @@ from django.shortcuts import render
 from student import models
 from portaladmin import models as pmodels
 from student.forms import (StudentWorkForm,
-                           StudentNotesForm)
+                           StudentNotesForm,
+                           StickyForm,
+                           StickyCommentForm)
 
 
 def switchlanguage(f):
@@ -204,3 +206,10 @@ def studentclassroom(request):
 
 def viewassignresource(request):
     return render(request, 'portalstudent/viewassignresource.html')    
+
+@switchlanguage
+def stickynotes(request):
+    return render(request, 'portalstudent/stickynotes.html', 
+                                        {'form':StickyForm.StickyForm(),
+                                         'Cform':StickyCommentForm.StickyCommentForm()
+                                         })    
