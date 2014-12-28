@@ -135,10 +135,10 @@
 .sticky_note{
     float: left;
     position: relative;
-    height: 150px;
-    width: 150px;
-    margin: 5px;
-    padding: 4px;
+    height: 300px;
+    width: 220px;
+    margin: 10px;
+    padding: 8px;
     box-shadow: 1px 1px 1px 1px #d3d3d3;
     overflow:hidden;
     cursor:default;
@@ -148,16 +148,16 @@
 
 .sticky_header{
     height: 18px;
-    width: 140px;
-    margin-bottom: 5px;
-    cursor: move;
+    width: 200px;
+    margin-bottom: 10px;
+    cursor: crosshair;
 }
 
 .sticky_footer {
     border-top: 1px solid gray;
     bottom: -3px;
     position: relative;
-    width: 140px;
+    width: 200px;
 }
 
 .table-bordered {
@@ -166,8 +166,8 @@
 
 .editrec{
     float: right;
-    margin: 0 5px;
-    cursor: default;
+    margin: -1px 8px 0 0;
+    cursor: pointer;
 }
 
 .editrec:hover{
@@ -176,8 +176,8 @@
 
 .deleterec{
     float: right;
-    margin-right: 3px;
-    cursor: default;
+    margin: -1px 8px 0 0;
+    cursor: pointer;
 }
 
 .deleterec:hover{
@@ -187,8 +187,8 @@
 
 .sticky_comment{
     float: right;
-    margin-right: 3px;
-    cursor: default;
+    margin-right: 4px;
+    cursor: pointer;
 }
 
 .sticky_comment:hover{
@@ -196,7 +196,7 @@
 }
 
 .sticky_content {
-    height: 95px;
+    height: 230px;
     overflow-x: auto;
 }
 
@@ -229,14 +229,57 @@
     display: none;
 }
 
-.comment_icon {
-    cursor: default;
+.show_comment_icon, .hide_comment_icon{
+    cursor: pointer;
     float: left;
-    height: 14px;
+    height: 22px;
     margin-left: 3px;
-    width: 14px;
+    margin-top: 3px;
+    width: 178px;
+}
+.show_comment_icon:hover, .hide_comment_icon:hover {
+    color :gray;
 }
 
+.show_comments, .hide_comments {
+    float: left;
+}
+
+.comment{
+    float: left;
+}
+
+.sticky_note {
+    z-index: 0
+}
+
+.comments{
+    float:left;
+    width:100%;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
+}
+
+.comment_details {
+    float: left;
+    color: gray;
+    font-style: italic;
+    height: 23px;
+    overflow: hidden;
+    width: 200px;
+}
+/*
+.comment_by{
+    float: left;
+    width:50%;
+    overflow: hidden;
+}
+
+.comment_date{
+    float: right;
+    width:50%;
+    overflow: hidden;
+}*/
 </style>
 {% endblock morecss %}
 
@@ -260,6 +303,14 @@
     {% crispy Cform %}
 </script>
 
+<script id="sticky-text" type="text/sticky">
+<div class='color_container'>
+    <div id='preview_color' class='yellow'>Preview</div>
+        <div class='control-label col-sm-8 color_values' id="color-swatch">
+    </div>
+</div>
+</script>
+
 <script>
 window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
@@ -280,21 +331,14 @@ TTS.forms.addstickynote = function(form, data) {
 
 TTS.forms.showstickyform = function() {
     var colors = ["yellow", "blue", "green","purple", "pink", "grey","red", "orange", "maroon", "gold"];
-    var color_div = "<div class='color_container'>"+
-                        "<div id='preview_color' class='yellow'>Preview</div>"+
-                        "<div class='control-label col-sm-4'>color</div>"+
-                        "<div class='control-label col-sm-8 color_values'>";
-    for (var i = 0; i < colors.length; i++) { 
-       color_div += "<div class='color "+colors[i]+"' name='"+colors[i]+"' ></div>";
-    }
-
-    color_div +="</div>";
-    color_div +="</div>";
     BootstrapDialog.show({
         title: 'Add Sticky note',
-        message: $($('#sticky-form').render() + color_div),
+        message: $($('#sticky-form').render() +  $("#sticky-text").text()), 
         onshown: function(){
             $('.summernote').summernote();
+            for (var i in colors) {
+               $("#color-swatch").append("<div class='color "+colors[i]+"' name='"+colors[i]+"' ></div>");
+            }
             $(".color").on("click", function(){
                 var clsclr = $(this).prop("class").split(" ");
                 var select_color = findColor(colors, clsclr) ? findColor(colors, clsclr) : 'yellow';
@@ -443,14 +487,31 @@ TTS.forms.renderstickynotes = function(data){
         if (data[i].comments !==  null) {
             com = data[i].comments.split("~");
         }
+        
+        var comby = []
+        if (data[i].commentby !==  null) {
+            comby = data[i].commentby.split("~");
+        }
+
+        var comdate = []
+        if (data[i].createddate !==  null) {
+            comdate = data[i].createddate.split("~");
+        }
+        
         if (com.length) {
-            sticky_html += "<div class='comment_icon'>";
-            sticky_html += "<span class='show_comments' src='"+com.length+"' name='"+data[i].id+"'><i class='fa fa-caret-right'></i></span>";
-            sticky_html += "</div>";
+            sticky_html += "<div class='show_comment_icon'>";
+            sticky_html += "<div class='show_comments' src='"+com.length+"' name='"+data[i].id+"'><i class='fa fa-caret-right'></i> &nbsp;&nbsp;</div>";
             sticky_html += "<div id='comment'>Comment ("+com.length+")</div>";
+            sticky_html += "</div>";
             sticky_html += "<div class='slidingDiv' id='slidingDiv_"+data[i].id+"'>";
             for (i in com){
-                sticky_html += "<div>"+com[i]+"</div>";
+                sticky_html += "<div>";
+                sticky_html += "<div class='comment_details'>"+comby[i]+" &nbsp;&nbsp "+comdate[i]+"</div>";
+                //sticky_html += "<div class='comment_by'>"+comby[i]+"</div>";
+                //sticky_html += "<div class='comment_date'>"+comdate[i]+"</div>";
+                //sticky_html += "</div>";
+                sticky_html += "<div class='comments'>"+com[i]+"</div>";
+                sticky_html += "</div>";
             }
             sticky_html += "</div>";
         } else {
@@ -480,7 +541,7 @@ $(document).ready(function(){
 });
 
 function load_onclick_events (){
-    $(".sticky_header").parent().draggable().resizable()
+    $(".sticky_header").parent().draggable({handle: '.sticky_header'});
     
     $("#sticky-placeholder").on("click", ".editrec", function(){
         var elm = $(this).parent().parent().find(".sticky_content")[0];
@@ -504,32 +565,31 @@ function load_onclick_events (){
         TTS.forms.showstickycommentform(sticky_id);
     });
 
-    $("#sticky-placeholder").on("click", ".show_comments", function(){
-       console.log($(this).html());
-       
-       /*
-       var sticky_id = $(this).attr("name");
-       var no_comment = $(this).attr("src");
-       size = (20*no_comment)
-       incHeight(sticky_id,size)
-       $("#sticky_note_"+sticky_id).css("z-index","99999");
-       $("#slidingDiv_"+sticky_id).show(1000);
-       //$("#show_comments").find('i').toggleClass('fa-caret-right fa-caret-top')
-       //TTS.forms.showstickycommentform(sticky_id);
-       */
+    var sticky_height = '';
+    $("#sticky-placeholder").on("click", ".show_comment_icon", function(){
+       $(".slidingDiv").slideUp();
+       sticky_height = $(this).parent().parent().height();
+       $(this).parent().parent().height("auto");
+       $(this).parent().parent().find(".slidingDiv").slideDown();
+       $(this).find('i').toggleClass('fa fa-caret-right fa fa-caret-down');
+       $(this).toggleClass('show_comment_icon hide_comment_icon');
     });
 
-    /*$(".comment_icon").on("click", "#show_comments", function(){
+    $("#sticky-placeholder").on("click", ".hide_comment_icon", function(){
+       $(".slidingDiv").slideUp();
+       $(this).parent().parent().height(sticky_height);
+       $(this).find('i').toggleClass('fa fa-caret-down fa fa-caret-right');
+       $(this).toggleClass('hide_comment_icon show_comment_icon');
+    });
 
-    });*/
+    $("#sticky-placeholder").on("mouseup", ".sticky_header", function(){
+         var zind = $(this).parent().css("z-index");
+         $(this).parent().css("z-index", 0);
+    });
 
-}
-
-function incHeight(id,size) {
-    var el = document.getElementById("sticky_note_"+id);
-    var height = el.offsetHeight;
-    var newHeight = (height + size);
-    el.style.height = newHeight + 'px';
+    $("#sticky-placeholder").on("mousedown", ".sticky_header", function(){
+        var stickyelm = $(this).parent().css("z-index", 1);
+    });
 }
 
 </script>
