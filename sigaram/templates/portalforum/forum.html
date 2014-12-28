@@ -18,13 +18,14 @@
     <div class="panel panel-default">
     <form enctype="multipart/form-data" action="" method="POST"> 
         <div class="panel-heading">
-            {% trans "New Conversation" %} 
+           <h3> {% trans "New Conversation" %} </h3>
         </div>
         <!-- /.panel-heading -->
         <div class="gentable" id ="admin-forum">
             {% crispy form %}
         </div>
         <div class="text-center">
+            <div>&nbsp;</div>
             <button class="btn btn-primary" id="addrec">Save</button>
         </div>
 
