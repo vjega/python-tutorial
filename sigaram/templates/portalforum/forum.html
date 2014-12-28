@@ -21,7 +21,7 @@
             {% trans "New Conversation" %} 
         </div>
         <!-- /.panel-heading -->
-        <div class="gentable" id ="rub_mtx_head rub_mtx_rows">
+        <div class="gentable" id ="admin-forum">
             {% crispy form %}
         </div>
         <div class="text-center">
@@ -69,23 +69,6 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-TTS.forms.addtfourms = function(form, data) {
-    $.ajax({
-        type:'POST',
-        data: data,
-        url : '/api/forum/foruminfo/'
-    }).done(function( msg ) {
-        console.log(data)
-        //form.close();
-        location.reload();
-        //dialogItself.close();
-    });
-}
-TTS.forms.showfourms = function() {
-    var data = TTS.utils.serilaizeJson("#add-forum");
-    TTS.forms.addtfourms(data); 
-};
-
 TTS.forms.renderfourminfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
@@ -116,10 +99,10 @@ TTS.forms.renderfourminfo = function(data){
     for(var i in data){
         var t = [];
         t.DT_RowId = data[i].forumid;
-        t.slno = ++count;
+        t.slno = data[i].forumid;
         t.forumname = data[i].forumname;
         t.createddate = data[i].createddate;
-        t.topic = "<a herf class=''>New Topic</a>";
+        t.topic = "<a herf='#' onclick='newtopic(this)'>New Topic</a>";
         t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
@@ -130,6 +113,11 @@ TTS.forms.renderfourminfo = function(data){
     });
 
 };
+
+function newtopic(elm) {
+    window.location = 'newtopic?forumid='+$(elm).parent().parent().prop('id')+
+                        '&forumname='+$(elm).parent().prev().prev().text()
+}
 
 $(document).ready(function(){
      $.ajax({
@@ -143,17 +131,24 @@ $(document).ready(function(){
         }
     });
 
-    $('body').on('click','.addnewtopic', function(){
-        alert("hi");
-        window.location ='viewtopic?forumid='+this.id+'&forumname='+$($(this).find(".topic")[0]).text()
-        $("#page-wrapper").on("click", "#addrec", function(){
-         TTS.forms.showviewfourm();
-        });
-    });
+    // $('body').on('click','.addnewtopic', function(){
+    //     alert(this);
+    //     window.location ='newtopic?forumid='+this.id+'&forumname='+$($(this).find(".topic")[0]).text()
+    //     $("#page-wrapper").on("click", "#addrec", function(){
+    //      TTS.forms.showviewfourm();
+    //     });
+    // });
     
-    $("#wrapper").on("click", "#addrec", function(){
-       TTS.forms.showfourms();
-        //alert("hi");
+    $("#addrec").click(function(){
+       //TTS.forms.showfourms();
+        $.ajax({
+            type:"POST",
+            url:"/api/forum/foruminfo/",
+            data: JSON.stringify({forumname:$("#id_forumname").val()})
+        }).done(function(data){
+            //console.log(data);
+            location.reload();
+        })
     });
 
 });
