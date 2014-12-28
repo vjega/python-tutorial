@@ -931,7 +931,8 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
                ari.originaltext,
                ari.studentid,
                ari.isanswered,
-               ari.issaved
+               ari.issaved,
+               ari.isbillboard
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         INNER JOIN  studentinfo si on si.studentid = ari.studentid 
@@ -1232,3 +1233,32 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         et.save()
 
         return Response('"msg":"Approved successfully"')
+
+
+class BillboardResourceViewSet(viewsets.ModelViewSet):
+    queryset = models.Billboardinfo.objects.all()
+    serializer_class = adminserializers.BillboardSerializer
+
+    def create(self, request):
+        billboard = models.Billboardinfo()
+        studentid  = request.GET.get('studentid');
+        resourceid = request.GET.get('resourceid');
+        billboard.assessmentid = 0
+        billboard.resourceid = resourceid
+        billboard.writtenworkid = 0
+        billboard.studentid = studentid
+        billboard.votescount = 0
+        billboard.lastvotedby = 0
+        billboard.postedby = studentid
+        billboard.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        billboard.save()
+
+        sql = '''
+        UPDATE assignresourceinfo
+            SET isbillboard = 1
+        WHERE studentid = '%s'
+            AND resourceid = '%s' ''' % (studentid, resourceid)
+        cursor = connection.cursor()
+        cursor.execute(sql)        
+
+        return Response('saved')
