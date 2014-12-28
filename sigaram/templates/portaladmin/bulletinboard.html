@@ -64,7 +64,7 @@
         <label for="folder_name" class="col-sm-2 control-label">{% trans "Title" %}</label>
     </div>
     <div class="form-group">
-        <textarea class="summernote"></textarea>
+        <textarea id="title" class="summernote"></textarea>
     </div>
 </div>
 <div class="row">
@@ -72,9 +72,19 @@
         <label for="folder_name" class="col-sm-2 control-label">{% trans "Announcment" %}</label>
     </div>
     <div class="form-group">
-        <textarea class="summernote"></textarea>
+        <textarea id="announcement" class="summernote"></textarea>
     </div>
-</div>          <!-- /.col-lg-12 -->
+</div>
+<div align="center">   
+    <span>
+        <button class="btn btn-primary btn-sm" id="save">
+            <i class="fa fa-floppy-o fa-lg"></i> {% trans "Save" %} 
+        </button>
+        <button class="btn btn-primary btn-sm" id="cancel">
+            <i class="fa fa-times fa-lg"></i> {% trans "Cancel" %} 
+        </button>
+    </span>
+</div>
 {% endblock botcontent%}
 
 {% block morecss %}
@@ -104,43 +114,60 @@
 <script>
 window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
+$("#save").click(function(){
+    TTS.forms.bulletinboardinfo();
+//    TTS.forms.bulletinmappinginfo();
+});
 
-TTS.forms.addexam = function(form, data) {
+TTS.forms.bulletinboardinfo = function(){   
+    var data = {};
+    data.resource = [];
+    data.messagetitle = $("#title").code();
+    data.message = $("#announcement").code();
+    data.classid=0;
+    data.schoolid=0;
+    data.isrecord=0;
+    data.postedby=$(this).prop("id");
+    $(".checkresourceid:checked").each(function(){
+        data.resource.push($(this).prop("id"));
+    });
+
     $.ajax({
-        type:'POST',
-        data: data,
-        url : '/api/admin/Bulletinboard/'
-    }).done(function( msg ) {
-        form.close();
+        url:"/api/admin/bulletinboardlist/",
+        type:"POST",
+        data: JSON.stringify(data)
+    }).done(function(data){
+        alert("Saved Successfully");
         location.reload();
-        //dialogItself.close();
+    }).error(function(err, msg){
+        alert("I didnt save the data");
     });
 }
 
-TTS.forms.showexamform = function() {
-    BootstrapDialog.show({
-        title: 'Add Exam',
-        message: $($('#announcement-form').render()),
-        onshown: function(){
-            TTS.forms.upload();
-            $('.summernote').summernote();
-        },
-        buttons: [{
-            label: 'Save',
-            cssClass: 'btn-primary',
-            action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-announcement");
-                TTS.forms.addexam(dialogItself, data); 
-            }
-            },{
-            label: 'Cancel',
-            action: function(dlg){
-                dlg.close();
-            }
-        }]
+/*
+TTS.forms.bulletinmappinginfo = function(){   
+    var data = {};
+    data.resource = [];
+    data.messagetitle = $(".summernote").code();
+    data.message = $(".summernote").code();
+   
+    $(".checkresourceid:checked").each(function(){
+        data.resource.push($(this).prop("id"));
     });
-};
 
+    $.ajax({
+        url:"/api/admin/bulletinmappinginfo/",
+        type:"POST",
+        data: JSON.stringify(data)
+    }).done(function(data){
+        alert("Saved Successfully");
+        location.reload();
+    }).error(function(err, msg){
+        alert("I didnt save the data");
+    });
+}
+
+*/
 TTS.forms.upload = function(elm) {
     console.log(elm);
     var uploader = new qq.FileUploader({
@@ -149,7 +176,7 @@ TTS.forms.upload = function(elm) {
         multiple: false,
         onComplete: function(id, fileName, responseJSON) {
             if(responseJSON.success) {
-                $("#id_fileurl").val(responseJSON.path.replace('static/', ''));
+                $("#uploadurl").val(responseJSON.path.replace('static/', ''));
             } else {
                 alert("upload failed!");
             }
@@ -182,7 +209,7 @@ TTS.forms.renderadmin = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.id = "<input type='checkbox' class='case' name='schoolname' id='"+data[i].adminid+"' value='"+data[i].adminid+"' />";
+        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].adminid+"' value='"+data[i].adminid+"' />";
         t.firstname = data[i].firstname;
         t.lastname = data[i].lastname;
         dataset.push(t);
@@ -220,7 +247,7 @@ TTS.forms.renderteacher = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.id = "<input type='checkbox' class='case' name='schoolname' id='"+data[i].teacherid+"' value='"+data[i].teacherid+"' />";
+        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].teacherid+"' value='"+data[i].teacherid+"' />";
         t.firstname = data[i].firstname;
         t.lastname = data[i].lastname;
         dataset.push(t);
@@ -248,7 +275,7 @@ TTS.forms.renderadminschool = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.id = "<input type='checkbox' class='case' name='schoolname' id='"+data[i].schoolid+"' value='"+data[i].schoolid+"' />";
+        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].schoolid+"' value='"+data[i].schoolid+"' />";
         t.firstname = data[i].schoolname;
         t.lastname = data[i].shortname;
         dataset.push(t);

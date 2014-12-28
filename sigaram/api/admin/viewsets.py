@@ -994,16 +994,16 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         data = json.loads(dict(request.DATA).keys()[0])
         announcement.messagetitle = data.get('messagetitle')
         announcement.message = data.get('message')
-        announcement.schoolid = data.get('schoolid')
-        announcement.classid = data.get('classid')
+        announcement.schoolid = data.get('schoolid',0)
+        announcement.classid = data.get('classid',0)
+        announcement.isrecord= data.get('isrecord',0)
         announcement.postedby = request.user.id
-        announcement.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        announcement.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         announcement.save()
         return Response(request.DATA)
 
 
 class BillboardViewSet(viewsets.ModelViewSet):
-
     queryset = models.Billboardinfo.objects.all()
     serializer_class = adminserializers.BillboardSerializer
 
@@ -1097,3 +1097,32 @@ class Bulletinboard(viewsets.ModelViewSet):
                 for row in cursor.fetchall()
             ]
         return Response(result)
+
+    def create(self, request):
+        announcement = models.Bulletinboardinfo()
+        data = json.loads(dict(request.DATA).keys()[0])
+        announcement.messagetitle = data.get('messagetitle')
+        announcement.message = data.get('message')
+        announcement.schoolid = data.get('schoolid',0)
+        announcement.classid = data.get('classid',0)
+        announcement.postedby = request.user.id
+        announcement.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        announcement.save()
+        return Response(request.DATA)
+
+class Bulletinmappinginfo(viewsets.ModelViewSet):
+    queryset = models.Bulletinmappinginfo.objects.all()
+    serializer_class = adminserializers.BulletinmappinginfoSerializer
+    
+    def create(self, request):
+        bulletmapping = models.Bulletinmappinginfo()
+        data = json.loads(dict(request.DATA).keys()[0])
+        bulletmapping.bulletinboardid = data.get('bulletinboardid')
+        bulletmapping.viewtype = data.get('viewtype')
+        bulletmapping.schoolid = data.get('schoolid')
+        bulletmapping.classid = data.get('classid')
+        bulletmapping.adminid = data.get('adminid')
+        bulletmapping.teacherid = data.get('teacherid')
+        bulletmapping.save()
+        return Response(request.DATA)
+
