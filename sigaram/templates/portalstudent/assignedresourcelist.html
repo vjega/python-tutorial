@@ -161,7 +161,7 @@
             }
             if (data[i].isanswered) {
                 var t = [];
-                t.DT_RowId = "vaa_"+data[i].id;
+                t.DT_RowId = "vaa_"+data[i].resourceid+"_"+data[i].studentid;
                 t.slno=++count_answered;
                 t.title=data[i].resourcetitle;
                 t.date=data[i].answereddate;
@@ -198,7 +198,7 @@ $(document).ready(function(){
             window.location = 'viewassignresource?assignedid='+x[1];
         
         if(x[0] == 'vaa')
-            window.location = 'viewassignmentanswer?assignedid='+x[1];
+            window.location = 'viewassignmentanswer?resourceid='+x[1]+'&studentid='+x[2];
 
     });
     $('#fromdatepicker').datetimepicker({
