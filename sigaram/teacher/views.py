@@ -7,6 +7,8 @@ from portaladmin import models as pmodels
 from teacher.forms import ( RubricsForm,
                             WrittenworkForm,
                             StudentForm,
+                            StickyForm,
+                            StickyCommentForm
                             #ViewworkspaceForm
                             ) 
 
@@ -380,9 +382,20 @@ def statisticsstudentslist(request):
 def rubric_edit(request):
     return render(request, 'portalteacher/rubric_edit.html' ,{'rubric_edit':rubric_edit,
                             "form" : RubricsForm.RubricsForm() })
-                  
+@switchlanguage                
 def viewassignresource(request):
     return render(request, 'portalteacher/viewassignresource.html')
-
+    
+@switchlanguage
 def viewassignmentanswer(request):
-    return render(request, 'portalteacher/viewassignmentanswer.html')                      
+    return render(request, 'portalteacher/viewassignmentanswer.html') 
+
+@switchlanguage
+def stickynotes(request):
+    return render(request, 'portalteacher/stickynotes.html', 
+                                        {'form':StickyForm.StickyForm(),
+                                         'Cform':StickyCommentForm.StickyCommentForm()
+                                         })                     
+@switchlanguage
+def billboard(request):
+    return render(request, 'portalteacher/billboard.html')

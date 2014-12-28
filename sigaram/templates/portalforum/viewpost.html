@@ -20,9 +20,11 @@
         <!-- /.panel-heading -->
         <div class="panel-body">
             <div class="table-responsive">
+                <center><h4><div id="headermsg"></div></h4></center>
                 <table class="table table-striped table-bordered table-hover" 
-                    id="forum-main-tbl">
+                    id="forum-reply-tbl">
                 </table>
+
                 <div><button class="btn btn-primary center-block" id="allreply">Reply</button></div>
                 
             </div>
@@ -41,7 +43,7 @@
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
 <style>
-    #addrec:hover, #forum-main-tbl tbody tr:hover, .tts-delete:hover{
+    #addrec:hover, #forum-reply-tbl tbody tr:hover, .tts-delete:hover{
         cursor: pointer;
     }
 </style>
@@ -140,7 +142,7 @@ TTS.forms.replysingle = function(topicid, postid) {
 };
 
 
-TTS.forms.replyall = function(forumid) {
+TTS.forms.replyall = function(forumid,topicid) {
     BootstrapDialog.show({
         title: 'New Conversation',
         message: $($('#replytopic').render()),
@@ -156,6 +158,8 @@ TTS.forms.replyall = function(forumid) {
                     var jdata = JSON.parse(data);
                     //adding a new key
                     jdata['forumid'] = forumid;
+                    jdata['topicid'] = topicid;
+                    //alert(topicid);
                     var sdata = JSON.stringify(jdata);
                     TTS.forms.allreplypost(dialogItself, sdata); 
                 }
@@ -195,6 +199,10 @@ TTS.forms.renderviewforum = function(data){
               "class": "text-center" ,
               "data" : "view"  
             },
+            { "title": "{% trans "Delete" %}",
+              "class": "text-center" ,
+              "data" : "delete"  
+            },
         ];
     var dataset = [];
     var count = 0
@@ -206,11 +214,20 @@ TTS.forms.renderviewforum = function(data){
         t.firstname = data[i].firstname;
         t.posteddate = data[i].posteddate;
         t.reply = "<i class='tts-reply fa fa-reply fa-lg'></i>";
-        t.view = "<a herf class=''>view</a>";
+        t.view = "<a herf id='replybox'>view</a>";
+        t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
 
-    $('#forum-main-tbl').dataTable({
+    if (TTS.forms.table) {
+        TTS.forms.table.fnClearTable();
+        TTS.forms.table.fnAddData(
+            dataset
+        );
+        return true;
+    }
+
+    $('#forum-reply-tbl').dataTable({
         "data":     dataset,
         "columns":  headers
     });
@@ -225,30 +242,38 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         if (data.length) {
+           // console.log(data);
             TTS.forms.renderviewforum(data);
         } else {
-            TTS.forms.table.fnClearTable();
+            //TTS.forms.table.fnClearTable();
         }
     });
 
-    
-    $('#forum-main-tbl').on('click', '.tts-delete', function(e){
+    $("#wrapper").on("click", "#allreply", function(){
+        TTS.forms.replyall(TTS.utils.getUrlParameter("forumid"),TTS.utils.getUrlParameter("topicid"));
+    });
+
+    var dataname = TTS.utils.getUrlParameter("forumname");
+    $("#headermsg").html(dataname);
+
+    $("#wrapper").on("click", ".singlereply", function(){
+        //console.log($(this).parent().prop("id"));
+          window.location ='newtopic?replyid='+$(this).parent().prop("id")+' & forumid='+TTS.utils.getUrlParameter("forumid")+'&topicid='+TTS.utils.getUrlParameter("topicid")+'&forumname='+TTS.utils.getUrlParameter("forumname");
+
+        TTS.forms.replysingle(TTS.utils.getUrlParameter("postid"), $(this).parent().prop("id"));
+
+    });
+
+    $('#forum-reply-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();
         if (!window.confirm("Do you want to delete this record?")) {
             return false;
         }
         alert("Record Deleted")
-        window.location = 'teacherresourcelist';
     });
 
-    $("#page-wrapper").on("click", "#allreply", function(){
-        TTS.forms.replyall(TTS.utils.getUrlParameter("forumid"));
-    });
-
-    $("#wrapper").on("click", ".singlereply", function(){
-        console.log($(this).parent().prop("id"));
-        TTS.forms.replysingle(TTS.utils.getUrlParameter("postid"), $(this).parent().prop("id"));
-
+    $("#wrapper").on("click","#replybox",function(){
+        alert("hi");
     });
    
 });
