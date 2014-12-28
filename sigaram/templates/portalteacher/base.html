@@ -38,9 +38,11 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
+<script src="{%static "bower_components/bootstrap3-datepicker/jquery-1.11.0.min.js" %}"></script>
+\<script src="{%static "bower_components/bootstrap3-datepicker/bootstrap-datepicker.js"" %}"></script>
+<link href="{%static "bower_components/bootstrap3-datepicker/datepicker.min.css" %}" rel="stylesheet">
 </head>
-
+    
 <body class="orange-yellow">
 
     <div id="wrapper" class="pattern-minimal">
@@ -166,6 +168,7 @@
     </div>
     <!-- /#wrapper -->
     {% block more %}{% endblock %}
+
     <!-- jQuery -->
     <script src="{%static "bower_components/jquery/jquery.min.js" %}"></script>
 

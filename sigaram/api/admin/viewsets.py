@@ -1155,7 +1155,6 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         ORDER BY editeddate desc """ % (assignedid,spanid)
 
         cursor = connection.cursor()
-        print sql
         cursor.execute(sql)
         desc = cursor.description
         result =  [
@@ -1163,3 +1162,73 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
                 for row in cursor.fetchall()
             ]
         return Response(result)
+
+    def retrieve(self, request, pk=None):
+        assignedid = request.GET.get('assignedid')
+        sql = '''
+        SELECT et.previoustext,
+            et.edittext,
+            ari.answertext,
+            et.spanid
+        FROM editingtext et
+        JOIN assignresourceinfo ari 
+            ON ari.assignedid = et.editid   
+        WHERE et.editingid = %s''' % (pk)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        rec =  cursor.fetchone()
+        previoustext = rec[0]
+        edittext = rec[1]
+        answertext = rec[2]
+        spanid = rec[3]
+
+        #updating approved answer text
+        #sql = '''
+        #UPDATE assignresourceinfo 
+        #    SET answertext = '%s'
+        #    WHERE assignedid = '%s' ''' % (answertext, assignedid)
+        #cursor = connection.cursor()
+        #cursor.execute(sql)
+
+        #resetting the previous one if set
+        sql = '''
+        UPDATE editingtext
+            SET isapproved = 0
+        WHERE spanid = '%s' ''' % (spanid)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+
+        #marking the selected as approved
+        sql = '''
+        UPDATE editingtext
+            SET isapproved = 1
+        WHERE editingid = '%s' ''' % (pk)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+
+        return Response('approved')
+
+    def create(self, request):
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        
+        assignedid  = data.get('assignedid');
+        spanid      = data.get('spanid');
+        orig        = data.get('orig');
+        modified    = data.get('modified');
+        usertype    = data.get('type');
+
+        et = models.Editingtext()
+        et.editid       = int(assignedid)
+        et.spanid       = str(spanid)
+        et.previoustext = str(orig)
+        et.edittext     = str(modified)
+        et.typeofresource = 0
+        et.isapproved   = 0
+        et.isrejected   = 0
+        et.editedby     = loginname_to_userid('Teacher', 'sheela')
+        et.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
+        et.usertype     = str(usertype)
+
+        et.save()
+
+        return Response('"msg":"Approved successfully"')
