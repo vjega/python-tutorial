@@ -21,10 +21,10 @@
             {% trans "New Conversation" %} 
         </div>
         <!-- /.panel-heading -->
-        <div class="gentable" id ="rub_mtx_head rub_mtx_rows">
+        <div class="gentable" id ="admin-newtopic">
             {% crispy form %}
         </div>
-        <div class="text-center">
+        <div class="text-center"><br><br>
             <button class="btn btn-primary" id="addrec">Save</button>
         </div>
 
@@ -75,7 +75,7 @@ $(document).ready(function(){
     var sn = $('.summernote').summernote();
     var data = TTS.utils.getUrlParameter("forumid");
     var dataname = TTS.utils.getUrlParameter("forumname");
-    alert (dataname);
+   // alert (dataname);
     $("#addrec").click(function(){
         $.ajax({
             type:"POST",
