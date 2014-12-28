@@ -1127,3 +1127,39 @@ class Bulletinmappinginfo(viewsets.ModelViewSet):
         bulletmapping.save()
         return Response(request.DATA)
 
+class EditAnswerViewSet(viewsets.ModelViewSet):
+    
+    queryset = models.Editingtext.objects.all()
+    serializer_class = adminserializers.EditingtextSerializer
+
+    def list(self, request):
+
+        spanid = request.GET.get('spanid')
+        assignedid = request.GET.get('assignedid')
+
+        sql = """
+        SELECT editingid, 
+               editid, 
+               spanid, 
+               previoustext, 
+               edittext, 
+               CONCAT(ti.firstname,' ',ti.lastname ) AS name,
+               editeddate AS edate,
+               isapproved,
+               et.usertype
+        FROM  editingtext et
+        INNER JOIN teacherinfo ti 
+            ON ti.teacherid = et.editedby
+        WHERE  et.editid = '%s'
+            AND et.spanid = '%s'
+        ORDER BY editeddate desc """ % (assignedid,spanid)
+
+        cursor = connection.cursor()
+        print sql
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
