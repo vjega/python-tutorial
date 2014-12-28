@@ -199,6 +199,10 @@ TTS.forms.renderviewforum = function(data){
               "class": "text-center" ,
               "data" : "view"  
             },
+            { "title": "{% trans "Delete" %}",
+              "class": "text-center" ,
+              "data" : "delete"  
+            },
         ];
     var dataset = [];
     var count = 0
@@ -210,7 +214,8 @@ TTS.forms.renderviewforum = function(data){
         t.firstname = data[i].firstname;
         t.posteddate = data[i].posteddate;
         t.reply = "<i class='tts-reply fa fa-reply fa-lg'></i>";
-        t.view = "<a herf class=''>view</a>";
+        t.view = "<a herf id='replybox'>view</a>";
+        t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
 
@@ -220,11 +225,6 @@ TTS.forms.renderviewforum = function(data){
             dataset
         );
         return true;
-    } else{
-        TTS.forms.table = $('#forum-reply-tbl').dataTable({
-            "data":     dataset,
-            "columns":  headers
-        });
     }
 
     $('#forum-reply-tbl').dataTable({
@@ -257,9 +257,23 @@ $(document).ready(function(){
     $("#headermsg").html(dataname);
 
     $("#wrapper").on("click", ".singlereply", function(){
-        console.log($(this).parent().prop("id"));
+        //console.log($(this).parent().prop("id"));
+          window.location ='newtopic?replyid='+$(this).parent().prop("id")+' & forumid='+TTS.utils.getUrlParameter("forumid")+'&topicid='+TTS.utils.getUrlParameter("topicid")+'&forumname='+TTS.utils.getUrlParameter("forumname");
+
         TTS.forms.replysingle(TTS.utils.getUrlParameter("postid"), $(this).parent().prop("id"));
 
+    });
+
+    $('#forum-reply-tbl').on('click', '.tts-delete', function(e){
+        e.stopPropagation();
+        if (!window.confirm("Do you want to delete this record?")) {
+            return false;
+        }
+        alert("Record Deleted")
+    });
+
+    $("#wrapper").on("click","#replybox",function(){
+        alert("hi");
     });
    
 });

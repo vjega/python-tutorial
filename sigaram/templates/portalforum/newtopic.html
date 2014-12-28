@@ -73,18 +73,34 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 
 $(document).ready(function(){
-    var sn = $('.summernote').summernote();
-    var data = TTS.utils.getUrlParameter("forumid");
-    var dataname = TTS.utils.getUrlParameter("forumname");
+    var sn        = $('.summernote').summernote();
+    var data      = TTS.utils.getUrlParameter("forumid");
+    var dataname  = TTS.utils.getUrlParameter("forumname");
+    var datpostid = TTS.utils.getUrlParameter("topicid");
     $("#headermsg").html(dataname);
-    
+
     $("#addrec").click(function(){
+        var url = "";
+        if ( TTS.utils.getUrlParameter('replyid') ) {
+            url = "/api/forum/postreplyinfo/";
+            datatable = JSON.stringify({postdetails:sn.code(),postid:datpostid})                               
+        } else {
+            url = "/api/forum/topicinfo/";
+            datatable = JSON.stringify({topicname:sn.code(),forumid:data})
+                                  
+        }
+        //alert ( TTS.utils.getUrlParameter('replyid'));
         $.ajax({
             type:"POST",
-            url:"/api/forum/topicinfo/",
-            data: JSON.stringify({topicname:sn.code(),forumid:data})
+            url:url,
+            data: datatable
         }).done(function(retdata){
-           window.location ='viewtopic?forumid='+data+'&forumname='+dataname
+            if ( TTS.utils.getUrlParameter('replyid')) {
+                 window.location ='viewpost?forumid='+data+'&forumname='+dataname+'&topicid='+datpostid
+                alert (TTS.utils.getUrlParameter("forumid"));
+            } else {
+                window.location ='viewtopic?forumid='+data+'&forumname='+dataname
+            }
         })
     });
 });
