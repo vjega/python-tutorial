@@ -20,7 +20,23 @@
             </select>
         </span>
     </div>
+
 </div>
+<div class="row" id="schooldetails">
+    <div class="col-lg-2">
+        <span >
+            <select name="school_name" class="form-control" id="school_name">
+                {% for school in schools%}
+                    <option value="{{school.schoolid}}">
+                        {{school.shortname}}
+                    </option>
+                {% endfor %}
+            </select>
+        <span>
+    </div>
+
+</div>
+
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-default">
@@ -48,17 +64,27 @@
         <label for="folder_name" class="col-sm-2 control-label">{% trans "Title" %}</label>
     </div>
     <div class="form-group">
-        <textarea class="summernote"></textarea>
+        <textarea id="title" class="summernote"></textarea>
     </div>
 </div>
 <div class="row">
     <div class="form-group" class="col-sm-2">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Title" %}</label>
-    </div><br />
-    <div class="form-group">
-        <textarea class="summernote"></textarea>
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Announcment" %}</label>
     </div>
-</div>          <!-- /.col-lg-12 -->
+    <div class="form-group">
+        <textarea id="announcement" class="summernote"></textarea>
+    </div>
+</div>
+<div align="center">   
+    <span>
+        <button class="btn btn-primary btn-sm" id="save">
+            <i class="fa fa-floppy-o fa-lg"></i> {% trans "Save" %} 
+        </button>
+        <button class="btn btn-primary btn-sm" id="cancel">
+            <i class="fa fa-times fa-lg"></i> {% trans "Cancel" %} 
+        </button>
+    </span>
+</div>
 {% endblock botcontent%}
 
 {% block morecss %}
@@ -88,43 +114,60 @@
 <script>
 window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
+$("#save").click(function(){
+    TTS.forms.bulletinboardinfo();
+//    TTS.forms.bulletinmappinginfo();
+});
 
-TTS.forms.addexam = function(form, data) {
+TTS.forms.bulletinboardinfo = function(){   
+    var data = {};
+    data.resource = [];
+    data.messagetitle = $("#title").code();
+    data.message = $("#announcement").code();
+    data.classid=0;
+    data.schoolid=0;
+    data.isrecord=0;
+    data.postedby=$(this).prop("id");
+    $(".checkresourceid:checked").each(function(){
+        data.resource.push($(this).prop("id"));
+    });
+
     $.ajax({
-        type:'POST',
-        data: data,
-        url : '/api/admin/Bulletinboard/'
-    }).done(function( msg ) {
-        form.close();
+        url:"/api/admin/bulletinboardlist/",
+        type:"POST",
+        data: JSON.stringify(data)
+    }).done(function(data){
+        alert("Saved Successfully");
         location.reload();
-        //dialogItself.close();
+    }).error(function(err, msg){
+        alert("I didnt save the data");
     });
 }
 
-TTS.forms.showexamform = function() {
-    BootstrapDialog.show({
-        title: 'Add Exam',
-        message: $($('#announcement-form').render()),
-        onshown: function(){
-            TTS.forms.upload();
-            $('.summernote').summernote();
-        },
-        buttons: [{
-            label: 'Save',
-            cssClass: 'btn-primary',
-            action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-announcement");
-                TTS.forms.addexam(dialogItself, data); 
-            }
-            },{
-            label: 'Cancel',
-            action: function(dlg){
-                dlg.close();
-            }
-        }]
+/*
+TTS.forms.bulletinmappinginfo = function(){   
+    var data = {};
+    data.resource = [];
+    data.messagetitle = $(".summernote").code();
+    data.message = $(".summernote").code();
+   
+    $(".checkresourceid:checked").each(function(){
+        data.resource.push($(this).prop("id"));
     });
-};
 
+    $.ajax({
+        url:"/api/admin/bulletinmappinginfo/",
+        type:"POST",
+        data: JSON.stringify(data)
+    }).done(function(data){
+        alert("Saved Successfully");
+        location.reload();
+    }).error(function(err, msg){
+        alert("I didnt save the data");
+    });
+}
+
+*/
 TTS.forms.upload = function(elm) {
     console.log(elm);
     var uploader = new qq.FileUploader({
@@ -133,7 +176,7 @@ TTS.forms.upload = function(elm) {
         multiple: false,
         onComplete: function(id, fileName, responseJSON) {
             if(responseJSON.success) {
-                $("#id_fileurl").val(responseJSON.path.replace('static/', ''));
+                $("#uploadurl").val(responseJSON.path.replace('static/', ''));
             } else {
                 alert("upload failed!");
             }
@@ -149,51 +192,146 @@ TTS.forms.upload = function(elm) {
     });
 };
 
-TTS.forms.renderannouncement = function(data){
+TTS.forms.renderadmin = function(data){
+    var headers = [
+            { "title": "&nbsp;",
+              "class": "text-center",
+              "data":"id"  
+            },
+            { "title": "{% trans "First Name" %}" ,
+              "data":"firstname"
+            },
+            { "title": "{% trans "Last name" %}",
+              "data":"lastname"
+            },     
+        ];
+    var dataset = [];
+    var count = 0
+    for(var i in data){
+        var t = [];
+        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].adminid+"' value='"+data[i].adminid+"' />";
+        t.firstname = data[i].firstname;
+        t.lastname = data[i].lastname;
+        dataset.push(t);
+    }
+
+    if(TTS.forms.asstable){
+        TTS.forms.asstable.fnClearTable();
+        TTS.forms.asstable.fnAddData(
+            dataset
+        );
+    }else{
+        TTS.forms.asstable = $('#admin-main-tbl').dataTable({
+            "data":     dataset,
+            "columns":  headers
+        });
+    }
+    //$('#admin-main-tbl').dataTable().fnDestroy();
+};
+
+TTS.forms.renderteacher = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"  
+              "data":"id"  
             },
-            { "title": "{% trans "Title" %}",
-              "data" : "title"
+            { "title": "{% trans "First Name" %}" ,
+              "data":"firstname"
             },
-            { "title": "{% trans "Announcer" %}",
-              "data" : "declared"
-            },  
+            { "title": "{% trans "Last name" %}",
+              "data":"lastname"
+            },     
         ];
     var dataset = [];
     
     var count = 0
     for(var i in data){
-        var t = {};
-        t.slno = ++count;
-        t.title = data[i].messagetitle;
-        t.declared = data[i].messagetitle + " "+data[i].postedby+"<br />"+data[i].posteddate;
+        var t = [];
+        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].teacherid+"' value='"+data[i].teacherid+"' />";
+        t.firstname = data[i].firstname;
+        t.lastname = data[i].lastname;
         dataset.push(t);
     }
-
-    $('#admin-main-tbl').dataTable({
-        "data":     dataset,
-        "columns":  headers
-    });
-
+    TTS.forms.asstable.fnClearTable();
+    TTS.forms.asstable.fnAddData(
+        dataset
+    );
 };
+
+TTS.forms.renderadminschool = function(data){
+    var headers = [
+            { "title": "&nbsp;",
+              "class": "text-center" ,
+              "data" : "id"  
+            },
+            { "title": "{% trans "Name" %}" ,
+              "data" : "firstname"
+            },
+            { "title": "{% trans "Shortname" %}",
+              "data" : "lastname"
+            }, 
+        ];
+    var dataset = [];
+    var count = 0
+    for(var i in data){
+        var t = [];
+        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].schoolid+"' value='"+data[i].schoolid+"' />";
+        t.firstname = data[i].schoolname;
+        t.lastname = data[i].shortname;
+        dataset.push(t);
+    }
+    TTS.forms.asstable.fnClearTable();
+    TTS.forms.asstable.fnAddData(
+        dataset
+    );
+};    
 
 $(document).ready(function(){
     $('.summernote').summernote();
+    $('#schooldetails').hide();
     $.ajax({
-        "url":"/api/admin/Bulletinboard/?format=json",
+        "url":"/api/admin/admin/?format=json",
         "type":"GET"
     }).done(function(data){
-        TTS.forms.renderannouncement(data);
+        TTS.forms.renderadmin(data);
     });
-    $("#page-wrapper").on("click", "#addrec", function(){
-        window.location = 'bulletinboard';
-        //TTS.forms.showexamform();
+    $('#category').on('change', function() {
+        if ($('#category').val()=='admin') {
+            $.ajax({
+                "url":"/api/admin/admin/?format=json",
+                "type":"GET"
+            }).done(function(data){
+                TTS.forms.renderadmin(data);
+            });
+        }
+        if ($('#category').val()=='teacher') {
+            var url = "/api/admin/teacher/?format=json"
+            $.ajax({
+                "url":url,
+                "type":"GET"
+            }).done(function(data){
+                TTS.forms.renderteacher(data);
+            });
+        }
+        if ($('#category').val()=='schools') {
+            $('#schooldetails').show();
+            $.ajax({
+                "url":"/api/admin/bulletinboard/?schoolid="+$('#school_name').val()+"&format=json",
+                "type":"GET"
+            }).done(function(data){
+                TTS.forms.renderadminschool(data);
+            });
+        }
+        //$('#admin-main-tbl').dataTable().fnDestroy();
     });
+    $('#school_name').change(function(){
+        $.ajax({
+                "url":"/api/admin/bulletinboard/?schoolid="+$('#school_name').val()+"&format=json",
+                "type":"GET"
+        }).done(function(data){
+                TTS.forms.renderadminschool(data);
+        });
+    })
 });
-
-
 </script>
 {% endblock scriptcontent %}

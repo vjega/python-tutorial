@@ -28,8 +28,11 @@ router.register(r'teacherassignedresource', viewsets.TeacherStudentAssignResourc
 router.register(r'assignedresourcestudents',viewsets.AssignedResourceStudents)
 router.register(r'studentinfo',      	  	viewsets.StudentinfoViewSet)
 router.register(r'stickycomments',          viewsets.StickyCommentsResource)
-router.register(r'Bulletinboard',           viewsets.Bulletinboard)
+router.register(r'bulletinboardlist',       viewsets.Bulletinboardlist)
 router.register(r'billboard',           	viewsets.BillboardViewSet)
+router.register(r'editanswer',           	viewsets.EditAnswerViewSet)
+router.register(r'bulletinboard',       	viewsets.Bulletinboard)
+router.register(r'bulletinmappinginfo',     viewsets.Bulletinmappinginfo)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

@@ -11,6 +11,7 @@
 {% endblock topcontent %}
 {% block morecss %}
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <style>
     #addrec:hover, #admin-main-tbl tbody tr:hover, #view-answer:hover{
         cursor: pointer;
@@ -31,10 +32,20 @@
     span.tc:hover, span.sc:hover {
         background-color: yellow !important;
     }
+    i.approved{
+        color: green;
+        cursor: pointer;
+    }
+    i.rejected{
+        color: red;
+        cursor: pointer;
+    }
 </style>
 {% endblock morecss %}
 
 {% block morescript %}
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <!-- script-->
@@ -175,30 +186,55 @@ TTS.forms.renderassignedresourceinfo = function(data){
     window.open("http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
 };*/
 
+TTS.forms.renderanswereditinginfo = function(data){
+    var headers = [
+            { "title": "{% trans "Answers" %}",
+              "data" : "edittext"
+            },
+            { "title": "{% trans "Name" %}",
+              "data" : "name"
+            },
+            { "title": "{% trans "Status" %}",
+              "data" : "isapproved"
+            },
+        ];
+    var dataset = [];
+    var count = 0
+    for(var i in data){
+        var t = [];
+        t.DT_RowId = data[i].editingid;
+        t.edittext = data[i].edittext;
+        t.name = data[i].name;
+        if(data[i].isapproved == 0)
+            t.isapproved = "<i class='fa fa-remove fa-lg rejected'></i>";
+        else
+            t.isapproved = "<i class='fa fa-check fa-lg approved'></i>";
+
+        dataset.push(t);
+    }
+
+    TTS.forms.asstable = $('#edit-answer-list').dataTable({
+        "data":     dataset,
+        "columns":  headers
+    });
+};
+
 TTS.forms.editanswerlist = function(spanid){
 
     var assignedid = $("#assignedid").val();
-    var dataobj = {
-        assignedid : assignedid,
-        spanid : spanid
-    };
 
     //alert(spanid + " --> " + assignedid);
  
     BootstrapDialog.show({
         title: 'Choose/Add Correction',
-        onshown: function(dialogRef){
-            //updateChapter();
-            //$('.summernote').summernote();
-        },
         message: $($('#editanswerlist').render()),
         onshown: function(dialogRef){
             $.ajax({
-                "url":"/api/admin/adminschool/?format=json",
+                "url":"/api/admin/editanswer/?assignedid="+assignedid+"&spanid="+spanid+"&format=json",
                 "type":"GET"
             }).done(function(data){
                 //console.log(data);
-                TTS.forms.renderschoolinfo(data);
+                TTS.forms.renderanswereditinginfo(data);
             });
         },
         buttons:  [{
@@ -364,7 +400,7 @@ TTS.forms.editanswer = function() {
                     data: data,
                     url : '/api/admin/studentassignresource/'+assign_id
                 }).done(function(msg) {
-                    console.log(msg);
+                    //console.log(msg);
                     dialogItself.close();
                     alert("Answer corrected successfully");
                     location.reload();
@@ -403,7 +439,7 @@ $(document).ready(function(){
         "url":"/api/admin/assignedresourcestudents/"+resourceid+"/?studentid="+studentid+"&format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
+        //console.log(data);
         TTS.forms.renderassignedresourceinfo(data);
     });
     
@@ -417,6 +453,19 @@ $(document).ready(function(){
         var spanid = $(this).attr("id");
         TTS.forms.editanswerlist(spanid);
     });
+    $("body").on("click","i.approved", function(event){
+        alert("approve");
+        var id = $(this).attr("id");
+        TTS.forms.approveeditanswer(id);
+    });
+    $("body").on("click","i.rejected", function(event){
+        alert("reject");
+        var editingid = $(this).parent().parent().attr("id");
+        var assignedid = $("#assignedid").val();
+        TTS.forms.rejecteditanswer(editingid);
+    });
+    
+
 });
 
 </script>

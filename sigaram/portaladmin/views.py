@@ -439,7 +439,9 @@ def bulletinboardlist(request):
 @login_required
 @switchlanguage
 def bulletinboard(request):
-    return render(request, 'portaladmin/bulletinboard.html')
+    schools = models.Schoolinfo.objects.all()
+    return render(request, 'portaladmin/bulletinboard.html',
+                                        {'schools':schools })
 
 @login_required
 def billboard(request):

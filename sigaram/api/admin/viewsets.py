@@ -818,7 +818,8 @@ class StickynotesResource(viewsets.ModelViewSet):
             s.stickytext,
             s.color,
             group_concat(sc.stickycomment SEPARATOR "~") as comments,
-            group_concat(sc.commentby SEPARATOR "~") as commentby
+            group_concat(sc.commentby SEPARATOR "~") as commentby,
+            group_concat(sc.createddate SEPARATOR "~") as createddate
         FROM stickynotes s
         LEFT JOIN stickycomments sc ON sc.stickyid = s.id
         GROUP BY s.id, 
@@ -960,35 +961,28 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
             ]
         return Response(result)
 
-class Bulletinboard(viewsets.ModelViewSet):
+class Bulletinboardlist(viewsets.ModelViewSet):
     queryset = models.Bulletinboardinfo.objects.all()
-    serializer_class = adminserializers.BulletinboardinfoSerializer
+    serializer_class = adminserializers.BulletinboardlistinfoSerializer
 
     def list(self, request):
         sql = """
-        SELECT  bulletinboardinfo.bulletinboardid, 
-                messagetitle,
-                message,
-                logininfo.firstname AS postedby, 
-                DATE( posteddate ) AS posteddate, 
-                imageurl 
-        FROM bulletinboardinfo 
-        INNER JOIN bulletinmappinginfo ON bulletinboardinfo.bulletinboardid = bulletinmappinginfo.bulletinboardid
-        INNER JOIN logininfo ON logininfo.loginid = bulletinboardinfo.postedby 
-        INNER JOIN teacherinfo ON teacherinfo.username = logininfo.username 
+        SELECT  bi.bulletinboardid, 
+                bi.messagetitle,
+                bi.message,
+                li.firstname AS postedby, 
+                DATE(bi.posteddate ) AS posteddate, 
+                ti.imageurl 
+        FROM bulletinboardinfo bi
+        INNER JOIN bulletinmappinginfo bmi ON bmi.bulletinboardid = bi.bulletinboardid
+        INNER JOIN logininfo li ON li.loginid = bi.postedby 
+        INNER JOIN teacherinfo ti ON ti.username = li.username 
         WHERE (viewtype =0 ) OR (viewtype =2) 
-        -- AND bulletinmappinginfo.adminid =$loginid
-        GROUP BY bulletinboardinfo.bulletinboardid 
+        -- AND bmi.adminid ='3866'
+        GROUP BY bmi.bulletinboardid 
         """
         cursor = connection.cursor()
-        #print sql
-        #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
-        #cursor.execute(sql, "3680")
-        #print dir(cursor)
-        #result = cursor.fetchall()
-        #print return [
-        
         desc = cursor.description
         result =  [
                 dict(zip([col[0] for col in desc], row))
@@ -1001,16 +995,16 @@ class Bulletinboard(viewsets.ModelViewSet):
         data = json.loads(dict(request.DATA).keys()[0])
         announcement.messagetitle = data.get('messagetitle')
         announcement.message = data.get('message')
-        announcement.schoolid = data.get('schoolid')
-        announcement.classid = data.get('classid')
+        announcement.schoolid = data.get('schoolid',0)
+        announcement.classid = data.get('classid',0)
+        announcement.isrecord= data.get('isrecord',0)
         announcement.postedby = request.user.id
-        announcement.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        announcement.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         announcement.save()
         return Response(request.DATA)
 
 
 class BillboardViewSet(viewsets.ModelViewSet):
-
     queryset = models.Billboardinfo.objects.all()
     serializer_class = adminserializers.BillboardSerializer
 
@@ -1077,4 +1071,95 @@ class BillboardViewSet(viewsets.ModelViewSet):
         return Response('"msg":"delete"')
 
 
+class Bulletinboard(viewsets.ModelViewSet):
+    queryset = models.Classschoolmappinginfo.objects.all()
+    serializer_class = adminserializers.BulletinboardSerializer
+    
+    def list(self, request):
+        schoolid =  request.GET.get('schoolid')
+        if schoolid:
+            wherecond = "WHERE csmi.schoolid=%s" % schoolid
+        else:
+            wherecond = ""
+        sql = """
+        SELECT  ci.shortname,
+                si.shortname AS schoolname,
+                csmi.classschoolmappingid AS classid 
+        FROM classschoolmappinginfo csmi
+        INNER JOIN classinfo ci ON ci.classid = csmi.classid 
+        INNER JOIN schoolinfo si ON si.schoolid = csmi.schoolid 
+        %s 
+        ORDER BY ci.classid """ % wherecond;
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
 
+    def create(self, request):
+        announcement = models.Bulletinboardinfo()
+        data = json.loads(dict(request.DATA).keys()[0])
+        announcement.messagetitle = data.get('messagetitle')
+        announcement.message = data.get('message')
+        announcement.schoolid = data.get('schoolid',0)
+        announcement.classid = data.get('classid',0)
+        announcement.postedby = request.user.id
+        announcement.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        announcement.save()
+        return Response(request.DATA)
+
+class Bulletinmappinginfo(viewsets.ModelViewSet):
+    queryset = models.Bulletinmappinginfo.objects.all()
+    serializer_class = adminserializers.BulletinmappinginfoSerializer
+    
+    def create(self, request):
+        bulletmapping = models.Bulletinmappinginfo()
+        data = json.loads(dict(request.DATA).keys()[0])
+        bulletmapping.bulletinboardid = data.get('bulletinboardid')
+        bulletmapping.viewtype = data.get('viewtype')
+        bulletmapping.schoolid = data.get('schoolid')
+        bulletmapping.classid = data.get('classid')
+        bulletmapping.adminid = data.get('adminid')
+        bulletmapping.teacherid = data.get('teacherid')
+        bulletmapping.save()
+        return Response(request.DATA)
+
+class EditAnswerViewSet(viewsets.ModelViewSet):
+    
+    queryset = models.Editingtext.objects.all()
+    serializer_class = adminserializers.EditingtextSerializer
+
+    def list(self, request):
+
+        spanid = request.GET.get('spanid')
+        assignedid = request.GET.get('assignedid')
+
+        sql = """
+        SELECT editingid, 
+               editid, 
+               spanid, 
+               previoustext, 
+               edittext, 
+               CONCAT(ti.firstname,' ',ti.lastname ) AS name,
+               editeddate AS edate,
+               isapproved,
+               et.usertype
+        FROM  editingtext et
+        INNER JOIN teacherinfo ti 
+            ON ti.teacherid = et.editedby
+        WHERE  et.editid = '%s'
+            AND et.spanid = '%s'
+        ORDER BY editeddate desc """ % (assignedid,spanid)
+
+        cursor = connection.cursor()
+        print sql
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
