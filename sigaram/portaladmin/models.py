@@ -1001,6 +1001,8 @@ class Calendardetails(models.Model):
     title = models.TextField()
     start = models.DateTimeField()
     end = models.DateTimeField()
+    eventcreatedby = models.CharField(max_length=30)
+    eventeditedby = models.CharField(max_length=30)
     createdby = models.BigIntegerField()
     isdeleted = models.IntegerField()
     createddate = models.DateTimeField()
