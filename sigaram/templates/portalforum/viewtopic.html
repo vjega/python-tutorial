@@ -20,6 +20,7 @@
         <!-- /.panel-heading -->
         <div class="panel-body">
             <div class="table-responsive">
+                <center> <h4><div id="headermsg"></div></h4></center>
                 <table class="table table-striped table-bordered table-hover" 
                     id="viewforum-main-tbl">
                 </table>
@@ -142,8 +143,7 @@ TTS.forms.renderviewfourminfo = function(data){
     var count = 0
     for(var i in data){
         var t = {};
-        t.DT_RowId = data[i].forumid;
-        t.DTT_RowId = data[i].topicid;
+        t.DT_RowId = data[i].forumid+'/'+data[i].topicid;
         t.slno = ++count;
         t.topicname = data[i].topicname;
         t.totalpost = data[i].totalpost;
@@ -170,16 +170,27 @@ $(document).ready(function(){
             TTS.forms.table.fnClearTable();
         }
     });
+    var dataname = TTS.utils.getUrlParameter("forumname");
+    $("#headermsg").html(dataname);
+
+
+
 
     $('#viewforum-main-tbl').on('click', 'tbody tr', function(){
-        window.location ='viewpost?forumid='+this.id+'&topicid='+this.id+'&topicname='+$($(this).find(".viewtopicname")[0]).text()+'&forumname='+TTS.utils.getUrlParameter("forumname");
+        var myString = this.id;
+        var arr = myString.split('/');
+
+        window.location ='viewpost?forumid='+arr[0]+'&topicid='+arr[1]+'&topicname='+$($(this).find(".viewtopicname")[0]).text()+'&forumname='+TTS.utils.getUrlParameter("forumname");
         //console.log(this.id);
-       
     });
 
     $("#wrapper").on("click", "#addrec", function(){
-        TTS.forms.showviewfourm();
+        window.location ='newtopic?forumid='+TTS.utils.getUrlParameter("forumid")+'&forumname='+TTS.utils.getUrlParameter("forumname");
     });
+
+    //$("#wrapper").on("click", "#addrec", function(){
+        //TTS.forms.showviewfourm();
+    //});
    
 });
 

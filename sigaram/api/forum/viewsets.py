@@ -147,7 +147,7 @@ class PostinfoViewSet(viewsets.ModelViewSet):
         order by postid  """ % topicid
 
         cursor = connection.cursor()
-        #print sql
+        print sql
         cursor.execute(sql)
         desc = cursor.description
         result =  [
