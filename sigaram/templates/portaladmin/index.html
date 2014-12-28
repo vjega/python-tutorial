@@ -102,11 +102,12 @@
         <!-- /.panel-heading -->
         <div class="panel-body">
             <div class="list-group">
+      
             {% autoescape off %}
             {% for body in announcement.body %}
                 <a class="list-group-item">
                     <i class="fa fa-bullhorn fa-fw"></i> 
-                            <span>{{body.messagetitle}}</span>
+                    <span>{{body.messagetitle}}</span>
                     <span class="pull-right text-muted small"><em>4 minutes ago</em>
                     </span>
                 </a>
@@ -181,6 +182,7 @@ $(document).ready(function(){
                         url : '/api/admin/addfolder'
                     }).done(function( msg ) {
                         console.log(msg);
+                        alert(msg);
                         //dialogItself.close();
                     });
                 }

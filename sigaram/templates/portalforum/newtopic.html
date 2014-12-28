@@ -18,13 +18,15 @@
     <div class="panel panel-default">
     <form enctype="multipart/form-data" action="" method="POST"> 
         <div class="panel-heading">
-            {% trans "New Conversation" %} 
+            <center> <h2>  {% trans "Forum" %}</h2> </center>
         </div>
+       <center> <div id="headermsg"></div></center>
         <!-- /.panel-heading -->
-        <div class="gentable" id ="rub_mtx_head rub_mtx_rows">
+        <div class="gentable" id ="admin-newtopic">
             {% crispy form %}
         </div>
         <div class="text-center">
+            <div>&nbsp;</div>
             <button class="btn btn-primary" id="addrec">Save</button>
         </div>
 
@@ -71,30 +73,27 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 
 $(document).ready(function(){
-
     var sn = $('.summernote').summernote();
     var data = TTS.utils.getUrlParameter("forumid");
     var dataname = TTS.utils.getUrlParameter("forumname");
-    alert (dataname);
+    $("#headermsg").html(dataname);
+    
     $("#addrec").click(function(){
         $.ajax({
             type:"POST",
             url:"/api/forum/topicinfo/",
             data: JSON.stringify({topicname:sn.code(),forumid:data})
-        }).done(function(data){
-           location.reload();
-
+        }).done(function(retdata){
+           window.location ='viewtopic?forumid='+data+'&forumname='+dataname
         })
     });
-
-    $('body').on('click','#addrec', function(){
-         window.location ='viewtopic?forumid='+data+'&forumname='+dataname
-        $("#page-wrapper").on("click", "#addrec", function(){
-          TTS.forms.showviewfourm();
-         });
-     });
-
 });
+
+    //$('body').on('click','#addrec', function(){
+    //     $("#page-wrapper").on("click", "#addrec", function(){
+    //      TTS.forms.showviewfourm();
+    //     });
+    // });
 
 </script>
 {% endblock scriptcontent %}

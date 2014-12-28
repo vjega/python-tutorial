@@ -342,7 +342,6 @@ class Bulletinboardinfo(models.Model):
         cursor = connection.cursor()
         cursor.execute(sql)
         x = dictfetchall(cursor)
-        print '^'*80
         print x
         return x
 
