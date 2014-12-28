@@ -12,10 +12,12 @@ def index(request):
 
 def forum(request):
     return render(request, 'portalforum/forum.html', {"form" : ForumsForm.ForumsForm()})
+def newtopic(request):
+    return render(request, 'portalforum/newtopic.html', {"form" : NewtopicForm.NewtopicForm()})
 
 def viewtopic(request):
    foruminfo = models.Foruminfo.objects.all()
-   return render(request, 'portalforum/viewtopic.html',{"form" : NewtopicForm.NewtopicForm()})
+   return render(request, 'portalforum/viewtopic.html')
 
 def viewpost(request):
     return render(request, 'portalforum/viewpost.html',{"form" : NewpostForm.NewpostForm()})

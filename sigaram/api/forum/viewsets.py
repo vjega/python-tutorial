@@ -35,7 +35,7 @@ class ForuminfoViewSet(viewsets.ModelViewSet):
         foruminfo.totaltopic = forumdata.get('totaltopic',0)
         foruminfo.totalpost = forumdata.get('totalpost',0)
         foruminfo.createdby = request.user.id
-        foruminfo.lastpostedby = forumdata.get('lastpostedby',0)
+        foruminfo.lastpostedby = request.user.id
         foruminfo.lastposteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         foruminfo.isdelete = 0
         foruminfo.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -87,7 +87,7 @@ class TopicinfoViewSet(viewsets.ModelViewSet):
         topicinfo.totaltopic = topicinfodata.get('totaltopic',0)
         topicinfo.totalpost = topicinfodata.get('totalpost',0)
         topicinfo.createdby = request.user.id
-        topicinfo.lastpostedby = topicinfodata.get('lastpostedby',0)
+        topicinfo.lastpostedby = request.user.id
         topicinfo.lastposteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         topicinfo.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         topicinfo.save()

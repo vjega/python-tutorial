@@ -21,7 +21,7 @@
             {% trans "New Conversation" %} 
         </div>
         <!-- /.panel-heading -->
-        <div class="gentable" id ="admin-forum">
+        <div class="gentable" id ="rub_mtx_head rub_mtx_rows">
             {% crispy form %}
         </div>
         <div class="text-center">
@@ -69,87 +69,30 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-TTS.forms.renderfourminfo = function(data){
-    var headers = [
-            { "title": "{% trans "Sl No." %}",
-              "class": "text-center" ,
-              "data" : "slno"  
-            },
-            { "title": "{% trans "Topics" %}",
-              "data" : "forumname" , 
-              "class": "topic"
-            },
-            
-            { "title": "{% trans "By Last Day" %}",
-              "class": "text-center" ,
-              "data" : "createddate"  
-            },
-
-            { "title": "{% trans "New Topic" %}",
-              "class": "addnewtopic" ,
-              "data" : "topic"
-            },
-            { "title": "{% trans "Delete" %}",
-              "class": "text-center" ,
-              "data" : "delete"  
-            },
-        ];
-    var dataset = [];
-    var count = 0
-    for(var i in data){
-        var t = [];
-        t.DT_RowId = data[i].forumid;
-        t.slno = data[i].forumid;
-        t.forumname = data[i].forumname;
-        t.createddate = data[i].createddate;
-        t.topic = "<a herf='#' onclick='newtopic(this)'>New Topic</a>";
-        t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
-        dataset.push(t);
-    }
-
-    $('#forum-main-tbl').dataTable({
-        "data":     dataset,
-        "columns":  headers
-    });
-
-};
-
-function newtopic(elm) {
-    window.location = 'newtopic?forumid='+$(elm).parent().parent().prop('id')+
-                        '&forumname='+$(elm).parent().prev().prev().text()
-}
 
 $(document).ready(function(){
-     $.ajax({
-        "url":"/api/forum/foruminfo/?format=json",
-        "type":"GET"
-    }).done(function(data){
-        if (data.length) {
-            TTS.forms.renderfourminfo(data);
-        } else {
-            TTS.forms.table.fnClearTable();
-        }
-    });
 
-    // $('body').on('click','.addnewtopic', function(){
-    //     alert(this);
-    //     window.location ='newtopic?forumid='+this.id+'&forumname='+$($(this).find(".topic")[0]).text()
-    //     $("#page-wrapper").on("click", "#addrec", function(){
-    //      TTS.forms.showviewfourm();
-    //     });
-    // });
-    
+    var sn = $('.summernote').summernote();
+    var data = TTS.utils.getUrlParameter("forumid");
+    var dataname = TTS.utils.getUrlParameter("forumname");
+    alert (dataname);
     $("#addrec").click(function(){
-       //TTS.forms.showfourms();
         $.ajax({
             type:"POST",
-            url:"/api/forum/foruminfo/",
-            data: JSON.stringify({forumname:$("#id_forumname").val()})
+            url:"/api/forum/topicinfo/",
+            data: JSON.stringify({topicname:sn.code(),forumid:data})
         }).done(function(data){
-            //console.log(data);
-            location.reload();
+           location.reload();
+
         })
     });
+
+    $('body').on('click','#addrec', function(){
+         window.location ='viewtopic?forumid='+data+'&forumname='+dataname
+        $("#page-wrapper").on("click", "#addrec", function(){
+          TTS.forms.showviewfourm();
+         });
+     });
 
 });
 
