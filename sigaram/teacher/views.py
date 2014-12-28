@@ -382,10 +382,11 @@ def statisticsstudentslist(request):
 def rubric_edit(request):
     return render(request, 'portalteacher/rubric_edit.html' ,{'rubric_edit':rubric_edit,
                             "form" : RubricsForm.RubricsForm() })
-                  
+@switchlanguage                
 def viewassignresource(request):
     return render(request, 'portalteacher/viewassignresource.html')
-
+    
+@switchlanguage
 def viewassignmentanswer(request):
     return render(request, 'portalteacher/viewassignmentanswer.html') 
 
@@ -395,3 +396,6 @@ def stickynotes(request):
                                         {'form':StickyForm.StickyForm(),
                                          'Cform':StickyCommentForm.StickyCommentForm()
                                          })                     
+@switchlanguage
+def billboard(request):
+    return render(request, 'portalteacher/billboard.html')

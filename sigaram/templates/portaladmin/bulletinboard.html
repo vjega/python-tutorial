@@ -60,6 +60,9 @@
     <div class="col-lg-6">
         <input id="uploadurl" type="file" name="uploadurl">
     </div><br />
+    <div class="col-lg-6">
+        <input id="bulletinboard" type="file" name="bulletinboard">
+    </div><br />
     <div class="form-group" class="col-sm-2">
         <label for="folder_name" class="col-sm-2 control-label">{% trans "Title" %}</label>
     </div>
@@ -97,6 +100,9 @@
     #addrec:hover, .tts-delete:hover{
         cursor: pointer;
     }
+    #bulletinboard{
+        display:none;
+    }
 </style>
 {% endblock morecss %}
 
@@ -116,22 +122,20 @@ window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
 $("#save").click(function(){
     TTS.forms.bulletinboardinfo();
-//    TTS.forms.bulletinmappinginfo();
 });
 
 TTS.forms.bulletinboardinfo = function(){   
     var data = {};
-    data.resource = [];
+    data.resourcelist = [];
     data.messagetitle = $("#title").code();
     data.message = $("#announcement").code();
-    data.classid=0;
-    data.schoolid=0;
-    data.isrecord=0;
-    data.postedby=$(this).prop("id");
+    data.attachmenturl =($("#bulletinboard").attr("name")+"/"+$("#uploadurl").val()) ;
+    data.cattype = $("#category").val();
+    data.schoolid=$('#school_name').val();
     $(".checkresourceid:checked").each(function(){
-        data.resource.push($(this).prop("id"));
+        data.resourcelist.push($(this).prop("id"));
     });
-
+    
     $.ajax({
         url:"/api/admin/bulletinboardlist/",
         type:"POST",
@@ -148,13 +152,19 @@ TTS.forms.bulletinboardinfo = function(){
 TTS.forms.bulletinmappinginfo = function(){   
     var data = {};
     data.resource = [];
-    data.messagetitle = $(".summernote").code();
-    data.message = $(".summernote").code();
-   
-    $(".checkresourceid:checked").each(function(){
-        data.resource.push($(this).prop("id"));
-    });
-
+    data.cattype = $("#category").val();
+    data.viewtype = 0;
+    if ($('#category').val()=='schools') {
+        data.schoolid=$('#school_name').val();
+        $(".checkresourceid:checked").each(function(){
+            data.resource.push($(this).prop("id"));
+        });
+    }else {
+        $(".checkresourceid:checked").each(function(){
+            data.resource.push($(this).prop("id"));
+        });
+    }
+    console.log(data);
     $.ajax({
         url:"/api/admin/bulletinmappinginfo/",
         type:"POST",
@@ -166,12 +176,11 @@ TTS.forms.bulletinmappinginfo = function(){
         alert("I didnt save the data");
     });
 }
-
 */
-TTS.forms.upload = function(elm) {
+/*TTS.forms.upload = function(elm) {
     console.log(elm);
     var uploader = new qq.FileUploader({
-        action: "/admin/admin-img-upload",
+        action: "/admin/bulletinboard-upload",
         element: $('#file-uploader')[0],
         multiple: false,
         onComplete: function(id, fileName, responseJSON) {
@@ -190,7 +199,7 @@ TTS.forms.upload = function(elm) {
             'csrf_xname': 'X-CSRFToken',
         },
     });
-};
+};*/
 
 TTS.forms.renderadmin = function(data){
     var headers = [
@@ -275,7 +284,7 @@ TTS.forms.renderadminschool = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].schoolid+"' value='"+data[i].schoolid+"' />";
+        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].classid+"' value='"+data[i].classid+"' />";
         t.firstname = data[i].schoolname;
         t.lastname = data[i].shortname;
         dataset.push(t);

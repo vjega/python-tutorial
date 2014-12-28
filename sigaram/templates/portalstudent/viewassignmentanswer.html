@@ -1,4 +1,4 @@
-{% extends 'portalteacher/base.html' %}
+{% extends 'portalstudent/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
@@ -25,7 +25,7 @@
         font-weight: bold;
     }
     span.tc, span.sc {
-        color: #40c040 !important;
+        color: red !important;
         cursor: pointer;
         display: inline;
     }
@@ -276,7 +276,7 @@ TTS.forms.editanswerlist = function(spanid){
                             var assignedid  = $("#assignedid").val();
                             var origtext    = $("#student-answer").html();
                             var modified    = modtext;
-                            var type        = 2;
+                            var type        = 1;
                             //var answertext  = TTS.forms.marktext(fulltext,origtext,uid,type);
                             
                             var data = {
@@ -367,7 +367,7 @@ TTS.forms.editanswer = function() {
                 var fulltext    = $("#student-answer").html();
                 var origtext    = x;
                 var modified    = modtext;
-                var type        = 2;
+                var type        = 1;
                 var answertext  = TTS.forms.marktext(fulltext,origtext,uid,type);
                 
                 var data = {

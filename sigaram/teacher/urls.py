@@ -48,5 +48,6 @@ urlpatterns = patterns('teacher.views',
     url(r'^viewassignmentanswer', 'viewassignmentanswer',  
                                                  name='viewassignmentanswer'),
     url(r'^sticky-notes$',              'stickynotes',  name='stickynotes'),
+    url(r'^billboard$',                 'billboard',     name="billboard"),
 
 )

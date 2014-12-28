@@ -143,7 +143,7 @@
            
             if (!data[i].issaved && !data[i].isanswered) {
                 var t = [];
-                t.DT_RowId = data[i].id;
+                t.DT_RowId = "var_"+data[i].id;
                 t.slno=++count_new;
                 t.title=data[i].resourcetitle;
                 t.date=data[i].createddate;
@@ -152,7 +152,7 @@
             }
             if (data[i].issaved && !data[i].isanswered) {
                 var t = [];
-                t.DT_RowId = data[i].id;
+                t.DT_RowId = "var_"+data[i].id;
                 t.slno=++count_saved;
                 t.title=data[i].resourcetitle;
                 t.date=data[i].answereddate;
@@ -161,7 +161,7 @@
             }
             if (data[i].isanswered) {
                 var t = [];
-                t.DT_RowId = data[i].id;
+                t.DT_RowId = "vaa_"+data[i].resourceid+"_"+data[i].studentid;
                 t.slno=++count_answered;
                 t.title=data[i].resourcetitle;
                 t.date=data[i].answereddate;
@@ -192,8 +192,14 @@ $(document).ready(function(){
         TTS.forms.assignedstudentresource(data);
     });
     $('.resourcelist').on('click','tbody tr',function(e){
-        e.stopPropagation();
-        window.location = 'viewassignresource?assignedid='+this.id;
+        var x = this.id;
+        x = x.split("_");
+        if(x[0] == 'var')
+            window.location = 'viewassignresource?assignedid='+x[1];
+        
+        if(x[0] == 'vaa')
+            window.location = 'viewassignmentanswer?resourceid='+x[1]+'&studentid='+x[2];
+
     });
     $('#fromdatepicker').datetimepicker({
         pickTime: false

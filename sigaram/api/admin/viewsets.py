@@ -948,7 +948,8 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
                ari.originaltext,
                ari.studentid,
                ari.isanswered,
-               ari.issaved
+               ari.issaved,
+               ari.isbillboard
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         INNER JOIN  studentinfo si on si.studentid = ari.studentid 
@@ -1008,16 +1009,42 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         return Response(result)
 
     def create(self, request):
-        announcement = models.Bulletinboardinfo()
         data = json.loads(dict(request.DATA).keys()[0])
-        announcement.messagetitle = data.get('messagetitle')
-        announcement.message = data.get('message')
-        announcement.schoolid = data.get('schoolid',0)
-        announcement.classid = data.get('classid',0)
-        announcement.isrecord= data.get('isrecord',0)
-        announcement.postedby = request.user.id
-        announcement.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
-        announcement.save()
+        #Saving annoucement
+        bbi = models.Bulletinboardinfo()
+        bbi.messagetitle = data.get('messagetitle')
+        bbi.message = data.get('message')
+        bbi.attachmenturl = data.get('attachmenturl')
+        bbi.schoolid = data.get('schoolid',0)
+        bbi.classid = data.get('classid',0)
+        bbi.isrecord = data.get('isrecord',0)
+        bbi.postedby = request.user.id
+        bbi.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        bbi.save()
+        # bbiid = bbi.bulletinboardid
+        # print bbiid
+        #saving annoument target
+        # for rl in data.get('resourcelist'):
+        #     bmi = models.Bulletinmappinginfo()
+        #     bmi.bulletinboardid = bbiid
+        #     if data.get('cattype') == 'admin':
+        #         bmi.adminid = rl
+        #         bmi.viewtype = 0
+        #     else:
+        #         bmi.adminid = 0
+        #     if data.get('cattype') == 'teacher':
+        #         bmi.teacherid = rl
+        #         bmi.viewtype = 2
+        #     else:
+        #         bmi.teacherid = 0
+        #     if data.get('cattype') == 'schools':
+        #         bmi.schoolid = data.get('schoolid')
+        #         bmi.classid = rl
+        #         bmi.viewtype = 2
+        #     else:
+        #         bmi.schoolid = 0
+        #         bmi.classid = 0
+        #     bmi.save()
         return Response(request.DATA)
 
 
@@ -1135,17 +1162,39 @@ class Bulletinmappinginfo(viewsets.ModelViewSet):
     def create(self, request):
         bulletmapping = models.Bulletinmappinginfo()
         data = json.loads(dict(request.DATA).keys()[0])
-        bulletmapping.bulletinboardid = data.get('bulletinboardid')
-        bulletmapping.viewtype = data.get('viewtype')
-        bulletmapping.schoolid = data.get('schoolid')
-        bulletmapping.classid = data.get('classid')
-        bulletmapping.adminid = data.get('adminid')
-        bulletmapping.teacherid = data.get('teacherid')
-        bulletmapping.save()
+        resource = data.get('resource',[]);
+        cattype = data.get('cattype');
+        if cattype == 'admin':
+            for ai in resource:
+               # bulletmapping.bulletinboardid = data.get('bulletinboardid')
+                bulletmapping.viewtype = data.get('viewtype',0)
+                bulletmapping.schoolid = 0 # data.get('schoolid')
+                bulletmapping.classid = 0 #data.get('classid')
+                bulletmapping.adminid = ai #data.get('adminid')
+                bulletmapping.teacherid = 0 #data.get('teacherid')
+                bulletmapping.save()
+        elif cattype == 'teacher':
+            for ti in resource:
+                #bulletmapping.bulletinboardid = data.get('bulletinboardid')
+                bulletmapping.viewtype = data.get('viewtype',0)
+                bulletmapping.schoolid = 0 #data.get('schoolid')
+                bulletmapping.classid = 0 #data.get('classid')
+                bulletmapping.adminid = 0 #data.get('adminid')
+                bulletmapping.teacherid = ti #data.get('teacherid')
+                bulletmapping.save()
+        else:
+            for ci in resource:
+                #bulletmapping.bulletinboardid = data.get('bulletinboardid')
+                bulletmapping.viewtype = data.get('viewtype',0)
+                bulletmapping.schoolid = data.get('schoolid')
+                bulletmapping.classid = ci
+                bulletmapping.adminid = 0 #data.get('adminid')
+                bulletmapping.teacherid = 0 #data.get('teacherid')
+                bulletmapping.save()
+
         return Response(request.DATA)
 
 class EditAnswerViewSet(viewsets.ModelViewSet):
-    
     queryset = models.Editingtext.objects.all()
     serializer_class = adminserializers.EditingtextSerializer
 
@@ -1172,7 +1221,6 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         ORDER BY editeddate desc """ % (assignedid,spanid)
 
         cursor = connection.cursor()
-        print sql
         cursor.execute(sql)
         desc = cursor.description
         result =  [
@@ -1180,3 +1228,102 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
                 for row in cursor.fetchall()
             ]
         return Response(result)
+
+    def retrieve(self, request, pk=None):
+        assignedid = request.GET.get('assignedid')
+        sql = '''
+        SELECT et.previoustext,
+            et.edittext,
+            ari.answertext,
+            et.spanid
+        FROM editingtext et
+        JOIN assignresourceinfo ari 
+            ON ari.assignedid = et.editid   
+        WHERE et.editingid = %s''' % (pk)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        rec =  cursor.fetchone()
+        previoustext = rec[0]
+        edittext = rec[1]
+        answertext = rec[2]
+        spanid = rec[3]
+
+        #updating approved answer text
+        #sql = '''
+        #UPDATE assignresourceinfo 
+        #    SET answertext = '%s'
+        #    WHERE assignedid = '%s' ''' % (answertext, assignedid)
+        #cursor = connection.cursor()
+        #cursor.execute(sql)
+
+        #resetting the previous one if set
+        sql = '''
+        UPDATE editingtext
+            SET isapproved = 0
+        WHERE spanid = '%s' ''' % (spanid)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+
+        #marking the selected as approved
+        sql = '''
+        UPDATE editingtext
+            SET isapproved = 1
+        WHERE editingid = '%s' ''' % (pk)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+
+        return Response('approved')
+
+    def create(self, request):
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        
+        assignedid  = data.get('assignedid');
+        spanid      = data.get('spanid');
+        orig        = data.get('orig');
+        modified    = data.get('modified');
+        usertype    = data.get('type');
+
+        et = models.Editingtext()
+        et.editid       = int(assignedid)
+        et.spanid       = str(spanid)
+        et.previoustext = str(orig)
+        et.edittext     = str(modified)
+        et.typeofresource = 0
+        et.isapproved   = 0
+        et.isrejected   = 0
+        et.editedby     = loginname_to_userid('Teacher', 'sheela')
+        et.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
+        et.usertype     = str(usertype)
+
+        et.save()
+
+        return Response('"msg":"Approved successfully"')
+
+
+class BillboardResourceViewSet(viewsets.ModelViewSet):
+    queryset = models.Billboardinfo.objects.all()
+    serializer_class = adminserializers.BillboardSerializer
+
+    def create(self, request):
+        billboard = models.Billboardinfo()
+        studentid  = request.GET.get('studentid');
+        resourceid = request.GET.get('resourceid');
+        billboard.assessmentid = 0
+        billboard.resourceid = resourceid
+        billboard.writtenworkid = 0
+        billboard.studentid = studentid
+        billboard.votescount = 0
+        billboard.lastvotedby = 0
+        billboard.postedby = studentid
+        billboard.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        billboard.save()
+
+        sql = '''
+        UPDATE assignresourceinfo
+            SET isbillboard = 1
+        WHERE studentid = '%s'
+            AND resourceid = '%s' ''' % (studentid, resourceid)
+        cursor = connection.cursor()
+        cursor.execute(sql)        
+
+        return Response('saved')

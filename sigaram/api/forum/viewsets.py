@@ -57,12 +57,14 @@ class TopicinfoViewSet(viewsets.ModelViewSet):
     def list(self, request):
         forumid = request.GET.get('forumid')
         forumname = request.GET.get('forumname')
+        replyid =request.GET.get('replyid')
         sql = """
         SELECT topicid,
                 forumid,
                 topicname,
                 totalpost,
                 date(lastposteddate) as lastposteddate,
+                lastpostedby,
                 firstname,
                 totalpost 
         FROM topicinfo ti 
@@ -78,6 +80,7 @@ class TopicinfoViewSet(viewsets.ModelViewSet):
                 for row in cursor.fetchall()
             ]
         return Response(result)
+
     def create(self, request):
         topicinfo = models.Topicinfo()
         topicinfodata =  json.loads(request.DATA.keys()[0])
@@ -104,17 +107,14 @@ class PostreplyinfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Postreplyinfo.objects.all()
     serializer_class = forumserializers.PostreplyinfoSerializer
-
     def create(self, request):
         postreplyinfo = models.Postreplyinfo()
         postreplydata =  json.loads(request.DATA.keys()[0])
-        print '^'*80
-        print postreplydata
-        print request.DATA
+        #print postreplydata
         postreplyinfo.postreplyid = postreplydata.get('postreplyid',0)
-        postreplyinfo.postid = postreplydata.get('topicid',0)
+        postreplyinfo.postid = postreplydata.get('postid',0)
         postreplyinfo.postdetails = postreplydata.get('postdetails',0)
-        postreplyinfo.postedby = postreplydata.get('postedby',0)
+        postreplyinfo.postedby = request.user.id
         postreplyinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         postreplyinfo.save()
         return Response(request.DATA)
