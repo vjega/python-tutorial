@@ -207,6 +207,9 @@ def studentclassroom(request):
 def viewassignresource(request):
     return render(request, 'portalstudent/viewassignresource.html')    
 
+def viewassignmentanswer(request):
+    return render(request, 'portalstudent/viewassignmentanswer.html') 
+
 @switchlanguage
 def stickynotes(request):
     return render(request, 'portalstudent/stickynotes.html', 
