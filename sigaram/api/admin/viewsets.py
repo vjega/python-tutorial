@@ -992,16 +992,42 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         return Response(result)
 
     def create(self, request):
-        announcement = models.Bulletinboardinfo()
         data = json.loads(dict(request.DATA).keys()[0])
-        announcement.messagetitle = data.get('messagetitle')
-        announcement.message = data.get('message')
-        announcement.schoolid = data.get('schoolid',0)
-        announcement.classid = data.get('classid',0)
-        announcement.isrecord= data.get('isrecord',0)
-        announcement.postedby = request.user.id
-        announcement.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
-        announcement.save()
+        #Saving annoucement
+        bbi = models.Bulletinboardinfo()
+        bbi.messagetitle = data.get('messagetitle')
+        bbi.message = data.get('message')
+        bbi.attachmenturl = data.get('attachmenturl')
+        bbi.schoolid = data.get('schoolid',0)
+        bbi.classid = data.get('classid',0)
+        bbi.isrecord = data.get('isrecord',0)
+        bbi.postedby = request.user.id
+        bbi.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        bbi.save()
+        # bbiid = bbi.bulletinboardid
+        # print bbiid
+        #saving annoument target
+        # for rl in data.get('resourcelist'):
+        #     bmi = models.Bulletinmappinginfo()
+        #     bmi.bulletinboardid = bbiid
+        #     if data.get('cattype') == 'admin':
+        #         bmi.adminid = rl
+        #         bmi.viewtype = 0
+        #     else:
+        #         bmi.adminid = 0
+        #     if data.get('cattype') == 'teacher':
+        #         bmi.teacherid = rl
+        #         bmi.viewtype = 2
+        #     else:
+        #         bmi.teacherid = 0
+        #     if data.get('cattype') == 'schools':
+        #         bmi.schoolid = data.get('schoolid')
+        #         bmi.classid = rl
+        #         bmi.viewtype = 2
+        #     else:
+        #         bmi.schoolid = 0
+        #         bmi.classid = 0
+        #     bmi.save()
         return Response(request.DATA)
 
 
@@ -1119,17 +1145,39 @@ class Bulletinmappinginfo(viewsets.ModelViewSet):
     def create(self, request):
         bulletmapping = models.Bulletinmappinginfo()
         data = json.loads(dict(request.DATA).keys()[0])
-        bulletmapping.bulletinboardid = data.get('bulletinboardid')
-        bulletmapping.viewtype = data.get('viewtype')
-        bulletmapping.schoolid = data.get('schoolid')
-        bulletmapping.classid = data.get('classid')
-        bulletmapping.adminid = data.get('adminid')
-        bulletmapping.teacherid = data.get('teacherid')
-        bulletmapping.save()
+        resource = data.get('resource',[]);
+        cattype = data.get('cattype');
+        if cattype == 'admin':
+            for ai in resource:
+               # bulletmapping.bulletinboardid = data.get('bulletinboardid')
+                bulletmapping.viewtype = data.get('viewtype',0)
+                bulletmapping.schoolid = 0 # data.get('schoolid')
+                bulletmapping.classid = 0 #data.get('classid')
+                bulletmapping.adminid = ai #data.get('adminid')
+                bulletmapping.teacherid = 0 #data.get('teacherid')
+                bulletmapping.save()
+        elif cattype == 'teacher':
+            for ti in resource:
+                #bulletmapping.bulletinboardid = data.get('bulletinboardid')
+                bulletmapping.viewtype = data.get('viewtype',0)
+                bulletmapping.schoolid = 0 #data.get('schoolid')
+                bulletmapping.classid = 0 #data.get('classid')
+                bulletmapping.adminid = 0 #data.get('adminid')
+                bulletmapping.teacherid = ti #data.get('teacherid')
+                bulletmapping.save()
+        else:
+            for ci in resource:
+                #bulletmapping.bulletinboardid = data.get('bulletinboardid')
+                bulletmapping.viewtype = data.get('viewtype',0)
+                bulletmapping.schoolid = data.get('schoolid')
+                bulletmapping.classid = ci
+                bulletmapping.adminid = 0 #data.get('adminid')
+                bulletmapping.teacherid = 0 #data.get('teacherid')
+                bulletmapping.save()
+
         return Response(request.DATA)
 
 class EditAnswerViewSet(viewsets.ModelViewSet):
-    
     queryset = models.Editingtext.objects.all()
     serializer_class = adminserializers.EditingtextSerializer
 

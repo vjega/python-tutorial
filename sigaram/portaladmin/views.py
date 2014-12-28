@@ -46,6 +46,8 @@ student_studentres_uploader = AjaxFileUploader(UPLOAD_DIR='static/studentres')
 
 student_teacherres_uploader = AjaxFileUploader(UPLOAD_DIR='static/teacherres')
 
+bulletinboard_uploader = AjaxFileUploader(UPLOAD_DIR='static/bulletinboard')
+
 def layoutdemo(request):
     return render(request, 'portaladmin/layoutdemo.html')
 
