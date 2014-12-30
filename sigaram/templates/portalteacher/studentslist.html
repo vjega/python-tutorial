@@ -72,6 +72,8 @@
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+
 {% endblock morescript %}
 
 {% block scriptcontent %}
@@ -135,7 +137,8 @@ TTS.forms.renderstudentlist = function(data){
 
 
 $(document).ready(function(){
-    var url = "/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json"
+    var url = "/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json";
+    TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":url,
         "type":"GET"
@@ -145,9 +148,11 @@ $(document).ready(function(){
         } else {
             TTS.forms.table.fnClearTable();
         }
+        TTS.utils.ajaxloaderstop();
     });
 
     $("#school_name").change(function(){
+        TTS.utils.ajaxloaderstart();
         $.ajax({
             "url":"/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json",
             "type":"GET"
@@ -157,10 +162,12 @@ $(document).ready(function(){
             } else {
                 TTS.forms.table.fnClearTable();
             }
+            TTS.utils.ajaxloaderstop();
         });
     })
 
     $("#classid").change(function(){
+        TTS.utils.ajaxloaderstart();
         $.ajax({
             "url":"/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json",
             "type":"GET"
@@ -170,6 +177,7 @@ $(document).ready(function(){
             } else {
                 TTS.forms.table.fnClearTable();
             }
+            TTS.utils.ajaxloaderstop();
         });
     })
       
