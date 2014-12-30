@@ -306,6 +306,8 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
         classid   = request.GET.get('classid')
         sectionid   = request.GET.get('section')
         chapterid = request.GET.get('chapterid')
+        categoryid = request.GET.get('categoryid')
+        
         kwarg = {}
         #kwarg['isdeleted'] = 0
         if classid:
@@ -314,11 +316,30 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             kwarg['sectionid'] = sectionid
         if chapterid:
             kwarg['chapterid'] = chapterid
+
         if len(kwarg):
             queryset = models.Chapterinfo.objects.filter(**kwarg).order_by('chaptername')
         else:
             queryset = models.Chapterinfo.objects.all().order_by('chaptername')
+
+        sql = '''
+        SELECT chapterid, 
+               count(*) AS cnt
+        FROM resourceinfo 
+        WHERE categoryid=%s
+            AND classid=%s
+            AND section='%s' 
+        GROUP BY chapterid'''%(categoryid, classid, sectionid)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        cnt = cursor.fetchall()
         serializer = adminserializers.ChapterinfoSerializer(queryset, many=True)
+        print serializer.data
+        for i, d in enumerate(serializer.data):
+            for c in cnt:
+                if serializer.data[i]['chapterid'] == c[0]:
+                    serializer.data[i]['rescount'] = c[1]
+                    break
         return Response(serializer.data)
  
 class AdminclassinfoViewSet(viewsets.ModelViewSet): 
@@ -1015,13 +1036,16 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         bbi.messagetitle = data.get('messagetitle')
         bbi.message = data.get('message')
         bbi.attachmenturl = data.get('attachmenturl')
-        bbi.schoolid = data.get('schoolid',0)
+        if data.get('cattype') == 'schools':
+            bbi.schoolid = data.get('schoolid')
+        else:
+            bbi.schoolid = 0 #data.get('schoolid')
         bbi.classid = data.get('classid',0)
         bbi.isrecord = data.get('isrecord',0)
         bbi.postedby = request.user.id
         bbi.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         bbi.save()
-        # bbiid = bbi.bulletinboardid
+        bbiid = bbi.bulletinboardid
         print bbi.bulletinboardid
         #saving annoument target
         # for rl in data.get('resourcelist'):
