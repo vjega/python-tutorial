@@ -42,7 +42,6 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 {% trans "Announcement " %}
-                <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
             </div>
             <div class="panel-body">
                 <div class="table-responsive">
@@ -122,6 +121,10 @@ window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
 $("#save").click(function(){
     TTS.forms.bulletinboardinfo();
+});
+
+$("#cancel").click(function(){
+    window.location='bulletinboardlist';
 });
 
 TTS.forms.bulletinboardinfo = function(){   

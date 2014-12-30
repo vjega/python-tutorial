@@ -119,7 +119,8 @@ $(document).ready(function(){
     });
     $('#admin-main-tbl').on('click', '.assignment',function(e){
         e.stopPropagation();
-        window.location = 'assignchapter?categoryid=1&classid='+TTS.classid+'&section='+TTS.section;
+        var chapterid = $(this).parent().parent().prop("id");
+        window.location = 'assignchapter?categoryid='+TTS.categoryid+'&classid='+TTS.classid+'&section='+TTS.section+'&chapterid='+chapterid;
     });
     
     /*

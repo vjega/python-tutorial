@@ -441,8 +441,9 @@ TTS.forms.ressave = function(){
 $(document).ready(function(){
     var classid   = TTS.forms.getUrlParameter('classid');
     var section   = TTS.forms.getUrlParameter('section');
+    var chapterid = TTS.forms.getUrlParameter('chapterid');
     $.ajax({
-        "url":"/api/admin/resourceinfo/?classid="+classid+"&section="+section+"&format=json",
+        "url":"/api/admin/resourceinfo/?classid="+classid+"&section="+section+"&chapterid="+chapterid+"&format=json",
         "type":"GET"
     }).done(function(data){
         //console.log(data);
