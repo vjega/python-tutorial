@@ -603,9 +603,9 @@ class StudentAssignResource(viewsets.ModelViewSet):
         ar.typeofresource = 0
         ar.isapproved   = 0
         ar.isrejected   = 0
-        ar.editedby     = loginname_to_userid('Teacher', 'sheela')
+        ar.editedby     = request.user.id #loginname_to_userid('Teacher', 'sheela')
         ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
-        ar.usertype     = str(usertype)
+        ar.usertype     = int(usertype)
 
         ar.save()
 
