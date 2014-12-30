@@ -39,12 +39,10 @@
 
     <div class="form-group" class="col-sm-2">
         <label for="folder_name" class="col-sm-2 control-label">{% trans "Heading" %}</label>
-        <div class="control">
-            நாங்கள் நல்ல நண்பர்கள்
-        </div>
+        <div class="control" id="resourcetitle"></div>
     </div>
 
-    <div class="form-group" class="col-sm-2">
+    <!--div class="form-group" class="col-sm-2">
         <label for="folder_name" class="col-sm-2 control-label">{% trans "Answer" %} {% trans "Type" %}</label>
         <div class="control">
             <select id="answertype" name="answertype">
@@ -54,8 +52,8 @@
                 <option value="video">Video</option>
             </select>
         </div>
-    </div>
-
+    </div-->
+    <br />
     <div class="form-group" class="col-sm-2">
         <label for="folder_name" class="col-sm-2 control-label">{% trans "Reference" %}</label>
     </div>
@@ -86,7 +84,8 @@
         </div>
         <div align="center" class="panel-footer">
             <button class="btn btn-success btn-sm" id="connect-rubrics"><i class="fa fa-link fa-lg"></i> {% trans "Connect" %} {% trans "Rubrics" %}</button>
-            <button class="btn btn-success btn-sm" id="res-send"><i class="fa fa-share fa-lg"></i> {% trans "Send" %}</button>            
+            <button class="btn btn-success btn-sm" id="res-send"><i class="fa fa-share fa-lg"></i> {% trans "Send" %}</button>
+            
         </div>
         <!-- /.panel-body -->
     </div>
@@ -96,6 +95,7 @@
 {% endblock botcontent%}
 
 {% block scriptcontent %}
+
 <script id="rubricslist" type="text/x-jsrender">
 <div class="row">
     <div class="control-group col-lg-7">
@@ -410,6 +410,15 @@ TTS.forms.ressave = function(){
 
 $(document).ready(function(){
 
+    var resourceid = getUrlParameter('resourceid');
+
+    $.ajax({
+        "url":"/api/student/resourceinfo/"+resourceid,
+        "type":"GET"
+    }).done(function(data){
+        $("#resourcetitle").html(data.resourcetitle);
+    });
+    
     $.ajax({
         "url":"/api/admin/adminschool/?format=json",
         "type":"GET"
