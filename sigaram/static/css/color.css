@@ -1,0 +1,89 @@
+
+.yellow{
+    background-color:#FDFB8C;
+    border:1px solid #DEDC65;   
+}
+
+.yellow_header{
+    background-color:#DEDC65;   
+}
+
+.blue{
+    background-color:#A6E3FC;
+    border:1px solid #75C5E7;   
+}
+.blue_header{
+    background-color:#75C5E7;   
+}
+
+.green{
+    background-color:#A5F88B;
+    border:1px solid #98E775;   
+}
+
+.green_header{
+    background-color:#98E775;   
+}
+
+.red{
+    background-color:#ff6666;
+    border:1px solid #ff3232;
+}
+
+.red_header{
+    background-color:#ff3232;   
+}
+
+.purple{
+    background-color: #d29fd3;
+    border: 1px solid #bc5fbd; 
+}
+
+.purple_header{
+    background-color:#bc5fbd;   
+}
+
+.pink{
+    background-color:#FFAEC9;
+    border:1px solid #f46998;   
+}
+
+.pink_header{
+    background-color:#f46998;   
+}
+
+.grey{
+    background-color:#F5F5f5;
+    border:1px solid #737373;  
+}
+
+.grey_header{
+    background-color:#737373;   
+}
+
+.orange{
+    background-color:#FF7F27;
+    border:1px solid #EB6712;  
+}
+
+.orange_header{
+    background-color:#EB6712;   
+}
+
+.maroon{
+    background-color: #e0d9bc;
+    border: 1px solid #c4b18f; 
+}
+
+.maroon_header{
+    background-color:#c4b18f;   
+}
+
+.gold{
+    background-color: #fcbb22;
+    border: 1px solid #fdb221; 
+}
+
+.gold_header{
+    background-color:#fdb221;   
+}

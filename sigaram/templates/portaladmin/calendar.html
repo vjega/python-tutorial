@@ -26,7 +26,11 @@
 {% endblock botcontent%}
 
 {% block morescript %}
-
+<style>
+.modal.bootstrap-dialog.size-normal.type-primary.fade.in {
+    z-index: 1 !important;
+}
+</style>
 <script src="{%static "bower_components/moment/min/moment.min.js" %}"></script>
 <script src="{%static "bower_components/fullcalendar/dist/fullcalendar.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
@@ -42,9 +46,9 @@
 window.TTS = window.TTS || {}
 window.TTS.forms = window.TTS.forms || {}
 TTS.forms.showcalform = function(start, end, allDay) {
-    console.log('start:',start);
-    console.log('end:',end);
-    console.log('allDay:',allDay);
+
+    //console.log($.fullCalendar.moment().time());
+    //console.log($.fullCalendar.formatDate(start, "yyyy-MM-dd HH:mm:ss"));
     BootstrapDialog.show({
         title: 'Add Event',
         message: $($('#cal-form').render()),
@@ -53,15 +57,19 @@ TTS.forms.showcalform = function(start, end, allDay) {
             $('#id_start').val(start.format());
             $('#id_end').val(end.format());
 
-            //alert("Cal Shown");
+            $('#id_start,#id_end').datepicker({
+                format: "yyyy/mm/dd",
+                todayBtn: "linked",
+                autoclose: true,
+                todayHighlight: true
+            });
         },
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
             action: function(dialogItself){
-                //var data = TTS.utils.serilaizeJson("#save-cal");
-                //TTS.forms.addadmin(dialogItself, data);
-                TTS.forms.saveCal() 
+                TTS.forms.saveCal();
+                dialogItself.close();
             }
             },{
             label: 'Cancel',
@@ -71,9 +79,9 @@ TTS.forms.showcalform = function(start, end, allDay) {
         }]
     });
 };
+
 TTS.forms.saveCal = function () {
     var data = TTS.utils.serilaizeJson("#cal-event");
-    console.log(data);
     $.ajax({
         type:'POST',
         data: data,
@@ -91,43 +99,116 @@ TTS.forms.saveCal = function () {
     });
 }
 
+TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
+    BootstrapDialog.show({
+            title: 'Edit Event',
+            message: $($('#cal-form').render()),
+            onshown: function(){
+                $('#id_title').val(calEvent.title);
+                $('#id_start').val(calEvent.start.format());
+                $('#id_end').val(calEvent.end.format());
+
+                $('#id_start,#id_end').datepicker({
+                    format: "yyyy/mm/dd",
+                    todayBtn: "linked",
+                    autoclose: true,
+                    todayHighlight: true
+                });
+            },
+            buttons: [{
+                label: 'Update',
+                cssClass: 'btn-primary',
+                action: function(dialogItself){
+                    var data = TTS.utils.serilaizeJson("#cal-event");
+                    data = JSON.parse(data);
+                    $.ajax({
+                        type:'PUT',
+                        data: JSON.stringify(data),
+                        url : '/api/admin/calendar/'+calEvent.id
+                    }).done(function( msg ) {
+                        dialogItself.close();
+                        location.reload();
+                    });
+                }
+                },{
+                label: 'Cancel',
+                action: function(dialogItself){
+                    dialogItself.close();
+                }
+            }]
+    });
+}
+
+TTS.forms.updatecalevent = function (event, dayDelta, minuteDelta){
+    var data = {
+        "title" : event.title,
+        "start" : event.start.format(),
+        "end" : event.start.format()
+    }
+    $.ajax({
+        type:'PUT',
+        data: JSON.stringify(data),
+        url : '/api/admin/calendar/'+event.id
+    }).done(function( msg ) {
+        //location.reload();
+    });
+};
+
 $(document).ready(function() {
     TTS.forms.calendar = $('#calendar').fullCalendar({
         selectable: true,
         selectHelper: true,
+        resizable: true,
+        droppable: true,
+        editable:true,
         header:
         {
             left: 'prev,next today',
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
         },
+        events: {
+            url:'/api/admin/calendar/'
+        },
         select: function(start, end, allDay)
         {
             TTS.forms.showcalform(start, end, allDay);
         },
         eventDrop: function (event, dayDelta, minuteDelta) {
-            //TTS.forms.saveCal(event);
-            console.log("Event Drop");
-        },
+            //alert(event.title + " was dropped on " + event.start.format());
+            /*if (!confirm("Are you sure about this change?")) {
+                TTS.forms.updatecalevent(event, dayDelta, minuteDelta);
+            }*/
 
-        eventResize: function (event, dayDelta, minuteDelta) {
-            //TTS.forms.saveCal(event);
+            /*
+                var start = $.fullCalendar.formatDate(event.start, "yyyy-MM-dd HH:mm:ss");
+                var end = $.fullCalendar.formatDate(event.end, "yyyy-MM-dd HH:mm:ss");
+            */
+        },
+        eventResize: function (event, delta, revertFunc) {
+            alert(event.title + " end is now " + event.end.format());
+
+            if (confirm("is this okay?")) {
+                TTS.forms.updatecalevent(event, dayDelta, minuteDelta);
+            }else{
+                revertFunc();
+            }
             console.log("Resize");
+            console.log(event.id);
+            console.log(event.title);
+            console.log(event.start.format());
+            console.log(event.end.format());
         },
         eventClick: function(calEvent, jsEvent, view) {
-
-            alert('Event: ' + calEvent.title);
-            alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-            alert('View: ' + view.name);
+            TTS.forms.updatecalform(calEvent, jsEvent, view);
 
             // change the border color just for fun
             $(this).css('border-color', 'red');
+            $(this).css('background-color', '#FDFB8C');
+            $(this).css('color', '#000000');
 
-        },
-        editable: true,
-        events: {
-            url:'/api/admin/calendar/'
-        },
+        }
+        
     })
 });
 </script>
