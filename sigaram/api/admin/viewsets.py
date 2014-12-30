@@ -1004,7 +1004,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         bbi.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         bbi.save()
         # bbiid = bbi.bulletinboardid
-        # print bbiid
+        print bbi.bulletinboardid
         #saving annoument target
         # for rl in data.get('resourcelist'):
         #     bmi = models.Bulletinmappinginfo()
