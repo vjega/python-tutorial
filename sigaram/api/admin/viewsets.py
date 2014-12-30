@@ -509,6 +509,23 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title = data.get('title')
         cal.start = data.get('start')
         cal.end = data.get('end')
+        cal.eventcreatedby = request.user.username
+        #cal.eventeditedby = request.user.username
+        cal.isdeleted = 0
+        cal.createdby = request.user.id
+        cal.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        cal.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        cal = models.Calendardetails.objects.get(pk=pk)  
+        data = json.loads(dict(request.DATA).keys()[0])
+        #data = {k:v[0] for k,v in dict(request.DATA).items()}
+        cal.title = data.get('title')
+        cal.start = time.strftime('%Y-%m-%d %H:%M:%S')
+        cal.end = time.strftime('%Y-%m-%d %H:%M:%S')
+        #cal.eventcreatedby = request.user.username
+        cal.eventeditedby = request.user.username
         cal.isdeleted = 0
         cal.createdby = request.user.id
         cal.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -1005,7 +1022,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         bbi.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         bbi.save()
         # bbiid = bbi.bulletinboardid
-        # print bbiid
+        print bbi.bulletinboardid
         #saving annoument target
         # for rl in data.get('resourcelist'):
         #     bmi = models.Bulletinmappinginfo()
