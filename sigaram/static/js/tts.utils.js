@@ -38,3 +38,17 @@ TTS.utils.getUrlParameter =  function (sParam) {
         }
     }
 }
+
+TTS.utils.ajaxloaderstart =  function (sParam) {
+    //console.log('Testing ...')
+    if (sParam) {
+        $("#top-notification>span").html("<i class='fa fa-spinner fa-spin'></i> "+sParam);
+    } else {
+        $("#top-notification>span").html("<i class='fa fa-spinner fa-spin'></i> Retreiving data from server. Please wait");
+    }
+    $("#top-notification").css('visibility','visible');
+}
+
+TTS.utils.ajaxloaderstop =  function (sParam) {
+    $("#top-notification").css('visibility','hidden');
+}
