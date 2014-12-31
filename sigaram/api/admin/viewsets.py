@@ -332,7 +332,7 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
         # cursor = connection.cursor()
         # cursor.execute(sql)
         # cnt = cursor.fetchall()
-        # serializer = adminserializers.ChapterinfoSerializer(queryset, many=True)
+        serializer = adminserializers.ChapterinfoSerializer(queryset, many=True)
         # print serializer.data
         # for i, d in enumerate(serializer.data):
         #     for c in cnt:
