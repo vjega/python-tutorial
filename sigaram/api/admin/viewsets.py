@@ -24,7 +24,6 @@ def loginname_to_userid(usertype, username):
 
 
 class AdmininfoViewSet(viewsets.ModelViewSet):
-
     queryset = models.Admininfo.objects.filter(isdelete=0)
     serializer_class = adminserializers.AdminInfoSerializer
 
