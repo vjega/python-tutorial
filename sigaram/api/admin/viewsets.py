@@ -24,7 +24,6 @@ def loginname_to_userid(usertype, username):
 
 
 class AdmininfoViewSet(viewsets.ModelViewSet):
-
     queryset = models.Admininfo.objects.filter(isdelete=0)
     serializer_class = adminserializers.AdminInfoSerializer
 
@@ -322,24 +321,25 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
         else:
             queryset = models.Chapterinfo.objects.all().order_by('chaptername')
 
-        sql = '''
-        SELECT chapterid, 
-               count(*) AS cnt
-        FROM resourceinfo 
-        WHERE categoryid=%s
-            AND classid=%s
-            AND section='%s' 
-        GROUP BY chapterid'''%(categoryid, classid, sectionid)
-        cursor = connection.cursor()
-        cursor.execute(sql)
-        cnt = cursor.fetchall()
         serializer = adminserializers.ChapterinfoSerializer(queryset, many=True)
-        print serializer.data
-        for i, d in enumerate(serializer.data):
-            for c in cnt:
-                if serializer.data[i]['chapterid'] == c[0]:
-                    serializer.data[i]['rescount'] = c[1]
-                    break
+        if categoryid:
+            sql = '''
+            SELECT chapterid, 
+                   count(*) AS cnt
+            FROM resourceinfo 
+            WHERE categoryid=%s
+                AND classid=%s
+                AND section='%s' 
+            GROUP BY chapterid'''%(categoryid, classid, sectionid)
+            cursor = connection.cursor()
+            cursor.execute(sql)
+            cnt = cursor.fetchall()
+            print serializer.data
+            for i, d in enumerate(serializer.data):
+                for c in cnt:
+                    if serializer.data[i]['chapterid'] == c[0]:
+                        serializer.data[i]['rescount'] = c[1]
+                        break
         return Response(serializer.data)
  
 class AdminclassinfoViewSet(viewsets.ModelViewSet): 

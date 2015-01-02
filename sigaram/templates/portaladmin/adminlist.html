@@ -204,11 +204,13 @@ TTS.forms.upload = function(elm) {
 };
 
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/admin/admin/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderadmin(data);
+        TTS.utils.ajaxloaderstop();
     });
     $('#admin-main-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();

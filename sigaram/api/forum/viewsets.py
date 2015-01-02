@@ -107,6 +107,31 @@ class PostreplyinfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Postreplyinfo.objects.all()
     serializer_class = forumserializers.PostreplyinfoSerializer
+
+    def list(self, request):
+        postreplyid = request.GET.get('postreplyid')
+        sql = """
+        SELECT  postreplyid,
+                postid,
+                postdetails,
+                postdetails,
+                li.firstname as postedby,
+                date(posteddate) as posteddate
+        FROM postreplyinfo pri
+        join logininfo li on li.loginid = pri.postedby 
+        where postid=%s
+        order by postid  """ % postreplyid
+
+        cursor = connection.cursor()
+        print sql
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
     def create(self, request):
         postreplyinfo = models.Postreplyinfo()
         postreplydata =  json.loads(request.DATA.keys()[0])

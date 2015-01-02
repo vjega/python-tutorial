@@ -47,6 +47,8 @@
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+
 {% endblock morescript %}
 
 {% block scriptcontent %}
@@ -156,11 +158,13 @@ TTS.forms.renderadmin = function(data){
 
 };
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/admin/admin/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderadmin(data);
+        TTS.utils.ajaxloaderstop()
     });
     $('#admin-main-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();
