@@ -95,12 +95,13 @@ TTS.forms.renderrubricsinfo = function(data){
 };
 
 $(document).ready(function(){
-    
+    TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/admin/rubricsheader/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderrubricsinfo(data);
+        TTS.utils.ajaxloaderstop();
     });
    
     $('#rubrics-main-tbl').on('click', '.tts-delete', function(e){

@@ -88,6 +88,7 @@
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
 <script src="{%static "bower_components/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js" %}"></script>
 <script src="{%static "bower_components/bootstrap-datetimepicker/src/js/locales/bootstrap-datetimepicker.es.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 <script>
     window.TTS = window.TTS || {}
     TTS.forms = TTS.forms || {}   
@@ -127,11 +128,14 @@
     };
 
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
+
     $.ajax({
         "url":"/api/admin/teacherassignedresource/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.assignedstudentresource(data);
+        TTS.utils.ajaxloaderstop();
     });
     $('.resourcelist').on('click','tbody tr',function(e){
         e.stopPropagation();
