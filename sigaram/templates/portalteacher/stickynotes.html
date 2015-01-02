@@ -1,4 +1,4 @@
-{% extends 'portaladmin/base.html' %}
+{% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% load crispy_forms_tags %}
@@ -526,15 +526,19 @@ TTS.forms.renderstickynotes = function(data){
 //?stickyid=1
 
 $(document).ready(function(){
+  
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.showstickyform();
+        TTS.utils.ajaxloaderstop();
     });
 
-     $.ajax({
+    TTS.utils.ajaxloaderstart();
+    $.ajax({
         "url":"/api/admin/stickynotes/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstickynotes(data);
+        TTS.utils.ajaxloaderstop();
     });
 
     setTimeout(function(){ load_onclick_events() }, 500);

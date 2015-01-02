@@ -61,6 +61,7 @@
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
@@ -113,12 +114,14 @@ TTS.forms.renderteacher = function(data){
 
 
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     var url = "/api/admin/teacher/?schoolid="+$("#school_name").val()+"&format=json"
     $.ajax({
         "url":url,
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacher(data);
+        TTS.utils.ajaxloaderstop();
     });
     
     $("#school_name").change(function(){
