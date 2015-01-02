@@ -56,19 +56,19 @@ def layoutdemo(request):
 def home(request):
     folders = [{
         "color": u"primary",
-        "icon" : u"university",
+        "icon" : u"flaticon-school43",
         "link" : u"schoollist",
         "caption": _("Schools"),
         "stat": 25
         }, {
         "color": u"green",
-        "icon" : u"book",
+        "icon" : u"flaticon-books24",
         "link" : u"teacherresourcelist",
         "caption": u"{0} {1}".format(_("Teachers"),_("Resources")),
         "stat": 64
         }, {
         "color": u"yellow",
-        "icon" : u"book",
+        "icon" : u"flaticon-education32",
         "link" : u"studentresourcetype",
         "caption": u"{0} {1}".format(_("Student"), _("Resources")),
         "stat": 125
