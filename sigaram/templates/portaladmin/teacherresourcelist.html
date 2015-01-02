@@ -189,7 +189,7 @@ var updateChapter = function(){
                 +"&section="+$("#id_section").val(),
         'type':'GET'
     }).done(function(data){
-        console.log(data)
+        //console.log(data)
         opt = "";
         for (d in data){
             opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"<option>\n";
