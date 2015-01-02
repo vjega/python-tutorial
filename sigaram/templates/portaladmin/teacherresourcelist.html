@@ -86,12 +86,13 @@ TTS.forms.addteacherresource = function(form, data) {
         data: data,
         url : '/api/admin/teacherresourcesinfo/'
     }).done(function( msg ) {
-        console.log(data)
+        //console.log(data)
         form.close();
         location.reload();
         //dialogItself.close();
     });
 }
+
 TTS.forms.showteacherresource = function() {
     BootstrapDialog.show({
         title: 'Add TeacherResource',
@@ -185,7 +186,7 @@ TTS.forms.upload = function(elm) {
 var updateChapter = function(){
     $.ajax({
         'url': "/api/admin/chapterinfo/?classid="+$("#id_classid").val()
-                +"&sectionid="+$("#id_section").val(),
+                +"&section="+$("#id_section").val(),
         'type':'GET'
     }).done(function(data){
         console.log(data)
