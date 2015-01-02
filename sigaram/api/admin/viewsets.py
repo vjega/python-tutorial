@@ -24,7 +24,6 @@ def loginname_to_userid(usertype, username):
 
 
 class AdmininfoViewSet(viewsets.ModelViewSet):
-
     queryset = models.Admininfo.objects.filter(isdelete=0)
     serializer_class = adminserializers.AdminInfoSerializer
 
@@ -306,6 +305,8 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
         classid   = request.GET.get('classid')
         sectionid   = request.GET.get('section')
         chapterid = request.GET.get('chapterid')
+        categoryid = request.GET.get('categoryid',0)
+        
         kwarg = {}
         #kwarg['isdeleted'] = 0
         if classid:
@@ -314,11 +315,31 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             kwarg['sectionid'] = sectionid
         if chapterid:
             kwarg['chapterid'] = chapterid
+
         if len(kwarg):
             queryset = models.Chapterinfo.objects.filter(**kwarg).order_by('chaptername')
         else:
             queryset = models.Chapterinfo.objects.all().order_by('chaptername')
+
         serializer = adminserializers.ChapterinfoSerializer(queryset, many=True)
+        if categoryid:
+            sql = '''
+            SELECT chapterid, 
+                   count(*) AS cnt
+            FROM resourceinfo 
+            WHERE categoryid=%s
+                AND classid=%s
+                AND section='%s' 
+            GROUP BY chapterid'''%(categoryid, classid, sectionid)
+            cursor = connection.cursor()
+            cursor.execute(sql)
+            cnt = cursor.fetchall()
+            print serializer.data
+            for i, d in enumerate(serializer.data):
+                for c in cnt:
+                    if serializer.data[i]['chapterid'] == c[0]:
+                        serializer.data[i]['rescount'] = c[1]
+                        break
         return Response(serializer.data)
  
 class AdminclassinfoViewSet(viewsets.ModelViewSet): 
@@ -509,6 +530,23 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title = data.get('title')
         cal.start = data.get('start')
         cal.end = data.get('end')
+        cal.eventcreatedby = request.user.username
+        #cal.eventeditedby = request.user.username
+        cal.isdeleted = 0
+        cal.createdby = request.user.id
+        cal.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        cal.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        cal = models.Calendardetails.objects.get(pk=pk)  
+        data = json.loads(dict(request.DATA).keys()[0])
+        #data = {k:v[0] for k,v in dict(request.DATA).items()}
+        cal.title = data.get('title')
+        cal.start = time.strftime('%Y-%m-%d %H:%M:%S')
+        cal.end = time.strftime('%Y-%m-%d %H:%M:%S')
+        #cal.eventcreatedby = request.user.username
+        cal.eventeditedby = request.user.username
         cal.isdeleted = 0
         cal.createdby = request.user.id
         cal.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -586,9 +624,9 @@ class StudentAssignResource(viewsets.ModelViewSet):
         ar.typeofresource = 0
         ar.isapproved   = 0
         ar.isrejected   = 0
-        ar.editedby     = loginname_to_userid('Teacher', 'sheela')
+        ar.editedby     = request.user.id #loginname_to_userid('Teacher', 'sheela')
         ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
-        ar.usertype     = str(usertype)
+        ar.usertype     = int(usertype)
 
         ar.save()
 
@@ -931,7 +969,8 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
                ari.originaltext,
                ari.studentid,
                ari.isanswered,
-               ari.issaved
+               ari.issaved,
+               ari.isbillboard
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         INNER JOIN  studentinfo si on si.studentid = ari.studentid 
@@ -991,16 +1030,45 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         return Response(result)
 
     def create(self, request):
-        announcement = models.Bulletinboardinfo()
         data = json.loads(dict(request.DATA).keys()[0])
-        announcement.messagetitle = data.get('messagetitle')
-        announcement.message = data.get('message')
-        announcement.schoolid = data.get('schoolid',0)
-        announcement.classid = data.get('classid',0)
-        announcement.isrecord= data.get('isrecord',0)
-        announcement.postedby = request.user.id
-        announcement.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
-        announcement.save()
+        #Saving annoucement
+        bbi = models.Bulletinboardinfo()
+        bbi.messagetitle = data.get('messagetitle')
+        bbi.message = data.get('message')
+        bbi.attachmenturl = data.get('attachmenturl')
+        if data.get('cattype') == 'schools':
+            bbi.schoolid = data.get('schoolid')
+        else:
+            bbi.schoolid = 0 #data.get('schoolid')
+        bbi.classid = data.get('classid',0)
+        bbi.isrecord = data.get('isrecord',0)
+        bbi.postedby = request.user.id
+        bbi.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        bbi.save()
+        bbiid = bbi.bulletinboardid
+        print bbi.bulletinboardid
+        #saving annoument target
+        # for rl in data.get('resourcelist'):
+        #     bmi = models.Bulletinmappinginfo()
+        #     bmi.bulletinboardid = bbiid
+        #     if data.get('cattype') == 'admin':
+        #         bmi.adminid = rl
+        #         bmi.viewtype = 0
+        #     else:
+        #         bmi.adminid = 0
+        #     if data.get('cattype') == 'teacher':
+        #         bmi.teacherid = rl
+        #         bmi.viewtype = 2
+        #     else:
+        #         bmi.teacherid = 0
+        #     if data.get('cattype') == 'schools':
+        #         bmi.schoolid = data.get('schoolid')
+        #         bmi.classid = rl
+        #         bmi.viewtype = 2
+        #     else:
+        #         bmi.schoolid = 0
+        #         bmi.classid = 0
+        #     bmi.save()
         return Response(request.DATA)
 
 
@@ -1118,17 +1186,39 @@ class Bulletinmappinginfo(viewsets.ModelViewSet):
     def create(self, request):
         bulletmapping = models.Bulletinmappinginfo()
         data = json.loads(dict(request.DATA).keys()[0])
-        bulletmapping.bulletinboardid = data.get('bulletinboardid')
-        bulletmapping.viewtype = data.get('viewtype')
-        bulletmapping.schoolid = data.get('schoolid')
-        bulletmapping.classid = data.get('classid')
-        bulletmapping.adminid = data.get('adminid')
-        bulletmapping.teacherid = data.get('teacherid')
-        bulletmapping.save()
+        resource = data.get('resource',[]);
+        cattype = data.get('cattype');
+        if cattype == 'admin':
+            for ai in resource:
+               # bulletmapping.bulletinboardid = data.get('bulletinboardid')
+                bulletmapping.viewtype = data.get('viewtype',0)
+                bulletmapping.schoolid = 0 # data.get('schoolid')
+                bulletmapping.classid = 0 #data.get('classid')
+                bulletmapping.adminid = ai #data.get('adminid')
+                bulletmapping.teacherid = 0 #data.get('teacherid')
+                bulletmapping.save()
+        elif cattype == 'teacher':
+            for ti in resource:
+                #bulletmapping.bulletinboardid = data.get('bulletinboardid')
+                bulletmapping.viewtype = data.get('viewtype',0)
+                bulletmapping.schoolid = 0 #data.get('schoolid')
+                bulletmapping.classid = 0 #data.get('classid')
+                bulletmapping.adminid = 0 #data.get('adminid')
+                bulletmapping.teacherid = ti #data.get('teacherid')
+                bulletmapping.save()
+        else:
+            for ci in resource:
+                #bulletmapping.bulletinboardid = data.get('bulletinboardid')
+                bulletmapping.viewtype = data.get('viewtype',0)
+                bulletmapping.schoolid = data.get('schoolid')
+                bulletmapping.classid = ci
+                bulletmapping.adminid = 0 #data.get('adminid')
+                bulletmapping.teacherid = 0 #data.get('teacherid')
+                bulletmapping.save()
+
         return Response(request.DATA)
 
 class EditAnswerViewSet(viewsets.ModelViewSet):
-    
     queryset = models.Editingtext.objects.all()
     serializer_class = adminserializers.EditingtextSerializer
 
@@ -1232,3 +1322,32 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         et.save()
 
         return Response('"msg":"Approved successfully"')
+
+
+class BillboardResourceViewSet(viewsets.ModelViewSet):
+    queryset = models.Billboardinfo.objects.all()
+    serializer_class = adminserializers.BillboardSerializer
+
+    def create(self, request):
+        billboard = models.Billboardinfo()
+        studentid  = request.GET.get('studentid');
+        resourceid = request.GET.get('resourceid');
+        billboard.assessmentid = 0
+        billboard.resourceid = resourceid
+        billboard.writtenworkid = 0
+        billboard.studentid = studentid
+        billboard.votescount = 0
+        billboard.lastvotedby = 0
+        billboard.postedby = studentid
+        billboard.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        billboard.save()
+
+        sql = '''
+        UPDATE assignresourceinfo
+            SET isbillboard = 1
+        WHERE studentid = '%s'
+            AND resourceid = '%s' ''' % (studentid, resourceid)
+        cursor = connection.cursor()
+        cursor.execute(sql)        
+
+        return Response('saved')

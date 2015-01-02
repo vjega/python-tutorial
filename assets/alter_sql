@@ -36,3 +36,8 @@ CREATE TABLE  `d60701781`.`stickynotes` (
   `createddate` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=102746 DEFAULT CHARSET=utf8
+
+
+ALTER TABLE `calendardetails` 
+ADD COLUMN `eventcreatedby` varchar(30)  NOT NULL AFTER `title` , 
+ADD COLUMN `eventeditedby` varchar(30)  NOT NULL AFTER `eventcreatedby`;

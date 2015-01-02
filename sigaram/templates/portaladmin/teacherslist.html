@@ -204,11 +204,17 @@ TTS.forms.renderteacher = function(data){
         t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
-    TTS.forms.table = $('#teacherlist-main-tbl').dataTable({
-        "data":     dataset,
-        "columns":  headers
-    });
-
+    if(TTS.forms.table){
+        TTS.forms.table.fnClearTable();
+        TTS.forms.table.fnAddData(
+            dataset
+        );
+    }else{
+        TTS.forms.table = $('#teacherlist-main-tbl').dataTable({
+            "data":     dataset,
+            "columns":  headers
+        });
+    }
 };
 
 TTS.forms.upload = function(elm) {

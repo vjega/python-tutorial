@@ -46,6 +46,8 @@ student_studentres_uploader = AjaxFileUploader(UPLOAD_DIR='static/studentres')
 
 student_teacherres_uploader = AjaxFileUploader(UPLOAD_DIR='static/teacherres')
 
+bulletinboard_uploader = AjaxFileUploader(UPLOAD_DIR='static/bulletinboard')
+
 def layoutdemo(request):
     return render(request, 'portaladmin/layoutdemo.html')
 
@@ -75,7 +77,7 @@ def home(request):
     recent_acitivity_head = [_("Sl No."),_("Assignments"),_("Date")]
     announcement_head = [_("Sl No."),_("Title"),_("Date")]
     admin_folders = models.AdminFolders.objects.all()
-    announcement_body = models.Bulletinboardinfo.announcement()
+    announcement_body = models.Bulletinboardinfo.announcement(request.user.id)
     recent_activity_body = models.Activitylog.recentactivities()
     recent_activities = {'head':recent_acitivity_head,
                          'body':recent_activity_body}

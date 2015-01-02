@@ -9,19 +9,22 @@
     <!-- /.col-lg-12 -->
 </div>
 <div class="row">
-    <div class="form-group" class="col-sm-2">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Schools" %}</label>
-        <div class="col-sm-2">
-            <select name="school_name" class="form-control" id="school_name">
-                {% for school in schools%}
-                <option value="{{school.schoolid}}">
-                    {{school.schoolname}}
-                </option>
-                {% endfor %}
-            </select>
+    <div class="col-lg-12">
+        <div class="form-group" class="col-sm-2">
+            <label for="folder_name" class="col-sm-2 control-label">{% trans "Schools" %}</label>
+            <div class="col-sm-2">
+                <select name="school_name" class="form-control" id="school_name">
+                    {% for school in schools%}
+                    <option value="{{school.schoolid}}">
+                        {{school.schoolname}}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
         </div>
     </div>
-</div>
+</div>    
+<br />
 {% endblock topcontent %}
 {% block botcontent %}
 <div class="col-lg-12">
@@ -220,11 +223,17 @@ TTS.forms.renderteacher = function(data){
         t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
-    TTS.forms.table = $('#teacherlist-main-tbl').dataTable({
-        "data":     dataset,
-        "columns":  headers
-    });
-
+    if(TTS.forms.schooltable){
+        TTS.forms.schooltable.fnClearTable();
+        TTS.forms.schooltable.fnAddData(
+            dataset
+        );
+    }else{
+        TTS.forms.schooltable = $('#teacherlist-main-tbl').dataTable({
+            "data":     dataset,
+            "columns":  headers
+        });
+    }
 };
 
 
@@ -235,9 +244,9 @@ $(document).ready(function(){
     }).done(function(data){
         TTS.forms.renderteacher(data);
     });
-    $("#school_name").change(function(){
+    $("#school_name").change(function(){    
         $.ajax({
-            "url":"/api/admin/teacher/?schoolid="+$("#school_name").val()+"&format=json",
+            "url":"/api/admin/teacher/?schoolid="+$(this).val()+"&format=json",
             "type":"GET"
         }).done(function(data){
             TTS.forms.renderteacher(data);

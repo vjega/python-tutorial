@@ -33,6 +33,7 @@ router.register(r'billboard',           	viewsets.BillboardViewSet)
 router.register(r'editanswer',           	viewsets.EditAnswerViewSet)
 router.register(r'bulletinboard',       	viewsets.Bulletinboard)
 router.register(r'bulletinmappinginfo',     viewsets.Bulletinmappinginfo)
+router.register(r'billboardresource',       viewsets.BillboardResourceViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

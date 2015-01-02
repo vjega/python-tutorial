@@ -42,6 +42,7 @@
 {% endblock morecss %}
 
 
+
 {% block morescript %}
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
@@ -66,9 +67,11 @@ TTS.forms.renderteacherresourceinfo = function(data){
     //console.log(data.resourcetype)
     if (data.resourcetype == "video") {
         //$("#view-resource").html("<a href='#' >View</a>");
+        window.open("/static/"+data.videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
     } 
     if (data.resourcetype == "audio") {
         //$("#view-resource").html("<a href='#' onclick=\"openwindow('audio','"+data.audiourl+"');\" >View</a>"); 
+        window.open("/static/"+data.audiourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
     }
     if (data.resourcetype === "text") {
         //$("#view-resource").html("<a href='#' onclick=\"openwindow('text','"+data.documenturl+"');\" >View</a>"); 
@@ -105,9 +108,7 @@ function getUrlParameter(sParam)
     }
 }
 
-$(document).ready(function(){
-
-    
+$(document).ready(function(){    
     $("#view-resource").click(function(){
         var teacherresourceid = getUrlParameter('teacherresourceid');
         $.ajax({

@@ -323,7 +323,7 @@ class Bulletinboardinfo(models.Model):
         db_table = 'bulletinboardinfo'
 
     @staticmethod
-    def announcement ():
+    def announcement (loginid):
         sql = """SELECT bbi.bulletinboardid,
                  messagetitle,
                  message,
@@ -335,10 +335,10 @@ class Bulletinboardinfo(models.Model):
             INNER JOIN logininfo li ON li.loginid = bbi.postedby
             INNER JOIN teacherinfo ti ON ti.username = li.username
             WHERE (viewtype =0 ) OR (viewtype =2)
-            -- AND bmi.adminid ={$loginid}
+                AND bmi.adminid =%s
             GROUP BY bbi.bulletinboardid
             ORDER by bbi.bulletinboardid DESC
-            LIMIT 2"""
+            LIMIT 2"""%loginid
         cursor = connection.cursor()
         cursor.execute(sql)
         x = dictfetchall(cursor)
@@ -1001,6 +1001,8 @@ class Calendardetails(models.Model):
     title = models.TextField()
     start = models.DateTimeField()
     end = models.DateTimeField()
+    eventcreatedby = models.CharField(max_length=30)
+    eventeditedby = models.CharField(max_length=30)
     createdby = models.BigIntegerField()
     isdeleted = models.IntegerField()
     createddate = models.DateTimeField()

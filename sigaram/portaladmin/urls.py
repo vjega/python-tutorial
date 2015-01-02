@@ -72,7 +72,7 @@ urlpatterns = patterns('portaladmin.views',
                                                          name="billcomprehensionanswerrating"),
     url(r'^billopenendedanswerrating$', 'billopenendedanswerrating',
                                                          name="billopenendedanswerrating"),
-
-    
+    url(r'^bulletinboard-upload$',      'bulletinboard_uploader', 
+                                                         name="bulletinboard-uploader"),
     #(r'^api/', include(v1_api.urls)),
 )

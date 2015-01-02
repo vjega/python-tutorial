@@ -137,6 +137,8 @@ TTS.forms.ressave = function(savesend){
     else
         data.isanswered = 0;
 
+    data.type = 1;
+
     $.ajax({
         url:"/api/admin/studentassignresource/"+assignedid+"/",
         type:"PUT",
