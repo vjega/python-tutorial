@@ -56,6 +56,7 @@
 </script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 
 {% endblock morescript %}
 
@@ -178,12 +179,15 @@ TTS.forms.renderteacherresourceinfo = function(data){
 };
 
 $(document).ready(function(){
-     $.ajax({
+    TTS.utils.ajaxloaderstart();
+
+    $.ajax({
         "url":"/api/admin/teacherresourcesinfo/?format=json",
         "type":"GET"
     }).done(function(data){
         //console.log(data);
         TTS.forms.renderteacherresourceinfo(data);
+        TTS.utils.ajaxloaderstop();
     });
 
     $('#admin-main-tbl tbody').on('click', 'tr', function(){

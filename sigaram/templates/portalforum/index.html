@@ -157,12 +157,14 @@ TTS.forms.renderfourminfo = function(data){
 
 
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/forum/foruminfo/?format=json",
         "type":"GET"
     }).done(function(data){
         if (data.length) {
             TTS.forms.renderfourminfo(data);
+             TTS.utils.ajaxloaderstop();
         } else {
             TTS.forms.table.fnClearTable();
         }

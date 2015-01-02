@@ -132,14 +132,18 @@ var updateChapter = function(){
             opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"</option>\n";
         }
         $("#id_chapterid").html(opt);
+
     });
 };
 $(document).ready(function(){
+     TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/admin/teacherresourcesinfo/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacherresourceinfo(data);
+        TTS.utils.ajaxloaderstop();
+
     });
     $('#studetresource-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();

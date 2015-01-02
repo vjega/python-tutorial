@@ -152,11 +152,14 @@ var updateChapter = function(){
     });
 };
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
+
     $.ajax({
         "url":"/api/admin/resourceinfo/?categoryid="+TTS.categoryid+"&chapterid="+TTS.chapterid+"&classid="+TTS.classid+"&section="+TTS.section+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacherresourceinfo(data);
+        TTS.utils.ajaxloaderstop();
     });
     /*$('#studetresource-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();
