@@ -306,7 +306,7 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
         classid   = request.GET.get('classid')
         sectionid   = request.GET.get('section')
         chapterid = request.GET.get('chapterid')
-        categoryid = request.GET.get('categoryid')
+        categoryid = request.GET.get('categoryid',0)
         
         kwarg = {}
         #kwarg['isdeleted'] = 0
