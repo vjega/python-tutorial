@@ -121,10 +121,12 @@ function newtopic(elm) {
 }
 
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
      $.ajax({
         "url":"/api/forum/foruminfo/?format=json",
         "type":"GET"
     }).done(function(data){
+        TTS.utils.ajaxloaderstop();
         if (data.length) {
             TTS.forms.renderfourminfo(data);
         } else {

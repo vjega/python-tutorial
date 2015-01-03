@@ -49,7 +49,7 @@ class ForuminfoViewSet(viewsets.ModelViewSet):
 
 class TopicinfoViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Topicinfo.objects.all()
+    queryset = models.Topicinfo.objects .all()
     serializer_class = forumserializers.TopicinfoSerializer
 
     def list(self, request):
