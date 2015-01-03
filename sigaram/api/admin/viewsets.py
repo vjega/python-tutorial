@@ -656,8 +656,6 @@ class StudentAssignResource(viewsets.ModelViewSet):
 
     def list(self, request):
 
-        #print request.user.name
-
         datecond = ''
         if request.GET.get('fdate') and request.GET.get('tdate'):
             datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
@@ -676,14 +674,14 @@ class StudentAssignResource(viewsets.ModelViewSet):
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         WHERE isdeleted=0
-              AND ari.studentid=%s
+              AND ari.studentid='%s'
               AND ari.IsDelete=0
-              AND ri.categoryid=0
+              /*AND ri.categoryid=0*/
               %s
         GROUP BY resourceid 
-        ORDER BY answereddate DESC''' % (18594, datecond)
+        ORDER BY answereddate DESC''' % (request.user.username, datecond)
         cursor = connection.cursor()
-        #print sql
+        print sql
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
         #cursor.execute(sql, "3680")
@@ -743,7 +741,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
                 ar.isbillboard = 0
                 ar.isclassroom = 0
                 ar.answereddate = '1910-01-01'
-                ar.assignedby = 1 #request.user.userid
+                ar.assignedby = request.user.userid
                 ar.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
                 ar.isdelete = 0
                 ar.rubric_id = int(rubricid)
@@ -792,16 +790,16 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         WHERE isdeleted=0
-              AND ari.assignedby=%s
+              AND ari.assignedby='%s'
               AND ari.IsDelete=0 
-              AND ri.categoryid=0 
+              /*AND ri.categoryid=0 */
               %s
         GROUP BY resourceid 
-        ORDER BY assigneddate DESC''' % (request.user.id, datecond)
+        ORDER BY assigneddate DESC''' % (request.user.username, datecond)
 
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
-        #3print sql
+        print sql
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
         #cursor.execute(sql, "3680")
@@ -977,7 +975,7 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         studentcond = ''
         if request.GET.get('studentid'):
-            studentcond = "AND ari.studentid = " + request.GET.get('studentid')
+            studentcond = "AND ari.studentid = '" + request.GET.get('studentid') + "'"
 
         sql = '''
         SELECT assignedid AS id,
@@ -998,11 +996,11 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
                ari.isbillboard
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
-        INNER JOIN  auth_user au on au.id = ari.studentid 
+        INNER JOIN  auth_user au on au.username = ari.studentid 
         WHERE isdeleted=0
               AND ari.resourceid=%s
               AND ari.IsDelete=0 
-              AND ri.categoryid=0
+              /*AND ri.categoryid=0*/
               %s
         GROUP BY ari.studentid
         ORDER BY assigneddate DESC''' % (pk, studentcond)
