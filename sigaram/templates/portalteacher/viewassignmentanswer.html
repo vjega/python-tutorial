@@ -250,7 +250,7 @@ TTS.forms.editanswerlist = function(spanid){
                 "url":"/api/admin/editanswer/?assignedid="+assignedid+"&spanid="+spanid+"&format=json",
                 "type":"GET"
             }).done(function(data){
-                //console.log(data);
+                console.log(data);
                 TTS.forms.renderanswereditinginfo(data,'');
             });
         },
@@ -384,7 +384,8 @@ TTS.forms.editanswer = function() {
                     data: data,
                     url : '/api/admin/studentassignresource/'+assign_id
                 }).done(function(msg) {
-                    //console.log(msg);
+                    console.log(msg);
+                    return false;
                     dialogItself.close();
                     alert("Answer corrected successfully");
                     location.reload();

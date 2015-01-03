@@ -16,27 +16,27 @@
             <div class="row">
                 <div class='col-lg-4'>    
                     <div class="form-group">
-                        <div class="col-lg-4">
+                        <div class="col-lg-5">
                             <label>{% trans "From Date" %}: </label>
                         </div>    
-                        <div class='input-group date' id='fromdatepicker'>
-                            <input type='text' class="form-control" data-date-format="YYYY/MM/DD" />
-                            <span class="input-group-addon">
+                        <div class='input-group'>
+                            <input id='fromdatepicker' readonly="" type='text' class="form-control" data-date-format="YYYY/MM/DD" />
+                            <!--span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
+                            </span-->
                         </div>
                     </div>
                 </div>
                 <div class='col-lg-4'>    
                     <div class="form-group">
-                        <div class="col-lg-4">
+                        <div class="col-lg-5">
                             <label>{% trans "To Date" %}: </label>
                         </div>
-                        <div class='input-group date' id='todatepicker'>
-                            <input type='text' class="form-control" data-date-format="YYYY/MM/DD" />
-                            <span class="input-group-addon">
+                        <div class='input-group'>
+                            <input id='todatepicker' readonly="" type='text' class="form-control" data-date-format="YYYY/MM/DD" />
+                            <!--span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
+                            </span-->
                         </div>
                     </div>
                 </div>    
@@ -48,17 +48,10 @@
             </div>
             </div>
             <br /><br />
-
-        
-                  <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="new">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover resourcelist" id="resource-list">
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover resourcelist" id="resource-list">
+                </table>
+            </div>
         <!-- /.panel-body -->
     </div>
     <!-- /.panel -->
@@ -69,7 +62,9 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
-<link rel="stylesheet" href="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/master/build/css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="{%static "bower_components/bootstrap3-datepicker/datepicker.min.css" %}">
+
+<!--link rel="stylesheet" href="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/master/build/css/bootstrap-datetimepicker.min.css"-->
 <style>
     .resourcelist tbody tr:hover{
         cursor: pointer;
@@ -86,8 +81,10 @@
 </script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
-<script src="{%static "bower_components/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js" %}"></script>
-<script src="{%static "bower_components/bootstrap-datetimepicker/src/js/locales/bootstrap-datetimepicker.es.js" %}"></script>
+<script src="{%static "bower_components/bootstrap3-datepicker/bootstrap-datepicker.js" %}"></script>
+
+<!--script src="{%static "bower_components/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js" %}"></script>
+<script src="{%static "bower_components/bootstrap-datetimepicker/src/js/locales/bootstrap-datetimepicker.es.js" %}"></script-->
 <script src="{% static "js/tts.utils.js" %}"></script>
 <script>
     window.TTS = window.TTS || {}
@@ -121,12 +118,18 @@
             dataset.push(t);
         }
 
-        $('#resource-list').dataTable({
-            "data":     dataset,
-            "columns":  headers
-        });
-    };
-
+    if(TTS.forms.tablerl){
+       TTS.forms.tablerl.fnClearTable();
+       TTS.forms.tablerl.fnAddData(
+            dataset
+        );
+    }else{
+        TTS.forms.tablerl = $('#resource-list').dataTable({
+                "data":     dataset,
+                "columns":  headers
+            });
+        };
+    }
 $(document).ready(function(){
     TTS.utils.ajaxloaderstart();
 
@@ -141,13 +144,13 @@ $(document).ready(function(){
         e.stopPropagation();
         window.location = 'viewassignresource?resourceid='+this.id;
     });
-    $('#fromdatepicker').datetimepicker({
+    /*$('#fromdatepicker').datetimepicker({
         pickTime: true
     });
     $('#todatepicker').datetimepicker({
         pickTime: true
     });
-    /*$("#fromdatepicker").on("dp.change",function (e) {
+    $("#fromdatepicker").on("dp.change",function (e) {
        $('#todatepicker').data("DateTimePicker").setMinDate(e.date);
     });
     $("#todatepicker").on("dp.change",function (e) {
@@ -156,8 +159,8 @@ $(document).ready(function(){
 
     $('#date-search').click(function(){
         //alert($("#fromdatepicker input").val());
-        var fromdate = $("#fromdatepicker input").val();
-        var todate = $("#todatepicker input").val();
+        var fromdate = $("#fromdatepicker").val();
+        var todate = $("#todatepicker").val();
         $.ajax({
             "url":"/api/admin/teacherassignedresource/?fdate="+fromdate+"&tdate="+todate+"&format=json",
             "type":"GET"
@@ -165,6 +168,14 @@ $(document).ready(function(){
             TTS.forms.assignedstudentresource(data);
         });
     });
+
+    $('#fromdatepicker, #todatepicker').datepicker({
+                format: "yyyy/mm/dd",
+                todayBtn: "linked",
+                autoclose: true,
+                todayHighlight: true
+            });
+
 
 });
 

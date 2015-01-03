@@ -656,7 +656,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
               AND ri.categoryid=0 
               %s
         GROUP BY resourceid 
-        ORDER BY answereddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
+        ORDER BY answereddate DESC''' % (request.user.id, datecond)
         cursor = connection.cursor()
         #print sql
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
@@ -767,12 +767,12 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         WHERE isdeleted=0
-              AND ari.assignedby=%d
+              AND ari.assignedby=%s
               AND ari.IsDelete=0 
               AND ri.categoryid=0 
               %s
         GROUP BY resourceid 
-        ORDER BY assigneddate DESC''' % (loginname_to_userid('Teacher', 'sheela'), datecond)
+        ORDER BY assigneddate DESC''' % (request.user.id, datecond)
 
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
@@ -981,7 +981,7 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
               AND ri.categoryid=0
               %s
         GROUP BY ari.studentid
-        ORDER BY assigneddate DESC''' % (loginname_to_userid('Teacher', 'sheela'), pk, studentcond)
+        ORDER BY assigneddate DESC''' % (request.user.id, pk, studentcond)
 
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
@@ -1233,16 +1233,18 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
                spanid, 
                previoustext, 
                edittext, 
-               CONCAT(ti.firstname,' ',ti.lastname ) AS name,
+               CONCAT(au.first_name,' ',au.last_name ) AS name,
                editeddate AS edate,
                isapproved,
                et.usertype
         FROM  editingtext et
-        INNER JOIN teacherinfo ti 
-            ON ti.teacherid = et.editedby
+        INNER JOIN auth_user au 
+            ON au.id = et.editedby
         WHERE  et.editid = '%s'
             AND et.spanid = '%s'
         ORDER BY editeddate desc """ % (assignedid,spanid)
+
+        print sql
 
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -1315,7 +1317,7 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         et.typeofresource = 0
         et.isapproved   = 0
         et.isrejected   = 0
-        et.editedby     = loginname_to_userid('Teacher', 'sheela')
+        et.editedby     = request.user.id
         et.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
         et.usertype     = str(usertype)
 
