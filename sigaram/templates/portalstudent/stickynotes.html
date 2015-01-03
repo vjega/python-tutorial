@@ -412,7 +412,7 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
                 data = JSON.parse(data);
                 data['color'] = $("#preview_color").attr("class");
                 $.ajax({
-                     headers : {
+                    headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
                     },
                     type:'PUT',

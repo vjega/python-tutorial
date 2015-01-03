@@ -576,7 +576,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
 class MindmapViewSet(viewsets.ModelViewSet):
-    queryset = models.Mindmap.objects.all()
+    queryset = models.Mindmap.objects.filter().order_by('-createddate')
     serializer_class = adminserializers.MindmapSerializer
 
     def create(self, request):
