@@ -429,7 +429,7 @@ TTS.forms.ressave = function(){
     })
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         url:"/api/admin/studentassignresource/",
         type:"POST",

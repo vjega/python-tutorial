@@ -31,6 +31,7 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
         print request.user
         print request.user.id
         print request.user.username
+        
         admin = models.Admininfo()
         admindata =  json.loads(request.DATA.keys()[0])
         admin.username = admindata.get('username')
@@ -78,10 +79,10 @@ class teacherViewSet(viewsets.ModelViewSet):
         teacher.password = teacherdata.get('password')
         teacher.firstname = teacherdata.get('firstname')
         teacher.schoolid = teacherdata.get('schoolid')
-        teacher.classid = '1' #teacherdata.get('classid')
+        teacher.classid = teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
         teacher.imageurl = teacherdata.get('imageurl')
-        #teacher.imageurl = studentdata.get('imageurl')
+       # teacher.imageurl = #studentdata.get('imageurl')
         teacher.isdelete = 0
         teacher.createdby = request.user.id
         teacher.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -96,7 +97,7 @@ class teacherViewSet(viewsets.ModelViewSet):
         teacher.password = teacherdata.get('password')
         teacher.firstname = teacherdata.get('firstname')
         teacher.schoolid = teacherdata.get('schoolid')
-        #teacher.classid = '1' #teacherdata.get('classid')
+        teacher.classid = teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
         teacher.save()
         return Response(request.DATA)
@@ -552,7 +553,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.start = data.get('start')
         cal.end = data.get('end')
         cal.eventcreatedby = request.user.username
-        #cal.eventeditedby = request.user.username
+        cal.eventeditedby = request.user.username
         cal.isdeleted = 0
         cal.createdby = request.user.id
         cal.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -566,7 +567,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title = data.get('title')
         cal.start = time.strftime('%Y-%m-%d %H:%M:%S')
         cal.end = time.strftime('%Y-%m-%d %H:%M:%S')
-        #cal.eventcreatedby = request.user.username
+        cal.eventcreatedby = request.user.username
         cal.eventeditedby = request.user.username
         cal.isdeleted = 0
         cal.createdby = request.user.id
@@ -584,7 +585,7 @@ class MindmapViewSet(viewsets.ModelViewSet):
         mm.title = data.get('title')
         mm.mapdata = data.get('mapdata')
         mm.isdelete = 0
-        mm.createdby = 1 #request.user.id
+        mm.createdby = request.user.id
         mm.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         mm.save()
         return Response(request.DATA)
@@ -595,7 +596,7 @@ class MindmapViewSet(viewsets.ModelViewSet):
         mm.title = data.get('title')
         mm.mapdata = data.get('mapdata')
         mm.isdelete = 0
-        mm.createdby = 1 #request.user.id
+        mm.createdby = request.user.id
         mm.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         mm.save()
         return Response(request.DATA)
@@ -1297,7 +1298,7 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         answertext = rec[2]
         spanid = rec[3]
 
-        print answertext
+        #print answertext
 
         #updating approved answer text
         # sql = '''
@@ -1308,20 +1309,20 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         # cursor.execute(sql)
 
         #resetting the previous one if set
-        # sql = '''
-        # UPDATE editingtext
-        #     SET isapproved = 0
-        # WHERE spanid = '%s' ''' % (spanid)
-        # cursor = connection.cursor()
-        # cursor.execute(sql)
+        sql = '''
+        UPDATE editingtext
+            SET isapproved = 0
+        WHERE spanid = '%s' ''' % (spanid)
+        cursor = connection.cursor()
+        cursor.execute(sql)
 
         # #marking the selected as approved
-        # sql = '''
-        # UPDATE editingtext
-        #     SET isapproved = 1
-        # WHERE editingid = '%s' ''' % (pk)
-        # cursor = connection.cursor()
-        # cursor.execute(sql)
+        sql = '''
+        UPDATE editingtext
+            SET isapproved = 1
+        WHERE editingid = '%s' ''' % (pk)
+        cursor = connection.cursor()
+        cursor.execute(sql)
 
         return Response('approved')
 
