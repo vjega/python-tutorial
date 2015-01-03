@@ -79,7 +79,7 @@ class teacherViewSet(viewsets.ModelViewSet):
         teacher.password = teacherdata.get('password')
         teacher.firstname = teacherdata.get('firstname')
         teacher.schoolid = teacherdata.get('schoolid')
-        teacher.classid = '1' #teacherdata.get('classid')
+        teacher.classid = teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
         teacher.imageurl = teacherdata.get('imageurl')
         #teacher.imageurl = studentdata.get('imageurl')
