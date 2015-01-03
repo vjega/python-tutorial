@@ -92,7 +92,7 @@ $(document).ready(function(){
         //alert ( TTS.utils.getUrlParameter('replyid'));
         $.ajax({
             headers : {
-                'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
             },
             type:"POST",
             url:url,
