@@ -96,11 +96,14 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 TTS.forms.addtfourms = function(form, data) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'POST',
         data: data,
         url : '/api/forum/foruminfo/'
     }).done(function( msg ) {
-        console.log(data)
+        //console.log(data)
         //form.close();
         location.reload();
         //dialogItself.close();

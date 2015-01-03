@@ -83,6 +83,9 @@ TTS.forms.addadmin = function(form, data) {
 
 TTS.forms.ediadmin = function(form, id, data) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'PUT',
         data: data,
         url : '/api/admin/admin/'+id
@@ -93,8 +96,11 @@ TTS.forms.ediadmin = function(form, id, data) {
 }
 
 TTS.forms.deladmin = function(id) {
-    console.log(id);
+    //console.log(id);
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'DELETE',
         url : '/api/admin/admin/'+id
     }).done(function( msg ) {

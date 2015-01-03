@@ -140,6 +140,9 @@ TTS.forms.ressave = function(savesend){
     data.type = 1;
 
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         url:"/api/admin/studentassignresource/"+assignedid+"/",
         type:"PUT",
         data: data

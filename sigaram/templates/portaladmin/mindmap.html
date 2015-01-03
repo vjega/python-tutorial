@@ -68,6 +68,9 @@ $(document).ready(function(){
       });
   } else {
     $.ajax({
+      headers : {
+          'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+      },
       url:'/api/admin/mindmap/'+getUrlParameter("editid"),
       type: 'GET'
     }).done(function(data){
@@ -87,6 +90,9 @@ $(document).ready(function(){
     var url  = (getUrlParameter("new")==="true") ? '/api/admin/mindmap/' : '/api/admin/mindmap/'+getUrlParameter("editid")
     console.log(postdata);
     $.ajax({
+      headers : {
+        'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+      },
       type:type,
       url : url,
       data : postdata
