@@ -36,9 +36,9 @@ class TeacherResourceForm(forms.Form):
         choices  = [('a', 'A'), ('b','B')]
     )
     resourcecategory = forms.ChoiceField(
-        label        = _("Select Division"),
+        label        = _("Select Folder"),
         required     = True,
-        choices      = [('0', 'Listening Comprehension'), ('1', 'Sample Lesson Plan')]
+        choices      = [('0', 'Lesson Plan '), ('1', 'School\'s resources')]
     )
     chapterid    = forms.ChoiceField(
         label    = _("Chapter"),

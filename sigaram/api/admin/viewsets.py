@@ -24,7 +24,7 @@ def loginname_to_userid(usertype, username):
 
 
 class AdmininfoViewSet(viewsets.ModelViewSet):
-    queryset = models.Admininfo.objects.filter(isdelete=0)
+    queryset = models.Admininfo.objects.filter(isdelete=0).order_by('-createddate')
     serializer_class = adminserializers.AdminInfoSerializer
 
     @create_login('Admin')
@@ -61,9 +61,9 @@ class teacherViewSet(viewsets.ModelViewSet):
     def list(self, request):
         schoolid =  request.GET.get('schoolid')
         if schoolid :
-            queryset = models.Teacherinfo.objects.filter(schoolid=schoolid)
+            queryset = models.Teacherinfo.objects.filter(schoolid=schoolid).order_by('-createddate')
         else:
-            queryset = models.Teacherinfo.objects.all()
+            queryset = models.Teacherinfo.objects.all().order_by('-createddate')
         serializer = adminserializers.TeacherinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -117,9 +117,9 @@ class studentViewSet(viewsets.ModelViewSet):
         schoolids  =  request.GET.get('schoolids')
 
         if schoolid and classid:
-            queryset = models.Studentinfo.objects.filter(schoolid=schoolid, classid=classid)
+            queryset = models.Studentinfo.objects.filter(schoolid=schoolid, classid=classid).order_by('-createddate')
         elif schoolid:
-            queryset = models.Studentinfo.objects.filter(schoolid=schoolid)
+            queryset = models.Studentinfo.objects.filter(schoolid=schoolid).order_by('-createddate')
         elif schoolids:
             schools = schoolids.split(",")
             q = Q() 
@@ -186,7 +186,7 @@ class TeacherResourcesViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
-    queryset = models.Teacherresourceinfo.objects.all()
+    queryset = models.Teacherresourceinfo.objects.filter().order_by('-createddate')
     serializer_class = adminserializers.TeacherresourceinfoSerializer
 
     def create(self, request):
@@ -243,7 +243,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         if chapterid:
             kwarg['chapterid'] = chapterid
         
-        queryset = models.Resourceinfo.objects.filter(**kwarg)
+        queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('-createddate')
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
