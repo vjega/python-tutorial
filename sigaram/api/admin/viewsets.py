@@ -387,7 +387,7 @@ class AdminclassinfoViewSet(viewsets.ModelViewSet):
 
 class AdminschoolViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Schoolinfo.objects.all()
+    queryset = models.Schoolinfo.objects.all().order_by('-createddate')
     serializer_class = adminserializers.AdminschoolSerializer
 
     def create(self, request):
