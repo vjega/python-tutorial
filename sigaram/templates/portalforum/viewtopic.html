@@ -80,11 +80,14 @@ TTS.forms = TTS.forms || {}
 };*/
 TTS.forms.addviewfourm = function(form, data) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'POST',
         data: data,
         url : '/api/forum/topicinfo/'
     }).done(function( msg ) {
-        console.log(data)
+     //   console.log(data)
         form.close();
         location.reload();
         //dialogItself.close();

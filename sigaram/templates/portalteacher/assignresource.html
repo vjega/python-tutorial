@@ -395,6 +395,9 @@ TTS.forms.ressave = function(){
         data.students.push($(this).val());
     })
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         url:"/api/admin/studentassignresource/",
         type:"POST",
         data: JSON.stringify(data)

@@ -144,6 +144,9 @@ TTS.forms.addteacher = function() {
             action: function(dialogItself ){
                 var data = TTS.utils.serilaizeJson("#add-teacher");
                 $.ajax({
+                   headers : {
+                        'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                    }, 
                    type:'POST',
                    data: data,
                    url : '/api/admin/teacher/'
@@ -170,6 +173,9 @@ TTS.forms.editschool = function() {
             action: function(){
                 var data = TTS.utils.serilaizeJson("#newfolderfrm");
                 $.ajax({
+                    headers : {
+                        'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                    },
                     type:'POST',
                     data: {'data':data},
                     url : '/api/admin/addfolder'

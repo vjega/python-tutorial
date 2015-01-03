@@ -288,6 +288,9 @@ TTS.forms.editanswerlist = function(spanid){
                             }
 
                             $.ajax({
+                                headers : {
+                                      'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                                },
                                 type:'POST',
                                 data: data,
                                 url : '/api/admin/editanswer/'
@@ -380,6 +383,9 @@ TTS.forms.editanswer = function() {
                 }
 
                 $.ajax({
+                    headers : {
+                        'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                    },
                     type:'PUT',
                     data: data,
                     url : '/api/admin/studentassignresource/'+assign_id
@@ -449,6 +455,9 @@ $(document).ready(function(){
 
     $("a#sendnoticeboard").click(function(){
         $.ajax({
+            headers : {
+                'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+            },
             type:'POST',
             url : '/api/admin/billboardresource/?resourceid='+resourceid+'&studentid='+studentid
         }).done(function(msg) {

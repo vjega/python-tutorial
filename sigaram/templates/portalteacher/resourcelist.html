@@ -75,6 +75,9 @@ TTS.forms.addstudentresource = function() {
                 var data = TTS.utils.serilaizeJson("#add-studentresource");
                 console.log(data);
                 $.ajax({
+                    headers : {
+                        'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                    },
                     type:'POST',
                     data: data,
                     url : '/api/admin/resourceinfo/'
