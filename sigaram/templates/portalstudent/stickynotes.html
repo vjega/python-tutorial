@@ -320,7 +320,7 @@ TTS.forms = TTS.forms || {};
 TTS.forms.addstickynote = function(form, data) {
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'POST',
         data: data,
@@ -412,6 +412,9 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
                 data = JSON.parse(data);
                 data['color'] = $("#preview_color").attr("class");
                 $.ajax({
+                     headers : {
+                        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                    },
                     type:'PUT',
                     data: JSON.stringify(data),
                     url : '/api/admin/stickynotes/'+edit_id
@@ -432,7 +435,7 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
 TTS.forms.delstickynotes = function(id) {
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'DELETE',
         url : '/api/admin/stickynotes/'+id
