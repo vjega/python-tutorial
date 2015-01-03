@@ -24,7 +24,7 @@ def loginname_to_userid(usertype, username):
 
 
 class AdmininfoViewSet(viewsets.ModelViewSet):
-    queryset = models.Admininfo.objects.filter(isdelete=0)
+    queryset = models.Admininfo.objects.filter(isdelete=0).order_by('-createddate')
     serializer_class = adminserializers.AdminInfoSerializer
 
     @create_login('Admin')
@@ -61,9 +61,9 @@ class teacherViewSet(viewsets.ModelViewSet):
     def list(self, request):
         schoolid =  request.GET.get('schoolid')
         if schoolid :
-            queryset = models.Teacherinfo.objects.filter(schoolid=schoolid)
+            queryset = models.Teacherinfo.objects.filter(schoolid=schoolid).order_by('-createddate')
         else:
-            queryset = models.Teacherinfo.objects.all()
+            queryset = models.Teacherinfo.objects.all().order_by('-createddate')
         serializer = adminserializers.TeacherinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -117,9 +117,9 @@ class studentViewSet(viewsets.ModelViewSet):
         schoolids  =  request.GET.get('schoolids')
 
         if schoolid and classid:
-            queryset = models.Studentinfo.objects.filter(schoolid=schoolid, classid=classid)
+            queryset = models.Studentinfo.objects.filter(schoolid=schoolid, classid=classid).order_by('-createddate')
         elif schoolid:
-            queryset = models.Studentinfo.objects.filter(schoolid=schoolid)
+            queryset = models.Studentinfo.objects.filter(schoolid=schoolid).order_by('-createddate')
         elif schoolids:
             schools = schoolids.split(",")
             q = Q() 
@@ -186,7 +186,7 @@ class TeacherResourcesViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
-    queryset = models.Teacherresourceinfo.objects.all()
+    queryset = models.Teacherresourceinfo.objects.filter().order_by('-createddate')
     serializer_class = adminserializers.TeacherresourceinfoSerializer
 
     def create(self, request):
@@ -243,7 +243,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         if chapterid:
             kwarg['chapterid'] = chapterid
         
-        queryset = models.Resourceinfo.objects.filter(**kwarg)
+        queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('-createddate')
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -656,7 +656,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
               AND ri.categoryid=0 
               %s
         GROUP BY resourceid 
-        ORDER BY answereddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
+        ORDER BY answereddate DESC''' % (request.user.id, datecond)
         cursor = connection.cursor()
         #print sql
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
@@ -767,12 +767,12 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         WHERE isdeleted=0
-              AND ari.assignedby=%d
+              AND ari.assignedby=%s
               AND ari.IsDelete=0 
               AND ri.categoryid=0 
               %s
         GROUP BY resourceid 
-        ORDER BY assigneddate DESC''' % (loginname_to_userid('Teacher', 'sheela'), datecond)
+        ORDER BY assigneddate DESC''' % (request.user.id, datecond)
 
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
@@ -981,7 +981,7 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
               AND ri.categoryid=0
               %s
         GROUP BY ari.studentid
-        ORDER BY assigneddate DESC''' % (loginname_to_userid('Teacher', 'sheela'), pk, studentcond)
+        ORDER BY assigneddate DESC''' % (request.user.id, pk, studentcond)
 
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
@@ -1233,16 +1233,18 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
                spanid, 
                previoustext, 
                edittext, 
-               CONCAT(ti.firstname,' ',ti.lastname ) AS name,
+               CONCAT(au.first_name,' ',au.last_name ) AS name,
                editeddate AS edate,
                isapproved,
                et.usertype
         FROM  editingtext et
-        INNER JOIN teacherinfo ti 
-            ON ti.teacherid = et.editedby
+        INNER JOIN auth_user au 
+            ON au.id = et.editedby
         WHERE  et.editid = '%s'
             AND et.spanid = '%s'
         ORDER BY editeddate desc """ % (assignedid,spanid)
+
+        print sql
 
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -1315,7 +1317,7 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         et.typeofresource = 0
         et.isapproved   = 0
         et.isrejected   = 0
-        et.editedby     = loginname_to_userid('Teacher', 'sheela')
+        et.editedby     = request.user.id
         et.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
         et.usertype     = str(usertype)
 
