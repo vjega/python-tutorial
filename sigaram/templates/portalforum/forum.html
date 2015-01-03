@@ -144,7 +144,7 @@ $(document).ready(function(){
        //TTS.forms.showfourms();
         $.ajax({
             headers : {
-                'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
             },
             type:"POST",
             url:"/api/forum/foruminfo/",
