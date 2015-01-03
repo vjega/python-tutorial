@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import (ugettext as _, activate)
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from student import models
 from portaladmin import models as pmodels

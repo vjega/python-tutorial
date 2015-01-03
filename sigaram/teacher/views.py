@@ -2,6 +2,7 @@
 from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from teacher import models
 from portaladmin import models as pmodels
 from teacher.forms import ( RubricsForm,
