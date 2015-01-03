@@ -11,10 +11,10 @@
 </div>
 <div class="row">
     <span>
-    <div class="form-group" class="col-sm-3">
+    <div class="form-group" class="col-sm-6">
         <label for="folder_name" class="col-sm-2 control-label">{% trans "Select School" %}
         </label>
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <select name="school_name" class="form-control" id="school_name">
                 {% for school in schools %}
                 <option value="{{school.schoolid}}">{{school.schoolname}}</option>
@@ -34,6 +34,7 @@
         </div>
     </div>
 </div>
+<br />
 
 {% endblock topcontent %}
 {% block botcontent %}
@@ -129,6 +130,7 @@ TTS.forms.editstudent = function(id, data) {
         title: 'Edit Student',
         message: $($('#student-form').render()),
         onshown: function(){
+            TTS.forms.upload();
             $("#add-student").find("input,select").each(function(){
                 $(this).val(data[this['name']]);
             });

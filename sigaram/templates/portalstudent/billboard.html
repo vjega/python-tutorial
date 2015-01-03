@@ -1,10 +1,10 @@
-{% extends 'portaladmin/base.html' %}
+{% extends 'portalstudent/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Billboard" %}</h2>
+        <h2 class="page-header">{% trans "Notice Board" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -12,7 +12,23 @@
 {% block botcontent %}
 <div class="col-lg-12">
     <div class="panel panel-default">
-        
+        <div class="panel-heading ">
+            <div class="col-lg-4">
+               <div id="add" class="col-lg-6">{% trans "From Date" %}</div>
+                    <div class="input-group date col-lg-6">
+                        <input type="text" class="form-control col-lg-6">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+            </div>    
+            <div class="col-lg-4">
+                <div id="add" class="add col-lg-6">{% trans "To Date" %}</div>
+                <div class="input-group date col-lg-6">
+                    <input type="text" class="form-control col-lg-6">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+               <button type="button" class="btn btn-primary">{% trans "Search" %}</button>
+        </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
             <div class="table-responsive">
@@ -224,11 +240,13 @@ TTS.forms.upload = function(elm) {
 };
 
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/admin/billboard/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderadmin(data);
+        TTS.utils.ajaxloaderstop();
     });
     $('#admin-main-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import (ugettext as _, activate)
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from student import models
 from portaladmin import models as pmodels
@@ -15,6 +16,7 @@ def switchlanguage(f):
         return f(req)
     return inner
 
+@login_required
 @switchlanguage
 def home(request):
     folders = [{
@@ -60,6 +62,7 @@ def home(request):
                                            "admin_folders":admin_folders,
                                            "recent_activities":recent_activities,
                                            "announcement":announcement})
+@login_required
 @switchlanguage
 def studentresourcetype(request):
     folders = [{
@@ -87,6 +90,7 @@ def studentresourcetype(request):
     return render(request, 'portalstudent/studentresource_type.html', 
                   {"folders":folders,'studentresourcetype':studentresourcetype})
 
+@login_required
 @switchlanguage
 def resourcetype(request):
     folders = [{
@@ -111,6 +115,7 @@ def resourcetype(request):
     return render(request, 'portalstudent/resource_type.html', 
                   {"folders":folders,'resourcetype':resourcetype})
 
+@login_required
 @switchlanguage
 def workspace(request):
     folders = [{
@@ -139,14 +144,21 @@ def workspace(request):
                            #'body':studentresourcetype_body}
     return render(request, 'portalstudent/workspace.html', 
                   {"folders":folders,'workspace':workspace})
+
+@login_required
 @switchlanguage
 def studentslist(request):
     user = models.Studentinfo.objects.filter(username=request.user.username)[0]
     return render(request, 'portalstudent/studentslist.html', {'user':user})
 
+
+@login_required
+@switchlanguage
 def assignedresourcelist(request):
     return render(request, 'portalstudent/assignedresourcelist.html')
 
+@login_required
+@switchlanguage
 def studentprofile(request):
     user = models.Studentinfo.objects.filter(username=request.user.username)[0]
     folders = [{
@@ -161,18 +173,28 @@ def studentprofile(request):
     return render(request, 'portalstudent/studentprofile.html', 
                   {"folders":folders, "user":user})
 
+@login_required
+@switchlanguage
 def studentassignedresourcelist(request):
     return render(request, 'portalstudent/studentassignedresourcelist.html')
 
+@login_required
+@switchlanguage
 def viewstudentresource(request):
     return render(request, 'portalstudent/viewstudentresource.html')
 
+@login_required
+@switchlanguage
 def viewstudentwrittenworks(request):
     return render(request, 'portalstudent/viewstudentwrittenworks.html')
 
+@login_required
+@switchlanguage
 def viewstudentwork(request):
     return render(request, 'portalstudent/viewstudentwork.html')
 
+@login_required
+@switchlanguage
 def worklistinfo(request):
     worktype=request.GET.get('workspacetype')
     if worktype=='text':
@@ -188,31 +210,53 @@ def worklistinfo(request):
                              "workspacetype":worktype,
                              "form" : StudentWorkForm.StudentWorkForm()})
     
+@login_required
+@switchlanguage
 def studentviewwork(request):
     return render(request, 'portalstudent/studentviewwork.html')
 
+@login_required
+@switchlanguage
 def studentnoteslist(request):
     return render(request, 'portalstudent/studentnoteslist.html',
                             {"form" : StudentNotesForm.StudentNotesForm()})
 
+@login_required
+@switchlanguage
 def studentwrittenwork(request):
     return render(request, 'portalstudent/studentwrittenwork.html')
 
+@login_required
+@switchlanguage
 def studentviewassessments(request):
     return render(request, 'portalstudent/studentviewassessments.html')
 
+@login_required
+@switchlanguage
 def studentclassroom(request):
     return render(request, 'portalstudent/studentclassroom.html')
 
+@login_required
+@switchlanguage
 def viewassignresource(request):
     return render(request, 'portalstudent/viewassignresource.html')    
 
+@login_required
+@switchlanguage
 def viewassignmentanswer(request):
     return render(request, 'portalstudent/viewassignmentanswer.html') 
 
+@switchlanguage
 @switchlanguage
 def stickynotes(request):
     return render(request, 'portalstudent/stickynotes.html', 
                                         {'form':StickyForm.StickyForm(),
                                          'Cform':StickyCommentForm.StickyCommentForm()
                                          })    
+@switchlanguage
+def billboard(request):
+    return render(request, 'portalstudent/billboard.html')
+
+@switchlanguage
+def billviewassignmentanswer(request):
+    return render(request, 'portalstudent/billviewassignmentanswer.html')
