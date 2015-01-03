@@ -60,6 +60,9 @@ TTS.forms = TTS.forms || {};
 TTS.forms.deladmin = function(id) {
     console.log(id);
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'DELETE',
         url : '/api/admin/admin/'+id
     }).done(function( msg ) {

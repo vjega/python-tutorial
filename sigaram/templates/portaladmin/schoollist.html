@@ -69,6 +69,9 @@ TTS.forms.addschool = function() {
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-school");
                 $.ajax({
+                    headers : {
+                        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                      },
                     type:'POST',
                     data: data,
                     url : '/api/admin/adminschool/'
@@ -102,6 +105,9 @@ TTS.forms.editschool = function(id, data) {
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-school");
                 $.ajax({
+                    headers : {
+                        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                    },
                     type:'PUT',
                     data: data,
                     url : '/api/admin/adminschool/'+id
@@ -160,10 +166,12 @@ TTS.forms.renderadminschool = function(data){
 
 };
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
      $.ajax({
         "url":"/api/admin/adminschool/?format=json",
         "type":"GET"
     }).done(function(data){
+        TTS.utils.ajaxloaderstop();
          if (data.length) {
             TTS.forms.renderadminschool(data);
         } else {

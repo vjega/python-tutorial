@@ -80,6 +80,9 @@ TTS.forms.showcalform = function(start, end, allDay) {
 TTS.forms.saveCal = function () {
     var data = TTS.utils.serilaizeJson("#cal-event");
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'POST',
         data: data,
         url : '/api/admin/calendar/'
@@ -104,6 +107,7 @@ TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
     var end_date = calEvent.end.format().split("T");
     var end_time = end_date[1].split("+");
     BootstrapDialog.show({
+<<<<<<< HEAD
             title: 'Edit Event',
             message: $($('#cal-form').render()),
             onshown: function(){
@@ -136,9 +140,46 @@ TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
                 },{
                 label: 'Cancel',
                 action: function(dialogItself){
+=======
+        title: 'Edit Event',
+        message: $($('#cal-form').render()),
+        onshown: function(){
+            $('#id_title').val(calEvent.title);
+            $('#id_start').val(calEvent.start.format());
+            $('#id_end').val(calEvent.end.format());
+
+            $('#id_start,#id_end').datepicker({
+                format: "yyyy/mm/dd",
+                todayBtn: "linked",
+                autoclose: true,
+                todayHighlight: true
+            });
+        },
+        buttons: [{
+            label: 'Update',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#cal-event");
+                data = JSON.parse(data);
+                $.ajax({
+                    headers : {
+                        'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                    },
+                    type:'PUT',
+                    data: JSON.stringify(data),
+                    url : '/api/admin/calendar/'+calEvent.id
+                }).done(function( msg ) {
+>>>>>>> 16a38b19e123fd9bdf0b79ac33706e1d4ac1af4d
                     dialogItself.close();
-                }
-            }]
+                    location.reload();
+                });
+            }
+            },{
+            label: 'Cancel',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
+        }]
     });
 }
 
@@ -149,6 +190,9 @@ TTS.forms.updatecalevent = function (event){
         "end" : event.start.format()
     }
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'PUT',
         data: JSON.stringify(data),
         url : '/api/admin/calendar/'+event.id

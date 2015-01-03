@@ -82,6 +82,9 @@ TTS.forms = TTS.forms || {}
 };*/
 TTS.forms.addteacherresource = function(form, data) {
     $.ajax({
+        headers : {
+             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
         type:'POST',
         data: data,
         url : '/api/admin/teacherresourcesinfo/'
@@ -127,6 +130,9 @@ TTS.forms.renderteacherresourceinfo = function(data){
             { "title": "{% trans "Title" %}",
               "data" : "resourcetitle"  
             },
+            { "title": "{% trans "Class" %}",
+              "data" : "class"  
+            },
             { "title": "{% trans "Date" %}",
               "data" : "date"  
             },
@@ -146,6 +152,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
         t.slno = ++count;
         t.DT_RowId = data[i].teacherresourceid;
         t.resourcetitle = data[i].resourcetitle;
+        t.class = data[i].shortname;
         t.date = data[i].createddate;
         t.resourcetype = data[i].resourcetype;
         t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
@@ -185,6 +192,9 @@ TTS.forms.upload = function(elm) {
 
 var updateChapter = function(){
     $.ajax({
+        headers : {
+             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
         'url': "/api/admin/chapterinfo/?classid="+$("#id_classid").val()
                 +"&section="+$("#id_section").val(),
         'type':'GET'
@@ -199,12 +209,14 @@ var updateChapter = function(){
 };
 
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/admin/teacherresourcesinfo/?format=json",
         "type":"GET"
     }).done(function(data){
         if (data.length) {
             TTS.forms.renderteacherresourceinfo(data);
+            TTS.utils.ajaxloaderstop();
         } else {
             TTS.forms.table.fnClearTable();
         }

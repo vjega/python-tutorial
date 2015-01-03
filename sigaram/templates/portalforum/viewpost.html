@@ -85,6 +85,9 @@ TTS.forms = TTS.forms || {}
 };*/
 TTS.forms.addviewpost = function(form, data) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
         type:'POST',
         data: data,
         url : '/api/forum/postreplyinfo/'
@@ -98,6 +101,9 @@ TTS.forms.addviewpost = function(form, data) {
 
 TTS.forms.allreplypost = function(form, data) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
         type:'POST',
         data: data,
         url : '/api/forum/postinfo/'

@@ -2,6 +2,7 @@
 from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from teacher import models
 from portaladmin import models as pmodels
 from teacher.forms import ( RubricsForm,
@@ -31,6 +32,7 @@ student_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/teachers',
                                       #backend=EasyThumbnailUploadBackend, 
                                       DIMENSIONS=(250, 250))
 
+@login_required
 @switchlanguage
 def home(request):
     folders = [{
@@ -64,30 +66,36 @@ def home(request):
                                            "recent_activities":recent_activities,
                                            "announcement":announcement})
 
+@login_required
 @switchlanguage
 def assignedresourcelist(request):
     return render(request, 'portalteacher/assignedresourcelist.html')
 
 
+@login_required
 @switchlanguage
 def viewworkspacelist(request):
    # print request.GET.get('type')
     return render(request, 'portalteacher/viewworkspacelist.html', {'opt':request.GET.get('type'),
                                                  "form" : ViewworkspaceForm.ViewworkspaceForm()})
 
+@login_required
 @switchlanguage
 def writtenwork(request):
     return render(request, 'portalteacher/writtenwork.html',{
                                         "form" : WrittenworkForm.WrittenworkForm()})
 
+@login_required
 @switchlanguage
 def viewassessments(request):
     return render(request, 'portalteacher/viewassessments.html')
 
+@login_required
 @switchlanguage
 def adminlist(request):
     return render(request, 'portalteacher/adminlist.html')
 
+@login_required
 @switchlanguage
 def teacherslist(request):
     schools = models.Schoolinfo.objects.all()
@@ -95,6 +103,7 @@ def teacherslist(request):
     return render(request, 'portalteacher/teacherslist.html', 
                                         {'schools':schools,'classes':classes})
 
+@login_required
 @switchlanguage
 def studentslist(request):
     schools = models.Schoolinfo.objects.all()
@@ -103,14 +112,17 @@ def studentslist(request):
                                     'classes':classes,"form" : StudentForm.StudentForm()})
                                                              
 
+@login_required
 @switchlanguage
 def classroom(request):
     return render(request, 'portalteacher/classroom.html')
 
+@login_required
 @switchlanguage
 def myprofile(request):
     return render(request, 'portalteacher/myprofile.html')
 
+@login_required
 @switchlanguage
 def allschoolresourcelist(request):
     schools = models.Schoolinfo.objects.all()
@@ -118,6 +130,7 @@ def allschoolresourcelist(request):
     return render(request, 'portalteacher/allschoolresourcelist.html', {'schools':schools,
                                                                         'teacherresourceinfo':teacherresourceinfo})
 
+@login_required
 @switchlanguage
 def students(request):
     schools = models.Schoolinfo.objects.all()
@@ -126,6 +139,7 @@ def students(request):
                                                              'classes':classes})
 
 
+@login_required
 @switchlanguage
 def studentresources(request):
     folders = [{
@@ -166,6 +180,7 @@ def studentresources(request):
     return render(request, 'portalteacher/studentresources.html', 
                   {"folders":folders,'studentresources':studentresources})
 
+@login_required
 @switchlanguage
 def studentresourcetype(request):
     folders = [{
@@ -201,6 +216,7 @@ def studentresourcetype(request):
                   "section":section}
                   )
 
+@login_required
 @switchlanguage
 def extras(request):
     folders = [{
@@ -227,6 +243,7 @@ def extras(request):
     return render(request, 'portalteacher/extras.html', 
                   {"folders":folders,'extras':extras})
 
+@login_required
 @switchlanguage
 def studentresourceunits(request):
     #studentresourceunits_body = models.Chapterinfo.objects.all()
@@ -237,11 +254,13 @@ def studentresourceunits(request):
                    'section': request.GET.get('section')    
                   })
 
+@login_required
 @switchlanguage
 def studentresourcelist(request):
     return render(request, 'portalteacher/studentresourcelist.html', 
                     {'studentresourcelist':studentresourcelist}) 
 
+@login_required
 @switchlanguage
 def assignchapter(request):
     schools = models.Schoolinfo.objects.all()
@@ -250,6 +269,7 @@ def assignchapter(request):
                     {'assignchapter':assignchapter,'schools':schools,
                                              'classes':classes   }) 
 
+@login_required
 @switchlanguage
 def assignresource(request):
     schools = models.Schoolinfo.objects.all()
@@ -258,6 +278,7 @@ def assignresource(request):
                     {'assignresource':assignresource,'schools':schools,
                                              'classes':classes   })
 
+@login_required
 @switchlanguage
 def resources(request):
     folders = [{
@@ -275,6 +296,7 @@ def resources(request):
     return render(request, 'portalteacher/resources.html', 
                   {"folders":folders,'resources':resources})
 
+@login_required
 @switchlanguage
 def resource_type (request):
     folders = [{
@@ -316,6 +338,7 @@ def resource_type (request):
                   {"folders":folders,'resource_type':resource_type})
 
 
+@login_required
 @switchlanguage
 def allschoolresourcelist(request):
     schools = models.Schoolinfo.objects.all()
@@ -323,6 +346,7 @@ def allschoolresourcelist(request):
     return render(request, 'portalteacher/allschoolresourcelist.html', 
                                         {'schools':schools,'classes':classes})
 
+@login_required
 @switchlanguage
 def resource_units(request):
     return render(request, 
@@ -332,11 +356,13 @@ def resource_units(request):
                    'section': request.GET.get('section')
                   })
 
+@login_required
 @switchlanguage
 def resourcelist(request):
     return render(request, 'portalteacher/resourcelist.html', 
                     {'resourcelist':resourcelist })
 
+@login_required
 @switchlanguage
 def extraslist(request):
     #studentresourceunits_body = models.Chapterinfo.objects.all()
@@ -348,10 +374,12 @@ def extraslist(request):
                   })
 
 
+@login_required
 @switchlanguage
 def rubrics(request):
     return render(request, 'portalteacher/rubrics.html')
 
+@login_required
 @switchlanguage
 def statistics(request):
     folders = [{
@@ -370,6 +398,7 @@ def statistics(request):
     return render(request, 'portalteacher/statistics.html', 
                   {"folders":folders,'statistics':statistics})
 
+@login_required
 @switchlanguage
 def statisticsstudentslist(request):
     schools = models.Schoolinfo.objects.all()
@@ -378,24 +407,29 @@ def statisticsstudentslist(request):
                                         {'schools':schools, 'classes':classes, 
                                         "form" : StudentForm.StudentForm()} )
 
+@login_required
 @switchlanguage
 def rubric_edit(request):
     return render(request, 'portalteacher/rubric_edit.html' ,{'rubric_edit':rubric_edit,
                             "form" : RubricsForm.RubricsForm() })
+@login_required
 @switchlanguage                
 def viewassignresource(request):
     return render(request, 'portalteacher/viewassignresource.html')
     
+@login_required
 @switchlanguage
 def viewassignmentanswer(request):
     return render(request, 'portalteacher/viewassignmentanswer.html') 
 
+@login_required
 @switchlanguage
 def stickynotes(request):
     return render(request, 'portalteacher/stickynotes.html', 
                                         {'form':StickyForm.StickyForm(),
                                          'Cform':StickyCommentForm.StickyCommentForm()
                                          })                     
+@login_required
 @switchlanguage
 def billboard(request):
     return render(request, 'portalteacher/billboard.html')

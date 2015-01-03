@@ -20,11 +20,9 @@ def loginname_to_userid(usertype, username):
         return m.studentid
 
 
-
-
 class ForuminfoViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Foruminfo.objects.all()
+    queryset = models.Foruminfo.objects.filter().order_by('-createddate')
     serializer_class = forumserializers.ForuminfoSerializer
 
     def create(self, request):
@@ -51,7 +49,7 @@ class ForuminfoViewSet(viewsets.ModelViewSet):
 
 class TopicinfoViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Topicinfo.objects.all()
+    queryset = models.Topicinfo.objects .all()
     serializer_class = forumserializers.TopicinfoSerializer
 
     def list(self, request):

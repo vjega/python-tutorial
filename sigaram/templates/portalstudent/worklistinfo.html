@@ -76,6 +76,9 @@ TTS.forms.addstudentwork = function() {
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-studentworkspace");
                 $.ajax({
+                    headers : {
+                        'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                    },
                     type:'POST',
                     data: data,
                     url : '/api/student/studentworkspaceinfo/'
@@ -145,11 +148,13 @@ TTS.forms.renderstudentwork = function(data){
 
 };
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/student/studentworkspaceinfo/?workspacetype={{workspacetype}}&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstudentwork(data);
+        TTS.utils.ajaxloaderstop();
     });
     $('#studentwork-main-tbl').on('click', 'tbody tr', function(){
         window.location = 'studentviewwork?workspaceid='+this.id;

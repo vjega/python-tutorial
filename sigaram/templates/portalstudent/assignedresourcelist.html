@@ -4,7 +4,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Deliverables" %}</h2>
+        <h2 class="page-header">{% trans "Assignments" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -109,6 +109,7 @@
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
 <script src="{%static "bower_components/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 <script src="{%static "bower_components/bootstrap-datetimepicker/src/js/locales/bootstrap-datetimepicker.es.js" %}"></script>
 <script>
     window.TTS = window.TTS || {}
@@ -185,11 +186,13 @@
     };
 
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/admin/studentassignresource/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.assignedstudentresource(data);
+        TTS.utils.ajaxloaderstop();
     });
     $('.resourcelist').on('click','tbody tr',function(e){
         var x = this.id;

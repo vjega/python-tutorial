@@ -232,6 +232,9 @@ TTS.forms = TTS.forms || {};
 
 TTS.forms.addstickynote = function(form, data) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'POST',
         data: data,
         url : '/api/admin/stickynotes/'
@@ -322,6 +325,9 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
                 data = JSON.parse(data);
                 data['color'] = $("#preview_color").attr("class");
                 $.ajax({
+                    headers : {
+                        'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                    },
                     type:'PUT',
                     data: JSON.stringify(data),
                     url : '/api/admin/stickynotes/'+edit_id
@@ -341,6 +347,9 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
 
 TTS.forms.delstickynotes = function(id) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'DELETE',
         url : '/api/admin/stickynotes/'+id
     }).done(function( msg ) {
@@ -353,6 +362,9 @@ TTS.forms.delstickynotes = function(id) {
 
 TTS.forms.addstickycomment = function(form, data) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'POST',
         data: data,
         url : '/api/admin/stickycomments/'
@@ -443,11 +455,13 @@ $(document).ready(function(){
         TTS.forms.showstickyform();
     });
 
-     $.ajax({
+    TTS.utils.ajaxloaderstart();
+    $.ajax({
         "url":"/api/admin/stickynotes/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstickynotes(data);
+        TTS.utils.ajaxloaderstop();
     });
 
     setTimeout(function(){ load_onclick_events() }, 500);

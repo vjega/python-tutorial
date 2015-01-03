@@ -70,7 +70,7 @@ class Studentworkspaceinfo(viewsets.ModelViewSet):
             kwarg['workspacetype'] = workspacetype
         
         
-        queryset = models.Studentworkspaceinfo.objects.filter(**kwarg)
+        queryset = models.Studentworkspaceinfo.objects.filter(**kwarg).order_by('-posteddate')
         serializer = studentserializers.StudentworkspaceinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -106,9 +106,9 @@ class StudentnotesinfoViewSet(viewsets.ModelViewSet):
     def list(self, request):
         userid =  request.user.id
         if userid :
-            queryset = models.Notesinfo.objects.filter(createdby=userid)
+            queryset = models.Notesinfo.objects.filter(createdby=userid).order_by('-createddate')
         else:
-            queryset = models.Notesinfo.objects.all()
+            queryset = models.Notesinfo.objects.all().order_by('-createddate')
         serializer = studentserializers.StudentnotesinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 

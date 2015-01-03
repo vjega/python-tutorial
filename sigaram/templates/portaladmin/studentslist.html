@@ -11,10 +11,10 @@
 </div>
 <div class="row">
     <span>
-    <div class="form-group" class="col-sm-3">
+    <div class="form-group" class="col-sm-6">
         <label for="folder_name" class="col-sm-2 control-label">{% trans "Select School" %}
         </label>
-        <div class="col-sm-2">
+        <div class="col-sm-5">
             <select name="school_name" class="form-control" id="school_name">
                 {% for school in schools %}
                 <option value="{{school.schoolid}}">{{school.schoolname}}</option>
@@ -25,7 +25,7 @@
     </span>
     <div class="form-group" class="col-sm-3">
         <label for="folder_name" class="col-sm-2 control-label">{% trans "Select Section" %}</label>
-        <div class="col-sm-1">
+        <div class="col-sm-2">
             <select name="classid" class="form-control" id="classid">
                 {% for class in classes %}
                 <option value="{{class.classid}}">{{class.shortname}}</option>
@@ -34,6 +34,7 @@
         </div>
     </div>
 </div>
+<br />
 
 {% endblock topcontent %}
 {% block botcontent %}
@@ -90,6 +91,9 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 TTS.forms.addstudent = function(form, data) {
     $.ajax({
+        headers : {
+             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
         type:'POST',
         data: data,
         url : '/api/admin/student/'
@@ -129,6 +133,7 @@ TTS.forms.editstudent = function(id, data) {
         title: 'Edit Student',
         message: $($('#student-form').render()),
         onshown: function(){
+            TTS.forms.upload();
             $("#add-student").find("input,select").each(function(){
                 $(this).val(data[this['name']]);
             });
@@ -139,6 +144,9 @@ TTS.forms.editstudent = function(id, data) {
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-student");
                 $.ajax({
+                    headers : {
+                        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                    },
                     type:'PUT',
                     data: data,
                     url : '/api/admin/student/'+id
@@ -245,6 +253,7 @@ TTS.forms.upload = function(elm) {
 
 
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     var url = "/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json"
     $.ajax({
         "url":url,
@@ -252,6 +261,7 @@ $(document).ready(function(){
     }).done(function(data){
         if (data.length) {
             TTS.forms.renderstudentlist(data);
+            TTS.utils.ajaxloaderstop();
         } else {
             TTS.forms.table.fnClearTable();
         }
