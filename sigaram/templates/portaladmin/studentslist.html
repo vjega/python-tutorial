@@ -247,6 +247,7 @@ TTS.forms.upload = function(elm) {
 
 
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     var url = "/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json"
     $.ajax({
         "url":url,
@@ -254,6 +255,7 @@ $(document).ready(function(){
     }).done(function(data){
         if (data.length) {
             TTS.forms.renderstudentlist(data);
+            TTS.utils.ajaxloaderstop();
         } else {
             TTS.forms.table.fnClearTable();
         }

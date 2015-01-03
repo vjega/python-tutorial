@@ -443,11 +443,13 @@ $(document).ready(function(){
         TTS.forms.showstickyform();
     });
 
-     $.ajax({
+    TTS.utils.ajaxloaderstart();
+    $.ajax({
         "url":"/api/admin/stickynotes/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstickynotes(data);
+        TTS.utils.ajaxloaderstop();
     });
 
     setTimeout(function(){ load_onclick_events() }, 500);

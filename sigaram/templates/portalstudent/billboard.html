@@ -75,6 +75,7 @@ TTS.forms = TTS.forms || {};
 
 /* ADMIN Crud Starts Here*/
 TTS.forms.addadmin = function(form, data) {
+     TTS.utils.ajaxloaderstart();
     $.ajax({
         type:'POST',
         data: data,
