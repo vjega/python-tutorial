@@ -149,7 +149,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
         t.slno = ++count;
         t.DT_RowId = data[i].teacherresourceid;
         t.resourcetitle = data[i].resourcetitle;
-        t.class = data[i].classid;
+        t.class = data[i].shortname;
         t.date = data[i].createddate;
         t.resourcetype = data[i].resourcetype;
         t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";

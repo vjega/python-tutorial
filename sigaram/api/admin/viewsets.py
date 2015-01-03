@@ -189,13 +189,33 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherresourceinfo.objects.filter().order_by('-createddate')
     serializer_class = adminserializers.TeacherresourceinfoSerializer
 
+    def list(self, request):
+        sql = """
+        SELECT  tri.teacherresourceid,
+                tri.classid,
+                tri.section,
+                tri.resourcetype,
+                tri.resourcetitle,
+                ci.shortname,
+                tri.createddate
+        FROM teacherresourceinfo tri
+        INNER JOIN classinfo ci ON ci.classid = tri.classid
+        ORDER BY tri.createddate DESC
+        """
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [dict(zip([col[0] for col in desc], row))for row in cursor.fetchall()]
+        return Response(result)
+
     def create(self, request):
         teacherresource = models.Teacherresourceinfo()
         teacherresourcedata =  json.loads(request.DATA.keys()[0])
+        restype = teacherresourcedata.get('resourcetype')
         teacherresource.schoolid = teacherresourcedata.get('schoolid')
         teacherresource.classid = teacherresourcedata.get('classid')
         teacherresource.section = teacherresourcedata.get('section')
-        teacherresource.resourcetype = teacherresourcedata.get('resourcetype')
+        teacherresource.resourcetype = restype
         teacherresource.resourcetitle = teacherresourcedata.get('resourcetitle')
         teacherresource.documenturl = "" #teacherresourcedata.get('documenturl')
         teacherresource.imageurl = "" #teacherresourcedata.get('imageurl')
