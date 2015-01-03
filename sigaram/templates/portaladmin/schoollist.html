@@ -70,7 +70,7 @@ TTS.forms.addschool = function() {
                 var data = TTS.utils.serilaizeJson("#add-school");
                 $.ajax({
                     headers : {
-                        'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
                       },
                     type:'POST',
                     data: data,
@@ -106,7 +106,7 @@ TTS.forms.editschool = function(id, data) {
                 var data = TTS.utils.serilaizeJson("#add-school");
                 $.ajax({
                     headers : {
-                        'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
                     },
                     type:'PUT',
                     data: data,
