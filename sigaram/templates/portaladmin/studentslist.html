@@ -92,7 +92,7 @@ TTS.forms = TTS.forms || {}
 TTS.forms.addstudent = function(form, data) {
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'POST',
         data: data,
@@ -145,7 +145,7 @@ TTS.forms.editstudent = function(id, data) {
                 var data = TTS.utils.serilaizeJson("#add-student");
                 $.ajax({
                     headers : {
-                        'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
                     },
                     type:'PUT',
                     data: data,

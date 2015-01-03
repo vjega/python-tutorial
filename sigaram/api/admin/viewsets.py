@@ -31,6 +31,7 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
         print request.user
         print request.user.id
         print request.user.username
+        
         admin = models.Admininfo()
         admindata =  json.loads(request.DATA.keys()[0])
         admin.username = admindata.get('username')
@@ -78,7 +79,7 @@ class teacherViewSet(viewsets.ModelViewSet):
         teacher.password = teacherdata.get('password')
         teacher.firstname = teacherdata.get('firstname')
         teacher.schoolid = teacherdata.get('schoolid')
-        teacher.classid = '1' #teacherdata.get('classid')
+        teacher.classid = teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
         teacher.imageurl = teacherdata.get('imageurl')
         #teacher.imageurl = studentdata.get('imageurl')

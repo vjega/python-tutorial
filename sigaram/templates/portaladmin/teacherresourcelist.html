@@ -83,7 +83,7 @@ TTS.forms = TTS.forms || {}
 TTS.forms.addteacherresource = function(form, data) {
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'POST',
         data: data,
@@ -193,7 +193,7 @@ TTS.forms.upload = function(elm) {
 var updateChapter = function(){
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         'url': "/api/admin/chapterinfo/?classid="+$("#id_classid").val()
                 +"&section="+$("#id_section").val(),
