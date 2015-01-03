@@ -433,3 +433,8 @@ def stickynotes(request):
 @switchlanguage
 def billboard(request):
     return render(request, 'portalteacher/billboard.html')
+
+@login_required
+@switchlanguage
+def activitystatistics(request):
+    return render(request, 'portalteacher/activitystatistics.html')
