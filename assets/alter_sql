@@ -41,3 +41,4 @@ CREATE TABLE  `d60701781`.`stickynotes` (
 ALTER TABLE `calendardetails` 
 ADD COLUMN `eventcreatedby` varchar(30)  NOT NULL AFTER `title` , 
 ADD COLUMN `eventeditedby` varchar(30)  NOT NULL AFTER `eventcreatedby`;
+ALTER TABLE editingtext MODIFY spanid VARCHAR(50);
