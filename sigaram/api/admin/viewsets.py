@@ -23,6 +23,7 @@ def loginname_to_userid(usertype, username):
         return m.studentid
 
 class AdmininfoViewSet(viewsets.ModelViewSet):
+
     queryset = models.Admininfo.objects.filter(isdelete=0).order_by('-createddate')
     serializer_class = adminserializers.AdminInfoSerializer
 
@@ -125,9 +126,9 @@ class studentViewSet(viewsets.ModelViewSet):
             queryset = models.Studentinfo.objects.filter(schoolid=schoolid).order_by('-createddate')
         elif schoolids:
             schools = schoolids.split(",")
-            q = Q() 
+            q = Q()
             for s in schools:
-                q |= Q(schoolid=s) 
+                q |= Q(schoolid=s)
             queryset = models.Studentinfo.objects.filter(q, classid=classid)
         else:
             queryset = models.Studentinfo.objects.all()
@@ -135,7 +136,7 @@ class studentViewSet(viewsets.ModelViewSet):
         serializer = adminserializers.StudentinfoSerializer(queryset, many=True)
         return Response(serializer.data)
        
-    @create_login('Student')   
+    @create_login('Student')
     def create(self, request):
         student = models.Studentinfo()
         studentdata =  json.loads(request.DATA.keys()[0])
@@ -656,7 +657,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
 
     def list(self, request):
 
-        print request.user.id
+        #print request.user.name
 
         datecond = ''
         if request.GET.get('fdate') and request.GET.get('tdate'):
@@ -676,9 +677,9 @@ class StudentAssignResource(viewsets.ModelViewSet):
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         WHERE isdeleted=0
-              AND ari.studentid=%d
-              AND ari.IsDelete=0 
-              AND ri.categoryid=0 
+              AND ari.studentid=%s
+              AND ari.IsDelete=0
+              AND ri.categoryid=0
               %s
         GROUP BY resourceid 
         ORDER BY answereddate DESC''' % (18594, datecond)
@@ -734,7 +735,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
             for s in students:
                 ar = models.Assignresourceinfo()
                 ar.resourceid = int(r)
-                ar.studentid = int(s)
+                ar.studentid = str(s)
                 ar.assigntext = str(assigntext)
                 ar.isanswered = 0
                 ar.issaved = 0
