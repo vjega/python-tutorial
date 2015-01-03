@@ -1298,7 +1298,7 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         answertext = rec[2]
         spanid = rec[3]
 
-        print answertext
+        #print answertext
 
         #updating approved answer text
         # sql = '''
@@ -1309,20 +1309,20 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         # cursor.execute(sql)
 
         #resetting the previous one if set
-        # sql = '''
-        # UPDATE editingtext
-        #     SET isapproved = 0
-        # WHERE spanid = '%s' ''' % (spanid)
-        # cursor = connection.cursor()
-        # cursor.execute(sql)
+        sql = '''
+        UPDATE editingtext
+            SET isapproved = 0
+        WHERE spanid = '%s' ''' % (spanid)
+        cursor = connection.cursor()
+        cursor.execute(sql)
 
         # #marking the selected as approved
-        # sql = '''
-        # UPDATE editingtext
-        #     SET isapproved = 1
-        # WHERE editingid = '%s' ''' % (pk)
-        # cursor = connection.cursor()
-        # cursor.execute(sql)
+        sql = '''
+        UPDATE editingtext
+            SET isapproved = 1
+        WHERE editingid = '%s' ''' % (pk)
+        cursor = connection.cursor()
+        cursor.execute(sql)
 
         return Response('approved')
 
