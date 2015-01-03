@@ -164,24 +164,24 @@ TTS.forms.renderadmin = function(data){
         var link = "";
 
         if (data[i].resourceid){
-           t.typebillboard = "<a href='billviewassignmentanswer?resourceid="+data[i].resourceid+"&studentid="+ data[i].studentid+"'>மாணவர் பெட்டகம்</a>";
-
+           t.typebillboard = "<a href='billviewassignmentanswer?resourceid="+data[i].resourceid+"&studentid="+ data[i].studentid+"'>
+                                                      {% trans "Student Archive" %}</a>";
         } else if (data[i].writtenworkid !== 0){
-            t.typebillboard = "<a href='billviewwrittenworkanswer?resourceid='>எழுத்து பாடம்</a>";
-                    
-
+            t.typebillboard = "<a href='billviewwrittenworkanswer?resourceid='>
+                                                        {% trans " Writing lesson" %}</a>";
         } else if (data[i].assessmentid){
             if (data[i].assessmenttype == 0) {
-                t.typebillboard = "<a href ='billfillinganswerrating?assessmentid='>நிரப்புக</a>";
-                 
+                t.typebillboard = "<a href ='billfillinganswerrating?assessmentid='>
+                                                                    {%trans "Fill" %}</a>";
             } else if (data[i].assessmenttype == 1) {
-                t.typebillboard = "<a href ='billchooseanswerrating?assessmentid='>சரியான விடை</a>";
-                 
+                t.typebillboard = "<a href ='billchooseanswerrating?assessmentid='>
+                                                        {% trans "Correct answer" %}</a>";
             } else if (data[i].assessmenttype == 2 ) {
-                t.typebillboard = "<a href ='billcomprehensionanswerrating?assessmentid='>கட்டுரை</a>";
-
+                t.typebillboard = "<a href ='billcomprehensionanswerrating?assessmentid='>
+                                                                {% trans "Article" %}</a>";
             } else if (data[i].assessmenttype == 3 ) {
-                t.typebillboard = "<a href ='billopenendedanswerrating?assessmentid='>open ended</a>";
+                t.typebillboard = "<a href ='billopenendedanswerrating?assessmentid='>
+                                                            {% trans "open ended" %}</a>";
             }
         }
 
@@ -224,11 +224,13 @@ TTS.forms.upload = function(elm) {
 };
 
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/admin/billboard/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderadmin(data);
+        TTS.utils.ajaxloaderstop();
     });
     $('#admin-main-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();

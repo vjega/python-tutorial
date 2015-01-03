@@ -46,6 +46,7 @@
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
@@ -100,11 +101,13 @@ TTS.forms.renderstudentwork = function(data){
     });
 };
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/admin/resourceinfo/?studentid=&studentloginid=&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstudentwork(data);
+        TTS.utils.ajaxloaderstop();
     });
     $('#admin-main-tbl').on('click', 'tbody tr', function(){
         window.location = 'viewstudentwork?resourceid='+this.id;

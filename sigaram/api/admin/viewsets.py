@@ -23,11 +23,14 @@ def loginname_to_userid(usertype, username):
         return m.studentid
 
 class AdmininfoViewSet(viewsets.ModelViewSet):
-    queryset = models.Admininfo.objects.filter(isdelete=0)
+    queryset = models.Admininfo.objects.filter(isdelete=0).order_by('-createddate')
     serializer_class = adminserializers.AdminInfoSerializer
 
     @create_login('Admin')
     def create(self, request):
+        print request.user
+        print request.user.id
+        print request.user.username
         admin = models.Admininfo()
         admindata =  json.loads(request.DATA.keys()[0])
         admin.username = admindata.get('username')
@@ -60,9 +63,9 @@ class teacherViewSet(viewsets.ModelViewSet):
     def list(self, request):
         schoolid =  request.GET.get('schoolid')
         if schoolid :
-            queryset = models.Teacherinfo.objects.filter(schoolid=schoolid)
+            queryset = models.Teacherinfo.objects.filter(schoolid=schoolid).order_by('-createddate')
         else:
-            queryset = models.Teacherinfo.objects.all()
+            queryset = models.Teacherinfo.objects.all().order_by('-createddate')
         serializer = adminserializers.TeacherinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -116,9 +119,9 @@ class studentViewSet(viewsets.ModelViewSet):
         schoolids  =  request.GET.get('schoolids')
 
         if schoolid and classid:
-            queryset = models.Studentinfo.objects.filter(schoolid=schoolid, classid=classid)
+            queryset = models.Studentinfo.objects.filter(schoolid=schoolid, classid=classid).order_by('-createddate')
         elif schoolid:
-            queryset = models.Studentinfo.objects.filter(schoolid=schoolid)
+            queryset = models.Studentinfo.objects.filter(schoolid=schoolid).order_by('-createddate')
         elif schoolids:
             schools = schoolids.split(",")
             q = Q() 
@@ -185,8 +188,27 @@ class TeacherResourcesViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
-    queryset = models.Teacherresourceinfo.objects.all()
+    queryset = models.Teacherresourceinfo.objects.filter().order_by('-createddate')
     serializer_class = adminserializers.TeacherresourceinfoSerializer
+
+    def list(self, request):
+        sql = """
+        SELECT  tri.teacherresourceid,
+                tri.classid,
+                tri.section,
+                tri.resourcetype,
+                tri.resourcetitle,
+                ci.shortname,
+                tri.createddate
+        FROM teacherresourceinfo tri
+        INNER JOIN classinfo ci ON ci.classid = tri.classid
+        ORDER BY tri.createddate DESC
+        """
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [dict(zip([col[0] for col in desc], row))for row in cursor.fetchall()]
+        return Response(result)
 
     def create(self, request):
         teacherresource = models.Teacherresourceinfo()
@@ -242,7 +264,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         if chapterid:
             kwarg['chapterid'] = chapterid
         
-        queryset = models.Resourceinfo.objects.filter(**kwarg)
+        queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('-createddate')
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -386,7 +408,7 @@ class AdminclassinfoViewSet(viewsets.ModelViewSet):
 
 class AdminschoolViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Schoolinfo.objects.all()
+    queryset = models.Schoolinfo.objects.all().order_by('-createddate')
     serializer_class = adminserializers.AdminschoolSerializer
 
     def create(self, request):

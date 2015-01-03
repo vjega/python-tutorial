@@ -509,3 +509,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', end
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
+.semester{
+    font-size:1.4em;
+    font-weight:bold;
+}
