@@ -586,52 +586,49 @@ class StudentAssignResource(viewsets.ModelViewSet):
     serializer_class = adminserializers.MindmapSerializer
 
     def update(self, request, pk=None):
-
-        print request.user.id
-
-        # data = {k:v[0] for k, v in dict(request.DATA).items()}
-        # #print data
-        # ari = models.Assignresourceinfo.objects.get(pk=pk)
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        print data
+        ari = models.Assignresourceinfo.objects.get(pk=pk)
         
-        # ari.answertext = data.get('answertext')
+        ari.answertext = data.get('answertext')
 
-        # if data.get('originaltext'):
-        #     ari.originaltext = data.get('originaltext')
+        if data.get('originaltext'):
+            ari.originaltext = data.get('originaltext')
 
-        # if data.get('answerurl'):
-        #     ari.answerurl = data.get('answerurl')
-        #     ari.isrecord = 1
+        if data.get('answerurl'):
+            ari.answerurl = data.get('answerurl')
+            ari.isrecord = 1
 
-        # if data.get('isanswered'):
-        #     ari.isanswered = data.get('isanswered')
-        #     ari.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        if data.get('isanswered'):
+            ari.isanswered = data.get('isanswered')
+            ari.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
 
-        # if data.get('issaved'):
-        #     ari.issaved = data.get('issaved')
+        if data.get('issaved'):
+            ari.issaved = data.get('issaved')
         
-        # ari.save()
+        ari.save()
 
-        # assignedid  = pk;
-        # spanid      = data.get('spanid');
-        # fulltext    = data.get('fulltext');
-        # orig        = data.get('orig');
-        # modified    = data.get('modified');
-        # usertype    = data.get('type');
-        # answertext  = data.get('answertext');
+        assignedid  = pk;
+        spanid      = data.get('spanid');
+        fulltext    = data.get('fulltext');
+        orig        = data.get('orig');
+        modified    = data.get('modified');
+        usertype    = data.get('type');
+        answertext  = data.get('answertext');
 
-        # ar = models.Editingtext()
-        # ar.editid       = int(assignedid)
-        # ar.spanid       = str(spanid)
-        # ar.previoustext = str(orig)
-        # ar.edittext     = str(modified)
-        # ar.typeofresource = 0
-        # ar.isapproved   = 0
-        # ar.isrejected   = 0
-        # ar.editedby     = request.user.id #loginname_to_userid('Teacher', 'sheela')
-        # ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
-        # ar.usertype     = int(usertype)
+        ar = models.Editingtext()
+        ar.editid       = int(assignedid)
+        ar.spanid       = str(spanid)
+        ar.previoustext = str(orig)
+        ar.edittext     = str(modified)
+        ar.typeofresource = 0
+        ar.isapproved   = 0
+        ar.isrejected   = 0
+        ar.editedby     = request.user.id #loginname_to_userid('Teacher', 'sheela')
+        ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
+        ar.usertype     = int(usertype)
 
-        # ar.save()
+        ar.save()
 
         return Response({'msg':True})
 
@@ -1231,9 +1228,7 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         assignedid = request.GET.get('assignedid')
 
         sql = """
-        SELECT au.id,
-               et.editedby,
-               editingid, 
+        SELECT editingid, 
                editid, 
                spanid, 
                previoustext, 
