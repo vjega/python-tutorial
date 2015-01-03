@@ -31,6 +31,12 @@
 
     <!-- Custom Fonts -->
     <link href="{%static "bower_components/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet" type="text/css">
+    <link href="{%static "icons/flaticon.css" %}" rel="stylesheet" type="text/css"> 
+    <style>
+        .modal {
+            z-index :0 !important;
+        }
+    </style>
     {% block morecss %}{% endblock %}
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -38,48 +44,61 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script src="{%static "bower_components/jquery/jquery.min.js" %}"></script>
+    <script src="{%static "bower_components/bootstrap3-datepicker/moment.js" %}"></script>
+    <script src="{%static "bower_components/bootstrap3-datepicker/bootstrap-datetimepicker.js" %}"></script>
+    <link href="{%static "bower_components/bootstrap3-datepicker/bootstrap-datetimepicker.min.css" %}" rel="stylesheet">
+
 </head>
-    
-<body class="orange-yellow">
-    
-    <div id="wrapper" class="pattern-minimal">
+
+<body class="">
+
+    <div id="wrapper" class="">
         <!-- user menu top -->
-        <div class="navbar navbar-default navbar-fixed-top">
-            <div class="container-fluid">
-                <div class="" id="navbar-top">
-                    <ul class="nav navbar-nav navbar-right">
-                        <div id="notification-container">
-                            <div id="top-notification"> 
-                               <span></span>
+        <div class="navbar navbar-default navbar-fixed-top orange-yellow">
+            <div class="t-sm-bg">
+                <div class="container-fluid">
+                    <div class="" id="navbar-top">
+                            <ul class="nav navbar-nav navbar-right">
+                            <div id="notification-container">
+                                <div id="top-notification"> 
+                                   <span></span>
+                                </div>
+                            </div>
+                            <li>
+                                <a href="">
+                                    <i class="fa fa-user"></i>
+                                    Welcome {{ user.get_username }} [Admin]
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../togglelanguage">
+                                    <i class="fa fa-user"></i>
+                                    Change Language
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../logout">
+                                    <i class="fa fa-sign-out"></i>
+                                    Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Header -->
+                <header class="header">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-8"><img src="{%static "img/10t-logo.png" %}" alt="" class="img-responsive ">
+                            </div>
+                            <div class="col-sm4 text-right"><img src="{%static "img/10t-partnet.png" %}" alt="">
                             </div>
                         </div>
-                        <li><a href=""><i class="fa fa-user"></i>
-                            Welcome {{ user.get_username }} [Teacher]
-                        </a>
-                        </li>
-                        <li>
-                            <a href="../togglelanguage">
-                                <i class="fa fa-user"></i>
-                                Change Language
-                            </a>
-                        </li>
-                        <li><a href="../logout"><i class="fa fa-sign-out"></i>Logout</a>
-                        </li>
-                    </ul>
-                </div>
+                    </div>
+                </header>
             </div>
         </div>
-
-        <!-- Header -->
-        <header class="header blue-green">
-            <div class="container-fluid t-sm-bg">
-                <div class="row">
-                    <div class="col-sm-8"><img src="{%static "img/10t-logo.png" %}" alt="" class="img-responsive "></div>
-                    <div class="col-sm4 text-right"><img src="{%static "img/10t-partnet.png" %}" alt=""></div>
-                </div>
-            </div>
-        </header>
-
         <!-- navbar-static-side -->
         <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse">
@@ -161,7 +180,7 @@
         </div>
         <!-- /.navbar-static-side -->
 
-        <div id="page-wrapper" class="pattern-minimal">
+        <div id="page-wrapper" class="" style="background:none;">
             {% block topcontent %}{% endblock %}
             {% block botcontent %}{% endblock %}
             <!-- /.row -->
@@ -170,9 +189,7 @@
     </div>
     <!-- /#wrapper -->
     {% block more %}{% endblock %}
-
     <!-- jQuery -->
-    <script src="{%static "bower_components/jquery/jquery.min.js" %}"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="{%static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
