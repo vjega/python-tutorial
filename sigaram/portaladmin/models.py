@@ -113,7 +113,7 @@ class Admininfo(models.Model):
 class Assessmentanswerinfo(models.Model):
     assessmentanswerid = models.BigIntegerField(primary_key=True)
     assessmentid = models.BigIntegerField()
-    studentid = models.BigIntegerField()
+    studentid = models.CharField(max_length=500)
     classid = models.BigIntegerField()
     schoolid = models.BigIntegerField()
     answertype = models.CharField(max_length=200)
@@ -201,7 +201,7 @@ class Assessmentlist(models.Model):
 class Assignassessmentinfo(models.Model):
     mappingid = models.BigIntegerField(primary_key=True)
     assessmentid = models.BigIntegerField()
-    studentid = models.BigIntegerField()
+    studentid = models.CharField(max_length=500)
     enddate = models.DateTimeField()
     isanswered = models.IntegerField()
     isbillboard = models.IntegerField()
@@ -217,7 +217,7 @@ class Assignassessmentinfo(models.Model):
 class Assignresourceinfo(models.Model):
     assignedid = models.BigIntegerField(db_column='assignedid', primary_key=True)
     resourceid = models.BigIntegerField()
-    studentid = models.BigIntegerField()
+    studentid = models.CharField(max_length=500)
     assigntext = models.TextField()
     isanswered = models.IntegerField()
     issaved = models.IntegerField()
@@ -246,7 +246,7 @@ class Assignresourceinfo(models.Model):
 class Assignwrittenworkinfo(models.Model):
     assignwrittenworkid = models.BigIntegerField(primary_key=True)
     writtenworkid = models.BigIntegerField()
-    studentid = models.BigIntegerField()
+    studentid = models.CharField(max_length=500)
     assigntext = models.TextField()
     issaved = models.IntegerField()
     ispublished = models.IntegerField()
@@ -269,7 +269,7 @@ class Billboardinfo(models.Model):
     assessmentid = models.BigIntegerField()
     resourceid = models.BigIntegerField()
     writtenworkid = models.BigIntegerField()
-    studentid = models.BigIntegerField()
+    studentid = models.CharField(max_length=500)
     votescount = models.IntegerField()
     lastvotedby = models.BigIntegerField()
     lastvoteddate = models.DateTimeField(blank=True, null=True)
@@ -284,7 +284,7 @@ class Billboardinfo(models.Model):
 class Billboardratinginfo(models.Model):
     billboardratingid = models.BigIntegerField(primary_key=True)
     billboardid = models.BigIntegerField()
-    studentid = models.BigIntegerField()
+    studentid = models.CharField(max_length=500)
     rating = models.BigIntegerField()
     ratedby = models.BigIntegerField()
     rateddate = models.DateTimeField()
@@ -297,7 +297,7 @@ class Billboardratinginfo(models.Model):
 class Billboardvotinginfo(models.Model):
     billboardvotingid = models.BigIntegerField(primary_key=True)
     billboardid = models.BigIntegerField()
-    studentid = models.BigIntegerField()
+    studentid = models.CharField(max_length=500)
     votedby = models.BigIntegerField()
     voteddate = models.DateTimeField()
 
@@ -429,7 +429,7 @@ class Classroominfo(models.Model):
     assessmentid = models.BigIntegerField()
     resourceid = models.BigIntegerField()
     writtenworkid = models.BigIntegerField()
-    studentid = models.BigIntegerField()
+    studentid = models.CharField(max_length=500)
     rating = models.IntegerField()
     ratingcount = models.IntegerField()
     votescount = models.IntegerField()
@@ -446,7 +446,7 @@ class Classroominfo(models.Model):
 class Classroomratinginfo(models.Model):
     classroomratingid = models.BigIntegerField(primary_key=True)
     classroomid = models.BigIntegerField()
-    studentid = models.BigIntegerField()
+    studentid = models.CharField(max_length=500)
     rating = models.BigIntegerField()
     ratedby = models.BigIntegerField()
     rateddate = models.DateTimeField()
@@ -459,7 +459,7 @@ class Classroomratinginfo(models.Model):
 class Classroomvotinginfo(models.Model):
     classroomvotingid = models.BigIntegerField(primary_key=True)
     classroomid = models.BigIntegerField()
-    studentid = models.BigIntegerField()
+    studentid = models.CharField(max_length=500)
     votedby = models.BigIntegerField()
     voteddate = models.DateTimeField()
 

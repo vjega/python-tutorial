@@ -1,0 +1,142 @@
+{% extends 'portalteacher/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block topcontent %}
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Classroom" %}</h2>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+{% endblock topcontent %}
+
+
+
+{% block botcontent %}
+<div class="col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading ">
+            <div class="col-lg-4">
+               <div id="add" class="col-lg-6">{% trans "From Date" %}</div>
+                    <div class="input-group date col-lg-6">
+                        <input type="text" class="form-control col-lg-6">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+            </div>    
+            <div class="col-lg-4">
+                <div id="add" class="add col-lg-6">{% trans "To Date" %}</div>
+                <div class="input-group date col-lg-6">
+                    <input type="text" class="form-control col-lg-6">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+               <button type="button" class="btn btn-primary">{% trans "Search" %}</button>
+        </div>
+        
+
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover" id="admin-main-tbl">
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+    <script>
+    $('.input-group.date').datepicker({
+    format: "yyyy/mm/dd",
+    todayBtn: "linked",
+    autoclose: true,
+    todayHighlight: true
+    });
+    </script>
+<!-- /.col-lg-12 -->
+{% endblock botcontent%}
+
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<style>
+    #addrec:hover, #admin-main-tbl tbody tr:hover{
+        cursor: pointer;
+    }
+</style>
+{% endblock morecss %}
+
+
+{% block morescript %}
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+
+{% endblock morescript %}
+
+{% block scriptcontent %}
+
+<script>
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}
+
+TTS.forms.renderteacherresourceinfo = function(data){
+    var headers = [
+                    { "title": "{% trans "Sl No." %}",
+                      "class": "text-center"  
+                    },
+                    { "title": "{% trans "Date" %}"}, 
+                ];
+    var dataset = [];
+    var count = 0
+    for(var i in data){
+        var t = [];
+        t.push(++count);
+        t.push(data[i].resourcetype);
+        dataset.push(t);
+    }
+
+    $('#admin-main-tbl').dataTable({
+        //"data":     dataset,
+        "columns":  headers
+    });
+
+};
+$(document).ready(function(){
+    $.ajax({
+        "url":"/api/admin/teacherresourcesinfo/?format=json",
+        "type":"GET"
+    }).done(function(data){
+        //console.log(data);
+        TTS.forms.renderteacherresourceinfo(data);
+    });
+    $('#admin-main-tbl tbody').on('click', 'tr', function(){
+        //window.location = 'teacherresourcelist?id='+this.id;
+    });
+    $('#admin-main-tbl tbody tr').on('click', '.tts-edit', function(e){
+        e.stopPropagation();
+        TTS.forms.editschool();
+    });
+    $('#admin-main-tbl tbody tr').on('click', '.tts-delete', function(e){
+        e.stopPropagation();
+        if (!window.confirm("Do you want to delete this record?")) {
+            return false;
+        }
+        alert("Record Deleted")
+        window.location = 'schoollist';
+    });
+    $("#page-wrapper").on("click", "#addrec", function(){
+        TTS.forms.editschool();
+    });
+
+
+});
+
+</script>
+
+{% endblock scriptcontent %}

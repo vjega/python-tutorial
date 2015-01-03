@@ -168,23 +168,25 @@ TTS.forms.renderstudentlist = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.id = "<input type='checkbox' class='case' name='schoolname' id='"+data[i].studentid+"' value='"+data[i].firstname+" "+data[i].lastname+"' />";
+        t.id = "<input type='checkbox' class='case' name='schoolname' id='"+data[i].username+"' value='"+data[i].firstname+" "+data[i].lastname+"' />";
 
         t.name = data[i].firstname+" "+data[i].lastname;
         dataset.push(t);
     }
 
-    if(TTS.forms.stable){
-        TTS.forms.stable.fnClearTable();
-        TTS.forms.stable.fnAddData(
-            dataset
-        );
-    }else{
-        TTS.forms.stable = $('#assessment-assigning-list').dataTable({
-            "data":     dataset,
-            "columns":  headers
-        });
-    }
+   
+   TTS.forms.asstable.fnClearTable();
+   TTS.forms.asstable.fnAddData(
+        dataset
+    );
+    return true;
+    
+    /*
+    TTS.forms.table2 = $('#assessment-assigning-list').dataTable({
+        "data":     dataset,
+        "columns":  headers
+    });
+    */
 };
 
 TTS.forms.rubricslist = function() {
@@ -271,9 +273,9 @@ TTS.forms.assessmentassigninglist = function() {
                         if (data.length) {
                             $.each(data, function( index, value ) {
                                 var studentlist = "#sltStudentList";
-                                if(!$(studentlist +"  option[value*='" + value.studentid + "']").length > 0){
+                                if(!$(studentlist +"  option[value*='" + value.username + "']").length > 0){
                                     //console.log("<option value='"+value.studentid+"'>"+value.firstname+" "+value.lastname+"</option>");
-                                    $("#sltStudentList").append("<option value='"+value.studentid+"'>"+value.firstname+" "+value.lastname+"</option>");
+                                    $("#sltStudentList").append("<option value='"+value.username+"'>"+value.firstname+" "+value.lastname+"</option>");
                                 }
                             });
                         } else {
@@ -433,6 +435,7 @@ TTS.forms.ressave = function(){
         type:"POST",
         data: JSON.stringify(data)
     }).done(function(data){
+        //console.log(data); return false;
         alert("Chapters assigned Successfully");
         window.location = 'studentresourceunits?categoryid=0&classid=1&section=a';
     }).error(function(err, msg){
@@ -467,7 +470,6 @@ $(document).ready(function(){
                 "url":"/api/admin/adminschool/?format=json",
                 "type":"GET"
             }).done(function(data){
-                //console.log(data);
                 TTS.forms.renderschoolinfoagain(data);
             });
         }else{
@@ -475,10 +477,11 @@ $(document).ready(function(){
                 "url":"/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json",
                 "type":"GET"
             }).done(function(data){
+                console.log(data);
                 if (data.length) {
                     TTS.forms.renderstudentlist(data);
                 } else {
-                    TTS.forms.table.fnClearTable();
+                    TTS.forms.asstable.fnClearTable();
                 }
             });
         }

@@ -282,7 +282,8 @@ $(document).ready(function(){
     })
 
     $('#student-main-tbl').on('click', 'tbody tr', function(){
-        window.location = 'studentprofile?studentid='+this.id;
+        //window.location = 'activitystatistics?studentid='+this.id;
+        window.location = 'activitystatistics?studentid='+this.id;
     });
     $('#student-main-tbl').on('click', '.tts-edit', function(e){
         e.stopPropagation();
