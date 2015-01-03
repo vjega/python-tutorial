@@ -28,17 +28,17 @@ class StudentresourceListForm(forms.Form):
         choices  = [(opt.classid, opt.shortname) for opt in models.Classinfo.objects.all()],
     )
     section      = forms.ChoiceField(
-        label    = _("Select Section"),
+        label    = _("Select Level"),
         required = True,
         choices  = [('a', 'A'), ('b','B')]
     )
     resourcetype = forms.ChoiceField(
-        label    = _("Unit"),
+        label    = _("Folders"),
         required = True,
-        choices  = [('0', 'Reading Passages'), ('1','Listening Comprehension'),('2','Doodle Board')]
+        choices  = [('0', 'Reading'), ('1','Picture conversation'),('2','Doodle Board'),('3','Picture composition')]
     )
     chapterid    = forms.ChoiceField(
-        label    = _("Chapter"),
+        label    = _("Lessons "),
         required = True,
     )
     resourcetitle = forms.CharField(
