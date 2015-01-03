@@ -143,6 +143,9 @@ $(document).ready(function(){
     $("#addrec").click(function(){
        //TTS.forms.showfourms();
         $.ajax({
+            headers : {
+                'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+            },
             type:"POST",
             url:"/api/forum/foruminfo/",
             data: JSON.stringify({forumname:$("#id_forumname").val()})
