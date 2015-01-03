@@ -90,9 +90,6 @@ TTS.forms.renderteacherresourceinfo = function(data){
                     { "title": "{% trans "Sl No." %}",
                       "class": "text-center"  
                     },
-                    { "title": "{% trans "Title" %}"},
-                    { "title": "{% trans "Category" %}" },
-                    { "title": "{% trans "Student" %}"},
                     { "title": "{% trans "Date" %}"}, 
                 ];
     var dataset = [];
@@ -100,8 +97,6 @@ TTS.forms.renderteacherresourceinfo = function(data){
     for(var i in data){
         var t = [];
         t.push(++count);
-        t.push(data[i].resourcetitle);
-        t.push(data[i].createddate);
         t.push(data[i].resourcetype);
         dataset.push(t);
     }
