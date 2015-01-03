@@ -140,6 +140,9 @@ TTS.forms.bulletinboardinfo = function(){
     });
     
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         url:"/api/admin/bulletinboardlist/",
         type:"POST",
         data: JSON.stringify(data)
