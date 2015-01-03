@@ -82,7 +82,7 @@ class teacherViewSet(viewsets.ModelViewSet):
         teacher.classid = teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
         teacher.imageurl = teacherdata.get('imageurl')
-        #teacher.imageurl = studentdata.get('imageurl')
+       # teacher.imageurl = #studentdata.get('imageurl')
         teacher.isdelete = 0
         teacher.createdby = request.user.id
         teacher.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -97,7 +97,7 @@ class teacherViewSet(viewsets.ModelViewSet):
         teacher.password = teacherdata.get('password')
         teacher.firstname = teacherdata.get('firstname')
         teacher.schoolid = teacherdata.get('schoolid')
-        #teacher.classid = '1' #teacherdata.get('classid')
+        teacher.classid = teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
         teacher.save()
         return Response(request.DATA)
@@ -553,7 +553,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.start = data.get('start')
         cal.end = data.get('end')
         cal.eventcreatedby = request.user.username
-        #cal.eventeditedby = request.user.username
+        cal.eventeditedby = request.user.username
         cal.isdeleted = 0
         cal.createdby = request.user.id
         cal.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -567,7 +567,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title = data.get('title')
         cal.start = time.strftime('%Y-%m-%d %H:%M:%S')
         cal.end = time.strftime('%Y-%m-%d %H:%M:%S')
-        #cal.eventcreatedby = request.user.username
+        cal.eventcreatedby = request.user.username
         cal.eventeditedby = request.user.username
         cal.isdeleted = 0
         cal.createdby = request.user.id
@@ -585,7 +585,7 @@ class MindmapViewSet(viewsets.ModelViewSet):
         mm.title = data.get('title')
         mm.mapdata = data.get('mapdata')
         mm.isdelete = 0
-        mm.createdby = 1 #request.user.id
+        mm.createdby = request.user.id
         mm.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         mm.save()
         return Response(request.DATA)
@@ -596,7 +596,7 @@ class MindmapViewSet(viewsets.ModelViewSet):
         mm.title = data.get('title')
         mm.mapdata = data.get('mapdata')
         mm.isdelete = 0
-        mm.createdby = 1 #request.user.id
+        mm.createdby = request.user.id
         mm.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         mm.save()
         return Response(request.DATA)
