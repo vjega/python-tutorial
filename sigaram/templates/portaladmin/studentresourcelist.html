@@ -236,7 +236,7 @@ TTS.forms.thumb = function(elm) {
 var updateChapter = function(){
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         'url': "/api/admin/chapterinfo/?classid="+$("#id_classid").val()
                 +"&section="+$("#id_section").val(),
@@ -254,7 +254,7 @@ var updateChapter = function(){
 var updateselectedChapter = function(){
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+           'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         'url': "/api/admin/chapterinfo/?classid="+TTS.classid
                 +"&section="+TTS.section+"&chapterid="+TTS.chapterid,
@@ -275,7 +275,7 @@ var updateselectedChapter = function(){
 var updateClass = function(){
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
          },
         'url': "/api/admin/classlist/?classid="+TTS.classid,
         'type':'GET'
