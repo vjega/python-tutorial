@@ -175,18 +175,18 @@ def resourcetype(request):
     folders = [{
         "id": "1",
         "categoryid": "0",
-        "name" :"வாசிப்பு",
-        "href" :"chapterlist"
+        "name" :u"Reading",
+        "href" :u"chapterlist"
         },{
         "id": "2",
         "categoryid": "1",
-        "name" :"பட உரையாடல்",
-        "href" :"chapterlist"
+        "name" :u"Image dialog",
+        "href" :u"chapterlist"
         },{
         "id": "3",
         "categoryid": "2",
-        "name" :"எழுத்து பலகை",
-        "href" :"chapterlist"
+        "name" :u"Writing board",
+        "href" :u"chapterlist"
         }]
     classid = request.GET.get('classid')
     section = request.GET.get('section')
@@ -204,19 +204,19 @@ def resourcetype(request):
 def extralist(request):
     folders = [{
         "id": "1",
-        "name" :"எழுத்து",
+        "name" :u"writing",
         "href" :""
         },{
         "id": "2",
-        "name" :"பல்லூடகம்",
+        "name" :u"Multimedia",
         "href" :""
         },{
         "id": "3",
-        "name" :"பாடல்",
+        "name" :u"Lyrics",
         "href" :""
         },{
         "id": "4",
-        "name" :"ஒளிப்படக்காட்சி",
+        "name" :u"Olippatakkatci",
         "href" :""
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
@@ -391,12 +391,12 @@ def subjectlist(request):
 def studentprofile(request):
     folders = [{
         "id"   : "1",
-        "name" :"Deliverables",
-        "href" :"studentassignedresourcelist"
+        "name" :u"Assessment",
+        "href" :u"studentassignedresourcelist"
         },{
         "id"   : "2",
-        "name" :"Writing job",
-        "href" :"viewstudentwrittenworks?studentid=%s" % request.GET.get('studentid') 
+        "name" :u"Writing job",
+        "href" :u"viewstudentwrittenworks?studentid=%s" % request.GET.get('studentid') 
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 

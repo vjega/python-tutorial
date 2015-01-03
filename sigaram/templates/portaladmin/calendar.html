@@ -83,6 +83,9 @@ TTS.forms.showcalform = function(start, end, allDay) {
 TTS.forms.saveCal = function () {
     var data = TTS.utils.serilaizeJson("#cal-event");
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'POST',
         data: data,
         url : '/api/admin/calendar/'
@@ -122,6 +125,9 @@ TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
                 var data = TTS.utils.serilaizeJson("#cal-event");
                 data = JSON.parse(data);
                 $.ajax({
+                    headers : {
+                        'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                    },
                     type:'PUT',
                     data: JSON.stringify(data),
                     url : '/api/admin/calendar/'+calEvent.id
@@ -146,6 +152,9 @@ TTS.forms.updatecalevent = function (event, dayDelta, minuteDelta){
         "end" : event.start.format()
     }
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'PUT',
         data: JSON.stringify(data),
         url : '/api/admin/calendar/'+event.id

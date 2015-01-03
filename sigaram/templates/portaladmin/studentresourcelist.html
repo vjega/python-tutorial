@@ -96,6 +96,9 @@ TTS.section = getUrlParameter('section');
 
 TTS.forms.addstudentresource = function(form, data) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+         },
         type:'POST',
         data: data,
         url : '/api/admin/resourceinfo/'
@@ -232,6 +235,9 @@ TTS.forms.thumb = function(elm) {
 
 var updateChapter = function(){
     $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
         'url': "/api/admin/chapterinfo/?classid="+$("#id_classid").val()
                 +"&section="+$("#id_section").val(),
         'type':'GET'
@@ -247,6 +253,9 @@ var updateChapter = function(){
 
 var updateselectedChapter = function(){
     $.ajax({
+        headers : {
+           'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
         'url': "/api/admin/chapterinfo/?classid="+TTS.classid
                 +"&section="+TTS.section+"&chapterid="+TTS.chapterid,
         'type':'GET'
@@ -265,6 +274,9 @@ var updateselectedChapter = function(){
 //};
 var updateClass = function(){
     $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+         },
         'url': "/api/admin/classlist/?classid="+TTS.classid,
         'type':'GET'
     }).done(function(data){
@@ -278,11 +290,13 @@ var updateClass = function(){
 };
 
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/admin/resourceinfo/?categoryid="+TTS.categoryid+"&chapterid="+TTS.chapterid+"&classid="+TTS.classid+"&section="+TTS.section+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstudentresourceinfo(data);
+        TTS.utils.ajaxloaderstop();
     });
     $('#studetresource-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();

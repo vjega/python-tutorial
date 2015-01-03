@@ -24,8 +24,13 @@
         font-size: 15px;
         font-weight: bold;
     }
-    span.tc, span.sc {
+    span.tc {
         color: #40c040 !important;
+        cursor: pointer;
+        display: inline;
+    }
+    span.sc {
+        color: red !important;
         cursor: pointer;
         display: inline;
     }
@@ -288,6 +293,9 @@ TTS.forms.editanswerlist = function(spanid){
                             }
 
                             $.ajax({
+                                headers : {
+                                    'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                                },
                                 type:'POST',
                                 data: data,
                                 url : '/api/admin/editanswer/'
@@ -380,12 +388,14 @@ TTS.forms.editanswer = function() {
                 }
 
                 $.ajax({
+                    headers : {
+                        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                    },
                     type:'PUT',
                     data: data,
                     url : '/api/admin/studentassignresource/'+assign_id
                 }).done(function(msg) {
-                    console.log(msg);
-                    return false;
+                    //console.log(msg);
                     dialogItself.close();
                     alert("Answer corrected successfully");
                     location.reload();
@@ -401,7 +411,6 @@ TTS.forms.editanswer = function() {
 };
 
 TTS.forms.marktext = function(original, marker, uid, usertype){
-    //alert(original+" --> "+marker+" --> "+uid+" --> "+usertype);
     if(usertype == 1)
         usertype = 'sc';
 
@@ -450,6 +459,9 @@ $(document).ready(function(){
 
     $("a#sendnoticeboard").click(function(){
         $.ajax({
+            headers : {
+                'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+            },
             type:'POST',
             url : '/api/admin/billboardresource/?resourceid='+resourceid+'&studentid='+studentid
         }).done(function(msg) {

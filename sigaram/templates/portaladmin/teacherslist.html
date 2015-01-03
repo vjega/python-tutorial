@@ -22,7 +22,7 @@
             </select>
         </div>
     </div>
-</div>
+</div><br />
 {% endblock topcontent %}
 {% block botcontent %}
 <div class="col-lg-12">
@@ -78,6 +78,9 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 TTS.forms.addteacher = function(form, data) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
         type:'POST',
         data: data,
         url : '/api/admin/teacher/'
@@ -127,6 +130,9 @@ TTS.forms.editteacher = function(id, data) {
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-teacher");
                 $.ajax({
+                    headers : {
+                        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                    },
                     type:'PUT',
                     data: data,
                     url : '/api/admin/teacher/'+id
@@ -147,6 +153,9 @@ TTS.forms.editteacher = function(id, data) {
 TTS.forms.delteacher = function(id) {
     //console.log(id);
     $.ajax({
+         headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
         type:'DELETE',
         url : '/api/admin/teacher/'+id
     }).done(function( msg ) {
@@ -244,11 +253,13 @@ TTS.forms.upload = function(elm) {
 
 
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/admin/teacher/?schoolid="+$("#school_name").val()+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacher(data);
+        TTS.utils.ajaxloaderstop();
     });
     $("#school_name").change(function(){
         $.ajax({

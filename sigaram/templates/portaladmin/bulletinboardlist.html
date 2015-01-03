@@ -68,6 +68,9 @@ TTS.forms = TTS.forms || {};
 
 TTS.forms.addexam = function(form, data) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'POST',
         data: data,
         url : '/api/admin/Bulletinboard/'
@@ -164,6 +167,9 @@ TTS.forms.renderannouncement = function(data){
 TTS.forms.delannouncement = function(id) {
     //console.log(id);
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'DELETE',
         url : '/api/admin/bulletinboardlist/'+id
     }).done(function( msg ) {
