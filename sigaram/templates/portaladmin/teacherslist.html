@@ -78,6 +78,9 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 TTS.forms.addteacher = function(form, data) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'POST',
         data: data,
         url : '/api/admin/teacher/'
@@ -147,6 +150,9 @@ TTS.forms.editteacher = function(id, data) {
 TTS.forms.delteacher = function(id) {
     //console.log(id);
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'DELETE',
         url : '/api/admin/teacher/'+id
     }).done(function( msg ) {

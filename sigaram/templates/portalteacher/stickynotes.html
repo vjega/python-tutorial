@@ -319,6 +319,9 @@ TTS.forms = TTS.forms || {};
 
 TTS.forms.addstickynote = function(form, data) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'POST',
         data: data,
         url : '/api/admin/stickynotes/'

@@ -69,6 +69,9 @@ TTS.forms.addschool = function() {
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-school");
                 $.ajax({
+                    headers : {
+                        'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                      },
                     type:'POST',
                     data: data,
                     url : '/api/admin/adminschool/'
@@ -102,6 +105,9 @@ TTS.forms.editschool = function(id, data) {
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-school");
                 $.ajax({
+                    headers : {
+                        'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                    },
                     type:'PUT',
                     data: data,
                     url : '/api/admin/adminschool/'+id
