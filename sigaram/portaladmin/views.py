@@ -32,14 +32,11 @@ def switchlanguage(f):
 
 
 admin_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/admins', 
-                                      #backend=EasyThumbnailUploadBackend, 
                                       DIMENSIONS=(250, 250))
 teacher_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/teachers', 
-                                      #backend=EasyThumbnailUploadBackend, 
                                       DIMENSIONS=(250, 250))
 
 student_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/students', 
-                                      #backend=EasyThumbnailUploadBackend, 
                                       DIMENSIONS=(250, 250))
 
 student_studentres_uploader = AjaxFileUploader(UPLOAD_DIR='static/studentres')
@@ -56,19 +53,19 @@ def layoutdemo(request):
 def home(request):
     folders = [{
         "color": u"primary",
-        "icon" : u"university",
+        "icon" : u"flaticon-school43",
         "link" : u"schoollist",
         "caption": _("Schools"),
         "stat": 25
         }, {
         "color": u"green",
-        "icon" : u"book",
+        "icon" : u"flaticon-books24",
         "link" : u"teacherresourcelist",
         "caption": u"{0} {1}".format(_("Teachers"),_("Resources")),
         "stat": 64
         }, {
         "color": u"yellow",
-        "icon" : u"book",
+        "icon" : u"flaticon-education32",
         "link" : u"studentresourcetype",
         "caption": u"{0} {1}".format(_("Student"), _("Resources")),
         "stat": 125
@@ -446,30 +443,37 @@ def bulletinboard(request):
                                         {'schools':schools })
 
 @login_required
+@switchlanguage
 def billboard(request):
     return render(request, 'portaladmin/billboard.html')
 
 @login_required
+@switchlanguage
 def billviewassignmentanswer(request):
     return render(request, 'portaladmin/billviewassignmentanswer.html',{"form":BillviewassignmentanswerForm.BillviewassignmentanswerForm()})
 
 @login_required
+@switchlanguage
 def billviewwrittenworkanswer(request):
     return render(request, 'portaladmin/billviewwrittenworkanswer.html')
 
 @login_required
+@switchlanguage
 def billfillinganswerrating(request):
     return render(request, 'portaladmin/billfillinganswerrating.html')
 
 @login_required
+@switchlanguage
 def billchooseanswerrating(request):
     return render(request, 'portaladmin/billchooseanswerrating.html')
 
 @login_required
+@switchlanguage
 def billcomprehensionanswerrating(request):
     return render(request, 'portaladmin/billcomprehensionanswerrating.html',
                         {"form":BillcomprehensionanswerratingForm.BillcomprehensionanswerratingForm})
 
 @login_required
+@switchlanguage
 def billopenendedanswerrating(request):
     return render(request, 'portaladmin/billopenendedanswerrating.html')

@@ -115,6 +115,7 @@ TTS.forms.showadminform = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-admin");
+                //console.log(data);
                 TTS.forms.addadmin(dialogItself, data); 
             }
             },{
