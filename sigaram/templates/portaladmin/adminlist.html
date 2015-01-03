@@ -68,6 +68,9 @@ TTS.forms = TTS.forms || {};
 /* ADMIN Crud Starts Here*/
 TTS.forms.addadmin = function(form, data) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'POST',
         data: data,
         url : '/api/admin/admin/'

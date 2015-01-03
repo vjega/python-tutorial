@@ -29,6 +29,9 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
 
     @create_login('Admin')
     def create(self, request):
+        print request.user
+        print request.user.id
+        print request.user.username
         admin = models.Admininfo()
         admindata =  json.loads(request.DATA.keys()[0])
         admin.username = admindata.get('username')
