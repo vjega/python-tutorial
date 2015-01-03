@@ -22,7 +22,6 @@ def loginname_to_userid(usertype, username):
         m = models.Studentinfo.objects.filter(username=username)[0]
         return m.studentid
 
-
 class AdmininfoViewSet(viewsets.ModelViewSet):
     queryset = models.Admininfo.objects.filter(isdelete=0)
     serializer_class = adminserializers.AdminInfoSerializer
@@ -317,9 +316,9 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             kwarg['chapterid'] = chapterid
 
         if len(kwarg):
-            queryset = models.Chapterinfo.objects.filter(**kwarg).order_by('chaptername')
+            queryset = models.Chapterinfo.objects.filter(**kwarg).order_by('chapterid')
         else:
-            queryset = models.Chapterinfo.objects.all().order_by('chaptername')
+            queryset = models.Chapterinfo.objects.all().order_by('chapterid')
 
         serializer = adminserializers.ChapterinfoSerializer(queryset, many=True)
         if categoryid:
@@ -587,7 +586,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
 
     def update(self, request, pk=None):
         data = {k:v[0] for k, v in dict(request.DATA).items()}
-        print data
+        
         ari = models.Assignresourceinfo.objects.get(pk=pk)
         
         ari.answertext = data.get('answertext')
@@ -633,6 +632,9 @@ class StudentAssignResource(viewsets.ModelViewSet):
         return Response({'msg':True})
 
     def list(self, request):
+
+        print request.user.id
+
         datecond = ''
         if request.GET.get('fdate') and request.GET.get('tdate'):
             datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
@@ -656,7 +658,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
               AND ri.categoryid=0 
               %s
         GROUP BY resourceid 
-        ORDER BY answereddate DESC''' % (request.user.id, datecond)
+        ORDER BY answereddate DESC''' % (18594, datecond)
         cursor = connection.cursor()
         #print sql
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
@@ -958,8 +960,8 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
         SELECT assignedid AS id,
                ari.assignedby,
                ri.resourceid,
-               si.firstname,
-               si.lastname,
+               au.first_name as firstname,
+               au.last_name as lastname,
                resourcetitle,
                date(assigneddate) as createddate,
                resourcetype,
@@ -973,19 +975,18 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
                ari.isbillboard
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
-        INNER JOIN  studentinfo si on si.studentid = ari.studentid 
+        INNER JOIN  auth_user au on au.id = ari.studentid 
         WHERE isdeleted=0
-              AND ari.assignedby=%d
               AND ari.resourceid=%s
               AND ari.IsDelete=0 
               AND ri.categoryid=0
               %s
         GROUP BY ari.studentid
-        ORDER BY assigneddate DESC''' % (request.user.id, pk, studentcond)
+        ORDER BY assigneddate DESC''' % (pk, studentcond)
 
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
-        #print sql
+        print sql
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
         #cursor.execute(sql, "3680")
@@ -1274,29 +1275,31 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         answertext = rec[2]
         spanid = rec[3]
 
+        print answertext
+
         #updating approved answer text
-        #sql = '''
-        #UPDATE assignresourceinfo 
+        # sql = '''
+        # UPDATE assignresourceinfo 
         #    SET answertext = '%s'
         #    WHERE assignedid = '%s' ''' % (answertext, assignedid)
-        #cursor = connection.cursor()
-        #cursor.execute(sql)
+        # cursor = connection.cursor()
+        # cursor.execute(sql)
 
         #resetting the previous one if set
-        sql = '''
-        UPDATE editingtext
-            SET isapproved = 0
-        WHERE spanid = '%s' ''' % (spanid)
-        cursor = connection.cursor()
-        cursor.execute(sql)
+        # sql = '''
+        # UPDATE editingtext
+        #     SET isapproved = 0
+        # WHERE spanid = '%s' ''' % (spanid)
+        # cursor = connection.cursor()
+        # cursor.execute(sql)
 
-        #marking the selected as approved
-        sql = '''
-        UPDATE editingtext
-            SET isapproved = 1
-        WHERE editingid = '%s' ''' % (pk)
-        cursor = connection.cursor()
-        cursor.execute(sql)
+        # #marking the selected as approved
+        # sql = '''
+        # UPDATE editingtext
+        #     SET isapproved = 1
+        # WHERE editingid = '%s' ''' % (pk)
+        # cursor = connection.cursor()
+        # cursor.execute(sql)
 
         return Response('approved')
 
