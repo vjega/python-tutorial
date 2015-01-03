@@ -101,41 +101,41 @@ TTS.forms.saveCal = function () {
 
 TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
     BootstrapDialog.show({
-            title: 'Edit Event',
-            message: $($('#cal-form').render()),
-            onshown: function(){
-                $('#id_title').val(calEvent.title);
-                $('#id_start').val(calEvent.start.format());
-                $('#id_end').val(calEvent.end.format());
+        title: 'Edit Event',
+        message: $($('#cal-form').render()),
+        onshown: function(){
+            $('#id_title').val(calEvent.title);
+            $('#id_start').val(calEvent.start.format());
+            $('#id_end').val(calEvent.end.format());
 
-                $('#id_start,#id_end').datepicker({
-                    format: "yyyy/mm/dd",
-                    todayBtn: "linked",
-                    autoclose: true,
-                    todayHighlight: true
-                });
-            },
-            buttons: [{
-                label: 'Update',
-                cssClass: 'btn-primary',
-                action: function(dialogItself){
-                    var data = TTS.utils.serilaizeJson("#cal-event");
-                    data = JSON.parse(data);
-                    $.ajax({
-                        type:'PUT',
-                        data: JSON.stringify(data),
-                        url : '/api/admin/calendar/'+calEvent.id
-                    }).done(function( msg ) {
-                        dialogItself.close();
-                        location.reload();
-                    });
-                }
-                },{
-                label: 'Cancel',
-                action: function(dialogItself){
+            $('#id_start,#id_end').datepicker({
+                format: "yyyy/mm/dd",
+                todayBtn: "linked",
+                autoclose: true,
+                todayHighlight: true
+            });
+        },
+        buttons: [{
+            label: 'Update',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#cal-event");
+                data = JSON.parse(data);
+                $.ajax({
+                    type:'PUT',
+                    data: JSON.stringify(data),
+                    url : '/api/admin/calendar/'+calEvent.id
+                }).done(function( msg ) {
                     dialogItself.close();
-                }
-            }]
+                    location.reload();
+                });
+            }
+            },{
+            label: 'Cancel',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
+        }]
     });
 }
 
