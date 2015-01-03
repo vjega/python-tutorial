@@ -137,6 +137,9 @@ $(document).ready(function(){
                 action: function(){
                     var data = TTS.utils.serilaizeJson("#newfolderfrm");
                     $.ajax({
+                        headers : {
+                            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                        },
                         type:'POST',
                         data: {'data':data},
                         url : '/api/admin/addfolder'

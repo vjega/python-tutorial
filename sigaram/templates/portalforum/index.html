@@ -81,6 +81,9 @@ TTS.forms = TTS.forms || {}
 };*/
 TTS.forms.addtfourms = function(form, data) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'POST',
         data: data,
         url : '/api/forum/foruminfo/'

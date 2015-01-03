@@ -319,6 +319,9 @@ TTS.forms = TTS.forms || {};
 
 TTS.forms.addstickynote = function(form, data) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'POST',
         data: data,
         url : '/api/admin/stickynotes/'
@@ -428,6 +431,9 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
 
 TTS.forms.delstickynotes = function(id) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'DELETE',
         url : '/api/admin/stickynotes/'+id
     }).done(function( msg ) {
@@ -440,6 +446,9 @@ TTS.forms.delstickynotes = function(id) {
 
 TTS.forms.addstickycomment = function(form, data) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
         type:'POST',
         data: data,
         url : '/api/admin/stickycomments/'
