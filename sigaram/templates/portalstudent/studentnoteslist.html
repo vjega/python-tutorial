@@ -76,6 +76,9 @@ TTS.forms.addstudentnotes = function() {
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-studentnoteslist");
                 $.ajax({
+                    headers : {
+                        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                    },
                     type:'POST',
                     data: data,
                     url : '/api/student/studentnotesinfo/'

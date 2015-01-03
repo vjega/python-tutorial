@@ -79,7 +79,7 @@ TTS.forms = TTS.forms || {}
 TTS.forms.addteacher = function(form, data) {
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'POST',
         data: data,
@@ -130,6 +130,9 @@ TTS.forms.editteacher = function(id, data) {
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-teacher");
                 $.ajax({
+                    headers : {
+                        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                    },
                     type:'PUT',
                     data: data,
                     url : '/api/admin/teacher/'+id
@@ -150,8 +153,8 @@ TTS.forms.editteacher = function(id, data) {
 TTS.forms.delteacher = function(id) {
     //console.log(id);
     $.ajax({
-        headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+         headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'DELETE',
         url : '/api/admin/teacher/'+id

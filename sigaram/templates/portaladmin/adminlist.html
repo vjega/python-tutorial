@@ -69,7 +69,7 @@ TTS.forms = TTS.forms || {};
 TTS.forms.addadmin = function(form, data) {
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'POST',
         data: data,
@@ -84,7 +84,7 @@ TTS.forms.addadmin = function(form, data) {
 TTS.forms.ediadmin = function(form, id, data) {
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'PUT',
         data: data,
@@ -99,7 +99,7 @@ TTS.forms.deladmin = function(id) {
     //console.log(id);
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'DELETE',
         url : '/api/admin/admin/'+id
