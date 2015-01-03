@@ -216,3 +216,10 @@ def stickynotes(request):
                                         {'form':StickyForm.StickyForm(),
                                          'Cform':StickyCommentForm.StickyCommentForm()
                                          })    
+@switchlanguage
+def billboard(request):
+    return render(request, 'portalstudent/billboard.html')
+
+@switchlanguage
+def billviewassignmentanswer(request):
+    return render(request, 'portalstudent/billviewassignmentanswer.html')
