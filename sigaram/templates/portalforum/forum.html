@@ -44,7 +44,7 @@
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <style>
-    #addrec:hover, .tts-edit:hover, .tts-delete:hover, #admin-main-tbl tbody tr:hover {
+    #addrec:hover, .tts-edit:hover, .tts-delete:hover, #admin-main-tbl tbody tr:hover, .tts-new-topic {
         cursor: pointer;
     }
 </style>
@@ -103,7 +103,7 @@ TTS.forms.renderfourminfo = function(data){
         t.slno = data[i].forumid;
         t.forumname = data[i].forumname;
         t.createddate = data[i].createddate;
-        t.topic = "<a herf='#' onclick='newtopic(this)'>New Topic</a>";
+        t.topic = "<a herf='#' class='tts-new-topic' onclick='newtopic(this)'>New Topic</a>";
         t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
