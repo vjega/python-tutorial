@@ -113,12 +113,13 @@ TTS.forms.showteacherform = function() {
 
 TTS.forms.editteacher = function(id, data) {
     BootstrapDialog.show({
-        title: 'Edit Student',
+        title: 'Edit Teacher',
         message: $($('#teacher-form').render()),
         onshown: function(){
             $("#add-teacher").find("input,select").each(function(){
                 $(this).val(data[this['name']]);
             });
+            TTS.forms.upload();
         },
         buttons: [{
             label: 'Update',
