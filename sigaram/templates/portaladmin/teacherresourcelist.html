@@ -199,12 +199,14 @@ var updateChapter = function(){
 };
 
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/admin/teacherresourcesinfo/?format=json",
         "type":"GET"
     }).done(function(data){
         if (data.length) {
             TTS.forms.renderteacherresourceinfo(data);
+            TTS.utils.ajaxloaderstop();
         } else {
             TTS.forms.table.fnClearTable();
         }
