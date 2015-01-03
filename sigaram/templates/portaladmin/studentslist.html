@@ -14,7 +14,7 @@
     <div class="form-group" class="col-sm-6">
         <label for="folder_name" class="col-sm-2 control-label">{% trans "Select School" %}
         </label>
-        <div class="col-sm-3">
+        <div class="col-sm-5">
             <select name="school_name" class="form-control" id="school_name">
                 {% for school in schools %}
                 <option value="{{school.schoolid}}">{{school.schoolname}}</option>
@@ -25,7 +25,7 @@
     </span>
     <div class="form-group" class="col-sm-3">
         <label for="folder_name" class="col-sm-2 control-label">{% trans "Select Section" %}</label>
-        <div class="col-sm-1">
+        <div class="col-sm-2">
             <select name="classid" class="form-control" id="classid">
                 {% for class in classes %}
                 <option value="{{class.classid}}">{{class.shortname}}</option>
