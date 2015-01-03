@@ -174,19 +174,17 @@ TTS.forms.renderstudentlist = function(data){
         dataset.push(t);
     }
 
-   
-   TTS.forms.asstable.fnClearTable();
-   TTS.forms.asstable.fnAddData(
-        dataset
-    );
-    return true;
-    
-    /*
-    TTS.forms.table2 = $('#assessment-assigning-list').dataTable({
-        "data":     dataset,
-        "columns":  headers
-    });
-    */
+    if(TTS.forms.stable){
+        TTS.forms.stable.fnClearTable();
+        TTS.forms.stable.fnAddData(
+            dataset
+        );
+    }else{
+        TTS.forms.stable = $('#assessment-assigning-list').dataTable({
+            "data":     dataset,
+            "columns":  headers
+        });
+    }
 };
 
 TTS.forms.rubricslist = function() {
