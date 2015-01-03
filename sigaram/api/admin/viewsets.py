@@ -543,8 +543,8 @@ class CalendarViewSet(viewsets.ModelViewSet):
         data = json.loads(dict(request.DATA).keys()[0])
         #data = {k:v[0] for k,v in dict(request.DATA).items()}
         cal.title = data.get('title')
-        cal.start = time.strftime('%Y-%m-%d %H:%M:%S')
-        cal.end = time.strftime('%Y-%m-%d %H:%M:%S')
+        cal.start = data.get('start')
+        cal.end = data.get('end')
         #cal.eventcreatedby = request.user.username
         cal.eventeditedby = request.user.username
         cal.isdeleted = 0
