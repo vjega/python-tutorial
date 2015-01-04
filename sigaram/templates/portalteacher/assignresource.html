@@ -453,7 +453,18 @@ $(document).ready(function(){
             });
         }
     })
-
+    $("body").on("change", "#classid",function(){
+        $.ajax({
+            "url":"/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json",
+            "type":"GET"
+        }).done(function(data){
+            if (data.length) {
+                TTS.forms.renderstudentlist(data);
+            } else {
+                TTS.forms.asstable.fnClearTable();
+            }
+        });
+    });
     $('#admin-main-tbl tbody').on('click', 'tr', function(){
         window.location = 'teacherresourcelist?id='+this.id;
     });
