@@ -9,8 +9,9 @@ from teacher.forms import ( RubricsForm,
                             WrittenworkForm,
                             StudentForm,
                             StickyForm,
-                            StickyCommentForm
+                            StickyCommentForm,
                             #ViewworkspaceForm
+                            TopicsForm
                             ) 
 
 from ajaxuploader.views import AjaxFileUploader  
@@ -438,6 +439,11 @@ def billboard(request):
 @switchlanguage
 def activitystatistics(request):
     return render(request, 'portalteacher/activitystatistics.html')
+    
+@login_required
+@switchlanguage
+def topics(request):
+    return render(request, 'portalteacher/topics.html',{"form" : TopicsForm.TopicsForm()} )
 
 @login_required
 @switchlanguage

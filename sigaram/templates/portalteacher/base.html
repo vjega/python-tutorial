@@ -113,11 +113,14 @@
                             <i class="fa fa-list fa-fw"></i>{% trans "Billboard" %}
                         </a>
                     </li>
+                    <!-- 
                     <li>
                         <a class="active" href="../forum">
                             <i class="fa fa-comments fa-fw"></i>{% trans "Forum" %}
                         </a>
                     </li>
+
+                    -->
                         
                     <li>
                         <a class="active" href="adminlist">
@@ -173,6 +176,21 @@
                         <a class="active" href="sticky-notes">
                             <i class="fa fa-tablet fa-fw"></i>{% trans "Sticky notes" %}
                         </a>
+                    </li>
+                    <li>
+                        <a class="active" href="#">
+                            <i class="fa fa-comments fa-fw"></i>{% trans "Forum" %}
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="topics">{% trans "Topics" %}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="thread">{% trans "Thread" %}</a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>

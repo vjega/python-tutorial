@@ -486,3 +486,4 @@ def billcomprehensionanswerrating(request):
 @switchlanguage
 def billopenendedanswerrating(request):
     return render(request, 'portaladmin/billopenendedanswerrating.html')
+                        
