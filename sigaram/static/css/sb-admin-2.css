@@ -127,6 +127,8 @@ body {
 }
 .sidebar ul li {
     border-bottom: 1px solid #e7e7e7;
+    background-color:#EED2EE;
+    opacity:0.8;
 }
 .sidebar ul li a.active {
     background-color: #eee;
@@ -520,4 +522,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', end
 .semester{
     font-size:1.4em;
     font-weight:bold;
+}
+.purple-blue{
+    background-color:#990099;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: #fff;
 }

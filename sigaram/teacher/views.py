@@ -3,14 +3,15 @@ from django.utils.translation import (ugettext as _, activate)
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from teacher import models
-from portaladmin import models as pmodels
+#from teacher import models
+from portaladmin import models as models
 from teacher.forms import ( RubricsForm,
                             StudentForm,
                             StickyForm,
                             StickyCommentForm,
                             #ViewworkspaceForm
-                            TopicsForm
+                            TopicsForm,
+                            ThreadForm
                             ) 
 
 from ajaxuploader.views import AjaxFileUploader  
@@ -194,11 +195,10 @@ def studentresourcetype(request):
         },{
         "id": "3",
         "categoryid": "2",
-        "name" :_("Writing Board"),
+        "name" :_("Written Work"),
         "href" :"studentresourceunits"
         },{
         "id": "3",
-        "categoryid": "2",
         "name" :_("composition"),
         "href" :"extras"
         }]
@@ -440,11 +440,25 @@ def activitystatistics(request):
 @login_required
 @switchlanguage
 def topics(request):
-    return render(request, 'portalteacher/topics.html',{"form" : TopicsForm.TopicsForm()} )
+    return render(request, 'portalteacher/topics.html',{"form" : ThreadForm.ThreadForm()})
+    
+@login_required
+@switchlanguage
+def thread(request):
+    topics = models.Topicinfo.objects.all()
+    return render(request, 'portalteacher/thread.html', 
+                                        {'topics':topics,
+                                        "form" : ThreadForm.ThreadForm()})
 
 @login_required
 @switchlanguage
 def addwrittenwork(request):
+    return render(request, 'portalteacher/addwrittenwork.html')
+
+@login_required
+@switchlanguage
+def threadview(request):
+    return render(request, 'portalteacher/threadview.html')
     schools = models.Schoolinfo.objects.all()
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/addwrittenwork.html', 
