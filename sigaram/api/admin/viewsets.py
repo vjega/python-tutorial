@@ -23,6 +23,7 @@ def loginname_to_userid(usertype, username):
         return m.studentid
 
 class AdmininfoViewSet(viewsets.ModelViewSet):
+
     queryset = models.Admininfo.objects.filter(isdelete=0).order_by('-createddate')
     serializer_class = adminserializers.AdminInfoSerializer
 
@@ -121,9 +122,9 @@ class studentViewSet(viewsets.ModelViewSet):
             queryset = models.Studentinfo.objects.filter(schoolid=schoolid).order_by('-createddate')
         elif schoolids:
             schools = schoolids.split(",")
-            q = Q() 
+            q = Q()
             for s in schools:
-                q |= Q(schoolid=s) 
+                q |= Q(schoolid=s)
             queryset = models.Studentinfo.objects.filter(q, classid=classid)
         else:
             queryset = models.Studentinfo.objects.all()
@@ -131,7 +132,7 @@ class studentViewSet(viewsets.ModelViewSet):
         serializer = adminserializers.StudentinfoSerializer(queryset, many=True)
         return Response(serializer.data)
        
-    @create_login('Student')   
+    @create_login('Student')
     def create(self, request):
         student = models.Studentinfo()
         studentdata =  json.loads(request.DATA.keys()[0])
@@ -645,7 +646,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
         ar.typeofresource = 0
         ar.isapproved   = 0
         ar.isrejected   = 0
-        ar.editedby     = request.user.id #loginname_to_userid('Teacher', 'sheela')
+        ar.editedby     = request.user.username
         ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
         ar.usertype     = int(usertype)
 
@@ -654,8 +655,6 @@ class StudentAssignResource(viewsets.ModelViewSet):
         return Response({'msg':True})
 
     def list(self, request):
-
-        print request.user.id
 
         datecond = ''
         if request.GET.get('fdate') and request.GET.get('tdate'):
@@ -675,14 +674,14 @@ class StudentAssignResource(viewsets.ModelViewSet):
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         WHERE isdeleted=0
-              AND ari.studentid=%d
-              AND ari.IsDelete=0 
-              AND ri.categoryid=0 
+              AND ari.studentid='%s'
+              AND ari.IsDelete=0
+              /*AND ri.categoryid=0*/
               %s
         GROUP BY resourceid 
-        ORDER BY answereddate DESC''' % (18594, datecond)
+        ORDER BY answereddate DESC''' % (request.user.username, datecond)
         cursor = connection.cursor()
-        #print sql
+        print sql
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
         #cursor.execute(sql, "3680")
@@ -733,7 +732,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
             for s in students:
                 ar = models.Assignresourceinfo()
                 ar.resourceid = int(r)
-                ar.studentid = int(s)
+                ar.studentid = str(s)
                 ar.assigntext = str(assigntext)
                 ar.isanswered = 0
                 ar.issaved = 0
@@ -742,7 +741,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
                 ar.isbillboard = 0
                 ar.isclassroom = 0
                 ar.answereddate = '1910-01-01'
-                ar.assignedby = 1 #request.user.userid
+                ar.assignedby = request.user.username
                 ar.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
                 ar.isdelete = 0
                 ar.rubric_id = int(rubricid)
@@ -791,16 +790,16 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         WHERE isdeleted=0
-              AND ari.assignedby=%s
+              AND ari.assignedby='%s'
               AND ari.IsDelete=0 
-              AND ri.categoryid=0 
+              /*AND ri.categoryid=0 */
               %s
         GROUP BY resourceid 
-        ORDER BY assigneddate DESC''' % (request.user.id, datecond)
+        ORDER BY assigneddate DESC''' % (request.user.username, datecond)
 
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
-        #3print sql
+        print sql
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
         #cursor.execute(sql, "3680")
@@ -976,7 +975,7 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         studentcond = ''
         if request.GET.get('studentid'):
-            studentcond = "AND ari.studentid = " + request.GET.get('studentid')
+            studentcond = "AND ari.studentid = '" + request.GET.get('studentid') + "'"
 
         sql = '''
         SELECT assignedid AS id,
@@ -997,11 +996,11 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
                ari.isbillboard
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
-        INNER JOIN  auth_user au on au.id = ari.studentid 
+        INNER JOIN  auth_user au on au.username = ari.studentid 
         WHERE isdeleted=0
               AND ari.resourceid=%s
               AND ari.IsDelete=0 
-              AND ri.categoryid=0
+              /*AND ri.categoryid=0*/
               %s
         GROUP BY ari.studentid
         ORDER BY assigneddate DESC''' % (pk, studentcond)
@@ -1262,12 +1261,10 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
                et.usertype
         FROM  editingtext et
         INNER JOIN auth_user au 
-            ON au.id = et.editedby
+            ON au.username = et.editedby
         WHERE  et.editid = '%s'
             AND et.spanid = '%s'
         ORDER BY editeddate desc """ % (assignedid,spanid)
-
-        print sql
 
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -1342,7 +1339,7 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         et.typeofresource = 0
         et.isapproved   = 0
         et.isrejected   = 0
-        et.editedby     = request.user.id
+        et.editedby     = request.user.username
         et.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
         et.usertype     = str(usertype)
 
@@ -1362,10 +1359,10 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
         billboard.assessmentid = 0
         billboard.resourceid = resourceid
         billboard.writtenworkid = 0
-        billboard.studentid = studentid
+        billboard.studentid = str(studentid)
         billboard.votescount = 0
         billboard.lastvotedby = 0
-        billboard.postedby = studentid
+        billboard.postedby = str(request.user.username)
         billboard.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         billboard.save()
 
@@ -1373,7 +1370,8 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
         UPDATE assignresourceinfo
             SET isbillboard = 1
         WHERE studentid = '%s'
-            AND resourceid = '%s' ''' % (studentid, resourceid)
+            AND resourceid = '%s' ''' % (str(studentid), resourceid)
+
         cursor = connection.cursor()
         cursor.execute(sql)        
 

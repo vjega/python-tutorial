@@ -30,6 +30,15 @@ def switchlanguage(f):
         return f(req)
     return inner
 
+def checkaccess(utype):
+    def outer(f):
+        def inner(*arg, **kwarg):
+            return f(*arg, **kwarg)
+        return inner
+    return outer
+
+
+
 
 admin_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/admins', 
                                       DIMENSIONS=(250, 250))
