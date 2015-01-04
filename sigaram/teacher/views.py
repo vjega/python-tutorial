@@ -194,11 +194,10 @@ def studentresourcetype(request):
         },{
         "id": "3",
         "categoryid": "2",
-        "name" :_("Writing Board"),
+        "name" :_("Written Work"),
         "href" :"studentresourceunits"
         },{
         "id": "3",
-        "categoryid": "2",
         "name" :_("composition"),
         "href" :"extras"
         }]
