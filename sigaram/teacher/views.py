@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 #from teacher import models
 from portaladmin import models as models
 from teacher.forms import ( RubricsForm,
-                            WrittenworkForm,
                             StudentForm,
                             StickyForm,
                             StickyCommentForm,
@@ -84,9 +83,7 @@ def viewworkspacelist(request):
 @login_required
 @switchlanguage
 def writtenwork(request):
-    return render(request, 'portalteacher/writtenwork.html',{
-                                        "form" : WrittenworkForm.WrittenworkForm()})
-
+    return render(request, 'portalteacher/writtenwork.html')
 @login_required
 @switchlanguage
 def viewassessments(request):
@@ -198,11 +195,10 @@ def studentresourcetype(request):
         },{
         "id": "3",
         "categoryid": "2",
-        "name" :_("Writing Board"),
+        "name" :_("Written Work"),
         "href" :"studentresourceunits"
         },{
         "id": "3",
-        "categoryid": "2",
         "name" :_("composition"),
         "href" :"extras"
         }]
@@ -463,3 +459,7 @@ def addwrittenwork(request):
 @switchlanguage
 def threadview(request):
     return render(request, 'portalteacher/threadview.html')
+    schools = models.Schoolinfo.objects.all()
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portalteacher/addwrittenwork.html', 
+                                        {'schools':schools,'classes':classes})

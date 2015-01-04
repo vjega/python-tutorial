@@ -39,11 +39,11 @@
                     <h3>{% trans "Note" %}:</h3>
                 </div><br />
                 <!--div class="form-group"> 
-                        <label>{% trans "Answer" %} {% trans "Type" %}</label>
-                        <select id="answer-type" name="answer-type">
-                            <option value="text">Text</option>
-                            <option value="audio">Audio</option>
-                        </select>
+                    <label>{% trans "Answer" %} {% trans "Type" %}</label>
+                    <select id="answer-type" name="answer-type">
+                        <option value="text">Text</option>
+                        <option value="audio">Audio</option>
+                    </select>
                 </div--> 
                 <div class="form-group">
                     {% trans "Answer" %} {% trans "Type" %}
@@ -55,15 +55,14 @@
                                         name="isaudio" class="isaudio" checked="checked">
                     <label for="hide-recorder">Text</label> 
                 </div> <br />
-
+                <!--audio src="blob:00158162-8a59-4d87-8059-b59379b62bf8" controls=""></audio-->
                 <div id="recorder-wrap">
                     <div id="recorder">
                         <p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
-                        <div id="audio_container">
-                        </div>
                     </div>
                 </div>
-                
+                <div id="audio_container">
+                </div>
                 <div class="form-group"> 
                     <label>{% trans "Answer" %}</label>
                 </div> 

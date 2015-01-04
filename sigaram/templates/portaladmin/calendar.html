@@ -54,11 +54,7 @@ TTS.forms.showcalform = function(start, end, allDay) {
             $('#id_start').val(start.format());
             $('#id_end').val(end.format());
 
-            $('#id_start,#id_end').datepicker({
-                format: "yyyy-mm-dd",
-                todayBtn: "linked",
-                autoclose: true,
-                todayHighlight: true
+            $('#id_start,#id_end').datetimepicker({
             });
         },
         buttons: [{
@@ -114,11 +110,7 @@ TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
                 $('#id_start').val(start_date[0]);
                 $('#id_end').val(end_date[0]);
 
-                $('#id_start,#id_end').datepicker({
-                    format: "yyyy-mm-dd",
-                    todayBtn: "linked",
-                    autoclose: true,
-                    todayHighlight: true
+                $('#id_start,#id_end').datetimepicker({
                 });
             },
             buttons: [{

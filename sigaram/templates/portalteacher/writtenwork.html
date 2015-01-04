@@ -5,7 +5,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Writing Job" %}</h2>
+        <h2 class="page-header">{% trans "Written Work" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -14,10 +14,19 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
             <div class="panel-heading">
-                <span id="add" class="add">{% trans "From Date" %}</span>
-                <input type="text" name="From Date">
-                <span id="add" class="add">{% trans "To Date" %}</span>
-                <input type="text" name="From Date"><button type="button">{% trans "Search" %}</button>
+                <div class="col-lg-2">
+                    <span id="add" class="add">{% trans "From Date" %}</span>
+                </div>
+                <div class=" col-lg-3">
+                    <input type="text" name="From Date" class="form-control" id="datetimepicker1" data-date-format="YYYY-MM-DD">
+                </div>
+                <div class="col-lg-2">
+                    <span id="add" class="add">{% trans "To Date" %}</span>
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" name="From Date" class="form-control" id="datetimepicker2" data-date-format="YYYY-MM-DD">
+                </div>
+                <button class="btn btn-primary" type="button">{% trans "Search" %}</button>
                 <span id="addrec">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <i class="fa fa-plus-square fa-lg"></i></span>
             </div>
@@ -43,6 +52,12 @@
     <!-- /.panel -->
 </div>
                 <!-- /.col-lg-12 -->
+
+    <script>
+    $('#datetimepicker1,#datetimepicker2').datetimepicker({
+        pickTime: false
+    });
+    </script>                
 {% endblock botcontent%}
 {% block morecss %}
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
@@ -69,9 +84,6 @@
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<script id="addwrittenwork" type="text/x-jsrender">
-{% crispy form %}
-</script>
 
 <script>
 window.TTS = window.TTS || {}
