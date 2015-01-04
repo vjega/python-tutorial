@@ -55,7 +55,7 @@
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<script id="admin-form" type="text/x-jsrender">
+<script id="thread-form" type="text/x-jsrender">
     {% crispy form %}
 </script>
 <script>
@@ -69,7 +69,7 @@ TTS.forms.addadmin = function(form, data) {
         },
         type:'POST',
         data: data,
-        url : '/api/admin/topics/'
+        url : '/api/admin/threads/'
     }).done(function( msg ) {
         form.close();
         location.reload();
@@ -81,7 +81,7 @@ TTS.forms.addadmin = function(form, data) {
 TTS.forms.showadminform = function() {
     BootstrapDialog.show({
         title: 'Add Topics',
-        message: $($('#admin-form').render()),
+        message: $($('#thread-form').render()),
         onshown: function(){
             $('.summernote').summernote();
         },
@@ -89,8 +89,9 @@ TTS.forms.showadminform = function() {
             label: 'Save',
             cssClass: 'btn-primary',
             action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-topic");
-                //console.log(data);
+                var data = TTS.utils.serilaizeJson("#add-thread");
+                data = JSON.parse(data);
+                data['topicid'] = TTS.utils.getUrlParameter("topicid");
                 TTS.forms.addadmin(dialogItself, data); 
             }
             },{
@@ -108,7 +109,11 @@ TTS.forms.renderteacher = function(data){
             { "title": "{% trans "Sl No." %}",
               "class": "text-center"  
             },
-            { "title": "{% trans "Name" %}" }
+            { "title": "{% trans "Name" %}" },
+            { "title": "{% trans "View" %}",
+              "class": "thread_id" ,
+              "data" : "view"  
+            },
             
         ];
     var dataset = [];
@@ -116,9 +121,10 @@ TTS.forms.renderteacher = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.DT_RowId = data[i].topicid;
-        t.push(++count);
-        t.push(data[i].topicname);
+        t.DT_RowId = data[i].threadid;
+        t.push(data[i].topicid);
+        t.push(data[i].threadname);
+        t.view = "<td class='threadview' id='"+data[i].threadid+"'>View</td>";
         dataset.push(t);
     }
     if (TTS.forms.table) {
@@ -138,7 +144,8 @@ TTS.forms.renderteacher = function(data){
 
 $(document).ready(function(){
     TTS.utils.ajaxloaderstart();
-    var url = "/api/admin/topics/"
+    var url ="/api/admin/threads/?topicid="+TTS.utils.getUrlParameter("topicid")+"&format=json"
+    console.log(TTS.utils.getUrlParameter("topicid"));
     $.ajax({
         "url":url,
         "type":"GET"
@@ -147,11 +154,19 @@ $(document).ready(function(){
         TTS.utils.ajaxloaderstop();
     });
     
-    $("#page-wrapper").on("click", "tbody tr", function(){
+    $("#page-wrapper").on("click", "#addrec", function(){
+        //TTS.forms.addschool();
+        TTS.forms.showadminform();
+    });
+
+
+    $("#page-wrapper").on("click", ".thread_id", function(){
         //TTS.forms.addschool();
         //TTS.forms.showadminform();
-        window.location = "thread?topicid="+this.id
+         window.location = "threadview?threadid="+$(this).parent().prop("id")
     });
+
+    
 });
 
 </script>

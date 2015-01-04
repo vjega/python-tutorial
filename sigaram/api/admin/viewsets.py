@@ -1382,6 +1382,16 @@ class TopicViewSet(viewsets.ModelViewSet):
     queryset = models.Topicinfo.objects .all()
     serializer_class = adminserializers.TopicsSerializer
 
+    def list(self, request):
+        topicid = request.GET.get('topicid')
+        topicname = request.GET.get('topicname')
+        if topicid :
+            queryset = models.Topicinfo.objects.filter(topicid=topicid)
+        else:
+            queryset = models.Topicinfo.objects.all()
+        serializer = adminserializers.TopicsSerializer(queryset, many=True)
+        return Response(serializer.data)
+
     def create(self, request):
         topics = models.Topicinfo()
         topicinfodata =  json.loads(request.DATA.keys()[0])
@@ -1398,4 +1408,41 @@ class TopicViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
+        
+class ThreadsViewSet(viewsets.ModelViewSet):
 
+    queryset = models.Threaddetails.objects.all()
+    serializer_class = adminserializers.ThreadSerializer
+
+    def list(self, request):
+        topicid = request.GET.get('topicid')
+        threadid = request.GET.get('threadid')
+        
+        if topicid :
+            queryset = models.Threaddetails.objects.filter(topicid=topicid)
+        else:
+            queryset = models.Threaddetails.objects.all()
+        serializer = adminserializers.ThreadSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk):
+        queryset = models.Threaddetails.objects.get(pk=pk)
+        serializer = adminserializers.ThreadSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        thread = models.Threaddetails()
+        threaddetailsdata =  json.loads(request.DATA.keys()[0])
+        thread.threadid = threaddetailsdata.get('threadid',0)
+        thread.topicid = threaddetailsdata.get('topicid',0)
+        thread.threadname = threaddetailsdata.get('threadname',0)
+        thread.createdby = request.user.id
+        thread.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        thread.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
