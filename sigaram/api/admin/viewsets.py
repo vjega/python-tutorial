@@ -668,6 +668,8 @@ class StudentAssignResource(viewsets.ModelViewSet):
                 request.GET.get('tdate'))
         sql = '''
         SELECT assignedid AS id,
+               ari.isrecord,
+               ari.audiourl,
                ri.resourceid,
                resourcetitle,
                date(assigneddate) as createddate,
@@ -706,6 +708,8 @@ class StudentAssignResource(viewsets.ModelViewSet):
         sql = '''
         SELECT assignedid AS id,
                ri.resourceid,
+               ari.isrecord,
+               ari.answerurl,
                ri.videourl,
                resourcetitle,
                date(assigneddate) as createddate,
@@ -1283,6 +1287,7 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk=None):
         assignedid = request.GET.get('assignedid')
+        previoustext = request.GET.get('previoustext')
         sql = '''
         SELECT et.previoustext,
             et.edittext,
@@ -1300,15 +1305,19 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         answertext = rec[2]
         spanid = rec[3]
 
-        #print answertext
+        # print edittext
+        # print previoustext
+        # print answertext
+
+        approvedanswertext = answertext.replace(previoustext,edittext)
 
         #updating approved answer text
-        # sql = '''
-        # UPDATE assignresourceinfo 
-        #    SET answertext = '%s'
-        #    WHERE assignedid = '%s' ''' % (answertext, assignedid)
-        # cursor = connection.cursor()
-        # cursor.execute(sql)
+        sql = '''
+        UPDATE assignresourceinfo 
+           SET answertext = "%s"
+           WHERE assignedid = '%s' ''' % (str(approvedanswertext), assignedid)
+        cursor = connection.cursor()
+        cursor.execute(sql)
 
         #resetting the previous one if set
         sql = '''
@@ -1321,8 +1330,9 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         # #marking the selected as approved
         sql = '''
         UPDATE editingtext
-            SET isapproved = 1
-        WHERE editingid = '%s' ''' % (pk)
+            SET isapproved = 1,
+            previoustext = "%s"
+        WHERE editingid = '%s' ''' % (edittext, pk)
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -1333,14 +1343,14 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         
         assignedid  = data.get('assignedid');
         spanid      = data.get('spanid');
-        orig        = data.get('orig');
+        prevtext    = data.get('prevtext');
         modified    = data.get('modified');
         usertype    = data.get('type');
 
         et = models.Editingtext()
         et.editid       = int(assignedid)
         et.spanid       = str(spanid)
-        et.previoustext = str(orig)
+        et.previoustext = str(prevtext)
         et.edittext     = str(modified)
         et.typeofresource = 0
         et.isapproved   = 0

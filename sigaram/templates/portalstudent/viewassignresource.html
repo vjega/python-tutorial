@@ -55,7 +55,7 @@
                                         name="isaudio" class="isaudio" checked="checked">
                     <label for="hide-recorder">Text</label> 
                 </div> <br />
-                <!--audio src="blob:00158162-8a59-4d87-8059-b59379b62bf8" controls=""></audio-->
+                <div id="audio-player"></div>
                 <div id="recorder-wrap">
                     <div id="recorder">
                         <p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
@@ -111,6 +111,10 @@ TTS.forms.renderassignedresourceinfo = function(data){
     $(".summernote").code(data.answertext);
     $("#resource-title").html(data.resourcetitle);
     $("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.videourl+"');\" >View</a>");
+    if(data.isrecord && data.answerurl){
+        $("#audio-player").html('<audio src="'+data.answerurl+'" controls=""></audio><br />');    
+    }
+    
 };
 function openwindow(videourl) {
     window.open("http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
@@ -120,11 +124,16 @@ TTS.forms.ressave = function(savesend){
     var assignedid = getUrlParameter('assignedid');
     data.originaltext = $(".summernote").code();
     data.answertext = $(".summernote").code();
-    data.answerurl = 'test/test.url';
     data.answertype = $(".isaudio:checked").val();
-    
+
+    if($("#recorder-wrap").next().find('a')){
+        data.answerurl = $("#audio_container a").prop('href');
+    }else{
+        data.answerurl = '';
+    }
+
     if(data.answertype == 'audio')
-        data.isrecord = 0;
+        data.isrecord = 1;
     else
         data.isrecord = 0;
 
@@ -176,7 +185,7 @@ $(document).ready(function(){
         "url":"/api/admin/studentassignresource/"+assignedid+"/?format=json",
         "type":"GET"
     }).done(function(data){
-        //console.log(data);
+        console.log(data);
         TTS.forms.renderassignedresourceinfo(data);
     });
 });

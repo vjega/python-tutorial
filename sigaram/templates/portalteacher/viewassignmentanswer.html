@@ -164,6 +164,7 @@
 
 {% block scriptcontent %}
 <script id="editanswerlist" type="text/x-jsrender">
+    <textarea id="prev-text" style="display:none"></textarea>
     <textarea id="correction" style="width:100%;height:60px;padding:5px;display:none"></textarea>
     <input type="hidden" id="spanid" value="">
     <div class="row">
@@ -206,6 +207,7 @@ TTS.forms.renderanswereditinginfo = function(data, isapproved){
     var x = data[0].previoustext;
     var previoustext = x.replace(/<\/?[^>]+>/gi, '');
     $("#correction").val(previoustext);
+    $("#prev-text").val(previoustext);
     $("#spanid").val(spanid);
     var headers = [
             { "title": "{% trans "Answers" %}",
@@ -280,6 +282,7 @@ TTS.forms.editanswerlist = function(spanid){
                             var uid         = $("#spanid").val();
                             var assignedid  = $("#assignedid").val();
                             var origtext    = $("#student-answer").html();
+                            var prevtext    = $("#prev-text").val();
                             var modified    = modtext;
                             var type        = 2;
                             //var answertext  = TTS.forms.marktext(fulltext,origtext,uid,type);
