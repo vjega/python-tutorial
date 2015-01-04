@@ -16,14 +16,14 @@
             <div class="col-lg-4">
                <div id="add" class="col-lg-6">{% trans "From Date" %}</div>
                     <div class="input-group date col-lg-6">
-                        <input type="text" class="form-control col-lg-6">
+                        <input type="text" class="form-control col-lg-6" id="datetimepicker1" data-date-format="YYYY-MM-DD">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
             </div>    
             <div class="col-lg-4">
                 <div id="add" class="add col-lg-6">{% trans "To Date" %}</div>
                 <div class="input-group date col-lg-6">
-                    <input type="text" class="form-control col-lg-6">
+                    <input type="text" class="form-control col-lg-6" id="datetimepicker2" data-date-format="YYYY-MM-DD">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>
             </div>
@@ -272,4 +272,12 @@ $(document).ready(function(){
 });
 
 </script>
+<script>
+$(document).ready(function(){
+    $('#datetimepicker1,#datetimepicker2').datetimepicker({
+        pickTime: false
+    });
+});
+</script>
+
 {% endblock scriptcontent %}

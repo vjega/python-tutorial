@@ -1358,11 +1358,10 @@ THE SOFTWARE.
     };
 
     $.fn.datetimepicker.defaults = {
-        format: "YYYY-MM-DD",
+        format: false,
         pickDate: true,
-        pickTime: false,
+        pickTime: true,
         useMinutes: true,
-		autoclose: true,
         useSeconds: false,
         useCurrent: true,
         calendarWeeks: false,

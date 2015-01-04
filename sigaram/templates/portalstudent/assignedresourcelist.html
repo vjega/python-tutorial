@@ -19,8 +19,8 @@
                         <div class="col-lg-4">
                             <label>{% trans "From Date" %}: </label>
                         </div>    
-                        <div class='input-group date' id='fromdatepicker'>
-                            <input type='text' class="form-control" data-date-format="YYYY/MM/DD" />
+                        <div class='input-group'>
+                            <input type='text' class="form-control"  id='fromdatepicker' data-date-format="YYYY-MM-DD" />
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -32,8 +32,8 @@
                         <div class="col-lg-4">
                             <label>{% trans "To Date" %}: </label>
                         </div>
-                        <div class='input-group date' id='todatepicker'>
-                            <input type='text' class="form-control" data-date-format="YYYY/MM/DD" />
+                        <div class='input-group date'>
+                            <input type='text' id='todatepicker' class="form-control" data-date-format="YYYY-MM-DD" />
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
@@ -88,6 +88,7 @@
                 <!-- /.col-lg-12 -->
 {% endblock botcontent%}
 {% block morecss %}
+
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
@@ -108,9 +109,7 @@
 </script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
-<script src="{%static "bower_components/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js" %}"></script>
 <script src="{% static "js/tts.utils.js" %}"></script>
-<script src="{%static "bower_components/bootstrap-datetimepicker/src/js/locales/bootstrap-datetimepicker.es.js" %}"></script>
 <script>
     window.TTS = window.TTS || {}
     TTS.forms = TTS.forms || {}   
@@ -204,12 +203,6 @@ $(document).ready(function(){
             window.location = 'viewassignmentanswer?resourceid='+x[1]+'&studentid='+x[2];
 
     });
-    $('#fromdatepicker').datetimepicker({
-        pickTime: false
-    });
-    $('#todatepicker').datetimepicker({
-        pickTime: false
-    });
     /*$("#fromdatepicker").on("dp.change",function (e) {
        $('#todatepicker').data("DateTimePicker").setMinDate(e.date);
     });
@@ -232,4 +225,10 @@ $(document).ready(function(){
 });
 
 </script>
+<script>
+    $('#fromdatepicker,#todatepicker').datetimepicker({
+        pickTime: false
+    });
+</script>
+
 {% endblock morescript %}

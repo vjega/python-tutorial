@@ -16,14 +16,14 @@
             <div class="col-lg-4">
                <div id="add" class="col-lg-6">{% trans "From Date" %}</div>
                     <div class="input-group date col-lg-6">
-                        <input type="text" class="form-control col-lg-6">
+                        <input type="text" class="form-control col-lg-6" id="fromdate" data-date-format="YYYY-MM-DD">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
             </div>    
             <div class="col-lg-4">
                 <div id="add" class="add col-lg-6">{% trans "To Date" %}</div>
                 <div class="input-group date col-lg-6">
-                    <input type="text" class="form-control col-lg-6">
+                    <input type="text" class="form-control col-lg-6" id="tilldate" data-date-format="YYYY-MM-DD">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>
             </div>
@@ -42,6 +42,11 @@
     </div>
     <!-- /.panel -->
 </div>
+    <script>
+    $('#fromdate,#tilldate').datetimepicker({
+        pickTime: false
+    });
+    </script>
                 <!-- /.col-lg-12 -->
 {% endblock botcontent%}
 
