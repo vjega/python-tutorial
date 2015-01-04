@@ -15,11 +15,14 @@
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <style>
-    #addrec:hover, #admin-main-tbl tbody tr:hover{
+    #addrec:hover{
         cursor: pointer;
     }
     .note-editable{
         height: 80px;
+    }
+    #writtenworks{
+        display:none;
     }
 </style>
 {% endblock morecss %}
@@ -35,88 +38,58 @@
 {% endblock morescript %}
 
 {% block botcontent %}
-<input type="hidden" id="set_rubric_id" name="rub_id" value="" />
 <div class="row">
-
-    <div class="form-group" class="col-sm-2">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Heading" %}</label>
-        <div class="control" id="resourcetitle"></div>
-    </div>
-
-    <!--div class="form-group" class="col-sm-2">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Answer" %} {% trans "Type" %}</label>
-        <div class="control">
-            <select id="answertype" name="answertype">
-                <option value="text">Text</option>
-                <option value="image">Image</option>
-                <option value="audio">Audio</option>
-                <option value="video">Video</option>
-            </select>
-        </div>
-    </div-->
-    <br />
-    <div class="form-group" class="col-sm-2">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Reference" %}</label>
-    </div>
-    </div>
+        <div class="form-group" class="col-sm-2">
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Title" %}</label>
+    </div><br />
     <div class="form-group">
-        <textarea class="summernote"></textarea>
+        <textarea id="title" class="summernote"></textarea>
+    </div><br />
+     <div class="form-group" class="col-sm-2">
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Note" %}</label>
+    </div><br />
+     <div class="form-group">
+        <textarea id="note" class="summernote"></textarea>
     </div>
-    <div class="form-group" id="set_rubric_text"></div>
-    <div class="row">
-
-<div class="col-lg-12">
-    <div class="panel panel-default">
-        <div align="center" class="panel-heading">
-            <span id="addrec">
-                <a href="javascript:void(0)" class="btn btn-success btn-sm"><i class="fa fa-plus-square fa-lg"></i> {% trans "Add" %}</a>
-            </span>
-            <a href="javascript:void(0)" class="btn btn-success btn-sm" id="removeStudent"><i class="fa fa-remove fa-lg"></i> {% trans "Remove" %}</a>
-        </div>
-        <!-- /.panel-heading -->
-        <div class="panel-body">
-            <div class="form-group">
-                <div class="col-sm-12">
-                    <select style="width:100%;height:250px;" id='sltStudentList' name='sltStudentList' multiple="">
-                        
-                    </select>
+    <div class="col-lg-6">
+        <input id="writtenwork" type="file" name="writtenwork">
+    </div>
+    <div class="col-lg-6">
+        <input id="writtenworks" type="file" name="writtenworks">
+    </div><br />
+</div><br />
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div align="center" class="panel-heading">
+                <span id="addrec">
+                    <a href="javascript:void(0)" class="btn btn-success btn-sm"><i class="fa fa-plus-square fa-lg"></i> {% trans "Add" %}</a>
+                </span>
+                <a href="javascript:void(0)" class="btn btn-success btn-sm" id="removeStudent"><i class="fa fa-remove fa-lg"></i> {% trans "Remove" %}</a>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <select style="width:100%;height:250px;" id='sltStudentList' name='sltStudentList' multiple="">
+                            
+                        </select>
+                    </div>
                 </div>
             </div>
+            <div align="center" class="panel-footer">
+                <button class="btn btn-success btn-sm" id="connect-rubrics"><i class="fa fa-link fa-lg"></i> {% trans "Connect" %} {% trans "Rubrics" %}</button>
+                <button class="btn btn-success btn-sm" id="res-send"><i class="fa fa-share fa-lg"></i> {% trans "Send" %}</button>
+                
+            </div>
+            <!-- /.panel-body -->
         </div>
-        <div align="center" class="panel-footer">
-            <button class="btn btn-success btn-sm" id="connect-rubrics"><i class="fa fa-link fa-lg"></i> {% trans "Connect" %} {% trans "Rubrics" %}</button>
-            <button class="btn btn-success btn-sm" id="res-send"><i class="fa fa-share fa-lg"></i> {% trans "Send" %}</button>
-            
-        </div>
-        <!-- /.panel-body -->
+        <!-- /.panel -->
     </div>
-    <!-- /.panel -->
-</div>
 </div>
 {% endblock botcontent%}
 
 {% block scriptcontent %}
-
-<script id="rubricslist" type="text/x-jsrender">
-<div class="row">
-    <div class="control-group col-lg-7">
-        <div class="controls">
-            <button class="btn btn-success" id="choose-rubric"> {% trans "Select" %}</button>
-        </div>
-    </div>
-</div>
-<br />
-<div class="row">
-    <div class="col-lg-12">
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover"  id="rubrics-list">
-                
-            </table>
-        </div>    
-    </div>
-</div>
-</script>
-
 
 <script id="assessmentassigninglist" type="text/x-jsrender">
 <div class="row">
@@ -163,25 +136,22 @@ TTS.forms.renderstudentlist = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.id = "<input type='checkbox' class='case' name='schoolname' id='"+data[i].studentid+"' value='"+data[i].firstname+" "+data[i].lastname+"' />";
+        t.id = "<input type='checkbox' class='case' name='schoolname' id='"+data[i].username+"' value='"+data[i].firstname+" "+data[i].lastname+"' />";
 
         t.name = data[i].firstname+" "+data[i].lastname;
         dataset.push(t);
+    }   
+    if(TTS.forms.asstable){
+        TTS.forms.asstable.fnClearTable();
+        TTS.forms.asstable.fnAddData(
+            dataset
+        );
+    }else{
+        TTS.forms.asstable = $('#assessment-assigning-list').dataTable({
+            "data":     dataset,
+            "columns":  headers
+        });
     }
-
-   
-   TTS.forms.asstable.fnClearTable();
-   TTS.forms.asstable.fnAddData(
-        dataset
-    );
-    return true;
-    
-    /*
-    TTS.forms.table2 = $('#assessment-assigning-list').dataTable({
-        "data":     dataset,
-        "columns":  headers
-    });
-    */
 };
 
 TTS.forms.assessmentassigninglist = function() {
@@ -227,8 +197,8 @@ TTS.forms.assessmentassigninglist = function() {
                         if (data.length) {
                             $.each(data, function( index, value ) {
                                 var studentlist = "#sltStudentList";
-                                if(!$(studentlist +"  option[value*='" + value.studentid + "']").length > 0){
-                                    $("#sltStudentList").append('<option value="'+value.studentid+'">'+value.firstname+' '+value.lastname+'</option>');
+                                if(!$(studentlist +"  option[value*='" + value.username + "']").length > 0){
+                                    $("#sltStudentList").append('<option value="'+value.username+'">'+value.firstname+' '+value.lastname+'</option>');
                                 }
                             });
                         } else {
@@ -259,76 +229,6 @@ TTS.forms.assessmentassigninglist = function() {
     });
 };
 
-TTS.forms.rubricslist = function() {
-    BootstrapDialog.show({  
-        title: 'Rubrics List',
-        message: $($('#rubricslist').render()),
-        onshown: function(dialogRef){
-            $.ajax({
-                "url":"/api/admin/rubricsheader/?format=json",
-                "type":"GET"
-            }).done(function(data){
-                TTS.forms.rubricinfo(data);
-            });
-
-            $("body").on("click", "#choose-rubric",function(){
-                if(!$(".rubric_id:checked").length) {
-                    alert("Select atleast one rubric");
-                    return false;
-                }
-                var rid = $(".rubric_id:checked").prop("id");
-                var assgtext = $(".rubric_id:checked").prop("name");
-                $("#set_rubric_id").val(rid);
-                $("#set_rubric_text").html(assgtext);
-                dialogRef.close();
-            });
-
-        },
-        buttons: [{
-            label: 'Add',
-            cssClass: 'btn-primary',
-            onshown: function(msg){
-
-            }
-            },{
-            label: 'Cancel',
-            action: function(dialogItself){
-                dialogItself.close();
-            }
-        }]
-    });
-};
-
-TTS.forms.rubricinfo = function(data){
-    var headers = [
-            { "title": "{% trans "Select" %}",
-              "class": "text-center",
-              "data" : "id",
-              "bSortable": false
-            },
-            { "title": "{% trans "Title" %}",
-              "data" : "title"
-            },
-            { "title": "{% trans "Teacher" %}",
-              "data" : "teacher"
-            },
-        ];
-    var dataset = [];
-    var count = 0
-    for(var i in data){
-        var t = [];
-        t.id = "<input type='radio' class='rubric_id' name='"+data[i].title+"' id='"+data[i].slno+"' />";
-        t.title = data[i].title;
-        t.teacher = data[i].teacher;
-        dataset.push(t);
-    }
-
-    TTS.forms.asstable = $('#rubrics-list').dataTable({
-        "data":     dataset,
-        "columns":  headers
-    });
-};
-
 
 TTS.forms.renderschoolinfoagain = function(data){
     var dataset = [];
@@ -340,12 +240,17 @@ TTS.forms.renderschoolinfoagain = function(data){
         t.name = data[i].schoolname;
         dataset.push(t);
     }
-
-   TTS.forms.asstable.fnClearTable();
-   TTS.forms.asstable.fnAddData(
-        dataset
-    );
-    return true;
+    if(TTS.forms.asstable){
+        TTS.forms.asstable.fnClearTable();
+        TTS.forms.asstable.fnAddData(
+            dataset
+        );
+    }else{
+        TTS.forms.asstable = $('#assessment-assigning-list').dataTable({
+            "data":     dataset,
+            "columns":  headers
+        });
+    }
 };
    
 TTS.forms.renderschoolinfo = function(data){
@@ -413,16 +318,7 @@ TTS.forms.ressave = function(){
 
 
 $(document).ready(function(){
-
-    var resourceid = getUrlParameter('resourceid');
-
-    $.ajax({
-        "url":"/api/student/resourceinfo/"+resourceid,
-        "type":"GET"
-    }).done(function(data){
-        $("#resourcetitle").html(data.resourcetitle);
-    });
-    
+   $('.summernote').summernote();
     $.ajax({
         "url":"/api/admin/adminschool/?format=json",
         "type":"GET"
@@ -431,9 +327,7 @@ $(document).ready(function(){
         TTS.forms.renderschoolinfo(data);
     });
     
-
     $("body").on("change", "#school_name",function(){
-
         if($("#school_name").val() == 'all'){
             $.ajax({
                 "url":"/api/admin/adminschool/?format=json",
@@ -444,27 +338,33 @@ $(document).ready(function(){
             });
         }else{
             $.ajax({
-                "url":"/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json",
+                "url":"/api/admin/teacher/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json",
                 "type":"GET"
             }).done(function(data){
                 if (data.length) {
                     TTS.forms.renderstudentlist(data);
                 } else {
-                    TTS.forms.table.fnClearTable();
+                    TTS.forms.asstable.fnClearTable();
                 }
             });
         }
-    })
-
-    $('#admin-main-tbl tbody').on('click', 'tr', function(){
-        window.location = 'teacherresourcelist?id='+this.id;
+    });
+    $("body").on("change", "#classid",function(){
+        $.ajax({
+            "url":"/api/admin/teacher/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json",
+            "type":"GET"
+        }).done(function(data){
+            if (data.length) {
+                TTS.forms.renderstudentlist(data);
+            } else {
+                TTS.forms.asstable.fnClearTable();
+            }
+        });
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.assessmentassigninglist();
         
     });
-    $('.summernote').summernote();
-
     // add multiple select / deselect functionality
     $("body").on("click", "#selectall", function () {
           $('.case').attr('checked', this.checked);
@@ -478,9 +378,6 @@ $(document).ready(function(){
             $("#selectall").removeAttr("checked");
         }
     });    
-    $("#connect-rubrics").on("click", function(){
-        TTS.forms.rubricslist();
-    });
     $("#removeStudent").click(function(){
         $('#sltStudentList :selected').each(function(i, selected){ 
             var studentid = $(selected).val(); 
@@ -493,19 +390,6 @@ $(document).ready(function(){
     });
 
 });
-function getUrlParameter(sParam)
-{
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++) 
-    {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam) 
-        {
-            return sParameterName[1];
-        }
-    }
-} 
 </script>
 
 {% endblock scriptcontent %}
