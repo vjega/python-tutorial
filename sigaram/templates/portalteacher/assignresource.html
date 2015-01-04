@@ -167,11 +167,9 @@ TTS.forms.renderstudentlist = function(data){
 
         t.name = data[i].firstname+" "+data[i].lastname;
         dataset.push(t);
-    }
-
-   
-   TTS.forms.asstable.fnClearTable();
-   TTS.forms.asstable.fnAddData(
+    }   
+    TTS.forms.asstable.fnClearTable();
+    TTS.forms.asstable.fnAddData(
         dataset
     );
     return true;

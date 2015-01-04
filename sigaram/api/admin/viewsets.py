@@ -59,11 +59,17 @@ class teacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
     serializer_class = adminserializers.TeacherinfoSerializer
     def list(self, request):
+
         schoolid =  request.GET.get('schoolid')
-        if schoolid :
+        classid  =  request.GET.get('classid')
+
+        if schoolid and classid:
+            queryset = models.Teacherinfo.objects.filter(schoolid=schoolid, classid=classid).order_by('-createddate')
+        elif schoolid:
             queryset = models.Teacherinfo.objects.filter(schoolid=schoolid).order_by('-createddate')
         else:
-            queryset = models.Teacherinfo.objects.all().order_by('-createddate')
+            queryset = models.Teacherinfo.objects.all()
+
         serializer = adminserializers.TeacherinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
