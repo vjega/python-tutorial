@@ -230,7 +230,7 @@ class Assignresourceinfo(models.Model):
     isbillboard = models.IntegerField()
     isclassroom = models.IntegerField()
     answereddate = models.DateTimeField()
-    assignedby = models.BigIntegerField()
+    assignedby = models.CharField(max_length=500)
     assigneddate = models.DateTimeField()
     isdelete = models.IntegerField(db_column='IsDelete')  # Field name made lowercase.
     rubric_id = models.IntegerField()
@@ -273,7 +273,7 @@ class Billboardinfo(models.Model):
     votescount = models.IntegerField()
     lastvotedby = models.BigIntegerField()
     lastvoteddate = models.DateTimeField(blank=True, null=True)
-    postedby = models.BigIntegerField()
+    postedby = models.CharField(max_length=500)
     posteddate = models.DateTimeField()
 
     class Meta:
@@ -555,7 +555,7 @@ class Editingtext(models.Model):
     spanid = models.CharField(max_length=15)
     previoustext = models.TextField()
     edittext = models.TextField(blank=True)
-    editedby = models.BigIntegerField()
+    editedby = models.CharField(max_length=500)
     editeddate = models.DateTimeField()
     editedplace = models.CharField(max_length=100)
     typeofresource = models.IntegerField()

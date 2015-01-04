@@ -125,11 +125,12 @@
         );
     }else{
         TTS.forms.tablerl = $('#resource-list').dataTable({
-                "data":     dataset,
-                "columns":  headers
-            });
-        };
+            "data":     dataset,
+            "columns":  headers
+        });
     }
+};
+
 $(document).ready(function(){
     TTS.utils.ajaxloaderstart();
 

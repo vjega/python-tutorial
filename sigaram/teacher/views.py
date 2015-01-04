@@ -438,3 +438,8 @@ def billboard(request):
 @switchlanguage
 def activitystatistics(request):
     return render(request, 'portalteacher/activitystatistics.html')
+
+@login_required
+@switchlanguage
+def addwrittenwork(request):
+    return render(request, 'portalteacher/addwrittenwork.html')

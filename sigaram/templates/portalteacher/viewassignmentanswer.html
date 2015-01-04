@@ -395,7 +395,6 @@ TTS.forms.editanswer = function() {
                     data: data,
                     url : '/api/admin/studentassignresource/'+assign_id
                 }).done(function(msg) {
-                    //console.log(msg);
                     dialogItself.close();
                     alert("Answer corrected successfully");
                     location.reload();
