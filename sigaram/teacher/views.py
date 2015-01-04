@@ -444,3 +444,8 @@ def activitystatistics(request):
 @switchlanguage
 def topics(request):
     return render(request, 'portalteacher/topics.html',{"form" : TopicsForm.TopicsForm()} )
+
+@login_required
+@switchlanguage
+def addwrittenwork(request):
+    return render(request, 'portalteacher/addwrittenwork.html')

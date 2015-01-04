@@ -31,7 +31,6 @@
 
     <!-- Custom Fonts -->
     <link href="{%static "bower_components/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet" type="text/css">
-    <link href="{%static "bower_components/bootstrap3-datepicker/datepicker.min.css" %}" rel="stylesheet">
     <link href="{%static "icons/flaticon.css" %}" rel="stylesheet" type="text/css"> 
     <style>
         .modal {
@@ -45,9 +44,6 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script src="{%static "bower_components/jquery/jquery.min.js" %}"></script>
-    <script src="{%static "bower_components/bootstrap3-datepicker/jquery-1.11.0.min.js" %}"></script>
-    <script src="{%static "bower_components/bootstrap3-datepicker/bootstrap-datepicker.js" %}"></script>
 
 </head>
 
@@ -90,9 +86,9 @@
                 <header class="header">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-sm-8"><img src="{%static "img/10t-logo.png" %}" alt="" class="img-responsive ">
+                            <div class="col-sm-8"><img src="{%static "img/10t-logo.png" %}" alt="" style="height:50px;width:auto"  class="img-responsive ">
                             </div>
-                            <div class="col-sm4 text-right"><img src="{%static "img/10t-partnet.png" %}" alt="">
+                            <div class="col-sm4 text-right"><img src="{%static "img/10t-partnet.png" %}" style="height:50px;width:auto"  alt="">
                             </div>
                         </div>
                     </div>
@@ -207,7 +203,7 @@
     <!-- /#wrapper -->
     {% block more %}{% endblock %}
     <!-- jQuery -->
-
+    <script src="{%static "bower_components/jquery/jquery.min.js" %}"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="{%static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
 

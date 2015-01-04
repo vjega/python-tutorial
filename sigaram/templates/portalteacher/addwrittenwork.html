@@ -163,7 +163,7 @@ TTS.forms.renderstudentlist = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.id = "<input type='checkbox' class='case' name='schoolname' id='"+data[i].username+"' value='"+data[i].firstname+" "+data[i].lastname+"' />";
+        t.id = "<input type='checkbox' class='case' name='schoolname' id='"+data[i].studentid+"' value='"+data[i].firstname+" "+data[i].lastname+"' />";
 
         t.name = data[i].firstname+" "+data[i].lastname;
         dataset.push(t);
@@ -227,8 +227,8 @@ TTS.forms.assessmentassigninglist = function() {
                         if (data.length) {
                             $.each(data, function( index, value ) {
                                 var studentlist = "#sltStudentList";
-                                if(!$(studentlist +"  option[value*='" + value.username + "']").length > 0){
-                                    $("#sltStudentList").append('<option value="'+value.username+'">'+value.firstname+' '+value.lastname+'</option>');
+                                if(!$(studentlist +"  option[value*='" + value.studentid + "']").length > 0){
+                                    $("#sltStudentList").append('<option value="'+value.studentid+'">'+value.firstname+' '+value.lastname+'</option>');
                                 }
                             });
                         } else {
