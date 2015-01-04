@@ -51,6 +51,7 @@ urlpatterns = patterns('teacher.views',
     url(r'^billboard$',          'billboard',     name="billboard"),
     url(r'^activitystatistics$',  'activitystatistics',     
                                                   name="activitystatistics"),
+    url(r'^topics$',          'topics',     name="topics"),
     
 
 )

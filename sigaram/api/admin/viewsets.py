@@ -1379,3 +1379,26 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
         cursor.execute(sql)        
 
         return Response('saved')
+
+class TopicViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Topicinfo.objects .all()
+    serializer_class = adminserializers.TopicsSerializer
+
+    def create(self, request):
+        topics = models.Topicinfo()
+        topicinfodata =  json.loads(request.DATA.keys()[0])
+        topics.topicid = topicinfodata.get('topicid',0)
+        topics.forumid = topicinfodata.get('forumid',0)
+        topics.topicname = topicinfodata.get('topicname',0)
+        topics.createdby = request.user.id
+        topics.lastpostedby = request.user.id
+        topics.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
+
