@@ -61,7 +61,7 @@ def home(request):
     recent_activity_body = models.Activitylog.recentactivities()
     recent_activities = {'head':recent_acitivity_head,
                          'body':recent_activity_body}
-    announcement = pmodels.Bulletinboardinfo.announcement(request.user.id)
+    announcement = models.Bulletinboardinfo.announcement(request.user.id)
     return  render(request, 'portalteacher/index.html', {"folders":folders,
                                            "admin_folders":admin_folders,
                                            "recent_activities":recent_activities,

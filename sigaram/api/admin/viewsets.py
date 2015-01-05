@@ -668,6 +668,8 @@ class StudentAssignResource(viewsets.ModelViewSet):
                 request.GET.get('tdate'))
         sql = '''
         SELECT assignedid AS id,
+               ari.isrecord,
+               ari.answerurl,
                ri.resourceid,
                resourcetitle,
                date(assigneddate) as createddate,
@@ -706,6 +708,8 @@ class StudentAssignResource(viewsets.ModelViewSet):
         sql = '''
         SELECT assignedid AS id,
                ri.resourceid,
+               ari.isrecord,
+               ari.answerurl,
                ri.videourl,
                resourcetitle,
                date(assigneddate) as createddate,
@@ -1282,7 +1286,9 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         return Response(result)
 
     def retrieve(self, request, pk=None):
+        import MySQLdb
         assignedid = request.GET.get('assignedid')
+
         sql = '''
         SELECT et.previoustext,
             et.edittext,
@@ -1300,15 +1306,26 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         answertext = rec[2]
         spanid = rec[3]
 
-        #print answertext
+        sql = '''
+        SELECT previoustext
+        FROM editingtext 
+        WHERE spanid = '%s'
+            AND isapproved = 1 ''' % (str(spanid))
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result =  cursor.fetchone()
+        if result:
+            previoustext = result[0];
+
+        approvedanswertext = answertext.replace(previoustext,edittext)
 
         #updating approved answer text
-        # sql = '''
-        # UPDATE assignresourceinfo 
-        #    SET answertext = '%s'
-        #    WHERE assignedid = '%s' ''' % (answertext, assignedid)
-        # cursor = connection.cursor()
-        # cursor.execute(sql)
+        sql = '''
+        UPDATE assignresourceinfo 
+           SET answertext = '%s'
+           WHERE assignedid = '%s' ''' % (MySQLdb.escape_string(approvedanswertext), assignedid)
+        cursor = connection.cursor()
+        cursor.execute(sql)
 
         #resetting the previous one if set
         sql = '''
@@ -1321,8 +1338,9 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         # #marking the selected as approved
         sql = '''
         UPDATE editingtext
-            SET isapproved = 1
-        WHERE editingid = '%s' ''' % (pk)
+            SET isapproved = 1,
+            previoustext = "%s"
+        WHERE editingid = '%s' ''' % (edittext, pk)
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -1333,14 +1351,14 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         
         assignedid  = data.get('assignedid');
         spanid      = data.get('spanid');
-        orig        = data.get('orig');
+        prevtext    = data.get('prevtext');
         modified    = data.get('modified');
         usertype    = data.get('type');
 
         et = models.Editingtext()
         et.editid       = int(assignedid)
         et.spanid       = str(spanid)
-        et.previoustext = str(orig)
+        et.previoustext = str(prevtext)
         et.edittext     = str(modified)
         et.typeofresource = 0
         et.isapproved   = 0
@@ -1445,6 +1463,29 @@ class ThreadsViewSet(viewsets.ModelViewSet):
         thread.createdby = request.user.id
         thread.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         thread.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
+
+
+class RubricsViewSet(viewsets.ModelViewSet):
+
+    queryset = models.RubricsHeader.objects.all()
+    serializer_class = adminserializers.AdminrubricsSerializer
+
+    def create(self, request):
+        adminrubrics = models.Rubricsheader()
+        rubricsdata =  json.loads(request.DATA.keys()[0])
+        adminrubrics.title = rubricsdata.get('title')
+        adminrubrics.description = rubricsdata.get('description')
+        adminrubrics.teacher = rubricsdata.get('teacher')
+        adminrubrics.status = rubricsdata.get('status')
+        adminrubrics.ts = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminrubrics.save()
         return Response(request.DATA)
 
     def update(self, request, pk=None):
