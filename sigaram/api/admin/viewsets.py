@@ -1449,9 +1449,9 @@ class ThreadsViewSet(viewsets.ModelViewSet):
         serializer = adminserializers.ThreadSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def retrieve(self, request, pk):
+    def retrieve(self, request, pk=None):
         queryset = models.Threaddetails.objects.get(pk=pk)
-        serializer = adminserializers.ThreadSerializer(queryset, many=True)
+        serializer = adminserializers.ThreadSerializer(queryset, many=False)
         return Response(serializer.data)
 
     def create(self, request):

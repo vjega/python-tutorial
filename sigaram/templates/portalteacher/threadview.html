@@ -63,31 +63,32 @@ TTS.forms = TTS.forms || {}
 TTS.threadid = TTS.utils.getUrlParameter('threadid');
 //alert (TTS.threadid);
 
+
+
 TTS.forms.renderteacher = function(data){
     
     var headers = [
             { "title": "{% trans "Sl No." %}",
-              "class": "text-center"  
+              "class": "text-center",
+              "data" :"slno" 
             },
-            { "title": "{% trans "Name" %}" },
-                        
+            { "title": "{% trans "Name" %}",
+              "data" : "name"
+            },
+            
+            
         ];
     var dataset = [];
     
     var count = 0
-    for(var i in data){
-        var t = [];
-        t.push(data[i].threadid);
-        t.push(data[i].threadname);
+    for (var i in data) {
+        console.log(data);
+        var t = {};
+        t.slno = ++count;
+        t.name = data[i].threadname;
         dataset.push(t);
     }
-    if (TTS.forms.table) {
-        TTS.forms.table.fnClearTable();
-        TTS.forms.table.fnAddData(
-            dataset
-        );
-        return true;
-    }
+
     TTS.forms.table = $('#topics-main-tbl').dataTable({
         "data":     dataset,
         "columns":  headers
@@ -96,19 +97,18 @@ TTS.forms.renderteacher = function(data){
 };
 
 
+
 $(document).ready(function(){
-    var url ="/api/admin/threads/?threadid="+TTS.threadid+"/?format=json"
+    var url ="/api/admin/threads/"+TTS.threadid+"/?format=json"
+    alert(url);
     $.ajax({
         "url":url,
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacher(data);
+        //console.log(data);
     });
-    
-    $("#page-wrapper").on("click", "#addrec", function(){
-        //TTS.forms.addschool();
-        TTS.forms.showadminform();
-    });
+   
 });
 
 </script>

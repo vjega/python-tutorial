@@ -459,7 +459,5 @@ def addwrittenwork(request):
 @switchlanguage
 def threadview(request):
     return render(request, 'portalteacher/threadview.html')
-    schools = models.Schoolinfo.objects.all()
-    classes = models.Classinfo.objects.all()
-    return render(request, 'portalteacher/addwrittenwork.html', 
-                                        {'schools':schools,'classes':classes})
+    
+   
