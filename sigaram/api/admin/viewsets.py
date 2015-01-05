@@ -196,18 +196,22 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.TeacherresourceinfoSerializer
 
     def list(self, request):
+        classid   = request.GET.get('classid')
+        section   = request.GET.get('section')
+        chapterid = request.GET.get('chapterid')
+        categoryid = request.GET.get('categoryid')
+
         sql = """
         SELECT  tri.teacherresourceid,
-                tri.classid,
-                tri.section,
-                tri.resourcetype,
                 tri.resourcetitle,
-                ci.shortname,
                 tri.createddate
         FROM teacherresourceinfo tri
-        INNER JOIN classinfo ci ON ci.classid = tri.classid
+        WHERE classid='%s' 
+        AND section='%s' 
+        AND chapterid='%s' 
+        AND resourcecategory='%s'
         ORDER BY tri.createddate DESC
-        """
+        """ % (classid,section,chapterid,categoryid)
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -1449,7 +1453,7 @@ class ThreadsViewSet(viewsets.ModelViewSet):
         serializer = adminserializers.ThreadSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def retrieve(self, request,  pk=None):
+    def retrieve(self, request, pk):
         queryset = models.Threaddetails.objects.get(pk=pk)
         serializer = adminserializers.ThreadSerializer(queryset, many=True)
         return Response(serializer.data)
