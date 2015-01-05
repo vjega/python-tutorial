@@ -165,6 +165,7 @@
 
 {% block scriptcontent %}
 <script id="editanswerlist" type="text/x-jsrender">
+    <textarea id="prev-text" style="display:none"></textarea>
     <textarea id="correction" style="width:100%;height:60px;padding:5px;display:none"></textarea>
     <input type="hidden" id="spanid" value="">
     <div class="row">
@@ -191,10 +192,11 @@ TTS.forms.renderassignedresourceinfo = function(data){
     $("#student-name").html(data[0].firstname+" "+data[0].lastname);
     $("#student-answer").html(data[0].answertext);    
     $("#original-text").html(data[0].originaltext);
-    if(data[0].isbillboard == 0)
+    if(data[0].isbillboard == 0){
         $('#alreadysentnoticeboard').hide();
-    else if(data[0].isbillboard == 1)
+    }else if(data[0].isbillboard == 1){
         $('#sendnoticeboard').hide();
+    }
     //$("#view-resource").html("<a href='#' onclick=\"TTS.forms.openwindow('"+data.videourl+"');\" >View</a>");
 };
 
@@ -207,6 +209,7 @@ TTS.forms.renderanswereditinginfo = function(data, isapproved){
     var x = data[0].previoustext;
     var previoustext = x.replace(/<\/?[^>]+>/gi, '');
     $("#correction").val(previoustext);
+    $("#prev-text").val(previoustext);
     $("#spanid").val(spanid);
     var headers = [
             { "title": "{% trans "Answers" %}",
@@ -283,6 +286,7 @@ TTS.forms.editanswerlist = function(spanid){
                             var origtext    = $("#student-answer").html();
                             var modified    = modtext;
                             var type        = 1;
+                            var prevtext    = $("#prev-text").val();
                             //var answertext  = TTS.forms.marktext(fulltext,origtext,uid,type);
                             
                             var data = {
@@ -290,7 +294,8 @@ TTS.forms.editanswerlist = function(spanid){
                                 spanid      : uid,
                                 orig        : origtext,
                                 modified    : modified,
-                                type        : type
+                                type        : type,
+                                prevtext    : prevtext
                             }
 
                             $.ajax({
@@ -319,6 +324,7 @@ TTS.forms.editanswerlist = function(spanid){
                         cssClass: 'btn-primary',
                         action: function(dialogItself){
                             dialogItself.close();
+                            location.reload();
                         }
                    }]
     });

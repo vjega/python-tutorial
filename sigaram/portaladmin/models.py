@@ -1046,3 +1046,14 @@ class stickycomments(models.Model):
     class Meta:
         managed = False
         db_table = 'stickycomments'
+
+class Threaddetails(models.Model):
+    threadid = models.BigIntegerField(primary_key=True)
+    topicid = models.BigIntegerField()
+    threadname = models.CharField(max_length=1000)
+    createdby = models.BigIntegerField()
+    createddate = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'threaddetails'

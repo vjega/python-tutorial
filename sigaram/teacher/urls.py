@@ -54,5 +54,7 @@ urlpatterns = patterns('teacher.views',
     url(r'^topics$',          'topics',     name="topics"),
     url(r'^addwrittenwork$',        'addwrittenwork',     
                                                   name="addwrittenwork"),
+    url(r'^thread$',        'thread',             name="thread"),
+    url(r'^threadview$',        'threadview',     name="threadview"),
 
 )

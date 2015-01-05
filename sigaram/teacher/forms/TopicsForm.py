@@ -1,7 +1,8 @@
 from django.utils.translation import (ugettext as _,)
 from django import forms
 from crispy_forms.helper import FormHelper
-#from crispy_forms.layout import Submit
+from portaladmin import models
+
 class TopicsForm(forms.Form):
     topicname  = forms.CharField(
         label     = _("Text of the note"),

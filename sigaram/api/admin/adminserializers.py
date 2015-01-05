@@ -164,3 +164,9 @@ class TopicsSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('topicid',  'forumid','topicname',
                   'totalpost','createdby', 'createddate',
                   'lastpostedby','lastposteddate')
+
+class ThreadSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Threaddetails
+        fields = ('threadid', 'topicid','threadname',
+                  'createdby', 'createddate')

@@ -1,7 +1,6 @@
 {% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
-{% load crispy_forms_tags %}
 {% block topcontent %}
 
 <div class="row">
@@ -55,52 +54,14 @@
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<script id="topic-form" type="text/x-jsrender">
-    {% crispy form %}
+<script id="thread-form" type="text/x-jsrender">
 </script>
 <script>
+
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-
-TTS.forms.addadmin = function(form, data) {
-    $.ajax({
-        headers : {
-            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
-        },
-        type:'POST',
-        data: data,
-        url : '/api/admin/topics/'
-    }).done(function( msg ) {
-        form.close();
-        location.reload();
-        //dialogItself.close();
-    });
-}
-
-
-TTS.forms.showadminform = function() {
-    BootstrapDialog.show({
-        title: 'Add Topics',
-        message: $($('#topic-form').render()),
-        onshown: function(){
-            $('.summernote').summernote();
-        },
-        buttons: [{
-            label: 'Save',
-            cssClass: 'btn-primary',
-            action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-topic");
-                //console.log(data);
-                TTS.forms.addadmin(dialogItself, data); 
-            }
-            },{
-            label: 'Cancel',
-            action: function(dlg){
-                dlg.close();
-            }
-        }]
-    });
-};
+TTS.threadid = TTS.utils.getUrlParameter('threadid');
+//alert (TTS.threadid);
 
 TTS.forms.renderteacher = function(data){
     
@@ -108,17 +69,16 @@ TTS.forms.renderteacher = function(data){
             { "title": "{% trans "Sl No." %}",
               "class": "text-center"  
             },
-            { "title": "{% trans "Name" %}" }
-            
+            { "title": "{% trans "Name" %}" },
+                        
         ];
     var dataset = [];
     
     var count = 0
     for(var i in data){
         var t = [];
-        t.DT_RowId = data[i].topicid;
-        t.push(++count);
-        t.push(data[i].topicname);
+        t.push(data[i].threadid);
+        t.push(data[i].threadname);
         dataset.push(t);
     }
     if (TTS.forms.table) {
@@ -137,21 +97,16 @@ TTS.forms.renderteacher = function(data){
 
 
 $(document).ready(function(){
-    TTS.utils.ajaxloaderstart();
-    var url = "/api/admin/topics/"
+    var url ="/api/admin/threads/?threadid="+TTS.threadid+"/?format=json"
     $.ajax({
         "url":url,
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacher(data);
-        TTS.utils.ajaxloaderstop();
-    });
-    
-    $("#page-wrapper").on("click", "tbody tr", function(){
-        window.location = "thread?topicid="+this.id
     });
     
     $("#page-wrapper").on("click", "#addrec", function(){
+        //TTS.forms.addschool();
         TTS.forms.showadminform();
     });
 });
