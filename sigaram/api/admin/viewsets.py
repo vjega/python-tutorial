@@ -412,7 +412,7 @@ class AdminclassinfoViewSet(viewsets.ModelViewSet):
 
 class AdminschoolViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Schoolinfo.objects.all().order_by('-createddate')
+    queryset = models.Schoolinfo.objects.all().order_by('schoolname')
     serializer_class = adminserializers.AdminschoolSerializer
 
     def create(self, request):
@@ -1440,15 +1440,34 @@ class ThreadsViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         topicid = request.GET.get('topicid')
+        topicname = request.GET.get('topicname')
         threadid = request.GET.get('threadid')
-        
-        if topicid :
-            queryset = models.Threaddetails.objects.filter(topicid=topicid)
-        else:
-            queryset = models.Threaddetails.objects.all()
-        serializer = adminserializers.ThreadSerializer(queryset, many=True)
-        return Response(serializer.data)
 
+        sql = """
+        SELECT td.threadid,ti.topicname,td.threadname
+        FROM threaddetails td 
+        LEFT JOIN topicinfo ti ON ti.topicid =  td.topicid
+        where td.topicid=%s
+        """ % topicid
+
+        cursor = connection.cursor()
+        print sql
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+        
+        #if topicid :
+            #queryset = models.Threaddetails.objects.filter(topicid=topicid,topicname=topicname)
+        #else:
+           # queryset = models.Threaddetails.objects.all()
+        #serializer = adminserializers.ThreadSerializer(queryset, many=True)
+        #return Response(serializer.data)
+
+    
     def retrieve(self, request, pk=None):
         queryset = models.Threaddetails.objects.get(pk=pk)
         serializer = adminserializers.ThreadSerializer(queryset, many=False)

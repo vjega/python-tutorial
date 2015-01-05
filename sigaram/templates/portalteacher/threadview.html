@@ -19,9 +19,7 @@
         <!-- /.panel-heading -->
         <div class="panel-body">
             <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover" 
-                    id="topics-main-tbl">
-                </table>
+                <div id="thread_details"></div>
             </div>
             <!-- /.table-responsive -->
         </div>
@@ -79,34 +77,21 @@ TTS.forms.renderteacher = function(data){
             
         ];
     var dataset = [];
-    
     var count = 0
-    for (var i in data) {
-        console.log(data);
-        var t = {};
-        t.slno = ++count;
-        t.name = data[i].threadname;
-        dataset.push(t);
-    }
-
-    TTS.forms.table = $('#topics-main-tbl').dataTable({
-        "data":     dataset,
-        "columns":  headers
-    });
-
+    dataset.push({slno:1, name:data.threadname});
+    $("#thread_details").html(data.threadname)
 };
 
 
 
 $(document).ready(function(){
-    var url ="/api/admin/threads/"+TTS.threadid+"/?format=json"
-    alert(url);
+   // var url ="/api/admin/threads/"+TTS.threadid+"/?format=json"
+   var url ="/api/admin/threads/"
     $.ajax({
         "url":url,
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacher(data);
-        //console.log(data);
     });
    
 });

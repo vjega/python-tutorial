@@ -11,7 +11,8 @@ from teacher.forms import ( RubricsForm,
                             StickyCommentForm,
                             #ViewworkspaceForm
                             TopicsForm,
-                            ThreadForm
+                            ThreadForm,
+                            AnnouncementForm
                             ) 
 
 from ajaxuploader.views import AjaxFileUploader  
@@ -185,7 +186,7 @@ def studentresourcetype(request):
     folders = [{
         "id": "1",
         "categoryid": "0",
-        "name" :_("Readings"),
+        "name" :_("Reading"),
         "href" :"studentresourceunits"
         },{
         "id": "2",
@@ -282,7 +283,7 @@ def resources(request):
     folders = [{
         "id": "2",
         "categoryid": "1",
-        "name" :_("Sing notes"),
+        "name" :_("Lesson Plans"),
         "href" :"resource_type"
         },{
         "id": "3",
@@ -453,7 +454,9 @@ def thread(request):
 @login_required
 @switchlanguage
 def addwrittenwork(request):
-    return render(request, 'portalteacher/addwrittenwork.html')
+    schools = models.Schoolinfo.objects.all()
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portalteacher/addwrittenwork.html',{'schools':schools,'classes':classes})
 
 @login_required
 @switchlanguage
@@ -461,3 +464,7 @@ def threadview(request):
     return render(request, 'portalteacher/threadview.html')
     
    
+@login_required
+@switchlanguage
+def bulletinboardlist(request):
+    return render(request, 'portaladmin/bulletinboardlist.html', {"form" : AnnouncementForm.AnnouncementForm()})
