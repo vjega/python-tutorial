@@ -63,16 +63,20 @@ TTS.section = "{{section}}";
 TTS.forms.renderchapterinfo = function(data){
      var headers = [
             { "title": "&nbsp;",
-              "class": "text-center"  
+              "class": "text-center",
+              "data" :"slno" 
             },
-            { "title": "{% trans "Title" %}"},
+            { "title": "{% trans "Title" %}",
+              "data":"title"
+            },
         ];
     var dataset = [];
     var count = 0
     for(var i in data){
         var t = [];
-        t.push("<i class='fa fa-book fa-2x'></i>");
-        t.push(data[i].chaptername);
+        t.DT_RowId = data[i].chapterid;
+        t.slno="<i class='fa fa-book fa-2x'></i>";
+        t.title=data[i].chaptername;
         dataset.push(t);
     }
 
@@ -95,7 +99,7 @@ $(document).ready(function(){
     $('#admin-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();
         //console.log("Hello");
-        window.location = 'resourcelist?categoryid=1&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.classid;
+        window.location = 'resourcelist?categoryid=1&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.section;
     });
     /*
     $('#admin-main-tbl tbody tr').on('click', '.tts-edit', function(e){
