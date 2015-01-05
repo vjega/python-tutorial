@@ -71,6 +71,7 @@ TTS.forms.addadmin = function(form, data) {
         data: data,
         url : '/api/admin/threads/'
     }).done(function( msg ) {
+        //console.log(data)
         form.close();
         location.reload();
         //dialogItself.close();
@@ -90,9 +91,10 @@ TTS.forms.showadminform = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-thread");
-                data = JSON.parse(data);
-                data['topicid'] = TTS.utils.getUrlParameter("topicid");
-                TTS.forms.addadmin(dialogItself, data); 
+                var jdata = JSON.parse(data);
+                jdata['topicid'] = TTS.utils.getUrlParameter("topicid");
+                var sdata = JSON.stringify(jdata);
+                TTS.forms.addadmin(dialogItself, sdata); 
             }
             },{
             label: 'Cancel',

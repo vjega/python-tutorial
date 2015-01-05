@@ -440,7 +440,7 @@ def activitystatistics(request):
 @login_required
 @switchlanguage
 def topics(request):
-    return render(request, 'portalteacher/topics.html',{"form" : ThreadForm.ThreadForm()})
+    return render(request, 'portalteacher/topics.html',{"form" : TopicsForm.TopicsForm()})
     
 @login_required
 @switchlanguage

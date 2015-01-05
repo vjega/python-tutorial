@@ -55,7 +55,7 @@
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<script id="admin-form" type="text/x-jsrender">
+<script id="topic-form" type="text/x-jsrender">
     {% crispy form %}
 </script>
 <script>
@@ -81,7 +81,7 @@ TTS.forms.addadmin = function(form, data) {
 TTS.forms.showadminform = function() {
     BootstrapDialog.show({
         title: 'Add Topics',
-        message: $($('#admin-form').render()),
+        message: $($('#topic-form').render()),
         onshown: function(){
             $('.summernote').summernote();
         },
@@ -148,9 +148,11 @@ $(document).ready(function(){
     });
     
     $("#page-wrapper").on("click", "tbody tr", function(){
-        //TTS.forms.addschool();
-        //TTS.forms.showadminform();
         window.location = "thread?topicid="+this.id
+    });
+    
+    $("#page-wrapper").on("click", "#addrec", function(){
+        TTS.forms.showadminform();
     });
 });
 
