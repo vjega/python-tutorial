@@ -469,3 +469,9 @@ def threadview(request):
 @switchlanguage
 def bulletinboardlist(request):
     return render(request, 'portaladmin/bulletinboardlist.html', {"form" : AnnouncementForm.AnnouncementForm()})
+
+
+@login_required
+@switchlanguage
+def mindmaplist(request):
+    return render(request, "portaladmin/mindmaplist.html", {})

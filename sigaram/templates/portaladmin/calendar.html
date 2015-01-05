@@ -77,7 +77,7 @@ TTS.forms.saveCal = function () {
     var data = TTS.utils.serilaizeJson("#cal-event");
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'POST',
         data: data,
@@ -121,7 +121,7 @@ TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
                     data = JSON.parse(data);
                     $.ajax({
                         headers : {
-                        'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
                     },
                         type:'PUT',
                         data: JSON.stringify(data),
@@ -148,7 +148,7 @@ TTS.forms.updatecalevent = function (event){
     }
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'PUT',
         data: JSON.stringify(data),
@@ -179,12 +179,10 @@ $(document).ready(function() {
             TTS.forms.showcalform(start, end, allDay);
         },
         eventDrop: function (event, dayDelta, minuteDelta, jsEvent, ui, view) {
-            /*alert(event.title + " was dropped on " + event.start.format());
+            alert(event.title + " was dropped on " + event.start.format());
             if (confirm("Are you sure about this change?")) {
                 TTS.forms.updatecalevent(event);
-            }*/
-            $(this).backgroundColor = "#666666";
-            cell.css("background-color", "#666666");
+            }
         },
         eventResize: function (event, delta, revertFunc) {
             /*alert(event.title + " end is now " + event.end.format());
