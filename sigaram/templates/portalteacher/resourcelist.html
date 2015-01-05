@@ -57,9 +57,27 @@
 
 
 <script>
+
+function getUrlParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+} 
+
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-
+TTS.categoryid = getUrlParameter('categoryid');
+TTS.chapterid = getUrlParameter('chapterid');
+TTS.classid = getUrlParameter('classid');
+TTS.section = getUrlParameter('section');
 TTS.forms.addstudentresource = function() {
     BootstrapDialog.show({
         title: 'Student Resources',
@@ -138,10 +156,13 @@ var updateChapter = function(){
 
     });
 };
+
+
+
 $(document).ready(function(){
-     TTS.utils.ajaxloaderstart();
+    TTS.utils.ajaxloaderstart();
     $.ajax({
-        "url":"/api/admin/teacherresourcesinfo/?format=json",
+        "url":"/api/admin/teacherresourcesinfo/?categoryid="+TTS.categoryid+"&chapterid="+TTS.chapterid+"&classid="+TTS.classid+"&section="+TTS.section+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacherresourceinfo(data);
