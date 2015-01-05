@@ -98,7 +98,7 @@ def adminlist(request):
 @login_required
 @switchlanguage
 def teacherslist(request):
-    schools = models.Schoolinfo.objects.all()
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/teacherslist.html', 
                                         {'schools':schools,'classes':classes})
@@ -106,7 +106,7 @@ def teacherslist(request):
 @login_required
 @switchlanguage
 def studentslist(request):
-    schools = models.Schoolinfo.objects.all()
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/studentslist.html', {'schools':schools,
                                     'classes':classes,"form" : StudentForm.StudentForm()})
@@ -468,3 +468,9 @@ def threadview(request):
 @switchlanguage
 def bulletinboardlist(request):
     return render(request, 'portaladmin/bulletinboardlist.html', {"form" : AnnouncementForm.AnnouncementForm()})
+
+
+@login_required
+@switchlanguage
+def mindmaplist(request):
+    return render(request, "portaladmin/mindmaplist.html", {})

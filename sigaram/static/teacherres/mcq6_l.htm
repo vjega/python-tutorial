@@ -1,0 +1,706 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:v = 
+"urn:schemas-microsoft-com:vml" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word"><HEAD>
+<META http-equiv=Content-Type content="text/html; charset=utf-8">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.2900.3268" name=GENERATOR>
+<META content="Microsoft Word 10" name=Originator><LINK 
+href="mcq1_l_files/filelist.xml" rel=File-List><LINK 
+href="mcq1_l_files/editdata.mso" rel=Edit-Time-Data><!--[if !mso]>
+<STYLE>v\:* {
+	BEHAVIOR: url(#default#VML)
+}
+o\:* {
+	BEHAVIOR: url(#default#VML)
+}
+w\:* {
+	BEHAVIOR: url(#default#VML)
+}
+.shape {
+	BEHAVIOR: url(#default#VML)
+}
+</STYLE>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Moe</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>Moe</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>4</o:TotalTime>
+  <o:Created>2008-02-13T07:05:00Z</o:Created>
+  <o:LastSaved>2008-02-13T07:09:00Z</o:LastSaved>
+  <o:Pages>2</o:Pages>
+  <o:Words>544</o:Words>
+  <o:Characters>3103</o:Characters>
+  <o:Company>MOE, Singapore</o:Company>
+  <o:Lines>25</o:Lines>
+  <o:Paragraphs>7</o:Paragraphs>
+  <o:CharactersWithSpaces>3640</o:CharactersWithSpaces>
+  <o:Version>10.6830</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:Zoom>75</w:Zoom>
+  <w:SpellingState>Clean</w:SpellingState>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:Compatibility>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]-->
+<STYLE>@font-face {
+	font-family: SimSun;
+}
+@font-face {
+	font-family: TAU_Janani;
+}
+@font-face {
+	font-family: @SimSun;
+}
+@page Section1 {size: 595.3pt 841.9pt; margin: 1.0in 1.25in 1.0in 1.25in; mso-header-margin: .5in; mso-footer-margin: .5in; mso-paper-source: 0; }
+P.MsoNormal {
+	FONT-SIZE: 12pt; MARGIN: 0in 0in 0pt; FONT-FAMILY: "Times New Roman"; mso-style-parent: ""; mso-pagination: widow-orphan; mso-fareast-font-family: SimSun; mso-bidi-font-family: "Times New Roman"
+}
+LI.MsoNormal {
+	FONT-SIZE: 12pt; MARGIN: 0in 0in 0pt; FONT-FAMILY: "Times New Roman"; mso-style-parent: ""; mso-pagination: widow-orphan; mso-fareast-font-family: SimSun; mso-bidi-font-family: "Times New Roman"
+}
+DIV.MsoNormal {
+	FONT-SIZE: 12pt; MARGIN: 0in 0in 0pt; FONT-FAMILY: "Times New Roman"; mso-style-parent: ""; mso-pagination: widow-orphan; mso-fareast-font-family: SimSun; mso-bidi-font-family: "Times New Roman"
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0in 5.4pt 0in 5.4pt;
+	mso-para-margin:0in;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";}
+</style>
+<![endif]-->
+<SCRIPT>
+<!--
+function right()
+    {
+    if (event.button == 2 || event.button == 3)
+        {
+        alert("The right click button has been disabled");
+        return false;
+        }
+    return true;
+    }
+
+document.onmousedown=right;
+
+function isRadioFieldEmpty(theField, arrayIdx)
+    {
+    empty=true;
+    for (i=0; i <= 3; i++)
+        {
+        if (theField[arrayIdx+i].status)
+            empty=false;
+        }
+    return empty;
+    }
+
+function isRadioOptionEmpty(theField, arrayIdx)
+    {
+    empty=true;
+    for (i=0; i <= 1; i++)
+        {
+        if (theField[arrayIdx+i].status)
+            empty=false;
+        }
+    return empty;
+    }
+
+function isTxtFieldEmpty(theField)
+    {
+    if (theField.value == "")
+        return true;
+    else
+        return false;
+    }
+
+if (document.layers) window.captureEvents(Event.MOUSEDOWN);
+var min1,sec1,min2,sec2;
+now=new Date();
+min1=now.getMinutes();
+sec1=now.getSeconds();
+
+function submit_answer(form, sname, sclass)
+    {
+    allAnswered = true;
+    if (isTxtFieldEmpty(form.SName))
+        {
+        alert("The name field is required. Please fill it in.");
+        allAnswered = false;
+        }
+    if (allAnswered && isTxtFieldEmpty(form.SClass))
+        {
+        alert("The class field is requried. Please fill it in.");
+        allAnswered = false;
+        }
+
+      var i;
+      var startIdx = 2;
+      var arrayIdx;
+
+for (i = 0 ; i < 5 ; i++)
+    {
+    arrayIdx = startIdx + i * 4;
+    if (allAnswered && (isRadioFieldEmpty(form.elements, arrayIdx)))
+        {
+       alert("Question " + (i+1) + " have not been answered.");
+        allAnswered = false;
+        }
+    }
+
+  if (allAnswered)
+     {
+          var result2 = 0;
+          var result1 = new Array();
+          var i = 0;
+          var result3 = 0;
+if (form.q1[1].status)
+    result2++;
+else
+    {
+    result1[i] = "1";
+    i++;
+    }
+if (form.q2[3].status)
+    result2++;
+else
+    {
+    result1[i] = "2";
+    i++;
+    }
+if (form.q3[2].status)
+    result2++;
+else
+    {
+    result1[i] = "3";
+    i++;
+    }
+if (form.q4[2].status)
+    result2++;
+else
+    {
+    result1[i] = "4";
+    i++;
+    }
+if (form.q5[2].status)
+    result2++;
+else
+    {
+    result1[i] = "5";
+    i++;
+    }
+
+        document.open("text/html");
+        document.write("<html><head><meta http-equiv=Content-Type content=text/html; charset=UTF-8></meta>");
+        document.write("</head><body bgcolor=\"#B5DBF5\">\n");
+        document.write("<FORM METHOD=post ");
+        document.write("onSubmit='window.open(\"mcq1_a.htm\",\"_top\")'>\n");
+        document.write('<font face="TAU_Janani" size="5" color="blue">');
+        document.write("Name: ", sname);
+        document.write("<br>\n");
+        document.write("Class: ", sclass);
+        document.write("<br>\n");
+        document.write("Date: ");
+        now=new Date();
+        thisday=now.getDate();
+
+        if ( thisday < 10)
+            thisday="0" + thisday;
+        document.write(thisday);
+        document.write("-");
+        thismonth=now.getMonth()+1;
+        if (thismonth < 10)
+        thismonth="0" + thismonth;
+        document.write(thismonth);
+        document.write("-");
+        document.write(now.getYear());
+        document.write("<br>\n");
+        min2=now.getMinutes();
+        sec2=now.getSeconds();
+        document.write("Time taken: ");
+        document.write((min2-min1)*60+(sec2-sec1));
+        document.write(" second");
+        document.write("\n<p>\n");
+        document.write("There are 5 questions. <br>Correct Answers: ", result2, "<br>\n");
+        result3=Math.round(result2/5*100);
+        document.write("Score: ", result3, " %<br>\n");
+        document.write("<br>\n");
+        var wrongAns = "";
+
+        if (result2 != 5)
+            {
+            document.write("Wrong Answers: <br>");
+            document.write("<blockquote>\n");
+
+            var j;
+
+            if (result1.length != 0)
+               {
+               document.write(" Question ");
+               wrongAns += "1";
+               for (j=0;j<result1.length;j++)
+                   {
+                   if (j==0)
+                         document.write(result1[j]);
+                   else
+                         document.write(", ", result1[j]);
+                   wrongAns += result1[j] + " ";
+                   }
+               document.write("<br>\n");
+               }
+               document.write("</blockquote>\n");
+               document.write("<p><br></p>\n");
+            }
+
+        document.write("<INPUT TYPE=submit NAME=Submit VALUE=\"Check\">\n");
+        document.write("</font></FORM>\n");
+        document.write("</body></html>");
+        document.close();
+        return true;
+        }
+    else
+        return false;
+  }
+//-->
+</SCRIPT>
+<!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="1026">
+  <o:colormru v:ext="edit" colors="#cc0,#ff7c80"/>
+  <o:colormenu v:ext="edit" fillcolor="#ff7c80"/>
+ </o:shapedefaults></xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]--></HEAD>
+<BODY oncontextmenu="return false" lang=EN-US style="tab-interval: .5in" 
+bgColor=#f8f8f8 background=mcq6_l_files/image001.jpg><!--[if gte mso 9]><xml>
+ <v:background id="_x0000_s1025" o:bwmode="white" fillcolor="#f8f8f8">
+  <v:fill src="mcq1_l_files/image001.jpg" o:title="Newsprint" type="tile"/>
+ </v:background></xml><![endif]-->
+<DIV class=Section1>
+<P class=MsoNormal style="TEXT-ALIGN: center" align=center><B><SPAN lang=TA 
+style="FONT-SIZE: 24pt; COLOR: #ff6600; FONT-FAMILY: TAU_Janani">நேர்மையற்ற 
+வணிகன்</SPAN></B><B><SPAN 
+style="FONT-SIZE: 24pt; COLOR: #ff6600; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani"><o:p></o:p></SPAN></B></P>
+<FORM method=get>
+<TABLE class=MsoNormalTable style="mso-cellspacing: 1.5pt" cellPadding=0 
+border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal><B><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: #ff6600; FONT-FAMILY: TAU_Janani">பெயர்:</SPAN></B><B><SPAN 
+      lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: #ff6600; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani"> 
+      </SPAN><SPAN style="COLOR: #ff6600"><o:p></o:p></SPAN></B></P></TD>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal><INPUT size=25 name=SName></P></TD></TR>
+  <TR style="mso-yfti-irow: 1; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal><B><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: #ff6600; FONT-FAMILY: TAU_Janani">வகுப்பு:</SPAN></B><B><SPAN 
+      lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: #ff6600; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani"> 
+      </SPAN><SPAN style="COLOR: #ff6600"><o:p></o:p></SPAN></B></P></TD>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal><INPUT size=25 name=SClass></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal style="MARGIN-BOTTOM: 12pt"><BR><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">முன்னொரு 
+காலத்தில் அரசர் ஒருவர் பாண்டிய நாட்டை ஆண்டு வந்தார். அவர் அறிவிலும் பண்பிலும் 
+சிறந்து விளங்கினார். அவர் நாள்தோறும் தம் அரசவையில் நாட்டில் நடக்கும் 
+நிகழ்ச்சிகளைக் கேட்டு அறிவது வழக்கம். அப்போது மக்கள் தம் வழக்குகளை அவரிடம் வந்து 
+கூறுவர். ஆனால்</SPAN><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">, 
+</SPAN><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">அரசர் 
+அவ்வழக்குகளைக்</SPAN><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani"> 
+</SPAN><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">கேட்டவுடனே 
+தீர்ப்புச் சொல்வதில்லை. அவர் இரவில் மக்களில் ஒருவனைப்போல் மாறுவேடத்தில் 
+ஊருக்குள் சென்று உண்மையைத் தாமே தெரிந்துகொள்வார்</SPAN><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">; 
+</SPAN><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">அதற்குப் பின்னரே 
+முடிவு கூறுவார்.</SPAN><BR><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">ஒரு நாள் வணிகன் 
+ஒருவன் மன்னரிடம் வந்து</SPAN><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">, 
+</SPAN><SPAN style="FONT-SIZE: 18pt; COLOR: black">″</SPAN><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">அரசே</SPAN><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">, 
+</SPAN><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">நான் வீட்டில் 
+சேர்த்து வைத்திருந்த பணத்தை என் அண்டைவீட்டுக்காரன் எப்படியோ களவாடி விட்டான். 
+தயவுசெய்து நீங்கள்தாம் அவனிடமிருந்து என் பணத்தைப் பெற்றுத்தர 
+வேண்டும்</SPAN><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">,</SPAN><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black">″</SPAN><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani"> 
+</SPAN><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">எனத் தாழ்மையுடன் 
+முறையிட்டான். அரசரும் வணிகனின் வழக்கைத் தீர்த்து வைப்பதாகக் கூறி அவனை அனுப்பி 
+வைத்தார்.</SPAN><BR><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">மறுநாள் காலையில் 
+வழக்கம்போல் அரசவை கூடியது. அரசர் வணிகனையும் அவன் அண்டைவீட்டுக்காரனையும் அழைத்து 
+வரும்படி காவலனிடம் கட்டளையிட்டார். அதன்படி அவ்விருவரும் அரசர் முன் 
+கொண்டுவரப்பட்டனர்.</SPAN><BR><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">அரசர் வணிகனைச் 
+சுட்டி</SPAN><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">, 
+</SPAN><SPAN style="FONT-SIZE: 18pt; COLOR: black">″</SPAN><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">நேற்றிரவு நான் 
+மாறுவேடத்தில் உன் வீட்டுப்பக்கம் வந்திருந்தேன். நீ உன் மனைவியிடம் 
+பேசிக்கொண்டிருந்ததை நான் செவிமடுத்தேன். நீ உன் வீட்டுத் தோட்டத்தில் பணத்தைப் 
+புதைத்து வைத்துவிட்டு அதை உன் பக்கத்து வீட்டுக்காரன் திருடிவிட்டதாக அவன்மீது 
+வீண்பழி சுமத்தியுள்ளாய். இதற்கு நீ அவன்மீது கொண்ட பகையே காரணம் என்பதையும் 
+அறிவேன். கொடிய எண்ணங்கொண்ட உனக்கு ஆறுமாதச் சிறைத்தண்டனை விதிக்கிறேன். 
+அத்துடன்</SPAN><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">, 
+</SPAN><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">நீ புதைத்து 
+வைத்திருக்கும் பணத்தில் பாதியை உன் பக்கத்து வீட்டுக்காரனுக்குக் 
+கொடுத்துவிடு</SPAN><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">, 
+</SPAN><SPAN style="FONT-SIZE: 18pt; COLOR: black">″</SPAN><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani"> 
+</SPAN><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">என்று 
+தீர்ப்பளித்தார்.</SPAN><BR><BR><BR><BR><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">பொருத்தமான 
+விடையைத் தேர்ந்தெடுத்துக் கிளிக் செய்து ஒப்படை பொத்தானைக் கிளிக் 
+செய்யுங்கள்.</SPAN><BR><BR><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">1. 
+</SPAN><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">அரசர் 
+மாறுவேடத்தில் ஊருக்குள் சென்று என்ன செய்வார்</SPAN><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">?</SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q1><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(1) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">மக்களிடம் 
+      பேசி மகிழ்வார்</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal><SPAN 
+style="DISPLAY: none; mso-hide: all"><o:p>&nbsp;</o:p></SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q1><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(2) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">உண்மையைக் 
+      கண்டறிவார்</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal><SPAN 
+style="DISPLAY: none; mso-hide: all"><o:p>&nbsp;</o:p></SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q1><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(3) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">வழக்குகளை 
+      விசாரிப்பார்</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal><SPAN 
+style="DISPLAY: none; mso-hide: all"><o:p>&nbsp;</o:p></SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q1><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(4) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">தீயவர்களைத் 
+      தண்டிப்பார்</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal style="MARGIN-BOTTOM: 12pt"><BR><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">2. 
+</SPAN><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">வணிகன் அரசரிடம் 
+என்ன முறையிட்டான்</SPAN><SPAN class=GramE><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">? 
+?</SPAN></SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q2><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(1) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">அண்டைவீட்டுக்காரன் 
+      பணம் காணாமற்போனதாக</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal><SPAN 
+style="DISPLAY: none; mso-hide: all"><o:p>&nbsp;</o:p></SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q2><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(2) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">அண்டைவீட்டுக்காரன் 
+      தன்மீது வீண் பழி சுமத்துவதாக</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal><SPAN 
+style="DISPLAY: none; mso-hide: all"><o:p>&nbsp;</o:p></SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q2><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(3) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">அண்டைவீட்டுக்காரன் 
+      தன்மீது பொறாமை கொண்டிருப்பதாக</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal><SPAN 
+style="DISPLAY: none; mso-hide: all"><o:p>&nbsp;</o:p></SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q2><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(4) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">அண்டைவீட்டுக்காரன் 
+      தன் பணத்தைத் திருடிவிட்டதாக</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal style="MARGIN-BOTTOM: 12pt"><BR><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">3. 
+</SPAN><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">அரசர் ஏன் 
+வணிகனையும் அண்டைவீட்டுக்காரனையும்</SPAN><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani"> 
+</SPAN><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">அரசவைக்கு 
+அழைத்தார்</SPAN><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">?</SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q3><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(1) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">வணிகனிடம் 
+      தன் பணத்தை ஒப்படைக்க</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal><SPAN 
+style="DISPLAY: none; mso-hide: all"><o:p>&nbsp;</o:p></SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q3><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(2) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">அண்டைவீட்டுக்காரனுக்குத் 
+      தண்டனை வழங்க</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal><SPAN 
+style="DISPLAY: none; mso-hide: all"><o:p>&nbsp;</o:p></SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q3><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(3) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">வணிகனின் 
+      வழக்கிற்குத் தீர்ப்புக் கூற</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal><SPAN 
+style="DISPLAY: none; mso-hide: all"><o:p>&nbsp;</o:p></SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q3><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(4) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">இருவரையும் 
+      சமாதானப்படுத்த</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal style="MARGIN-BOTTOM: 12pt"><BR><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">4. 
+</SPAN><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">அரசர் வணிகனின் 
+வழக்கைத் தீர்க்க என்ன செய்தார்</SPAN><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">?</SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q4><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(1) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">வணிகனின் 
+      வீட்டுக்கு மாறுவேடத்தில் சென்று உண்மையை</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">அறிந்தார்.</SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q4><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(2) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">வணிகனின் 
+      மனைவியிடம் பேசி உண்மையைக் கேட்டறிந்தார்.</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal><SPAN 
+style="DISPLAY: none; mso-hide: all"><o:p>&nbsp;</o:p></SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q4><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(3) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">மாறுவேடத்தில் 
+      வணிகனின் வீட்டுப்பக்கம் சென்று</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">உண்மையை 
+அறிந்தார்.</SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q4><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(4) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">வணிகனை 
+      மாறுவேடத்தில் சந்தித்துப் பேசி உண்மையை</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal style="MARGIN-BOTTOM: 12pt"><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">அறிந்தார்.</SPAN><BR><BR><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">5. 
+</SPAN><SPAN lang=TA 
+style="FONT-SIZE: 18pt; COLOR: black; FONT-FAMILY: TAU_Janani">வணிகனுக்கு ஏன் 
+அபராதம் விதிக்கப்பட்டது</SPAN><SPAN 
+style="FONT-SIZE: 18pt; COLOR: black; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">?</SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q5><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(1) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">அண்டைவீட்டுக்காரனைப் 
+      பகைத்துக் கொண்டதற்காக</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal><SPAN 
+style="DISPLAY: none; mso-hide: all"><o:p>&nbsp;</o:p></SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q5><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(2) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">பணத்தைப் 
+      புதைத்து வைத்ததற்காக</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal><SPAN 
+style="DISPLAY: none; mso-hide: all"><o:p>&nbsp;</o:p></SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q5><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(3) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">அடுத்தவன் 
+      மீது வீண்பழி சுமத்தியதற்காக</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal><SPAN 
+style="DISPLAY: none; mso-hide: all"><o:p>&nbsp;</o:p></SPAN></P>
+<TABLE class=MsoNormalTable style="WIDTH: 100%; mso-cellspacing: 1.5pt" 
+cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR style="mso-yfti-irow: 0; mso-yfti-lastrow: yes">
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt" 
+    vAlign=top>
+      <P class=MsoNormal><INPUT type=radio name=q5><SPAN 
+      style="FONT-SIZE: 18pt; COLOR: blue; mso-bidi-font-family: TAU_Janani; mso-hansi-font-family: TAU_Janani">(4) 
+      </SPAN><SPAN lang=TA 
+      style="FONT-SIZE: 18pt; COLOR: blue; FONT-FAMILY: TAU_Janani">பணத்தைப் 
+      பத்திரமாக வைத்துக் கொள்ளாததற்காக</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal><BR><INPUT onclick="return submit_answer(this.form, this.form.SName.value, this.form.SClass.value)" type=submit value="Submit Query" name=Submit METHOD="GET"></P></FORM></DIV></BODY></HTML>
