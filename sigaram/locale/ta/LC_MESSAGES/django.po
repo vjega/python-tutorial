@@ -892,7 +892,7 @@ msgstr ""
 #: templates/portalstudent/billviewassignmentanswer.html:20
 #: templates/portalteacher/billboard.html:7
 msgid "Notice Board"
-msgstr "அறிவுப்பு்பபலகை"
+msgstr "அறிவிப்புப்பலகை"
 
 #: templates/portaladmin/billcomprehensionanswerrating.html:25
 msgid "Sl.no"
