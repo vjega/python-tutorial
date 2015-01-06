@@ -200,7 +200,7 @@ def studentresourcetype(request):
         "href" :"studentresourceunits"
         },{
         "id": "3",
-        "name" :_("composition"),
+        "name" :_("Composition"),
         "href" :"extras"
         }]
     classid = request.GET.get('classid')
@@ -220,22 +220,22 @@ def studentresourcetype(request):
 def extras(request):
     folders = [{
         "id": "1",
-        "categoryid": "0",
+        "type": "text",
         "name" :_("writing"),
         "href" :"extraslist"
         },{
         "id": "2",
-        "categoryid": "1",
+        "type": "image",
         "name" :_("Multimedia"),
         "href" :"extraslist"
         },{
         "id": "3",
-        "categoryid": "2",
+        "type": "audio",
         "name" :_("Songs"),
         "href" :"extraslist"
         },{
-        "id": "3",
-        "categoryid": "2",
+        "id": "4",
+        "type": "video",
         "name" :_("Olippatakkatci"),
         "href" :"extraslist"
         }]

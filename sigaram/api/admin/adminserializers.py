@@ -170,3 +170,10 @@ class ThreadSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Threaddetails
         fields = ('threadid', 'topicid','threadname',
                   'createdby', 'createddate')
+
+
+class ExtraslistSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Extraslist
+        fields = ('extraid', 'resourceurl','title',
+                'extratype','createddate')
