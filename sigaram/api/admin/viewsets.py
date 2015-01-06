@@ -1446,9 +1446,8 @@ class ThreadsViewSet(viewsets.ModelViewSet):
         topicid = request.GET.get('topicid')
         topicname = request.GET.get('topicname')
        
-        
         if topicid :
-            queryset = models.Threaddetails.objects.filter(topicid=topicid,topicname=topicname)
+            queryset = models.Threaddetails.objects.filter(topicid=topicid)
         else:
             queryset = models.Threaddetails.objects.all()
         serializer = adminserializers.ThreadSerializer(queryset, many=True)
@@ -1465,7 +1464,7 @@ class ThreadsViewSet(viewsets.ModelViewSet):
         FROM threaddetails td 
         LEFT JOIN topicinfo ti ON ti.topicid =  td.topicid
         where td.threadid=%s
-        """ % threadid
+        """ % pk
 
         cursor = connection.cursor()
         print sql

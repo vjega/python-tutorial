@@ -71,7 +71,6 @@ TTS.forms.addadmin = function(form, data) {
         data: data,
         url : '/api/admin/threads/'
     }).done(function( msg ) {
-        //console.log(data)
         form.close();
         location.reload();
         //dialogItself.close();
@@ -91,10 +90,11 @@ TTS.forms.showadminform = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-thread");
-                var jdata = JSON.parse(data);
-                jdata['topicid'] = TTS.utils.getUrlParameter("topicid");
-                var sdata = JSON.stringify(jdata);
-                TTS.forms.addadmin(dialogItself, sdata); 
+                data = JSON.parse(data);
+                console.log(data);
+                data['topicid'] = TTS.utils.getUrlParameter("topicid");
+                //console.log(data);
+                TTS.forms.addadmin(dialogItself, data); 
             }
             },{
             label: 'Cancel',
@@ -118,7 +118,6 @@ TTS.forms.renderteacher = function(data){
             },
             
         ];
-        
     var dataset = [];
     
     var count = 0
@@ -147,8 +146,7 @@ TTS.forms.renderteacher = function(data){
 
 $(document).ready(function(){
     TTS.utils.ajaxloaderstart();
-    var url ="/api/admin/threads/?topicid="+TTS.utils.getUrlParameter("topicid")+"&format=json"
-    console.log(TTS.utils.getUrlParameter("topicid"));
+    var url = "/api/admin/threads/?topicid="+TTS.utils.getUrlParameter("topicid")+"&format=json"
     $.ajax({
         "url":url,
         "type":"GET"
@@ -162,14 +160,10 @@ $(document).ready(function(){
         TTS.forms.showadminform();
     });
 
-
-    $("#page-wrapper").on("click", ".thread_id", function(){
-        //TTS.forms.addschool();
-        //TTS.forms.showadminform();
-         window.location = "threadview?threadid="+$(this).parent().prop("id")
+    $("body").on("click",".thread_id",function(){
+        window.location = "threadview?threadid="+$(this).parent().prop("id")
+        //alert("hi");
     });
-
-    
 });
 
 </script>
