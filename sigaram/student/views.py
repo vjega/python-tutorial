@@ -271,7 +271,18 @@ def billviewassignmentanswer(request):
 def bulletinboardlist(request):
     return render(request, 'portalstudent/bulletinboardlist.html')
 
+@switchlanguage
+def bulletinboardlist(request):
+    return render(request, 'portalstudent/bulletinboardlist.html')
+
 
 @switchlanguage
 def studentresourceunits(request):
-    return render(request, 'portalstudent/studentresourceunits.html')
+    return render(request, 'portalstudent/studentresourceunits.html',
+                 {'classid': request.GET.get('classid'),
+                   'section': request.GET.get('section')    
+                  })
+
+@switchlanguage
+def studentresourcelist(request):
+    return render(request, 'portalstudent/studentresourcelist.html')

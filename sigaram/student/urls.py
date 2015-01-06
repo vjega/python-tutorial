@@ -44,6 +44,7 @@ urlpatterns = patterns('student.views',
                                                             name='billviewassignmentanswer'),
     url(r'^bulletinboardlist$',              'bulletinboardlist',   name='bulletinboardlist'),
     url(r'^studentresourceunits$',           'studentresourceunits',   name='studentresourceunits'),
+    url(r'^studentresourcelist$',           'studentresourcelist',   name='studentresourcelist'),
 
     
 
