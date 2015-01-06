@@ -186,7 +186,7 @@ TTS.forms = TTS.forms || {}
 
 
 TTS.forms.renderassignedresourceinfo = function(data){
-    console.log
+    console.log(data);
     $("#assignedid").val(data[0].id);
     $("#resource-title").html(data[0].resourcetitle);
     $("#assigned-date").html(data[0].createddate);
@@ -200,14 +200,15 @@ TTS.forms.renderassignedresourceinfo = function(data){
         $('#sendnoticeboard').hide();
     }
 
-
-    /*$.ajax({
-        "url":"/api/admin/rubrics/"+resourceid+"/?studentid="+studentid+"&format=json",
-        "type":"GET"
-    }).done(function(data){
-        //console.log(data);
-        TTS.forms.renderassignedresourceinfo(data);
-    });*/
+    if(data[0].rubric_id){
+        $.ajax({
+            "url":"/api/admin/rubrics/"+data[0].rubric_id,
+            "type":"GET"
+        }).done(function(data){
+            console.log(data);
+            TTS.forms.renderrubrictableinfo(data);
+        });
+    }
 
     //$("#view-resource").html("<a href='#' onclick=\"TTS.forms.openwindow('"+data.videourl+"');\" >View</a>");
 };
@@ -215,6 +216,25 @@ TTS.forms.renderassignedresourceinfo = function(data){
 /*TTS.forms.openwindow = function(videourl) {
     window.open("http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
 };*/
+
+TTS.forms.renderrubrictableinfo = function(data){
+    var tableHTML = '';
+    tableHTML += "<table class='table table-striped table-bordered table-hover'>";
+    tableHTML += "<tr><td>&nbsp;</td>";
+    var thdata = data.rmh[0];
+    var th = thdata.split('~~');
+    $(th).each(function(k,v){
+        tableHTML += "<td>"+v+"</td>";
+    });
+    tableHTML += "<td>Total</td></tr>";
+    var tddata = data.rmb[1][0];
+    var td = tddata.split('~~');
+    $(td).each(function(i,j){
+        tableHTML += "<td>"+j+"</td>";
+    });
+    tableHTML += "</tr><table>";
+    $("#rubrics-vote").html(tableHTML);
+}
 
 TTS.forms.renderanswereditinginfo = function(data, isapproved){
     var spanid = data[0].spanid;
@@ -342,7 +362,7 @@ TTS.forms.editanswerlist = function(spanid){
     });
 };
 
-TTS.forms.getSelectionHtml = function() {        
+TTS.forms.getSelectionHtml = function() {
     var html = "";
     if (typeof window.getSelection != "undefined") {
         var sel = window.getSelection();
