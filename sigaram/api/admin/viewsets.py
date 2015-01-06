@@ -689,7 +689,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
         GROUP BY resourceid 
         ORDER BY answereddate DESC''' % (request.user.username, datecond)
         cursor = connection.cursor()
-        print sql
+        
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
         #cursor.execute(sql, "3680")
@@ -809,7 +809,7 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
 
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
-        print sql
+        
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
         #cursor.execute(sql, "3680")
@@ -989,6 +989,7 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
 
         sql = '''
         SELECT assignedid AS id,
+               ari.rubric_id,
                ari.assignedby,
                ri.resourceid,
                au.first_name as firstname,
@@ -1017,7 +1018,7 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
 
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
-        print sql
+        
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
         #cursor.execute(sql, "3680")
@@ -1139,7 +1140,7 @@ class BillboardViewSet(viewsets.ModelViewSet):
         ORDER BY bbi.billboardid desc  """ 
 
         cursor = connection.cursor()
-        print sql
+        
         cursor.execute(sql)
         desc = cursor.description
         result =  [
@@ -1476,6 +1477,44 @@ class RubricsViewSet(viewsets.ModelViewSet):
 
     queryset = models.RubricsHeader.objects.all()
     serializer_class = adminserializers.AdminrubricsSerializer
+
+    def retrieve(self, request, pk=None):
+        data = {}
+
+        sql = '''
+        SELECT *
+        FROM rubrics_header
+        WHERE slno = %s
+        ''' % pk
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        data['rh'] =  cursor.fetchone()
+        
+        sql = '''
+        SELECT jdata
+        FROM rubric_matrix
+        WHERE refno = %s
+        AND datatype='H'
+        ''' % pk
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        data['rmh'] =  cursor.fetchone()
+
+        sql = '''
+        SELECT jdata 
+        FROM rubric_matrix
+        WHERE refno = %s 
+        AND datatype='B' 
+        ORDER BY disp_order
+        ''' % pk
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        data['rmb'] =  cursor.fetchall()
+
+        return Response(data)
 
     def create(self, request):
         adminrubrics = models.Rubricsheader()
