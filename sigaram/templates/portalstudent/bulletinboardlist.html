@@ -4,7 +4,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Students" %}</h2>
+        <h2 class="page-header">{% trans "Announcement" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -13,13 +13,13 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans "Students" %}
+            {% trans "Announcement " %}
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
             <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover" 
-                    id="admin-main-tbl">
+                <table class="table table-striped table-bordered table-hover"
+                     id="admin-main-tbl">
                 </table>
             </div>
             <!-- /.table-responsive -->
@@ -34,87 +34,74 @@
 {% block morecss %}
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+
 <style>
-    #admin-main-tbl tbody tr:hover {
+    #addrec:hover, .tts-delete:hover{
         cursor: pointer;
     }
 </style>
 {% endblock morecss %}
 
 {% block morescript %}
+<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
 <script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
+
 <script>
-window.TTS = window.TTS || {}
-TTS.forms = TTS.forms || {}
-TTS.forms.renderstudentlist = function(data){
+window.TTS = window.TTS || {};
+TTS.forms = TTS.forms || {};
+
+TTS.forms.renderannouncement = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
               "data" : "slno"  
             },
-            { "title": "{% trans "Photo" %}",
-              "class": "text-center",  
-              "data" : "photo"  
+            { "title": "{% trans "Title" %}",
+              "data" : "title"
             },
-            { "title": "{% trans "Name" %}",
-              "data" : "name"  
+            { "title": "{% trans "Announcer" %}",
+              "data" : "declared"
             },
-            { "title": "{% trans "Email Id" %}",
-              "data" : "emailid"  
-            }, 
+              
         ];
     var dataset = [];
     
     var count = 0
     for(var i in data){
-        var t = [];
-        t.DT_RowId = data[i].studentid;
+        var t = {};
+        t.DT_RowId = data[i].schoolid;
         t.slno = ++count;
-        if (data[i].imageurl){
-            t.photo = "<img src='/static/"+data[i].imageurl+"' width='100' height='100'>";
-        } else {
-            t.photo ="<img src='http://placehold.it/100x100'>";
-        }
-        t.name = data[i].firstname + " "+data[i].lastname;
-        t.emailid = data[i].emailid;
+        t.title = data[i].messagetitle;
+        t.declared = data[i].messagetitle + " "+data[i].postedby+"<br />"+data[i].posteddate;
         dataset.push(t);
     }
-    if (TTS.forms.table) {
-        TTS.forms.table.fnClearTable();
-        TTS.forms.table.fnAddData(
-            dataset
-        );
-        return true;
-    }
-    TTS.forms.table = $('#admin-main-tbl').dataTable({
+
+    $('#admin-main-tbl').dataTable({
         "data":     dataset,
         "columns":  headers
     });
 
 };
+
+
 $(document).ready(function(){
-    TTS.utils.ajaxloaderstart();
     $.ajax({
-            "url":"/api/student/student/?schoolid={{user.schoolid}}&classid={{user.classid}}&format=json",
-            "type":"GET"
+        "url":"/api/student/bulletinboardlist/?schoolid="+this.id+"/format=json",
+        "type":"GET"
     }).done(function(data){
-    TTS.utils.ajaxloaderstop();
-        if (data.length) {
-            TTS.forms.renderstudentlist(data);
-        } else {
-            TTS.forms.table.fnClearTable();
-        }
+        TTS.forms.renderannouncement(data);
     });
-    $('#admin-main-tbl').on('click', 'tbody tr', function(){
-         window.location = 'studentprofile?studentid='+this.id;
-    });
+    
 });
 
 </script>

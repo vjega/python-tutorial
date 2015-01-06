@@ -39,8 +39,12 @@ urlpatterns = patterns('student.views',
     url(r'^viewassignmentanswer',           'viewassignmentanswer',   
                                                             name='viewassignmentanswer'),
     url(r'^sticky-notes$',                  'stickynotes',  name='stickynotes'),
-    url(r'^billboard$',                      'billboard',   name='billboard'),
-    url(r'^billviewassignmentanswer$',       'billviewassignmentanswer',  
+    url(r'^billboard$',                     'billboard',   name='billboard'),
+    url(r'^billviewassignmentanswer$',      'billviewassignmentanswer',  
                                                             name='billviewassignmentanswer'),
+    url(r'^bulletinboardlist$',              'bulletinboardlist',   name='bulletinboardlist'),
+    url(r'^studentresourceunits$',           'studentresourceunits',   name='studentresourceunits'),
+
+    
 
 )
