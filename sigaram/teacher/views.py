@@ -472,7 +472,6 @@ def bulletinboardlist(request):
 
 @login_required
 @switchlanguage
-<<<<<<< HEAD
 def studentprofile(request):
     # user = models.Studentinfo.objects.filter(username=request.user.username)[0]
     user=request.GET.get('studentid');
@@ -498,7 +497,6 @@ def studentassignedresourcelist(request):
 @switchlanguage
 def viewstudentwrittenworks(request):
     return render(request, 'portalteacher/viewstudentwrittenworks.html')
-=======
+
 def mindmaplist(request):
     return render(request, "portaladmin/mindmaplist.html", {})
->>>>>>> 4bf18d48cf5a85806190d8ca315ba691d2d2e727
