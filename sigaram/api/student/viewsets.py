@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import serializers
-
+from django.db import connection
 from portaladmin import models
 import studentserializers
 import json, time
@@ -37,21 +37,37 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
     serializer_class = studentserializers.ResourceinfoSerializer
     
     def list(self, request):
-        classid   = request.GET.get('classid')
-        section   = request.GET.get('section')
-        chapterid = request.GET.get('chapterid')
-        kwarg = {}
-        kwarg['isdeleted'] = 0
-        if classid:
-            kwarg['classid'] = classid
-        if section:
-            kwarg['section'] = section
-        if chapterid:
-            kwarg['chapterid'] = chapterid
+        studentid   = request.GET.get('studentid')
+        sql ="""
+            SELECT  ri.resourceid,
+                    ri.resourcetitle,
+                    date(ari.assigneddate) as createddate,
+                    ri.resourcetype,
+                    ri.thumbnailurl,
+                    ari.studentid
+            FROM resourceinfo ri
+            INNER JOIN assignresourceinfo ari on ari.resourceid=ri.resourceid
+            WHERE ri.isdeleted=0  
+            and ari.studentid='%s'
+            AND isanswered=1 
+            GROUP BY ri.resourceid 
+            ORDER BY ari.assigneddate DESC 
+        """ % studentid
+        cursor = connection.cursor()
+        # print sql
+        #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
+        cursor.execute(sql)
+        #cursor.execute(sql, "3680")
+        #print dir(cursor)
+        #result = cursor.fetchall()
+        #print return [
         
-        queryset = models.Resourceinfo.objects.filter(**kwarg)
-        serializer = studentserializers.ResourceinfoSerializer(queryset, many=True)
-        return Response(serializer.data)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
 
 class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Writtenworkinfo.objects.all()
