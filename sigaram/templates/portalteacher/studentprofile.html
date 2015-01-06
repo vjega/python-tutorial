@@ -1,0 +1,48 @@
+{% extends 'portalteacher/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block topcontent %}
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Student Profile" %}</h2>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row">
+    {% for folder in folders%}
+    <a href="{{folder.href}}?studentid={{user}}">
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-yellow">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-folder fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="tent-medium">{{folder.name}}</div>
+
+                    </div>
+                </div>
+            </div>
+         </div>
+    </div>
+    {% endfor %}
+</div>
+ <!-- /.row -->
+{% endblock topcontent %}
+
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<style>
+  .modal-backdrop {z-index: 0 !important}
+</style>
+{% endblock morecss %}
+
+{% block morescript %}
+<script src="{% static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{% static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+{% endblock morescript %}

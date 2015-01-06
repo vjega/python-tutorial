@@ -40,3 +40,8 @@ class StudentnotesinfoSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('notesid', 'notestitle','notes',
                   'isdeleted','createdby', 'createddate'
                   )
+
+class StudentBulletinboardlistinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Bulletinboardinfo
+        fields = ('messagetitle','message','posteddate','postedby')

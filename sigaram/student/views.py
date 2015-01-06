@@ -96,18 +96,23 @@ def resourcetype(request):
     folders = [{
         "categoryid" : "0",
         "id"         : "1",
-        "name"       :"Reading",
-        "href"       :"assignedresourcelist"
+        "name"       : _("Reading"),
+        "href"       :"studentresourceunits"
         },{
         "categoryid" : "1",
         "id"         : "2",
-        "name"       :"Image dialog",
-        "href"       :"assignedresourcelist"
+        "name"       :_("Image dialog"),
+        "href"       :"studentresourceunits"
         },{
         "categoryid" : "3",
         "id"         : "3",
-        "name"       :"Writing board",
-        "href"       :"assignedresourcelist"
+        "name"       :_("Writing board"),
+        "href"       :"studentresourceunits"
+        },{
+        "categoryid" : "4",
+        "id"         : "4",
+        "name"       :_("Comprehension"),
+        "href"       :"studentresourceunits"
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
@@ -120,22 +125,22 @@ def resourcetype(request):
 def workspace(request):
     folders = [{
         "id"   : "1",
-        "name" :"Character",
+        "name" :_("Character"),
         "href" :"worklistinfo",
         "worktype":"text"
         },{
         "id"   : "2",
-        "name" :"Photography",
+        "name" :_("Photography"),
         "href" :"worklistinfo",
         "worktype":"image"
         },{
         "id"   : "3",
-        "name" :"Lyrics",
+        "name" :_("Lyrics"),
         "href" :"worklistinfo",
         "worktype":"audio"
         },{
         "id"   : "4",
-        "name" :"Video",
+        "name" :_("Video"),
         "href" :"worklistinfo",
         "worktype":"video"
         }]
@@ -163,11 +168,12 @@ def studentprofile(request):
     user = models.Studentinfo.objects.filter(username=request.user.username)[0]
     folders = [{
         "id"   :"1",
-        "name" :"Deliverables",
+        # "caption": _("Assignments"),
+        "name" :_("Assignments"),
         "href" :"studentassignedresourcelist"
         },{
         "id"   :"2",
-        "name" :"Writing job",
+        "name" :_("Written Work"),
         "href" :"viewstudentwrittenworks"
         }]
     return render(request, 'portalstudent/studentprofile.html', 
@@ -260,3 +266,23 @@ def billboard(request):
 @switchlanguage
 def billviewassignmentanswer(request):
     return render(request, 'portalstudent/billviewassignmentanswer.html')
+
+@switchlanguage
+def bulletinboardlist(request):
+    return render(request, 'portalstudent/bulletinboardlist.html')
+
+@switchlanguage
+def bulletinboardlist(request):
+    return render(request, 'portalstudent/bulletinboardlist.html')
+
+
+@switchlanguage
+def studentresourceunits(request):
+    return render(request, 'portalstudent/studentresourceunits.html',
+                 {'classid': request.GET.get('classid'),
+                   'section': request.GET.get('section')    
+                  })
+
+@switchlanguage
+def studentresourcelist(request):
+    return render(request, 'portalstudent/studentresourcelist.html')

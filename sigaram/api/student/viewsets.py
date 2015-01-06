@@ -1,8 +1,9 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import serializers
-
+from django.db import connection
 from portaladmin import models
+from django.db import connection
 import studentserializers
 import json, time
 
@@ -37,21 +38,37 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
     serializer_class = studentserializers.ResourceinfoSerializer
     
     def list(self, request):
-        classid   = request.GET.get('classid')
-        section   = request.GET.get('section')
-        chapterid = request.GET.get('chapterid')
-        kwarg = {}
-        kwarg['isdeleted'] = 0
-        if classid:
-            kwarg['classid'] = classid
-        if section:
-            kwarg['section'] = section
-        if chapterid:
-            kwarg['chapterid'] = chapterid
+        studentid   = request.GET.get('studentid')
+        sql ="""
+            SELECT  ri.resourceid,
+                    ri.resourcetitle,
+                    date(ari.assigneddate) as createddate,
+                    ri.resourcetype,
+                    ri.thumbnailurl,
+                    ari.studentid
+            FROM resourceinfo ri
+            INNER JOIN assignresourceinfo ari on ari.resourceid=ri.resourceid
+            WHERE ri.isdeleted=0  
+            and ari.studentid='%s'
+            AND isanswered=1 
+            GROUP BY ri.resourceid 
+            ORDER BY ari.assigneddate DESC 
+        """ % studentid
+        cursor = connection.cursor()
+        # print sql
+        #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
+        cursor.execute(sql)
+        #cursor.execute(sql, "3680")
+        #print dir(cursor)
+        #result = cursor.fetchall()
+        #print return [
         
-        queryset = models.Resourceinfo.objects.filter(**kwarg)
-        serializer = studentserializers.ResourceinfoSerializer(queryset, many=True)
-        return Response(serializer.data)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
 
 class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Writtenworkinfo.objects.all()
@@ -128,3 +145,54 @@ class StudentnotesinfoViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
+
+class Studentbulletinboardlist(viewsets.ModelViewSet):
+    queryset = models.Bulletinboardinfo.objects.all()
+    serializer_class = studentserializers.StudentBulletinboardlistinfoSerializer
+
+    def list(self, request):
+        student = request.user.username
+        print student
+        stu = models.Studentinfo.objects.filter(username=student)
+        schoolid = stu[0].schoolid
+        sql = """
+        SELECT  bi.bulletinboardid, 
+                bi.messagetitle,
+                bi.message,
+                bmi.schoolid,
+                DATE(bi.posteddate ) AS posteddate
+        FROM bulletinboardinfo bi
+        INNER JOIN bulletinmappinginfo bmi ON bmi.bulletinboardid = bi.bulletinboardid
+        WHERE bmi.schoolid = %s
+        GROUP BY bi.bulletinboardid
+        """ % schoolid
+        cursor = connection.cursor()
+        #print sql
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+    def create(self, request):
+        data = json.loads(dict(request.DATA).keys()[0])
+        #Saving annoucement
+        bbi = models.Bulletinboardinfo()
+        bbi.messagetitle = data.get('messagetitle')
+        bbi.message = data.get('message')
+        bbi.attachmenturl = data.get('attachmenturl')
+        if data.get('cattype') == 'schools':
+            bbi.schoolid = data.get('schoolid')
+        else:
+            bbi.schoolid = 0 #data.get('schoolid')
+        bbi.classid = data.get('classid',0)
+        bbi.isrecord = data.get('isrecord',0)
+        bbi.postedby = request.user.id
+        bbi.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        bbi.save()
+        bbiid = bbi.bulletinboardid
+        #print bbi.bulletinboardid
+       
+        return Response(request.DATA)

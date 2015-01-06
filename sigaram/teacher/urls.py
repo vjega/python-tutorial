@@ -59,5 +59,9 @@ urlpatterns = patterns('teacher.views',
     url(r'^threadview$',            'threadview',       name="threadview"),
     url(r'^bulletinboardlist$',     'bulletinboardlist',           
                                                         name="bulletinboardlist"),
-
+    url(r'^studentprofile$',        'studentprofile',   name='studentprofile'),
+    url(r'^studentassignedresourcelist$',   'studentassignedresourcelist',  
+                                                        name='studentassignedresourcelist'),
+    url(r'^viewstudentwrittenworks$',       'viewstudentwrittenworks',  
+                                                            name='viewstudentwrittenworks'),
 )
