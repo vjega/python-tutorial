@@ -1425,9 +1425,13 @@ class TopicViewSet(viewsets.ModelViewSet):
         topicinfodata =  json.loads(request.DATA.keys()[0])
         topics.topicid = topicinfodata.get('topicid',0)
         topics.forumid = topicinfodata.get('forumid',0)
+        topics.totalpost = topicinfodata.get('totalpost',0)
+        topics.forumid = topicinfodata.get('forumid',0)
         topics.topicname = topicinfodata.get('topicname',0)
         topics.createdby = request.user.id
         topics.lastpostedby = request.user.id
+        topics.lastposteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        topics.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         topics.save()
         return Response(request.DATA)
 
