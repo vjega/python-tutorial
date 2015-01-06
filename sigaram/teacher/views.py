@@ -41,7 +41,7 @@ def home(request):
         "color": u"primary",
         "icon" : u"file-text-o",
         "link" : u"assignedresourcelist",
-        "caption": _("Assignment"),
+        "caption": _("Assignments"),
         "stat": 25
         },{
         "color": u"yellow",
@@ -472,5 +472,33 @@ def bulletinboardlist(request):
 
 @login_required
 @switchlanguage
+<<<<<<< HEAD
+def studentprofile(request):
+    # user = models.Studentinfo.objects.filter(username=request.user.username)[0]
+    user=request.GET.get('studentid');
+    folders = [{
+        "id"   :"1",
+        "name" :_("Assignments"),
+        "href" :"studentassignedresourcelist"
+        },{
+        "id"   :"2",
+        "name" :_("Written Work"),
+        "href" :"viewstudentwrittenworks"
+        }]
+    return render(request, 'portalteacher/studentprofile.html', 
+                  {"folders":folders,"user":user})
+
+
+@login_required
+@switchlanguage
+def studentassignedresourcelist(request):
+    return render(request, 'portalteacher/studentassignedresourcelist.html')
+
+@login_required
+@switchlanguage
+def viewstudentwrittenworks(request):
+    return render(request, 'portalteacher/viewstudentwrittenworks.html')
+=======
 def mindmaplist(request):
     return render(request, "portaladmin/mindmaplist.html", {})
+>>>>>>> 4bf18d48cf5a85806190d8ca315ba691d2d2e727

@@ -168,11 +168,12 @@ def studentprofile(request):
     user = models.Studentinfo.objects.filter(username=request.user.username)[0]
     folders = [{
         "id"   :"1",
-        "name" :_("Assignment"),
+        # "caption": _("Assignments"),
+        "name" :_("Assignments"),
         "href" :"studentassignedresourcelist"
         },{
         "id"   :"2",
-        "name" :_("Writing job"),
+        "name" :_("Written Work"),
         "href" :"viewstudentwrittenworks"
         }]
     return render(request, 'portalstudent/studentprofile.html', 
