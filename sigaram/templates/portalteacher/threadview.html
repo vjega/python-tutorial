@@ -19,6 +19,7 @@
         <!-- /.panel-heading -->
         <div class="panel-body">
             <div class="table-responsive">
+                
                 <div id="thread_details"></div>
             </div>
             <!-- /.table-responsive -->
@@ -59,34 +60,31 @@
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 TTS.threadid = TTS.utils.getUrlParameter('threadid');
-//alert (TTS.threadid);
-
-
 
 TTS.forms.renderteacher = function(data){
     
     var headers = [
-            { "title": "{% trans "Sl No." %}",
-              "class": "text-center",
-              "data" :"slno" 
-            },
+            
             { "title": "{% trans "Name" %}",
               "data" : "name"
+            },
+            { "title": "{% trans "Name" %}",
+              "data" : "topicname"
             },
             
             
         ];
     var dataset = [];
     var count = 0
-    dataset.push({slno:1, name:data.threadname});
+    dataset.push({name:data.threadname,topicname:data.topicname,});
+    console.log(dataset);
     $("#thread_details").html(data.threadname)
 };
 
 
 
 $(document).ready(function(){
-     var url ="/api/admin/threads/"+TTS.threadid+"/?format=json"
-   //var url ="/api/admin/threads/"
+    var url ="/api/admin/threads/"+TTS.threadid+"/?format=json"
     $.ajax({
         "url":url,
         "type":"GET"

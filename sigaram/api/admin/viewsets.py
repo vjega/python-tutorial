@@ -1455,9 +1455,8 @@ class ThreadsViewSet(viewsets.ModelViewSet):
 
     
     def retrieve(self, request, pk=None):
-        topicid = request.GET.get('topicid')
-        topicname = request.GET.get('topicname')
         threadid = request.GET.get('threadid')
+        threadname = request.GET.get('threadname')
 
         sql = """
         SELECT td.threadid,ti.topicname,td.threadname

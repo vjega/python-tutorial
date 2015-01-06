@@ -90,11 +90,12 @@ TTS.forms.showadminform = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-thread");
-                data = JSON.parse(data);
+                var jdata = JSON.parse(data);
                 console.log(data);
-                data['topicid'] = TTS.utils.getUrlParameter("topicid");
+                jdata['topicid'] = TTS.utils.getUrlParameter("topicid");
+                var sdata = JSON.stringify(jdata);
                 //console.log(data);
-                TTS.forms.addadmin(dialogItself, data); 
+                TTS.forms.addadmin(dialogItself, sdata); 
             }
             },{
             label: 'Cancel',
