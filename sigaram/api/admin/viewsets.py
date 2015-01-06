@@ -196,18 +196,22 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.TeacherresourceinfoSerializer
 
     def list(self, request):
+        classid   = request.GET.get('classid')
+        section   = request.GET.get('section')
+        chapterid = request.GET.get('chapterid')
+        categoryid = request.GET.get('categoryid')
+
         sql = """
         SELECT  tri.teacherresourceid,
-                tri.classid,
-                tri.section,
-                tri.resourcetype,
                 tri.resourcetitle,
-                ci.shortname,
                 tri.createddate
         FROM teacherresourceinfo tri
-        INNER JOIN classinfo ci ON ci.classid = tri.classid
+        WHERE classid='%s' 
+        AND section='%s' 
+        AND chapterid='%s' 
+        AND resourcecategory='%s'
         ORDER BY tri.createddate DESC
-        """
+        """ % (classid,section,chapterid,categoryid)
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -412,7 +416,7 @@ class AdminclassinfoViewSet(viewsets.ModelViewSet):
 
 class AdminschoolViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Schoolinfo.objects.all().order_by('-createddate')
+    queryset = models.Schoolinfo.objects.all().order_by('schoolname')
     serializer_class = adminserializers.AdminschoolSerializer
 
     def create(self, request):
@@ -1422,9 +1426,13 @@ class TopicViewSet(viewsets.ModelViewSet):
         topicinfodata =  json.loads(request.DATA.keys()[0])
         topics.topicid = topicinfodata.get('topicid',0)
         topics.forumid = topicinfodata.get('forumid',0)
+        topics.totalpost = topicinfodata.get('totalpost',0)
+        topics.forumid = topicinfodata.get('forumid',0)
         topics.topicname = topicinfodata.get('topicname',0)
         topics.createdby = request.user.id
         topics.lastpostedby = request.user.id
+        topics.lastposteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        topics.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         topics.save()
         return Response(request.DATA)
 
@@ -1441,8 +1449,8 @@ class ThreadsViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         topicid = request.GET.get('topicid')
-        threadid = request.GET.get('threadid')
-        
+        topicname = request.GET.get('topicname')
+       
         if topicid :
             queryset = models.Threaddetails.objects.filter(topicid=topicid)
         else:
@@ -1450,10 +1458,31 @@ class ThreadsViewSet(viewsets.ModelViewSet):
         serializer = adminserializers.ThreadSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def retrieve(self, request, pk):
-        queryset = models.Threaddetails.objects.get(pk=pk)
-        serializer = adminserializers.ThreadSerializer(queryset, many=True)
-        return Response(serializer.data)
+    
+    def retrieve(self, request, pk=None):
+        threadid = request.GET.get('threadid')
+        threadname = request.GET.get('threadname')
+
+        sql = """
+        SELECT td.threadid,ti.topicname,td.threadname
+        FROM threaddetails td 
+        LEFT JOIN topicinfo ti ON ti.topicid =  td.topicid
+        where td.threadid=%s
+        """ % pk
+
+        cursor = connection.cursor()
+        print sql
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+        #queryset = models.Threaddetails.objects.get(pk=pk)
+        #serializer = adminserializers.ThreadSerializer(queryset, many=False)
+        #return Response(serializer.data)
 
     def create(self, request):
         thread = models.Threaddetails()

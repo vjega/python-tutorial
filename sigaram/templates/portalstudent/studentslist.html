@@ -66,9 +66,6 @@ TTS.forms.renderstudentlist = function(data){
             { "title": "{% trans "Name" %}",
               "data" : "name"  
             },
-            { "title": "{% trans "Username" %}",
-              "data" : "username"  
-            }, 
             { "title": "{% trans "Email Id" %}",
               "data" : "emailid"  
             }, 
@@ -86,7 +83,6 @@ TTS.forms.renderstudentlist = function(data){
             t.photo ="<img src='http://placehold.it/100x100'>";
         }
         t.name = data[i].firstname + " "+data[i].lastname;
-        t.username = data[i].username;
         t.emailid = data[i].emailid;
         dataset.push(t);
     }

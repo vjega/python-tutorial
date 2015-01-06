@@ -4,7 +4,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Resources" %}</h2>
+        <h2 class="page-header">{% trans "Teachers" %} {% trans "Resources" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -14,7 +14,7 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans "Resources" %} &nbsp; <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
+            {% trans "Teachers" %} {% trans "Resources" %} &nbsp;
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
@@ -57,9 +57,27 @@
 
 
 <script>
+
+function getUrlParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+} 
+
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-
+TTS.categoryid = getUrlParameter('categoryid');
+TTS.chapterid = getUrlParameter('chapterid');
+TTS.classid = getUrlParameter('classid');
+TTS.section = getUrlParameter('section');
 TTS.forms.addstudentresource = function() {
     BootstrapDialog.show({
         title: 'Student Resources',
@@ -138,10 +156,13 @@ var updateChapter = function(){
 
     });
 };
+
+
+
 $(document).ready(function(){
-     TTS.utils.ajaxloaderstart();
+    TTS.utils.ajaxloaderstart();
     $.ajax({
-        "url":"/api/admin/teacherresourcesinfo/?format=json",
+        "url":"/api/admin/teacherresourcesinfo/?categoryid="+TTS.categoryid+"&chapterid="+TTS.chapterid+"&classid="+TTS.classid+"&section="+TTS.section+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacherresourceinfo(data);

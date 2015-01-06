@@ -106,28 +106,25 @@ TTS.forms.renderteacher = function(data){
     
     var headers = [
             { "title": "{% trans "Sl No." %}",
-              "class": "text-center"  
+              "class": "text-center" ,
+              "data" : "slno"
             },
-            { "title": "{% trans "Name" %}" }
+            { "title": "{% trans "Name" %}",
+              "data" :"name"
+            }
             
         ];
     var dataset = [];
-    
     var count = 0
+    //dataset.push({slno:1, name:data.threadname});
     for(var i in data){
         var t = [];
         t.DT_RowId = data[i].topicid;
-        t.push(++count);
-        t.push(data[i].topicname);
+        t.slno = ++count;
+        t.name = data[i].topicname;
         dataset.push(t);
     }
-    if (TTS.forms.table) {
-        TTS.forms.table.fnClearTable();
-        TTS.forms.table.fnAddData(
-            dataset
-        );
-        return true;
-    }
+    
     TTS.forms.table = $('#topics-main-tbl').dataTable({
         "data":     dataset,
         "columns":  headers
@@ -151,6 +148,9 @@ $(document).ready(function(){
         //TTS.forms.addschool();
         //TTS.forms.showadminform();
         window.location = "thread?topicid="+this.id
+    });
+    $("#page-wrapper").on("click", "#addrec", function(){
+        TTS.forms.showadminform();
     });
 });
 
