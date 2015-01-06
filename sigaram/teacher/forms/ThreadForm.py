@@ -4,11 +4,11 @@ from crispy_forms.helper import FormHelper
 from portaladmin import models
 #from crispy_forms.layout import Submit
 class ThreadForm(forms.Form):
-    topicid = forms.ChoiceField(
-        label = _("Select Topics"),
-        required = True,
-        choices  = [(opt.topicid, opt.topicname) for opt in models.Topicinfo.objects.all()],
-    )
+    #topicid = forms.ChoiceField(
+        #label = _("Select Topics"),
+       # required = True,
+        #choices  = [(opt.topicid, opt.topicname) for opt in models.Topicinfo.objects.all()],
+    #)
     threadname  = forms.CharField(
         label     = _("Text of the note"),
         required  = True,

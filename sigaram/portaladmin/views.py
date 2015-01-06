@@ -103,7 +103,7 @@ def adminlist(request):
 @login_required
 @switchlanguage
 def teacherslist(request):
-    schools = models.Schoolinfo.objects.all()
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
     return render(request, 'portaladmin/teacherslist.html', 
                                         {'schools':schools,
                                         "form" : TeacherForm.TeacherForm()})
@@ -111,7 +111,7 @@ def teacherslist(request):
 @login_required
 @switchlanguage
 def studentslist(request):
-    schools = models.Schoolinfo.objects.all()
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portaladmin/studentslist.html', 
                                       {'schools':schools, 'classes':classes, 
@@ -264,7 +264,7 @@ def viewstudentwrittenworks(request):
                          _('Short Name'),
                          _('Edit'),
                          _('Delete')]
-    viewstudentwrittenworks_body = models.Schoolinfo.objects.all()
+    viewstudentwrittenworks_body = models.Schoolinfo.objects.all().order_by('schoolname')
     viewstudentwrittenworks = {'head':viewstudentwrittenworks_head, 'body':viewstudentwrittenworks_body}
     return render(request, 'portaladmin/viewstudentwrittenworks.html')
 
@@ -272,7 +272,7 @@ def viewstudentwrittenworks(request):
 @login_required
 @switchlanguage
 def classlist(request):
-    schools = models.Schoolinfo.objects.all()
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
     return render(request, 'portaladmin/classlist.html', 
                   {'schools':schools, "form" : ClassListForm.ClassListForm()}
                   )
@@ -280,7 +280,7 @@ def classlist(request):
 @login_required
 @switchlanguage
 def statistics(request):
-    schools = models.Schoolinfo.objects.all()
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
     return render(request, 'portaladmin/statistics.html', {'schools':schools})
    
 
@@ -447,7 +447,7 @@ def bulletinboardlist(request):
 @login_required
 @switchlanguage
 def bulletinboard(request):
-    schools = models.Schoolinfo.objects.all()
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
     return render(request, 'portaladmin/bulletinboard.html',
                                         {'schools':schools })
 

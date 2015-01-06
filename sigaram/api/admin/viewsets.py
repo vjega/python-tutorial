@@ -1425,9 +1425,13 @@ class TopicViewSet(viewsets.ModelViewSet):
         topicinfodata =  json.loads(request.DATA.keys()[0])
         topics.topicid = topicinfodata.get('topicid',0)
         topics.forumid = topicinfodata.get('forumid',0)
+        topics.totalpost = topicinfodata.get('totalpost',0)
+        topics.forumid = topicinfodata.get('forumid',0)
         topics.topicname = topicinfodata.get('topicname',0)
         topics.createdby = request.user.id
         topics.lastpostedby = request.user.id
+        topics.lastposteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        topics.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         topics.save()
         return Response(request.DATA)
 
@@ -1444,8 +1448,8 @@ class ThreadsViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         topicid = request.GET.get('topicid')
-        threadid = request.GET.get('threadid')
-        
+        topicname = request.GET.get('topicname')
+       
         if topicid :
             queryset = models.Threaddetails.objects.filter(topicid=topicid)
         else:
@@ -1453,10 +1457,31 @@ class ThreadsViewSet(viewsets.ModelViewSet):
         serializer = adminserializers.ThreadSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def retrieve(self, request, pk):
-        queryset = models.Threaddetails.objects.get(pk=pk)
-        serializer = adminserializers.ThreadSerializer(queryset, many=True)
-        return Response(serializer.data)
+    
+    def retrieve(self, request, pk=None):
+        threadid = request.GET.get('threadid')
+        threadname = request.GET.get('threadname')
+
+        sql = """
+        SELECT td.threadid,ti.topicname,td.threadname
+        FROM threaddetails td 
+        LEFT JOIN topicinfo ti ON ti.topicid =  td.topicid
+        where td.threadid=%s
+        """ % pk
+
+        cursor = connection.cursor()
+        print sql
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+        #queryset = models.Threaddetails.objects.get(pk=pk)
+        #serializer = adminserializers.ThreadSerializer(queryset, many=False)
+        #return Response(serializer.data)
 
     def create(self, request):
         thread = models.Threaddetails()
