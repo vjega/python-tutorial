@@ -263,6 +263,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         classid   = request.GET.get('classid')
         section   = request.GET.get('section')
         chapterid = request.GET.get('chapterid')
+        categoryid = request.GET.get('categoryid')
         kwarg = {}
         kwarg['isdeleted'] = 0
         if classid:
@@ -271,7 +272,9 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
             kwarg['section'] = section
         if chapterid:
             kwarg['chapterid'] = chapterid
-        
+        if categoryid:
+            kwarg['categoryid'] = categoryid
+            
         queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('-createddate')
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
         return Response(serializer.data)
@@ -1567,9 +1570,10 @@ class ExtraslistViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.ExtraslistSerializer
 
     def list(self, request):
-        classid   = request.GET.get('classid')
-        section   = request.GET.get('section')
-        chapterid = request.GET.get('chapterid')
+        print request.GET.get('extratype');
+        # type   = request.GET.get('type')
+        # classid   = request.GET.get('classid')
+        # sectionid = request.GET.get('section')
        
         sql = """
         SELECT  el.extraid,
@@ -1583,13 +1587,13 @@ class ExtraslistViewSet(viewsets.ModelViewSet):
         FROM extraslist el
         INNER JOIN logininfo li ON li.loginid=el.createdby  
         WHERE li.isdelete=0 
-        -- AND el.extratype = 'video' 
-        -- AND el.classid=1 
-        -- AND el.section='b' 
+        -- AND el.extratype = '%s' 
+        -- AND el.classid=%s 
+        -- AND el.section='%s' 
         -- ORDER BY el.extraid DESC
         """ 
         cursor = connection.cursor()
-        #print sql
+        print sql
         cursor.execute(sql)
         desc = cursor.description
         result =  [

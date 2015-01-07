@@ -239,8 +239,11 @@ def extras(request):
         "name" :_("Olippatakkatci"),
         "href" :"extraslist"
         }]
+    classid = request.GET.get('classid')
+    section = request.GET.get('section')
     return render(request, 'portalteacher/extras.html', 
-                  {"folders":folders,'extras':extras})
+                  {'folders':folders,'classid':classid,
+                    'section':section})
 
 @login_required
 @switchlanguage
