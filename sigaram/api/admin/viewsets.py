@@ -1567,8 +1567,14 @@ class ExtraslistViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.ExtraslistSerializer
 
     def list(self, request):
+        classid   = request.GET.get('classid')
+        section   = request.GET.get('section')
+        chapterid = request.GET.get('chapterid')
+       
         sql = """
         SELECT  el.extraid,
+                el.classid,
+                el.section,
                 el.resourceurl,
                 el.title,
                 el.extratype,
