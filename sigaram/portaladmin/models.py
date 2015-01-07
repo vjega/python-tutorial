@@ -1057,3 +1057,13 @@ class Threaddetails(models.Model):
     class Meta:
         managed = False
         db_table = 'threaddetails'
+
+class Stickyinfo(models.Model):
+    title = models.CharField(max_length=250)
+    createdby = models.BigIntegerField()
+    isdeleted = models.IntegerField()
+    createddate = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'stickyinfo'

@@ -177,3 +177,8 @@ class ExtraslistSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Extraslist
         fields = ('extraid', 'resourceurl','title',
                 'extratype','createddate')
+
+class StickyinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Stickyinfo
+        fields = ('title', 'createdby','isdeleted','createddate')

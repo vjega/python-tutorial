@@ -12,7 +12,8 @@ from teacher.forms import ( RubricsForm,
                             #ViewworkspaceForm
                             TopicsForm,
                             ThreadForm,
-                            AnnouncementForm
+                            AnnouncementForm,
+                            StickyinfoForm
                             ) 
 
 from ajaxuploader.views import AjaxFileUploader  
@@ -509,4 +510,4 @@ def mindmaplist(request):
 @login_required
 @switchlanguage
 def stickynoteslist(request):
-    return render(request, 'portalteacher/stickynoteslist.html')                     
+    return render(request, 'portalteacher/stickynoteslist.html',{'form':StickyinfoForm.StickyinfoForm()})                     
