@@ -274,7 +274,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
             kwarg['chapterid'] = chapterid
         if categoryid:
             kwarg['categoryid'] = categoryid
-            
+
         queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('-createddate')
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
         return Response(serializer.data)
@@ -1570,7 +1570,7 @@ class ExtraslistViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.ExtraslistSerializer
 
     def list(self, request):
-        print request.GET.get('extratype');
+        print request.GET.get('type');
         # type   = request.GET.get('type')
         # classid   = request.GET.get('classid')
         # sectionid = request.GET.get('section')
