@@ -1023,6 +1023,7 @@ class Mindmap(models.Model):
         db_table = 'mindmap'
 
 class stickynotes(models.Model):
+    stickylistid = models.BigIntegerField()
     stickytext = models.CharField(max_length=200)
     name  = models.TextField()
     color = models.TextField()
