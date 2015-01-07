@@ -200,7 +200,7 @@ def studentresourcetype(request):
         "href" :"studentresourceunits"
         },{
         "id": "3",
-        "name" :_("composition"),
+        "name" :_("Composition"),
         "href" :"extras"
         }]
     classid = request.GET.get('classid')
@@ -220,27 +220,30 @@ def studentresourcetype(request):
 def extras(request):
     folders = [{
         "id": "1",
-        "categoryid": "0",
+        "type": "text",
         "name" :_("writing"),
         "href" :"extraslist"
         },{
         "id": "2",
-        "categoryid": "1",
+        "type": "image",
         "name" :_("Multimedia"),
         "href" :"extraslist"
         },{
         "id": "3",
-        "categoryid": "2",
+        "type": "audio",
         "name" :_("Songs"),
         "href" :"extraslist"
         },{
-        "id": "3",
-        "categoryid": "2",
+        "id": "4",
+        "type": "video",
         "name" :_("Olippatakkatci"),
         "href" :"extraslist"
         }]
+    classid = request.GET.get('classid')
+    section = request.GET.get('section')
     return render(request, 'portalteacher/extras.html', 
-                  {"folders":folders,'extras':extras})
+                  {'folders':folders,'classid':classid,
+                    'section':section})
 
 @login_required
 @switchlanguage
@@ -498,5 +501,12 @@ def studentassignedresourcelist(request):
 def viewstudentwrittenworks(request):
     return render(request, 'portalteacher/viewstudentwrittenworks.html')
 
+@login_required
+@switchlanguage
 def mindmaplist(request):
-    return render(request, "portaladmin/mindmaplist.html", {})
+    return render(request, "portalteacher/mindmaplist.html", {})
+
+@login_required
+@switchlanguage
+def stickynoteslist(request):
+    return render(request, 'portalteacher/stickynoteslist.html')                     

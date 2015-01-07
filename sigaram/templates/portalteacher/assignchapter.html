@@ -446,8 +446,9 @@ $(document).ready(function(){
     var classid   = TTS.forms.getUrlParameter('classid');
     var section   = TTS.forms.getUrlParameter('section');
     var chapterid = TTS.forms.getUrlParameter('chapterid');
+    var categoryid = TTS.forms.getUrlParameter('categoryid');
     $.ajax({
-        "url":"/api/admin/resourceinfo/?classid="+classid+"&section="+section+"&chapterid="+chapterid+"&format=json",
+        "url":"/api/admin/resourceinfo/?classid="+classid+"&section="+section+"&chapterid="+chapterid+"&categoryid="+categoryid+"&format=json",
         "type":"GET"
     }).done(function(data){
         //console.log(data);

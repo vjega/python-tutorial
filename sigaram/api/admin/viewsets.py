@@ -263,6 +263,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         classid   = request.GET.get('classid')
         section   = request.GET.get('section')
         chapterid = request.GET.get('chapterid')
+        categoryid = request.GET.get('categoryid')
         kwarg = {}
         kwarg['isdeleted'] = 0
         if classid:
@@ -271,7 +272,9 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
             kwarg['section'] = section
         if chapterid:
             kwarg['chapterid'] = chapterid
-        
+        if categoryid:
+            kwarg['categoryid'] = categoryid
+
         queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('-createddate')
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
         return Response(serializer.data)
@@ -1561,3 +1564,41 @@ class RubricsViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
+
+class ExtraslistViewSet(viewsets.ModelViewSet):
+    queryset = models.Extraslist.objects.all()
+    serializer_class = adminserializers.ExtraslistSerializer
+
+    def list(self, request):
+        print request.GET.get('type');
+        # type   = request.GET.get('type')
+        # classid   = request.GET.get('classid')
+        # sectionid = request.GET.get('section')
+       
+        sql = """
+        SELECT  el.extraid,
+                el.classid,
+                el.section,
+                el.resourceurl,
+                el.title,
+                el.extratype,
+                li.firstname,
+                date(el.createddate) as createddate 
+        FROM extraslist el
+        INNER JOIN logininfo li ON li.loginid=el.createdby  
+        WHERE li.isdelete=0 
+        -- AND el.extratype = '%s' 
+        -- AND el.classid=%s 
+        -- AND el.section='%s' 
+        -- ORDER BY el.extraid DESC
+        """ 
+        cursor = connection.cursor()
+        print sql
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
