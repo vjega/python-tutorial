@@ -55,7 +55,6 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
     queryset = models.AdminFolders.objects.all()
     serializer_class = adminserializers.AdminFolderSerializer
 
-    @create_login('Teacher')
     def create(self, request):
         folder = models.AdminFolders()
         folderdata =  json.loads(request.DATA.keys()[0])
@@ -210,24 +209,47 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         classid   = request.GET.get('classid')
         section   = request.GET.get('section')
         chapterid = request.GET.get('chapterid')
-        categoryid = request.GET.get('categoryid')
+        categoryid = request.GET.get('resourcecategory')
+        kwarg = {}
+        kwarg['isdeleted'] = 0
+        if classid:
+            kwarg['classid'] = classid
+        if section:
+            kwarg['section'] = section
+        if chapterid:
+            kwarg['chapterid'] = chapterid
+        if categoryid:
+            kwarg['resourcecategory'] = categoryid
 
-        sql = """
-        SELECT  tri.teacherresourceid,
-                tri.resourcetitle,
-                tri.createddate
-        FROM teacherresourceinfo tri
-        WHERE classid='%s' 
-        AND section='%s' 
-        AND chapterid='%s' 
-        AND resourcecategory='%s'
-        ORDER BY tri.createddate DESC
-        """ % (classid,section,chapterid,categoryid)
-        cursor = connection.cursor()
-        cursor.execute(sql)
-        desc = cursor.description
-        result =  [dict(zip([col[0] for col in desc], row))for row in cursor.fetchall()]
-        return Response(result)
+        if len(kwarg):
+            queryset = models.Teacherresourceinfo.objects.filter(**kwarg).order_by('createddate')
+        else:
+            queryset = models.Teacherresourceinfo.objects.all().order_by('createddate')
+
+        # sql = """
+        # SELECT  tri.teacherresourceid,
+        #         tri.resourcetitle,
+        #         tri.createddate
+        # FROM teacherresourceinfo tri
+        # -- WHERE classid='%s' 
+        # -- AND section='%s' 
+        # -- AND chapterid='%s' 
+        # -- AND resourcecategory='%s'
+        # ORDER BY tri.createddate DESC
+        # """ 
+        # cursor = connection.cursor()
+        # cursor.execute(sql)
+        # desc = cursor.description
+        # result =  [dict(zip([col[0] for col in desc], row))for row in cursor.fetchall()]
+        # return Response(result)#
+        serializer = adminserializers.TeacherresourceinfoSerializer(queryset, many=True)
+        for k, v in enumerate(serializer.data):
+            try:
+                serializer.data[k]['levelname'] = models.Classinfo.objects.get(pk=int(v['classid'])+1).shortname
+            except:
+                serializer.data[k]['levelname'] = None
+            
+        return Response(serializer.data)
 
     def create(self, request):
         teacherresource = models.Teacherresourceinfo()

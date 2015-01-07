@@ -285,7 +285,7 @@ def resources(request):
         },{
         "id": "3",
         "categoryid": "2",
-        "name" :_("All schools"),
+        "name" :_("Teacher Share"),
         "href" :"allschoolresourcelist"
         }]
 
