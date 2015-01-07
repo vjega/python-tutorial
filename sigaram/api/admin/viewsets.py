@@ -1570,10 +1570,9 @@ class ExtraslistViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.ExtraslistSerializer
 
     def list(self, request):
-        print request.GET.get('type');
-        # type   = request.GET.get('type')
-        # classid   = request.GET.get('classid')
-        # sectionid = request.GET.get('section')
+        categorytype   = request.GET.get('type')
+        classid   = request.GET.get('classid')
+        section = request.GET.get('section')
        
         sql = """
         SELECT  el.extraid,
@@ -1587,13 +1586,13 @@ class ExtraslistViewSet(viewsets.ModelViewSet):
         FROM extraslist el
         INNER JOIN logininfo li ON li.loginid=el.createdby  
         WHERE li.isdelete=0 
-        -- AND el.extratype = '%s' 
-        -- AND el.classid=%s 
-        -- AND el.section='%s' 
-        -- ORDER BY el.extraid DESC
-        """ 
+        AND el.extratype = '%s' 
+        AND el.classid=%s 
+        AND el.section='%s' 
+        ORDER BY el.extraid DESC
+        """ % (categorytype,classid,section) 
         cursor = connection.cursor()
-        print sql
+        # print sql
         cursor.execute(sql)
         desc = cursor.description
         result =  [

@@ -47,7 +47,10 @@
 
 {% block scriptcontent %}
 <script>
+
+
 function audioReceived(filename, filedata) {
+        console.log(filedata);
         filedata = window.atob(filedata);
         var container = document.getElementById('audio_container');
         var wrap = document.getElementById('recorder-wrap');
