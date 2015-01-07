@@ -1429,7 +1429,7 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
 
 class TopicViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Topicinfo.objects .all()
+    queryset = models.Topicinfo.objects.filter().order_by('-createddate')
     serializer_class = adminserializers.TopicsSerializer
 
     def list(self, request):
@@ -1489,6 +1489,7 @@ class ThreadsViewSet(viewsets.ModelViewSet):
         FROM threaddetails td 
         LEFT JOIN topicinfo ti ON ti.topicid =  td.topicid
         where td.threadid=%s
+        ORDER BY td.createddate DESC
         """ % pk
 
         cursor = connection.cursor()
