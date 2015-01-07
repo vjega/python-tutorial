@@ -125,14 +125,6 @@ def myprofile(request):
 
 @login_required
 @switchlanguage
-def allschoolresourcelist(request):
-    schools = models.Schoolinfo.objects.all()
-    #teacherresourceinfo = models.Teacherresourceinfo.objects.all()
-    return render(request, 'portalteacher/allschoolresourcelist.html', {'schools':schools,
-                                                                        'teacherresourceinfo':teacherresourceinfo})
-
-@login_required
-@switchlanguage
 def students(request):
     schools = models.Schoolinfo.objects.all()
     classes = models.Classinfo.objects.all()
@@ -344,7 +336,7 @@ def resource_type (request):
 @login_required
 @switchlanguage
 def allschoolresourcelist(request):
-    schools = models.Schoolinfo.objects.all()
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/allschoolresourcelist.html', 
                                         {'schools':schools,'classes':classes})
