@@ -18,7 +18,8 @@ from portaladmin.forms import (AdminForm,
                    StickyCommentForm,
                    AnnouncementForm,
                    BillviewassignmentanswerForm,
-                   BillcomprehensionanswerratingForm
+                   BillcomprehensionanswerratingForm,
+                   StickyinfoForm
                     )
 from ajaxuploader.views import AjaxFileUploader
 #from ajaxuploader.backends.easythumbnails import EasyThumbnailUploadBackend
@@ -486,4 +487,9 @@ def billcomprehensionanswerrating(request):
 @switchlanguage
 def billopenendedanswerrating(request):
     return render(request, 'portaladmin/billopenendedanswerrating.html')
+
+@login_required
+@switchlanguage
+def stickynoteslist(request):
+    return render(request, 'portaladmin/stickynoteslist.html',{'form':StickyinfoForm.StickyinfoForm()})
                         

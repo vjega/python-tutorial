@@ -413,9 +413,9 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
                 data = JSON.parse(data);
                 data['color'] = $("#preview_color").attr("class");
                 $.ajax({
-                            headers : {
-                    'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
-                },
+                    headers : {
+                        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                    },
                     type:'PUT',
                     data: JSON.stringify(data),
                     url : '/api/admin/stickynotes/'+edit_id

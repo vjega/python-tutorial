@@ -74,5 +74,6 @@ urlpatterns = patterns('portaladmin.views',
                                                          name="billopenendedanswerrating"),
     url(r'^bulletinboard-upload$',      'bulletinboard_uploader', 
                                                          name="bulletinboard-uploader"),
+    url(r'^sticky-notes-list$',   'stickynoteslist',      name='stickynoteslist'),
     #(r'^api/', include(v1_api.urls)),
 )
