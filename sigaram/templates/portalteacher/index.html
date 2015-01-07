@@ -184,11 +184,11 @@ $(document).ready(function(){
                     var data = TTS.utils.serilaizeJson("#newfolderfrm");
                     $.ajax({
                         headers : {
-                            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
                         },
                         type:'POST',
                         data: {'data':data},
-                        url : '/api/admin/addfolder'
+                        url : '/api/admin/adminfolders/'
                     }).done(function( msg ) {
                         console.log(msg);
                         //dialogItself.close();

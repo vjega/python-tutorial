@@ -55,6 +55,17 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
     queryset = models.AdminFolders.objects.all()
     serializer_class = adminserializers.AdminFolderSerializer
 
+    @create_login('Teacher')
+    def create(self, request):
+        folder = models.AdminFolders()
+        folderdata =  json.loads(request.DATA.keys()[0])
+        folder.folder_name = folderdata.get('folder_name')
+        folder.folder_description = folderdata.get('remark')
+        folder.folder_order = folderdata.get('order_no')
+        folder.added_date = time.strftime('%Y-%m-%d %H:%M:%S')
+        folder.save()
+        return Response(request.DATA)
+
 class teacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
     serializer_class = adminserializers.TeacherinfoSerializer
