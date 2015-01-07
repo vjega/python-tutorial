@@ -498,5 +498,12 @@ def studentassignedresourcelist(request):
 def viewstudentwrittenworks(request):
     return render(request, 'portalteacher/viewstudentwrittenworks.html')
 
+@login_required
+@switchlanguage
 def mindmaplist(request):
-    return render(request, "portaladmin/mindmaplist.html", {})
+    return render(request, "portalteacher/mindmaplist.html", {})
+
+@login_required
+@switchlanguage
+def stickynoteslist(request):
+    return render(request, 'portalteacher/stickynoteslist.html')                     
