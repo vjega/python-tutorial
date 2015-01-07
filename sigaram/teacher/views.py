@@ -9,7 +9,7 @@ from teacher.forms import ( RubricsForm,
                             StudentForm,
                             StickyForm,
                             StickyCommentForm,
-                            #ViewworkspaceForm
+                            TeacherResourceForm,
                             TopicsForm,
                             ThreadForm,
                             AnnouncementForm,
@@ -122,14 +122,6 @@ def classroom(request):
 @switchlanguage
 def myprofile(request):
     return render(request, 'portalteacher/myprofile.html')
-
-@login_required
-@switchlanguage
-def allschoolresourcelist(request):
-    schools = models.Schoolinfo.objects.all()
-    #teacherresourceinfo = models.Teacherresourceinfo.objects.all()
-    return render(request, 'portalteacher/allschoolresourcelist.html', {'schools':schools,
-                                                                        'teacherresourceinfo':teacherresourceinfo})
 
 @login_required
 @switchlanguage
@@ -344,10 +336,11 @@ def resource_type (request):
 @login_required
 @switchlanguage
 def allschoolresourcelist(request):
-    schools = models.Schoolinfo.objects.all()
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/allschoolresourcelist.html', 
-                                        {'schools':schools,'classes':classes})
+                                        {'schools':schools,'classes':classes,
+                                        'form':TeacherResourceForm.TeacherResourceForm()})
 
 @login_required
 @switchlanguage
