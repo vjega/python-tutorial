@@ -209,7 +209,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         classid   = request.GET.get('classid')
         section   = request.GET.get('section')
         chapterid = request.GET.get('chapterid')
-        categoryid = request.GET.get('categoryid')
+        categoryid = request.GET.get('resourcecategory')
         kwarg = {}
         kwarg['isdeleted'] = 0
         if classid:
@@ -219,7 +219,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         if chapterid:
             kwarg['chapterid'] = chapterid
         if categoryid:
-            kwarg['categoryid'] = categoryid
+            kwarg['resourcecategory'] = categoryid
 
         if len(kwarg):
             queryset = models.Teacherresourceinfo.objects.filter(**kwarg).order_by('createddate')
