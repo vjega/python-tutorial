@@ -55,12 +55,51 @@
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<script id="admin-form" type="text/x-jsrender">
+<script id="stickylist-form" type="text/x-jsrender">
     {% crispy form %}
 </script>
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
+
+TTS.forms.addadmin = function(form, data) {
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'POST',
+        data: data,
+        url : '/api/admin/stickyinfo/'
+    }).done(function( msg ) {
+        form.close();
+        location.reload();
+        //dialogItself.close();
+    });
+}
+
+TTS.forms.showadminform = function() {
+    BootstrapDialog.show({
+        title: 'Add Sticky List',
+        message: $($('#stickylist-form').render()),
+        onshown: function(){
+        },
+        buttons: [{
+            label: 'Save',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#add-sticky-info");
+                //console.log(data);
+                TTS.forms.addadmin(dialogItself, data); 
+            }
+            },{
+            label: 'Cancel',
+            action: function(dlg){
+                dlg.close();
+            }
+        }]
+    });
+};
+
 TTS.forms.renderteacher = function(data){
     
     var headers = [
@@ -78,6 +117,7 @@ TTS.forms.renderteacher = function(data){
     var count = 0
     for(var i in data){
         var t = [];
+        t.DT_RowId = data[i].id;
         t.push(++count);
         t.push(data[i].title);
         t.push(data[i].createddate);
@@ -91,7 +131,7 @@ TTS.forms.renderteacher = function(data){
         return true;
     }
     TTS.forms.table = $('#sticky-list-tbl').dataTable({
-        //"data":     dataset,
+        "data":     dataset,
         "columns":  headers
     });
 
@@ -107,6 +147,13 @@ $(document).ready(function(){
     }).done(function(data){
         TTS.forms.renderteacher(data);
         TTS.utils.ajaxloaderstop();
+    });
+    $('#sticky-list-tbl').on('click', 'tbody tr', function(){
+        window.location = 'sticky-notes?id='+this.id;
+        console.log();
+    });
+    $("#page-wrapper").on("click", "#addrec", function(){
+        TTS.forms.showadminform();
     });
     
 });

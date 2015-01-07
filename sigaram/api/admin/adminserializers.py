@@ -181,4 +181,4 @@ class ExtraslistSerializer(serializers.HyperlinkedModelSerializer):
 class StickyinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Stickyinfo
-        fields = ('title', 'createdby','isdeleted','createddate')
+        fields = ('id','title', 'createdby','isdeleted','createddate')

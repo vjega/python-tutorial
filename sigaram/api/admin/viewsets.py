@@ -891,18 +891,24 @@ class StickynotesResource(viewsets.ModelViewSet):
     serializer_class = adminserializers.StickynotesSerializer
 
     def list(self, request):
+        stickylistid = request.GET.get('id')
+        cond =''
+        if stickylistid:
+            cond = "WHERE stickylistid = %s"%stickylistid
         sql = '''
         SELECT s.id,
             s.stickytext,
+            s.stickylistid,
             s.color,
             group_concat(sc.stickycomment SEPARATOR "~") as comments,
             group_concat(sc.commentby SEPARATOR "~") as commentby,
             group_concat(sc.createddate SEPARATOR "~") as createddate
         FROM stickynotes s
         LEFT JOIN stickycomments sc ON sc.stickyid = s.id
+        %s
         GROUP BY s.id, 
                  s.stickytext,
-                 s.color''' 
+                 s.color'''%cond 
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -915,6 +921,7 @@ class StickynotesResource(viewsets.ModelViewSet):
         stickynotes = models.stickynotes()
         data = json.loads(dict(request.DATA).keys()[0])
         stickynotes.stickytext = data.get('stickytext')
+        stickynotes.stickylistid = data.get('stickylistid')
         stickynotes.name = data.get('name')
         stickynotes.xyz = data.get('xyz')
         stickynotes.color = data.get('color')

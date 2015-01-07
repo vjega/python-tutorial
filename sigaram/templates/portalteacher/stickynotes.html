@@ -320,7 +320,7 @@ TTS.forms = TTS.forms || {};
 TTS.forms.addstickynote = function(form, data) {
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'POST',
         data: data,
@@ -358,6 +358,7 @@ TTS.forms.showstickyform = function() {
                 var select_color = $("#preview_color").attr("class");
                 data = JSON.parse(data);
                 data['color'] = select_color;
+                data['stickylistid'] = TTS.utils.getUrlParameter('id');
                 TTS.forms.addstickynote(dialogItself, JSON.stringify(data)); 
             }
             },{
@@ -412,6 +413,9 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
                 data = JSON.parse(data);
                 data['color'] = $("#preview_color").attr("class");
                 $.ajax({
+                            headers : {
+                    'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                },
                     type:'PUT',
                     data: JSON.stringify(data),
                     url : '/api/admin/stickynotes/'+edit_id
@@ -431,6 +435,9 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
 
 TTS.forms.delstickynotes = function(id) {
     $.ajax({
+         headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
         type:'DELETE',
         url : '/api/admin/stickynotes/'+id
     }).done(function( msg ) {
@@ -443,6 +450,9 @@ TTS.forms.delstickynotes = function(id) {
 
 TTS.forms.addstickycomment = function(form, data) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
         type:'POST',
         data: data,
         url : '/api/admin/stickycomments/'
@@ -464,6 +474,7 @@ TTS.forms.showstickycommentform = function(stickyid) {
                 var data = TTS.utils.serilaizeJson("#add-stickycomment");
                 data = JSON.parse(data);
                 data['stickyid'] = stickyid;
+                //data['stickylistid'] = 
                 TTS.forms.addstickycomment(dialogItself, JSON.stringify(data)); 
             }
             },{
@@ -537,7 +548,7 @@ $(document).ready(function(){
 
     TTS.utils.ajaxloaderstart();
     $.ajax({
-        "url":"/api/admin/stickynotes/?format=json",
+        "url":"/api/admin/stickynotes/?id="+TTS.utils.getUrlParameter("id")+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstickynotes(data);
