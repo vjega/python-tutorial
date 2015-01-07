@@ -104,7 +104,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
 };
 $(document).ready(function(){
     $.ajax({
-        "url":"/api/admin/extraslist/?extratype="+TTS.type+"&classid="+TTS.classid+"&section="+TTS.section+"&format=json",
+        "url":"/api/admin/extraslist/?type="+TTS.type+"&classid="+TTS.classid+"&section="+TTS.section+"&format=json",
         "type":"GET"
     }).done(function(data){
         //console.log(data);
