@@ -133,7 +133,6 @@ TTS.forms.renderadmin = function(data){
               "class": "text-center"  
             },
             { "title": "{% trans "Name" %}" },
-            { "title": "{% trans "Username" %}"}, 
             { "title": "{% trans "Email Id" %}"}, 
             
         ];
@@ -149,7 +148,6 @@ TTS.forms.renderadmin = function(data){
             t.push("<img src='http://placehold.it/100x100'>");
         }
         t.push(data[i].firstname + " "+data[i].lastname);
-        t.push(data[i].username);
         t.push(data[i].emailid);
         dataset.push(t);
     }
