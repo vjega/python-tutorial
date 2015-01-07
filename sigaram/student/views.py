@@ -7,7 +7,8 @@ from portaladmin import models as pmodels
 from student.forms import (StudentWorkForm,
                            StudentNotesForm,
                            StickyForm,
-                           StickyCommentForm)
+                           StickyCommentForm,
+                           TopicsForm,)
 
 
 def switchlanguage(f):
@@ -97,22 +98,22 @@ def resourcetype(request):
         "categoryid" : "0",
         "id"         : "1",
         "name"       : _("Reading"),
-        "href"       :"studentresourceunits"
+        "href"       :"assignedresourcelist"
         },{
         "categoryid" : "1",
         "id"         : "2",
         "name"       :_("Image dialog"),
-        "href"       :"studentresourceunits"
+        "href"       :"assignedresourcelist"
         },{
         "categoryid" : "3",
         "id"         : "3",
         "name"       :_("Writing board"),
-        "href"       :"studentresourceunits"
+        "href"       :"assignedresourcelist"
         },{
         "categoryid" : "4",
         "id"         : "4",
         "name"       :_("Comprehension"),
-        "href"       :"studentresourceunits"
+        "href"       :"assignedresourcelist"
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
@@ -286,3 +287,8 @@ def studentresourceunits(request):
 @switchlanguage
 def studentresourcelist(request):
     return render(request, 'portalstudent/studentresourcelist.html')
+
+@login_required
+@switchlanguage
+def topics(request):
+    return render(request, 'portalstudent/topics.html',{"form" : TopicsForm.TopicsForm()})
