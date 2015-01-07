@@ -1612,3 +1612,19 @@ class ExtraslistViewSet(viewsets.ModelViewSet):
             ]
         return Response(result)
 
+class StickyinfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Stickyinfo.objects.all()
+    serializer_class = adminserializers.StickyinfoSerializer
+
+    def create(self, request):
+        stickylist = models.Stickyinfo()
+        stickydata =  json.loads(request.DATA.keys()[0])
+        stickylist.title = stickydata.get('title')
+        stickylist.isdeleted = 0
+        stickylist.createdby = request.user.id
+        stickylist.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        stickylist.save()
+        return Response(request.DATA)
+
+   
