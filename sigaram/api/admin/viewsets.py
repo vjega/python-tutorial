@@ -1561,3 +1561,40 @@ class RubricsViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
+
+class ExtraslistViewSet(viewsets.ModelViewSet):
+    queryset = models.Extraslist.objects.all()
+    serializer_class = adminserializers.ExtraslistSerializer
+
+    def list(self, request):
+        classid   = request.GET.get('classid')
+        section   = request.GET.get('section')
+        chapterid = request.GET.get('chapterid')
+       
+        sql = """
+        SELECT  el.extraid,
+                el.classid,
+                el.section,
+                el.resourceurl,
+                el.title,
+                el.extratype,
+                li.firstname,
+                date(el.createddate) as createddate 
+        FROM extraslist el
+        INNER JOIN logininfo li ON li.loginid=el.createdby  
+        WHERE li.isdelete=0 
+        -- AND el.extratype = 'video' 
+        -- AND el.classid=1 
+        -- AND el.section='b' 
+        -- ORDER BY el.extraid DESC
+        """ 
+        cursor = connection.cursor()
+        #print sql
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+

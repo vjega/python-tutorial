@@ -37,6 +37,7 @@ router.register(r'billboardresource',       viewsets.BillboardResourceViewSet)
 router.register(r'topics',      			viewsets.TopicViewSet)
 router.register(r'threads',      			viewsets.ThreadsViewSet)
 router.register(r'rubrics',         		viewsets.RubricsViewSet)
+router.register(r'extraslist',         		viewsets.ExtraslistViewSet)
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
