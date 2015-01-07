@@ -19,8 +19,7 @@ from portaladmin.forms import (AdminForm,
                    AnnouncementForm,
                    BillviewassignmentanswerForm,
                    BillcomprehensionanswerratingForm,
-                   StickyinfoForm,
-                   TopicsForm
+                   StickyinfoForm
                     )
 from ajaxuploader.views import AjaxFileUploader
 #from ajaxuploader.backends.easythumbnails import EasyThumbnailUploadBackend
@@ -497,4 +496,4 @@ def stickynoteslist(request):
 @login_required
 @switchlanguage
 def topics(request):
-    return render(request, 'portaladmin/topics.html',{"form" : TopicsForm.TopicsForm()})
+    return render(request, 'portalteacher/topics.html',{"form" : TopicsForm.TopicsForm()})

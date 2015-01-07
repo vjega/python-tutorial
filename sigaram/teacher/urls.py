@@ -64,5 +64,7 @@ urlpatterns = patterns('teacher.views',
                                                             name='viewstudentwrittenworks'),
 
     url(r'^sticky-notes-list$',   'stickynoteslist',      name='stickynoteslist'),
+    url(r'^forum$','forum',name='forum'),
+    url(r'^viewtopic$','viewtopic',name='viewtopic'),
 
 )

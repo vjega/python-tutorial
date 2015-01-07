@@ -10,10 +10,11 @@ from teacher.forms import ( RubricsForm,
                             StickyForm,
                             StickyCommentForm,
                             TeacherResourceForm,
-                            TopicsForm,
+                            ForumForm,
                             ThreadForm,
                             AnnouncementForm,
-                            StickyinfoForm
+                            StickyinfoForm,
+                            NewtopicForm
                             ) 
 
 from ajaxuploader.views import AjaxFileUploader  
@@ -438,7 +439,7 @@ def activitystatistics(request):
 @login_required
 @switchlanguage
 def topics(request):
-    return render(request, 'portalteacher/topics.html',{"form" : TopicsForm.TopicsForm()})
+    return render(request, 'portalteacher/forum.html',{"form" : ForumForm.ForumForm()})
     
 @login_required
 @switchlanguage
@@ -504,3 +505,14 @@ def mindmaplist(request):
 @switchlanguage
 def stickynoteslist(request):
     return render(request, 'portalteacher/stickynoteslist.html',{'form':StickyinfoForm.StickyinfoForm()})                     
+
+@login_required
+@switchlanguage
+def forum(request):
+    return render(request, 'portalteacher/forum.html', {"form" : ForumForm.ForumForm()})
+
+@login_required
+@switchlanguage
+def viewtopic(request):
+   foruminfo = models.Foruminfo.objects.all()
+   return render(request, 'portalteacher/viewtopic.html',{"form" : NewtopicForm.NewtopicForm()})
