@@ -54,6 +54,8 @@
 {% block morecss %}
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <style>
     #addrec:hover, .tts-delete:hover, .tts-edit:hover{
         cursor: pointer;
@@ -62,11 +64,13 @@
 {% endblock morecss %}
 
 {% block morescript %}
+<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "js/tts.utils.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
@@ -94,6 +98,30 @@ TTS.forms.addteacherresource = function(form, data) {
     });
 }
 
+TTS.forms.upload = function(elm) {
+    var uploader = new qq.FileUploader({
+        action: "/admin/student-teacherres-upload",
+        element: $('#file-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#id_fileurl").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
+    });
+};
+
+
 TTS.forms.showteacherresource = function() {
     BootstrapDialog.show({
         title: 'Add TeacherResource',
@@ -101,7 +129,6 @@ TTS.forms.showteacherresource = function() {
         onshown: function(){
             TTS.forms.upload();
             $('.summernote').summernote();
-            updateChapter();
         },
         buttons: [{
             label: 'Save',
@@ -142,18 +169,11 @@ TTS.forms.renderteacher = function(data){
     var dataset = [];
     var count = 0
     for(var i in data){
-        var t = [];
-        t.DT_RowId = data[i].studentid;
+        var t = {};
         t.slno = ++count;
-        if (data[i].imageurl){
-            t.photo = "<img src='/static/"+data[i].imageurl+"' width='100' height='100'>";
-        } else {
-            t.photo ="<img src='http://placehold.it/100x100'>";
-        }
-        t.name = data[i].firstname + " "+data[i].lastname;
-        t.username = data[i].username;
-        t.emailid = data[i].emailid;
-        t.edit = "<i class='tts-edit fa fa-pencil fa-lg'></i>";
+        t.DT_RowId = data[i].teacherresourceid;
+        t.resourcetitle = data[i].resourcetitle;
+        t.date = data[i].createddate;
         t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
@@ -172,11 +192,17 @@ TTS.forms.renderteacher = function(data){
 
 
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     $.ajax({
-        "url":"/api/admin/teacher/?schoolid="+$("#school_name").val()+"&format=json",
+        "url":"/api/admin/teacherresourcesinfo/?format=json",
         "type":"GET"
     }).done(function(data){
-        TTS.forms.renderteacher(data);
+        if (data.length) {
+            TTS.forms.renderteacherresourceinfo(data);
+            TTS.utils.ajaxloaderstop();
+        } else {
+            TTS.forms.table.fnClearTable();
+        }
     });
     $("#school_name").change(function(){    
         $.ajax({
@@ -200,7 +226,7 @@ $(document).ready(function(){
         window.location = 'teacherslist';
     });
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.addteacher();
+        TTS.forms.showteacherresource();
     });
 });
 
