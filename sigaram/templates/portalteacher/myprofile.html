@@ -39,14 +39,6 @@
                     </div>
                     <div class="row">
                         <div class="form-group" class="col-sm-6">
-                            <label for="folder_name" class="col-sm-4 control-label">{% trans "Last Name" %}</label>
-                            <div class="col-sm-3">
-                                <input type ="text" class="form-control" name="admin_lname" id="admin_lname">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group" class="col-sm-6">
                             <label for="folder_name" class="col-sm-4 control-label">{% trans "Password" %}</label>
                             <div class="col-sm-3">
                                 <input type ="text" class="form-control" name="admin-pass" id="admin-pass">
@@ -68,6 +60,9 @@
                                <input type="file" class="form-control" name="admin_photo" id="admin_photo"placeholder="{% trans "Choose File" %}">
                             </div>
                         </div>
+                    </div><br/>
+                    <div>
+                        <button class="btn btn-primary center-block" id="savebutton">Save</button>
                     </div>
 
                 </table>
@@ -103,15 +98,28 @@
 <script  type="text/x-jsrender">
 
 $(document).ready(function(){
-    $('#admin-main-tbl').on('click', '.tts-delete', function(e){
-        e.stopPropagation();
-        if (!window.confirm("Do you want to delete this record?")) {
-            return false;
-        }
-        alert("Record Deleted")
-        window.location = 'adminlist';
+      $("#savebutton").click(function(){
+        var url = "";
+            url = "/api/admin/postreplyinfo/";
+            datatable = JSON.stringify({postdetails:sn.code(),postid:datpostid})                               
+       
+        //alert ( TTS.utils.getUrlParameter('replyid'));
+        $.ajax({
+            headers : {
+                'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+            },
+            type:"POST",
+            url:url,
+            data: datatable
+        }).done(function(retdata){
+            if ( TTS.utils.getUrlParameter('replyid')) {
+                 window.location ='viewpost?forumid='+data+'&forumname='+dataname+'&topicid='+datpostid
+                alert (TTS.utils.getUrlParameter("forumid"));
+            } else {
+                window.location ='viewtopic?forumid='+data+'&forumname='+dataname
+            }
+        })
     });
-
    
 });
 
