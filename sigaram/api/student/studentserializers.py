@@ -45,3 +45,10 @@ class StudentBulletinboardlistinfoSerializer(serializers.HyperlinkedModelSeriali
     class Meta:
         model = models.Bulletinboardinfo
         fields = ('messagetitle','message','posteddate','postedby')
+
+class ClassroominfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Classroominfo
+        fields = ('classroomid','assessmentid','resourceid','writtenworkid','studentid',
+                  'rating','ratingcount','votescount','lastvotedby','lastvoteddate','postedby',
+                  'posteddate')

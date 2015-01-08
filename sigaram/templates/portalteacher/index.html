@@ -4,7 +4,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h3 class="page-header"><a href="#" id="new-folder" class="fa fa-plus-square fa-1x">{% trans "New Folder" %}</a></h3>
+        <h3 class="page-header">{% trans "Dashboard" %}</h3>
 
     </div>
     <!-- /.col-lg-12 -->
@@ -13,6 +13,7 @@
 <div class="row">
     <div class="col-lg-8 col-md-8">
         <div class="row">
+        <h3><a href="#" id="new-folder" class="fa fa-plus-square fa-1x">{% trans "New Folder" %}</a></h3>
         {% for folder in folders%}
         <a href="{{folder.link}}">
         <div class="col-md-4">
