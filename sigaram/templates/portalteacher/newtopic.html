@@ -1,0 +1,118 @@
+{% extends 'portalteacher/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block topcontent %}
+<div class="row">
+    <div class="form-group" class="col-sm-3">
+        <div class="col-sm-1">
+           
+        </div>
+    </div>
+</div>
+
+{% endblock topcontent %}
+{% block botcontent %}
+
+<div class="col-lg-12">
+    <div class="panel panel-default">
+    <form enctype="multipart/form-data" action="" method="POST"> 
+        <div class="panel-heading">
+            <center> <h2>  {% trans "New Topic" %}</h2> </center>
+        </div>
+       <center> <div id="headermsg"></div></center>
+        <!-- /.panel-heading -->
+        <div class="gentable" id ="admin-newtopic">
+            {% crispy form %}
+        </div>
+        <div class="text-center">
+            <div>&nbsp;</div>
+            <button class="btn btn-primary" id="addrec">Save</button>
+        </div>
+
+         <table class="table table-striped table-bordered table-hover" 
+                    id="forum-main-tbl">
+        </table>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+                <!-- /.col-lg-12 -->
+{% endblock botcontent%}
+
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<style>
+    #addrec:hover, .tts-edit:hover, .tts-delete:hover, #admin-main-tbl tbody tr:hover {
+        cursor: pointer;
+    }
+</style>
+{% endblock morecss %}
+
+{% block morescript %}
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}">
+
+</script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+{% endblock morescript %}
+
+{% block scriptcontent %}
+<script id="rubrics-form" type="text/x-jsrender">
+
+</script>
+
+
+<script>
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}
+
+$(document).ready(function(){
+    var sn        = $('.summernote').summernote();
+    var data      = TTS.utils.getUrlParameter("forumid");
+    var dataname  = TTS.utils.getUrlParameter("forumname");
+    var datpostid = TTS.utils.getUrlParameter("topicid");
+    $("#headermsg").html(dataname);
+
+    $("#addrec").click(function(){
+        var url = "";
+        if ( TTS.utils.getUrlParameter('replyid') ) {
+            url = "/api/forum/postreplyinfo/";
+            datatable = JSON.stringify({postdetails:sn.code(),postid:datpostid})                               
+        } else {
+            url = "/api/forum/topicinfo/";
+            datatable = JSON.stringify({topicname:sn.code(),forumid:data})
+                                  
+        }
+        //alert ( TTS.utils.getUrlParameter('replyid'));
+        $.ajax({
+            headers : {
+                'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+            },
+            type:"POST",
+            url:url,
+            data: datatable
+        }).done(function(retdata){
+            if ( TTS.utils.getUrlParameter('replyid')) {
+                 window.location ='viewpost?forumid='+data+'&forumname='+dataname+'&topicid='+datpostid
+                alert (TTS.utils.getUrlParameter("forumid"));
+            } else {
+                window.location ='viewtopic?forumid='+data+'&forumname='+dataname
+            }
+        })
+    });
+});
+
+    //$('body').on('click','#addrec', function(){
+    //     $("#page-wrapper").on("click", "#addrec", function(){
+    //      TTS.forms.showviewfourm();
+    //     });
+    // });
+
+</script>
+{% endblock scriptcontent %}

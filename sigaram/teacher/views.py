@@ -515,4 +515,10 @@ def forum(request):
 @switchlanguage
 def viewtopic(request):
    foruminfo = models.Foruminfo.objects.all()
-   return render(request, 'portalteacher/viewtopic.html',{"form" : NewtopicForm.NewtopicForm()})
+   return render(request, 'portalteacher/viewtopic.html')
+
+def viewpost(request):
+    return render(request, 'portalteacher/viewpost.html')
+
+def newtopic(request):
+    return render(request, 'portalteacher/newtopic.html', {"form" : NewtopicForm.NewtopicForm()})
