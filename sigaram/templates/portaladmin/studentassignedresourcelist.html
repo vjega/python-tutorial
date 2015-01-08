@@ -95,7 +95,7 @@ TTS.forms.renderstudentwork = function(data){
         );
         return true;
     }
-    TTS.forms.table = $('#admin-main-tbl').dataTable({
+    TTS.forms.table = $('#admin-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });

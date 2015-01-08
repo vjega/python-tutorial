@@ -152,9 +152,9 @@ TTS.forms.renderadmin = function(data){
         dataset.push(t);
     }
 
-    $('#admin-main-tbl').dataTable({
+    $('#admin-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
-        "columns":  headers
+        "columns":  headers,
     });
 
 };

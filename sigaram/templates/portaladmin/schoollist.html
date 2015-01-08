@@ -159,7 +159,7 @@ TTS.forms.renderadminschool = function(data){
         t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
-    $('#adminschool-main-tbl').dataTable({
+    $('#adminschool-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });

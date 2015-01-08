@@ -151,7 +151,7 @@ TTS.forms.renderfourminfo = function(data){
         dataset.push(t);
     }
 
-    $('#forum-main-tbl').dataTable({
+    $('#forum-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });

@@ -208,7 +208,7 @@ TTS.forms.renderstudentlist = function(data){
         );
         return true;
     }
-    TTS.forms.table = $('#student-main-tbl').dataTable({
+    TTS.forms.table = $('#student-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });

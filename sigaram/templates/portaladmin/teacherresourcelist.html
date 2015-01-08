@@ -159,7 +159,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
         dataset.push(t);
     }
 
-    $('#teacherresource-main-tbl').dataTable({
+    $('#teacherresource-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data"   :  dataset,
         "columns":  headers
     });

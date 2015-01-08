@@ -87,7 +87,7 @@ TTS.forms.renderrubricsinfo = function(data){
         dataset.push(t);
     }
 
-    $('#rubrics-main-tbl').dataTable({
+    $('#rubrics-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });

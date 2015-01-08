@@ -220,7 +220,7 @@ TTS.forms.renderteacher = function(data){
             dataset
         );
     }else{
-        TTS.forms.table = $('#teacherlist-main-tbl').dataTable({
+        TTS.forms.table = $('#teacherlist-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
             "data":     dataset,
             "columns":  headers
         });
