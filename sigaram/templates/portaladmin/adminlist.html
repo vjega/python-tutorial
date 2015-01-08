@@ -120,7 +120,7 @@ TTS.forms.showadminform = function() {
             TTS.forms.upload();
         },
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-admin");
@@ -128,7 +128,7 @@ TTS.forms.showadminform = function() {
                 TTS.forms.addadmin(dialogItself, data); 
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dlg){
                 dlg.close();
             }

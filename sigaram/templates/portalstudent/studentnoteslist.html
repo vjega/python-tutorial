@@ -71,7 +71,7 @@ TTS.forms.addstudentnotes = function() {
         },
         message: $($('#studentnotes-form').render()),
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-studentnoteslist");
@@ -89,7 +89,7 @@ TTS.forms.addstudentnotes = function() {
                 });
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }

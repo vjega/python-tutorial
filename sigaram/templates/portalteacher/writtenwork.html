@@ -97,7 +97,7 @@ TTS.forms.addwrittenwork = function() {
         },
         message: $($('#addwrittenwork').render()),
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(){
                 var data = TTS.utils.serilaizeJson("#newfolderfrm");
@@ -114,7 +114,7 @@ TTS.forms.addwrittenwork = function() {
                 });
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }

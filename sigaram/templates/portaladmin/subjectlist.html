@@ -175,7 +175,7 @@ TTS.forms = TTS.forms || {}
             alert("Hello");
         },
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             onshown: function(dialogRef){
                 $('.summernote').summernote();
@@ -192,7 +192,7 @@ TTS.forms = TTS.forms || {}
                 });
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }
@@ -208,7 +208,7 @@ TTS.forms.editschool = function() {
         },
         message: $($('#editschool').render()),
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(){
                 var data = TTS.utils.serilaizeJson("#newfolderfrm");
@@ -225,7 +225,7 @@ TTS.forms.editschool = function() {
                 });
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }

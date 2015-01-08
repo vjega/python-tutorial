@@ -351,7 +351,7 @@ TTS.forms.showstickyform = function() {
         },
 
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-sticky");
@@ -362,7 +362,7 @@ TTS.forms.showstickyform = function() {
                 TTS.forms.addstickynote(dialogItself, JSON.stringify(data)); 
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dlg){
                 dlg.close();
             }
@@ -425,7 +425,7 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
                 });
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }
@@ -468,7 +468,7 @@ TTS.forms.showstickycommentform = function(stickyid) {
         title: 'Add Sticky Comment',
         message: $($('#stickycomment-form').render()),
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-stickycomment");
@@ -477,7 +477,7 @@ TTS.forms.showstickycommentform = function(stickyid) {
                 TTS.forms.addstickycomment(dialogItself, JSON.stringify(data)); 
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dlg){
                 dlg.close();
             }
