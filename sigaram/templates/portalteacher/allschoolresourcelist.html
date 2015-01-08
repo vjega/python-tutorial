@@ -155,14 +155,13 @@ TTS.forms.renderteacher = function(data){
               "data" : "slno"
             },
             { "title": "{% trans "Heading" %}",
-              "class": "text-center",  
-              "data" : "photo"  
+              "data" : "resourcetitle"  
             },
             { "title": "{% trans "Date" %}",
-              "data" : "name"  
+              "data" : "date"  
             },
             { "title": "{% trans "View" %}",
-              "data" : "username"  
+              "data" : "view"  
             }, 
            
         ];
@@ -170,11 +169,11 @@ TTS.forms.renderteacher = function(data){
     var count = 0
     for(var i in data){
         var t = {};
-        t.slno = ++count;
         t.DT_RowId = data[i].teacherresourceid;
+        t.slno = ++count;
         t.resourcetitle = data[i].resourcetitle;
         t.date = data[i].createddate;
-        t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
+        t.view="<i class='flaticon-zoom38'></i>";
         dataset.push(t);
     }
     if(TTS.forms.schooltable){
@@ -198,7 +197,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         if (data.length) {
-            TTS.forms.renderteacherresourceinfo(data);
+            TTS.forms.renderteacher(data);
             TTS.utils.ajaxloaderstop();
         } else {
             TTS.forms.table.fnClearTable();
