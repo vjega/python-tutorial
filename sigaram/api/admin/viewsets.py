@@ -1658,4 +1658,23 @@ class StickyinfoViewSet(viewsets.ModelViewSet):
         stickylist.save()
         return Response(request.DATA)
 
+class LogininfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Logininfo.objects.all()
+    serializer_class = adminserializers.LogininfoSerializer
+
+    def create(self, request):
+        loginlist = models.Logininfo()
+        logindata =  json.loads(request.DATA.keys()[0])
+        loginlist.loginid = logindata.get('loginid')
+        loginlist.password = logindata.get('password')
+        loginlist.firstname = logindata.get('firstname')
+        loginlist.lastname = logindata.get('lastname')
+        loginlist.lastlogin = logindata.get('lastlogin')
+        loginlist.usertype = logindata.get('usertype')
+        loginlist.isdeleted = 0
+        loginlist.username = request.user.id
+        loginlist.save()
+        return Response(request.DATA)
+
    

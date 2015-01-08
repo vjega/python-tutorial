@@ -182,3 +182,9 @@ class StickyinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Stickyinfo
         fields = ('id','title', 'createdby','isdeleted','createddate')
+
+class LogininfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Logininfo
+        fields = ('loginid','username', 'password','firstname','lastname','isdelete',
+                   'lastlogin','usertype','isadmin')
