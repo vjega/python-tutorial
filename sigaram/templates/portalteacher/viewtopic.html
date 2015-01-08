@@ -100,7 +100,7 @@ TTS.forms.showviewfourm = function() {
             $('.summernote').summernote();
         },
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#newtopic-forum");
@@ -111,7 +111,7 @@ TTS.forms.showviewfourm = function() {
                 TTS.forms.addviewfourm(dialogItself, data); 
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dlg){
                 dlg.close();
             }

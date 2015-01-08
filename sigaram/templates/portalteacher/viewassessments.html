@@ -128,7 +128,7 @@ TTS.forms.editschool = function() {
         },
         message: $($('#editschool').render()),
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(){
                 var data = TTS.utils.serilaizeJson("#newfolderfrm");
@@ -145,7 +145,7 @@ TTS.forms.editschool = function() {
                 });
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }

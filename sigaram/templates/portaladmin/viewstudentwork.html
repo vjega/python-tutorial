@@ -138,7 +138,7 @@ $(document).ready(function(){
             title: "{% trans "New Folder" %}",
             message: $($("#newfolder").render()),
             buttons: [{
-                label: 'Save',
+                label: '{% trans "Save" %}',
                 cssClass: 'btn-primary',
                 action: function(){
                     var data = TTS.utils.serilaizeJson("#newfolderfrm");
@@ -155,7 +155,7 @@ $(document).ready(function(){
                     });
                 }
                 },{
-                label: 'Close',
+                label: '{% trans "Close" %}',
                 action: function(dialogItself){
                     dialogItself.close();
                 }
