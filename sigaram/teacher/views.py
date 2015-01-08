@@ -385,7 +385,7 @@ def statistics(request):
         "href" :"statisticsstudentslist"
         },{
         "id": "2",
-        "name" :_("Deliverables statistics"),
+        "name" :_("Assignment statistics"),
         "href" :"statisticsstudentslist"
         },{
         "id": "3",
