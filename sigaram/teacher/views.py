@@ -522,3 +522,7 @@ def viewpost(request):
 
 def newtopic(request):
     return render(request, 'portalteacher/newtopic.html', {"form" : NewtopicForm.NewtopicForm()})
+
+@switchlanguage
+def billviewassignmentanswer(request):
+    return render(request, 'portalteacher/billviewassignmentanswer.html')
