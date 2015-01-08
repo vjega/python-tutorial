@@ -492,14 +492,25 @@ class AdminrubricsViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.AdminrubricsSerializer
 
     def create(self, request):
-        adminrubrics = models.Rubricsheader()
+        adminrubrics = models.RubricsHeader()
+        rubricmatrix = models.RubricMatrix()
         rubricsdata =  json.loads(request.DATA.keys()[0])
-        adminrubrics.title = rubricsdata.get('title')
-        adminrubrics.description = rubricsdata.get('description')
-        adminrubrics.teacher = rubricsdata.get('teacher')
-        adminrubrics.status = rubricsdata.get('status')
-        adminrubrics.ts = time.strftime('%Y-%m-%d %H:%M:%S')
-        adminrubrics.save()
+        refno = 105
+        print rubricsdata
+
+        # rubricmatrix.refno = refno
+        # rubricmatrix.datatype = ''
+        # rubricmatrix.jdata = refno
+        # rubricmatrix.disp_order = refno
+
+        # adminrubrics.title = rubricsdata.get('instn')
+        # adminrubrics.description = rubricsdata.get('desc')
+        # adminrubrics.instruction = rubricsdata.get('instn')
+        # adminrubrics.teacher = request.user.username
+        # adminrubrics.status = 0
+        # adminrubrics.ts = time.strftime('%Y-%m-%d %H:%M:%S')
+        # adminrubrics.save()
+
         return Response(request.DATA)
 
     def update(self, request, pk=None):
