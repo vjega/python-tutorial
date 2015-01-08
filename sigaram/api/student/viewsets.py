@@ -196,3 +196,66 @@ class Studentbulletinboardlist(viewsets.ModelViewSet):
         #print bbi.bulletinboardid
        
         return Response(request.DATA)
+
+class ClassroominfoViewSet(viewsets.ModelViewSet):
+    queryset = models.Classroominfo.objects.all()
+    serializer_class = studentserializers.ClassroominfoSerializer
+    
+    def list(self, request):
+        sql ="""
+            SELECT distinct cli.classroomid,
+                            cli.assessmentid,
+                            cli.resourceid,
+                            asl.assessmenttype,
+                            asl.assessmenttitle,
+                            rsi.resourcetype,
+                            rsi.resourcetitle,
+                            wwi.writtenworktitle,
+                            cli.writtenworkid, 
+                            sti.firstname,
+                            sti.imageurl,
+                            date(cli.posteddate) as posteddate,
+                            cli.studentid 
+            FROM classroominfo cli
+            LEFT JOIN assignassessmentinfo asi ON asi.assessmentid = cli.assessmentid 
+                AND asi.studentid = cli.studentid 
+            LEFT JOIN assessmentlist asl ON asl.assessmentid = cli.assessmentid 
+            LEFT JOIN assignresourceinfo asri ON asri.resourceid = cli.resourceid 
+                AND asri.studentid = cli.studentid 
+            LEFT JOIN resourceinfo rsi ON rsi.resourceid = cli.resourceid
+            LEFT JOIN assignwrittenworkinfo awwi on awwi.writtenworkid = cli.writtenworkid
+            LEFT JOIN writtenworkinfo wwi on wwi.writtenworkid = cli.writtenworkid
+            LEFT JOIN logininfo li on li.loginid = cli.studentid
+            LEFT JOIN studentinfo sti on sti.username=li.username
+            LIMIT 1
+            
+        """
+        cursor = connection.cursor()
+        #print sql
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+
+    def create(self, request):
+        classroom = models.Classroominfo()
+        classroomdata =  json.loads(request.DATA.keys()[0])
+        classroom.classroomid = classroomdata.get('classroomid')
+        classroom.assessmentid = classroomdata.get('assessmentid')
+        classroom.resourceid = classroomdata.get('resourceid')
+        classroom.writtenworkid = classroomdata.get('writtenworkid')
+        classroom.studentid = classroomdata.get('studentid')
+        classroom.rating = classroomdata.get('rating')
+        classroom.ratingcount = classroomdata.get('ratingcount')
+        classroom.votescount = classroomdata.get('votescount')
+        classroom.lastvotedby = classroomdata.get('lastvotedby')
+        classroom.lastvoteddate = classroomdata.get('lastvoteddate')
+        classroom.postedby = request.user.id
+        classroom.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        classroom.save()
+        return Response(request.DATA)
+
