@@ -147,7 +147,7 @@ TTS.forms.renderstudentlist = function(data){
             dataset
         );
     }else{
-        TTS.forms.asstable = $('#assessment-assigning-list').dataTable({
+        TTS.forms.asstable = $('#assessment-assigning-list').dataTable({"language" : TTS.utils.datatable_ta,
             "data":     dataset,
             "columns":  headers
         });
@@ -246,7 +246,7 @@ TTS.forms.renderschoolinfoagain = function(data){
             dataset
         );
     }else{
-        TTS.forms.asstable = $('#assessment-assigning-list').dataTable({
+        TTS.forms.asstable = $('#assessment-assigning-list').dataTable({"language" : TTS.utils.datatable_ta,
             "data":     dataset,
             "columns":  headers
         });
@@ -273,7 +273,7 @@ TTS.forms.renderschoolinfo = function(data){
         dataset.push(t);
     }
 
-    TTS.forms.asstable = $('#assessment-assigning-list').dataTable({
+    TTS.forms.asstable = $('#assessment-assigning-list').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });

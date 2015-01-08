@@ -136,7 +136,7 @@ TTS.forms.renderstudentnotes = function(data){
         );
         return true;
     }
-    TTS.forms.table = $('#studentnotes-main-tbl').dataTable({
+    TTS.forms.table = $('#studentnotes-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });

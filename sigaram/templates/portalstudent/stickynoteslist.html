@@ -130,7 +130,7 @@ TTS.forms.renderteacher = function(data){
         );
         return true;
     }
-    TTS.forms.table = $('#sticky-list-tbl').dataTable({
+    TTS.forms.table = $('#sticky-list-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });

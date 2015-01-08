@@ -170,15 +170,15 @@
             }
         }
 
-        $('#resource-list-new').dataTable({
+        $('#resource-list-new').dataTable({"language" : TTS.utils.datatable_ta,
             "data":     dataset_new,
             "columns":  headers
         });
-        $('#resource-list-saved').dataTable({
+        $('#resource-list-saved').dataTable({"language" : TTS.utils.datatable_ta,
             "data":     dataset_saved,
             "columns":  headers
         });
-        $('#resource-list-answered').dataTable({
+        $('#resource-list-answered').dataTable({"language" : TTS.utils.datatable_ta,
             "data":     dataset_answered,
             "columns":  headers
         });

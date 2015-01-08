@@ -178,7 +178,7 @@ TTS.forms.renderstudentresourceinfo = function(data){
         dataset.push(t);
     }
 
-    $('#studetresource-main-tbl').dataTable({
+    $('#studetresource-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });

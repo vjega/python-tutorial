@@ -155,14 +155,13 @@ TTS.forms.renderteacher = function(data){
               "data" : "slno"
             },
             { "title": "{% trans "Heading" %}",
-              "class": "text-center",  
-              "data" : "photo"  
+              "data" : "resourcetitle"  
             },
             { "title": "{% trans "Date" %}",
-              "data" : "name"  
+              "data" : "date"  
             },
             { "title": "{% trans "View" %}",
-              "data" : "username"  
+              "data" : "view"  
             }, 
            
         ];
@@ -170,11 +169,11 @@ TTS.forms.renderteacher = function(data){
     var count = 0
     for(var i in data){
         var t = {};
+        //t.DT_RowId = data[i].teacherresourceid;
         t.slno = ++count;
-        t.DT_RowId = data[i].teacherresourceid;
         t.resourcetitle = data[i].resourcetitle;
         t.date = data[i].createddate;
-        t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
+        t.view="<i class='flaticon-zoom38'></i>";
         dataset.push(t);
     }
     if(TTS.forms.schooltable){
@@ -183,7 +182,7 @@ TTS.forms.renderteacher = function(data){
             dataset
         );
     }else{
-        TTS.forms.schooltable = $('#teacherlist-main-tbl').dataTable({
+        TTS.forms.schooltable = $('#teacherlist-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
             "data":     dataset,
             "columns":  headers
         });
@@ -194,11 +193,11 @@ TTS.forms.renderteacher = function(data){
 $(document).ready(function(){
     TTS.utils.ajaxloaderstart();
     $.ajax({
-        "url":"/api/admin/teacherresourcesinfo/?format=json",
+        "url":"/api/admin/teacherresourcesinfo/?schoolid="+$(school_name).val()+"&format=json",
         "type":"GET"
     }).done(function(data){
         if (data.length) {
-            TTS.forms.renderteacherresourceinfo(data);
+            TTS.forms.renderteacher(data);
             TTS.utils.ajaxloaderstop();
         } else {
             TTS.forms.table.fnClearTable();
@@ -206,7 +205,7 @@ $(document).ready(function(){
     });
     $("#school_name").change(function(){    
         $.ajax({
-            "url":"/api/admin/teacher/?schoolid="+$(this).val()+"&format=json",
+            "url":"/api/admin/teacherresourcesinfo/?schoolid="+$(school_name).val()+"&format=json",
             "type":"GET"
         }).done(function(data){
             TTS.forms.renderteacher(data);

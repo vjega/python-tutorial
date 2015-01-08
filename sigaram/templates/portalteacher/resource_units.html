@@ -14,7 +14,7 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans "Title" %}
+            {% trans "Teachers" %} {% trans "Resources" %}
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
@@ -80,7 +80,7 @@ TTS.forms.renderchapterinfo = function(data){
         dataset.push(t);
     }
 
-    $('#admin-main-tbl').dataTable({
+    $('#admin-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });
