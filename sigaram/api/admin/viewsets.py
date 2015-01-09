@@ -515,7 +515,6 @@ class AdminrubricsViewSet(viewsets.ModelViewSet):
         adminrubrics = models.RubricsHeader()
         rubricmatrix = models.RubricMatrix()
         rubricsdata =  json.loads(request.DATA.keys()[0])
-        refno = 105
         rubbodydata = rubricsdata.get('mtx_body')
         rubheaderdata = rubricsdata.get('mtx_head')
         
@@ -527,24 +526,21 @@ class AdminrubricsViewSet(viewsets.ModelViewSet):
         adminrubrics.ts = time.strftime('%Y-%m-%d %H:%M:%S')
         adminrubrics.save()
 
+        refno = adminrubrics.slno
 
+        for idx, bd in enumerate(rubbodydata):
+            rubricmatrix.refno = refno
+            rubricmatrix.datatype = 'B'
+            rubricmatrix.jdata = bd
+            rubricmatrix.disp_order = idx+1
+            rubricmatrix.save()
 
-        print adminrubrics.insert_id()
-
-
-        # for idx, bd in enumerate(rubbodydata):
-        #     rubricmatrix.refno = refno
-        #     rubricmatrix.datatype = 'B'
-        #     rubricmatrix.jdata = bd
-        #     rubricmatrix.disp_order = idx+1
-        #     rubricmatrix.save()
-
-        # for idy, hd in enumerate(rubheaderdata):
-        #     rubricmatrix.refno = refno
-        #     rubricmatrix.datatype = 'H'
-        #     rubricmatrix.jdata = hd
-        #     rubricmatrix.disp_order = idy
-        #     rubricmatrix.save()
+        for idy, hd in enumerate(rubheaderdata):
+            rubricmatrix.refno = refno
+            rubricmatrix.datatype = 'H'
+            rubricmatrix.jdata = hd
+            rubricmatrix.disp_order = idy
+            rubricmatrix.save()
 
         return Response(request.DATA);
 

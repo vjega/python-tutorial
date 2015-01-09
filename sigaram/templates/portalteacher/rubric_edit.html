@@ -97,6 +97,9 @@
         width:98%;
         background-color:#fff;
     }
+    .note-codable{
+        height: 500px;
+    }
 </style>
 
 <script>
@@ -120,7 +123,8 @@ TTS.forms.addtable = function() {
             }
             tabelms += "<td class='tblhead'>-/-</td></tr>";
         }
-        tabelms += "<tr><td colspan='"+cols+"'><input type='button' class ='btn btn-primary' onclick='send_rubrics()' value='Send' /></td></tr></table>";
+        tabelms += "<tr><td height='60' colspan='"+cols+"'><input type='button' class ='btn btn-primary' onclick='send_rubrics()' value='Send' /></td></tr></table>";
+        
         $('#dyntable').html(tabelms);
 };
 

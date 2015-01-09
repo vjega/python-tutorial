@@ -17,7 +17,7 @@
 <script src="{% static "js/tts.utils.js" %}"></script>
 <script type="text/javascript" src="{%static "FlashWavRecorder/html/js/swfobject.js"%}"></script>
 <script type="text/javascript" src="{%static "FlashWavRecorder/html/js/recorder.js"%}"></script>
-<script type="text/javascript" src="{%static "FlashWavRecorder/html/basic/basic.js"%}"></script>
+<script type="text/javascript" src="{%static "js/audiorecorder.js"%}"></script>
 {% endblock morescript %}
 
 {% block botcontent %}
@@ -78,16 +78,14 @@
                             </div>
                         </div>
                     </div>
-                    <form id="uploadForm" name="uploadForm" action="/api/admin/audioupload/">
+                    <form id="uploadForm" name="uploadForm" action="/api/admin/audioupload/?format=json">
                         <input id="authenticity_token" name="authenticity_token" value="xxxxx" type="hidden">
                         <input id="upload_file[parent_id]" name="upload_file[parent_id]" value="1" type="hidden">
-                        <input id="uploadfilename" name="uploadfilename"  type="text">
+                        File Name: <input id="uploadfilename" name="uploadfilename"  type="text">
                         <input id="format" name="format" value="json" type="hidden">
                     </form>
-                    <audio controls>
-                        <source src="/static/file.wav" type="audio/wav">
-                        Your browser does not support the audio element.
-                    </audio>
+                    <input type="hidden" id="filenamecreated">
+                    
                 </section>
                 <div class="form-group"> 
                     <label>{% trans "Answer" %}</label>
@@ -139,7 +137,10 @@ TTS.forms.renderassignedresourceinfo = function(data){
     $("#resource-title").html(data.resourcetitle);
     $("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.videourl+"');\" >View</a>");
     if(data.isrecord && data.answerurl){
-        $("#audio-player").html('<audio src="'+data.answerurl+'" controls=""></audio><br />');    
+        $("#show-recorder").prop('checked',true);
+        $("#audio-player").html('<audio src="/static/audio/'+data.answerurl+'" controls=""></audio><br />');    
+    }else{
+        $("#show-recorder").prop('checked',false);
     }
     
 };
@@ -148,13 +149,14 @@ function openwindow(videourl) {
 }
 TTS.forms.ressave = function(savesend){
     var data = {};
-    var assignedid = getUrlParameter('assignedid');
+    var assignedid = TTS.utils.getUrlParameter('assignedid');
     data.originaltext = $(".summernote").code();
     data.answertext = $(".summernote").code();
     data.answertype = $(".isaudio:checked").val();
 
-    if($("#recorder-wrap").next().find('a')){
-        data.answerurl = $("#audio_container a").prop('href');
+
+    if($("#filenamecreated").val()){
+        data.answerurl = $("#filenamecreated").val();
     }else{
         data.answerurl = '';
     }
@@ -194,13 +196,15 @@ $(document).ready(function(){
     $('.summernote').summernote();
     $('#recorder-wrap').hide();
     $('#show-recorder').on("click",function(){
-        $('#recorder-wrap').show();
+        $('section.recorder-container').show();
+        $('#audio-player').show();
     });
     $('#hide-recorder').on("click",function(){
-        $('#recorder-wrap').hide();
+        $('section.recorder-container').hide();
+        $('#audio-player').hide();
     });
 
-    var assignedid = getUrlParameter('assignedid');
+    var assignedid = TTS.utils.getUrlParameter('assignedid');
 
     $("#res-save").click(function(){
         TTS.forms.ressave('save');
@@ -216,52 +220,5 @@ $(document).ready(function(){
         TTS.forms.renderassignedresourceinfo(data);
     });
 });
-
-function getUrlParameter(sParam)
-{
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++) 
-    {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam) 
-        {
-            return sParameterName[1];
-        }
-    }
-}
-
-function audioReceived(filename, filedata) {
-        filedata = window.atob(filedata);
-        var container = document.getElementById('audio_container');
-        var wrap = document.getElementById('recorder-wrap');
-        var link = document.createElement('a');
-        var audio = document.createElement('audio');
-        var WU = window.URL || window.webkitURL;
-        var blob, recorderHTML;
-        
-        // Extract raw data from Base64-encoded string
-        var ar = new Uint8Array(filedata.length);
-        for(var i=0;i<filedata.length;++i) {
-            ar[i] = filedata.charCodeAt(i);
-        }
-
-        // Put audio data into a blob and set up <audio> tag
-        blob = new Blob([ar], {type:'audio/x-wav'});
-        audio.src = WU.createObjectURL(blob);
-        audio.controls = true;
-
-        container.innerHTML = '';
-        link.href = audio.src;
-        link.appendChild(document.createTextNode('Download this recording'));
-        link.download = filename;
-        container.appendChild(audio);
-        container.appendChild(document.createElement('br'));
-        container.appendChild(document.createElement('br'));
-        container.appendChild(link);
-}
-
-        flashvars = {gateway:'form', 'return':'reset', callback:'audioReceived', format:'wav'};
-        swfobject.embedSWF("{% static "bower_components/local-audio-recorder-master/build/recorder.swf" %}", "recorder", "215", "138", "10.1", "{% static "bower_components/local-audio-recorder-master/demo/expressInstall.swf"  %}", flashvars);
 </script>
 {% endblock scriptcontent %}
