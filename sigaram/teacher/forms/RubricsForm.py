@@ -4,7 +4,7 @@ from crispy_forms.helper import FormHelper
 from teacher import models
 #from crispy_forms.layout import Submit
 class RubricsForm(forms.Form):
-    username = forms.CharField(
+    Title = forms.CharField(
         label = _("Title"),
         max_length = 100,
         required = True,
@@ -13,7 +13,7 @@ class RubricsForm(forms.Form):
     Detail = forms.CharField(
         label = _("Detail"),
         required = True,
-        widget = forms.TextInput({ "placeholder": _("Title")})
+        widget = forms.TextInput({ "placeholder": _("Detail")})
     )
     instructions = forms.CharField(
         label = _("Instructions"),

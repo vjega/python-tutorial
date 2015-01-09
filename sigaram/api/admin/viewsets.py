@@ -57,16 +57,6 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
     queryset = models.AdminFolders.objects.all()
     serializer_class = adminserializers.AdminFolderSerializer
 
-    def create(self, request):
-        folder = models.AdminFolders()
-        folderdata =  json.loads(request.DATA.keys()[0])
-        folder.folder_name = folderdata.get('folder_name')
-        folder.folder_description = folderdata.get('remark')
-        folder.folder_order = folderdata.get('order_no')
-        folder.added_date = time.strftime('%Y-%m-%d %H:%M:%S')
-        folder.save()
-        return Response(request.DATA)
-
 class teacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
     serializer_class = adminserializers.TeacherinfoSerializer
@@ -215,6 +205,8 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         categoryid = request.GET.get('resourcecategory')
         kwarg = {}
         kwarg['isdeleted'] = 0
+        if schoolid:
+            kwarg['schoolid'] = schoolid
         if classid:
             kwarg['classid'] = classid
         if section:
@@ -223,44 +215,30 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
             kwarg['chapterid'] = chapterid
         if categoryid:
             kwarg['resourcecategory'] = categoryid
-
-        if len(kwarg):
-            queryset = models.Teacherresourceinfo.objects.filter(**kwarg).order_by('createddate')
-        else:
-            queryset = models.Teacherresourceinfo.objects.all().order_by('createddate')
-
-        # sql = """
-        # SELECT  tri.teacherresourceid,
-        #         tri.resourcetitle,
-        #         tri.createddate
-        # FROM teacherresourceinfo tri
-        # -- WHERE classid='%s' 
-        # -- AND section='%s' 
-        # -- AND chapterid='%s' 
-        # -- AND resourcecategory='%s'
-        # ORDER BY tri.createddate DESC
-        # """ 
-        # cursor = connection.cursor()
-        # cursor.execute(sql)
-        # desc = cursor.description
-        # result =  [dict(zip([col[0] for col in desc], row))for row in cursor.fetchall()]
-        # return Response(result)#
-        serializer = adminserializers.TeacherresourceinfoSerializer(queryset, many=True)
-        for k, v in enumerate(serializer.data):
-            try:
-                serializer.data[k]['levelname'] = models.Classinfo.objects.get(pk=int(v['classid'])+1).shortname
-            except:
-                serializer.data[k]['levelname'] = None
-            
-        return Response(serializer.data)
+        sql = """
+        SELECT  tri.teacherresourceid,
+                tri.resourcetitle,
+                tri.createddate
+        FROM teacherresourceinfo tri
+        WHERE classid='%s' 
+        AND section='%s' 
+        AND chapterid='%s' 
+        AND resourcecategory='%s'
+        ORDER BY tri.createddate DESC
+        """ % (classid,section,chapterid,categoryid)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [dict(zip([col[0] for col in desc], row))for row in cursor.fetchall()]
+        return Response(result)
 
     def create(self, request):
         teacherresource = models.Teacherresourceinfo()
         teacherresourcedata =  json.loads(request.DATA.keys()[0])
         restype = teacherresourcedata.get('resourcetype')
         teacherresource.schoolid = teacherresourcedata.get('schoolid')
-        teacherresource.classid = teacherresourcedata.get('classid')
-        teacherresource.section = teacherresourcedata.get('section')
+        teacherresource.classid = teacherresourcedata.get('classid',0)
+        teacherresource.section = teacherresourcedata.get('section',0)
         teacherresource.resourcetype = restype
         teacherresource.resourcetitle = teacherresourcedata.get('resourcetitle')
         teacherresource.documenturl = "" #teacherresourcedata.get('documenturl')
@@ -276,7 +254,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         elif restype == "video":
             teacherresource.videourl = teacherresourcedata.get('fileurl')
         teacherresource.resourcecategory = teacherresourcedata.get('resourcecategory')
-        teacherresource.chapterid = teacherresourcedata.get('chapterid')
+        teacherresource.chapterid = teacherresourcedata.get('chapterid',0)
         teacherresource.createdby = request.user.id
         teacherresource.isapproved = 0
         teacherresource.isdeleted = 0
@@ -528,14 +506,26 @@ class AdminrubricsViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.AdminrubricsSerializer
 
     def create(self, request):
-        adminrubrics = models.Rubricsheader()
+        adminrubrics = models.RubricsHeader()
+        rubricmatrix = models.RubricMatrix()
         rubricsdata =  json.loads(request.DATA.keys()[0])
-        adminrubrics.title = rubricsdata.get('title')
-        adminrubrics.description = rubricsdata.get('description')
-        adminrubrics.teacher = rubricsdata.get('teacher')
-        adminrubrics.status = rubricsdata.get('status')
-        adminrubrics.ts = time.strftime('%Y-%m-%d %H:%M:%S')
-        adminrubrics.save()
+        refno = 105
+        print rubricsdata
+        # for bd in rubricsdata.get(''):
+        
+        # rubricmatrix.refno = refno
+        # rubricmatrix.datatype = ''
+        # rubricmatrix.jdata = refno
+        # rubricmatrix.disp_order = refno
+
+        # adminrubrics.title = rubricsdata.get('instn')
+        # adminrubrics.description = rubricsdata.get('desc')
+        # adminrubrics.instruction = rubricsdata.get('instn')
+        # adminrubrics.teacher = request.user.username
+        # adminrubrics.status = 0
+        # adminrubrics.ts = time.strftime('%Y-%m-%d %H:%M:%S')
+        # adminrubrics.save()
+
         return Response(request.DATA)
 
     def update(self, request, pk=None):
@@ -927,24 +917,18 @@ class StickynotesResource(viewsets.ModelViewSet):
     serializer_class = adminserializers.StickynotesSerializer
 
     def list(self, request):
-        stickylistid = request.GET.get('id')
-        cond =''
-        if stickylistid:
-            cond = "WHERE stickylistid = %s"%stickylistid
         sql = '''
         SELECT s.id,
             s.stickytext,
-            s.stickylistid,
             s.color,
             group_concat(sc.stickycomment SEPARATOR "~") as comments,
             group_concat(sc.commentby SEPARATOR "~") as commentby,
             group_concat(sc.createddate SEPARATOR "~") as createddate
         FROM stickynotes s
         LEFT JOIN stickycomments sc ON sc.stickyid = s.id
-        %s
         GROUP BY s.id, 
                  s.stickytext,
-                 s.color'''%cond 
+                 s.color''' 
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -957,7 +941,6 @@ class StickynotesResource(viewsets.ModelViewSet):
         stickynotes = models.stickynotes()
         data = json.loads(dict(request.DATA).keys()[0])
         stickynotes.stickytext = data.get('stickytext')
-        stickynotes.stickylistid = data.get('stickylistid')
         stickynotes.name = data.get('name')
         stickynotes.xyz = data.get('xyz')
         stickynotes.color = data.get('color')
@@ -1454,7 +1437,7 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
 
 class TopicViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Topicinfo.objects.filter().order_by('-createddate')
+    queryset = models.Topicinfo.objects .all()
     serializer_class = adminserializers.TopicsSerializer
 
     def list(self, request):
@@ -1514,7 +1497,6 @@ class ThreadsViewSet(viewsets.ModelViewSet):
         FROM threaddetails td 
         LEFT JOIN topicinfo ti ON ti.topicid =  td.topicid
         where td.threadid=%s
-        ORDER BY td.createddate DESC
         """ % pk
 
         cursor = connection.cursor()
@@ -1695,4 +1677,3 @@ class AudioinfoViewSet(viewsets.ViewSet):
                 destination.write(chunk)
         return Response({'msg':'ok'})
 
-   
