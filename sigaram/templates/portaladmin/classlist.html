@@ -87,7 +87,7 @@ TTS.forms.addclassroom = function() {
         },
         message: $($('#classlist-form').render()),
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-classlist");
@@ -102,7 +102,7 @@ TTS.forms.addclassroom = function() {
                 });
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }

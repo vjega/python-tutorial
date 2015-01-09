@@ -352,7 +352,7 @@ TTS.forms.editanswerlist = function(spanid){
                         }
                    },
                    {
-                        label: 'Close',
+                        label: '{% trans "Close" %}',
                         cssClass: 'btn-primary',
                         action: function(dialogItself){
                             dialogItself.close();
@@ -398,7 +398,7 @@ TTS.forms.editanswer = function() {
         },
         message: html,
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
 
@@ -440,7 +440,7 @@ TTS.forms.editanswer = function() {
                 });
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }

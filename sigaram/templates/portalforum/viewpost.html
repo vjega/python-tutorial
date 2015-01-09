@@ -123,7 +123,7 @@ TTS.forms.replysingle = function(topicid, postid) {
             $('.summernote').summernote();
         },
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#reply-post");
@@ -139,7 +139,7 @@ TTS.forms.replysingle = function(topicid, postid) {
                 TTS.forms.addviewpost(dialogItself, sdata); 
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dlg){
                 dlg.close();
             }
@@ -157,7 +157,7 @@ TTS.forms.replyall = function(forumid,topicid) {
         },
         buttons: [
             {
-                label: 'Save',
+                label: '{% trans "Save" %}',
                 cssClass: 'btn-primary',
                 action: function(dialogItself){
                     var data = TTS.utils.serilaizeJson("#reply-post");
@@ -170,7 +170,7 @@ TTS.forms.replyall = function(forumid,topicid) {
                     TTS.forms.allreplypost(dialogItself, sdata); 
                 }
             }, {
-                label: 'Cancel',
+                label: '{% trans "Close" %}',
                 action: function(dlg){
                     dlg.close();
                 }
