@@ -124,7 +124,7 @@ TTS.forms.upload = function(elm) {
 
 TTS.forms.showteacherresource = function() {
     BootstrapDialog.show({
-        title: 'Add TeacherResource',
+        title: '{% trans "Add" %} {% trans "Teachers" %} {% trans "Share" %}',
         message: $($('#teacherresource-form').render()),
         onshown: function(){
             TTS.forms.upload();
@@ -200,7 +200,7 @@ $(document).ready(function(){
             TTS.forms.renderteacher(data);
             TTS.utils.ajaxloaderstop();
         } else {
-            TTS.forms.table.fnClearTable();
+            TTS.forms.schooltable.fnClearTable();
         }
     });
     $("#school_name").change(function(){    

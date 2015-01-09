@@ -213,6 +213,8 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         categoryid = request.GET.get('resourcecategory')
         kwarg = {}
         kwarg['isdeleted'] = 0
+        if schoolid:
+            kwarg['schoolid'] = schoolid
         if classid:
             kwarg['classid'] = classid
         if section:
@@ -257,8 +259,8 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         teacherresourcedata =  json.loads(request.DATA.keys()[0])
         restype = teacherresourcedata.get('resourcetype')
         teacherresource.schoolid = teacherresourcedata.get('schoolid')
-        teacherresource.classid = teacherresourcedata.get('classid')
-        teacherresource.section = teacherresourcedata.get('section')
+        teacherresource.classid = teacherresourcedata.get('classid',0)
+        teacherresource.section = teacherresourcedata.get('section',0)
         teacherresource.resourcetype = restype
         teacherresource.resourcetitle = teacherresourcedata.get('resourcetitle')
         teacherresource.documenturl = "" #teacherresourcedata.get('documenturl')
@@ -274,7 +276,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         elif restype == "video":
             teacherresource.videourl = teacherresourcedata.get('fileurl')
         teacherresource.resourcecategory = teacherresourcedata.get('resourcecategory')
-        teacherresource.chapterid = teacherresourcedata.get('chapterid')
+        teacherresource.chapterid = teacherresourcedata.get('chapterid',0)
         teacherresource.createdby = request.user.id
         teacherresource.isapproved = 0
         teacherresource.isdeleted = 0

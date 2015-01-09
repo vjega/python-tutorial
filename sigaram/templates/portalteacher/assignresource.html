@@ -184,7 +184,7 @@ TTS.forms.renderstudentlist = function(data){
 
 TTS.forms.assessmentassigninglist = function() {
     BootstrapDialog.show({  
-        title: 'Assessment Assigning List',
+         title: '{% trans "Name" %} {% trans "List" %}',
         message: $($('#assessmentassigninglist').render()),
         onshown: function(dialogRef){
             $.ajax({
@@ -196,7 +196,7 @@ TTS.forms.assessmentassigninglist = function() {
             });
         },
         buttons: [{
-            label: 'Add',
+            label: '{% trans "Add" %}',
             cssClass: 'btn-primary',
             action: function(){
                 //var data = TTS.utils.serilaizeJson("#newfolderfrm");
