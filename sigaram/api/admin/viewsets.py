@@ -203,30 +203,36 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         section   = request.GET.get('section')
         chapterid = request.GET.get('chapterid')
         categoryid = request.GET.get('resourcecategory')
-        kwarg = {}
-        kwarg['isdeleted'] = 0
-        if schoolid:
-            kwarg['schoolid'] = schoolid
-        if classid:
-            kwarg['classid'] = classid
-        if section:
-            kwarg['section'] = section
-        if chapterid:
-            kwarg['chapterid'] = chapterid
-        if categoryid:
-            kwarg['resourcecategory'] = categoryid
+
+
+        if request.GET.get('schoolid'):
+            schoolid = "AND schoolid='%s' "
+        if request.GET.get('classid'):
+            classid = "AND classid='%s' "
+        if request.GET.get('section'):
+            section = "AND section='%s' "
+        if request.GET.get('chapterid'):
+            chapterid = "AND chapterid='%s' "
+        if request.GET.get('resourcecategory'):
+            categoryid = "AND resourcecategory='%s' "
+
+
         sql = """
         SELECT  tri.teacherresourceid,
                 tri.resourcetitle,
                 tri.createddate
         FROM teacherresourceinfo tri
-        WHERE classid='%s' 
+        WHERE isdeleted=0
+        AND classid='%s' 
         AND section='%s' 
         AND chapterid='%s' 
         AND resourcecategory='%s'
         ORDER BY tri.createddate DESC
         """ % (classid,section,chapterid,categoryid)
         cursor = connection.cursor()
+
+        print sql
+
         cursor.execute(sql)
         desc = cursor.description
         result =  [dict(zip([col[0] for col in desc], row))for row in cursor.fetchall()]
