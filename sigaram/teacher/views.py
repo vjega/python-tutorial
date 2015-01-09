@@ -452,7 +452,7 @@ def thread(request):
 @login_required
 @switchlanguage
 def addwrittenwork(request):
-    schools = models.Schoolinfo.objects.all()
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/addwrittenwork.html',{'schools':schools,'classes':classes})
 

@@ -35,7 +35,7 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
-    #addrec:hover, #admin-main-tbl tbody tr:hover{
+    #addrec:hover, .assignotes:hover{
         cursor: pointer;
     }
 </style>
@@ -46,6 +46,7 @@
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
@@ -84,7 +85,7 @@ TTS.forms.renderstudentwork = function(data){
         t.title = data[i].resourcetitle;
         t.type = data[i].resourcetype;
         t.date = data[i].createddate;
-        t.note = "<i> Note</i>";
+        t.note = "<i class='assignotes'> Notes</i>";
         dataset.push(t);
     }
     if (TTS.forms.table) {

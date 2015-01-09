@@ -309,7 +309,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         if categoryid:
             kwarg['categoryid'] = categoryid
 
-        queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('-createddate')
+        queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('resourceid')
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -1628,7 +1628,7 @@ class ExtraslistViewSet(viewsets.ModelViewSet):
         FROM extraslist el
         INNER JOIN logininfo li ON li.loginid=el.createdby  
         WHERE li.isdelete=0 
-        AND el.extratype = '%s' 
+        -- AND el.extratype = '%s' 
         AND el.classid=%s 
         AND el.section='%s' 
         ORDER BY el.extraid DESC
