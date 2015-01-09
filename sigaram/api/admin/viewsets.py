@@ -1,3 +1,5 @@
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import serializers
@@ -1677,24 +1679,20 @@ class LogininfoViewSet(viewsets.ModelViewSet):
         loginlist.save()
         return Response(request.DATA)
 
-class AudioinfoViewSet(viewsets.ModelViewSet):
+class AudioinfoViewSet(viewsets.ViewSet):
 
     queryset = models.Admininfo.objects.filter(isdelete=0).order_by('-createddate')
     serializer_class = adminserializers.AudiouploadSerializer
-
-    @create_login('Admin')
+    def perform_authentication(self, request):
+        pass
+    
     def create(self, request):
-        admin = models.Admininfo()
-        admindata =  json.loads(request.DATA.keys()[0])
-        admin.username = admindata.get('username')
-        admin.firstname = admindata.get('firstname')
-        admin.lastname = admindata.get('lastname')
-        admin.emailid = admindata.get('emailid')
-        admin.imageurl = admindata.get('image')
-        admin.isdelete = 0
-        admin.createdby = request.user.id
-        admin.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
-        admin.save()
-        return Response(request.DATA)
+        import os
+        f = request.FILES["upload_file[filename]"]
+        filename = request.POST.get("uploadfilename")
+        with open(os.path.join('static',filename+'.wav'), 'wb+') as destination:
+            for chunk in f.chunks():
+                destination.write(chunk)
+        return Response({'msg':'ok'})
 
    
