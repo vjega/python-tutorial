@@ -510,23 +510,37 @@ class AdminrubricsViewSet(viewsets.ModelViewSet):
         rubricmatrix = models.RubricMatrix()
         rubricsdata =  json.loads(request.DATA.keys()[0])
         refno = 105
-        print rubricsdata
-        # for bd in rubricsdata.get(''):
+        rubbodydata = rubricsdata.get('mtx_body')
+        rubheaderdata = rubricsdata.get('mtx_head')
         
-        # rubricmatrix.refno = refno
-        # rubricmatrix.datatype = ''
-        # rubricmatrix.jdata = refno
-        # rubricmatrix.disp_order = refno
+        adminrubrics.title = rubricsdata.get('instn')
+        adminrubrics.description = rubricsdata.get('desc')
+        adminrubrics.instruction = rubricsdata.get('instn')
+        adminrubrics.teacher = request.user.username
+        adminrubrics.status = 0
+        adminrubrics.ts = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminrubrics.save()
 
-        # adminrubrics.title = rubricsdata.get('instn')
-        # adminrubrics.description = rubricsdata.get('desc')
-        # adminrubrics.instruction = rubricsdata.get('instn')
-        # adminrubrics.teacher = request.user.username
-        # adminrubrics.status = 0
-        # adminrubrics.ts = time.strftime('%Y-%m-%d %H:%M:%S')
-        # adminrubrics.save()
 
-        return Response(request.DATA)
+
+        print adminrubrics.insert_id()
+
+
+        # for idx, bd in enumerate(rubbodydata):
+        #     rubricmatrix.refno = refno
+        #     rubricmatrix.datatype = 'B'
+        #     rubricmatrix.jdata = bd
+        #     rubricmatrix.disp_order = idx+1
+        #     rubricmatrix.save()
+
+        # for idy, hd in enumerate(rubheaderdata):
+        #     rubricmatrix.refno = refno
+        #     rubricmatrix.datatype = 'H'
+        #     rubricmatrix.jdata = hd
+        #     rubricmatrix.disp_order = idy
+        #     rubricmatrix.save()
+
+        return Response(request.DATA);
 
     def update(self, request, pk=None):
         return Response('"msg":"update"')
@@ -1676,4 +1690,3 @@ class AudioinfoViewSet(viewsets.ViewSet):
             for chunk in f.chunks():
                 destination.write(chunk)
         return Response({'msg':'ok'})
-
