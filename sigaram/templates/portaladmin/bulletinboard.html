@@ -154,62 +154,9 @@ TTS.forms.bulletinboardinfo = function(){
     });
 }
 
-/*
-TTS.forms.bulletinmappinginfo = function(){   
-    var data = {};
-    data.resource = [];
-    data.cattype = $("#category").val();
-    data.viewtype = 0;
-    if ($('#category').val()=='schools') {
-        data.schoolid=$('#school_name').val();
-        $(".checkresourceid:checked").each(function(){
-            data.resource.push($(this).prop("id"));
-        });
-    }else {
-        $(".checkresourceid:checked").each(function(){
-            data.resource.push($(this).prop("id"));
-        });
-    }
-    console.log(data);
-    $.ajax({
-        url:"/api/admin/bulletinmappinginfo/",
-        type:"POST",
-        data: JSON.stringify(data)
-    }).done(function(data){
-        alert("Saved Successfully");
-        location.reload();
-    }).error(function(err, msg){
-        alert("I didnt save the data");
-    });
-}
-*/
-/*TTS.forms.upload = function(elm) {
-    console.log(elm);
-    var uploader = new qq.FileUploader({
-        action: "/admin/bulletinboard-upload",
-        element: $('#file-uploader')[0],
-        multiple: false,
-        onComplete: function(id, fileName, responseJSON) {
-            if(responseJSON.success) {
-                $("#uploadurl").val(responseJSON.path.replace('static/', ''));
-            } else {
-                alert("upload failed!");
-            }
-        },
-        onAllComplete: function(uploads) {
-            // the maps look like this: {file: FileObject, response: JSONServerResponse}
-        },
-        params: {
-            'csrf_token': '{{ csrf_token }}',
-            'csrf_name': 'csrfmiddlewaretoken',
-            'csrf_xname': 'X-CSRFToken',
-        },
-    });
-};*/
-
 TTS.forms.renderadmin = function(data){
     var headers = [
-            { "title": "&nbsp;",
+            { "title": "{% trans "Select" %}",
               "class": "text-center",
               "data":"id"  
             },
@@ -221,7 +168,7 @@ TTS.forms.renderadmin = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].adminid+"' value='"+data[i].adminid+"' />";
+        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].username+"' value='"+data[i].adminid+"' />";
         t.name = data[i].firstname + " "+data[i].lastname;
         dataset.push(t);
     }
@@ -255,7 +202,7 @@ TTS.forms.renderteacher = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].teacherid+"' value='"+data[i].teacherid+"' />";
+        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].username+"' value='"+data[i].username+"' />";
         t.name = data[i].firstname + " "+data[i].lastname;
         dataset.push(t);
     }
