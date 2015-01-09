@@ -1,0 +1,15 @@
+{
+  "name": "FlashWavRecorder",
+  "homepage": "https://github.com/michalstocki/FlashWavRecorder",
+  "version": "0.9.0",
+  "_release": "0.9.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.9.0",
+    "commit": "d531b7567f6c4297ab632a6d9eac8436fd0fd15b"
+  },
+  "_source": "git://github.com/michalstocki/FlashWavRecorder.git",
+  "_target": "~0.9.0",
+  "_originalSource": "michalstocki/FlashWavRecorder",
+  "_direct": true
+}
