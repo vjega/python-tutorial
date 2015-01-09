@@ -1693,7 +1693,9 @@ class AudioinfoViewSet(viewsets.ViewSet):
         f = request.FILES["upload_file[filename]"]
         filename = request.POST.get("uploadfilename")
         ts = time.time()
-        with open(os.path.join('static',filename+str(ts)+'.wav'), 'wb+') as destination:
+        filename = filename+str(ts)+'.wav'
+        fullpath = os.path.join('static/audio', filename)
+        with open(fullpath, 'wb+') as destination:
             for chunk in f.chunks():
                 destination.write(chunk)
-        return Response({'msg':'ok'})
+        return Response({'filename':fileame})
