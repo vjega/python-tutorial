@@ -115,15 +115,21 @@ $(document).ready(function(){
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
             },
            // url:"/api/admin/logininfo/"+id+"/",
-            url:"/api/admin/logininfo/",
+            url:"/api/admin/logininfo/?format=json",
             type:"POST",
-            data:dataobj
+            data: JSON.stringify(dataobj),
         }).done(function(data){
-            console.log(data)
-        })
-        ;
-        datatable = JSON.stringify($("#admin_username").val(),$("#admin_fname").val())
-        alert(datatable);
+            alert(data)
+        });
+        alert(dataobj);
+
+        //datatable = JSON.stringify($("#admin_username").val(),
+                                        //$("#admin_fname").val(),
+                                       // $("#admin-pass").val(),
+                                       // $("#email").val(),
+                                        //$("#admin_photo").val()
+                                        //)
+        //alert(datatable);
     });
     
 });

@@ -1666,11 +1666,25 @@ class LogininfoViewSet(viewsets.ModelViewSet):
     def create(self, request):
         loginlist = models.Logininfo()
         logindata =  json.loads(request.DATA.keys()[0])
-        loginlist.loginid = logindata.get('loginid')
-        loginlist.password = logindata.get('password')
-        loginlist.firstname = logindata.get('firstname')
-        loginlist.lastname = logindata.get('lastname')
-        loginlist.lastlogin = logindata.get('lastlogin')
+        loginlist.loginid = logindata.get('loginid',0)
+        loginlist.password = logindata.get('password',0)
+        loginlist.firstname = logindata.get('firstname',0,0)
+        loginlist.lastname = logindata.get('lastname',0)
+        loginlist.lastlogin = logindata.get('lastlogin',0)
+        loginlist.usertype = request.user.username
+        loginlist.isdeleted = 0
+        loginlist.username = request.user.id
+        loginlist.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        loginlist = models.Logininfo.objects.get(pk=pk)
+        logindata =  json.loads(request.DATA.keys()[0])
+        loginlist.loginid = logindata.get('loginid',0)
+        loginlist.password = logindata.get('password',0)
+        loginlist.firstname = logindata.get('firstname',0,0)
+        loginlist.lastname = logindata.get('lastname',0)
+        loginlist.lastlogin = logindata.get('lastlogin',0)
         loginlist.usertype = request.user.username
         loginlist.isdeleted = 0
         loginlist.username = request.user.id
@@ -1696,5 +1710,7 @@ class AudioinfoViewSet(viewsets.ModelViewSet):
         admin.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         admin.save()
         return Response(request.DATA)
+
+
 
    
