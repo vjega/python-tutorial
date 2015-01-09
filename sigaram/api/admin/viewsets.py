@@ -200,7 +200,6 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         classid   = request.GET.get('classid')
         section   = request.GET.get('section')
         chapterid = request.GET.get('chapterid')
-<<<<<<< HEAD
         categoryid = request.GET.get('resourcecategory')
         kwarg = {}
         kwarg['isdeleted'] = 0
@@ -214,10 +213,6 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
             kwarg['chapterid'] = chapterid
         if categoryid:
             kwarg['resourcecategory'] = categoryid
-=======
-        categoryid = request.GET.get('categoryid')
->>>>>>> 96970e343624196870f4f797af063b99372e8f90
-
         sql = """
         SELECT  tri.teacherresourceid,
                 tri.resourcetitle,
