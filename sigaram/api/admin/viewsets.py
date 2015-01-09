@@ -1689,6 +1689,9 @@ class AudioinfoViewSet(viewsets.ViewSet):
         pass
     
     def create(self, request):
+        queryset = models.Admininfo.objects.filter(isdelete=0).order_by('-createddate')
+        serializer_class = adminserializers.AudiouploadSerializer
+    
         import os, time
         f = request.FILES["upload_file[filename]"]
         filename = request.POST.get("uploadfilename")
@@ -1698,4 +1701,4 @@ class AudioinfoViewSet(viewsets.ViewSet):
         with open(fullpath, 'wb+') as destination:
             for chunk in f.chunks():
                 destination.write(chunk)
-        return Response({'filename':fileame})
+        return Response({'filename':filename})

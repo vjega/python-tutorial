@@ -37,7 +37,7 @@
                     </div>
                 </div>
             </div>
-            <form id="uploadForm" name="uploadForm" action="/api/admin/audioupload/">
+            <form id="uploadForm" name="uploadForm" action="/api/admin/audioupload/?format=json">
                 <input id="authenticity_token" name="authenticity_token" value="xxxxx" type="hidden">
                 <input id="upload_file[parent_id]" name="upload_file[parent_id]" value="1" type="hidden">
                 <input id="uploadfilename" name="uploadfilename"  type="text">
@@ -69,7 +69,7 @@
 <!-- script-->
 <script type="text/javascript" src="{%static "FlashWavRecorder/html/js/swfobject.js"%}"></script>
 <script type="text/javascript" src="{%static "FlashWavRecorder/html/js/recorder.js"%}"></script>
-<script type="text/javascript" src="{%static "FlashWavRecorder/html/basic/basic.js"%}"></script>
+<script type="text/javascript" src="{%static "js/audiorecorder.js"%}"></script>
 
 {% endblock morescript %}
 
