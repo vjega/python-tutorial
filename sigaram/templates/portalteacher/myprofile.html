@@ -101,30 +101,33 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 
 $(document).ready(function(){
-    
+
+    /*
     $("#mybtn").click(function(){
-        var dataobj = {
+        var dataobj = [{
             'username' : $("#admin_username").val(),
             'fname'    : $("#admin_fname").val(),
             'password' : $("#admin-pass").val(),
             'email'    : $("#email").val(),
             'photo'    : $("#admin_photo").val(),
-        }
+        }]        
+        alert(dataobj);
         $.ajax({
             headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
             },
            // url:"/api/admin/logininfo/"+id+"/",
-            url:"/api/admin/logininfo/",
+            url:"/api/admin/logininfo/?format=json",
             type:"POST",
-            data:dataobj
+            data: JSON.stringify(dataobj),
         }).done(function(data){
-            console.log(data)
-        })
-        ;
-        datatable = JSON.stringify($("#admin_username").val(),$("#admin_fname").val())
-        alert(datatable);
+            alert(data)
+        });
+       
+
+        
     });
+*/
     
 });
 
