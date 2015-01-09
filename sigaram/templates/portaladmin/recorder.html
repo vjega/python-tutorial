@@ -103,7 +103,6 @@
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<<<<<<< HEAD
 <script>
 
 
@@ -141,8 +140,6 @@ function audioReceived(filename, filedata) {
         flashvars = {gateway:'form', 'return':'reset', callback:'audioReceived', format:'wav'};
         swfobject.embedSWF("{% static "bower_components/local-audio-recorder-master/build/recorder.swf" %}", "recorder", "215", "138", "10.1", "{% static "bower_components/local-audio-recorder-master/demo/expressInstall.swf"  %}", flashvars);
 </script>
-=======
->>>>>>> 8334c4addd5e0678d314a8fce3e8eb7ba9159085
 {% endblock scriptcontent %}
 
 
