@@ -1661,7 +1661,7 @@ class StickyinfoViewSet(viewsets.ModelViewSet):
 class LogininfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Logininfo.objects.all()
-    serializer_class = adminserializers.LogininfoSerializer
+    serializer_class = adminserializers.StickyinfoSerializer
 
     def create(self, request):
         loginlist = models.Logininfo()
@@ -1671,10 +1671,30 @@ class LogininfoViewSet(viewsets.ModelViewSet):
         loginlist.firstname = logindata.get('firstname')
         loginlist.lastname = logindata.get('lastname')
         loginlist.lastlogin = logindata.get('lastlogin')
-        loginlist.usertype = logindata.get('usertype')
+        loginlist.usertype = request.user.username
         loginlist.isdeleted = 0
         loginlist.username = request.user.id
         loginlist.save()
+        return Response(request.DATA)
+
+class AudioinfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Admininfo.objects.filter(isdelete=0).order_by('-createddate')
+    serializer_class = adminserializers.AudiouploadSerializer
+
+    @create_login('Admin')
+    def create(self, request):
+        admin = models.Admininfo()
+        admindata =  json.loads(request.DATA.keys()[0])
+        admin.username = admindata.get('username')
+        admin.firstname = admindata.get('firstname')
+        admin.lastname = admindata.get('lastname')
+        admin.emailid = admindata.get('emailid')
+        admin.imageurl = admindata.get('image')
+        admin.isdelete = 0
+        admin.createdby = request.user.id
+        admin.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        admin.save()
         return Response(request.DATA)
 
    

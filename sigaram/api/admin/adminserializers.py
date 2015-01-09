@@ -188,3 +188,9 @@ class LogininfoSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Logininfo
         fields = ('loginid','username', 'password','firstname','lastname','isdelete',
                    'lastlogin','usertype','isadmin')
+
+class AudiouploadSerializer(serializers.HyperlinkedModelSerializer):
+      class Meta:
+        model = models.Admininfo
+        fields = ('adminid',  'firstname','lastname',
+                  'username','emailid','imageurl')

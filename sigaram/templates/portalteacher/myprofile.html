@@ -61,8 +61,8 @@
                             </div>
                         </div>
                     </div><br/>
-                    <div>
-                        <button class="btn btn-primary center-block" id="savebutton">Save</button>
+                    <div >
+                        <button class="btn btn-primary center-block" id="mybtn">Save</button>
                     </div>
 
                 </table>
@@ -91,36 +91,41 @@
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
 
-<script  type="text/x-jsrender">
+<script>
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}
 
 $(document).ready(function(){
-      $("#savebutton").click(function(){
-        var url = "";
-            url = "/api/admin/postreplyinfo/";
-            datatable = JSON.stringify({postdetails:sn.code(),postid:datpostid})                               
-       
-        //alert ( TTS.utils.getUrlParameter('replyid'));
+    
+    $("#mybtn").click(function(){
+        var dataobj = {
+            'username' : $("#admin_username").val(),
+            'fname'    : $("#admin_fname").val(),
+            'password' : $("#admin-pass").val(),
+            'email'    : $("#email").val(),
+            'photo'    : $("#admin_photo").val(),
+        }
         $.ajax({
             headers : {
-                'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
             },
-            type:"POST",
-            url:url,
-            data: datatable
-        }).done(function(retdata){
-            if ( TTS.utils.getUrlParameter('replyid')) {
-                 window.location ='viewpost?forumid='+data+'&forumname='+dataname+'&topicid='+datpostid
-                alert (TTS.utils.getUrlParameter("forumid"));
-            } else {
-                window.location ='viewtopic?forumid='+data+'&forumname='+dataname
-            }
+           // url:"/api/admin/logininfo/"+id+"/",
+            url:"/api/admin/logininfo/",
+            type:"PUT",
+            data:dataobj
+        }).done(function(data){
+            console.log(data)
         })
+        ;
+        datatable = JSON.stringify($("#admin_username").val(),$("#admin_fname").val())
+        alert(datatable);
     });
-   
+    
 });
 
 </script>
