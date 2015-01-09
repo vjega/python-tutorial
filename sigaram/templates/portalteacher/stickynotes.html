@@ -296,6 +296,7 @@
 
 {% block scriptcontent %}
 <script id="sticky-form" type="text/x-jsrender">
+    <div id="file-uploader">File Uploader Comes Here...</div> 
     {% crispy form %}
 </script>
 
@@ -332,6 +333,31 @@ TTS.forms.addstickynote = function(form, data) {
     });
 }
 
+TTS.forms.upload = function(elm) {
+    console.log(elm);
+    var uploader = new qq.FileUploader({
+        action: "/admin/admin-img-upload",
+        element: $('#file-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#id_image").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
+    });
+};
+
+
 TTS.forms.showstickyform = function() {
     var colors = ["yellow", "blue", "green","purple", "pink", "grey","red", "orange", "maroon", "gold"];
     BootstrapDialog.show({
@@ -339,6 +365,7 @@ TTS.forms.showstickyform = function() {
         message: $($('#sticky-form').render() +  $("#sticky-text").text()), 
         onshown: function(){
             $('.summernote').summernote();
+             TTS.forms.upload();
             for (var i in colors) {
                $("#color-swatch").append("<div class='color "+colors[i]+"' name='"+colors[i]+"' ></div>");
             }
