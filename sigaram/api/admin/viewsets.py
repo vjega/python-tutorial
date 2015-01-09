@@ -512,9 +512,11 @@ class AdminrubricsViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.AdminrubricsSerializer
 
     def create(self, request):
+        print request
         adminrubrics = models.RubricsHeader()
         rubricmatrix = models.RubricMatrix()
         rubricsdata =  json.loads(request.DATA.keys()[0])
+        print rubricsdata
         rubbodydata = rubricsdata.get('mtx_body')
         rubheaderdata = rubricsdata.get('mtx_head')
         
