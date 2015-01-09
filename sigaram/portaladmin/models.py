@@ -802,7 +802,7 @@ class RubricMatrix(models.Model):
 
 
 class RubricsHeader(models.Model):
-    slno = models.IntegerField(primary_key=True)
+    slno = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     instruction = models.TextField(blank=True)
