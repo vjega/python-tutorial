@@ -1,3 +1,5 @@
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import serializers
@@ -200,8 +202,19 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         classid   = request.GET.get('classid')
         section   = request.GET.get('section')
         chapterid = request.GET.get('chapterid')
-        categoryid = request.GET.get('categoryid')
-
+        categoryid = request.GET.get('resourcecategory')
+        kwarg = {}
+        kwarg['isdeleted'] = 0
+        if schoolid:
+            kwarg['schoolid'] = schoolid
+        if classid:
+            kwarg['classid'] = classid
+        if section:
+            kwarg['section'] = section
+        if chapterid:
+            kwarg['chapterid'] = chapterid
+        if categoryid:
+            kwarg['resourcecategory'] = categoryid
         sql = """
         SELECT  tri.teacherresourceid,
                 tri.resourcetitle,
@@ -224,8 +237,8 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         teacherresourcedata =  json.loads(request.DATA.keys()[0])
         restype = teacherresourcedata.get('resourcetype')
         teacherresource.schoolid = teacherresourcedata.get('schoolid')
-        teacherresource.classid = teacherresourcedata.get('classid')
-        teacherresource.section = teacherresourcedata.get('section')
+        teacherresource.classid = teacherresourcedata.get('classid',0)
+        teacherresource.section = teacherresourcedata.get('section',0)
         teacherresource.resourcetype = restype
         teacherresource.resourcetitle = teacherresourcedata.get('resourcetitle')
         teacherresource.documenturl = "" #teacherresourcedata.get('documenturl')
@@ -241,7 +254,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         elif restype == "video":
             teacherresource.videourl = teacherresourcedata.get('fileurl')
         teacherresource.resourcecategory = teacherresourcedata.get('resourcecategory')
-        teacherresource.chapterid = teacherresourcedata.get('chapterid')
+        teacherresource.chapterid = teacherresourcedata.get('chapterid',0)
         teacherresource.createdby = request.user.id
         teacherresource.isapproved = 0
         teacherresource.isdeleted = 0
@@ -1662,22 +1675,18 @@ class LogininfoViewSet(viewsets.ModelViewSet):
         loginlist.save()
         return Response(request.DATA)
 
-class AudioinfoViewSet(viewsets.ModelViewSet):
+class AudioinfoViewSet(viewsets.ViewSet):
 
     queryset = models.Admininfo.objects.filter(isdelete=0).order_by('-createddate')
     serializer_class = adminserializers.AudiouploadSerializer
-
-    @create_login('Admin')
+    def perform_authentication(self, request):
+        pass
+    
     def create(self, request):
-        admin = models.Admininfo()
-        admindata =  json.loads(request.DATA.keys()[0])
-        admin.username = admindata.get('username')
-        admin.firstname = admindata.get('firstname')
-        admin.lastname = admindata.get('lastname')
-        admin.emailid = admindata.get('emailid')
-        admin.imageurl = admindata.get('image')
-        admin.isdelete = 0
-        admin.createdby = request.user.id
-        admin.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
-        admin.save()
-        return Response(request.DATA)
+        import os
+        f = request.FILES["upload_file[filename]"]
+        filename = request.POST.get("uploadfilename")
+        with open(os.path.join('static',filename+'.wav'), 'wb+') as destination:
+            for chunk in f.chunks():
+                destination.write(chunk)
+        return Response({'msg':'ok'})

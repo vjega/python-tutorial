@@ -37,7 +37,7 @@
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <style>
-    #addrec:hover, .assignment:hover{
+    #addrec:hover, .assignment:hover, #studetresource-main-tbl tbody tr:hover{
         cursor: pointer;
     }
 </style>
@@ -116,20 +116,28 @@ TTS.forms.addstudentresource = function() {
 TTS.forms.renderteacherresourceinfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
-              "class": "text-center"  
+              "class": "text-center",
+              "data":"slno"  
             },
-            { "title": "{% trans "Title" %}"},
-            { "title": "{% trans "Date" %}" },
-            { "title": "{% trans "Assignment" %}"}, 
+            { "title": "{% trans "Title" %}",
+              "data" :"title"
+            },
+            { "title": "{% trans "Date" %}",
+              "data" :"date"
+            },
+            { "title": "{% trans "Assignment" %}",
+              "data":"assignment"
+            }, 
         ];
     var dataset = [];
     var count = 0
     for(var i in data){
-        var t = [];
-        t.push(++count);
-        t.push("<p class='col-sm-3 pull-left'><img src=http://10tsigaram.com/dbinterface/"+data[i].thumbnailurl+"></p> " + data[i].resourcetitle);
-        t.push(data[i].createddate);
-        t.push("<a href='javascript:void(0)' class='assignment' id='"+data[i].resourceid+"' ><i class='fa fa-share fa-2x'></i></a>");
+        var t = {};
+        t.slno= ++count;
+        t.DT_RowId = data[i].resourceid;
+        t.title ="<p class='col-sm-3 pull-left'><img src=http://10tsigaram.com/dbinterface/"+data[i].thumbnailurl+"></p> " + "<a href='javascript:void(0)' id='"+data[i].resourceid+"' ></a>"+data[i].resourcetitle;
+        t.date= data[i].createddate;
+        t.assignment="<a href='javascript:void(0)' class='assignment' id='"+data[i].resourceid+"' ><i class='fa fa-share fa-2x'></i></a>";
         dataset.push(t);
     }
 
@@ -169,8 +177,8 @@ $(document).ready(function(){
         //console.log("Hello");
         window.location = 'studentresourcelist?categoryid=1&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.section;
     });*/
-    $('#studetresource-main-tbl tbody').on('click', 'tr', function(){
-        window.location = 'teacherresourcelist?id='+this.id;
+    $('#studetresource-main-tbl').on('click', 'tbody tr', function(){
+        window.location = 'http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/studentresources/.swf';
 
     });
     $('#studetresource-main-tbl').on('click', '.tts-delete', function(e){

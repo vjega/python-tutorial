@@ -215,7 +215,7 @@ TTS.forms.rubricslist = function() {
 
         },
         buttons: [{
-            label: 'Add',
+            label: '{% trans "Add" %}',
             cssClass: 'btn-primary',
             onshown: function(msg){
 
@@ -232,7 +232,7 @@ TTS.forms.rubricslist = function() {
 
 TTS.forms.assessmentassigninglist = function() {
     BootstrapDialog.show({  
-        title: 'Assessment Assigning List',
+        title: '{% trans "Name" %} {% trans "List" %}',
         message: $($('#assessmentassigninglist').render()),
         onshown: function(dialogRef){
             $.ajax({
