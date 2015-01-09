@@ -84,7 +84,7 @@
             </div>
         </div>
         <div align="center" class="panel-footer">
-            <button class="btn btn-success btn-sm" id="connect-rubrics"><i class="fa fa-link fa-lg"></i> {% trans "Connect" %} {% trans "Rubrics" %}</button>
+            <button class="btn btn-success btn-sm" id="connect-rubrics"><i class="flaticon-test19"></i> {% trans "Connect" %} {% trans "Rubrics" %}</button>
             <button class="btn btn-success btn-sm" id="res-send"><i class="fa fa-share fa-lg"></i> {% trans "Send" %}</button>
             
         </div>
@@ -184,7 +184,7 @@ TTS.forms.renderstudentlist = function(data){
 
 TTS.forms.assessmentassigninglist = function() {
     BootstrapDialog.show({  
-        title: 'Assessment Assigning List',
+         title: '{% trans "Name" %} {% trans "List" %}',
         message: $($('#assessmentassigninglist').render()),
         onshown: function(dialogRef){
             $.ajax({
@@ -196,7 +196,7 @@ TTS.forms.assessmentassigninglist = function() {
             });
         },
         buttons: [{
-            label: 'Add',
+            label: '{% trans "Add" %}',
             cssClass: 'btn-primary',
             action: function(){
                 //var data = TTS.utils.serilaizeJson("#newfolderfrm");

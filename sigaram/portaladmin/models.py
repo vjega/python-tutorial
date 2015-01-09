@@ -307,7 +307,7 @@ class Billboardvotinginfo(models.Model):
 
 
 class Bulletinboardinfo(models.Model):
-    bulletinboardid = models.BigIntegerField(primary_key=True)
+    bulletinboardid = models.AutoField(primary_key=True)
     messagetitle = models.CharField(max_length=1000)
     message = models.CharField(max_length=1000)
     classid = models.BigIntegerField()
@@ -339,6 +339,7 @@ class Bulletinboardinfo(models.Model):
             GROUP BY bbi.bulletinboardid
             ORDER by bbi.bulletinboardid DESC
             LIMIT 2"""%loginid
+        print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         x = dictfetchall(cursor)
@@ -801,7 +802,7 @@ class RubricMatrix(models.Model):
 
 
 class RubricsHeader(models.Model):
-    slno = models.IntegerField(primary_key=True)
+    slno = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     instruction = models.TextField(blank=True)

@@ -15,34 +15,62 @@
         <div class="panel-heading">
              Recorder
         </div>
-        <!-- /.panel-heading -->
-            <div id="recorder-wrap">
-                <div id="recorder">
-                    <p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
+        <section class="recorder-container">
+            <div class="recorder">
+                <div class="level">
+                    <div class="progress"></div>
+                </div>
+                <button class="start-recording" onclick="FWRecorder.record('audio', 'audio.wav');">
+                    <i class="fa fa-circle fa-fw text-danger"></i>
+                </button>
+                <button class="stop-recording" onclick="FWRecorder.stopRecording('audio');">
+                    <i class="fa fa-stop fa-fw"></i>
+                    <!-- img src="{%static "FlashWavRecorder/html/images/stop.png" %}" alt="Stop Recording"/ -->
+                </button>
+                <button class="start-playing" onclick="FWRecorder.playBack('audio');" title="Play">
+                    <i class="fa fa-play fa-fw"></i>
+                    <!-- img src="{%static "FlashWavRecorder/html/images/play.png" %}" alt="Play"/ -->
+                </button>
+                <div class="upload" style="display: inline-block">
+                    <div id="flashcontent">
+                        <p>Your browser must have JavaScript enabled and the Adobe Flash Player installed.</p>
+                    </div>
                 </div>
             </div>
-            <div id="audio_container">
-                Once you have made a recording, this text will be replaced with an audio player.
-            </div>
-        <!-- /.panel-body -->
+            <form id="uploadForm" name="uploadForm" action="/api/admin/audioupload/?format=json">
+                <input id="authenticity_token" name="authenticity_token" value="xxxxx" type="hidden">
+                <input id="upload_file[parent_id]" name="upload_file[parent_id]" value="1" type="hidden">
+                <input id="uploadfilename" name="uploadfilename"  type="text">
+                <input id="format" name="format" value="json" type="hidden">
+            </form>
+            <audio controls>
+                <source src="/static/file.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+        </section>
     </div>
-    <!-- /.panel -->
 </div>
-                <!-- /.col-lg-12 -->
 {% endblock botcontent%}
 
 {% block morecss %}
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="{%static "FlashWavRecorder/html/basic/basic.css"%}">
 <style>
     #addrec:hover, #admin-main-tbl tbody tr:hover{
         cursor: pointer;
     }
+
+    
+
 </style>
 {% endblock morecss %}
 {% block morescript %}
 <!-- script-->
-<script type="text/javascript" src="{% static "bower_components/local-audio-recorder-master/demo/swfobject.js" %}"></script>
+<script type="text/javascript" src="{%static "FlashWavRecorder/html/js/swfobject.js"%}"></script>
+<script type="text/javascript" src="{%static "FlashWavRecorder/html/js/recorder.js"%}"></script>
+<script type="text/javascript" src="{%static "js/audiorecorder.js"%}"></script>
+
 {% endblock morescript %}
 
 {% block scriptcontent %}
@@ -50,7 +78,6 @@
 
 
 function audioReceived(filename, filedata) {
-        console.log(filedata);
         filedata = window.atob(filedata);
         var container = document.getElementById('audio_container');
         var wrap = document.getElementById('recorder-wrap');
@@ -68,6 +95,7 @@ function audioReceived(filename, filedata) {
         // Put audio data into a blob and set up <audio> tag
         blob = new Blob([ar], {type:'audio/x-wav'});
         audio.src = WU.createObjectURL(blob);
+        alert(audio.src);
         audio.controls = true;
 
         container.innerHTML = '';

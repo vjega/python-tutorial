@@ -1,4 +1,4 @@
-{% extends 'portalstudent/base.html' %}
+{% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
@@ -21,10 +21,13 @@
         </div>
         <div>
             <div class="col-lg-12">
-                <h3>{% trans "Title" %}</h3>
+                 <label for="folder_name" class="col-sm-1 control-label">{% trans "Title" %}
+                        &nbsp;:
+                 </label>
+                 <div class="control" id="resourcetitle"></div>
             </div>
             <div class="col-lg-4">
-                <h4>{% trans "Assigned Date" %}</h4>
+                <h4>{% trans "Date" %}</h4>
             </div>
             <div class="col-lg-4">
                 <h4>{% trans "Assigned Person" %}</h4>
@@ -87,11 +90,22 @@
 
 {% block scriptcontent %}
 <script id="rubrics-form" type="text/x-jsrender">
-
 </script>
-
-
 <script>
+function getUrlParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+} 
+
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 TTS.forms.addtfourms = function(form, data) {
@@ -155,17 +169,17 @@ TTS.forms.renderfourminfo = function(data){
 };
 
 $(document).ready(function(){
-     $('.summernote').summernote();
-
-     $.ajax({
-        "url":"/api/forum/foruminfo/?format=json",
-        "type":"GET"
-    }).done(function(data){
-        if (data.length) {
-            TTS.forms.renderfourminfo(data);
+    var resourceid = getUrlParameter('resourceid');
+    $('.summernote').summernote();
+    $.ajax({
+        "url":"/api/admin/resourceinfo/"+resourceid,
+        "type":"GET"    }).done(function(data){
+        TTS.forms.renderfourminfo(data);
+        $("#resourcetitle").html(data.resourcetitle);
+        /*if (data.length) {
         } else {
-            TTS.forms.table.fnClearTable();
-        }
+            TTS.forms.dataTable.fnClearTable();
+        }*/
     });
 
     $('body').on('click','.addnewtopic', function(){

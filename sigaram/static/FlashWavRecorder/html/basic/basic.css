@@ -1,0 +1,70 @@
+/* Styles for demo page - can be omitted */
+
+h1 {
+    margin: 50px 0;
+    text-align: center;
+    font-family: sans-serif;
+    color: #686868;
+    position: relative;
+}
+
+h1 span {
+    display: block;
+}
+
+h1 .basic {
+    position: relative;
+    top: 5px;
+    left: -150px;
+    font-family: serif;
+    font-style: italic;
+    color: lightgray;
+    -webkit-transform: rotate(-12deg);
+    -moz-transform: rotate(-12deg);
+    transform: rotate(-12deg);
+    font-size: 70%;
+}
+
+h1 .project-name {
+    letter-spacing: 1px;
+}
+
+.recorder-container {
+    /*width: 250px;*/
+    /*margin: 30px auto;*/
+    border: 1px solid #EBEBEB;
+    /*text-align: center;*/
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* Styles for recorder buttons */
+.recorder button, .recorder .upload, .level {
+    border: 1px solid #686868;
+    height: 30px;
+    background-color: white;
+    display: inline-block;
+    vertical-align: bottom;
+    margin: 2px;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
+/* Styles for level indicator - required! */
+.level {
+    width: 30px;
+    height: 30px;
+    position: relative;
+}
+.progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #b10000;
+    margin-bottom: 0px;/*Override BS*/
+    height: 0px;
+}
+.upload {
+    padding-top: 2px;
+}
