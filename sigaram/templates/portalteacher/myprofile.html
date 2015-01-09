@@ -101,6 +101,10 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 
 $(document).ready(function(){
+    var userid     = TTS.utils.getUrlParameter("userid");
+   
+    alert(TTS.utils.getUrlParameter("userid"));
+   
 
     /*
     $("#mybtn").click(function(){
@@ -118,7 +122,7 @@ $(document).ready(function(){
             },
            // url:"/api/admin/logininfo/"+id+"/",
             url:"/api/admin/logininfo/?format=json",
-            type:"POST",
+            type:"PUT",
             data: JSON.stringify(dataobj),
         }).done(function(data){
             alert(data)

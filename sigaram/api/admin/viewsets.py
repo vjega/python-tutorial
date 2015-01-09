@@ -1664,17 +1664,18 @@ class LogininfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.StickyinfoSerializer
 
     def list(self, request):
-        loginid   = request.user.id
+        userid   = request.user.id
+        user   = request.user.username
 
         sql = """
-        SELECT teacherid,
-               ti.firstname,
-               ti.username,
-               ti.emailid 
-        FROM teacherinfo ti
-        INNER JOIN logininfo li on li.username=ti.username 
-        WHERE li.loginid= 333
-        """ 
+         SELECT teacherid,
+                ti.firstname,
+                ti.username,
+                ti.emailid
+         FROM teacherinfo ti
+         INNER JOIN auth_user au on au.username=ti.username
+          WHERE au.id = %s
+        """%userid 
         cursor = connection.cursor()
         print sql
         cursor.execute(sql)
