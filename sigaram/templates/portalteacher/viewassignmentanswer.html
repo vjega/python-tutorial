@@ -36,6 +36,17 @@
         color: red;
         cursor: pointer;
     }
+    table#rubrics-table thead tr th{
+        text-align: center;
+        height: 45px;
+        background-color: #B8B8B8;
+    }
+    table#rubrics-table tbody tr td:nth-child(1),
+    table#rubrics-table tbody tr td:last-child { 
+        background-color: #B8B8B8; 
+        font-weight: bold;
+    }
+    
 </style>
 {% endblock morecss %}
 
@@ -119,8 +130,6 @@
                     <div class="bs-docs-grid">
                         <div class="row show-grid col-lg-12">
                             <div class="col-lg-12" id="rubrics-vote">
-                                {% trans "Rubrics" %} {% trans "Mark" %}
-
 
                             </div>
                         </div>
@@ -178,7 +187,7 @@ TTS.forms = TTS.forms || {}
 
 
 TTS.forms.renderassignedresourceinfo = function(data){
-    console.log(data);
+    //console.log(data);
     $("#assignedid").val(data[0].id);
     $("#resource-title").html(data[0].resourcetitle);
     $("#assigned-date").html(data[0].createddate);
@@ -211,20 +220,36 @@ TTS.forms.renderassignedresourceinfo = function(data){
 
 TTS.forms.renderrubrictableinfo = function(data){
     var tableHTML = '';
-    tableHTML += "<table class='table table-striped table-bordered table-hover'>";
-    tableHTML += "<tr><td>&nbsp;</td>";
+    tableHTML += "<table id='rubrics-table' class='table table-striped table-bordered table-hover'>";
+    tableHTML += "<thead><tr><th>&nbsp;</th>";
     var thdata = data.rmh[0];
     var th = thdata.split('~~');
     $(th).each(function(k,v){
-        tableHTML += "<td>"+v+"</td>";
+        tableHTML += "<th>"+v+"</th>";
     });
-    tableHTML += "<td>Total</td></tr>";
-    var tddata = data.rmb[1][0];
-    var td = tddata.split('~~');
-    $(td).each(function(i,j){
-        tableHTML += "<td>"+j+"</td>";
+
+    tableHTML += "<th>{% trans 'Total' %}</th></tr></thead>";
+    var tddataobj = data.rmb;
+    var td = '';
+    var answercheck = '';
+    tableHTML += "<tbody>";
+    $(tddataobj).each(function(x,tddata){
+        td = tddata[0].split('~~');
+        tableHTML += "<tr>";
+        $(td).each(function(i,j){
+            if(i > 0){
+                answercheck="<input onclick='TTS.forms.setmarks("+x+","+(--td.length)+")' class='chkrub mark-"+x+"' id='m"+x+"-"+i+"' name='mark-"+x+"' type='radio'>";
+            }else{
+                answercheck="";
+            }
+            tableHTML += "<td>"+answercheck+" "+j+"</td>";
+        });
+        tableHTML += "<td><input class='totals' id='tmark-"+x+"' style='width:30px;text-align:center' readonly type='text' value=''> / "+th.length+"</td>";
+        tableHTML += "</tr>";
     });
-    tableHTML += "</tr><table>";
+    tableHTML += "<tr><td style='text-align:center' colspan="+(tddataobj.length)+"><strong>{% trans 'Total' %}</strong></td><td><input id='ttls' style='width:30px;text-align:center' readonly type='text' value=''> / "+(th.length)*(tddataobj.length)+"</td></tr>";
+    tableHTML += "</tbody></table>";
+    tableHTML += '<button class="btn btn-primary" id="save-rubric-marks">{% trans "Save" %} {% trans "Result" %}</button>';
     $("#rubrics-vote").html(tableHTML);
 }
 
@@ -462,6 +487,13 @@ TTS.forms.changeapproveicon = function(editingid){
     $("table#edit-answer-list > tbody > tr#"+editingid+" > td i")
                                                 .removeClass('fa-remove rejected')
                                                 .addClass('fa-check approved');
+};
+
+TTS.forms.setmarks = function(row, mark) {
+    $("#tmark-"+row).val(mark);
+    var x=0;
+    $('.totals').each(function(){x += parseInt($(this).val()) || 0;});
+    $('#ttls').val(x);
 };
 
 $(document).ready(function(){
