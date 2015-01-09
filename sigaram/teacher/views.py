@@ -9,10 +9,12 @@ from teacher.forms import ( RubricsForm,
                             StudentForm,
                             StickyForm,
                             StickyCommentForm,
-                            #ViewworkspaceForm
-                            TopicsForm,
+                            TeacherResourceForm,
+                            ForumForm,
                             ThreadForm,
-                            AnnouncementForm
+                            AnnouncementForm,
+                            StickyinfoForm,
+                            NewtopicForm
                             ) 
 
 from ajaxuploader.views import AjaxFileUploader  
@@ -121,14 +123,6 @@ def classroom(request):
 @switchlanguage
 def myprofile(request):
     return render(request, 'portalteacher/myprofile.html')
-
-@login_required
-@switchlanguage
-def allschoolresourcelist(request):
-    schools = models.Schoolinfo.objects.all()
-    #teacherresourceinfo = models.Teacherresourceinfo.objects.all()
-    return render(request, 'portalteacher/allschoolresourcelist.html', {'schools':schools,
-                                                                        'teacherresourceinfo':teacherresourceinfo})
 
 @login_required
 @switchlanguage
@@ -291,7 +285,7 @@ def resources(request):
         },{
         "id": "3",
         "categoryid": "2",
-        "name" :_("All schools"),
+        "name" :_("Teacher Share"),
         "href" :"allschoolresourcelist"
         }]
 
@@ -343,10 +337,11 @@ def resource_type (request):
 @login_required
 @switchlanguage
 def allschoolresourcelist(request):
-    schools = models.Schoolinfo.objects.all()
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/allschoolresourcelist.html', 
-                                        {'schools':schools,'classes':classes})
+                                        {'schools':schools,'classes':classes,
+                                        'form':TeacherResourceForm.TeacherResourceForm()})
 
 @login_required
 @switchlanguage
@@ -444,7 +439,7 @@ def activitystatistics(request):
 @login_required
 @switchlanguage
 def topics(request):
-    return render(request, 'portalteacher/topics.html',{"form" : TopicsForm.TopicsForm()})
+    return render(request, 'portalteacher/forum.html',{"form" : ForumForm.ForumForm()})
     
 @login_required
 @switchlanguage
@@ -509,4 +504,15 @@ def mindmaplist(request):
 @login_required
 @switchlanguage
 def stickynoteslist(request):
-    return render(request, 'portalteacher/stickynoteslist.html')                     
+    return render(request, 'portalteacher/stickynoteslist.html',{'form':StickyinfoForm.StickyinfoForm()})                     
+
+@login_required
+@switchlanguage
+def forum(request):
+    return render(request, 'portalteacher/forum.html', {"form" : ForumForm.ForumForm()})
+
+@login_required
+@switchlanguage
+def viewtopic(request):
+   foruminfo = models.Foruminfo.objects.all()
+   return render(request, 'portalteacher/viewtopic.html',{"form" : NewtopicForm.NewtopicForm()})

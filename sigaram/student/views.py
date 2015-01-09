@@ -8,7 +8,8 @@ from student.forms import (StudentWorkForm,
                            StudentNotesForm,
                            StickyForm,
                            StickyCommentForm,
-                           TopicsForm,)
+                           TopicsForm,
+                           StickyinfoForm)
 
 
 def switchlanguage(f):
@@ -292,3 +293,8 @@ def studentresourcelist(request):
 @switchlanguage
 def topics(request):
     return render(request, 'portalstudent/topics.html',{"form" : TopicsForm.TopicsForm()})
+
+@login_required
+@switchlanguage
+def stickynoteslist(request):
+    return render(request, 'portalstudent/stickynoteslist.html',{'form':StickyinfoForm.StickyinfoForm()})

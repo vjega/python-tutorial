@@ -97,7 +97,7 @@ TTS.section = getUrlParameter('section');
 TTS.forms.addstudentresource = function(form, data) {
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
          },
         type:'POST',
         data: data,

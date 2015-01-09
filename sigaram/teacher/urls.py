@@ -32,8 +32,6 @@ urlpatterns = patterns('teacher.views',
     url(r'^assignchapter$',         'assignchapter',    name='assignchapter'),
     url(r'^resources$',             'resources',        name='resources'),
     url(r'^resource_type$',         'resource_type',    name='resource_type'),
-    url(r'^allschoolresourcelist$', 'allschoolresourcelist',
-                                                        name='allschoolresourcelist'),
     url(r'^resource_units$',        'resource_units',   name='resource_units'),
     url(r'^assignresource$',        'assignresource',   name='assignresource'),
     url(r'^resource_units$',        'resource_units',   name='resource_units'),
@@ -66,5 +64,7 @@ urlpatterns = patterns('teacher.views',
                                                             name='viewstudentwrittenworks'),
 
     url(r'^sticky-notes-list$',   'stickynoteslist',      name='stickynoteslist'),
+    url(r'^forum$','forum',name='forum'),
+    url(r'^viewtopic$','viewtopic',name='viewtopic'),
 
 )

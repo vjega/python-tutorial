@@ -1,6 +1,7 @@
 {% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
+{% load crispy_forms_tags %}
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
@@ -53,6 +54,8 @@
 {% block morecss %}
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <style>
     #addrec:hover, .tts-delete:hover, .tts-edit:hover{
         cursor: pointer;
@@ -61,137 +64,89 @@
 {% endblock morecss %}
 
 {% block morescript %}
+<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "js/tts.utils.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<script id="editteacher" type="text/x-jsrender">
-<form id="newfolderfrm" class="form-horizontal" role="form">
-    <div class="form-group">
-        <label for="folder_name" class="col-sm-4 control-label">{% trans "School Name" %}</label>
-        <div class="col-sm-8">
-           <select name="school_name" class="form-control" id="school_name">
-                {% for school in schools%}
-                <option value="{{school.schoolid}}">
-                    {{school.schoolname}}
-                </option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="remark" class="col-sm-4 control-label">{% trans "Class" %}</label>
-        <div class="col-sm-8">
-            <select name="classid" class="form-control" id="classid">
-                {% for class in classes %}
-                <option value="{{class.classid}}">{{class.shortname}}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="order_no" class="col-sm-4 control-label">{% trans "Name" %}</label>
-        <div class="col-sm-8">
-            <input type="text" class="form-control" name="teacher_name" id="teacher_name"
-                 placeholder="{% trans "Teacher Name" %}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="order_no" class="col-sm-4 control-label">{% trans "User Name" %}</label>
-        <div class="col-sm-8">
-            <input type="text" class="form-control" name="user_name" id="user_name"
-                 placeholder="{% trans "User Name" %}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="order_no" class="col-sm-4 control-label">{% trans "Password" %}</label>
-        <div class="col-sm-8">
-            <input type="text" class="form-control" name="user_password" id="user_password"
-                 placeholder="{% trans "Password" %}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="order_no" class="col-sm-4 control-label">{% trans "Email Id" %}</label>
-        <div class="col-sm-8">
-            <input type="text" class="form-control" name="email_id" id="email_id"
-                 placeholder="{% trans "Email Id" %}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="order_no" class="col-sm-4 control-label">{% trans "Photo" %}</label>
-        <div class="col-sm-8">
-            <input type="file" class="form-control" name="teacher_photo" id="teacher_photo"
-                 >
-        </div>
-    </div>
-</form>
+<script id="teacherresource-form" type="text/x-jsrender">
+<div id="file-uploader">File Uploader Comes Here...</div> 
+{% crispy form %}
 </script>
 
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-TTS.forms.addteacher = function() {
+TTS.forms.addteacherresource = function(form, data) {
+    $.ajax({
+        headers : {
+             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'POST',
+        data: data,
+        url : '/api/admin/teacherresourcesinfo/'
+    }).done(function( msg ) {
+        //console.log(data)
+        form.close();
+        location.reload();
+        //dialogItself.close();
+    });
+}
+
+TTS.forms.upload = function(elm) {
+    var uploader = new qq.FileUploader({
+        action: "/admin/student-teacherres-upload",
+        element: $('#file-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#id_fileurl").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
+    });
+};
+
+
+TTS.forms.showteacherresource = function() {
     BootstrapDialog.show({
-        title: 'Add Teacher',
-        message: $($('#teacher-form').render()),
+        title: 'Add TeacherResource',
+        message: $($('#teacherresource-form').render()),
+        onshown: function(){
+            TTS.forms.upload();
+            $('.summernote').summernote();
+        },
         buttons: [{
             label: 'Save',
             cssClass: 'btn-primary',
-            action: function(dialogItself ){
-                var data = TTS.utils.serilaizeJson("#add-teacher");
-                $.ajax({
-                   headers : {
-                        'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
-                    }, 
-                   type:'POST',
-                   data: data,
-                   url : '/api/admin/teacher/'
-                }).done(function( msg ) {
-                    dialogItself.close();
-                    location.reload();
-                });
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#add-teacherresource");
+                TTS.forms.addteacherresource(dialogItself, data); 
             }
             },{
             label: 'Cancel',
-            action: function(dialogItself){
-                dialogItself.close();
+            action: function(dlg){
+                dlg.close();
             }
         }]
     });
 };
-TTS.forms.editschool = function() {
-    BootstrapDialog.show({
-        title: 'Edit Teacher',
-        message: $($('#editteacher').render()),
-        buttons: [{
-            label: 'Save',
-            cssClass: 'btn-primary',
-            action: function(){
-                var data = TTS.utils.serilaizeJson("#newfolderfrm");
-                $.ajax({
-                    headers : {
-                        'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
-                    },
-                    type:'POST',
-                    data: {'data':data},
-                    url : '/api/admin/addfolder'
-                }).done(function( msg ) {
-                    console.log(msg);
-                    //dialogItself.close();
-                });
-            }
-            },{
-            label: 'Cancel',
-            action: function(dialogItself){
-                dialogItself.close();
-            }
-        }]
-    });
-};
+
+
 
 TTS.forms.renderteacher = function(data){
     var headers = [
@@ -214,18 +169,11 @@ TTS.forms.renderteacher = function(data){
     var dataset = [];
     var count = 0
     for(var i in data){
-        var t = [];
-        t.DT_RowId = data[i].studentid;
+        var t = {};
         t.slno = ++count;
-        if (data[i].imageurl){
-            t.photo = "<img src='/static/"+data[i].imageurl+"' width='100' height='100'>";
-        } else {
-            t.photo ="<img src='http://placehold.it/100x100'>";
-        }
-        t.name = data[i].firstname + " "+data[i].lastname;
-        t.username = data[i].username;
-        t.emailid = data[i].emailid;
-        t.edit = "<i class='tts-edit fa fa-pencil fa-lg'></i>";
+        t.DT_RowId = data[i].teacherresourceid;
+        t.resourcetitle = data[i].resourcetitle;
+        t.date = data[i].createddate;
         t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
@@ -244,11 +192,17 @@ TTS.forms.renderteacher = function(data){
 
 
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     $.ajax({
-        "url":"/api/admin/teacher/?schoolid="+$("#school_name").val()+"&format=json",
+        "url":"/api/admin/teacherresourcesinfo/?format=json",
         "type":"GET"
     }).done(function(data){
-        TTS.forms.renderteacher(data);
+        if (data.length) {
+            TTS.forms.renderteacherresourceinfo(data);
+            TTS.utils.ajaxloaderstop();
+        } else {
+            TTS.forms.table.fnClearTable();
+        }
     });
     $("#school_name").change(function(){    
         $.ajax({
@@ -272,7 +226,7 @@ $(document).ready(function(){
         window.location = 'teacherslist';
     });
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.addteacher();
+        TTS.forms.showteacherresource();
     });
 });
 

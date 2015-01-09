@@ -1,0 +1,195 @@
+{% extends 'portalteacher/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block topcontent %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel-body"> 
+            <h2 class="page-header">{% trans "Forum" %}</h2>
+        </div>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+{% endblock topcontent %}
+
+{% block botcontent %}
+<div class="col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% trans "Forum" %} &nbsp; <span id="addrec">
+                <i class="fa fa-plus-square fa-lg"></i></span>
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover" 
+                    id="forum-main-tbl">
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+<!-- /.col-lg-12 -->
+{% endblock botcontent%}
+
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
+<style>
+    #addrec:hover, #forum-main-tbl tbody tr:hover, .tts-delete:hover{
+        cursor: pointer;
+    }
+</style>
+{% endblock morecss %}
+
+{% block morescript %}
+<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+{% endblock morescript %}
+
+{% block scriptcontent %}
+
+<script id="forum-form" type="text/x-jsrender">
+    {% crispy form %}
+</script>
+<script>
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}
+/*TTS.forms.update_chapter_list = function () {
+    var classid = $("#classid").val();
+    var section = $("#section").val();
+    var url = "/api/admin/teacherresourcesinfo/?classid="+classid+"&section="+section+"&format=json";
+    $.ajax({
+        url  : url,
+        type : "GET"
+    })
+    .done(function(data){
+        var opt = "";
+        for (var d in data){
+            opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"</option>";
+        }
+        $("#chapterid").html(opt);
+    })
+};*/
+TTS.forms.addtfourms = function(form, data) {
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+        },
+        type:'POST',
+        data: data,
+        url : '/api/forum/foruminfo/'
+    }).done(function( msg ) {
+        console.log(data)
+        form.close();
+        location.reload();
+        //dialogItself.close();
+    });
+}
+TTS.forms.showfourms = function() {
+    BootstrapDialog.show({
+        title: 'New Conversation',
+        message: $($('#forum-form').render()),
+        onshown: function(){
+            $('.summernote').summernote();
+        },
+        buttons: [{
+            label: 'Save',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#add-forum");
+                TTS.forms.addtfourms(dialogItself, data); 
+            }
+            },{
+            label: 'Cancel',
+            action: function(dlg){
+                dlg.close();
+            }
+        }]
+    });
+};
+
+TTS.forms.renderfourminfo = function(data){
+    var headers = [
+            { "title": "{% trans "Sl No." %}",
+              "class": "text-center" ,
+              "data" : "slno"  
+            },
+            { "title": "{% trans "Topics" %}",
+              "data" : "forumname" , 
+              "class": "topic"
+            },
+            { "title": "{% trans "Total Topics" %}",
+              "data" : "totaltopic"  
+            },
+            { "title": "{% trans "Last author" %}",
+              "class": "text-center" ,
+              "data" : "createdby"  
+            },
+            { "title": "{% trans "By Last Day" %}",
+              "class": "text-center" ,
+              "data" : "createddate"  
+            },
+        ];
+    var dataset = [];
+    var count = 0
+    for(var i in data){
+        var t = [];
+        t.DT_RowId = data[i].forumid;
+        t.slno = ++count;
+        t.forumname = data[i].forumname;
+        t.totaltopic = data[i].totaltopic;
+        t.createdby = data[i].createdby;
+        t.createddate = data[i].createddate;
+        dataset.push(t);
+    }
+
+    $('#forum-main-tbl').dataTable({
+        "data":     dataset,
+        "columns":  headers
+    });
+
+};
+
+
+$(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
+    $.ajax({
+        "url":"/api/forum/foruminfo/?format=json",
+        "type":"GET"
+    }).done(function(data){
+        if (data.length) {
+            TTS.forms.renderfourminfo(data);
+             TTS.utils.ajaxloaderstop();
+        } else {
+            TTS.forms.table.fnClearTable();
+        }
+    });
+  
+    $('#forum-main-tbl').on('click', 'tbody tr', function(){
+        window.location ='viewtopic?forumid='+this.id+'&forumname='+$($(this).find(".topic")[0]).text();
+        //console.log(this.id);
+    });
+
+    $("#page-wrapper").on("click", "#addrec", function(){
+        TTS.forms.showfourms();
+         //window.location = 'forum';
+         //alert("hi");
+    });
+   
+});
+
+</script>
+
+{% endblock scriptcontent %}

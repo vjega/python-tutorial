@@ -497,7 +497,8 @@ class AdminrubricsViewSet(viewsets.ModelViewSet):
         rubricsdata =  json.loads(request.DATA.keys()[0])
         refno = 105
         print rubricsdata
-
+        # for bd in rubricsdata.get(''):
+        
         # rubricmatrix.refno = refno
         # rubricmatrix.datatype = ''
         # rubricmatrix.jdata = refno

@@ -37,7 +37,7 @@
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <style>
-    #addrec:hover, #studetresource-main-tbl tbody tr:hover,.tts-delete:hover{
+    #addrec:hover, .tts-delete:hover{
         cursor: pointer;
     }
 </style>
@@ -162,7 +162,7 @@ var updateChapter = function(){
 $(document).ready(function(){
     TTS.utils.ajaxloaderstart();
     $.ajax({
-        "url":"/api/admin/teacherresourcesinfo/?categoryid="+TTS.categoryid+"&chapterid="+TTS.chapterid+"&classid="+TTS.classid+"&section="+TTS.section+"&format=json",
+        "url":"/api/admin/teacherresourcesinfo/?resourcecategory="+TTS.categoryid+"&chapterid="+TTS.chapterid+"&classid="+TTS.classid+"&section="+TTS.section+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacherresourceinfo(data);

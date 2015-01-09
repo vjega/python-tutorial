@@ -662,7 +662,7 @@ msgstr "ஒப்படைப்புகள்"
 
 #: teacher/views.py:56 templates/portalteacher/viewassessments.html:7
 msgid "Exercises"
-msgstr "பயிற்சி"
+msgstr "பயிற்சிகள்"
 
 #: teacher/views.py:189
 msgid "Reading"

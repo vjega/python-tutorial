@@ -12,7 +12,7 @@
 <!-- /.row -->
 <div class="row">
     <div class="col-lg-8 col-md-8">
-        <div class="col-lg-12 col-md-12">
+        <div class="row">
         {% for folder in folders%}
         <a href="{{folder.link}}">
         <div class="col-md-4">
@@ -32,6 +32,32 @@
         </div>
         </a>
         {% endfor %}
+        </div>
+        <div class="row">
+            {% for folder in admin_folders%}
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-yellow">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-folder fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="tent-medium">{{folder.folder_name}}</div>
+                                <div class="tent-medium">{{folder.folder_description}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{folder.link}}">
+                        <div class="panel-footer">
+                            <span class="pull-left">மேல் விவரங்களுக்கு</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
         </div>
         <div class="col-lg-12">
             <div class="panel panel-default">
@@ -95,32 +121,7 @@
 </div>
 </div>
 <!-- /.row -->
-<div class="row">
-    {% for folder in admin_folders%}
-    <div class="col-lg-3 col-md-6">
-        <div class="panel panel-yellow">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-folder fa-5x"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div class="tent-medium">{{folder.folder_name}}</div>
-                        <div class="tent-medium">{{folder.folder_description}}</div>
-                    </div>
-                </div>
-            </div>
-            <a href="{{folder.link}}">
-                <div class="panel-footer">
-                    <span class="pull-left">மேல் விவரங்களுக்கு</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
-        </div>
-    </div>
-    {% endfor %}
-</div>
+
 <!-- /.row -->
 {% endblock topcontent %}
 {% block botcontent %}
@@ -184,11 +185,11 @@ $(document).ready(function(){
                     var data = TTS.utils.serilaizeJson("#newfolderfrm");
                     $.ajax({
                         headers : {
-                            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
                         },
                         type:'POST',
-                        data: {'data':data},
-                        url : '/api/admin/addfolder'
+                        data: data,
+                        url : '/api/admin/adminfolders/'
                     }).done(function( msg ) {
                         console.log(msg);
                         //dialogItself.close();
