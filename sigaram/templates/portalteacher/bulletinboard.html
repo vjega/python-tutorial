@@ -1,4 +1,4 @@
-{% extends 'portaladmin/base.html' %}
+{% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% load crispy_forms_tags %}
@@ -209,9 +209,9 @@ TTS.forms.bulletinmappinginfo = function(){
 
 TTS.forms.renderadmin = function(data){
     var headers = [
-            { "title": "&nbsp;",
-              "class": "text-center",
-              "data":"id"  
+            { "title": "{% trans "Select" %}",
+              "class": "text-center" ,
+              "data" : "id"  
             },
             { "title": "{% trans "Name" %}" ,
               "data":"name"
@@ -272,8 +272,8 @@ TTS.forms.renderadminschool = function(data){
               "data" : "id"  
             },
             { "title": "{% trans "Name" %}" ,
-              "data" : "firstname"
-            }, 
+              "data":"firstname"
+            },
         ];
     var dataset = [];
     var count = 0

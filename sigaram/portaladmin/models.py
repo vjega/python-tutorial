@@ -324,21 +324,21 @@ class Bulletinboardinfo(models.Model):
 
     @staticmethod
     def announcement (loginid):
-        sql = """SELECT bbi.bulletinboardid,
-                 messagetitle,
-                 message,
-                 li.firstname AS postedby,
-                 DATE( posteddate ) AS posteddate,
-                 imageurl
-            FROM bulletinboardinfo bbi
-            INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
-            INNER JOIN logininfo li ON li.loginid = bbi.postedby
-            INNER JOIN teacherinfo ti ON ti.username = li.username
-            WHERE (viewtype =0 ) OR (viewtype =2)
-                AND bmi.adminid =%s
-            GROUP BY bbi.bulletinboardid
-            ORDER by bbi.bulletinboardid DESC
-            LIMIT 2"""%loginid
+        sql = """
+        SELECT  bbi.bulletinboardid,
+                bbi.messagetitle,
+                bbi.message,
+                au.first_name AS postedby,
+                DATE(bbi.posteddate ) AS posteddate
+        FROM bulletinboardinfo bbi
+        INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
+        INNER JOIN auth_user au ON au.id = bbi.postedby
+        -- INNER JOIN teacherinfo ti ON ti.username = au.username
+        WHERE (viewtype =0 ) OR (viewtype =2)
+            AND bmi.adminid =%s
+        GROUP BY bbi.bulletinboardid
+        ORDER by bbi.bulletinboardid DESC
+        LIMIT 2"""%loginid
         print sql;
         cursor = connection.cursor()
         cursor.execute(sql)

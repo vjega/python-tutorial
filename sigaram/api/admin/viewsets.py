@@ -1095,17 +1095,16 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         SELECT  bi.bulletinboardid, 
                 bi.messagetitle,
                 bi.message,
-                li.firstname AS postedby, 
-                DATE(bi.posteddate ) AS posteddate, 
-                ti.imageurl 
+                au.first_name AS postedby, 
+                DATE(bi.posteddate ) AS posteddate
         FROM bulletinboardinfo bi
         INNER JOIN bulletinmappinginfo bmi ON bmi.bulletinboardid = bi.bulletinboardid
-        INNER JOIN logininfo li ON li.loginid = bi.postedby 
-        INNER JOIN teacherinfo ti ON ti.username = li.username 
+        INNER JOIN auth_user au ON au.id = bi.postedby 
+        -- INNER JOIN teacherinfo ti ON ti.username = au.username 
         WHERE (viewtype =0 ) OR (viewtype =2) 
-        -- AND bmi.adminid ='3866'
+        AND bmi.adminid =%s
         GROUP BY bmi.bulletinboardid 
-        """
+        """%request.user.id
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
