@@ -307,7 +307,7 @@ class Billboardvotinginfo(models.Model):
 
 
 class Bulletinboardinfo(models.Model):
-    bulletinboardid = models.BigIntegerField(primary_key=True)
+    bulletinboardid = models.AutoField(primary_key=True)
     messagetitle = models.CharField(max_length=1000)
     message = models.CharField(max_length=1000)
     classid = models.BigIntegerField()

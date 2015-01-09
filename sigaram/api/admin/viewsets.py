@@ -1132,29 +1132,29 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         bbi.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         bbi.save()
         bbiid = bbi.bulletinboardid
-        print bbi.bulletinboardid
+        #print "created id is %s"%bbi.bulletinboardid
         #saving annoument target
-        # for rl in data.get('resourcelist'):
-        #     bmi = models.Bulletinmappinginfo()
-        #     bmi.bulletinboardid = bbiid
-        #     if data.get('cattype') == 'admin':
-        #         bmi.adminid = rl
-        #         bmi.viewtype = 0
-        #     else:
-        #         bmi.adminid = 0
-        #     if data.get('cattype') == 'teacher':
-        #         bmi.teacherid = rl
-        #         bmi.viewtype = 2
-        #     else:
-        #         bmi.teacherid = 0
-        #     if data.get('cattype') == 'schools':
-        #         bmi.schoolid = data.get('schoolid')
-        #         bmi.classid = rl
-        #         bmi.viewtype = 2
-        #     else:
-        #         bmi.schoolid = 0
-        #         bmi.classid = 0
-        #     bmi.save()
+        for rl in data.get('resourcelist'):
+            bmi = models.Bulletinmappinginfo()
+            bmi.bulletinboardid = bbiid
+            if data.get('cattype') == 'admin':
+                bmi.adminid = rl
+                bmi.viewtype = 0
+            else:
+                bmi.adminid = 0
+            if data.get('cattype') == 'teacher':
+                bmi.teacherid = rl
+                bmi.viewtype = 2
+            else:
+                bmi.teacherid = 0
+            if data.get('cattype') == 'schools':
+                bmi.schoolid = data.get('schoolid')
+                bmi.classid = rl
+                bmi.viewtype = 2
+            else:
+                bmi.schoolid = 0
+                bmi.classid = 0
+            bmi.save()
         return Response(request.DATA)
 
 
