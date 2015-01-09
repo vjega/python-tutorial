@@ -465,9 +465,14 @@ def threadview(request):
 @login_required
 @switchlanguage
 def bulletinboardlist(request):
-    return render(request, 'portaladmin/bulletinboardlist.html', {"form" : AnnouncementForm.AnnouncementForm()})
+    return render(request, 'portalteacher/bulletinboardlist.html', {"form" : AnnouncementForm.AnnouncementForm()})
 
-
+@login_required
+@switchlanguage
+def bulletinboard(request):
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    return render(request, 'portalteacher/bulletinboard.html',
+                                        {'schools':schools })
 @login_required
 @switchlanguage
 def studentprofile(request):
