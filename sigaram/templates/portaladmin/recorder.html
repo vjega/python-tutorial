@@ -37,11 +37,16 @@
                     </div>
                 </div>
             </div>
-            <form id="uploadForm" name="uploadForm" action="/api/admin/audioupload">
-                <input id="authenticity_token" name="authenticity_token" value="xxxxx" type="text">
-                <input id="upload_file[parent_id]" name="upload_file[parent_id]" value="1" type="text">
-                <input id="format" name="format" value="json" type="text">
+            <form id="uploadForm" name="uploadForm" action="/api/admin/audioupload/">
+                <input id="authenticity_token" name="authenticity_token" value="xxxxx" type="hidden">
+                <input id="upload_file[parent_id]" name="upload_file[parent_id]" value="1" type="hidden">
+                <input id="uploadfilename" name="uploadfilename"  type="text">
+                <input id="format" name="format" value="json" type="hidden">
             </form>
+            <audio controls>
+                <source src="/static/file.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
         </section>
     </div>
 </div>
@@ -98,7 +103,6 @@
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<<<<<<< HEAD
 <script>
 
 
@@ -136,8 +140,6 @@ function audioReceived(filename, filedata) {
         flashvars = {gateway:'form', 'return':'reset', callback:'audioReceived', format:'wav'};
         swfobject.embedSWF("{% static "bower_components/local-audio-recorder-master/build/recorder.swf" %}", "recorder", "215", "138", "10.1", "{% static "bower_components/local-audio-recorder-master/demo/expressInstall.swf"  %}", flashvars);
 </script>
-=======
->>>>>>> 8334c4addd5e0678d314a8fce3e8eb7ba9159085
 {% endblock scriptcontent %}
 
 
