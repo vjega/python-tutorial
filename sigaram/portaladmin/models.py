@@ -323,7 +323,7 @@ class Bulletinboardinfo(models.Model):
         db_table = 'bulletinboardinfo'
 
     @staticmethod
-    def announcement (loginid):
+    def announcement (req):
         sql = """
         SELECT  bbi.bulletinboardid,
                 bbi.messagetitle,
@@ -333,13 +333,10 @@ class Bulletinboardinfo(models.Model):
         FROM bulletinboardinfo bbi
         INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
         INNER JOIN auth_user au ON au.id = bbi.postedby
-        -- INNER JOIN teacherinfo ti ON ti.username = au.username
-        WHERE (viewtype =0 ) OR (viewtype =2)
-            AND bmi.adminid =%s
+        WHERE bmi.userid = %s
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
-        LIMIT 2"""%loginid
-        print sql;
+        LIMIT 2"""%req.user.id 
         cursor = connection.cursor()
         cursor.execute(sql)
         x = dictfetchall(cursor)
