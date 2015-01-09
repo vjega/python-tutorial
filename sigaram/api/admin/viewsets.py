@@ -1683,10 +1683,11 @@ class AudioinfoViewSet(viewsets.ViewSet):
         pass
     
     def create(self, request):
-        import os
+        import os, time
         f = request.FILES["upload_file[filename]"]
         filename = request.POST.get("uploadfilename")
-        with open(os.path.join('static',filename+'.wav'), 'wb+') as destination:
+        ts = time.time()
+        with open(os.path.join('static',filename+str(ts)+'.wav'), 'wb+') as destination:
             for chunk in f.chunks():
                 destination.write(chunk)
         return Response({'msg':'ok'})

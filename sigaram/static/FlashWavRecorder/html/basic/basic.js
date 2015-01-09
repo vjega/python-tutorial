@@ -5,10 +5,10 @@ $(function () {
 
   var appWidth = 24;
   var appHeight = 24;
-  var flashvars = {'upload_image': '../images/upload.png'};
+  var flashvars = {'upload_image': '/static/FlashWavRecorder/html/images/upload.png'};
   var params = {};
   var attributes = {'id': RECORDER_APP_ID, 'name': RECORDER_APP_ID};
-  swfobject.embedSWF("../recorder.swf", "flashcontent", appWidth, appHeight, "11.0.0", "", flashvars, params, attributes);
+  swfobject.embedSWF("/static/FlashWavRecorder/html/recorder.swf", "flashcontent", appWidth, appHeight, "11.0.0", "", flashvars, params, attributes);
 
   window.fwr_event_handler = function fwr_event_handler() {
     var name, $controls;
