@@ -182,7 +182,7 @@ TTS.forms.renderstudentlist = function(data){
     return true;
     
     /*
-    TTS.forms.table2 = $('#assessment-assigning-list').dataTable({
+    TTS.forms.table2 = $('#assessment-assigning-list').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });
@@ -221,7 +221,7 @@ TTS.forms.rubricslist = function() {
 
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }
@@ -298,7 +298,7 @@ TTS.forms.assessmentassigninglist = function() {
 
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }
@@ -326,7 +326,7 @@ TTS.forms.renderschoolinfoagain = function(data){
    
 TTS.forms.renderschoolinfo = function(data){
     var headers = [
-            { "title": "<input type='checkbox' id='selectall'>",
+            { "title": "<input type='checkbox' id='selectall'>{% trans "Select" %}",
               "class": "text-center",
               "data" : "id",
               "bSortable": false
@@ -344,7 +344,7 @@ TTS.forms.renderschoolinfo = function(data){
         dataset.push(t);
     }
 
-    TTS.forms.asstable = $('#assessment-assigning-list').dataTable({
+    TTS.forms.asstable = $('#assessment-assigning-list').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });
@@ -374,7 +374,7 @@ TTS.forms.rubricinfo = function(data){
         dataset.push(t);
     }
 
-    TTS.forms.asstable = $('#rubrics-list').dataTable({
+    TTS.forms.asstable = $('#rubrics-list').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });
@@ -382,7 +382,7 @@ TTS.forms.rubricinfo = function(data){
 
 TTS.forms.renderresourceinfo = function(data){
     var headers = [
-             { "title": "<input type='checkbox' id='selectall'>",
+             { "title": "<input type='checkbox' id='selectall'>{% trans "Select" %}",
               "class": "text-center",
               "bSortable": false
             },
@@ -397,7 +397,7 @@ TTS.forms.renderresourceinfo = function(data){
         dataset.push(t);
     }
 
-    $('#admin-main-tbl').dataTable({
+    $('#admin-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });
@@ -437,7 +437,7 @@ TTS.forms.ressave = function(){
     }).done(function(data){
         //console.log(data); return false;
         alert("Chapters assigned Successfully");
-        window.location = 'studentresourceunits?categoryid=0&classid=1&section=a';
+        location.reload();
     }).error(function(err, msg){
         alert("I didnt save the data");
     });

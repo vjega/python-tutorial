@@ -68,3 +68,28 @@ TTS.utils.getCookie = function(name)  {
     }
     return cookieValue;
 }
+
+TTS.utils.datatable_ta = {
+    "emptyTable":     "அட்டவணையில் பதிவுகள் எதுவும் இல்லை",
+    "info":           "_START_  இருந்து _END_ வரை (மொத்தம் _TOTAL_)",
+    "infoEmpty":      "அட்டவணையில் பதிவுகள் எதுவும் இல்லை",
+    "infoFiltered":   "(_MAX_ பதிவுகளிலிருந்து வடிகட்டப்பட்டது)",
+    "infoPostFix":    "",
+    "thousands":      ",",
+    "lengthMenu":     "காண்க _MENU_ பதிவுகள்",
+    "loadingRecords": "ஏற்றுகிறது...",
+    "processing":     "செயலாக்குகிறது...",
+    "search":         "தேடு:",
+    "zeroRecords":    "தேடும் பதிவுகள் இல்லை",
+    "paginate": {
+        "first":      "முதல்",
+        "last":       "கடைசி",
+        "next":       "அடுத்து",
+        "previous":   "முன்"
+    },
+    "aria": {
+        "sortAscending":  ": activate to sort column ascending",
+        "sortDescending": ": activate to sort column descending"
+    
+    }
+}

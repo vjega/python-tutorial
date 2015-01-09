@@ -71,7 +71,7 @@ TTS.forms.addstudentnotes = function() {
         },
         message: $($('#studentnotes-form').render()),
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-studentnoteslist");
@@ -89,7 +89,7 @@ TTS.forms.addstudentnotes = function() {
                 });
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }
@@ -136,7 +136,7 @@ TTS.forms.renderstudentnotes = function(data){
         );
         return true;
     }
-    TTS.forms.table = $('#studentnotes-main-tbl').dataTable({
+    TTS.forms.table = $('#studentnotes-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });

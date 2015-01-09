@@ -71,7 +71,7 @@ TTS.forms.addstudentwork = function() {
         },
         message: $($('#worklist-form').render()),
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-studentworkspace");
@@ -89,7 +89,7 @@ TTS.forms.addstudentwork = function() {
                 });
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }
@@ -141,7 +141,7 @@ TTS.forms.renderstudentwork = function(data){
         );
         return true;
     }
-    TTS.forms.table = $('#studentwork-main-tbl').dataTable({
+    TTS.forms.table = $('#studentwork-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });

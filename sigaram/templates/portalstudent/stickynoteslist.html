@@ -84,7 +84,7 @@ TTS.forms.showadminform = function() {
         onshown: function(){
         },
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-sticky-info");
@@ -92,7 +92,7 @@ TTS.forms.showadminform = function() {
                 TTS.forms.addadmin(dialogItself, data); 
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dlg){
                 dlg.close();
             }
@@ -130,7 +130,7 @@ TTS.forms.renderteacher = function(data){
         );
         return true;
     }
-    TTS.forms.table = $('#sticky-list-tbl').dataTable({
+    TTS.forms.table = $('#sticky-list-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });

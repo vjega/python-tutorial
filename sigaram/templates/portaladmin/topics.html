@@ -86,7 +86,7 @@ TTS.forms.showadminform = function() {
             $('.summernote').summernote();
         },
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-topic");
@@ -94,7 +94,7 @@ TTS.forms.showadminform = function() {
                 TTS.forms.addadmin(dialogItself, data); 
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dlg){
                 dlg.close();
             }
@@ -125,7 +125,7 @@ TTS.forms.renderteacher = function(data){
         dataset.push(t);
     }
     
-    TTS.forms.table = $('#topics-main-tbl').dataTable({
+    TTS.forms.table = $('#topics-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });

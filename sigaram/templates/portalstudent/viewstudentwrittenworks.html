@@ -46,6 +46,7 @@
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
@@ -94,7 +95,7 @@ TTS.forms.renderstudentwork = function(data){
         );
         return true;
     }
-    TTS.forms.table = $('#student-written-tbl').dataTable({
+    TTS.forms.table = $('#student-written-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });

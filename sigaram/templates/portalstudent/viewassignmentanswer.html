@@ -4,7 +4,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Deliverables" %}</h2>
+        <h2 class="page-header">{% trans "Assignment" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -242,7 +242,7 @@ TTS.forms.renderanswereditinginfo = function(data, isapproved){
             dataset
         );
     }else{
-        TTS.forms.asstable = $('#edit-answer-list').dataTable({
+        TTS.forms.asstable = $('#edit-answer-list').dataTable({"language" : TTS.utils.datatable_ta,
             "data":     dataset,
             "columns":  headers
         });        
@@ -320,7 +320,7 @@ TTS.forms.editanswerlist = function(spanid){
                         }
                    },
                    {
-                        label: 'Close',
+                        label: '{% trans "Close" %}',
                         cssClass: 'btn-primary',
                         action: function(dialogItself){
                             dialogItself.close();
@@ -366,7 +366,7 @@ TTS.forms.editanswer = function() {
         },
         message: html,
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
 
@@ -409,7 +409,7 @@ TTS.forms.editanswer = function() {
                 });
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }

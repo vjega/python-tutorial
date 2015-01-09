@@ -36,7 +36,7 @@
                 <h4>{% trans "Answer" %}</h4>
                 f hdfhs dfgs<br>
                 dfgsdgsfd<br>
-                Original Text :<a href="">View</a> <== click Here 
+                Original Text :<a href="">{% trans "View" %}</a> <== click Here 
             </div>
             
            
@@ -50,7 +50,7 @@
         <!-- /.panel-heading -->
        
         <div class="text-center">
-            <button class="btn btn-primary" id="addrec">Send</button>
+            <button class="btn btn-primary" id="addrec">{% trans "Send" %}</button>
         </div>
 
          <table class="table table-striped table-bordered table-hover" 
@@ -125,7 +125,7 @@ TTS.forms.renderfourminfo = function(data){
               "class": "topic"
             },
             
-            { "title": "{% trans "Declared" %}",
+            { "title": "{% trans "Announcer" %}",
               "class": "text-center" ,
               "data" : "createddate"  
             },
@@ -147,7 +147,7 @@ TTS.forms.renderfourminfo = function(data){
         dataset.push(t);
     }
 
-    $('#forum-main-tbl').dataTable({
+    $('#forum-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         //"data":     dataset,
         "columns":  headers
     });

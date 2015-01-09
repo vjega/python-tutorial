@@ -39,14 +39,6 @@
                     </div>
                     <div class="row">
                         <div class="form-group" class="col-sm-6">
-                            <label for="folder_name" class="col-sm-4 control-label">{% trans "Last Name" %}</label>
-                            <div class="col-sm-3">
-                                <input type ="text" class="form-control" name="admin_lname" id="admin_lname">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group" class="col-sm-6">
                             <label for="folder_name" class="col-sm-4 control-label">{% trans "Password" %}</label>
                             <div class="col-sm-3">
                                 <input type ="text" class="form-control" name="admin-pass" id="admin-pass">
@@ -68,6 +60,9 @@
                                <input type="file" class="form-control" name="admin_photo" id="admin_photo"placeholder="{% trans "Choose File" %}">
                             </div>
                         </div>
+                    </div><br/>
+                    <div >
+                        <button class="btn btn-primary center-block" id="mybtn">Save</button>
                     </div>
 
                 </table>
@@ -96,23 +91,41 @@
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
 
-<script  type="text/x-jsrender">
+<script>
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}
 
 $(document).ready(function(){
-    $('#admin-main-tbl').on('click', '.tts-delete', function(e){
-        e.stopPropagation();
-        if (!window.confirm("Do you want to delete this record?")) {
-            return false;
+    
+    $("#mybtn").click(function(){
+        var dataobj = {
+            'username' : $("#admin_username").val(),
+            'fname'    : $("#admin_fname").val(),
+            'password' : $("#admin-pass").val(),
+            'email'    : $("#email").val(),
+            'photo'    : $("#admin_photo").val(),
         }
-        alert("Record Deleted")
-        window.location = 'adminlist';
+        $.ajax({
+            headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+            },
+           // url:"/api/admin/logininfo/"+id+"/",
+            url:"/api/admin/logininfo/",
+            type:"POST",
+            data:dataobj
+        }).done(function(data){
+            console.log(data)
+        })
+        ;
+        datatable = JSON.stringify($("#admin_username").val(),$("#admin_fname").val())
+        alert(datatable);
     });
-
-   
+    
 });
 
 </script>

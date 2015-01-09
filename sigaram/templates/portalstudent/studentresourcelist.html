@@ -86,7 +86,7 @@ TTS.forms.addstudentresource = function() {
         },
         message: $($('#studentresource-form').render()),
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-studentresource");
@@ -106,7 +106,7 @@ TTS.forms.addstudentresource = function() {
 
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }
@@ -134,7 +134,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
         dataset.push(t);
     }
 
-    $('#studetresource-main-tbl').dataTable({
+    $('#studetresource-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         //"data":     dataset,
         "columns":  headers
     });

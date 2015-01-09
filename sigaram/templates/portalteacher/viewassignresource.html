@@ -161,7 +161,7 @@ TTS.forms.renderstudentlist = function(data){
         dataset.push(t);
     }
 
-    TTS.forms.table = $('#studentlist').dataTable({
+    TTS.forms.table = $('#studentlist').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });

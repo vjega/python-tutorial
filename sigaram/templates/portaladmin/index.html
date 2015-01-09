@@ -165,13 +165,13 @@
 
 <script>
 $(document).ready(function(){
-    $('#admin-main-tbl').dataTable();
+    $('#admin-main-tbl').dataTable({language:TTS.utils.datatable_ta});
     $("#page-wrapper").on("click", "#new-folder", function(){
         BootstrapDialog.show({
             title: "{% trans "New Folder" %}",
             message: $($("#newfolder").render()),
             buttons: [{
-                label: 'Save',
+                label: '{% trans "Save" %}',
                 cssClass: 'btn-primary',
                 action: function(){
                     var data = TTS.utils.serilaizeJson("#newfolderfrm");
@@ -189,7 +189,7 @@ $(document).ready(function(){
                     });
                 }
                 },{
-                label: 'Close',
+                label: '{% trans "Close" %}',
                 action: function(dialogItself){
                     dialogItself.close();
                 }

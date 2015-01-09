@@ -99,14 +99,14 @@ TTS.forms.showteacherform = function() {
             TTS.forms.upload();
         },
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-teacher");
                 TTS.forms.addteacher(dialogItself, data); 
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dlg){
                 dlg.close();
             }
@@ -142,7 +142,7 @@ TTS.forms.editteacher = function(id, data) {
                 });
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }
@@ -220,7 +220,7 @@ TTS.forms.renderteacher = function(data){
             dataset
         );
     }else{
-        TTS.forms.table = $('#teacherlist-main-tbl').dataTable({
+        TTS.forms.table = $('#teacherlist-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
             "data":     dataset,
             "columns":  headers
         });

@@ -129,7 +129,7 @@
             dataset
         );
     }else{
-        TTS.forms.tablerl = $('#resource-list').dataTable({
+        TTS.forms.tablerl = $('#resource-list').dataTable({"language" : TTS.utils.datatable_ta,
             "data":     dataset,
             "columns":  headers
         });

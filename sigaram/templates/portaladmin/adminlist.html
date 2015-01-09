@@ -120,7 +120,7 @@ TTS.forms.showadminform = function() {
             TTS.forms.upload();
         },
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-admin");
@@ -128,7 +128,7 @@ TTS.forms.showadminform = function() {
                 TTS.forms.addadmin(dialogItself, data); 
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dlg){
                 dlg.close();
             }
@@ -182,7 +182,7 @@ TTS.forms.renderadmin = function(data){
         dataset.push(t);
     }
 
-    $('#admin-main-tbl').dataTable({
+    $('#admin-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });

@@ -101,14 +101,14 @@ TTS.forms.showfourms = function() {
         onshown: function(){
         },
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-forum");
                 TTS.forms.addtfourms(dialogItself, data); 
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dlg){
                 dlg.close();
             }
@@ -151,7 +151,7 @@ TTS.forms.renderfourminfo = function(data){
         dataset.push(t);
     }
 
-    $('#forum-main-tbl').dataTable({
+    $('#forum-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });

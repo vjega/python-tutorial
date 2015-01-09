@@ -5,7 +5,12 @@ from crispy_forms.helper import FormHelper
 #from crispy_forms.layout import Submit
 class NewtopicForm(forms.Form):
     topicname = forms.CharField(
-        label    = _("Heading"),
+        label    = _("Title"),
+        required = True,
+        widget   = forms.Textarea({ "class": "summernote"})
+    )
+    name = forms.CharField(
+        label    = _("Content"),
         required = True,
         widget   = forms.Textarea({ "class": "summernote"})
     )

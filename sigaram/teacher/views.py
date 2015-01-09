@@ -190,7 +190,7 @@ def studentresourcetype(request):
         },{
         "id": "3",
         "categoryid": "2",
-        "name" :_("Written Work"),
+        "name" :_("Writing board"),
         "href" :"studentresourceunits"
         },{
         "id": "3",
@@ -385,7 +385,7 @@ def statistics(request):
         "href" :"statisticsstudentslist"
         },{
         "id": "2",
-        "name" :_("Deliverables statistics"),
+        "name" :_("Assignment statistics"),
         "href" :"statisticsstudentslist"
         },{
         "id": "3",
@@ -452,7 +452,7 @@ def thread(request):
 @login_required
 @switchlanguage
 def addwrittenwork(request):
-    schools = models.Schoolinfo.objects.all()
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/addwrittenwork.html',{'schools':schools,'classes':classes})
 
@@ -515,4 +515,14 @@ def forum(request):
 @switchlanguage
 def viewtopic(request):
    foruminfo = models.Foruminfo.objects.all()
-   return render(request, 'portalteacher/viewtopic.html',{"form" : NewtopicForm.NewtopicForm()})
+   return render(request, 'portalteacher/viewtopic.html')
+
+def viewpost(request):
+    return render(request, 'portalteacher/viewpost.html')
+
+def newtopic(request):
+    return render(request, 'portalteacher/newtopic.html', {"form" : NewtopicForm.NewtopicForm()})
+
+@switchlanguage
+def billviewassignmentanswer(request):
+    return render(request, 'portalteacher/billviewassignmentanswer.html')

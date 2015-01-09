@@ -1,7 +1,6 @@
 {% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
-{% load crispy_forms_tags %}
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
@@ -58,9 +57,6 @@
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<script id="topic-form" type="text/x-jsrender">
-    {% crispy form %}
-</script>
 
 <script>
 window.TTS = window.TTS || {}
@@ -104,7 +100,7 @@ TTS.forms.showviewfourm = function() {
             $('.summernote').summernote();
         },
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#newtopic-forum");
@@ -115,7 +111,7 @@ TTS.forms.showviewfourm = function() {
                 TTS.forms.addviewfourm(dialogItself, data); 
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dlg){
                 dlg.close();
             }
@@ -158,7 +154,7 @@ TTS.forms.renderviewfourminfo = function(data){
         dataset.push(t);
     }
 
-    $('#viewforum-main-tbl').dataTable({
+    $('#viewforum-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });
@@ -172,13 +168,11 @@ $(document).ready(function(){
     }).done(function(data){
         if (data.length) {
             TTS.forms.renderviewfourminfo(data);
-        } else {
-            TTS.forms.table.fnClearTable();
-        }
+        } 
+        
     });
     var dataname = TTS.utils.getUrlParameter("forumname");
     $("#headermsg").html(dataname);
-
 
 
 
@@ -186,16 +180,16 @@ $(document).ready(function(){
         var myString = this.id;
         var arr = myString.split('/');
 
-        //window.location ='viewpost?forumid='+arr[0]+'&topicid='+arr[1]+'&topicname='+$($(this).find(".viewtopicname")[0]).text()+'&forumname='+TTS.utils.getUrlParameter("forumname");
+        window.location ='viewpost?forumid='+arr[0]+'&topicid='+arr[1]+'&topicname='+$($(this).find(".viewtopicname")[0]).text()+'&forumname='+TTS.utils.getUrlParameter("forumname");
         //console.log(this.id);
     });
 
     $("#wrapper").on("click", "#addrec", function(){
-       // window.location ='newtopic?forumid='+TTS.utils.getUrlParameter("forumid")+'&forumname='+TTS.utils.getUrlParameter("forumname");
+        window.location ='newtopic?forumid='+TTS.utils.getUrlParameter("forumid")+'&forumname='+TTS.utils.getUrlParameter("forumname");
     });
 
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.showviewfourm();
+        //TTS.forms.showviewfourm();
     });
    
 });

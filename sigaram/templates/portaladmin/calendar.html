@@ -58,14 +58,14 @@ TTS.forms.showcalform = function(start, end, allDay) {
             });
         },
         buttons: [{
-            label: 'Save',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 TTS.forms.saveCal();
                 dialogItself.close();
             }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }
@@ -132,7 +132,7 @@ TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
                     });
                 }
             },{
-            label: 'Cancel',
+            label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }
