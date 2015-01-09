@@ -339,6 +339,7 @@ class Bulletinboardinfo(models.Model):
             GROUP BY bbi.bulletinboardid
             ORDER by bbi.bulletinboardid DESC
             LIMIT 2"""%loginid
+        print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         x = dictfetchall(cursor)
