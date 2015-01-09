@@ -508,7 +508,7 @@ class AdminclasslistViewSet(viewsets.ModelViewSet):
 
 class AdminrubricsViewSet(viewsets.ModelViewSet):
 
-    queryset = models.RubricsHeader.objects.all()
+    queryset = models.RubricsHeader.objects.all().order_by('-ts')
     serializer_class = adminserializers.AdminrubricsSerializer
 
     def create(self, request):
@@ -1666,7 +1666,7 @@ class LogininfoViewSet(viewsets.ModelViewSet):
     def list(self, request):
         userid   = request.user.id
         user   = request.user.username
-
+        print userid
         sql = """
          SELECT teacherid,
                 ti.firstname,
@@ -1690,25 +1690,11 @@ class LogininfoViewSet(viewsets.ModelViewSet):
     def create(self, request):
         loginlist = models.Logininfo()
         logindata =  json.loads(request.DATA.keys()[0])
-        loginlist.loginid = logindata.get('loginid',0)
-        loginlist.password = logindata.get('password',0)
-        loginlist.firstname = logindata.get('firstname',0,0)
-        loginlist.lastname = logindata.get('lastname',0)
-        loginlist.lastlogin = logindata.get('lastlogin',0)
-        loginlist.usertype = request.user.username
-        loginlist.isdeleted = 0
-        loginlist.username = request.user.id
-        loginlist.save()
-        return Response(request.DATA)
-
-    def update(self, request, pk=None):
-        loginlist = models.Logininfo.objects.get(pk=pk)
-        logindata =  json.loads(request.DATA.keys()[0])
-        loginlist.loginid = logindata.get('loginid',0)
-        loginlist.password = logindata.get('password',0)
-        loginlist.firstname = logindata.get('firstname',0,0)
-        loginlist.lastname = logindata.get('lastname',0)
-        loginlist.lastlogin = logindata.get('lastlogin',0)
+        loginlist.loginid = logindata.get('loginid')
+        loginlist.password = logindata.get('password')
+        loginlist.firstname = logindata.get('firstname')
+        loginlist.lastname = logindata.get('lastname')
+        loginlist.lastlogin = logindata.get('lastlogin')
         loginlist.usertype = request.user.username
         loginlist.isdeleted = 0
         loginlist.username = request.user.id
@@ -1725,6 +1711,7 @@ class AudioinfoViewSet(viewsets.ViewSet):
     def create(self, request):
         queryset = models.Admininfo.objects.filter(isdelete=0).order_by('-createddate')
         serializer_class = adminserializers.AudiouploadSerializer
+    
         import os, time
         f = request.FILES["upload_file[filename]"]
         filename = request.POST.get("uploadfilename")

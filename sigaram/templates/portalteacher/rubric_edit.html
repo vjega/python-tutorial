@@ -16,33 +16,33 @@
 
 <div class="col-lg-12">
     <div class="panel panel-default">
-    <form enctype="multipart/form-data" action="" method="POST"> 
         <div class="panel-heading">
             {% trans "Rubrics" %} 
         </div>
+        <div style="padding:10px">
         <!-- /.panel-heading -->
-        <div class="gentable" id ="rub_mtx_head rub_mtx_rows">
-            {% crispy form %}
-        </div>
-        <table class="form-horizontal">
-            <tr>
-                <td>&nbsp;&nbsp; Column</td><td><input type='text' class="form-control" id='r-row' ></td>
-                <td>&nbsp;&nbsp; Paragraph</td><td><input type='text' class="form-control" id='r-col'></td>
-                <td>&nbsp;&nbsp;<input type='button'class ="btn btn-primary " id="createTable" value= ' Create '/></td>
-                <td>&nbsp;&nbsp;<input type='button' class ="btn btn-primary "id ="showexcelfile" value=' Excel Import'/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan='6' id='filedialog' style='display:none'>
-                    <input type='file' name='excelfile' id='excelfile' />
-                    <input type='submit' id='uploadexcel' value='Upload' >
-                    </form>
-                </td>
-            </tr>
-        </table><br />
-        <div id='dyntable' style='background-color:#ADFF2F'>
- 
-        </div>
+            <div class="gentable" id ="rub_mtx_head rub_mtx_rows">
+                {% crispy form %}
+            </div>
+            <table class="form-horizontal">
+                <tr height="65">
+                    <td width="170">Column</td><td><input type='text' class="form-control" id='r-row' ></td>
+                    <td width="170"> &nbsp;&nbsp; Paragraph</td><td><input type='text' class="form-control" id='r-col'></td>
+                    <td>&nbsp;&nbsp; <input type='button'class ="btn btn-primary " id="createTable" value= ' Create '/></td>
+                    <td>&nbsp;&nbsp; <input type='button' class ="btn btn-primary "id ="showexcelfile" value=' Excel Import'/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='6' id='filedialog' style='display:none'>
+                        <input type='file' name='excelfile' id='excelfile' />
+                        <input type='submit' id='uploadexcel' value='Upload' >
+                    </td>
+                </tr>
+            </table><br />
+            <div id='dyntable' style='background-color:#ADFF2F'>
+     
+            </div>
+        </div>  
         <!-- /.panel-body -->
     </div>
     <!-- /.panel -->
@@ -97,8 +97,11 @@
         width:98%;
         background-color:#fff;
     }
-    .note-codable{
-        height: 500px;
+    .note-editable{
+        height: 80px;
+    }
+    .form-group{
+        height: 35px;
     }
 </style>
 
@@ -322,7 +325,8 @@ $(document).ready(function(){
                 data: JSON.stringify(data)
             }).done(function(data){
                 console.log(data);
-                //TTS.forms.renderteacherresourceinfo(data);
+                alert("Rubrics Saved Successfully");
+                window.location = "rubrics";
             });
 
 
