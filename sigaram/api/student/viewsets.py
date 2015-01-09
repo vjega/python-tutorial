@@ -227,6 +227,8 @@ class ClassroominfoViewSet(viewsets.ModelViewSet):
             LEFT JOIN writtenworkinfo wwi on wwi.writtenworkid = cli.writtenworkid
             LEFT JOIN logininfo li on li.loginid = cli.studentid
             LEFT JOIN studentinfo sti on sti.username=li.username
+            WHERE (asri.isclassroom =1 OR asi.isclassroom =1 OR awwi.isclassroom=1)
+                      ORDER BY cli.classroomid desc
             LIMIT 1
             
         """

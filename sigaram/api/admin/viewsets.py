@@ -1663,6 +1663,29 @@ class LogininfoViewSet(viewsets.ModelViewSet):
     queryset = models.Logininfo.objects.all()
     serializer_class = adminserializers.StickyinfoSerializer
 
+    def list(self, request):
+        loginid   = request.user.id
+
+        sql = """
+        SELECT teacherid,
+               ti.firstname,
+               ti.username,
+               ti.emailid 
+        FROM teacherinfo ti
+        INNER JOIN logininfo li on li.username=ti.username 
+        WHERE li.loginid= 333
+        """ 
+        cursor = connection.cursor()
+        print sql
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+
     def create(self, request):
         loginlist = models.Logininfo()
         logindata =  json.loads(request.DATA.keys()[0])

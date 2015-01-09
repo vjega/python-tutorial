@@ -101,15 +101,17 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 
 $(document).ready(function(){
-    
+
+    /*
     $("#mybtn").click(function(){
-        var dataobj = {
+        var dataobj = [{
             'username' : $("#admin_username").val(),
             'fname'    : $("#admin_fname").val(),
             'password' : $("#admin-pass").val(),
             'email'    : $("#email").val(),
             'photo'    : $("#admin_photo").val(),
-        }
+        }]        
+        alert(dataobj);
         $.ajax({
             headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -121,16 +123,11 @@ $(document).ready(function(){
         }).done(function(data){
             alert(data)
         });
-        alert(dataobj);
+       
 
-        //datatable = JSON.stringify($("#admin_username").val(),
-                                        //$("#admin_fname").val(),
-                                       // $("#admin-pass").val(),
-                                       // $("#email").val(),
-                                        //$("#admin_photo").val()
-                                        //)
-        //alert(datatable);
+        
     });
+*/
     
 });
 
