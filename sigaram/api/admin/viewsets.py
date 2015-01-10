@@ -57,16 +57,16 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
     queryset = models.AdminFolders.objects.all()
     serializer_class = adminserializers.AdminFolderSerializer
 
-    # def create(self, request):
-    #     adminfolder = models.AdminFolders()
-    #     data =  json.loads(request.DATA.keys()[0])
-    #     adminfolder.folder_name = data.get('folder_name')
-    #     adminfolder.folder_description = data.get('folder_description')
-    #     adminfolder.folder_order = data.get('folder_order')
-    #     adminfolder.added_date = time.strftime('%Y-%m-%d %H:%M:%S')
-    #     adminfolder.userid = request.user.username
-    #     adminfolder.save()
-    #     return Response(request.DATA)
+    def create(self, request):
+        adminfolder = models.AdminFolders()
+        data =  json.loads(request.DATA.keys()[0])
+        adminfolder.folder_name = data.get('folder_name')
+        adminfolder.folder_description = data.get('remark')
+        adminfolder.folder_order = data.get('order_no')
+        adminfolder.added_date = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminfolder.userid = request.user.username
+        adminfolder.save()
+        return Response(request.DATA)
 
 class teacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
@@ -248,7 +248,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         """ % (classid,section,chapterid,categoryid)
         cursor = connection.cursor()
 
-        print sql
+        # print sql
 
         cursor.execute(sql)
         desc = cursor.description
@@ -667,6 +667,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title = data.get('title')
         cal.start = data.get('start')
         cal.end = data.get('end')
+        cal.color = '#337ab7'
         cal.eventcreatedby = request.user.username
         cal.eventeditedby = request.user.username
         cal.isdeleted = 0
@@ -682,6 +683,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title = data.get('title')
         cal.start = data.get('start')
         cal.end = data.get('end')
+        cal.color = '#d9534f'
         #cal.eventcreatedby = request.user.username
         #cal.start = time.strftime('%Y-%m-%d %H:%M:%S')
         #cal.end = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -692,6 +694,9 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         cal.save()
         return Response(request.DATA)
+    def destroy(self, request, pk):
+        models.Calendardetails.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
 
 class MindmapViewSet(viewsets.ModelViewSet):
     queryset = models.Mindmap.objects.filter().order_by('-createddate')
@@ -1145,6 +1150,7 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
             ]
         return Response(result)
 
+
 class Bulletinboardlist(viewsets.ModelViewSet):
     queryset = models.Bulletinboardinfo.objects.all()
     serializer_class = adminserializers.BulletinboardlistinfoSerializer
@@ -1304,7 +1310,7 @@ class Bulletinboard(viewsets.ModelViewSet):
         sql = """
         SELECT  ci.shortname,
                 si.shortname AS schoolname,
-                csmi.classschoolmappingid AS classid 
+                ci.classid AS classid 
         FROM classschoolmappinginfo csmi
         INNER JOIN classinfo ci ON ci.classid = csmi.classid 
         INNER JOIN schoolinfo si ON si.schoolid = csmi.schoolid 
@@ -1586,7 +1592,7 @@ class ThreadsViewSet(viewsets.ModelViewSet):
         """ % pk
 
         cursor = connection.cursor()
-        print sql
+        # print sql
         cursor.execute(sql)
         desc = cursor.description
         result =  [
@@ -1744,10 +1750,9 @@ class AuthuserViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-
     def retrieve(self, request, pk=None):
         userid   = request.user.id
-        print userid
+        # print userid
         return Response(userid)
 
 

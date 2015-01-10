@@ -182,11 +182,11 @@ $(document).ready(function(){
                             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
                         },
                         type:'POST',
-                        data: {'data':data},
+                        data: data,
                         url : '/api/admin/adminfolders/'
                     }).done(function( msg ) {
                         console.log(msg);
-                        alert(msg);
+                        location.reload();
                         //dialogItself.close();
                     });
                 }

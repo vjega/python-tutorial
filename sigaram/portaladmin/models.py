@@ -48,7 +48,7 @@ class Activitylog(models.Model):
         return dictfetchall(cursor)
 
 class AdminFolders(models.Model):
-    folder_id = models.IntegerField(primary_key=True)
+    folder_id = models.AutoField(primary_key=True)
     folder_name = models.CharField(max_length=200)
     folder_description = models.CharField(max_length=1000)
     added_date = models.DateTimeField()
@@ -67,10 +67,10 @@ class AdminFolders(models.Model):
         FROM admin_folders 
         WHERE userid='%s'
         """%req.user.username 
+        print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         x = dictfetchall(cursor)
-        # print x
         return x
 
 
@@ -1045,6 +1045,7 @@ class Calendardetails(models.Model):
     title = models.TextField()
     start = models.DateTimeField()
     end = models.DateTimeField()
+    color = models.CharField(max_length=30)
     eventcreatedby = models.CharField(max_length=30)
     eventeditedby = models.CharField(max_length=30)
     createdby = models.BigIntegerField()
