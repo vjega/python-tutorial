@@ -13,20 +13,36 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading ">
-            <div class="col-lg-5">
-               <div id="add" class="col-lg-5">{% trans "From Date" %}</div>
-                    <div class="input-group col-lg-7">
-                        <input type="text" class="form-control" id="datetimepicker1" data-date-format="YYYY-MM-DD">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            <div class='col-lg-5'>    
+                    <div class="form-group">
+                        <div class="col-lg-5">
+                            <label>{% trans "From Date" %}: </label>
+                        </div>    
+                        <div class="col-lg-7" id='fromdate'>
+                            <div class='input-group'>
+                                <input type='text' class="form-control" data-date-format="YYYY-MM-DD"/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
                     </div>
-            </div>    
-            <div class="col-lg-5">
-                <div id="add" class="add col-lg-5">{% trans "To Date" %}</div>
-                <div class="input-group date col-lg-7">
-                    <input type="text" class="form-control" id="datetimepicker2" data-date-format="YYYY-MM-DD">
-                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 </div>
-            </div>
+                <div class='col-lg-5'>    
+                    <div class="form-group">
+                        <div class="col-lg-5">
+                            <label>{% trans "To Date" %}: </label>
+                        </div>
+                        <div class="col-lg-7" id='tilldate'>
+                            <div class='input-group'>
+                                <input type='text' class="form-control" data-date-format="YYYY-MM-DD"/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                <button type="button" class="btn btn-primary">{% trans "Search" %}</button>
         </div>
 
@@ -76,7 +92,7 @@
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
 <script>
 $(document).ready(function(){
-    $('#datetimepicker1,#datetimepicker2').datetimepicker({
+    $('#fromdate,#tilldate').datetimepicker({
         pickTime: false
     });
 });

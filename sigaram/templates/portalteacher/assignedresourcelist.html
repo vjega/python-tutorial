@@ -14,29 +14,33 @@
     <div class="panel panel-default">
             <div class="panel-heading">
             <div class="row">
-                <div class='col-lg-4'>    
+                <div class='col-lg-5'>    
                     <div class="form-group">
                         <div class="col-lg-5">
                             <label>{% trans "From Date" %}: </label>
                         </div>    
-                        <div class='input-group'>
-                            <input id='fromdatepicker' readonly="" type='text' class="form-control"data-date-format="YYYY-MM-DD"/>
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
+                        <div class="col-lg-7" id='fromdate'>
+                            <div class='input-group'>
+                                <input readonly="" type='text' class="form-control" data-date-format="YYYY-MM-DD"/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class='col-lg-4'>    
+                <div class='col-lg-5'>    
                     <div class="form-group">
                         <div class="col-lg-5">
                             <label>{% trans "To Date" %}: </label>
                         </div>
-                        <div class='input-group'>
-                            <input id='todatepicker' readonly="" type='text' class="form-control" data-date-format="YYYY-MM-DD"/>
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
+                        <div class="col-lg-7" id='tilldate'>
+                            <div class='input-group'>
+                                <input type='text' class="form-control" data-date-format="YYYY-MM-DD"/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>    
@@ -57,7 +61,7 @@
     <!-- /.panel -->
 </div>
 <script>
-    $('#fromdatepicker,#todatepicker').datetimepicker({
+    $('#fromdate,#tilldate').datetimepicker({
         pickTime: false
     });
 </script>

@@ -530,3 +530,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', end
 .navbar-default .navbar-nav>li>a {
     color: #fff;
 }
+.input-group-addon{
+    cursor:pointer;
+}
