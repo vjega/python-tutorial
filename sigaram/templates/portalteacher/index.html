@@ -95,29 +95,31 @@
         </div>
 <!-- /.col-lg-12 -->
     </div>
-    <div class="col-lg-4 col-md-8">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <i class="fa fa-bullhorn fa-fw"></i> {% trans "Announcement" %}
-        </div>
-        <!-- /.panel-heading -->
-        <div class="panel-body">
-            <div class="list-group">
-            {% autoescape off %}
-            {% for announce in announcement %}
-                <a class="list-group-item">
-                    <i class="fa fa-bullhorn fa-fw"></i> 
-                            <span>{{announce.messagetitle}}</span>
-                    <span class="pull-right text-muted small"><em>4 minutes ago</em>
-                    </span>
-                </a>
-            {% endfor announcement.body %}
-            {% endautoescape %}
+    <div class="col-lg-4 col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bullhorn fa-fw"></i> {% trans "Announcement" %}
             </div>
-            <!-- /.list-group -->
-            <a href="bulletinboardlist" class="btn btn-default btn-block">View All Announcement</a>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="list-group">
+          
+                {% autoescape off %}
+                {% for body in announcement.body %}
+                    <a class="list-group-item">
+                        <i class="fa fa-bullhorn fa-fw"></i> 
+                        <span>{{body.messagetitle}}</span>
+                        <span class="pull-right text-muted small"><em>4 minutes ago</em>
+                        </span>
+                    </a>
+                {% endfor announcement.body %}
+                {% endautoescape %}
+                </div>
+                <!-- /.list-group -->
+                <a href="bulletinboardlist" class="btn btn-default btn-block">View All Announcement</a>
+            </div>
+            <!-- /.panel-body -->
         </div>
-        <!-- /.panel-body -->
     </div>
 </div>
 </div>

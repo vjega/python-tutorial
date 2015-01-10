@@ -61,8 +61,6 @@ def layoutdemo(request):
 @login_required
 @switchlanguage
 def home(request):
-    print ("User is ", request.user.id)
-    print ("Group is ", request.user.groups.values_list('name',flat=True)[0])
     folders = [{
         "color": u"primary",
         "icon" : u"flaticon-school43",
@@ -86,21 +84,16 @@ def home(request):
     recent_acitivity_head = [_("Sl No."),
                              _("Assignments"),
                              _("Date")]
-    announcement_head = [_("Sl No."),
-                         _("Title"),
-                         _("Date")]
     admin_folders = models.AdminFolders.objects.all()
-    print "calling before announcement"
     announcement_body = models.Bulletinboardinfo.announcement(request)
-    print "calling after announcement"
     recent_activity_body = models.Activitylog.recentactivities()
     recent_activities = {'head':recent_acitivity_head,
                          'body':recent_activity_body}
-    announcement = {'head':announcement_head ,'body':announcement_body}
+    announcement = {'body':announcement_body}
     return  render(request, 'portaladmin/index.html', {"folders":folders,
                                            "admin_folders":admin_folders,
                                            "recent_activities":recent_activities,
-                                           #"announcement":announcement
+                                           "announcement":announcement
                                            })
 
 @login_required

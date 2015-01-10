@@ -59,16 +59,20 @@ def home(request):
         "stat": 125
         }]
 
-    recent_acitivity_head = [_("Sl No."),_("Assignments"),_("Date")]
+    recent_acitivity_head = [_("Sl No."),
+                             _("Assignments"),
+                             _("Date")]
     admin_folders = models.AdminFolders.objects.all()
+    announcement_body = models.Bulletinboardinfo.announcement(request)
     recent_activity_body = models.Activitylog.recentactivities()
     recent_activities = {'head':recent_acitivity_head,
                          'body':recent_activity_body}
-    announcement = models.Bulletinboardinfo.announcement(request.user.id)
+    announcement = {'body':announcement_body}
     return  render(request, 'portalteacher/index.html', {"folders":folders,
                                            "admin_folders":admin_folders,
                                            "recent_activities":recent_activities,
-                                           "announcement":announcement})
+                                           "announcement":announcement
+                                           })
 
 @login_required
 @switchlanguage

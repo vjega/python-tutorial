@@ -1116,20 +1116,18 @@ class Bulletinboardlist(viewsets.ModelViewSet):
 
     def list(self, request):
         sql = """
-        SELECT  bi.bulletinboardid, 
-                bi.messagetitle,
-                bi.message,
-                li.firstname AS postedby, 
-                DATE(bi.posteddate ) AS posteddate, 
-                ti.imageurl 
-        FROM bulletinboardinfo bi
-        INNER JOIN bulletinmappinginfo bmi ON bmi.bulletinboardid = bi.bulletinboardid
-        INNER JOIN logininfo li ON li.loginid = bi.postedby 
-        INNER JOIN teacherinfo ti ON ti.username = li.username 
-        WHERE (viewtype =0 ) OR (viewtype =2) 
-        -- AND bmi.adminid ='3866'
-        GROUP BY bmi.bulletinboardid 
-        """
+        SELECT  bbi.bulletinboardid,
+                bbi.messagetitle,
+                bbi.message,
+                au.first_name AS postedby,
+                DATE(bbi.posteddate ) AS posteddate
+        FROM bulletinboardinfo bbi
+        INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
+        INNER JOIN auth_user au ON au.username = bmi.userid
+        WHERE bmi.userid = '%s'
+        GROUP BY bbi.bulletinboardid
+        ORDER by bbi.bulletinboardid DESC
+        LIMIT 2"""%request.user.username
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -1161,20 +1159,12 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         for rl in data.get('resourcelist'):
             bmi = models.Bulletinmappinginfo()
             bmi.bulletinboardid = bbiid
-            if data.get('cattype') == 'admin':
-                bmi.adminid = rl
-                bmi.viewtype = 0
-            else:
-                bmi.adminid = 0
-            if data.get('cattype') == 'teacher':
-                bmi.teacherid = rl
-                bmi.viewtype = 2
-            else:
-                bmi.teacherid = 0
+            bmi.userid = request.user.username
+            bmi.viewtype = 0    
+            bmi.postedby = request.user.id
             if data.get('cattype') == 'schools':
                 bmi.schoolid = data.get('schoolid')
                 bmi.classid = rl
-                bmi.viewtype = 2
             else:
                 bmi.schoolid = 0
                 bmi.classid = 0
