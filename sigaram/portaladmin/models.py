@@ -48,15 +48,30 @@ class Activitylog(models.Model):
         return dictfetchall(cursor)
 
 class AdminFolders(models.Model):
-    folder_id = models.IntegerField(primary_key=True)
+    folder_id = models.AutoField(primary_key=True)
     folder_name = models.CharField(max_length=200)
     folder_description = models.CharField(max_length=1000)
     added_date = models.DateTimeField()
     folder_order = models.IntegerField()
+    userid = models.CharField(max_length=10)
 
     class Meta:
         managed = False
         db_table = 'admin_folders'
+
+    @staticmethod
+    def folders (req):
+        sql = """
+        SELECT  folder_name,
+                folder_description 
+        FROM admin_folders 
+        WHERE userid='%s'
+        """%req.user.username 
+        print sql;
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        x = dictfetchall(cursor)
+        return x
 
 
 class AdminResources(models.Model):
@@ -324,23 +339,39 @@ class Bulletinboardinfo(models.Model):
 
     @staticmethod
     def announcement (req):
+        l =  req.user.groups.values_list('name',flat=True)[0]
+        fieldcond=""
+        joincond=""
+        wherecond = ""
+        if l == 'Admin' or l == 'Teacher' :
+            fieldcond="au.first_name AS postedby"
+            joincond="INNER JOIN auth_user au ON au.username = bmi.userid"
+            wherecond = "bmi.userid = '%s'"%req.user.username
+        else:
+            fieldcond="'' AS postedby"
+            joincond=""
+            wherecond = """bmi.schoolid = '%s'
+                           AND bmi.classid = '%s' 
+                        """%(req.session.get('stu_schoolid'), 
+                             req.session.get('stu_classid'))
+        
         sql = """
         SELECT  bbi.bulletinboardid,
                 bbi.messagetitle,
                 bbi.message,
-                au.first_name AS postedby,
+                %s,
                 DATE(bbi.posteddate ) AS posteddate
         FROM bulletinboardinfo bbi
         INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
-        INNER JOIN auth_user au ON au.username = bmi.userid
-        WHERE bmi.userid = '%s'        
+        %s
+        WHERE %s
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
-        LIMIT 2"""%req.user.username 
+        LIMIT 2"""% (fieldcond,joincond,wherecond)
         cursor = connection.cursor()
         cursor.execute(sql)
         x = dictfetchall(cursor)
-        print x
+        # print x
         return x
 
 class Bulletinmappinginfo(models.Model):
@@ -350,7 +381,7 @@ class Bulletinmappinginfo(models.Model):
     schoolid = models.BigIntegerField()
     classid = models.BigIntegerField()
     userid = models.CharField(max_length=10)
-    
+
     class Meta:
         managed = False
         db_table = 'bulletinmappinginfo'
@@ -986,7 +1017,7 @@ class Writtenworkinfo(models.Model):
     schoolid = models.IntegerField()
     classid = models.IntegerField()
     isassigned = models.IntegerField()
-    createdby = models.BigIntegerField()
+    createdby = models.CharField(max_length=500)
     isdeleted = models.IntegerField()
     createddate = models.DateTimeField()
 

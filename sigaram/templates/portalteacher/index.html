@@ -12,8 +12,8 @@
 <!-- /.row -->
 <div class="row">
     <div class="col-lg-8 col-md-8">
+            <h3><a href="#" id="new-folder" class="fa fa-plus-square fa-1x nfolder">{% trans "New Folder" %}</a></h3>
         <div class="row">
-        <h3><a href="#" id="new-folder" class="fa fa-plus-square fa-1x nfolder">{% trans "New Folder" %}</a></h3>
         {% for folder in folders%}
         <a href="{{folder.link}}">
         <div class="col-md-4">
@@ -109,7 +109,7 @@
                     <a class="list-group-item">
                         <i class="fa fa-bullhorn fa-fw"></i> 
                         <span>{{body.messagetitle}}</span>
-                        <span class="pull-right text-muted small"><em>4 minutes ago</em>
+                        <span class="pull-right text-muted small"><em>{{body.posteddate}}</em>
                         </span>
                     </a>
                 {% endfor announcement.body %}

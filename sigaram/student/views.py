@@ -54,12 +54,14 @@ def home(request):
         "stat": 125
         }]
 
-    recent_acitivity_head = [_("Sl No."),_("Assignments"),_("Date")]
-    admin_folders = models.AdminFolders.objects.all()
+    recent_acitivity_head = [_("Sl No."),
+                             _("Assignments"),
+                             _("Date")]
+    admin_folders = pmodels.AdminFolders.folders(request)
     recent_activity_body = models.Activitylog.recentactivities()
     recent_activities = {'head':recent_acitivity_head,
                          'body':recent_activity_body}
-    announcement = pmodels.Bulletinboardinfo.announcement(request.user.id)
+    announcement = pmodels.Bulletinboardinfo.announcement(request)
     return  render(request, 'portalstudent/index.html', {"folders":folders,
                                            "admin_folders":admin_folders,
                                            "recent_activities":recent_activities,
