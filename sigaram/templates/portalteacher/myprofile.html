@@ -112,11 +112,17 @@ $(document).ready(function(){
         "url":"/api/admin/teacher/"+$("#admin_id").val()+"/?format=json",
         "type":"GET"
     }).done(function(data){
+<<<<<<< HEAD
         $("#admin_username").val(data.username); 
         $("#admin_fname").val(data.firstname);
         $("#email").val(data.emailid);
         $("#user-password").val(data.password);
         $("#admin_photo").val(data.imageurl);
+=======
+        if (data.length) {
+            TTS.forms.renderviewfourminfo(data);
+        } 
+>>>>>>> 7ee9c9ce266c2fe6c019f1d145fd798f62bf4cb0
     });
 
     

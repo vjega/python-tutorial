@@ -58,8 +58,6 @@
 <div class="row">
     <div class="col-lg-6">
         <input id="uploadurl" type="file" name="uploadurl">
-    </div><br />
-    <div class="col-lg-6">
         <input id="bulletinboard" type="file" name="bulletinboard">
     </div><br />
     <div class="form-group" class="col-sm-2">
@@ -132,7 +130,7 @@ TTS.forms.bulletinboardinfo = function(){
     data.resourcelist = [];
     data.messagetitle = $("#title").code();
     data.message = $("#announcement").code();
-    data.attachmenturl =($("#bulletinboard").attr("name")+"/"+$("#uploadurl").val()) ;
+    data.attachmenturl =($("#bulletinboard").attr("name")+"/"+$("#uploadurl").val());
     data.cattype = $("#category").val();
     data.schoolid=$('#school_name').val();
     $(".checkresourceid:checked").each(function(){

@@ -57,6 +57,17 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
     queryset = models.AdminFolders.objects.all()
     serializer_class = adminserializers.AdminFolderSerializer
 
+    # def create(self, request):
+    #     adminfolder = models.AdminFolders()
+    #     data =  json.loads(request.DATA.keys()[0])
+    #     adminfolder.folder_name = data.get('folder_name')
+    #     adminfolder.folder_description = data.get('folder_description')
+    #     adminfolder.folder_order = data.get('folder_order')
+    #     adminfolder.added_date = time.strftime('%Y-%m-%d %H:%M:%S')
+    #     adminfolder.userid = request.user.username
+    #     adminfolder.save()
+    #     return Response(request.DATA)
+
 class teacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
     serializer_class = adminserializers.TeacherinfoSerializer
@@ -354,7 +365,53 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
 class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Writtenworkinfo.objects.all()
     serializer_class = adminserializers.WrittenworkinfoSerializer
-    
+
+    def create(self, request):    
+        data = json.loads(dict(request.DATA).keys()[0]);
+        print data
+        students = data.get('students');
+        title = data.get('title')
+        note = data.get('note');
+        schoolid = request.session.get('schoolid')
+        classid = request.session.get('classid')
+
+        print schoolid
+        print classid
+        
+        imageurl = ''
+
+        writtenwork = models.Writtenworkinfo()
+        writtenwork.writtenworktitle= title
+        writtenwork.description     = note
+        writtenwork.writtenImage    = imageurl
+        writtenwork.schoolid        = schoolid
+        writtenwork.classid         = classid
+        writtenwork.isassigned      = 0
+        writtenwork.isdeleted       = 0
+        writtenwork.createdby       = str(request.user.username)
+        writtenwork.createddate     = time.strftime('%Y-%m-%d %H:%M:%S')
+        writtenwork.save()
+
+        return Response(request.DATA)
+
+        # for s in students:
+        #     ar = models.Assignresourceinfo()
+        #     ar.resourceid = int(r)
+        #     ar.studentid = str(s)
+        #     ar.assigntext = str(assigntext)
+        #     ar.isanswered =def create(self, request): 0
+        #     ar.issaved = 0
+        #     ar.isrecord = 0
+        #     ar.answerrating = 0
+        #     ar.isbillboard = 0
+        #     ar.isclassroom = 0
+        #     ar.isdelete = 0
+        #     ar.rubric_id = int(rubricid)
+        #     ar.old_edit = 0
+        #     ar.save()   
+        
+        #return Response(request.DATA)
+
 class ChapterinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Chapterinfo.objects.all()
     serializer_class = adminserializers.ChapterinfoSerializer
@@ -1091,23 +1148,37 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
 class Bulletinboardlist(viewsets.ModelViewSet):
     queryset = models.Bulletinboardinfo.objects.all()
     serializer_class = adminserializers.BulletinboardlistinfoSerializer
-
     def list(self, request):
+        l =  request.user.groups.values_list('name',flat=True)[0]
+        fieldcond=""
+        joincond=""
+        wherecond = ""
+        if l == 'Admin' or l == 'Teacher' :
+            fieldcond="au.first_name AS postedby"
+            joincond="INNER JOIN auth_user au ON au.username = bmi.userid"
+            wherecond = "bmi.userid = '%s'"%request.user.username
+        else:
+            fieldcond="'' AS postedby"
+            joincond=""
+            wherecond = """bmi.schoolid = '%s'
+                           AND bmi.classid = '%s' 
+                        """%(request.session.get('stu_schoolid'), 
+                             request.session.get('stu_classid'))
+
         sql = """
-        SELECT  bi.bulletinboardid, 
-                bi.messagetitle,
-                bi.message,
-                li.firstname AS postedby, 
-                DATE(bi.posteddate ) AS posteddate, 
-                ti.imageurl 
-        FROM bulletinboardinfo bi
-        INNER JOIN bulletinmappinginfo bmi ON bmi.bulletinboardid = bi.bulletinboardid
-        INNER JOIN logininfo li ON li.loginid = bi.postedby 
-        INNER JOIN teacherinfo ti ON ti.username = li.username 
-        WHERE (viewtype =0 ) OR (viewtype =2) 
-        -- AND bmi.adminid ='3866'
-        GROUP BY bmi.bulletinboardid 
-        """
+        SELECT  bbi.bulletinboardid,
+                bbi.messagetitle,
+                bbi.message,
+                %s,
+                DATE(bbi.posteddate ) AS posteddate
+        FROM bulletinboardinfo bbi
+        INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
+        %s
+        WHERE %s
+        GROUP BY bbi.bulletinboardid
+        ORDER by bbi.bulletinboardid DESC
+        LIMIT 2"""% (fieldcond,joincond,wherecond)
+        print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -1139,23 +1210,16 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         for rl in data.get('resourcelist'):
             bmi = models.Bulletinmappinginfo()
             bmi.bulletinboardid = bbiid
-            if data.get('cattype') == 'admin':
-                bmi.adminid = rl
-                bmi.viewtype = 0
-            else:
-                bmi.adminid = 0
-            if data.get('cattype') == 'teacher':
-                bmi.teacherid = rl
-                bmi.viewtype = 2
-            else:
-                bmi.teacherid = 0
+            bmi.viewtype = 0    
+            bmi.postedby = request.user.id
             if data.get('cattype') == 'schools':
                 bmi.schoolid = data.get('schoolid')
                 bmi.classid = rl
-                bmi.viewtype = 2
+                bmi.userid = 0
             else:
                 bmi.schoolid = 0
                 bmi.classid = 0
+                bmi.userid = rl
             bmi.save()
         return Response(request.DATA)
 
