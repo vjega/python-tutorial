@@ -667,6 +667,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title = data.get('title')
         cal.start = data.get('start')
         cal.end = data.get('end')
+        cal.color = '#337ab7'
         cal.eventcreatedby = request.user.username
         cal.eventeditedby = request.user.username
         cal.isdeleted = 0
@@ -682,6 +683,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title = data.get('title')
         cal.start = data.get('start')
         cal.end = data.get('end')
+        cal.color = '#d9534f'
         #cal.eventcreatedby = request.user.username
         #cal.start = time.strftime('%Y-%m-%d %H:%M:%S')
         #cal.end = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -692,6 +694,9 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         cal.save()
         return Response(request.DATA)
+    def destroy(self, request, pk):
+        models.Calendardetails.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
 
 class MindmapViewSet(viewsets.ModelViewSet):
     queryset = models.Mindmap.objects.filter().order_by('-createddate')
