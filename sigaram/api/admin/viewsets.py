@@ -1126,23 +1126,29 @@ class Bulletinboardlist(viewsets.ModelViewSet):
     serializer_class = adminserializers.BulletinboardlistinfoSerializer
     def list(self, request):
         l =  request.user.groups.values_list('name',flat=True)[0]
+        fieldcond=""
+        joincond=""
         wherecond = ""
         if l == 'Admin' or l == 'Teacher' :
+            fieldcond="au.first_name AS postedby"
+            join="INNER JOIN auth_user au ON au.username = bmi.userid"
             wherecond = "bmi.userid = '%s'"%request.user.username
         else:
+            fieldcond="'' AS postedby"
+            joincond=""
             wherecond = """bmi.schoolid = '%s'
                            AND bmi.classid = '%s' 
-                        """%(11, 35)#(schoolid, classid)
+                        """%(8, 1)#(schoolid, classid)
 
         sql = """
         SELECT  bbi.bulletinboardid,
                 bbi.messagetitle,
                 bbi.message,
-                au.first_name AS postedby,
+                -- au.first_name AS postedby,
                 DATE(bbi.posteddate ) AS posteddate
         FROM bulletinboardinfo bbi
         INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
-        INNER JOIN auth_user au ON au.username = bmi.userid
+        -- INNER JOIN auth_user au ON au.username = bmi.userid
         WHERE %s
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
@@ -1179,15 +1185,16 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         for rl in data.get('resourcelist'):
             bmi = models.Bulletinmappinginfo()
             bmi.bulletinboardid = bbiid
-            bmi.userid = request.user.username
             bmi.viewtype = 0    
             bmi.postedby = request.user.id
             if data.get('cattype') == 'schools':
                 bmi.schoolid = data.get('schoolid')
                 bmi.classid = rl
+                bmi.userid = 0
             else:
                 bmi.schoolid = 0
                 bmi.classid = 0
+                bmi.userid = rl
             bmi.save()
         return Response(request.DATA)
 
