@@ -359,7 +359,35 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
 class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Writtenworkinfo.objects.all()
     serializer_class = adminserializers.WrittenworkinfoSerializer
-    
+
+    def create(self, request):    
+        data = json.loads(dict(request.DATA).keys()[0]);
+        print data
+        # students = data.get('students');
+        # resource = data.get('resource');
+        # rubricid = data.get('rubricid');
+        # assigntext = data.get('assigntext');
+        # for r in resource:
+        #     for s in students:
+        #         ar = models.Assignresourceinfo()
+        #         ar.resourceid = int(r)
+        #         ar.studentid = str(s)
+        #         ar.assigntext = str(assigntext)
+
+        #         ar.isanswered =def create(self, request): 0
+        #         ar.issaved = 0
+        #         print issav
+        #         ar.isrecord = 0
+        #         ar.answerrating = 0
+        #         ar.isbillboard = 0
+        #         ar.isclassroom = 0
+        #         ar.isdelete = 0
+        #         ar.rubric_id = int(rubricid)
+        #         ar.old_edit = 0
+        #         ar.save()   
+        
+        return Response(request.DATA)
+
 class ChapterinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Chapterinfo.objects.all()
     serializer_class = adminserializers.ChapterinfoSerializer
@@ -1672,30 +1700,6 @@ class LogininfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Logininfo.objects.all()
     serializer_class = adminserializers.StickyinfoSerializer
-
-    def list(self, request):
-        userid   = request.user.id
-        user   = request.user.username
-        print userid
-        sql = """
-         SELECT teacherid,
-                ti.firstname,
-                ti.username,
-                ti.emailid
-         FROM teacherinfo ti
-         INNER JOIN auth_user au on au.username=ti.username
-          WHERE au.id = %s
-        """%userid 
-        cursor = connection.cursor()
-        print sql
-        cursor.execute(sql)
-        desc = cursor.description
-        result =  [
-                dict(zip([col[0] for col in desc], row))
-                for row in cursor.fetchall()
-            ]
-        return Response(result)
-
 
     def create(self, request):
         loginlist = models.Logininfo()
