@@ -68,6 +68,10 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
         adminfolder.save()
         return Response(request.DATA)
 
+    def destroy(self, request, pk):
+        models.AdminFolders.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
+
 class teacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
     serializer_class = adminserializers.TeacherinfoSerializer
