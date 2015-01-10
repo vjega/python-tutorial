@@ -339,20 +339,35 @@ class Bulletinboardinfo(models.Model):
 
     @staticmethod
     def announcement (req):
-
+        l =  req.user.groups.values_list('name',flat=True)[0]
+        fieldcond=""
+        joincond=""
+        wherecond = ""
+        if l == 'Admin' or l == 'Teacher' :
+            fieldcond="au.first_name AS postedby"
+            joincond="INNER JOIN auth_user au ON au.username = bmi.userid"
+            wherecond = "bmi.userid = '%s'"%req.user.username
+        else:
+            fieldcond="'' AS postedby"
+            joincond=""
+            wherecond = """bmi.schoolid = '%s'
+                           AND bmi.classid = '%s' 
+                        """%(req.session.get('stu_schoolid'), 
+                             req.session.get('stu_classid'))
+        
         sql = """
         SELECT  bbi.bulletinboardid,
                 bbi.messagetitle,
                 bbi.message,
-                au.first_name AS postedby,
+                %s,
                 DATE(bbi.posteddate ) AS posteddate
         FROM bulletinboardinfo bbi
         INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
-        INNER JOIN auth_user au ON au.id = bbi.postedby
-        WHERE bmi.userid = %s
+        %s
+        WHERE %s
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
-        LIMIT 2"""%req.user.id 
+        LIMIT 2"""% (fieldcond,joincond,wherecond)
         cursor = connection.cursor()
         cursor.execute(sql)
         x = dictfetchall(cursor)
@@ -365,8 +380,7 @@ class Bulletinmappinginfo(models.Model):
     viewtype = models.IntegerField()
     schoolid = models.BigIntegerField()
     classid = models.BigIntegerField()
-    adminid = models.BigIntegerField()
-    teacherid = models.BigIntegerField()
+    userid = models.CharField(max_length=10)
 
     class Meta:
         managed = False

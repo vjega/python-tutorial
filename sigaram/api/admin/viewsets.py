@@ -1149,28 +1149,29 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         wherecond = ""
         if l == 'Admin' or l == 'Teacher' :
             fieldcond="au.first_name AS postedby"
-            join="INNER JOIN auth_user au ON au.username = bmi.userid"
+            joincond="INNER JOIN auth_user au ON au.username = bmi.userid"
             wherecond = "bmi.userid = '%s'"%request.user.username
         else:
             fieldcond="'' AS postedby"
             joincond=""
             wherecond = """bmi.schoolid = '%s'
                            AND bmi.classid = '%s' 
-                        """%(8, 1)#(schoolid, classid)
+                        """%(request.session.get('stu_schoolid'), 
+                             request.session.get('stu_classid'))
 
         sql = """
         SELECT  bbi.bulletinboardid,
                 bbi.messagetitle,
                 bbi.message,
-                -- au.first_name AS postedby,
+                %s,
                 DATE(bbi.posteddate ) AS posteddate
         FROM bulletinboardinfo bbi
         INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
-        -- INNER JOIN auth_user au ON au.username = bmi.userid
+        %s
         WHERE %s
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
-        LIMIT 2"""%wherecond
+        LIMIT 2"""% (fieldcond,joincond,wherecond)
         print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
