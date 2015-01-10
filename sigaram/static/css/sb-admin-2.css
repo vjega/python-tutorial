@@ -546,3 +546,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', end
 .t-sm-bg2 {
     background:transparent url("../img/10t-logo.png") no-repeat;
 }
+
+.folder-delete{
+    cursor: pointer;
+    margin-bottom: 4px;
+    margin-right: 14px;
+    margin-top: -3px;
+}

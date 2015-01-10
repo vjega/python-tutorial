@@ -43,6 +43,9 @@
                             <div class="col-xs-3">
                                 <i class="fa fa-folder fa-5x"></i>
                             </div>
+                            <div class="folder-delete text-right">
+                                <i id="new-folder-delete" class='fa fa-trash'></i>
+                            </div>
                             <div class="col-xs-9 text-right">
                                 <div class="tent-medium">{{folder.folder_name}}</div>
                                 <div class="tent-medium">{{folder.folder_description}}</div>
@@ -166,6 +169,22 @@
 </script>
 
 <script>
+window.TTS = window.TTS || {}
+window.TTS.forms = window.TTS.forms || {}
+TTS.forms.deletenewfolder = function(folder_id) {
+    $.ajax({
+         headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'DELETE',
+        url : '/api/admin/adminfolders/'+folder_id
+    }).done(function( msg ) {
+        location.reload();
+    }).error(function(msg){
+        alert("Something Bad Happended");
+    });
+}
+
 $(document).ready(function(){
     $('#admin-main-tbl').dataTable({language:TTS.utils.datatable_ta});
     $("#page-wrapper").on("click", "#new-folder", function(){
@@ -185,7 +204,6 @@ $(document).ready(function(){
                         data: data,
                         url : '/api/admin/adminfolders/'
                     }).done(function( msg ) {
-                        console.log(msg);
                         location.reload();
                         //dialogItself.close();
                     });
@@ -198,7 +216,14 @@ $(document).ready(function(){
             }]
         });
     });
+    
+    $(".folder-delete").on("click", "#new-folder-delete", function(){
+            console.log("delete");
+            //TTS.forms.deletenewfolder()
+    });
+
 });
+
 </script>
 {% endblock scriptcontent %}
 
