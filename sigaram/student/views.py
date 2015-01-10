@@ -54,8 +54,10 @@ def home(request):
         "stat": 125
         }]
 
-    recent_acitivity_head = [_("Sl No."),_("Assignments"),_("Date")]
-    admin_folders = models.AdminFolders.objects.all()
+    recent_acitivity_head = [_("Sl No."),
+                             _("Assignments"),
+                             _("Date")]
+    admin_folders = pmodels.AdminFolders.folders(request)
     recent_activity_body = models.Activitylog.recentactivities()
     recent_activities = {'head':recent_acitivity_head,
                          'body':recent_activity_body}

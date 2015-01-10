@@ -57,16 +57,16 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
     queryset = models.AdminFolders.objects.all()
     serializer_class = adminserializers.AdminFolderSerializer
 
-    # def create(self, request):
-    #     adminfolder = models.AdminFolders()
-    #     data =  json.loads(request.DATA.keys()[0])
-    #     adminfolder.folder_name = data.get('folder_name')
-    #     adminfolder.folder_description = data.get('folder_description')
-    #     adminfolder.folder_order = data.get('folder_order')
-    #     adminfolder.added_date = time.strftime('%Y-%m-%d %H:%M:%S')
-    #     adminfolder.userid = request.user.username
-    #     adminfolder.save()
-    #     return Response(request.DATA)
+    def create(self, request):
+        adminfolder = models.AdminFolders()
+        data =  json.loads(request.DATA.keys()[0])
+        adminfolder.folder_name = data.get('folder_name')
+        adminfolder.folder_description = data.get('remark')
+        adminfolder.folder_order = data.get('order_no')
+        adminfolder.added_date = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminfolder.userid = request.user.username
+        adminfolder.save()
+        return Response(request.DATA)
 
 class teacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
@@ -1144,6 +1144,7 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
                 for row in cursor.fetchall()
             ]
         return Response(result)
+
 
 class Bulletinboardlist(viewsets.ModelViewSet):
     queryset = models.Bulletinboardinfo.objects.all()
