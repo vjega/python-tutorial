@@ -219,8 +219,10 @@ $(document).ready(function(){
     });
     
     $(".folder-delete").on("click", "#new-folder-delete", function(){
+        if (confirm("Are you sure want to delete?")) {
             var folder_id = $(this).attr("name");
             TTS.forms.deletenewfolder(folder_id)
+        }
     });
 
 });
