@@ -39,7 +39,7 @@ router.register(r'threads',      			viewsets.ThreadsViewSet)
 router.register(r'rubrics',         		viewsets.RubricsViewSet)
 router.register(r'extraslist',         		viewsets.ExtraslistViewSet)
 router.register(r'stickyinfo',         		viewsets.StickyinfoViewSet)
-router.register(r'logininfo',         		viewsets.LogininfoViewSet)
+router.register(r'auth_user',         		viewsets.AuthuserViewSet)
 router.register(r'audioupload',         	viewsets.AudioinfoViewSet)
 urlpatterns = [
     url(r'^', include(router.urls)),

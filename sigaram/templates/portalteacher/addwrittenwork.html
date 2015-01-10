@@ -287,31 +287,34 @@ TTS.forms.ressave = function(){
     }*/
     
     var data = {};
-    data.resource = 0;
     data.students = [];
-    data.rubricid = 0;
-    data.assigntext = $(".summernote").code();
-    if(getUrlParameter('resourceid')){
-        data.resource = getUrlParameter('resourceid');
+    data.title = $("#title").code();
+    data.note = $("#note").code();
+    data.attachmenturl =($("#bulletinboard").attr("name")+"/"+$("#uploadurl").val()) ;
+    if(TTS.utils.getUrlParameter('resourceid')){
+        data.resource = TTS.utils.getUrlParameter('resourceid');
     }
-    if($("#set_rubric_id").val()){
-        data.rubricid = $("#set_rubric_id").val();
-    }
+    
     $("#sltStudentList>option").each(function(){
         data.students.push($(this).val());
     })
+    console.log(data);
+
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
-        url:"/api/admin/studentassignresource/",
+        url:"/api/admin/writtenworkinfo/",
         type:"POST",
         data: JSON.stringify(data)
     }).done(function(data){
-        //console.log(data);
+        console.log(data);
+        return false;
         alert("Chapter assigned Successfully");
         location.reload();
     }).error(function(err, msg){
+        console.log(err, msg);
+        return false;
         alert("I didnt save the data");
     });
 }

@@ -35,9 +35,18 @@ def user_landing(request):
         raise(Http404)
 
     if group == 'Teacher':
+        from portaladmin.models import Teacherinfo
+        t = Teacherinfo.objects.filter(username=request.user.username)[0]
+        request.session['schoolid'] = t.schoolid
+        request.session['classid'] =  t.classid
         return redirect('/teacher/home')
     elif group == 'Student':
+        from portaladmin.models import Studentinfo
+        t = Studentinfo.objects.filter(username=request.user.username)[0]
+        request.session['stu_schoolid'] = t.schoolid
+        request.session['stu_classid'] =  t.classid
         return redirect('/student/home')
+
     elif group == 'Admin':
         return redirect('/admin/home')
     else:

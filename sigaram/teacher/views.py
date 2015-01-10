@@ -62,7 +62,7 @@ def home(request):
     recent_acitivity_head = [_("Sl No."),
                              _("Assignments"),
                              _("Date")]
-    admin_folders = models.AdminFolders.objects.all()
+    admin_folders = models.AdminFolders.folders(request)
     announcement_body = models.Bulletinboardinfo.announcement(request)
     recent_activity_body = models.Activitylog.recentactivities()
     recent_activities = {'head':recent_acitivity_head,
@@ -493,7 +493,6 @@ def studentprofile(request):
         }]
     return render(request, 'portalteacher/studentprofile.html', 
                   {"folders":folders,"user":user})
-
 
 @login_required
 @switchlanguage

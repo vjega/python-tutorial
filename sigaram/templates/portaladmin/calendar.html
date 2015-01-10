@@ -99,7 +99,6 @@ TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
     console.log(calEvent)
     var start_date = calEvent.start.format().split("T");
     var start_time = start_date[1].split("+"); 
-    //console.log(calEvent);
     var end_date = calEvent.end.format().split("T");
     var end_time = end_date[1].split("+");
     BootstrapDialog.show({
@@ -158,6 +157,20 @@ TTS.forms.updatecalevent = function (event){
     });
 };
 
+TTS.forms.deletecalevent = function(event_id) {
+    $.ajax({
+         headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'DELETE',
+        url : '/api/admin/calendar/'+event_id
+    }).done(function( msg ) {
+        location.reload();
+    }).error(function(msg){
+        alert("Something Bad Happended");
+    });
+}
+
 $(document).ready(function() {
     TTS.forms.calendar = $('#calendar').fullCalendar({
         selectable: true,
@@ -171,7 +184,7 @@ $(document).ready(function() {
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
         },
-        events: {
+        events:{
             url:'/api/admin/calendar/'
         },
         select: function(start, end, allDay)
@@ -205,10 +218,21 @@ $(document).ready(function() {
             TTS.forms.updatecalform(calEvent, jsEvent, view);
 
             // change the border color just for fun
-            $(this).css('border-color', 'red');
-            $(this).css('background-color', '#FDFB8C');
-            $(this).css('color', '#000000');
+            //$(this).css('border-color', 'red');
+            //$(this).css('background-color', '#FDFB8C');
+            //$(this).css('color', '#000000');
 
+        },
+        eventRender: function(event, element) {
+            element.append( "<div class='fc-resizer'></div>");
+            element.append( "<span class='closon'><i class='fa fa-trash'></i> </span>");
+            element.find(".closon").click(function() {
+               if (confirm("Are you sure want to delete?")) {
+                    $('#calendar').fullCalendar('removeEvents',event._id);
+                    TTS.forms.deletecalevent(event._id);
+                }
+            });
+            //$(element).find(".fc-time").remove();
         }
         
     })
