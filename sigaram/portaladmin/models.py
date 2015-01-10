@@ -63,6 +63,7 @@ class AdminFolders(models.Model):
     def folders (req):
         sql = """
         SELECT  folder_name,
+                folder_id,
                 folder_description 
         FROM admin_folders 
         WHERE userid='%s'

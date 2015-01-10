@@ -11,7 +11,7 @@
 <!-- /.row -->
 <div class="row">
     <div class="col-lg-8 col-md-8">
-        <h3><a href="#" id="new-folder" class="fa fa-plus-square fa-1x nfolder">{% trans "New Folder" %}</a></h3>
+        <h3><a href="#" id="new-folder" class="fa fa-plus-square fa-1x nfolder"> {% trans "New Folder" %}</a></h3>
         <div class="row">
             {% for folder in folders%}
             <a href="{{folder.link}}">
@@ -44,10 +44,10 @@
                                 <i class="fa fa-folder fa-5x"></i>
                             </div>
                             <div class="folder-delete text-right">
-                                <i id="new-folder-delete" class='fa fa-trash'></i>
+                                <i id="new-folder-delete" class='fa fa-trash' name="{{folder.folder_id}}"></i>
                             </div>
                             <div class="col-xs-9 text-right">
-                                <div class="tent-medium">{{folder.folder_name}}</div>
+                                <div class="tent-medium" >{{folder.folder_name}}</div>
                                 <div class="tent-medium">{{folder.folder_description}}</div>
                             </div>
                         </div>
@@ -132,6 +132,11 @@
   .modal-backdrop {z-index: 0 !important}
   p {display:inline;}
   a.nfolder {color: blue;}
+
+  .fa.fa-plus-square.fa-1x.nfolder {
+    color: #fff;
+  }
+
 </style>
 {% endblock morecss %}
 
@@ -171,6 +176,7 @@
 <script>
 window.TTS = window.TTS || {}
 window.TTS.forms = window.TTS.forms || {}
+
 TTS.forms.deletenewfolder = function(folder_id) {
     $.ajax({
          headers : {
@@ -218,8 +224,10 @@ $(document).ready(function(){
     });
     
     $(".folder-delete").on("click", "#new-folder-delete", function(){
-            console.log("delete");
-            //TTS.forms.deletenewfolder()
+        if (confirm("Are you sure want to delete?")) {
+            var folder_id = $(this).attr("name");
+            TTS.forms.deletenewfolder(folder_id)
+        }
     });
 
 });
