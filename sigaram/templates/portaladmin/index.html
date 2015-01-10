@@ -11,7 +11,8 @@
 <!-- /.row -->
 <div class="row">
     <div class="col-lg-8 col-md-8">
-        <div class="col-lg-12 col-md-12">
+        <h3><a href="#" id="new-folder" class="fa fa-plus-square fa-1x nfolder">{% trans "New Folder" %}</a></h3>
+        <div class="row">
             {% for folder in folders%}
             <a href="{{folder.link}}">
             <div class="col-lg-4 col-md-4">
@@ -127,6 +128,7 @@
 <style>
   .modal-backdrop {z-index: 0 !important}
   p {display:inline;}
+  a.nfolder {color: blue;}
 </style>
 {% endblock morecss %}
 
@@ -177,11 +179,11 @@ $(document).ready(function(){
                     var data = TTS.utils.serilaizeJson("#newfolderfrm");
                     $.ajax({
                         headers : {
-                            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+                            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
                         },
                         type:'POST',
                         data: {'data':data},
-                        url : '/api/admin/addfolder'
+                        url : '/api/admin/adminfolders/'
                     }).done(function( msg ) {
                         console.log(msg);
                         alert(msg);

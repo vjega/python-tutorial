@@ -53,10 +53,25 @@ class AdminFolders(models.Model):
     folder_description = models.CharField(max_length=1000)
     added_date = models.DateTimeField()
     folder_order = models.IntegerField()
+    userid = models.CharField(max_length=10)
 
     class Meta:
         managed = False
         db_table = 'admin_folders'
+
+    @staticmethod
+    def folders (req):
+        sql = """
+        SELECT  folder_name,
+                folder_description 
+        FROM admin_folders 
+        WHERE userid='%s'
+        """%req.user.username 
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        x = dictfetchall(cursor)
+        # print x
+        return x
 
 
 class AdminResources(models.Model):
@@ -324,6 +339,7 @@ class Bulletinboardinfo(models.Model):
 
     @staticmethod
     def announcement (req):
+
         sql = """
         SELECT  bbi.bulletinboardid,
                 bbi.messagetitle,
@@ -340,7 +356,7 @@ class Bulletinboardinfo(models.Model):
         cursor = connection.cursor()
         cursor.execute(sql)
         x = dictfetchall(cursor)
-        print x
+        # print x
         return x
 
 class Bulletinmappinginfo(models.Model):
