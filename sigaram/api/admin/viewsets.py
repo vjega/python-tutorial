@@ -57,6 +57,17 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
     queryset = models.AdminFolders.objects.all()
     serializer_class = adminserializers.AdminFolderSerializer
 
+    # def create(self, request):
+    #     adminfolder = models.AdminFolders()
+    #     data =  json.loads(request.DATA.keys()[0])
+    #     adminfolder.folder_name = data.get('folder_name')
+    #     adminfolder.folder_description = data.get('folder_description')
+    #     adminfolder.folder_order = data.get('folder_order')
+    #     adminfolder.added_date = time.strftime('%Y-%m-%d %H:%M:%S')
+    #     adminfolder.userid = request.user.username
+    #     adminfolder.save()
+    #     return Response(request.DATA)
+
 class teacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
     serializer_class = adminserializers.TeacherinfoSerializer
@@ -1131,8 +1142,16 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
 class Bulletinboardlist(viewsets.ModelViewSet):
     queryset = models.Bulletinboardinfo.objects.all()
     serializer_class = adminserializers.BulletinboardlistinfoSerializer
-
     def list(self, request):
+        l =  request.user.groups.values_list('name',flat=True)[0]
+        wherecond = ""
+        if l == 'Admin' or l == 'Teacher' :
+            wherecond = "bmi.userid = '%s'"%request.user.username
+        else:
+            wherecond = """bmi.schoolid = '%s'
+                           AND bmi.classid = '%s' 
+                        """%(11, 35)#(schoolid, classid)
+
         sql = """
         SELECT  bbi.bulletinboardid,
                 bbi.messagetitle,
@@ -1142,10 +1161,11 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         FROM bulletinboardinfo bbi
         INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
         INNER JOIN auth_user au ON au.username = bmi.userid
-        WHERE bmi.userid = '%s'
+        WHERE %s
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
-        LIMIT 2"""%request.user.username
+        LIMIT 2"""%wherecond
+        print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
