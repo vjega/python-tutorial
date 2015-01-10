@@ -57,17 +57,6 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
     queryset = models.AdminFolders.objects.all()
     serializer_class = adminserializers.AdminFolderSerializer
 
-    # def create(self, request):
-    #     adminfolder = models.AdminFolders()
-    #     data =  json.loads(request.DATA.keys()[0])
-    #     adminfolder.folder_name = data.get('folder_name')
-    #     adminfolder.folder_description = data.get('folder_description')
-    #     adminfolder.folder_order = data.get('folder_order')
-    #     adminfolder.added_date = time.strftime('%Y-%m-%d %H:%M:%S')
-    #     adminfolder.userid = request.user.username
-    #     adminfolder.save()
-    #     return Response(request.DATA)
-
 class teacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
     serializer_class = adminserializers.TeacherinfoSerializer
@@ -1110,7 +1099,9 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
                ari.studentid,
                ari.isanswered,
                ari.issaved,
-               ari.isbillboard
+               ari.isbillboard,
+               ari.rubric_marks,
+               ari.rubric_n_mark
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         INNER JOIN  auth_user au on au.username = ari.studentid 
@@ -1142,16 +1133,8 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
 class Bulletinboardlist(viewsets.ModelViewSet):
     queryset = models.Bulletinboardinfo.objects.all()
     serializer_class = adminserializers.BulletinboardlistinfoSerializer
-    def list(self, request):
-        l =  request.user.groups.values_list('name',flat=True)[0]
-        wherecond = ""
-        if l == 'Admin' or l == 'Teacher' :
-            wherecond = "bmi.userid = '%s'"%request.user.username
-        else:
-            wherecond = """bmi.schoolid = '%s'
-                           AND bmi.classid = '%s' 
-                        """%(11, 35)#(schoolid, classid)
 
+    def list(self, request):
         sql = """
         SELECT  bbi.bulletinboardid,
                 bbi.messagetitle,
@@ -1161,11 +1144,10 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         FROM bulletinboardinfo bbi
         INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
         INNER JOIN auth_user au ON au.username = bmi.userid
-        WHERE %s
+        WHERE bmi.userid = '%s'
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
-        LIMIT 2"""%wherecond
-        print sql;
+        LIMIT 2"""%request.user.username
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -1658,7 +1640,12 @@ class RubricsViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        return Response('"msg":"update"')
+        data = json.loads(request.DATA.keys()[0])
+        arirm = models.Assignresourceinfo.objects.get(pk=pk)
+        arirm.rubric_marks    = data.get('ans')
+        arirm.rubric_n_mark   = data.get('ans_n')
+        arirm.save()
+        return Response({'msg':True})
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')

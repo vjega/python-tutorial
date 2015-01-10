@@ -36,14 +36,16 @@
         color: red;
         cursor: pointer;
     }
-    table#rubrics-table thead tr th{
+    table#rubrics-table thead tr th,
+    table#rubrics-table tfoot tr td{
         text-align: center;
         height: 45px;
-        background-color: #B8B8B8;
+        background-color: #337ab7;
+        color: #ffffff;
+        font-weight: bold;
     }
-    table#rubrics-table tbody tr td:nth-child(1),
-    table#rubrics-table tbody tr td:last-child { 
-        background-color: #B8B8B8; 
+    table#rubrics-table tbody tr td:nth-child(1) { 
+        background-color: #d3d3d3;
         font-weight: bold;
     }
     
@@ -132,10 +134,11 @@
                             <div class="col-lg-12" id="rubrics-vote">
 
                             </div>
+                            <input type="hidden" id="max-mark">
                         </div>
                     </div>                    
 
-                    <div class="row">
+                    <!--div class="row">
                         <div class="col-lg-12">
                             <label class="col-lg-12">{% trans "Rubrics" %} {% trans "Evaluation" %}</label>
                         </div>
@@ -147,7 +150,7 @@
                                 Rubrics Evaluation
                             </div>
                         </div>
-                    </div>                    
+                    </div-->                    
                     
 
                 <!--div id="view-resource">
@@ -187,7 +190,6 @@ TTS.forms = TTS.forms || {}
 
 
 TTS.forms.renderassignedresourceinfo = function(data){
-    //console.log(data);
     $("#assignedid").val(data[0].id);
     $("#resource-title").html(data[0].resourcetitle);
     $("#assigned-date").html(data[0].createddate);
@@ -205,9 +207,8 @@ TTS.forms.renderassignedresourceinfo = function(data){
         $.ajax({
             "url":"/api/admin/rubrics/"+data[0].rubric_id,
             "type":"GET"
-        }).done(function(data){
-            console.log(data);
-            TTS.forms.renderrubrictableinfo(data);
+        }).done(function(rubricdata){
+            TTS.forms.renderrubrictableinfo(rubricdata, data);
         });
     }
 
@@ -218,20 +219,26 @@ TTS.forms.renderassignedresourceinfo = function(data){
     window.open("http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
 };*/
 
-TTS.forms.renderrubrictableinfo = function(data){
+TTS.forms.renderrubrictableinfo = function(rubtable, rubdata){
+
+    var rubricid = rubdata[0].rubric_marks;
+    var rubricmark = rubdata[0].rubric_n_mark.split(",");
     var tableHTML = '';
+    var thdata = rubtable.rmh[0];
+    var th = thdata.split('~~');
+    var tddataobj = rubtable.rmb;
+    var td = '';
+    var answercheck = '';
+    var rubchecks = {};
+   
     tableHTML += "<table id='rubrics-table' class='table table-striped table-bordered table-hover'>";
     tableHTML += "<thead><tr><th>&nbsp;</th>";
-    var thdata = data.rmh[0];
-    var th = thdata.split('~~');
+    $("#max-mark").val(th.length);
     $(th).each(function(k,v){
         tableHTML += "<th>"+v+"</th>";
     });
 
     tableHTML += "<th>{% trans 'Total' %}</th></tr></thead>";
-    var tddataobj = data.rmb;
-    var td = '';
-    var answercheck = '';
     tableHTML += "<tbody>";
     $(tddataobj).each(function(x,tddata){
         td = tddata[0].split('~~');
@@ -247,10 +254,16 @@ TTS.forms.renderrubrictableinfo = function(data){
         tableHTML += "<td><input class='totals' id='tmark-"+x+"' style='width:30px;text-align:center' readonly type='text' value=''> / "+th.length+"</td>";
         tableHTML += "</tr>";
     });
-    tableHTML += "<tr><td style='text-align:center' colspan="+(tddataobj.length)+"><strong>{% trans 'Total' %}</strong></td><td><input id='ttls' style='width:30px;text-align:center' readonly type='text' value=''> / "+(th.length)*(tddataobj.length)+"</td></tr>";
-    tableHTML += "</tbody></table>";
+    tableHTML += "</tbody><tfoot><tr><td style='text-align:center' colspan="+(th.length+1)+"><strong>{% trans 'Total' %}</strong></td><td><input id='ttls' style='width:30px;text-align:center' readonly type='text' value=''> / "+(th.length)*(tddataobj.length)+"</td></tr></tfoot>";
+    tableHTML += "</table>";
     tableHTML += '<button class="btn btn-primary" id="save-rubric-marks">{% trans "Save" %} {% trans "Result" %}</button>';
     $("#rubrics-vote").html(tableHTML);
+    rubricid = rubricid.split('~');
+    $.each(rubricid, function(idx, value){
+        $("#"+value).prop("checked", true);
+        $("#tmark-"+idx).val(rubricmark[idx])
+    })
+    TTS.forms.settotalmarks();
 }
 
 TTS.forms.renderanswereditinginfo = function(data, isapproved){
@@ -308,7 +321,7 @@ TTS.forms.editanswerlist = function(spanid){
                 "url":"/api/admin/editanswer/?assignedid="+assignedid+"&spanid="+spanid+"&format=json",
                 "type":"GET"
             }).done(function(data){
-                console.log(data);
+                //console.log(data);
                 TTS.forms.renderanswereditinginfo(data,'');
             });
         },
@@ -491,29 +504,44 @@ TTS.forms.changeapproveicon = function(editingid){
 
 TTS.forms.setmarks = function(row, mark) {
     $("#tmark-"+row).val(mark);
+    TTS.forms.settotalmarks();
+};
+TTS.forms.settotalmarks = function() {
     var x=0;
     $('.totals').each(function(){x += parseInt($(this).val()) || 0;});
     $('#ttls').val(x);
 };
 
+
 TTS.forms.ressave = function(){
-    
+    var data = {}
+    var ansarr=[];
+    var ans_n_arr = [];
+    $("input:checked.chkrub").each(function(){
+        ansarr.push($(this).attr("id"));
+    });
+    $("input.totals").each(function(){
+        ans_n_arr.push($(this).val());
+    });
+    ans_n_arr.push($("#max-mark").val());
+    var ans = ansarr.join("~");
+    var ans_n = ans_n_arr.join(",");
+    data['ans'] = ans;
+    data['ans_n'] = ans_n;
+    var assignedid = $("#assignedid").val();
+
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
-        url:"/api/admin/writtenworkinfo/",
-        type:"POST",
+        url:"/api/admin/rubrics/"+assignedid,
+        type:"PUT",
         data: JSON.stringify(data)
     }).done(function(data){
-        console.log(data);
-        return false;
-        alert("Chapter assigned Successfully");
-        location.reload();
+        alert("Rubric marks updated successfully");
+        //location.reload();
     }).error(function(err, msg){
-        console.log(err, msg);
-        return false;
-        alert("I didnt save the data");
+        alert("I didnt update the rubric marks");
     });
 }
 
@@ -566,7 +594,7 @@ $(document).ready(function(){
                 TTS.forms.changeapproveicon(editingid);
         });
     });
-    $("#save-rubric-marks").click(function(){
+    $("body").on("click","#save-rubric-marks", function(event){
         TTS.forms.ressave();
     });
 });
