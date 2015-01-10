@@ -248,7 +248,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         """ % (classid,section,chapterid,categoryid)
         cursor = connection.cursor()
 
-        print sql
+        # print sql
 
         cursor.execute(sql)
         desc = cursor.description
@@ -1305,7 +1305,7 @@ class Bulletinboard(viewsets.ModelViewSet):
         sql = """
         SELECT  ci.shortname,
                 si.shortname AS schoolname,
-                csmi.classschoolmappingid AS classid 
+                ci.classid AS classid 
         FROM classschoolmappinginfo csmi
         INNER JOIN classinfo ci ON ci.classid = csmi.classid 
         INNER JOIN schoolinfo si ON si.schoolid = csmi.schoolid 
@@ -1587,7 +1587,7 @@ class ThreadsViewSet(viewsets.ModelViewSet):
         """ % pk
 
         cursor = connection.cursor()
-        print sql
+        # print sql
         cursor.execute(sql)
         desc = cursor.description
         result =  [
@@ -1748,7 +1748,7 @@ class LogininfoViewSet(viewsets.ModelViewSet):
           WHERE au.id = %s
         """%userid 
         cursor = connection.cursor()
-        print sql
+        # print sql
         cursor.execute(sql)
         desc = cursor.description
         result =  [
@@ -1759,7 +1759,7 @@ class LogininfoViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk=None):
         userid   = request.user.id
-        print userid
+        # print userid
         return Response(userid)
 
 
