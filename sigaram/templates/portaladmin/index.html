@@ -11,7 +11,7 @@
 <!-- /.row -->
 <div class="row">
     <div class="col-lg-8 col-md-8">
-        <h3><a href="#" id="new-folder" class="fa fa-plus-square fa-1x nfolder">{% trans "New Folder" %}</a></h3>
+        <h3><a href="#" id="new-folder" class="fa fa-plus-square fa-1x nfolder"> {% trans "New Folder" %}</a></h3>
         <div class="row">
             {% for folder in folders%}
             <a href="{{folder.link}}">
@@ -132,6 +132,11 @@
   .modal-backdrop {z-index: 0 !important}
   p {display:inline;}
   a.nfolder {color: blue;}
+
+  .fa.fa-plus-square.fa-1x.nfolder {
+    color: #fff;
+  }
+
 </style>
 {% endblock morecss %}
 
@@ -219,8 +224,10 @@ $(document).ready(function(){
     });
     
     $(".folder-delete").on("click", "#new-folder-delete", function(){
+        if (confirm("Are you sure want to delete?")) {
             var folder_id = $(this).attr("name");
             TTS.forms.deletenewfolder(folder_id)
+        }
     });
 
 });
