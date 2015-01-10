@@ -14,6 +14,7 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
 <style>
     #addrec:hover{
         cursor: pointer;
@@ -21,14 +22,12 @@
     .note-editable{
         height: 80px;
     }
-    #writtenworks{
-        display:none;
-    }
 </style>
 {% endblock morecss %}
 
 
 {% block morescript %}
+<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
@@ -51,12 +50,8 @@
      <div class="form-group">
         <textarea id="note" class="summernote"></textarea>
     </div>
-    <div class="col-lg-6">
-        <input id="writtenwork" type="file" name="writtenwork">
-    </div>
-    <div class="col-lg-6">
-        <input id="writtenworks" type="file" name="writtenworks">
-    </div><br />
+    <div id="file-uploader">File Uploader Comes Here...</div> 
+    <input type="hidden" id="uploadurl">
 </div><br />
 <div class="row">
     <div class="col-lg-12">
@@ -290,15 +285,15 @@ TTS.forms.ressave = function(){
     data.students = [];
     data.title = $("#title").code();
     data.note = $("#note").code();
-    data.attachmenturl =($("#bulletinboard").attr("name")+"/"+$("#uploadurl").val()) ;
+    if($("#uploadurl").val()){
+        data.attachmenturl = $("#uploadurl").val();
+    }
     if(TTS.utils.getUrlParameter('resourceid')){
         data.resource = TTS.utils.getUrlParameter('resourceid');
     }
-    
     $("#sltStudentList>option").each(function(){
         data.students.push($(this).val());
-    })
-    console.log(data);
+    });
 
     $.ajax({
         headers : {
@@ -392,6 +387,27 @@ $(document).ready(function(){
     });
     $("#res-send").click(function(){
         TTS.forms.ressave();
+    });
+
+    var uploader = new qq.FileUploader({
+        action: "/admin/writtenwork-upload",
+        element: $('#file-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#uploadurl").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
     });
 
 });

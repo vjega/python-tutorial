@@ -276,7 +276,7 @@ class Assignresourceinfo(models.Model):
 
 
 class Assignwrittenworkinfo(models.Model):
-    assignwrittenworkid = models.BigIntegerField(primary_key=True)
+    assignwrittenworkid = models.AutoField(primary_key=True)
     writtenworkid = models.BigIntegerField()
     studentid = models.CharField(max_length=500)
     assigntext = models.TextField()
@@ -287,7 +287,7 @@ class Assignwrittenworkinfo(models.Model):
     answerrating = models.IntegerField()
     isbillboard = models.IntegerField()
     isclassroom = models.IntegerField()
-    assignedby = models.BigIntegerField()
+    assignedby = models.CharField(max_length=500)
     assigneddate = models.DateTimeField()
     publisheddate = models.DateTimeField()
 
@@ -1027,7 +1027,7 @@ class Workspaceinfo(models.Model):
 
 
 class Writtenworkinfo(models.Model):
-    writtenworkid = models.BigIntegerField(primary_key=True)
+    writtenworkid = models.AutoField(primary_key=True)
     writtenworktitle = models.TextField()
     description = models.TextField()
     writtenimage = models.CharField(db_column='writtenImage', max_length=200)  # Field name made lowercase.
