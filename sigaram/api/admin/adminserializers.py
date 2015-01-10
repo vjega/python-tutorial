@@ -88,7 +88,7 @@ class AdminclasslistSerializer(serializers.HyperlinkedModelSerializer):
 class CalendarSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Calendardetails
-        fields = ('id',  'title','start','end')
+        fields = ('id',  'title','start','end','color')
 
 class AdminrubricsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

@@ -998,6 +998,7 @@ class Calendardetails(models.Model):
     title = models.TextField()
     start = models.DateTimeField()
     end = models.DateTimeField()
+    color = models.CharField(max_length=30)
     eventcreatedby = models.CharField(max_length=30)
     eventeditedby = models.CharField(max_length=30)
     createdby = models.BigIntegerField()
