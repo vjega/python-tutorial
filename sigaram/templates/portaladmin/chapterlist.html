@@ -86,7 +86,7 @@ TTS.forms.renderchapterinfo = function(data){
               "data" :"title"
             },
             { "title": "{% trans "Count" %}",
-              "data" :"count"
+              "data" :"chaptercount"
             },
         ];
     var dataset = [];
@@ -96,7 +96,7 @@ TTS.forms.renderchapterinfo = function(data){
         t.DT_RowId = data[i].chapterid;
         t.icon = "<i class='fa fa-book fa-2x'></i>";
         t.title = data[i].chaptername;
-        t.count = data[i].rescount;
+        t.chaptercount = data[i].rescount;
         dataset.push(t);
     }
 

@@ -183,11 +183,11 @@ class StickyinfoSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Stickyinfo
         fields = ('id','title', 'createdby','isdeleted','createddate')
 
-class LogininfoSerializer(serializers.HyperlinkedModelSerializer):
+class Auth_userSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = models.Logininfo
-        fields = ('loginid','username', 'password','firstname','lastname','isdelete',
-                   'lastlogin','usertype','isadmin')
+        model = models.Auth_user
+        fields = ('id','password', 'last_login','username','first_name','last_name','email',
+                   'is_staff','is_active','date_joined')
 
 class AudiouploadSerializer(serializers.HyperlinkedModelSerializer):
       class Meta:

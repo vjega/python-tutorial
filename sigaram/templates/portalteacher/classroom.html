@@ -18,17 +18,21 @@
         <div class="panel-heading ">
             <div class="col-lg-5">
                <div id="add" class="col-lg-5">{% trans "From Date" %}</div>
-                    <div class="input-group col-lg-7">
-                        <input type="text" class="form-control" id="datetimepicker1" data-date-format="YYYY-MM-DD">
+               <div class="col-lg-7" id="fromdate">
+                    <div class="input-group">
+                        <input type="text" class="form-control" data-date-format="YYYY-MM-DD">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                     </div>
+                </div>
             </div>    
             <div class="col-lg-5">
                 <div id="add" class="add col-lg-5">{% trans "To Date" %}</div>
-                <div class="input-group date col-lg-7">
-                    <input type="text" class="form-control" id="datetimepicker2" data-date-format="YYYY-MM-DD">
-                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                </div>
+                    <div class="col-lg-7" id="tilldate">
+                        <div class="input-group date">
+                            <input type="text" class="form-control" data-date-format="YYYY-MM-DD">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        </div>        
+                    </div>
             </div>
                <button type="button" class="btn btn-primary">{% trans "Search" %}</button>
         </div>
@@ -47,8 +51,8 @@
     <!-- /.panel -->
 </div>
 <script>
-    $('#datetimepicker1,#datetimepicker2').datetimepicker({
-        pickTime: false
+    $('#fromdate,#tilldate').datetimepicker({
+        pickTime: false,
     });
 </script>
 <!-- /.col-lg-12 -->

@@ -248,7 +248,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         """ % (classid,section,chapterid,categoryid)
         cursor = connection.cursor()
 
-        print sql
+        # print sql
 
         cursor.execute(sql)
         desc = cursor.description
@@ -1310,7 +1310,7 @@ class Bulletinboard(viewsets.ModelViewSet):
         sql = """
         SELECT  ci.shortname,
                 si.shortname AS schoolname,
-                csmi.classschoolmappingid AS classid 
+                ci.classid AS classid 
         FROM classschoolmappinginfo csmi
         INNER JOIN classinfo ci ON ci.classid = csmi.classid 
         INNER JOIN schoolinfo si ON si.schoolid = csmi.schoolid 
@@ -1592,7 +1592,7 @@ class ThreadsViewSet(viewsets.ModelViewSet):
         """ % pk
 
         cursor = connection.cursor()
-        print sql
+        # print sql
         cursor.execute(sql)
         desc = cursor.description
         result =  [
@@ -1734,52 +1734,51 @@ class StickyinfoViewSet(viewsets.ModelViewSet):
         stickylist.save()
         return Response(request.DATA)
 
-class LogininfoViewSet(viewsets.ModelViewSet):
+class AuthuserViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Logininfo.objects.all()
-    serializer_class = adminserializers.StickyinfoSerializer
+    queryset = models.Auth_user.objects.all()
+    serializer_class = adminserializers.Auth_userSerializer
 
     def list(self, request):
-        userid   = request.user.id
-        user   = request.user.username
-        #uid = request.GET.get('userid')
-        sql = """
-         SELECT teacherid,
-                ti.firstname,
-                ti.username,
-                ti.emailid
-         FROM teacherinfo ti
-         INNER JOIN auth_user au on au.username=ti.username
-          WHERE au.id = %s
-        """%userid 
-        cursor = connection.cursor()
-        print sql
-        cursor.execute(sql)
-        desc = cursor.description
-        result =  [
-                dict(zip([col[0] for col in desc], row))
-                for row in cursor.fetchall()
-            ]
-        return Response(result)
+        id = request.GET.get('id')
+       
+        if id :
+            queryset = models.Auth_user.objects.filter(id=id)
+        else:
+            queryset = models.Auth_user.objects.all()
+        serializer = adminserializers.Auth_userSerializer(queryset, many=True)
+        return Response(serializer.data)
+
 
     def retrieve(self, request, pk=None):
         userid   = request.user.id
-        print userid
+        # print userid
         return Response(userid)
 
 
     def create(self, request):
-        loginlist = models.Logininfo()
-        logindata =  json.loads(request.DATA.keys()[0])
-        loginlist.loginid = logindata.get('loginid')
-        loginlist.password = logindata.get('password')
-        loginlist.firstname = logindata.get('firstname')
-        loginlist.lastname = logindata.get('lastname')
-        loginlist.lastlogin = logindata.get('lastlogin')
-        loginlist.usertype = request.user.username
-        loginlist.isdeleted = 0
-        loginlist.username = request.user.id
-        loginlist.save()
+        authuser = models.Auth_user()
+        authuserdata =  json.loads(request.DATA.keys()[0])
+        authuser.id = authuserdata.get('id')
+        authuser.password = authuserdata.get('password')
+        authuser.last_login = time.strftime('%Y-%m-%d %H:%M:%S')
+        authuser.username = authuserdata.get('username')
+        authuser.firstname = authuserdata.get('firstname')
+        authuser.last_name = authuserdata.get('last_name')
+        authuser.email = authuserdata.get('email')
+        authuser.is_staff = authuserdata.get('is_staff')
+        authuser.is_active = authuserdata.get('is_active')
+        authuser.date_joined = time.strftime('%Y-%m-%d %H:%M:%S')
+        authuser.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        authuser = models.Auth_user.objects.get(pk=pk)
+        authuserdata =  json.loads(request.DATA.keys()[0])
+        authuser.password = authuserdata.get('password')
+        authuser.email = authuserdata.get('firstname')
+        authuser.emailid = authuserdata.get('emailid')
+        authuser.save()
         return Response(request.DATA)
 
 class AudioinfoViewSet(viewsets.ViewSet):

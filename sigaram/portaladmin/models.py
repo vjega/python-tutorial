@@ -228,6 +228,22 @@ class Assignassessmentinfo(models.Model):
         managed = False
         db_table = 'assignassessmentinfo'
 
+class Auth_user(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    password = models.CharField(max_length=128)
+    last_login = models.DateTimeField()
+    username = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.CharField(max_length=75)
+    is_staff =models.IntegerField()
+    is_active =models.IntegerField()
+    date_joined = models.DateTimeField()
+    
+    class Meta:
+        managed = False
+        db_table = 'auth_user'
+
 
 class Assignresourceinfo(models.Model):
     assignedid = models.BigIntegerField(db_column='assignedid', primary_key=True)
