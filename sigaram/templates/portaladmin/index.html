@@ -44,10 +44,10 @@
                                 <i class="fa fa-folder fa-5x"></i>
                             </div>
                             <div class="folder-delete text-right">
-                                <i id="new-folder-delete" class='fa fa-trash'></i>
+                                <i id="new-folder-delete" class='fa fa-trash' name="{{folder.folder_id}}"></i>
                             </div>
                             <div class="col-xs-9 text-right">
-                                <div class="tent-medium">{{folder.folder_name}}</div>
+                                <div class="tent-medium" >{{folder.folder_name}}</div>
                                 <div class="tent-medium">{{folder.folder_description}}</div>
                             </div>
                         </div>
@@ -171,6 +171,7 @@
 <script>
 window.TTS = window.TTS || {}
 window.TTS.forms = window.TTS.forms || {}
+
 TTS.forms.deletenewfolder = function(folder_id) {
     $.ajax({
          headers : {
@@ -218,8 +219,8 @@ $(document).ready(function(){
     });
     
     $(".folder-delete").on("click", "#new-folder-delete", function(){
-            console.log("delete");
-            //TTS.forms.deletenewfolder()
+            var folder_id = $(this).attr("name");
+            TTS.forms.deletenewfolder(folder_id)
     });
 
 });

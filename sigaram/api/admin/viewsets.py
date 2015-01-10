@@ -68,6 +68,10 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
         adminfolder.save()
         return Response(request.DATA)
 
+    def destroy(self, request, pk):
+        models.AdminFolders.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
+
 class teacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
     serializer_class = adminserializers.TeacherinfoSerializer
@@ -1121,7 +1125,9 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
                ari.studentid,
                ari.isanswered,
                ari.issaved,
-               ari.isbillboard
+               ari.isbillboard,
+               ari.rubric_marks,
+               ari.rubric_n_mark
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         INNER JOIN  auth_user au on au.username = ari.studentid 
@@ -1154,6 +1160,7 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
 class Bulletinboardlist(viewsets.ModelViewSet):
     queryset = models.Bulletinboardinfo.objects.all()
     serializer_class = adminserializers.BulletinboardlistinfoSerializer
+
     def list(self, request):
         l =  request.user.groups.values_list('name',flat=True)[0]
         fieldcond=""
@@ -1678,7 +1685,12 @@ class RubricsViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        return Response('"msg":"update"')
+        data = json.loads(request.DATA.keys()[0])
+        arirm = models.Assignresourceinfo.objects.get(pk=pk)
+        arirm.rubric_marks    = data.get('ans')
+        arirm.rubric_n_mark   = data.get('ans_n')
+        arirm.save()
+        return Response({'msg':True})
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
