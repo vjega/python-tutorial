@@ -1131,7 +1131,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         for rl in data.get('resourcelist'):
             bmi = models.Bulletinmappinginfo()
             bmi.bulletinboardid = bbiid
-            bmi.userid = rl
+            bmi.userid = request.user.username
             bmi.viewtype = 0    
             bmi.postedby = request.user.id
             if data.get('cattype') == 'schools':
