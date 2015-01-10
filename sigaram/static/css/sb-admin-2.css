@@ -314,10 +314,10 @@ table.dataTable thead .sorting:after {
     background-color: #f0ad4e;
 }
 .panel-yellow a {
-    color: #f0ad4e;
+    color: #fff;
 }
 .panel-yellow a:hover {
-    color: #df8a13;
+    color: #fff;
 }
 /*!0t css*/
 
@@ -552,4 +552,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', end
     margin-bottom: 4px;
     margin-right: 14px;
     margin-top: -3px;
+}
+.fa.fa-plus-square.fa-1x.nfolder {
+    color: #fff;
+}
+.page-header{
+    color: #fff;
 }
