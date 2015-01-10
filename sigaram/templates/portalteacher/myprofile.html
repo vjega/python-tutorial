@@ -22,13 +22,14 @@
                                                           id="viewforum-main-tbl"> -->
                     <div class="row">
                         <div class="form-group" class="col-sm-6">
+                            <input type ="text" class="form-control" value="{{user.id}}"name="admin_id" id="admin_id">
                             <label for="folder_name" class="col-sm-4 control-label">{% trans "Username" %}
                             </label>
                             <div class="col-sm-3">
-                                <input type ="text" class="form-control" name="admin_username" id="admin_username">
+                                <input type ="text" class="form-control" value="" name="admin_username" id="admin_username" readonly="true">
                             </div>
                         </div>
-                    </div>
+                    </div><br/>
                     <div class="row">
                         <div class="form-group" class="col-sm-6">
                             <label for="folder_name" class="col-sm-4 control-label">{% trans "First Name" %}</label>
@@ -38,13 +39,15 @@
                         </div>
                     </div>
                     <div class="row">
+                    <form action="#" id="login-form-1">
                         <div class="form-group" class="col-sm-6">
                             <label for="folder_name" class="col-sm-4 control-label">{% trans "Password" %}</label>
                             <div class="col-sm-3">
-                                <input type ="text" class="form-control" name="admin-pass" id="admin-pass">
+                                <input type="password" id="user-password" class="form-control"  name="user-password" />
                             </div>
                         </div>
-                    </div>
+                        <form>
+                    </div><br/>
                     <div class="row">
                         <div class="form-group" class="col-sm-6">
                             <label for="folder_name" class="col-sm-4 control-label">{% trans "Email" %}</label>
@@ -52,7 +55,7 @@
                                 <input type ="text" class="form-control" name="email" id="email">
                             </div>
                         </div>
-                    </div>
+                    </div><br/>
                     <div class="row">
                         <div class="form-group" class="col-sm-6">
                             <label for="folder_name" class="col-sm-4 control-label">{% trans "Photo" %}</label>
@@ -60,7 +63,9 @@
                                <input type="file" class="form-control" name="admin_photo" id="admin_photo"placeholder="{% trans "Choose File" %}">
                             </div>
                         </div>
-                    </div><br/>
+
+                    </div>
+                    
                     <div >
                         <button class="btn btn-primary center-block" id="mybtn">Save</button>
                     </div>
@@ -100,53 +105,18 @@
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 
-
-TTS.forms.renderviewfourminfo = function(data){
-    var headers = [
-           
-            { "title": "{% trans "Topics" %}",
-              "data" : "username" ,
-              "class": "viewtopicname" 
-            },
-            { "title": "{% trans "Total Comments" %}",
-              "data" : "emailid"  
-            },
-            { "title": "{% trans "Last author" %}",
-              "class": "text-center" ,
-              "data" : "firstname"  
-            },
-            { "title": "{% trans "By Last Day" %}",
-              "class": "text-center" ,
-              "data" : "lastposteddate"  
-            },
-        ];
-    var dataset = [];
-    var count = 0
-    for(var i in data){
-        var t = {};
-        t.username = data[i].username;
-        t.emailid = data[i].emailid;
-        dataset.push(t);
-    
-    }
-    //console.log(dataset);
-   
-    console.log(dataset);
-};
-
 $(document).ready(function(){
-   var userid     = TTS.utils.getUrlParameter("userid");
    
-   //alert(TTS.utils.getUrlParameter("userid"));
    $.ajax({
-        "url":"/api/admin/logininfo/?format=json",
+        //"url":"/api/admin/logininfo/"+$("#admin_id").val()+"/?format=json",
+        "url":"/api/admin/teacher/"+$("#admin_id").val()+"/?format=json",
         "type":"GET"
     }).done(function(data){
-        if (data.length) {
-            TTS.forms.renderviewfourminfo(data);
-        } else {
-            TTS.forms.table.fnClearTable();
-        }
+        $("#admin_username").val(data.username); 
+        $("#admin_fname").val(data.firstname);
+        $("#email").val(data.emailid);
+        $("#user-password").val(data.password);
+        $("#admin_photo").val(data.imageurl);
     });
 
     
@@ -154,7 +124,7 @@ $(document).ready(function(){
         var dataobj = [{
             'username' : $("#admin_username").val(),
             'fname'    : $("#admin_fname").val(),
-            'password' : $("#admin-pass").val(),
+            'password' : $("#input").val(),
             'email'    : $("#email").val(),
             'photo'    : $("#admin_photo").val(),
         }]        
@@ -171,7 +141,6 @@ $(document).ready(function(){
             alert(data)
         }); 
     });
-
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.showviewfourm();
     });

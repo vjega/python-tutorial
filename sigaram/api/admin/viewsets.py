@@ -107,6 +107,12 @@ class teacherViewSet(viewsets.ModelViewSet):
         teacher.save()
         return Response(request.DATA)
 
+    def retrieve(self, request, pk=None):
+        queryset = models.Teacherinfo.objects.filter(username=request.user.username)[0]
+        serializer = adminserializers.TeacherinfoSerializer(queryset, many=False)
+        return Response(serializer.data)
+        
+
     @delete_login('Teacher')
     def destroy(self, request, pk):
         teacher = models.Teacherinfo.objects.get(pk=pk)
@@ -1666,7 +1672,7 @@ class LogininfoViewSet(viewsets.ModelViewSet):
     def list(self, request):
         userid   = request.user.id
         user   = request.user.username
-        print userid
+        #uid = request.GET.get('userid')
         sql = """
          SELECT teacherid,
                 ti.firstname,
@@ -1685,6 +1691,11 @@ class LogininfoViewSet(viewsets.ModelViewSet):
                 for row in cursor.fetchall()
             ]
         return Response(result)
+
+    def retrieve(self, request, pk=None):
+        userid   = request.user.id
+        print userid
+        return Response(userid)
 
 
     def create(self, request):
@@ -1722,3 +1733,4 @@ class AudioinfoViewSet(viewsets.ViewSet):
             for chunk in f.chunks():
                 destination.write(chunk)
         return Response({'filename':filename})
+
