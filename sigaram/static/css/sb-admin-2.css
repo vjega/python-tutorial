@@ -530,3 +530,26 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', end
 .navbar-default .navbar-nav>li>a {
     color: #fff;
 }
+
+.input-group-addon{
+    cursor:pointer;
+}
+
+.closon{
+    cursor: pointer;
+    font-size: 14px;
+    position: absolute;
+    right: 5px;
+    top: -1px;
+}
+
+.t-sm-bg2 {
+    background:transparent url("../img/10t-logo.png") no-repeat;
+}
+
+.folder-delete{
+    cursor: pointer;
+    margin-bottom: 4px;
+    margin-right: 14px;
+    margin-top: -3px;
+}

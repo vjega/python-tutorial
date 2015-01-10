@@ -100,18 +100,17 @@
             <!-- /.panel-heading -->
             <div class="panel-body">
                 <div class="list-group">
-          
-            {% autoescape off %}
-            {% for announce in announcement %}
-                <a class="list-group-item">
-                    <i class="fa fa-bullhorn fa-fw"></i> 
+                    {% autoescape off %}
+                    {% for announce in announcement %}
+                        <a class="list-group-item">
+                            <i class="fa fa-bullhorn fa-fw"></i> 
                             <span>{{announce.messagetitle}}</span>
-                    <span class="pull-right text-muted small"><em>4 minutes ago</em>
-                    </span>
-                </a>
-            {% endfor announcement.body %}
-            {% endautoescape %}
-                </div>
+                            <span class="pull-right text-muted small"><em>{{announce.posteddate}}</em>
+                            </span>
+                        </a>
+                    {% endfor announcement.body %}
+                    {% endautoescape %}
+                 </div>
                 <!-- /.list-group -->
                 <a href="bulletinboardlist" class="btn btn-default btn-block">View All Announcement</a>
             </div>
