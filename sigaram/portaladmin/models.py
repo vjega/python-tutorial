@@ -333,7 +333,8 @@ class Bulletinboardinfo(models.Model):
         FROM bulletinboardinfo bbi
         INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
         INNER JOIN auth_user au ON au.username = bmi.userid
-        WHERE bmi.userid = '%s'        GROUP BY bbi.bulletinboardid
+        WHERE bmi.userid = '%s'        
+        GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
         LIMIT 2"""%req.user.username 
         cursor = connection.cursor()
