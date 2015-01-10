@@ -332,11 +332,11 @@ class Bulletinboardinfo(models.Model):
                 DATE(bbi.posteddate ) AS posteddate
         FROM bulletinboardinfo bbi
         INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
-        INNER JOIN auth_user au ON au.username = bmi.userid
-        WHERE bmi.userid = '%s'        
+        INNER JOIN auth_user au ON au.id = bbi.postedby
+        WHERE bmi.userid = %s
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
-        LIMIT 2"""%req.user.username 
+        LIMIT 2"""%req.user.id 
         cursor = connection.cursor()
         cursor.execute(sql)
         x = dictfetchall(cursor)
@@ -349,8 +349,9 @@ class Bulletinmappinginfo(models.Model):
     viewtype = models.IntegerField()
     schoolid = models.BigIntegerField()
     classid = models.BigIntegerField()
-    userid = models.CharField(max_length=10)
-    
+    adminid = models.BigIntegerField()
+    teacherid = models.BigIntegerField()
+
     class Meta:
         managed = False
         db_table = 'bulletinmappinginfo'
@@ -986,7 +987,7 @@ class Writtenworkinfo(models.Model):
     schoolid = models.IntegerField()
     classid = models.IntegerField()
     isassigned = models.IntegerField()
-    createdby = models.BigIntegerField()
+    createdby = models.CharField(max_length=500)
     isdeleted = models.IntegerField()
     createddate = models.DateTimeField()
 

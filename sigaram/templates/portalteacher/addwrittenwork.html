@@ -290,6 +290,7 @@ TTS.forms.ressave = function(){
     data.students = [];
     data.title = $("#title").code();
     data.note = $("#note").code();
+    data.attachmenturl =($("#bulletinboard").attr("name")+"/"+$("#uploadurl").val()) ;
     if(TTS.utils.getUrlParameter('resourceid')){
         data.resource = TTS.utils.getUrlParameter('resourceid');
     }

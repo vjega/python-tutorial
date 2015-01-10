@@ -494,7 +494,6 @@ def studentprofile(request):
     return render(request, 'portalteacher/studentprofile.html', 
                   {"folders":folders,"user":user})
 
-
 @login_required
 @switchlanguage
 def studentassignedresourcelist(request):

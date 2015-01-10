@@ -352,30 +352,48 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     def create(self, request):    
         data = json.loads(dict(request.DATA).keys()[0]);
         print data
-        # students = data.get('students');
-        # resource = data.get('resource');
-        # rubricid = data.get('rubricid');
-        # assigntext = data.get('assigntext');
-        # for r in resource:
-        #     for s in students:
-        #         ar = models.Assignresourceinfo()
-        #         ar.resourceid = int(r)
-        #         ar.studentid = str(s)
-        #         ar.assigntext = str(assigntext)
+        students = data.get('students');
+        title = data.get('title')
+        note = data.get('note');
+        schoolid = request.session.get('schoolid')
+        classid = request.session.get('classid')
 
-        #         ar.isanswered =def create(self, request): 0
-        #         ar.issaved = 0
-        #         print issav
-        #         ar.isrecord = 0
-        #         ar.answerrating = 0
-        #         ar.isbillboard = 0
-        #         ar.isclassroom = 0
-        #         ar.isdelete = 0
-        #         ar.rubric_id = int(rubricid)
-        #         ar.old_edit = 0
-        #         ar.save()   
+        print schoolid
+        print classid
         
+        imageurl = ''
+
+        writtenwork = models.Writtenworkinfo()
+        writtenwork.writtenworktitle= title
+        writtenwork.description     = note
+        writtenwork.writtenImage    = imageurl
+        writtenwork.schoolid        = schoolid
+        writtenwork.classid         = classid
+        writtenwork.isassigned      = 0
+        writtenwork.isdeleted       = 0
+        writtenwork.createdby       = str(request.user.username)
+        writtenwork.createddate     = time.strftime('%Y-%m-%d %H:%M:%S')
+        writtenwork.save()
+
         return Response(request.DATA)
+
+        # for s in students:
+        #     ar = models.Assignresourceinfo()
+        #     ar.resourceid = int(r)
+        #     ar.studentid = str(s)
+        #     ar.assigntext = str(assigntext)
+        #     ar.isanswered =def create(self, request): 0
+        #     ar.issaved = 0
+        #     ar.isrecord = 0
+        #     ar.answerrating = 0
+        #     ar.isbillboard = 0
+        #     ar.isclassroom = 0
+        #     ar.isdelete = 0
+        #     ar.rubric_id = int(rubricid)
+        #     ar.old_edit = 0
+        #     ar.save()   
+        
+        #return Response(request.DATA)
 
 class ChapterinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Chapterinfo.objects.all()

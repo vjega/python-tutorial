@@ -496,6 +496,27 @@ TTS.forms.setmarks = function(row, mark) {
     $('#ttls').val(x);
 };
 
+TTS.forms.ressave = function(){
+    
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        url:"/api/admin/writtenworkinfo/",
+        type:"POST",
+        data: JSON.stringify(data)
+    }).done(function(data){
+        console.log(data);
+        return false;
+        alert("Chapter assigned Successfully");
+        location.reload();
+    }).error(function(err, msg){
+        console.log(err, msg);
+        return false;
+        alert("I didnt save the data");
+    });
+}
+
 $(document).ready(function(){
     var resourceid = TTS.utils.getUrlParameter('resourceid');
     var studentid = TTS.utils.getUrlParameter('studentid');
@@ -545,7 +566,9 @@ $(document).ready(function(){
                 TTS.forms.changeapproveicon(editingid);
         });
     });
-
+    $("#save-rubric-marks").click(function(){
+        TTS.forms.ressave();
+    });
 });
 
 </script>
