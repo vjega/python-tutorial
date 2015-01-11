@@ -7,7 +7,7 @@ import viewsets
 router = routers.DefaultRouter()
 router.register(r'admin',        		  	viewsets.AdmininfoViewSet)
 router.register(r'adminfolders', 		  	viewsets.AdminFoldersViewSet)
-router.register(r'teacher',      		  	viewsets.teacherViewSet)
+router.register(r'teacher',      		  	viewsets.TeacherViewSet)
 router.register(r'student',      		  	viewsets.studentViewSet)
 router.register(r'teacherresources',      	viewsets.TeacherResourcesViewSet)
 router.register(r'teacherresourcesinfo',  	viewsets.TeacherresourceinfoViewSet)

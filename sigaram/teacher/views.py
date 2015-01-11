@@ -14,7 +14,8 @@ from teacher.forms import ( RubricsForm,
                             ThreadForm,
                             AnnouncementForm,
                             StickyinfoForm,
-                            NewtopicForm
+                            NewtopicForm,
+                            MyprofileForm
                             ) 
 
 from ajaxuploader.views import AjaxFileUploader  
@@ -126,7 +127,7 @@ def classroom(request):
 @login_required
 @switchlanguage
 def myprofile(request):
-    return render(request, 'portalteacher/myprofile.html')
+    return render(request, 'portalteacher/myprofile.html',{'form':MyprofileForm.MyprofileForm()})
 
 @login_required
 @switchlanguage
