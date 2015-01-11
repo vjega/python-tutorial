@@ -232,22 +232,25 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.TeacherresourceinfoSerializer
 
     def list(self, request):
+        print request.GET.get('schoolid');
         # schoolid   = request.GET.get('schoolid')
         # classid   = request.GET.get('classid')
         # section   = request.GET.get('section')
         # chapterid = request.GET.get('chapterid')
         # categoryid = request.GET.get('resourcecategory')
+
+
         # if request.GET.get('schoolid'):
         #     schoolid = "AND schoolid='%s' "
-        wherecond = ''
         if request.GET.get('classid'):
-            wherecond = "AND classid='%s'"
+            classid = "AND classid='%s'"
         if request.GET.get('section'):
-            wherecond = "AND section='%s' "
+            section = "AND section='%s' "
         if request.GET.get('chapterid'):
-            wherecond = "AND chapterid='%s' "
+            chapterid = "AND chapterid='%s' "
         if request.GET.get('resourcecategory'):
-            wherecond = "AND resourcecategory='%s' "
+            categoryid = "AND resourcecategory='%s' "
+
 
         sql = """
         SELECT  tri.teacherresourceid,
@@ -255,12 +258,15 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
                 tri.createddate
         FROM teacherresourceinfo tri
         WHERE isdeleted=0
-        %s
+        AND classid='%s' 
+        AND section='%s' 
+        AND chapterid='%s' 
+        AND resourcecategory='%s'
         ORDER BY tri.createddate DESC
-        """ % (wherecond)
+        """ % (classid,section,chapterid,categoryid)
         cursor = connection.cursor()
 
-        print sql
+        # print sql
 
         cursor.execute(sql)
         desc = cursor.description
