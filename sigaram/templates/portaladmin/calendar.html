@@ -51,10 +51,17 @@ TTS.forms.showcalform = function(start, end, allDay) {
         message: $($('#cal-form').render()),
         onshown: function(){
             $('#id_title').val("New Event");
-            $('#id_start').val(start.format());
-            $('#id_end').val(end.format());
-
+            $('#id_start').val(start.format('YYYY-MM-DD LT'));
+            $('#id_end').val(start.format('YYYY-MM-DD LT'));
+            
+            //next date
+            //$('#id_end').val(end.format('YYYY-MM-DD hh:mm'));
+            
             $('#id_start,#id_end').datetimepicker({
+                format: 'YYYY-MM-DD LT',
+                //todayHighlight: true,
+                //showMeridian: true,
+                //minDate:new Date()
             });
         },
         buttons: [{
@@ -88,7 +95,8 @@ TTS.forms.saveCal = function () {
         {
             title: data.title,
             start: data.start,
-            end: data.end
+            end: data.end,
+            alldayevents:$("#id_alldayevents").is(':checked')
         },
         true // make the event "stick"
         );
@@ -96,7 +104,6 @@ TTS.forms.saveCal = function () {
 }
 
 TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
-    console.log(calEvent)
     var start_date = calEvent.start.format().split("T");
     var start_time = start_date[1].split("+"); 
     var end_date = calEvent.end.format().split("T");
@@ -108,7 +115,6 @@ TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
                 $('#id_title').val(calEvent.title);
                 $('#id_start').val(start_date[0]);
                 $('#id_end').val(end_date[0]);
-
                 $('#id_start,#id_end').datetimepicker({
                 });
             },
@@ -217,12 +223,6 @@ $(document).ready(function() {
         },
         eventClick: function(calEvent, jsEvent, view) {
             TTS.forms.updatecalform(calEvent, jsEvent, view);
-
-            // change the border color just for fun
-            //$(this).css('border-color', 'red');
-            //$(this).css('background-color', '#FDFB8C');
-            //$(this).css('color', '#000000');
-
         },
         eventRender: function(event, element) {
             element.append( "<div class='fc-resizer'></div>");
