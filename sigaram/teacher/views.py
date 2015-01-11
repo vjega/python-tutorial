@@ -47,7 +47,7 @@ def home(request):
         "caption": _("Assignments"),
         "stat": 25
         },{
-        "color": u"yellow",
+        "color": u"green",
         "icon" : u"pencil-square-o",
         "link" : u"writtenwork",
         "caption":_("Written Work"),

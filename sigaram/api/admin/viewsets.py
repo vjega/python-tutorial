@@ -383,6 +383,12 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Writtenworkinfo.objects.all()
     serializer_class = adminserializers.WrittenworkinfoSerializer
 
+    def list(self, request):
+        print request.user.username
+        queryset = models.Writtenworkinfo.objects.filter(createdby=str(request.user.username))
+        serializer = adminserializers.WrittenworkinfoSerializer(queryset, many=True)
+        return Response(serializer.data)
+
     def create(self, request):    
         data = json.loads(dict(request.DATA).keys()[0]);
         students = data.get('students');
@@ -479,28 +485,28 @@ class AdminclassinfoViewSet(viewsets.ModelViewSet):
            cri.classroomid,
            cri.assessmentid, 
            cri.resourceid,
-           al.assessmenttype,
-           al.assessmenttitle,
-           ri.resourcetype,
-           ri.resourcetitle,
-           wwi.writtenworktitle,
+           -- al.assessmenttype,
+           -- al.assessmenttitle,
+           -- ri.resourcetype,
+           -- ri.resourcetitle,
+           -- wwi.writtenworktitle,
            cri.writtenworkid, 
-           si.firstname,
-           si.imageurl,
+           -- si.firstname,
+           -- si.imageurl,
            date(cri.posteddate) as posteddate,
            cri.studentid
         FROM classroominfo cri
-        LEFT OUTER JOIN assignassessmentinfo aai ON aai.assessmentid = cri.assessmentid 
-                        AND aai.studentid = cri.studentid 
-        LEFT OUTER JOIN assessmentlist al ON al.assessmentid = cri.assessmentid 
-        LEFT OUTER JOIN assignresourceinfo ari  ON ari.resourceid = cri.resourceid 
-                        AND ari.studentid = cri.studentid 
-        LEFT OUTER JOIN resourceinfo ri ON ri.resourceid = cri.resourceid
-        LEFT OUTER JOIN assignwrittenworkinfo awwi ON awwi.writtenworkid = cri.writtenworkid
-        LEFT OUTER JOIN writtenworkinfo wwi ON wwi.writtenworkid = cri.writtenworkid
-        LEFT OUTER JOIN logininfo li ON li.loginid = cri.studentid
-        LEFT OUTER JOIN studentinfo si ON si.username = li.username
         /*
+        -- LEFT OUTER JOIN assignassessmentinfo aai ON aai.assessmentid = cri.assessmentid 
+                        -- AND aai.studentid = cri.studentid 
+        -- LEFT OUTER JOIN assessmentlist al ON al.assessmentid = cri.assessmentid 
+        -- LEFT OUTER JOIN assignresourceinfo ari  ON ari.resourceid = cri.resourceid 
+                        -- AND ari.studentid = cri.studentid 
+        -- LEFT OUTER JOIN resourceinfo ri ON ri.resourceid = cri.resourceid
+        -- LEFT OUTER JOIN assignwrittenworkinfo awwi ON awwi.writtenworkid = cri.writtenworkid
+        -- LEFT OUTER JOIN writtenworkinfo wwi ON wwi.writtenworkid = cri.writtenworkid
+        -- LEFT OUTER JOIN logininfo li ON li.loginid = cri.studentid
+        -- LEFT OUTER JOIN studentinfo si ON si.username = li.username
         WHERE ( ari.isclassroom =1 OR 
                  aai.isclassroom =1 OR 
                 awwi.isclassroom=1 ) 
@@ -1825,30 +1831,3 @@ class AudioinfoViewSet(viewsets.ViewSet):
                 destination.write(chunk)
         return Response({'filename':filename})
 
-# class AdminresourceViewSet(viewsets.ModelViewSet):
-
-#     queryset = models.AdminResources.objects.filter(isdelete=0).order_by('-createddate')
-#     serializer_class = adminserializers.AdminresourceSerializer
-
-#     @create_login('Admin')
-#     def create(self, request):
-#         admin = models.AdminResources()
-#         admindata =  json.loads(request.DATA.keys()[0])
-#         admin.resourcetype = admindata.get('resourcetype')
-#         admin.resourcetitle = admindata.get('resourcetitle')
-#         admin.resourcedescription = admindata.get('resourcedescription')
-#         admin.emailid = admindata.get('emailid')
-#         admin.imageurl = admindata.get('image')
-#         admin.isdelete = 0
-#         admin.createdby = request.user.id
-#         admin.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
-#         admin.save()
-#         return Response(request.DATA)
-
-#     def update(self, request, pk=None):
-#         return Response('"msg":"update"')
-
-#     @delete_login('Admin')
-#     def destroy(self, request, pk):
-#         models.Admininfo.objects.get(pk=pk).delete()
-#         return Response('"msg":"delete"')
