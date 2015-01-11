@@ -211,7 +211,8 @@ $(document).ready(function(){
         $("#assingdate").html(data[0].assigneddate);
         $("#assingperson").html(data[0].assigneddate);
         $("#respondingday").html(data[0].answereddate);
-        $("#answer").html(data[0].answertext);
+        $("#answer").html(data[0].originaltext);
+        alert (data[0].originaltext);
         if (data.length) {
             TTS.forms.renderbillassignmentanswer(data);
         }
