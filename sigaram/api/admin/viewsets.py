@@ -372,22 +372,17 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
 
     def create(self, request):    
         data = json.loads(dict(request.DATA).keys()[0]);
-        print data
         students = data.get('students');
         title = data.get('title')
         note = data.get('note');
         schoolid = request.session.get('schoolid')
         classid = request.session.get('classid')
-
-        print schoolid
-        print classid
-        
-        imageurl = ''
+        attachmenturl = data.get('attachmenturl')
 
         writtenwork = models.Writtenworkinfo()
         writtenwork.writtenworktitle= title
         writtenwork.description     = note
-        writtenwork.writtenImage    = imageurl
+        writtenwork.writtenimage    = attachmenturl
         writtenwork.schoolid        = schoolid
         writtenwork.classid         = classid
         writtenwork.isassigned      = 0
@@ -396,25 +391,25 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
         writtenwork.createddate     = time.strftime('%Y-%m-%d %H:%M:%S')
         writtenwork.save()
 
-        return Response(request.DATA)
+        writtenworkid = writtenwork.writtenworkid
 
-        # for s in students:
-        #     ar = models.Assignresourceinfo()
-        #     ar.resourceid = int(r)
-        #     ar.studentid = str(s)
-        #     ar.assigntext = str(assigntext)
-        #     ar.isanswered =def create(self, request): 0
-        #     ar.issaved = 0
-        #     ar.isrecord = 0
-        #     ar.answerrating = 0
-        #     ar.isbillboard = 0
-        #     ar.isclassroom = 0
-        #     ar.isdelete = 0
-        #     ar.rubric_id = int(rubricid)
-        #     ar.old_edit = 0
-        #     ar.save()   
+        for s in students:
+            awwi = models.Assignwrittenworkinfo()
+            awwi.writtenworkid = writtenworkid
+            awwi.studentid = str(s)
+            awwi.assigntext = str(note)
+            awwi.issaved = 0
+            awwi.ispublished = 0
+            awwi.isrecord = 0
+            awwi.answerrating = 0
+            awwi.isbillboard = 0
+            awwi.isclassroom = 0
+            awwi.assignedby = str(request.user.username)
+            awwi.assigneddate = '2015-01-01 00:00:00'
+            awwi.publisheddate = '2015-01-01 00:00:00' #time.strftime('%Y-%m-%d %H:%M:%S')
+            awwi.save()
         
-        #return Response(request.DATA)
+        return Response(request.DATA)
 
 class ChapterinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Chapterinfo.objects.all()

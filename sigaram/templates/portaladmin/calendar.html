@@ -140,6 +140,7 @@ TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
 }
 
 TTS.forms.updatecalevent = function (event){
+    console.log(event);
     var data = {
         "title" : event.title,
         "start" : event.start.format(),
@@ -153,7 +154,7 @@ TTS.forms.updatecalevent = function (event){
         data: JSON.stringify(data),
         url : '/api/admin/calendar/'+event.id
     }).done(function( msg ) {
-        location.reload();
+        //location.reload();
     });
 };
 
@@ -198,20 +199,20 @@ $(document).ready(function() {
             }
         },
         eventResize: function (event, delta, revertFunc) {
-            /*alert(event.title + " end is now " + event.end.format());
+            alert(event.title + " end is now " + event.end.format());
             if (confirm("Are you sure want this change?")) {
-                TTS.forms.updatecalevent(event, delta, '');
+                TTS.forms.updatecalevent(event);
             }else{
                 revertFunc();
-            }*/
+            }
             
-            
+            /*
             console.log("Resize");
             console.log(event);
             console.log(event.id);
             console.log(event.title);
             console.log(event.start.format());
-            console.log(event.end.format());
+            console.log(event.end.format());*/
             
         },
         eventClick: function(calEvent, jsEvent, view) {

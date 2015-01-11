@@ -40,25 +40,20 @@
                 <div class="panel panel-yellow">
                     <div class="panel-heading">
                         <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fa fa-folder fa-5x"></i>
-                            </div>
-                            <div class="folder-delete text-right">
-                                <i id="new-folder-delete" class='fa fa-trash' name="{{folder.folder_id}}"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div class="tent-medium" >{{folder.folder_name}}</div>
-                                <div class="tent-medium">{{folder.folder_description}}</div>
-                            </div>
+                            <a href="{{folder.link}}">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-folder fa-5x"></i>
+                                </div>
+                                <div class="folder-delete text-right">
+                                    <i id="new-folder-delete" class='fa fa-trash' name="{{folder.folder_id}}"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="tent-medium" >{{folder.folder_name}}</div>
+                                    <div class="tent-medium">{{folder.folder_description}}</div>
+                                </div>
+                            </a>
                         </div>
                     </div>
-                    <a href="myresourcelist">
-                        <div class="panel-footer">
-                            <span class="pull-left">மேல் விவரங்களுக்கு</span>
-                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                            <div class="clearfix"></div>
-                        </div>
-                    </a>
                 </div>
             </div>
             {% endfor %}
