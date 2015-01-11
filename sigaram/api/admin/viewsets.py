@@ -232,40 +232,48 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.TeacherresourceinfoSerializer
 
     def list(self, request):
-        schoolid   = request.GET.get('schoolid')
-        classid   = request.GET.get('classid')
-        section   = request.GET.get('section')
-        chapterid = request.GET.get('chapterid')
-        categoryid = request.GET.get('resourcecategory')
+        # schoolid   = request.GET.get('schoolid')
+        # classid   = request.GET.get('classid')
+        # section   = request.GET.get('section')
+        # chapterid = request.GET.get('chapterid')
+        # categoryid = request.GET.get('resourcecategory')
 
+        schoolid    = ''
+        classid     = ''
+        section     = ''
+        chapterid   = ''
+        categoryid  = ''
 
         if request.GET.get('schoolid'):
-            schoolid = "AND schoolid='%s' "
+            schoolid = "AND tri.schoolid='%s'" % (request.GET.get('schoolid'))
         if request.GET.get('classid'):
-            classid = "AND classid='%s' "
+            classid = "AND tri.classid='%s'" % (request.GET.get('classid'))
         if request.GET.get('section'):
-            section = "AND section='%s' "
+            section = "AND tri.section='%s'" % (request.GET.get('section'))
         if request.GET.get('chapterid'):
-            chapterid = "AND chapterid='%s' "
+            chapterid = "AND tri.chapterid='%s'" % (request.GET.get('chapterid'))
         if request.GET.get('resourcecategory'):
-            categoryid = "AND resourcecategory='%s' "
+            categoryid = "AND tri.resourcecategory='%s'" % (request.GET.get('resourcecategory'))
 
 
         sql = """
         SELECT  tri.teacherresourceid,
                 tri.resourcetitle,
-                tri.createddate
+                tri.createddate,
+                ci.shortname as levelname,
+                tri.resourcetype
         FROM teacherresourceinfo tri
+        INNER JOIN classinfo ci ON ci.classid=tri.classid
         WHERE isdeleted=0
-        AND classid='%s' 
-        AND section='%s' 
-        AND chapterid='%s' 
-        AND resourcecategory='%s'
+        %s 
+        %s 
+        %s 
+        %s 
+        %s
         ORDER BY tri.createddate DESC
-        """ % (classid,section,chapterid,categoryid)
+        """ % (schoolid,classid,section,chapterid,categoryid)
         cursor = connection.cursor()
-
-        # print sql
+        print sql
 
         cursor.execute(sql)
         desc = cursor.description
@@ -1854,3 +1862,33 @@ class AudioinfoViewSet(viewsets.ViewSet):
                 destination.write(chunk)
         return Response({'filename':filename})
 
+
+class AdminresourceViewSet(viewsets.ModelViewSet):
+
+    queryset = models.AdminResources.objects.filter(isdeleted=0).order_by('-createddate')
+    serializer_class = adminserializers.AdminresourceSerializer
+
+    def create(self, request):
+        admin = models.AdminResources()
+        admindata =  json.loads(request.DATA.keys()[0])
+        admin.resourcetype = admindata.get('resourcetype')
+        admin.resourcetitle = admindata.get('resourcetitle')
+        admin.resourcedescription = admindata.get('resourcedescription')
+        admin.documenturl = 0
+        admin.imageurl = 0
+        admin.audiourl = 0
+        admin.videourl = 0
+        admin.isdeleted = 0
+        admin.resource_folder_id = admindata.get('resource_folder_id')
+        admin.fileurl = admindata.get('fileurl')
+        admin.createdby = request.user.id
+        admin.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        admin.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk):
+        models.Admininfo.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')

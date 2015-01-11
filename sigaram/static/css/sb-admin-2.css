@@ -522,6 +522,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', end
 .semester{
     font-size:1.4em;
     font-weight:bold;
+    color: #f0ad4e;
 }
 .purple-blue{
     background-color:#990099;
@@ -558,4 +559,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', end
 }
 .page-header{
     color: #fff;
+}
+a{
+    text-decoration: none !important;
 }

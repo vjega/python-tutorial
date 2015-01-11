@@ -41,7 +41,7 @@ router.register(r'extraslist',         		viewsets.ExtraslistViewSet)
 router.register(r'stickyinfo',         		viewsets.StickyinfoViewSet)
 router.register(r'auth_user',         		viewsets.AuthuserViewSet)
 router.register(r'audioupload',         	viewsets.AudioinfoViewSet)
-# router.register(r'adminresources',         	viewsets.AdminresourceViewSet)
+router.register(r'adminresources',         	viewsets.AdminresourceViewSet)
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))

@@ -19,7 +19,8 @@ from portaladmin.forms import (AdminForm,
                    AnnouncementForm,
                    BillviewassignmentanswerForm,
                    BillcomprehensionanswerratingForm,
-                   StickyinfoForm
+                   StickyinfoForm,
+                   MyresourcelistForm
                     )
 from ajaxuploader.views import AjaxFileUploader
 #from ajaxuploader.backends.easythumbnails import EasyThumbnailUploadBackend
@@ -76,7 +77,7 @@ def home(request):
         "caption": u"{0} {1}".format(_("Teachers"),_("Resources")),
         "stat": 64
         }, {
-        "color": u"yellow",
+        "color": u"red",
         "icon" : u"flaticon-education32",
         "link" : u"studentresourcetype",
         "caption": u"{0} {1}".format(_("Student"), _("Resources")),
@@ -505,4 +506,4 @@ def topics(request):
 @switchlanguage
 def myresourcelist(request):
     return render(request, 'portaladmin/myresourcelist.html', 
-                                        {"adminform" : AdminForm.AdminForm()})
+                                        {"adminform" : MyresourcelistForm.MyresourcelistForm()})
