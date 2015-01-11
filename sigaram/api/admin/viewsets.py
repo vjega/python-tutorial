@@ -232,41 +232,48 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.TeacherresourceinfoSerializer
 
     def list(self, request):
-        print request.GET.get('schoolid');
         # schoolid   = request.GET.get('schoolid')
         # classid   = request.GET.get('classid')
         # section   = request.GET.get('section')
         # chapterid = request.GET.get('chapterid')
         # categoryid = request.GET.get('resourcecategory')
 
+        schoolid    = ''
+        classid     = ''
+        section     = ''
+        chapterid   = ''
+        categoryid  = ''
 
-        # if request.GET.get('schoolid'):
-        #     schoolid = "AND schoolid='%s' "
+        if request.GET.get('schoolid'):
+            schoolid = "AND tri.schoolid='%s'" % (request.GET.get('schoolid'))
         if request.GET.get('classid'):
-            classid = "AND classid='%s'"
+            classid = "AND tri.classid='%s'" % (request.GET.get('classid'))
         if request.GET.get('section'):
-            section = "AND section='%s' "
+            section = "AND tri.section='%s'" % (request.GET.get('section'))
         if request.GET.get('chapterid'):
-            chapterid = "AND chapterid='%s' "
+            chapterid = "AND tri.chapterid='%s'" % (request.GET.get('chapterid'))
         if request.GET.get('resourcecategory'):
-            categoryid = "AND resourcecategory='%s' "
+            categoryid = "AND tri.resourcecategory='%s'" % (request.GET.get('resourcecategory'))
 
 
         sql = """
         SELECT  tri.teacherresourceid,
                 tri.resourcetitle,
-                tri.createddate
+                tri.createddate,
+                ci.shortname as levelname,
+                tri.resourcetype
         FROM teacherresourceinfo tri
+        INNER JOIN classinfo ci ON ci.classid=tri.classid
         WHERE isdeleted=0
-        AND classid='%s' 
-        AND section='%s' 
-        AND chapterid='%s' 
-        AND resourcecategory='%s'
+        %s 
+        %s 
+        %s 
+        %s 
+        %s
         ORDER BY tri.createddate DESC
-        """ % (classid,section,chapterid,categoryid)
+        """ % (schoolid,classid,section,chapterid,categoryid)
         cursor = connection.cursor()
-
-        # print sql
+        print sql
 
         cursor.execute(sql)
         desc = cursor.description
