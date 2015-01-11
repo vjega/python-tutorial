@@ -72,7 +72,7 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
         models.AdminFolders.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
-class teacherViewSet(viewsets.ModelViewSet):
+class TeacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
     serializer_class = adminserializers.TeacherinfoSerializer
     def list(self, request):
