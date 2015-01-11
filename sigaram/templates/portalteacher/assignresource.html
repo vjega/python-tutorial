@@ -21,6 +21,12 @@
     .note-editable{
         height: 80px;
     }
+    i.flaticon-a10{
+        margin-left: -20px;
+    }
+    .btn.btn-success.btn-lg{
+        font-size: 20px;
+    }
 </style>
 {% endblock morecss %}
 
@@ -84,8 +90,12 @@
             </div>
         </div>
         <div align="center" class="panel-footer">
-            <button class="btn btn-success btn-sm" id="connect-rubrics"><i class="flaticon-test19"></i> {% trans "Connect" %} {% trans "Rubrics" %}</button>
-            <button class="btn btn-success btn-sm" id="res-send"><i class="fa fa-share fa-lg"></i> {% trans "Send" %}</button>
+            <button class="btn btn-success btn-lg" id="connect-rubrics">
+                <i class="flaticon-a10"></i> {% trans "Connect" %} {% trans "Rubrics" %}
+            </button>
+            <button class="btn btn-success btn-lg" id="res-send">
+                <i class="fa fa-share fa-lg"></i> {% trans "Send" %}
+            </button>
             
         </div>
         <!-- /.panel-body -->
