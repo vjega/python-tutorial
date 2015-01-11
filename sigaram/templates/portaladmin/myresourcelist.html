@@ -142,21 +142,20 @@ TTS.forms.renderadmin = function(data){
               "class": "text-center",
               "data" : "slno"  
             },
-            { "title": "{% trans "Photo" %}",
-              "class": "text-center",
-              "data" : "image"  
+            { "title": "{% trans "Title" %}",
+              "data" : "Title"  
 
             },
-            { "title": "{% trans "Name" %}",
-              "data" : "name"
+            { "title": "{% trans "Date" %}",
+              "data" : "Date"
             },
-            { "title": "{% trans "Email Id" %}",
-              "data" : "emailid"
+            { "title": "{% trans "Type" %}",
+              "data" : "Type"
 
             }, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center",
-              "data" : "del"
+              "data" : "delete"
 
             }, 
         ];
@@ -167,14 +166,10 @@ TTS.forms.renderadmin = function(data){
         var t = {};
         t.DT_RowId = data[i].adminid;
         t.slno = ++count;
-        if (data[i].imageurl){
-            t.image = "<img src='/static/"+data[i].imageurl+"' width='100' height='100'>";
-        } else {
-            t.image = "<img src='http://placehold.it/100x100'>";
-        }
-        t.name = data[i].firstname + " "+data[i].lastname;
-        t.emailid = data[i].emailid;
-        t.del = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
+        t.Title = data[i].firstname + " "+data[i].lastname;
+        t.Date = data[i].emailid;
+        t.Type = data[i].emailid;
+        t.delete = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);
     }
 

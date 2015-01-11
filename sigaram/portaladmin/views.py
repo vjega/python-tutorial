@@ -497,4 +497,10 @@ def stickynoteslist(request):
 @login_required
 @switchlanguage
 def topics(request):
-    return render(request, 'portalteacher/topics.html',{"form" : TopicsForm.TopicsForm()})
+    return render(request, 'portaladmin/topics.html',{"form" : TopicsForm.TopicsForm()})
+
+@login_required
+@switchlanguage
+def myresourcelist(request):
+    return render(request, 'portaladmin/myresourcelist.html', 
+                                        {"adminform" : AdminForm.AdminForm()})
