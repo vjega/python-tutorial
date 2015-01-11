@@ -68,7 +68,11 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
         adminfolder.save()
         return Response(request.DATA)
 
-class TeacherViewSet(viewsets.ModelViewSet):
+    def destroy(self, request, pk):
+        models.AdminFolders.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
+
+class teacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
     serializer_class = adminserializers.TeacherinfoSerializer
     def list(self, request):
@@ -381,22 +385,17 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
 
     def create(self, request):    
         data = json.loads(dict(request.DATA).keys()[0]);
-        print data
         students = data.get('students');
         title = data.get('title')
         note = data.get('note');
         schoolid = request.session.get('schoolid')
         classid = request.session.get('classid')
-
-        print schoolid
-        print classid
-        
-        imageurl = ''
+        attachmenturl = data.get('attachmenturl')
 
         writtenwork = models.Writtenworkinfo()
         writtenwork.writtenworktitle= title
         writtenwork.description     = note
-        writtenwork.writtenImage    = imageurl
+        writtenwork.writtenimage    = attachmenturl
         writtenwork.schoolid        = schoolid
         writtenwork.classid         = classid
         writtenwork.isassigned      = 0
@@ -405,25 +404,25 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
         writtenwork.createddate     = time.strftime('%Y-%m-%d %H:%M:%S')
         writtenwork.save()
 
-        return Response(request.DATA)
+        writtenworkid = writtenwork.writtenworkid
 
-        # for s in students:
-        #     ar = models.Assignresourceinfo()
-        #     ar.resourceid = int(r)
-        #     ar.studentid = str(s)
-        #     ar.assigntext = str(assigntext)
-        #     ar.isanswered =def create(self, request): 0
-        #     ar.issaved = 0
-        #     ar.isrecord = 0
-        #     ar.answerrating = 0
-        #     ar.isbillboard = 0
-        #     ar.isclassroom = 0
-        #     ar.isdelete = 0
-        #     ar.rubric_id = int(rubricid)
-        #     ar.old_edit = 0
-        #     ar.save()   
+        for s in students:
+            awwi = models.Assignwrittenworkinfo()
+            awwi.writtenworkid = writtenworkid
+            awwi.studentid = str(s)
+            awwi.assigntext = str(note)
+            awwi.issaved = 0
+            awwi.ispublished = 0
+            awwi.isrecord = 0
+            awwi.answerrating = 0
+            awwi.isbillboard = 0
+            awwi.isclassroom = 0
+            awwi.assignedby = str(request.user.username)
+            awwi.assigneddate = '2015-01-01 00:00:00'
+            awwi.publisheddate = '2015-01-01 00:00:00' #time.strftime('%Y-%m-%d %H:%M:%S')
+            awwi.save()
         
-        #return Response(request.DATA)
+        return Response(request.DATA)
 
 class ChapterinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Chapterinfo.objects.all()
@@ -1134,7 +1133,9 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
                ari.studentid,
                ari.isanswered,
                ari.issaved,
-               ari.isbillboard
+               ari.isbillboard,
+               ari.rubric_marks,
+               ari.rubric_n_mark
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         INNER JOIN  auth_user au on au.username = ari.studentid 
@@ -1167,6 +1168,7 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
 class Bulletinboardlist(viewsets.ModelViewSet):
     queryset = models.Bulletinboardinfo.objects.all()
     serializer_class = adminserializers.BulletinboardlistinfoSerializer
+
     def list(self, request):
         l =  request.user.groups.values_list('name',flat=True)[0]
         fieldcond=""
@@ -1691,7 +1693,12 @@ class RubricsViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        return Response('"msg":"update"')
+        data = json.loads(request.DATA.keys()[0])
+        arirm = models.Assignresourceinfo.objects.get(pk=pk)
+        arirm.rubric_marks    = data.get('ans')
+        arirm.rubric_n_mark   = data.get('ans_n')
+        arirm.save()
+        return Response({'msg':True})
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
@@ -1818,3 +1825,30 @@ class AudioinfoViewSet(viewsets.ViewSet):
                 destination.write(chunk)
         return Response({'filename':filename})
 
+# class AdminresourceViewSet(viewsets.ModelViewSet):
+
+#     queryset = models.AdminResources.objects.filter(isdelete=0).order_by('-createddate')
+#     serializer_class = adminserializers.AdminresourceSerializer
+
+#     @create_login('Admin')
+#     def create(self, request):
+#         admin = models.AdminResources()
+#         admindata =  json.loads(request.DATA.keys()[0])
+#         admin.resourcetype = admindata.get('resourcetype')
+#         admin.resourcetitle = admindata.get('resourcetitle')
+#         admin.resourcedescription = admindata.get('resourcedescription')
+#         admin.emailid = admindata.get('emailid')
+#         admin.imageurl = admindata.get('image')
+#         admin.isdelete = 0
+#         admin.createdby = request.user.id
+#         admin.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+#         admin.save()
+#         return Response(request.DATA)
+
+#     def update(self, request, pk=None):
+#         return Response('"msg":"update"')
+
+#     @delete_login('Admin')
+#     def destroy(self, request, pk):
+#         models.Admininfo.objects.get(pk=pk).delete()
+#         return Response('"msg":"delete"')

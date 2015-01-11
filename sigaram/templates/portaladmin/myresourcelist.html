@@ -1,0 +1,230 @@
+{% extends 'portaladmin/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block topcontent %}
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Administrators" %}</h2>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+{% endblock topcontent %}
+{% block botcontent %}
+<div class="col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% trans "Administrators" %} {% trans "List" %}
+            <span id="add" class="add">({% trans "Add" %})</span>
+             <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover"
+                     id="admin-main-tbl">
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+                <!-- /.col-lg-12 -->
+{% endblock botcontent%}
+
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
+
+<style>
+    #addrec:hover, .tts-delete:hover{
+        cursor: pointer;
+    }
+</style>
+{% endblock morecss %}
+
+{% block morescript %}
+<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+{% endblock morescript %}
+
+{% block scriptcontent %}
+<script id="admin-form" type="text/x-jsrender">
+    <div id="file-uploader">File Uploader Comes Here...</div> 
+    {% crispy adminform %}
+</script>
+
+<script>
+window.TTS = window.TTS || {};
+TTS.forms = TTS.forms || {};
+
+/* ADMIN Crud Starts Here*/
+TTS.forms.addadmin = function(form, data) {
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'POST',
+        data: data,
+        url : '/api/admin/admin/'
+    }).done(function( msg ) {
+        form.close();
+        location.reload();
+        //dialogItself.close();
+    });
+}
+
+TTS.forms.ediadmin = function(form, id, data) {
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'PUT',
+        data: data,
+        url : '/api/admin/admin/'+id
+    }).done(function( msg ) {
+        form.close();
+        location.reload();
+    });
+}
+
+TTS.forms.deladmin = function(id) {
+    //console.log(id);
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'DELETE',
+        url : '/api/admin/admin/'+id
+    }).done(function( msg ) {
+        dialogItself.close();
+        location.reload();
+    }).error(function(msg){
+        alert("Something Bad Happended");
+    });
+}
+/* End of Admin CRUD */
+
+TTS.forms.showadminform = function() {
+    BootstrapDialog.show({
+        title: 'Add Administrator',
+        message: $($('#admin-form').render()),
+        onshown: function(){
+            TTS.forms.upload();
+        },
+        buttons: [{
+            label: '{% trans "Save" %}',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#add-admin");
+                //console.log(data);
+                TTS.forms.addadmin(dialogItself, data); 
+            }
+            },{
+            label: '{% trans "Close" %}',
+            action: function(dlg){
+                dlg.close();
+            }
+        }]
+    });
+};
+
+TTS.forms.renderadmin = function(data){
+    var headers = [
+            { "title": "{% trans "Sl No." %}",
+              "class": "text-center",
+              "data" : "slno"  
+            },
+            { "title": "{% trans "Title" %}",
+              "data" : "Title"  
+
+            },
+            { "title": "{% trans "Date" %}",
+              "data" : "Date"
+            },
+            { "title": "{% trans "Type" %}",
+              "data" : "Type"
+
+            }, 
+            { "title": "{% trans "Delete" %}",
+              "class": "text-center",
+              "data" : "delete"
+
+            }, 
+        ];
+    var dataset = [];
+    
+    var count = 0
+    for (var i in data) {
+        var t = {};
+        t.DT_RowId = data[i].adminid;
+        t.slno = ++count;
+        t.Title = data[i].firstname + " "+data[i].lastname;
+        t.Date = data[i].emailid;
+        t.Type = data[i].emailid;
+        t.delete = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
+        dataset.push(t);
+    }
+
+    $('#admin-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
+        "data":     dataset,
+        "columns":  headers
+    });
+
+};
+
+TTS.forms.upload = function(elm) {
+    console.log(elm);
+    var uploader = new qq.FileUploader({
+        action: "/admin/admin-img-upload",
+        element: $('#file-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#id_image").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
+    });
+};
+
+$(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
+    $.ajax({
+        "url":"/api/admin/admin/?format=json",
+        "type":"GET"
+    }).done(function(data){
+        TTS.forms.renderadmin(data);
+        TTS.utils.ajaxloaderstop();
+    });
+    $('#admin-main-tbl').on('click', '.tts-delete', function(e){
+        e.stopPropagation();
+        if (!window.confirm("Do you want to delete this record?")) {
+            return false;
+        }
+        TTS.forms.deladmin($(this).parent().parent().prop("id"));
+        window.location.reload();
+    });
+    $("#page-wrapper").on("click", "#addrec", function(){
+        TTS.forms.showadminform();
+    });
+});
+
+</script>
+{% endblock scriptcontent %}

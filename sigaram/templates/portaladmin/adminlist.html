@@ -150,11 +150,8 @@ TTS.forms.renderadmin = function(data){
             { "title": "{% trans "Name" %}",
               "data" : "name"
             },
-            { "title": "{% trans "Username" %}",
-              "data" : "username"
-            }, 
             { "title": "{% trans "Email Id" %}",
-              "data" : "emaiid"
+              "data" : "emailid"
 
             }, 
             { "title": "{% trans "Delete" %}",
@@ -176,8 +173,7 @@ TTS.forms.renderadmin = function(data){
             t.image = "<img src='http://placehold.it/100x100'>";
         }
         t.name = data[i].firstname + " "+data[i].lastname;
-        t.username = data[i].username;
-        t.emaiid = data[i].emailid;
+        t.emailid = data[i].emailid;
         t.del = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);
     }

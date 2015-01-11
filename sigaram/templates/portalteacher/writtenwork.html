@@ -14,17 +14,35 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
             <div class="panel-heading">
-                <div class="col-lg-2">
-                    <span id="add" class="add">{% trans "From Date" %}</span>
+                <div class='col-lg-5'>    
+                    <div class="form-group">
+                        <div class="col-lg-5">
+                            <label>{% trans "From Date" %}: </label>
+                        </div>    
+                        <div class="col-lg-7" id='fromdate'>
+                            <div class='input-group'>
+                                <input type='text' class="form-control" data-date-format="YYYY-MM-DD"/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class=" col-lg-3">
-                    <input type="text" name="From Date" class="form-control" id="datetimepicker1" data-date-format="YYYY-MM-DD">
-                </div>
-                <div class="col-lg-2">
-                    <span id="add" class="add">{% trans "To Date" %}</span>
-                </div>
-                <div class="col-lg-3">
-                    <input type="text" name="From Date" class="form-control" id="datetimepicker2" data-date-format="YYYY-MM-DD">
+                <div class='col-lg-5'>    
+                    <div class="form-group">
+                        <div class="col-lg-5">
+                            <label>{% trans "To Date" %}: </label>
+                        </div>
+                        <div class="col-lg-7" id='tilldate'>
+                            <div class='input-group'>
+                                <input type='text' class="form-control" data-date-format="YYYY-MM-DD"/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <button class="btn btn-primary" type="button">{% trans "Search" %}</button>
                 <span id="addrec">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -42,8 +60,12 @@
 
                   <!-- Tab panes -->
                   <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="home">...</div>
-                    <div role="tabpanel" class="tab-pane" id="profile">...</div>
+                    <div role="tabpanel" class="tab-pane active" id="home">
+                        
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="profile">
+                        
+                    </div>
                   </div>
 
                 </div>
@@ -54,7 +76,7 @@
                 <!-- /.col-lg-12 -->
 
     <script>
-    $('#datetimepicker1,#datetimepicker2').datetimepicker({
+    $('#fromdate,#tilldate').datetimepicker({
         pickTime: false
     });
     </script>                
