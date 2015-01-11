@@ -80,5 +80,7 @@ urlpatterns = patterns('portaladmin.views',
                                                          name="writtenwork-uploader"),
     url(r'^myresourcelist$',           'myresourcelist', 
                                                          name="myresourcelist"),
+    url(r'^viewbulletinboard$',          'viewbulletinboard', 
+                                                         name="viewbulletinboard"),
     #(r'^api/', include(v1_api.urls)),
 )

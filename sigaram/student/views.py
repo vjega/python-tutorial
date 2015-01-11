@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from student import models
 from portaladmin import models as pmodels
+from ajaxuploader.views import AjaxFileUploader
 from student.forms import (StudentWorkForm,
                            StudentNotesForm,
                            StickyForm,
@@ -11,6 +12,8 @@ from student.forms import (StudentWorkForm,
                            TopicsForm,
                            StickyinfoForm)
 
+
+bulletinboard_uploader = AjaxFileUploader(UPLOAD_DIR='static/bulletinboard')
 
 def switchlanguage(f):
     def inner(req):
@@ -300,3 +303,8 @@ def topics(request):
 @switchlanguage
 def stickynoteslist(request):
     return render(request, 'portalstudent/stickynoteslist.html',{'form':StickyinfoForm.StickyinfoForm()})
+
+@login_required
+@switchlanguage
+def viewbulletinboard(request):
+    return render(request, 'portalstudent/viewbulletinboard.html')

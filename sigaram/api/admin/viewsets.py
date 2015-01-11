@@ -273,7 +273,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         ORDER BY tri.createddate DESC
         """ % (schoolid,classid,section,chapterid,categoryid)
         cursor = connection.cursor()
-        print sql
+        # print sql
 
         cursor.execute(sql)
         desc = cursor.description
@@ -326,6 +326,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         section   = request.GET.get('section')
         chapterid = request.GET.get('chapterid')
         categoryid = request.GET.get('categoryid')
+        resourceid = request.GET.get('resourceid')
         kwarg = {}
         kwarg['isdeleted'] = 0
         if classid:
@@ -339,6 +340,11 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
 
         queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('resourceid')
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = models.Resourceinfo.objects.get(pk=pk)
+        serializer = adminserializers.ResourceinfoSerializer(queryset, many=False)
         return Response(serializer.data)
 
 
@@ -364,6 +370,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         ri.chapterid = ridata.get('chapterid')
         ri.resourcetype = category
         ri.chapterid = ridata.get('chapterid')
+        ri.resourceid = ridata.get('resourceid')
         ri.resourcetitle = ridata.get('resourcetitle')
         ri.resourcedescription = ridata.get('resourcedescription', "")
         ri.thumbnailurl = ridata.get('thumbnailurl', "")
@@ -497,7 +504,7 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             cursor = connection.cursor()
             cursor.execute(sql)
             cnt = cursor.fetchall()
-            print serializer.data
+            # print serializer.data
             for i, d in enumerate(serializer.data):
                 for c in cnt:
                     if serializer.data[i]['chapterid'] == c[0]:
@@ -666,6 +673,16 @@ class AssignresourceinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Assignresourceinfo.objects.all()
     serializer_class = adminserializers.AssignresourceinfoSerializer
 
+    def list(self, request):
+        resourceid = request.GET.get('resourceid')
+       
+        if resourceid :
+            queryset = models.Assignresourceinfo.objects.filter(resourceid=resourceid)
+        else:
+            queryset = models.Assignresourceinfo.objects.all()
+        serializer = adminserializers.AssignresourceinfoSerializer(queryset, many=True)
+        return Response(serializer.data)
+
     def create(self, request):
         assignresourceinfo = models.Assignresourceinfo()
         assigndata =  json.loads(request.DATA.keys()[0])
@@ -673,6 +690,7 @@ class AssignresourceinfoViewSet(viewsets.ModelViewSet):
         assignresourceinfo.isdelete = 0 #assigndata.get('IsDelete')
         assignresourceinfo.assignedby = assigndata.get('assignedby')
         assignresourceinfo.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        assignresourceinfo.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
         assignresourceinfo.save()
         return Response(request.DATA)
 
@@ -1227,6 +1245,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         SELECT  bbi.bulletinboardid,
                 bbi.messagetitle,
                 bbi.message,
+                bbi.attachmenturl,
                 %s,
                 DATE(bbi.posteddate ) AS posteddate
         FROM bulletinboardinfo bbi
@@ -1236,7 +1255,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
         LIMIT 2"""% (fieldcond,joincond,wherecond)
-        print sql;
+        # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -1281,6 +1300,10 @@ class Bulletinboardlist(viewsets.ModelViewSet):
             bmi.save()
         return Response(request.DATA)
 
+    def retrieve(self, request, pk=None):
+        queryset = models.Bulletinboardinfo.objects.filter(pk=pk)[0]
+        serializer = adminserializers.BulletinboardlistinfoSerializer(queryset, many=False)
+        return Response(serializer.data)    
 
 class BillboardViewSet(viewsets.ModelViewSet):
     queryset = models.Billboardinfo.objects.all()
@@ -1314,7 +1337,8 @@ class BillboardViewSet(viewsets.ModelViewSet):
         LEFT OUTER JOIN logininfo on logininfo.loginid = bbi.studentid
         LEFT OUTER JOIN studentinfo on studentinfo.username=logininfo.username
         WHERE ( ari.isbillboard =1 OR asm.isbillboard =1 OR awi.isbillboard=1 ) 
-        ORDER BY bbi.billboardid desc  """ 
+        ORDER BY bbi.billboardid desc 
+         """ 
 
         cursor = connection.cursor()
         
@@ -1830,8 +1854,8 @@ class AuthuserViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        print "*"*80
-        print request.DATA
+        # print "*"*80
+        # print request.DATA
         authuser = models.Auth_user.objects.get(pk=pk)
         authuserdata =  json.loads(request.DATA.keys()[0])
         authuser.password = authuserdata.get('password')

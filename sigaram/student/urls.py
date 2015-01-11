@@ -47,5 +47,9 @@ urlpatterns = patterns('student.views',
     url(r'^studentresourcelist$',            'studentresourcelist',   name='studentresourcelist'),
     url(r'^topics$',       'topics',                    name='topics'),
     url(r'^sticky-notes-list$',   'stickynoteslist',      name='stickynoteslist'),
+    url(r'^viewbulletinboard$',          'viewbulletinboard', 
+                                                         name="viewbulletinboard"),
+    url(r'^bulletinboard-upload$',      'bulletinboard_uploader', 
+                                                         name="bulletinboard-uploader"),
 
 )

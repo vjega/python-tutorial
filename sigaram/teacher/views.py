@@ -37,6 +37,8 @@ student_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/teachers',
                                       #backend=EasyThumbnailUploadBackend, 
                                       DIMENSIONS=(250, 250))
 
+bulletinboard_uploader = AjaxFileUploader(UPLOAD_DIR='static/bulletinboard')
+
 @login_required
 @switchlanguage
 def home(request):
@@ -536,6 +538,12 @@ def newtopic(request):
 def billviewassignmentanswer(request):
     return render(request, 'portalteacher/billviewassignmentanswer.html')
 
+@login_required
+@switchlanguage
+def viewbulletinboard(request):
+    return render(request, 'portalteacher/viewbulletinboard.html')
+
 @switchlanguage
 def viewassignwrittenwork(request):
     return render(request, 'portalteacher/viewassignwrittenwork.html')
+
