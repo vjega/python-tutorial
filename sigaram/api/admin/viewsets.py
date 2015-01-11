@@ -232,39 +232,47 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.TeacherresourceinfoSerializer
 
     def list(self, request):
-        schoolid   = request.GET.get('schoolid')
-        classid   = request.GET.get('classid')
-        section   = request.GET.get('section')
-        chapterid = request.GET.get('chapterid')
-        categoryid = request.GET.get('resourcecategory')
+        # schoolid   = request.GET.get('schoolid')
+        # classid   = request.GET.get('classid')
+        # section   = request.GET.get('section')
+        # chapterid = request.GET.get('chapterid')
+        # categoryid = request.GET.get('resourcecategory')
 
+        schoolid    = ''
+        classid     = ''
+        section     = ''
+        chapterid   = ''
+        categoryid  = ''
 
         if request.GET.get('schoolid'):
-            schoolid = "AND schoolid='%s' "
+            schoolid = "AND tri.schoolid='%s'" % (request.GET.get('schoolid'))
         if request.GET.get('classid'):
-            classid = "AND classid='%s' "
+            classid = "AND tri.classid='%s'" % (request.GET.get('classid'))
         if request.GET.get('section'):
-            section = "AND section='%s' "
+            section = "AND tri.section='%s'" % (request.GET.get('section'))
         if request.GET.get('chapterid'):
-            chapterid = "AND chapterid='%s' "
+            chapterid = "AND tri.chapterid='%s'" % (request.GET.get('chapterid'))
         if request.GET.get('resourcecategory'):
-            categoryid = "AND resourcecategory='%s' "
+            categoryid = "AND tri.resourcecategory='%s'" % (request.GET.get('resourcecategory'))
 
 
         sql = """
         SELECT  tri.teacherresourceid,
                 tri.resourcetitle,
-                tri.createddate
+                tri.createddate,
+                ci.shortname as levelname,
+                tri.resourcetype
         FROM teacherresourceinfo tri
+        INNER JOIN classinfo ci ON ci.classid=tri.classid
         WHERE isdeleted=0
-        AND classid='%s' 
-        AND section='%s' 
-        AND chapterid='%s' 
-        AND resourcecategory='%s'
+        %s 
+        %s 
+        %s 
+        %s 
+        %s
         ORDER BY tri.createddate DESC
-        """ % (classid,section,chapterid,categoryid)
+        """ % (schoolid,classid,section,chapterid,categoryid)
         cursor = connection.cursor()
-
         # print sql
 
         cursor.execute(sql)
@@ -318,6 +326,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         section   = request.GET.get('section')
         chapterid = request.GET.get('chapterid')
         categoryid = request.GET.get('categoryid')
+        resourceid = request.GET.get('resourceid')
         kwarg = {}
         kwarg['isdeleted'] = 0
         if classid:
@@ -331,6 +340,11 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
 
         queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('resourceid')
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = models.Resourceinfo.objects.get(pk=pk)
+        serializer = adminserializers.ResourceinfoSerializer(queryset, many=False)
         return Response(serializer.data)
 
 
@@ -356,6 +370,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         ri.chapterid = ridata.get('chapterid')
         ri.resourcetype = category
         ri.chapterid = ridata.get('chapterid')
+        ri.resourceid = ridata.get('resourceid')
         ri.resourcetitle = ridata.get('resourcetitle')
         ri.resourcedescription = ridata.get('resourcedescription', "")
         ri.thumbnailurl = ridata.get('thumbnailurl', "")
@@ -384,10 +399,32 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.WrittenworkinfoSerializer
 
     def list(self, request):
-        print request.user.username
-        queryset = models.Writtenworkinfo.objects.filter(createdby=str(request.user.username))
+        queryset = models.Writtenworkinfo.objects.filter(createdby=str(request.user.username)).order_by('-createddate')
         serializer = adminserializers.WrittenworkinfoSerializer(queryset, many=True)
         return Response(serializer.data)
+
+    def destroy(self, request, pk):
+        models.Writtenworkinfo.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
+
+    def retrieve(self, request, pk=None):
+        sql = '''
+        SELECT assignwrittenworkid AS id,
+               wwi.writtenworkid,
+               wwi.writtenImage,
+               wwi.writtenworktitle,
+               date(wwi.createddate) as createddate,
+               awwi.studentid,
+               wwi.isassigned,
+               awwi.issaved
+        FROM assignwrittenworkinfo awwi
+        INNER JOIN writtenworkinfo wwi on wwi.writtenworkid = awwi.writtenworkid 
+        WHERE awwi.writtenworkid = %s
+        ''' % pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
+        return Response(result)
 
     def create(self, request):    
         data = json.loads(dict(request.DATA).keys()[0]);
@@ -467,7 +504,7 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             cursor = connection.cursor()
             cursor.execute(sql)
             cnt = cursor.fetchall()
-            print serializer.data
+            # print serializer.data
             for i, d in enumerate(serializer.data):
                 for c in cnt:
                     if serializer.data[i]['chapterid'] == c[0]:
@@ -636,6 +673,16 @@ class AssignresourceinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Assignresourceinfo.objects.all()
     serializer_class = adminserializers.AssignresourceinfoSerializer
 
+    def list(self, request):
+        resourceid = request.GET.get('resourceid')
+       
+        if resourceid :
+            queryset = models.Assignresourceinfo.objects.filter(resourceid=resourceid)
+        else:
+            queryset = models.Assignresourceinfo.objects.all()
+        serializer = adminserializers.AssignresourceinfoSerializer(queryset, many=True)
+        return Response(serializer.data)
+
     def create(self, request):
         assignresourceinfo = models.Assignresourceinfo()
         assigndata =  json.loads(request.DATA.keys()[0])
@@ -643,6 +690,7 @@ class AssignresourceinfoViewSet(viewsets.ModelViewSet):
         assignresourceinfo.isdelete = 0 #assigndata.get('IsDelete')
         assignresourceinfo.assignedby = assigndata.get('assignedby')
         assignresourceinfo.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        assignresourceinfo.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
         assignresourceinfo.save()
         return Response(request.DATA)
 
@@ -1143,7 +1191,8 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
                ari.issaved,
                ari.isbillboard,
                ari.rubric_marks,
-               ari.rubric_n_mark
+               ari.rubric_n_mark,
+               ari.answerurl
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         INNER JOIN  auth_user au on au.username = ari.studentid 
@@ -1198,6 +1247,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         SELECT  bbi.bulletinboardid,
                 bbi.messagetitle,
                 bbi.message,
+                bbi.attachmenturl,
                 %s,
                 DATE(bbi.posteddate ) AS posteddate
         FROM bulletinboardinfo bbi
@@ -1207,7 +1257,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
         LIMIT 2"""% (fieldcond,joincond,wherecond)
-        print sql;
+        # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -1252,6 +1302,10 @@ class Bulletinboardlist(viewsets.ModelViewSet):
             bmi.save()
         return Response(request.DATA)
 
+    def retrieve(self, request, pk=None):
+        queryset = models.Bulletinboardinfo.objects.filter(pk=pk)[0]
+        serializer = adminserializers.BulletinboardlistinfoSerializer(queryset, many=False)
+        return Response(serializer.data)    
 
 class BillboardViewSet(viewsets.ModelViewSet):
     queryset = models.Billboardinfo.objects.all()
@@ -1285,7 +1339,8 @@ class BillboardViewSet(viewsets.ModelViewSet):
         LEFT OUTER JOIN logininfo on logininfo.loginid = bbi.studentid
         LEFT OUTER JOIN studentinfo on studentinfo.username=logininfo.username
         WHERE ( ari.isbillboard =1 OR asm.isbillboard =1 OR awi.isbillboard=1 ) 
-        ORDER BY bbi.billboardid desc  """ 
+        ORDER BY bbi.billboardid desc 
+         """ 
 
         cursor = connection.cursor()
         
@@ -1801,8 +1856,8 @@ class AuthuserViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        print "*"*80
-        print request.DATA
+        # print "*"*80
+        # print request.DATA
         authuser = models.Auth_user.objects.get(pk=pk)
         authuserdata =  json.loads(request.DATA.keys()[0])
         authuser.password = authuserdata.get('password')
@@ -1833,3 +1888,33 @@ class AudioinfoViewSet(viewsets.ViewSet):
                 destination.write(chunk)
         return Response({'filename':filename})
 
+
+class AdminresourceViewSet(viewsets.ModelViewSet):
+
+    queryset = models.AdminResources.objects.filter(isdeleted=0).order_by('-createddate')
+    serializer_class = adminserializers.AdminresourceSerializer
+
+    def create(self, request):
+        admin = models.AdminResources()
+        admindata =  json.loads(request.DATA.keys()[0])
+        admin.resourcetype = admindata.get('resourcetype')
+        admin.resourcetitle = admindata.get('resourcetitle')
+        admin.resourcedescription = admindata.get('resourcedescription')
+        admin.documenturl = 0
+        admin.imageurl = 0
+        admin.audiourl = 0
+        admin.videourl = 0
+        admin.isdeleted = 0
+        admin.resource_folder_id = admindata.get('resource_folder_id')
+        admin.fileurl = admindata.get('fileurl')
+        admin.createdby = request.user.id
+        admin.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        admin.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk):
+        models.Admininfo.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')

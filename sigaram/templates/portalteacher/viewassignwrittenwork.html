@@ -4,7 +4,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Deliverables" %}</h2>
+        <h2 class="page-header">{% trans "Written" %} {% trans "Work" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -41,11 +41,9 @@
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
-<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
 <script src="{% static "js/tts.utils.js" %}"></script>
 
 <!-- script-->
-<script type="text/javascript" src="{% static "bower_components/local-audio-recorder-master/demo/swfobject.js" %}"></script>
 {% endblock morescript %}
 
 {% block botcontent %}
@@ -59,8 +57,8 @@
                 <div>
                     <h3>{% trans "Title" %}:</h3>
                 </div><br />
-                <div id="resource-title"></div><br />
-                <div id="view-resource"></div>
+                <div id="writtenwork-title"></div><br />
+                <div id="writtenwork-view"></div>
                 </table>
             </div>
             <div class="row">
@@ -95,36 +93,36 @@
 <script>
 
 window.TTS = window.TTS || {}
-TTS.forms = TTS.forms || {}   
+TTS.forms = TTS.forms || {}
 
 
 TTS.forms.renderassignedresourceinfo = function(data){
-    $("#resource-title").html(data.resourcetitle);
-    $("#view-resource").html("<a href='#' onclick=\"TTS.forms.openwindow('"+data.videourl+"');\" >View</a>");
+    $("#writtenwork-title").html(data.writtenworktitle);
+    $("#writtenwork-view").html("<a target='_blank' href='../static/"+data.writtenImage+"' >{% trans 'View' %}</a>");
 };
 
-TTS.forms.openwindow = function(videourl) {
-    window.open("../static/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
-};
+/*TTS.forms.openwindow = function(videourl) {
+    window.open("http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
+};*/
 
 $(document).ready(function(){
-    var resourceid = TTS.utils.getUrlParameter('resourceid');
+    var writtenworkid = TTS.utils.getUrlParameter('writtenworkid');
     $.ajax({
-        "url":"/api/admin/teacherassignedresource/"+resourceid+"/?format=json",
+        "url":"/api/admin/writtenworkinfo/"+writtenworkid+"/?format=json",
         "type":"GET"
     }).done(function(data){
         console.log(data);
         TTS.forms.renderassignedresourceinfo(data);
     });
     $.ajax({
-        "url":"/api/admin/assignedresourcestudents/"+resourceid+"?format=json",
+        "url":"/api/admin/assignedresourcestudents/"+writtenworkid+"?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstudentlist(data);
     });
     $("#studentlist").on("click", ".cgreen", function(){
         var studentid = $(this).parent().parent().prop("id");
-        window.location = 'viewassignmentanswer?resourceid='+resourceid+'&studentid='+studentid;
+        window.location = 'viewassignmentanswer?writtenworkid='+writtenworkid+'&studentid='+studentid;
     });
 });
 
@@ -166,6 +164,7 @@ TTS.forms.renderstudentlist = function(data){
         "columns":  headers
     });
 }
+
 
 </script>
 

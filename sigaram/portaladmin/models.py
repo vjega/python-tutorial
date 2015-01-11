@@ -84,6 +84,7 @@ class AdminResources(models.Model):
     imageurl = models.CharField(max_length=1000)
     audiourl = models.CharField(max_length=1000)
     videourl = models.CharField(max_length=1000)
+    fileurl = models.CharField(max_length=1000)
     isdeleted = models.IntegerField()
     resource_folder_id = models.IntegerField()
     createdby = models.BigIntegerField()

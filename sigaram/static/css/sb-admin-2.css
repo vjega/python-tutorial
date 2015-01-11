@@ -560,3 +560,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', end
 .page-header{
     color: #fff;
 }
+a{
+    text-decoration: none !important;
+}

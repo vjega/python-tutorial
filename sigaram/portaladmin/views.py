@@ -19,7 +19,8 @@ from portaladmin.forms import (AdminForm,
                    AnnouncementForm,
                    BillviewassignmentanswerForm,
                    BillcomprehensionanswerratingForm,
-                   StickyinfoForm
+                   StickyinfoForm,
+                   MyresourcelistForm
                     )
 from ajaxuploader.views import AjaxFileUploader
 #from ajaxuploader.backends.easythumbnails import EasyThumbnailUploadBackend
@@ -505,4 +506,9 @@ def topics(request):
 @switchlanguage
 def myresourcelist(request):
     return render(request, 'portaladmin/myresourcelist.html', 
-                                        {"adminform" : AdminForm.AdminForm()})
+                                        {"adminform" : MyresourcelistForm.MyresourcelistForm()})
+
+@login_required
+@switchlanguage
+def viewbulletinboard(request):
+    return render(request, 'portaladmin/viewbulletinboard.html')

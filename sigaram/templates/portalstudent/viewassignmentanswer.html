@@ -105,6 +105,9 @@
                             <div class="col-lg-10" id="student-name"></div>
                         </div>
                         <div class="col-lg-12">
+                            <div class="col-lg-10" id="audio-player"></div>
+                        </div>
+                        <div class="col-lg-12">
                             <label class="col-lg-12">{% trans "Answer" %} </label>
                         </div>    
                     </div>
@@ -205,6 +208,9 @@ TTS.forms.renderassignedresourceinfo = function(data){
     $("#student-name").html(data[0].firstname+" "+data[0].lastname);
     $("#student-answer").html(data[0].answertext);    
     $("#original-text").html(data[0].originaltext);
+    if(data[0].answerurl){
+        $("#audio-player").html('<audio src="../static/audio/'+data[0].answerurl+'" controls=""></audio><br />');
+    }
     if(data[0].isbillboard == 0){
         $('#alreadysentnoticeboard').hide();
     }else if(data[0].isbillboard == 1){
@@ -530,8 +536,7 @@ $(document).ready(function(){
             url : '/api/admin/billboardresource/?resourceid='+resourceid+'&studentid='+studentid
         }).done(function(msg) {
             if(msg = 'saved')
-                alert("Insert into Classroom);
-
+                alert("Insert into Classroom");
             location.reload();
         });
     });
