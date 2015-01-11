@@ -48,38 +48,45 @@
                 <span id="addrec">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <i class="fa fa-plus-square fa-lg"></i></span>
             </div>
-
+            <br />
 
         <!-- /.panel-heading -->
             <div role="tabpanel">
                   <!-- Nav tabs -->
-                  <ul class="nav nav-tabs" role="tablist">
+                <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">{% trans "New" %}</a></li>
                     <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">{% trans "Edited" %}</a></li>
-                  </ul>
+                </ul>
 
-                  <!-- Tab panes -->
-                  <div class="tab-content">
+                <!-- Tab panes -->
+                <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="home">
-                        
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover writtenworklist" id="writtenwork-list-new">
+                            </table>
+                        </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="profile">
-                        
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover writtenworklist" id="writtenwork-list-saved">
+                            </table>
+                        </div>
                     </div>
-                  </div>
-
                 </div>
+            </div>
         <!-- /.panel-body -->
     </div>
     <!-- /.panel -->
 </div>
                 <!-- /.col-lg-12 -->
 
-    <script>
-    $('#fromdate,#tilldate').datetimepicker({
-        pickTime: false
-    });
-    </script>                
+<script>
+$('#fromdate,#tilldate').datetimepicker({
+    pickTime: false
+});
+</script>
+
+
 {% endblock botcontent%}
 {% block morecss %}
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
@@ -110,6 +117,61 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
+
+TTS.forms.writtenworklist = function(data){
+
+    var headers = [
+            { "title": "{% trans "Sl No." %}",
+              "class": "text-center" ,
+              "data" :"slno"
+            },
+            { "title": "{% trans "Title" %}",
+              "data" :"title"
+            },
+            { "title": "{% trans "Date" %}",
+              "data" :"date"
+            },
+            { "title": "{% trans "View" %}" ,
+              "data" :"type"
+            },
+        ];
+
+
+    var dataset_new = [];
+    var dataset_saved = [];
+    var count_new = 0
+    var count_saved = 0
+    for(var i in data){
+       
+        if (!data[i].issaved && !data[i].isanswered) {
+            var t = [];
+            t.DT_RowId = "var_"+data[i].id;
+            t.slno=++count_new;
+            t.title=data[i].writtenworktitle;
+            t.date=data[i].createddate;
+            t.type = data[i].isassigned
+            dataset_new.push(t);
+        }
+        if (data[i].issaved && !data[i].isanswered) {
+            var t = [];
+            t.DT_RowId = "var_"+data[i].id;
+            t.slno=++count_saved;
+            t.title=data[i].writtenworktitle;
+            t.date=data[i].answereddate;
+            t.type=data[i].isassigned;
+            dataset_saved.push(t);
+        }
+    }
+
+    $('#writtenwork-list-new').dataTable({"language" : TTS.utils.datatable_ta,
+        "data":     dataset_new,
+        "columns":  headers
+    });
+    $('#writtenwork-list-saved').dataTable({"language" : TTS.utils.datatable_ta,
+        "data":     dataset_saved,
+        "columns":  headers
+    });
+};
 
 TTS.forms.addwrittenwork = function() {
     BootstrapDialog.show({
@@ -145,6 +207,27 @@ TTS.forms.addwrittenwork = function() {
 };
 
 $(document).ready(function(){
+
+    TTS.utils.ajaxloaderstart();
+    $.ajax({
+        "url":"/api/admin/writtenworkinfo/?format=json",
+        "type":"GET"
+    }).done(function(data){
+        console.log(data);
+        TTS.forms.writtenworklist(data);
+        TTS.utils.ajaxloaderstop();
+    });
+    $('.resourcelist').on('click','tbody tr',function(e){
+        var x = this.id;
+        x = x.split("_");
+        if(x[0] == 'var')
+            window.location = 'viewassignresource?assignedid='+x[1];
+        
+        if(x[0] == 'vaa')
+            window.location = 'viewassignmentanswer?resourceid='+x[1]+'&studentid='+x[2];
+
+    });
+
 
     $('#admin-main-tbl tbody').on('click', 'tr', function(){
         //window.location = 'teacherresourcelist?id='+this.id;

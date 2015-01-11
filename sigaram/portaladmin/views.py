@@ -77,7 +77,7 @@ def home(request):
         "caption": u"{0} {1}".format(_("Teachers"),_("Resources")),
         "stat": 64
         }, {
-        "color": u"yellow",
+        "color": u"red",
         "icon" : u"flaticon-education32",
         "link" : u"studentresourcetype",
         "caption": u"{0} {1}".format(_("Student"), _("Resources")),

@@ -383,6 +383,12 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Writtenworkinfo.objects.all()
     serializer_class = adminserializers.WrittenworkinfoSerializer
 
+    def list(self, request):
+        print request.user.username
+        queryset = models.Writtenworkinfo.objects.filter(createdby=str(request.user.username))
+        serializer = adminserializers.WrittenworkinfoSerializer(queryset, many=True)
+        return Response(serializer.data)
+
     def create(self, request):    
         data = json.loads(dict(request.DATA).keys()[0]);
         students = data.get('students');
@@ -1824,6 +1830,7 @@ class AudioinfoViewSet(viewsets.ViewSet):
             for chunk in f.chunks():
                 destination.write(chunk)
         return Response({'filename':filename})
+
 
 class AdminresourceViewSet(viewsets.ModelViewSet):
 
