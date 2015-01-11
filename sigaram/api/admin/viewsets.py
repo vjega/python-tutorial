@@ -72,18 +72,22 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
         models.AdminFolders.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
-class teacherViewSet(viewsets.ModelViewSet):
+class TeacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
     serializer_class = adminserializers.TeacherinfoSerializer
     def list(self, request):
 
         schoolid =  request.GET.get('schoolid')
         classid  =  request.GET.get('classid')
-
-        if schoolid and classid:
+        username = request.GET.get('username')
+       
+        if schoolid and classid and username:
             queryset = models.Teacherinfo.objects.filter(schoolid=schoolid, classid=classid).order_by('-createddate')
         elif schoolid:
             queryset = models.Teacherinfo.objects.filter(schoolid=schoolid).order_by('-createddate')
+        elif username:
+            queryset = models.Teacherinfo.objects.filter(username=username)
+
         else:
             queryset = models.Teacherinfo.objects.all()
 
@@ -110,6 +114,9 @@ class teacherViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
+        print "Hi"
+        """
+        print request.DATA
         teacher = models.Teacherinfo.objects.get(pk=pk)
         teacherdata =  json.loads(request.DATA.keys()[0])
         teacher.username = teacherdata.get('username')
@@ -117,10 +124,16 @@ class teacherViewSet(viewsets.ModelViewSet):
         teacher.password = teacherdata.get('password')
         teacher.firstname = teacherdata.get('firstname')
         teacher.schoolid = teacherdata.get('schoolid')
+        teacher.imageurl = teacherdata.get('imageurl')
         teacher.classid = teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
         teacher.save()
+        """
         return Response(request.DATA)
+
+    def partial_update(self, request, pk=None):
+        print "Hi"
+        pass
 
     def retrieve(self, request, pk=None):
         queryset = models.Teacherinfo.objects.filter(username=request.user.username)[0]
@@ -472,28 +485,28 @@ class AdminclassinfoViewSet(viewsets.ModelViewSet):
            cri.classroomid,
            cri.assessmentid, 
            cri.resourceid,
-           al.assessmenttype,
-           al.assessmenttitle,
-           ri.resourcetype,
-           ri.resourcetitle,
-           wwi.writtenworktitle,
+           -- al.assessmenttype,
+           -- al.assessmenttitle,
+           -- ri.resourcetype,
+           -- ri.resourcetitle,
+           -- wwi.writtenworktitle,
            cri.writtenworkid, 
-           si.firstname,
-           si.imageurl,
+           -- si.firstname,
+           -- si.imageurl,
            date(cri.posteddate) as posteddate,
            cri.studentid
         FROM classroominfo cri
-        LEFT OUTER JOIN assignassessmentinfo aai ON aai.assessmentid = cri.assessmentid 
-                        AND aai.studentid = cri.studentid 
-        LEFT OUTER JOIN assessmentlist al ON al.assessmentid = cri.assessmentid 
-        LEFT OUTER JOIN assignresourceinfo ari  ON ari.resourceid = cri.resourceid 
-                        AND ari.studentid = cri.studentid 
-        LEFT OUTER JOIN resourceinfo ri ON ri.resourceid = cri.resourceid
-        LEFT OUTER JOIN assignwrittenworkinfo awwi ON awwi.writtenworkid = cri.writtenworkid
-        LEFT OUTER JOIN writtenworkinfo wwi ON wwi.writtenworkid = cri.writtenworkid
-        LEFT OUTER JOIN logininfo li ON li.loginid = cri.studentid
-        LEFT OUTER JOIN studentinfo si ON si.username = li.username
         /*
+        -- LEFT OUTER JOIN assignassessmentinfo aai ON aai.assessmentid = cri.assessmentid 
+                        -- AND aai.studentid = cri.studentid 
+        -- LEFT OUTER JOIN assessmentlist al ON al.assessmentid = cri.assessmentid 
+        -- LEFT OUTER JOIN assignresourceinfo ari  ON ari.resourceid = cri.resourceid 
+                        -- AND ari.studentid = cri.studentid 
+        -- LEFT OUTER JOIN resourceinfo ri ON ri.resourceid = cri.resourceid
+        -- LEFT OUTER JOIN assignwrittenworkinfo awwi ON awwi.writtenworkid = cri.writtenworkid
+        -- LEFT OUTER JOIN writtenworkinfo wwi ON wwi.writtenworkid = cri.writtenworkid
+        -- LEFT OUTER JOIN logininfo li ON li.loginid = cri.studentid
+        -- LEFT OUTER JOIN studentinfo si ON si.username = li.username
         WHERE ( ari.isclassroom =1 OR 
                  aai.isclassroom =1 OR 
                 awwi.isclassroom=1 ) 
@@ -1786,6 +1799,8 @@ class AuthuserViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
+        print "*"*80
+        print request.DATA
         authuser = models.Auth_user.objects.get(pk=pk)
         authuserdata =  json.loads(request.DATA.keys()[0])
         authuser.password = authuserdata.get('password')
