@@ -273,7 +273,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         ORDER BY tri.createddate DESC
         """ % (schoolid,classid,section,chapterid,categoryid)
         cursor = connection.cursor()
-        print sql
+        # print sql
 
         cursor.execute(sql)
         desc = cursor.description
@@ -399,10 +399,32 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.WrittenworkinfoSerializer
 
     def list(self, request):
-        print request.user.username
-        queryset = models.Writtenworkinfo.objects.filter(createdby=str(request.user.username))
+        queryset = models.Writtenworkinfo.objects.filter(createdby=str(request.user.username)).order_by('-createddate')
         serializer = adminserializers.WrittenworkinfoSerializer(queryset, many=True)
         return Response(serializer.data)
+
+    def destroy(self, request, pk):
+        models.Writtenworkinfo.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
+
+    def retrieve(self, request, pk=None):
+        sql = '''
+        SELECT assignwrittenworkid AS id,
+               wwi.writtenworkid,
+               wwi.writtenImage,
+               wwi.writtenworktitle,
+               date(wwi.createddate) as createddate,
+               awwi.studentid,
+               wwi.isassigned,
+               awwi.issaved
+        FROM assignwrittenworkinfo awwi
+        INNER JOIN writtenworkinfo wwi on wwi.writtenworkid = awwi.writtenworkid 
+        WHERE awwi.writtenworkid = %s
+        ''' % pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
+        return Response(result)
 
     def create(self, request):    
         data = json.loads(dict(request.DATA).keys()[0]);
@@ -482,7 +504,7 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             cursor = connection.cursor()
             cursor.execute(sql)
             cnt = cursor.fetchall()
-            print serializer.data
+            # print serializer.data
             for i, d in enumerate(serializer.data):
                 for c in cnt:
                     if serializer.data[i]['chapterid'] == c[0]:
@@ -1167,7 +1189,8 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
                ari.issaved,
                ari.isbillboard,
                ari.rubric_marks,
-               ari.rubric_n_mark
+               ari.rubric_n_mark,
+               ari.answerurl
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         INNER JOIN  auth_user au on au.username = ari.studentid 
@@ -1222,6 +1245,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         SELECT  bbi.bulletinboardid,
                 bbi.messagetitle,
                 bbi.message,
+                bbi.attachmenturl,
                 %s,
                 DATE(bbi.posteddate ) AS posteddate
         FROM bulletinboardinfo bbi
@@ -1231,7 +1255,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
         LIMIT 2"""% (fieldcond,joincond,wherecond)
-        print sql;
+        # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -1276,6 +1300,10 @@ class Bulletinboardlist(viewsets.ModelViewSet):
             bmi.save()
         return Response(request.DATA)
 
+    def retrieve(self, request, pk=None):
+        queryset = models.Bulletinboardinfo.objects.filter(pk=pk)[0]
+        serializer = adminserializers.BulletinboardlistinfoSerializer(queryset, many=False)
+        return Response(serializer.data)    
 
 class BillboardViewSet(viewsets.ModelViewSet):
     queryset = models.Billboardinfo.objects.all()
@@ -1826,8 +1854,8 @@ class AuthuserViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        print "*"*80
-        print request.DATA
+        # print "*"*80
+        # print request.DATA
         authuser = models.Auth_user.objects.get(pk=pk)
         authuserdata =  json.loads(request.DATA.keys()[0])
         authuser.password = authuserdata.get('password')

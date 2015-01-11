@@ -71,7 +71,7 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
-<link rel="stylesheet" href="{%static "bower_components/bootstrap3-datepicker/datepicker.min.css" %}">
+%}">
 
 <!--link rel="stylesheet" href="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/master/build/css/bootstrap-datetimepicker.min.css"-->
 <style>
@@ -90,7 +90,6 @@
 </script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
-<script src="{%static "bower_components/bootstrap3-datepicker/bootstrap-datepicker.js" %}"></script>
 
 <!--script src="{%static "bower_components/bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js" %}"></script>
 <script src="{%static "bower_components/bootstrap-datetimepicker/src/js/locales/bootstrap-datetimepicker.es.js" %}"></script-->
@@ -179,14 +178,6 @@ $(document).ready(function(){
         });
     });
     
-    $('#fromdatepicker, #todatepicker').datepicker({
-        format: "yyyy/mm/dd",
-        todayBtn: "linked",
-        autoclose: true,
-        todayHighlight: true
-    });
-
-
 });
 
 </script>

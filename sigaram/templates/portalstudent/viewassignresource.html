@@ -32,9 +32,7 @@
                     <h3>{% trans "Title" %}:</h3>
                 </div><br />
                 <div id="resource-title"></div><br />
-                <div id="view-resource">
-                     <a href="javascript:void(0)" onclick="window.open('http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/studentresources/12771A-L3-RP5(HA).swf','wdwSearch','top=100,left=100,width=1024,height=768,scrollbars=1,menu=0');">View</a>
-                </div><br />
+                <div id="view-resource"></div><br />
                 <div>
                     <h3>{% trans "Note" %}:</h3>
                 </div><br />
@@ -145,7 +143,7 @@ TTS.forms.renderassignedresourceinfo = function(data){
     
 };
 function openwindow(videourl) {
-    window.open("http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
+    window.open("../static/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
 }
 TTS.forms.ressave = function(savesend){
     var data = {};
@@ -153,7 +151,6 @@ TTS.forms.ressave = function(savesend){
     data.originaltext = $(".summernote").code();
     data.answertext = $(".summernote").code();
     data.answertype = $(".isaudio:checked").val();
-
 
     if($("#filenamecreated").val()){
         data.answerurl = $("#filenamecreated").val();
@@ -216,7 +213,6 @@ $(document).ready(function(){
         "url":"/api/admin/studentassignresource/"+assignedid+"/?format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
         TTS.forms.renderassignedresourceinfo(data);
     });
 });

@@ -59,6 +59,7 @@ $(function () {
         console.info('saving success', name, response);
         var data = JSON.parse(response)
         $("#filenamecreated").val(data.filename);
+        alert("Uploaded Successfully");
         break;
 
       case "save_failed":
