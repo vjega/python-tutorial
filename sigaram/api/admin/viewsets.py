@@ -273,7 +273,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         ORDER BY tri.createddate DESC
         """ % (schoolid,classid,section,chapterid,categoryid)
         cursor = connection.cursor()
-        print sql
+        # print sql
 
         cursor.execute(sql)
         desc = cursor.description
@@ -475,7 +475,7 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             cursor = connection.cursor()
             cursor.execute(sql)
             cnt = cursor.fetchall()
-            print serializer.data
+            # print serializer.data
             for i, d in enumerate(serializer.data):
                 for c in cnt:
                     if serializer.data[i]['chapterid'] == c[0]:
@@ -1204,6 +1204,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         SELECT  bbi.bulletinboardid,
                 bbi.messagetitle,
                 bbi.message,
+                bbi.attachmenturl,
                 %s,
                 DATE(bbi.posteddate ) AS posteddate
         FROM bulletinboardinfo bbi
@@ -1213,7 +1214,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
         LIMIT 2"""% (fieldcond,joincond,wherecond)
-        print sql;
+        # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -1258,6 +1259,10 @@ class Bulletinboardlist(viewsets.ModelViewSet):
             bmi.save()
         return Response(request.DATA)
 
+    def retrieve(self, request, pk=None):
+        queryset = models.Bulletinboardinfo.objects.filter(pk=pk)[0]
+        serializer = adminserializers.BulletinboardlistinfoSerializer(queryset, many=False)
+        return Response(serializer.data)    
 
 class BillboardViewSet(viewsets.ModelViewSet):
     queryset = models.Billboardinfo.objects.all()
@@ -1807,8 +1812,8 @@ class AuthuserViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        print "*"*80
-        print request.DATA
+        # print "*"*80
+        # print request.DATA
         authuser = models.Auth_user.objects.get(pk=pk)
         authuserdata =  json.loads(request.DATA.keys()[0])
         authuser.password = authuserdata.get('password')

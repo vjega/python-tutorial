@@ -507,3 +507,8 @@ def topics(request):
 def myresourcelist(request):
     return render(request, 'portaladmin/myresourcelist.html', 
                                         {"adminform" : MyresourcelistForm.MyresourcelistForm()})
+
+@login_required
+@switchlanguage
+def viewbulletinboard(request):
+    return render(request, 'portaladmin/viewbulletinboard.html')
