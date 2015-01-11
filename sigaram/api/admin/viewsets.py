@@ -232,24 +232,22 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.TeacherresourceinfoSerializer
 
     def list(self, request):
-        schoolid   = request.GET.get('schoolid')
-        classid   = request.GET.get('classid')
-        section   = request.GET.get('section')
-        chapterid = request.GET.get('chapterid')
-        categoryid = request.GET.get('resourcecategory')
-
-
-        if request.GET.get('schoolid'):
-            schoolid = "AND schoolid='%s' "
+        # schoolid   = request.GET.get('schoolid')
+        # classid   = request.GET.get('classid')
+        # section   = request.GET.get('section')
+        # chapterid = request.GET.get('chapterid')
+        # categoryid = request.GET.get('resourcecategory')
+        # if request.GET.get('schoolid'):
+        #     schoolid = "AND schoolid='%s' "
+        wherecond = ''
         if request.GET.get('classid'):
-            classid = "AND classid='%s' "
+            wherecond = "AND classid='%s'"
         if request.GET.get('section'):
-            section = "AND section='%s' "
+            wherecond = "AND section='%s' "
         if request.GET.get('chapterid'):
-            chapterid = "AND chapterid='%s' "
+            wherecond = "AND chapterid='%s' "
         if request.GET.get('resourcecategory'):
-            categoryid = "AND resourcecategory='%s' "
-
+            wherecond = "AND resourcecategory='%s' "
 
         sql = """
         SELECT  tri.teacherresourceid,
@@ -257,15 +255,12 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
                 tri.createddate
         FROM teacherresourceinfo tri
         WHERE isdeleted=0
-        AND classid='%s' 
-        AND section='%s' 
-        AND chapterid='%s' 
-        AND resourcecategory='%s'
+        %s
         ORDER BY tri.createddate DESC
-        """ % (classid,section,chapterid,categoryid)
+        """ % (wherecond)
         cursor = connection.cursor()
 
-        # print sql
+        print sql
 
         cursor.execute(sql)
         desc = cursor.description
