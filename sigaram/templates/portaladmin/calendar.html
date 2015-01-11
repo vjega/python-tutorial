@@ -51,14 +51,14 @@ TTS.forms.showcalform = function(start, end, allDay) {
         message: $($('#cal-form').render()),
         onshown: function(){
             $('#id_title').val("New Event");
-            $('#id_start').val(start.format('YYYY-MM-DD LT'));
-            $('#id_end').val(start.format('YYYY-MM-DD LT'));
+            $('#id_start').val(start.format('YYYY-MM-DD hh:mm'));
+            $('#id_end').val(start.format('YYYY-MM-DD hh:mm'));
             
             //next date
-            //$('#id_end').val(end.format('YYYY-MM-DD hh:mm'));
+            //$('#id_end').val(end.format('YYYY-MM-DD hh:mm LT'));
             
             $('#id_start,#id_end').datetimepicker({
-                format: 'YYYY-MM-DD LT',
+                format: 'YYYY-MM-DD hh:mm',
                 //todayHighlight: true,
                 //showMeridian: true,
                 //minDate:new Date()
