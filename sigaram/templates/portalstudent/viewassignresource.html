@@ -154,7 +154,6 @@ TTS.forms.ressave = function(savesend){
     data.answertext = $(".summernote").code();
     data.answertype = $(".isaudio:checked").val();
 
-
     if($("#filenamecreated").val()){
         data.answerurl = $("#filenamecreated").val();
     }else{
@@ -216,7 +215,6 @@ $(document).ready(function(){
         "url":"/api/admin/studentassignresource/"+assignedid+"/?format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
         TTS.forms.renderassignedresourceinfo(data);
     });
 });

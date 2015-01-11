@@ -535,3 +535,7 @@ def newtopic(request):
 @switchlanguage
 def billviewassignmentanswer(request):
     return render(request, 'portalteacher/billviewassignmentanswer.html')
+
+@switchlanguage
+def viewassignwrittenwork(request):
+    return render(request, 'portalteacher/viewassignwrittenwork.html')
