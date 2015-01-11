@@ -1831,3 +1831,33 @@ class AudioinfoViewSet(viewsets.ViewSet):
                 destination.write(chunk)
         return Response({'filename':filename})
 
+
+class AdminresourceViewSet(viewsets.ModelViewSet):
+
+    queryset = models.AdminResources.objects.filter(isdeleted=0).order_by('-createddate')
+    serializer_class = adminserializers.AdminresourceSerializer
+
+    def create(self, request):
+        admin = models.AdminResources()
+        admindata =  json.loads(request.DATA.keys()[0])
+        admin.resourcetype = admindata.get('resourcetype')
+        admin.resourcetitle = admindata.get('resourcetitle')
+        admin.resourcedescription = admindata.get('resourcedescription')
+        admin.documenturl = 0
+        admin.imageurl = 0
+        admin.audiourl = 0
+        admin.videourl = 0
+        admin.isdeleted = 0
+        admin.resource_folder_id = admindata.get('resource_folder_id')
+        admin.fileurl = admindata.get('fileurl')
+        admin.createdby = request.user.id
+        admin.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        admin.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk):
+        models.Admininfo.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
