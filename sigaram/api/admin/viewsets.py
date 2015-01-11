@@ -619,7 +619,7 @@ class AdminclasslistViewSet(viewsets.ModelViewSet):
 
 class AdminrubricsViewSet(viewsets.ModelViewSet):
 
-    queryset = models.RubricsHeader.objects.all().order_by('-ts')
+    queryset = models.RubricsHeader.objects.all().order_by('-slno')
     serializer_class = adminserializers.AdminrubricsSerializer
 
     def create(self, request):
@@ -851,8 +851,8 @@ class StudentAssignResource(viewsets.ModelViewSet):
               AND ari.IsDelete=0
               /*AND ri.categoryid=0*/
               %s
-        GROUP BY resourceid 
-        ORDER BY answereddate DESC''' % (request.user.username, datecond)
+        GROUP BY ari.resourceid, ari.answereddate
+        ORDER BY ari.assignedid DESC''' % (request.user.username, datecond)
         cursor = connection.cursor()
         
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
