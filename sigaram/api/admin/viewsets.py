@@ -72,18 +72,22 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
         models.AdminFolders.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
-class teacherViewSet(viewsets.ModelViewSet):
+class TeacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
     serializer_class = adminserializers.TeacherinfoSerializer
     def list(self, request):
 
         schoolid =  request.GET.get('schoolid')
         classid  =  request.GET.get('classid')
-
-        if schoolid and classid:
+        username = request.GET.get('username')
+       
+        if schoolid and classid and username:
             queryset = models.Teacherinfo.objects.filter(schoolid=schoolid, classid=classid).order_by('-createddate')
         elif schoolid:
             queryset = models.Teacherinfo.objects.filter(schoolid=schoolid).order_by('-createddate')
+        elif username:
+            queryset = models.Teacherinfo.objects.filter(username=username)
+
         else:
             queryset = models.Teacherinfo.objects.all()
 
@@ -110,6 +114,9 @@ class teacherViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
+        print "Hi"
+        """
+        print request.DATA
         teacher = models.Teacherinfo.objects.get(pk=pk)
         teacherdata =  json.loads(request.DATA.keys()[0])
         teacher.username = teacherdata.get('username')
@@ -117,10 +124,16 @@ class teacherViewSet(viewsets.ModelViewSet):
         teacher.password = teacherdata.get('password')
         teacher.firstname = teacherdata.get('firstname')
         teacher.schoolid = teacherdata.get('schoolid')
+        teacher.imageurl = teacherdata.get('imageurl')
         teacher.classid = teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
         teacher.save()
+        """
         return Response(request.DATA)
+
+    def partial_update(self, request, pk=None):
+        print "Hi"
+        pass
 
     def retrieve(self, request, pk=None):
         queryset = models.Teacherinfo.objects.filter(username=request.user.username)[0]
@@ -1780,6 +1793,8 @@ class AuthuserViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
+        print "*"*80
+        print request.DATA
         authuser = models.Auth_user.objects.get(pk=pk)
         authuserdata =  json.loads(request.DATA.keys()[0])
         authuser.password = authuserdata.get('password')
