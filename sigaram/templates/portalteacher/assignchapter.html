@@ -401,7 +401,7 @@ TTS.forms.renderresourceinfo = function(data){
     for(var i in data){
         var t = [];
         t.push("<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].resourceid+"' value='"+data[i].resourceid+"' />");
-        t.push("<p class='col-sm-2 pull-left'><img src=http://10tsigaram.com/dbinterface/"+data[i].thumbnailurl+"></p> " + data[i].resourcetitle);
+        t.push("<p class='col-sm-3 pull-left'><img src=http://10tsigaram.com/dbinterface/"+data[i].thumbnailurl+"></p> " + data[i].resourcetitle);
         dataset.push(t);
     }
 
@@ -451,10 +451,10 @@ TTS.forms.ressave = function(){
     });
 }
 $(document).ready(function(){
-    var classid   = TTS.forms.getUrlParameter('classid');
-    var section   = TTS.forms.getUrlParameter('section');
-    var chapterid = TTS.forms.getUrlParameter('chapterid');
-    var categoryid = TTS.forms.getUrlParameter('categoryid');
+    var classid   = TTS.utils.getUrlParameter('classid');
+    var section   = TTS.utils.getUrlParameter('section');
+    var chapterid = TTS.utils.getUrlParameter('chapterid');
+    var categoryid = TTS.utils.getUrlParameter('categoryid');
     $.ajax({
         "url":"/api/admin/resourceinfo/?classid="+classid+"&section="+section+"&chapterid="+chapterid+"&categoryid="+categoryid+"&format=json",
         "type":"GET"
@@ -534,18 +534,6 @@ $(document).ready(function(){
     });
 
 });
-TTS.forms.getUrlParameter = function(sParam) {
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++) 
-    {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam) 
-        {
-            return sParameterName[1];
-        }
-    }
-}
 </script>
 
 {% endblock scriptcontent %}
