@@ -392,10 +392,32 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.WrittenworkinfoSerializer
 
     def list(self, request):
-        print request.user.username
-        queryset = models.Writtenworkinfo.objects.filter(createdby=str(request.user.username))
+        queryset = models.Writtenworkinfo.objects.filter(createdby=str(request.user.username)).order_by('-createddate')
         serializer = adminserializers.WrittenworkinfoSerializer(queryset, many=True)
         return Response(serializer.data)
+
+    def destroy(self, request, pk):
+        models.Writtenworkinfo.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
+
+    def retrieve(self, request, pk=None):
+        sql = '''
+        SELECT assignwrittenworkid AS id,
+               wwi.writtenworkid,
+               wwi.writtenImage,
+               wwi.writtenworktitle,
+               date(wwi.createddate) as createddate,
+               awwi.studentid,
+               wwi.isassigned,
+               awwi.issaved
+        FROM assignwrittenworkinfo awwi
+        INNER JOIN writtenworkinfo wwi on wwi.writtenworkid = awwi.writtenworkid 
+        WHERE awwi.writtenworkid = %s
+        ''' % pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
+        return Response(result)
 
     def create(self, request):    
         data = json.loads(dict(request.DATA).keys()[0]);
@@ -1149,7 +1171,8 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
                ari.issaved,
                ari.isbillboard,
                ari.rubric_marks,
-               ari.rubric_n_mark
+               ari.rubric_n_mark,
+               ari.answerurl
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         INNER JOIN  auth_user au on au.username = ari.studentid 

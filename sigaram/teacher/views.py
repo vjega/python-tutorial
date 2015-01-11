@@ -542,3 +542,8 @@ def billviewassignmentanswer(request):
 @switchlanguage
 def viewbulletinboard(request):
     return render(request, 'portalteacher/viewbulletinboard.html')
+
+@switchlanguage
+def viewassignwrittenwork(request):
+    return render(request, 'portalteacher/viewassignwrittenwork.html')
+
