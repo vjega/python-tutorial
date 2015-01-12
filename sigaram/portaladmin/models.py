@@ -299,9 +299,8 @@ class Assignwrittenworkinfo(models.Model):
 
 class Billboardinfo(models.Model):
     billboardid = models.BigIntegerField(primary_key=True)
-    assessmentid = models.BigIntegerField()
     resourceid = models.BigIntegerField()
-    writtenworkid = models.BigIntegerField()
+    resourcetype = models.CharField(max_length=2)
     studentid = models.CharField(max_length=500)
     votescount = models.IntegerField()
     lastvotedby = models.BigIntegerField()
@@ -471,18 +470,19 @@ class Classlessionmappinginfo(models.Model):
 
 
 class Classroominfo(models.Model):
-    classroomid = models.BigIntegerField(primary_key=True)
-    assessmentid = models.BigIntegerField()
-    resourceid = models.BigIntegerField()
-    writtenworkid = models.BigIntegerField()
-    studentid = models.CharField(max_length=500)
-    rating = models.IntegerField()
-    ratingcount = models.IntegerField()
-    votescount = models.IntegerField()
-    lastvotedby = models.BigIntegerField()
-    lastvoteddate = models.DateTimeField(blank=True, null=True)
-    postedby = models.BigIntegerField()
-    posteddate = models.DateTimeField()
+    classroomid         = models.BigIntegerField(primary_key=True)
+    resourceid          = models.BigIntegerField()
+    resourcetype        = models.CharField(max_length=2)
+    studentid           = models.CharField(max_length=500)
+    rating              = models.IntegerField()
+    ratingcount         = models.IntegerField()
+    votescount          = models.IntegerField()
+    lastvotedby         = models.BigIntegerField()
+    lastvoteddate       = models.DateTimeField(blank=True, null=True)
+    postedby            = models.CharField(max_length=500)
+    posteddate          = models.DateTimeField()
+    schoolid            = models.BigIntegerField()
+    classid             = models.BigIntegerField()
 
     class Meta:
         managed = False

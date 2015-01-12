@@ -1188,6 +1188,7 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
                ari.isanswered,
                ari.issaved,
                ari.isbillboard,
+               ari.isclassroom,
                ari.rubric_marks,
                ari.rubric_n_mark,
                ari.answerurl
@@ -1581,10 +1582,9 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
     def create(self, request):
         billboard = models.Billboardinfo()
         studentid  = request.GET.get('studentid');
-        resourceid = request.GET.get('resourceid');
-        billboard.assessmentid = 0
-        billboard.resourceid = resourceid
-        billboard.writtenworkid = 0
+        assignedresourceid = request.GET.get('assignedresourceid');
+        billboard.resourceid = assignedresourceid
+        billboard.resourcetype = 'ar'
         billboard.studentid = str(studentid)
         billboard.votescount = 0
         billboard.lastvotedby = 0
@@ -1595,8 +1595,7 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
         sql = '''
         UPDATE assignresourceinfo
             SET isbillboard = 1
-        WHERE studentid = '%s'
-            AND resourceid = '%s' ''' % (str(studentid), resourceid)
+        WHERE assignedid = '%s' ''' % (assignedresourceid)
 
         cursor = connection.cursor()
         cursor.execute(sql)        
@@ -1916,3 +1915,32 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
     def destroy(self, request, pk):
         models.Admininfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
+
+class ClassinfoViewSet(viewsets.ModelViewSet): 
+    queryset = models.Classroominfo.objects.all()
+    serializer_class = adminserializers.ClassroominfoSerializer
+
+    def create(self, request):
+        classroom = models.Classroominfo()
+        classroomdata =  json.loads(request.DATA.keys()[0])
+        classroom.resourceid            = classroomdata.get('assignedresourceid')
+        classroom.resourcetype          = 'ar'        
+        classroom.studentid             = str(classroomdata.get('studentid'))
+        classroom.rating                = 0
+        classroom.ratingcount           = 0
+        classroom.votescount            = 0
+        classroom.lastvotedby           = 0
+        classroom.postedby              = str(request.user.username)
+        classroom.schoolid              = request.session.get('stu_schoolid')
+        classroom.classid               = request.session.get('stu_classid')
+        classroom.posteddate            = time.strftime('%Y-%m-%d %H:%M:%S')
+        classroom.save()
+
+        sql = '''
+        UPDATE assignresourceinfo
+            SET isclassroom = 1
+        WHERE assignedid = '%s' ''' % (classroomdata.get('assignedresourceid'))
+        cursor = connection.cursor()
+        cursor.execute(sql)
+
+        return Response(request.DATA)
