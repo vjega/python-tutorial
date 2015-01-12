@@ -5,7 +5,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Teacher Resource" %}</h2>
+        <h2 class="page-header">{% trans "Teacher" %} {% trans "Resources" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -15,7 +15,7 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans "Teacher Resource" %} &nbsp; <span id="addrec">
+           {% trans "Teacher" %} {% trans "Resources" %} &nbsp; <span id="addrec">
                 <i class="fa fa-plus-square fa-lg"></i></span>
         </div>
         <!-- /.panel-heading -->
@@ -64,26 +64,11 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-/*TTS.forms.update_chapter_list = function () {
-    var classid = $("#classid").val();
-    var section = $("#section").val();
-    var url = "/api/admin/teacherresourcesinfo/?classid="+classid+"&section="+section+"&format=json";
-    $.ajax({
-        url  : url,
-        type : "GET"
-    })
-    .done(function(data){
-        var opt = "";
-        for (var d in data){
-            opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"</option>";
-        }
-        $("#chapterid").html(opt);
-    })
-};*/
+
 TTS.forms.addteacherresource = function(form, data) {
     $.ajax({
         headers : {
-             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'POST',
         data: data,
@@ -167,7 +152,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
 };
 
 TTS.forms.upload = function(elm) {
-    console.log(elm);
+    //console.log(elm);
     var uploader = new qq.FileUploader({
         action: "/admin/student-teacherres-upload",
         element: $('#file-uploader')[0],
@@ -192,9 +177,6 @@ TTS.forms.upload = function(elm) {
 
 var updateChapter = function(){
     $.ajax({
-        headers : {
-             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
-        },
         'url': "/api/admin/chapterinfo/?classid="+$("#id_classid").val()
                 +"&section="+$("#id_section").val(),
         'type':'GET'
@@ -208,18 +190,27 @@ var updateChapter = function(){
     });
 };
 
+function getUrlParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+}
+
 $(document).ready(function(){
-    TTS.utils.ajaxloaderstart();
-    $.ajax({
-        "url":"/api/admin/teacherresourcesinfo/?format=json",
+    var id = getUrlParameter('resourcecategory');
+     $.ajax({
+        "url":"/api/admin/teacherresourcesinfo/?resourcecategory="+id+"&format=json",
         "type":"GET"
     }).done(function(data){
-        if (data.length) {
-            TTS.forms.renderteacherresourceinfo(data);
-            TTS.utils.ajaxloaderstop();
-        } else {
-            TTS.forms.table.fnClearTable();
-        }
+        TTS.forms.renderteacherresourceinfo(data);
     });
 
     $('#teacherresource-main-tbl').on('click', 'tbody tr',function(e){

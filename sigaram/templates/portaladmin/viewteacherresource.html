@@ -22,10 +22,9 @@
                 <div>
                     <h3>{% trans "Title" %}:</h3>
                 </div><br />
-                <div id="resource-title"></div><br />
-                <div id="view-resource">
-                    <a href="#" id="view-resource">View</a>
-                </div><br />
+                <div><h3 id="resource-title"></h3></div><br />
+                <div id="view-resource"><a href="#" id="view-resource">{% trans 'View' %}</a>
+                </div>
             </table>
         <!-- /.panel-body -->
     </div>
@@ -62,38 +61,27 @@ TTS.forms = TTS.forms || {}
 
 
 TTS.forms.renderteacherresourceinfo = function(data){
-
     $("#resource-title").html(data.resourcetitle);
-    //console.log(data.resourcetype)
-    if (data.resourcetype == "video") {
-        //$("#view-resource").html("<a href='#' >View</a>");
-        window.open("/static/"+data.videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
-    } 
-    if (data.resourcetype == "audio") {
-        //$("#view-resource").html("<a href='#' onclick=\"openwindow('audio','"+data.audiourl+"');\" >View</a>"); 
-        window.open("/static/"+data.audiourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
-    }
-    if (data.resourcetype === "text") {
-        //$("#view-resource").html("<a href='#' onclick=\"openwindow('text','"+data.documenturl+"');\" >View</a>"); 
-        window.open("/static/"+data.documenturl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
-    }
-    if (data.resourcetype === "image") {
-        $("#view-resource").html("<a href='#' onclick=\"openwindow('image','"+data.imageurl+"');\" >View</a>"); 
-    }
+    $("#view-resource").click(function(){
+        if (data.resourcetype == "video") {
+            //$("#view-resource").html("<a href='#' >View</a>");
+            window.open("/static/"+data.videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
+        } 
+        if (data.resourcetype == "audio") {
+            //$("#view-resource").html("<a href='#' onclick=\"openwindow('audio','"+data.audiourl+"');\" >View</a>"); 
+            window.open("/static/"+data.audiourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
+        }
+        if (data.resourcetype === "text") {
+            //$("#view-resource").html("<a href='#' onclick=\"openwindow('text','"+data.documenturl+"');\" >View</a>"); 
+            window.open("/static/"+data.documenturl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
+        }
+        if (data.resourcetype === "image") {
+            $("#view-resource").html("<a href='#' onclick=\"openwindow('image','"+data.imageurl+"');\" ></a>"); 
+        }
+    });
 
 };
-/*
-function openwindow(type, url) {
-    if (type==='video')
-        window.open("http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
-    else if (type==='audio')
-        window.open("http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/"+audiourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
-    else if (type==='text')
-        
-    else
-        window.open("static/teacherres/"+imageurl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0) 
-}       
-*/
+
 function getUrlParameter(sParam)
 {
     var sPageURL = window.location.search.substring(1);
@@ -109,14 +97,14 @@ function getUrlParameter(sParam)
 }
 
 $(document).ready(function(){    
+    var teacherresourceid = getUrlParameter('teacherresourceid');
+    $.ajax({
+        "url":"/api/admin/teacherresourcesinfo/"+teacherresourceid+"/?format=json",
+        "type":"GET"
+    }).done(function(data){
+        TTS.forms.renderteacherresourceinfo(data);
+    });
     $("#view-resource").click(function(){
-        var teacherresourceid = getUrlParameter('teacherresourceid');
-        $.ajax({
-            "url":"/api/admin/teacherresourcesinfo/"+teacherresourceid+"/?format=json",
-            "type":"GET"
-        }).done(function(data){
-            TTS.forms.renderteacherresourceinfo(data);
-        });
     })
 });
 

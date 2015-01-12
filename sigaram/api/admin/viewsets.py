@@ -273,7 +273,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         ORDER BY tri.createddate DESC
         """ % (schoolid,classid,section,chapterid,categoryid)
         cursor = connection.cursor()
-        # print sql
+        print sql
 
         cursor.execute(sql)
         desc = cursor.description
@@ -734,6 +734,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.start = data.get('start')
         cal.end = data.get('end')
         cal.color = '#337ab7'
+        cal.allday = data.get('alldayevents')
         cal.eventcreatedby = request.user.username
         cal.eventeditedby = request.user.username
         cal.isdeleted = 0
@@ -750,6 +751,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.start = data.get('start')
         cal.end = data.get('end')
         cal.color = '#d9534f'
+        cal.allday = data.get('alldayevents')
         #cal.eventcreatedby = request.user.username
         #cal.start = time.strftime('%Y-%m-%d %H:%M:%S')
         #cal.end = time.strftime('%Y-%m-%d %H:%M:%S')
