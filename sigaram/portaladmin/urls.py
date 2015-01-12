@@ -82,5 +82,6 @@ urlpatterns = patterns('portaladmin.views',
                                                          name="myresourcelist"),
     url(r'^viewbulletinboard$',          'viewbulletinboard', 
                                                          name="viewbulletinboard"),
+    url(r'^resources$',             'resources',        name='resources'),
     #(r'^api/', include(v1_api.urls)),
 )

@@ -512,3 +512,21 @@ def myresourcelist(request):
 @switchlanguage
 def viewbulletinboard(request):
     return render(request, 'portaladmin/viewbulletinboard.html')
+
+@login_required
+@switchlanguage
+def resources(request):
+    folders = [{
+        "id": "2",
+        "categoryid": "1",
+        "name" :_("Lesson Plans"),
+        "href" :"teacherresourcelist"
+        },{
+        "id": "3",
+        "categoryid": "2",
+        "name" :_("Schools resources"),
+        "href" :"teacherresourcelist"
+        }]
+
+    return render(request, 'portaladmin/resources.html', 
+                  {"folders":folders,'resources':resources})
