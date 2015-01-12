@@ -273,7 +273,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         ORDER BY tri.createddate DESC
         """ % (schoolid,classid,section,chapterid,categoryid)
         cursor = connection.cursor()
-        # print sql
+        print sql
 
         cursor.execute(sql)
         desc = cursor.description
