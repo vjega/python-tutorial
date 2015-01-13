@@ -64,27 +64,30 @@ TTS.forms = TTS.forms || {}
 TTS.forms.renderrubricsinfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
-              "class": "text-center"  
+              "class": "text-center",
+              "data" : "slno"  
             },
-            { "title": "{% trans "Title" %}"},
-            { "title": "{% trans "Detail" %}"},
-            { "title": "{% trans "Teacher" %}" },
-            { "title": "{% trans "Date Time" %}"}, 
+            { "title": "{% trans "Title" %}", "data" : "title"},
+            { "title": "{% trans "Detail" %}", "data" : "detail"},
+            { "title": "{% trans "Teacher" %}", "data" : "teacher"},
+            { "title": "{% trans "Date Time" %}", "data" : "time"}, 
             { "title": "{% trans "Delete" %}",
-              "class": "text-center"  
+              "class": "text-center", 
+              "data" : "delete"  
             }, 
         ];
     var dataset = [];
     var count = 0
     for(var i in data){
-        var t = [];
-        t.push(++count);
-        t.push(data[i].title);
-        t.push(data[i].description);
-        t.push(data[i].teacher);
-        t.push(data[i].ts);
-        t.push("<i class='tts-delete fa fa-trash fa-lg'></i>");
-        dataset.push(t);
+        dataset.push({
+            "DT_RowId" : data[i].slno,
+            "slno" : ++count,
+            "title": data[i].title,
+            "detail": data[i].description,
+            "teacher": data[i].teacher,
+            "time" : data[i].ts,
+            "delete" : "<i class='tts-delete fa fa-trash fa-lg'></i>"
+        });
     }
 
     $('#rubrics-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
@@ -115,6 +118,10 @@ $(document).ready(function(){
         window.location = 'rubric_edit';
 
     });
+
+    $("#rubrics-main-tbl").on("click", "tbody tr", function(){
+        window.location = "/teacher/rubric_view?rubricid="+$(this).prop('id');
+    })
    
 });
 
