@@ -414,8 +414,16 @@ def statisticsstudentslist(request):
 @login_required
 @switchlanguage
 def rubric_edit(request):
-    return render(request, 'portalteacher/rubric_edit.html' ,{'rubric_edit':rubric_edit,
+    return render(request, 'portalteacher/rubric_edit.html' ,{
                             "form" : RubricsForm.RubricsForm() })
+
+@login_required
+@switchlanguage
+def rubric_view(request):
+    rubricid =  request.GET.get("rubricid")
+    return render(request, 'portalteacher/rubric_view.html' ,{ 'rubricheader' : rubricheader,
+                            "form" : RubricsForm.RubricsForm() })
+
 @login_required
 @switchlanguage                
 def viewassignresource(request):
