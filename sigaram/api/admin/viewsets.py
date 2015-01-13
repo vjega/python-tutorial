@@ -232,17 +232,24 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.TeacherresourceinfoSerializer
 
     def list(self, request):
+        l =  request.user.groups.values_list('name',flat=True)[0]
         # schoolid   = request.GET.get('schoolid')
         # classid   = request.GET.get('classid')
         # section   = request.GET.get('section')
         # chapterid = request.GET.get('chapterid')
         # categoryid = request.GET.get('resourcecategory')
-
+        joincond=''
+        fieldcond=''
         schoolid    = ''
         classid     = ''
         section     = ''
         chapterid   = ''
         categoryid  = ''
+        if l == 'Admin' :
+            fieldcond="ci.shortname as levelname"
+            joincond="INNER JOIN classinfo ci ON ci.classid=tri.classid"
+        else :
+            fieldcond="'' as levelname"
 
         if request.GET.get('schoolid'):
             schoolid = "AND tri.schoolid='%s'" % (request.GET.get('schoolid'))
@@ -260,10 +267,10 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         SELECT  tri.teacherresourceid,
                 tri.resourcetitle,
                 tri.createddate,
-                ci.shortname as levelname,
+                %s,
                 tri.resourcetype
         FROM teacherresourceinfo tri
-        INNER JOIN classinfo ci ON ci.classid=tri.classid
+        %s
         WHERE isdeleted=0
         %s 
         %s 
@@ -271,7 +278,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         %s 
         %s
         ORDER BY tri.createddate DESC
-        """ % (schoolid,classid,section,chapterid,categoryid)
+        """ % (fieldcond,joincond,schoolid,classid,section,chapterid,categoryid)
         cursor = connection.cursor()
         # print sql
 
@@ -1270,6 +1277,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
 
     def create(self, request):
         data = json.loads(dict(request.DATA).keys()[0])
+
         #Saving annoucement
         bbi = models.Bulletinboardinfo()
         bbi.messagetitle = data.get('messagetitle')
@@ -1279,6 +1287,11 @@ class Bulletinboardlist(viewsets.ModelViewSet):
             bbi.schoolid = data.get('schoolid')
         else:
             bbi.schoolid = 0 #data.get('schoolid')
+        if data.get('cattype') == 'all_schools':
+            bbi.allschool = data.get('allschool')
+        else:
+            bbi.allschool = 0
+            bbi.schoolid = 0
         bbi.classid = data.get('classid',0)
         bbi.isrecord = data.get('isrecord',0)
         bbi.postedby = request.user.id
