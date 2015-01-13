@@ -273,7 +273,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         ORDER BY tri.createddate DESC
         """ % (schoolid,classid,section,chapterid,categoryid)
         cursor = connection.cursor()
-        print sql
+        # print sql
 
         cursor.execute(sql)
         desc = cursor.description
@@ -1274,7 +1274,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         bbi = models.Bulletinboardinfo()
         bbi.messagetitle = data.get('messagetitle')
         bbi.message = data.get('message')
-        bbi.attachmenturl = data.get('attachmenturl')
+        bbi.attachmenturl = data.get('attachmenturl',0)
         if data.get('cattype') == 'schools':
             bbi.schoolid = data.get('schoolid')
         else:
@@ -1287,6 +1287,20 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         bbiid = bbi.bulletinboardid
         #print "created id is %s"%bbi.bulletinboardid
         #saving annoument target
+        for rl in data.get('resourcelist'):
+            bmi = models.Bulletinmappinginfo()
+            bmi.bulletinboardid = bbiid
+            bmi.viewtype = 0    
+            bmi.postedby = request.user.id
+            bmi.userid = request.user.username
+            if data.get('cattype') == 'schools':
+                bmi.schoolid = data.get('schoolid')
+                bmi.classid = rl
+            else:
+                bmi.schoolid = 0
+                bmi.classid = 0
+            bmi.save()
+
         for rl in data.get('resourcelist'):
             bmi = models.Bulletinmappinginfo()
             bmi.bulletinboardid = bbiid
