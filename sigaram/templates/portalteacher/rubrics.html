@@ -124,11 +124,10 @@ $(document).ready(function(){
    
     $('#rubrics-main-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();
-        if (!window.confirm("Do you want to delete this record?")) {
-            return false;
+        if (window.confirm("Do you want to delete this record?")) {
+            delid = $(this).parent().parent().prop("id");
+            TTS.forms.delrubric(delid);
         }
-        delid = $(this).parent().parent().prop("id");
-        TTS.forms.delrubric(delid);
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         //TTS.forms.addrubrics();
