@@ -508,15 +508,17 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
                 AND classid=%s
                 AND section='%s' 
             GROUP BY chapterid'''%(categoryid, classid, sectionid)
+            # print sql;
             cursor = connection.cursor()
             cursor.execute(sql)
             cnt = cursor.fetchall()
-            # print serializer.data
             for i, d in enumerate(serializer.data):
+                serializer.data[i]['rescount']=0
                 for c in cnt:
                     if serializer.data[i]['chapterid'] == c[0]:
                         serializer.data[i]['rescount'] = c[1]
                         break
+            # print serializer.data
         return Response(serializer.data)
  
 class AdminclassinfoViewSet(viewsets.ModelViewSet): 
