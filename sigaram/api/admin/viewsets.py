@@ -666,6 +666,7 @@ class AdminrubricsViewSet(viewsets.ModelViewSet):
         return Response('"msg":"update"')
 
     def destroy(self, request, pk=None):
+        models.RubricsHeader.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
 class AssignresourceinfoViewSet(viewsets.ModelViewSet):
@@ -903,7 +904,10 @@ class StudentAssignResource(viewsets.ModelViewSet):
                ari.answertext,
                ari.studentid,
                ari.isanswered,
-               ari.issaved
+               ari.issaved,
+               ari.rubric_id,
+               ari.rubric_marks,
+               ari.rubric_n_mark
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         WHERE assignedid = %s
