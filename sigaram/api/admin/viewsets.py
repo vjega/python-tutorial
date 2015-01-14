@@ -357,19 +357,17 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         ri = models.Resourceinfo()
-        #print request.DATA, type(request.DATA)
+        print request.DATA, type(request.DATA)
         ridata =  json.loads(dict(request.DATA).keys()[0])
-        #print ridata
         category = ridata.get('categoryid')
         if category == 'text' :
             categoryid = 0
-        elif category == 'audio':
-            categoryid = 1
-        elif category == 'video':
-            category = 2
         elif category == 'image':
-            category = 3
-
+            categoryid = 1
+        # elif category == 'audio':
+        #     categoryid = 2
+        elif category == 'video':
+            categoryid = 2
 
         ri.categoryid = categoryid
         ri.classid = int(ridata.get('classid'))

@@ -7,8 +7,8 @@ class StudentresourceListForm(forms.Form):
     categoryid     = forms.ChoiceField(
         label      = _("Category"),
         required   = True,
-        choices    = [('text', 'Text'), ('audio', 'Audio'),('video','Video'),
-                         ('image', 'Image')]
+        choices    = [('text', 'Text'),('image', 'Image'),
+                         ]
     )
     fileurl = forms.CharField(
         label = _("Photo"),
