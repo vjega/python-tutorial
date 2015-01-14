@@ -237,6 +237,12 @@ TTS.forms.renderrubrictableinfo = function(rubtable, rubdata){
     var td = '';
     var answercheck = '';
     var rubchecks = {};
+    var thnumber = [];
+    var maxVal = '';
+    $.each(th, function(idx, value){
+        thnumber[idx] = value.match(/\d+/)[0];
+    });
+    maxVal = Math.max.apply(Math,thnumber);
    
     tableHTML += "<table id='rubrics-table' class='table table-striped table-bordered table-hover'>";
     tableHTML += "<thead><tr><th>&nbsp;</th>";
@@ -258,10 +264,10 @@ TTS.forms.renderrubrictableinfo = function(rubtable, rubdata){
             }
             tableHTML += "<td>"+answercheck+" "+j+"</td>";
         });
-        tableHTML += "<td><input class='totals' id='tmark-"+x+"' style='width:30px;text-align:center' readonly type='text' value=''> / "+th.length+"</td>";
+        tableHTML += "<td><input class='totals' id='tmark-"+x+"' style='width:30px;text-align:center' readonly type='text' value=''> / "+maxVal+"</td>";
         tableHTML += "</tr>";
     });
-    tableHTML += "</tbody><tfoot><tr><td style='text-align:center' colspan="+(th.length+1)+"><strong>{% trans 'Total' %}</strong></td><td><input id='ttls' style='width:30px;text-align:center' readonly type='text' value=''> / "+(th.length)*(tddataobj.length)+"</td></tr></tfoot>";
+    tableHTML += "</tbody><tfoot><tr><td style='text-align:center' colspan="+(th.length+1)+"><strong>{% trans 'Total' %}</strong></td><td><input id='ttls' style='width:30px;text-align:center' readonly type='text' value=''> / "+maxVal*(tddataobj.length)+"</td></tr></tfoot>";
     tableHTML += "</table>";
     $("#rubrics-vote").html(tableHTML);
     rubricid = rubricid.split('~');

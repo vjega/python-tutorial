@@ -421,7 +421,7 @@ def rubric_edit(request):
 @switchlanguage
 def rubric_view(request):
     rubricid =  request.GET.get("rubricid")
-    return render(request, 'portalteacher/rubric_view.html' ,{ 'rubricheader' : rubricheader,
+    return render(request, 'portalteacher/rubric_view.html' ,{
                             "form" : RubricsForm.RubricsForm() })
 
 @login_required
