@@ -1,0 +1,363 @@
+{% extends 'portalteacher/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block topcontent %}
+<div class="row">
+    <div class="form-group" class="col-sm-3">
+        <div class="col-sm-1">
+           
+        </div>
+    </div>
+</div>
+
+{% endblock topcontent %}
+{% block botcontent %}
+
+<div class="col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% trans "Rubrics" %} 
+        </div>
+        <div style="padding:10px">
+        <!-- /.panel-heading -->
+            <div class="gentable" id ="rub_mtx_head rub_mtx_rows">
+                {% crispy form %}
+            </div>
+            <table class="form-horizontal">
+                <tr height="65">
+                    <td width="170">Column</td><td><input type='text' class="form-control" id='r-row' ></td>
+                    <td width="170"> &nbsp;&nbsp; Paragraph</td><td><input type='text' class="form-control" id='r-col'></td>
+                    <td>&nbsp;&nbsp; <input type='button'class ="btn btn-primary " id="createTable" value= ' Create '/></td>
+                    <td>&nbsp;&nbsp; <input type='button' class ="btn btn-primary "id ="showexcelfile" value=' Excel Import'/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan='6' id='filedialog' style='display:none'>
+                        <input type='file' name='excelfile' id='excelfile' />
+                        <input type='submit' id='uploadexcel' value='Upload' >
+                    </td>
+                </tr>
+            </table><br />
+            <div id='dyntable' style='background-color:#ADFF2F'>
+     
+            </div>
+        </div>  
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+                <!-- /.col-lg-12 -->
+{% endblock botcontent%}
+
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<style>
+    #addrec:hover, .tts-edit:hover, .tts-delete:hover, #admin-main-tbl tbody tr:hover {
+        cursor: pointer;
+    }
+</style>
+{% endblock morecss %}
+
+{% block morescript %}
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}">
+
+</script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+{% endblock morescript %}
+
+{% block scriptcontent %}
+<script id="rubrics-form" type="text/x-jsrender">
+
+</script>
+<style>
+    td, th{
+        color: #000;
+    }
+    .tblhead {
+        border:1px solid grey;background-color:#ccc!important;color:#000;
+    }
+    .tblbody {
+        border:0 none;background-color:#fff!importan;color:#000;
+    }
+    .fulltext{
+        border:none;
+    }
+    .headtext{
+        width:90%;
+        background-color:#d0d0d0;
+    }
+    .bodytext{
+        width:98%;
+        background-color:#fff;
+    }
+    .note-editable{
+        height: 80px;
+    }
+    .form-group{
+        height: 35px;
+    }
+</style>
+
+<script>
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}
+TTS.forms.addtable = function() {
+    var rows = parseInt($('#r-row').val());
+    var cols = parseInt($('#r-col').val());
+    var tabelms = "<br/><div style='text-align:center'><input type='button' class = 'btn btn-primary' class = 'btn btn-primary' value='Add a row before' id='add_row_before' />&nbsp;<input type='button' class = 'btn btn-primary' value='Add a row after' id='add_row_after'/>&nbsp;<input type='button'class = 'btn btn-primary' value='Add a col before' id='add_col_before' />&nbsp;&nbsp;<input type='button' class = 'btn btn-primary'  value='Add a col after' id='add_col_after' />&nbsp;<input type='button' class = 'btn btn-primary' value='Delete a row' id='del_row' />&nbsp;<input type='button'class = 'btn btn-primary'  value='Delete a column' id='del_col' /></div><br/>";
+        tabelms += "<table style='width:90%' id='gentable' align='center'>";
+        tabelms += "<tr class='rub_mtx_head rub_mtx_rows'><td class='tblhead'>&nbsp;</td>";
+        for (var j=0; j<=cols; j++) {
+            tabelms += "<td class='tblhead'>"+(j===cols?"Total":"<input type='checkbox' class='col_mod' id='col-"+j+"' id='makeradio_col(id)' /><input type='text' class='fulltext headtext'>")+"</td>";
+        }
+        tabelms += "</tr>";
+        
+        for (var i=0; i<rows; i++) {
+            tabelms += "<tr class='rub_mtx_body rub_mtx_rows'><td class='tblhead'><input type='checkbox' class='row_mod' id='row-"+i+"' id='makeradio_row(id)' /><input type='text' class='fulltext headtext'></td>";
+            for (var j=0; j<cols; j++) {
+                tabelms += "<td class='tblbody'><input type='text' class='fulltext bodytext'></td>";
+            }
+            tabelms += "<td class='tblhead'>-/-</td></tr>";
+        }
+        tabelms += "<tr><td height='60' colspan='"+cols+"'><input type='button' class ='btn btn-primary' onclick='send_rubrics()' value='Send' /></td></tr></table>";
+        
+        $('#dyntable').html(tabelms);
+};
+
+TTS.forms.makeradio_row = function(id) {
+    $(".row_mod").attr("checked", false);
+    $("#"+id).attr("checked", true);
+};
+
+TTS.forms.makeradio_col = function(id) {
+    $(".col_mod").attr("checked", false);
+    $("#"+id).attr("checked", true);
+};
+
+TTS.forms.showexcelfile = function () {
+    $("#filedialog").show();
+}
+
+TTS.forms.add_row = function(after) {
+    if (!$("input:checked.row_mod").length) {
+        alert("Make a selection");
+        return false;
+    }
+    var arr = $("input:checked.row_mod").attr("id").split("-");
+    var row_idx = parseInt(arr[1])+parseInt(after);
+    $("table#gentable").children().children("tr").eq(row_idx).after(TTS.forms._make_row());
+    //Resetting the id for further row modification
+        $(".row_mod").each(function(ind) {
+        $(this).attr("id", "row-"+ind);
+    });
+    //Add one column
+    $("#r-row").val(parseInt($("#r-row").val())+1);
+};
+
+TTS.forms._make_row = function() {
+    var cols = parseInt($('#r-col').val());
+    var _temp = "<tr class='rub_mtx_body rub_mtx_rows'><td class='tblhead'><input class='row_mod' type='checkbox' id='makeradio_row' /><input type='text' class='fulltext headtext'/></td>";
+    for (var i=0; i<cols; i++) {
+        _temp += "<td class='tblbody'><input type='text' class='fulltext bodytext'/></td>";
+    }
+    _temp += "<td class='tblhead'>-/-</td>";
+    return _temp;
+};
+
+TTS.forms.add_col = function (placement) {
+    if (!$("input:checked.col_mod").length) {
+        alert("Make a selection");
+        return false;
+    }
+
+    var arr = $("input:checked.col_mod").attr("id").split("-");
+    var temp = parseInt(arr[1])+1+parseInt(placement);
+    $(".rub_mtx_rows td:nth-child("+temp+")").each(function(cnt) {
+        $(this).after("<td class='"+(cnt?"tblbody' >":"tblhead' ><input type='checkbox' class='col_mod' />")+
+            "<input type='text' class='fulltext "+(cnt?"":"headtext")+"' /></td>");
+        
+    });
+    //Resetting the id for further col modification
+    $(".col_mod").each(function(ind) {
+        $(this).attr("id", "col-"+ind);
+    });
+    //Add one column in the text box
+    $("#r-col").val(parseInt($("#r-col").val())+1);
+}
+
+TTS.forms.del_row  = function () {
+    if (!$("input:checked.row_mod").length) {
+        alert("Make a selection");
+        return false;
+    }
+    var arr = $("input:checked.row_mod").attr("id").split("-");
+    var row_idx = parseInt(arr[1])+1;
+    $("table#gentable").children().children("tr").eq(row_idx).remove();
+    //Resetting the id for further row modification
+    $(".row_mod").each(function(ind) {
+        $(this).attr("id", "row-"+ind);
+    });
+    //Add one column
+    $("#r-row").val(parseInt($("#r-row").val())-1);
+}
+
+TTS.forms.del_column = function () {
+    if (!$("input:checked.col_mod").length) {
+        alert("Make a selection");
+        return false;
+    }
+    var arr = $("input:checked.col_mod").attr("id").split("-");
+    var temp = parseInt(arr[1])+2;
+    $(".rub_mtx_rows td:nth-child("+temp+")").each(function(cnt) {
+        $(this).remove();
+    });
+    //Resetting the id for further col modification
+    $(".col_mod").each(function(ind) {
+        $(this).attr("id", "col-"+ind);
+    });
+    //Add one column
+    $("#r-col").val(parseInt($("#r-col").val())-1);
+}
+
+$(document).ready(function(){
+    $('.summernote').summernote();
+   
+    $('#createTable').on('click',function(){
+        TTS.forms.addtable();
+    });
+
+    $('body').on('click','#add_row_after', function(){
+        TTS.forms.add_row(1);
+    });
+
+    $('body').on('click','#add_row_before', function(){
+        TTS.forms.add_row(0);
+    });
+
+    $('body').on('click','#makeradio_row', function(){
+        TTS.forms.makeradio_row();
+    });
+
+    $('body').on('click','#makeradio_row', function(){
+        TTS.forms.makeradio_col();
+    });
+    
+    $('body').on('click','#del_row', function(){
+        TTS.forms.del_row();
+    });
+
+    $('body').on('click','#del_col', function(){
+        TTS.forms.del_column();
+    });
+    
+    $('body').on('click','#add_col_after', function(){
+        TTS.forms.add_col(1);
+    });
+
+    $('body').on('click','#add_col_before', function(){
+        TTS.forms.add_col(0);
+    });
+
+    $('#showexcelfile').on('click',function(){
+        TTS.forms.showexcelfile();
+    });
+
+});
+    function send_rubrics() {
+        var rows = parseInt($('#r-row').val());
+        var cols = parseInt($('#r-col').val());
+        var mtx = [];
+        var tmtx = [];
+        var bodydata = [];
+        var headerdata = [];
+        $(".rub_mtx_body").each(function(indx) {
+            mtx[indx] = [];
+            bodydata[indx] = '';
+            for (var i = 0; i<=cols; i++) {
+                var bdata = $(this).children().eq(i).children("input:text").val();
+                mtx[indx].push(bdata);
+                bodydata[indx] += bdata;
+                if(cols != i){
+                    bodydata[indx] += "~~";
+                }
+            }
+        });
+        $(".rub_mtx_head").each(function(indx) {
+            tmtx[indx] = [];
+            headerdata[indx] = '';
+            for (var i = 1; i<=cols; i++) {
+                var hdata = $(this).children().eq(i).find("input:text").val();
+                tmtx[indx].push(hdata);
+                headerdata[indx] += hdata;
+                if(cols != i){
+                    headerdata[indx] += "~~";
+                }
+            }
+        });
+        /*console.log(mtx);
+        console.log(bodydata);
+        console.log(tmtx);
+        console.log(headerdata);*/
+
+        //return false;
+        var data = {
+            ttl         :$('#id_Title').val(),
+            desc        :$('#id_Detail').val(),
+            instn       :$('.summernote').code(),
+            mtx_body    :bodydata,
+            mtx_head    :headerdata
+        };
+        console.log(data);
+        if(field_validation()){
+            $.ajax({
+                headers : {
+                    'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                },
+                url:"/api/admin/rubricsheader/",
+                type:"POST",
+                data: JSON.stringify(data)
+            }).done(function(data){
+                console.log(data);
+                alert("Rubrics Saved Successfully");
+                window.location = "rubrics";
+            });
+
+
+            // $.post('ajaxpost.php',{submit:"create", data:JSON.stringify(dataObj)}, function(data) {
+            //     if(data){
+            //         alert("Rubrics Saved");
+            //         window.location = "rubrics.php";
+            //     };
+            // });
+        }
+    }
+
+function field_validation() {
+    if ($("#id_Title").val()=="") {
+        alert("Title is required");
+        return false;
+    }
+    if ($("#id_Detail").val()=="") {
+        alert("Detail is required");
+        return false;
+    }
+    if ($("#r-row").val()=="") {
+        alert("Row is required");
+        return false;
+    }
+    if ($("#r-col").val()=="") {
+        alert("Col is required");
+        return false;
+    }
+    return true;
+}
+
+</script>
+{% endblock scriptcontent %}
