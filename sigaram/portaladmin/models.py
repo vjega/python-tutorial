@@ -63,12 +63,11 @@ class AdminFolders(models.Model):
     def folders (req):
         sql = """
         SELECT  folder_name,
-                folder_id,
-                folder_description 
+                folder_id
         FROM admin_folders 
         WHERE userid='%s'
         """%req.user.username 
-        print sql;
+        # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         x = dictfetchall(cursor)
