@@ -68,7 +68,7 @@ class AdminFolders(models.Model):
         FROM admin_folders 
         WHERE userid='%s'
         """%req.user.username 
-        print sql;
+        # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         x = dictfetchall(cursor)
