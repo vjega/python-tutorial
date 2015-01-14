@@ -18,7 +18,12 @@ class TeacherResourceForm(forms.Form):
     schoolid = forms.ChoiceField(
         label    = _("Select School"),
         required = True,
-        choices  = [(opt.schoolid, opt.schoolname) for opt in models.Schoolinfo.objects.all()],
+        choices  = [(opt.schoolid, opt.schoolname) for opt in models.Schoolinfo.objects.all().order_by('schoolname')],
+    )
+    resourcecategory = forms.ChoiceField(
+        label        = _("Select Folder"),
+        required     = True,
+        choices      = [('2', 'School\'s resources')]
     )
     originaltext = forms.CharField(
         label    = _("Title"),

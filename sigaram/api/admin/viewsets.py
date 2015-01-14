@@ -232,17 +232,24 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.TeacherresourceinfoSerializer
 
     def list(self, request):
+        l =  request.user.groups.values_list('name',flat=True)[0]
         # schoolid   = request.GET.get('schoolid')
         # classid   = request.GET.get('classid')
         # section   = request.GET.get('section')
         # chapterid = request.GET.get('chapterid')
         # categoryid = request.GET.get('resourcecategory')
-
+        joincond=''
+        fieldcond=''
         schoolid    = ''
         classid     = ''
         section     = ''
         chapterid   = ''
         categoryid  = ''
+        if l == 'Admin' :
+            fieldcond="ci.shortname as levelname"
+            joincond="INNER JOIN classinfo ci ON ci.classid=tri.classid"
+        else :
+            fieldcond="'' as levelname"
 
         if request.GET.get('schoolid'):
             schoolid = "AND tri.schoolid='%s'" % (request.GET.get('schoolid'))
@@ -260,10 +267,10 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         SELECT  tri.teacherresourceid,
                 tri.resourcetitle,
                 tri.createddate,
-                ci.shortname as levelname,
+                %s,
                 tri.resourcetype
         FROM teacherresourceinfo tri
-        INNER JOIN classinfo ci ON ci.classid=tri.classid
+        %s
         WHERE isdeleted=0
         %s 
         %s 
@@ -271,9 +278,9 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         %s 
         %s
         ORDER BY tri.createddate DESC
-        """ % (schoolid,classid,section,chapterid,categoryid)
+        """ % (fieldcond,joincond,schoolid,classid,section,chapterid,categoryid)
         cursor = connection.cursor()
-        print sql
+        # print sql
 
         cursor.execute(sql)
         desc = cursor.description
@@ -1274,15 +1281,21 @@ class Bulletinboardlist(viewsets.ModelViewSet):
 
     def create(self, request):
         data = json.loads(dict(request.DATA).keys()[0])
+
         #Saving annoucement
         bbi = models.Bulletinboardinfo()
         bbi.messagetitle = data.get('messagetitle')
         bbi.message = data.get('message')
-        bbi.attachmenturl = data.get('attachmenturl')
+        bbi.attachmenturl = data.get('attachmenturl',0)
         if data.get('cattype') == 'schools':
             bbi.schoolid = data.get('schoolid')
         else:
             bbi.schoolid = 0 #data.get('schoolid')
+        if data.get('cattype') == 'all_schools':
+            bbi.allschool = data.get('allschool')
+        else:
+            bbi.allschool = 0
+            bbi.schoolid = 0
         bbi.classid = data.get('classid',0)
         bbi.isrecord = data.get('isrecord',0)
         bbi.postedby = request.user.id
@@ -1291,6 +1304,20 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         bbiid = bbi.bulletinboardid
         #print "created id is %s"%bbi.bulletinboardid
         #saving annoument target
+        for rl in data.get('resourcelist'):
+            bmi = models.Bulletinmappinginfo()
+            bmi.bulletinboardid = bbiid
+            bmi.viewtype = 0    
+            bmi.postedby = request.user.id
+            bmi.userid = request.user.username
+            if data.get('cattype') == 'schools':
+                bmi.schoolid = data.get('schoolid')
+                bmi.classid = rl
+            else:
+                bmi.schoolid = 0
+                bmi.classid = 0
+            bmi.save()
+
         for rl in data.get('resourcelist'):
             bmi = models.Bulletinmappinginfo()
             bmi.bulletinboardid = bbiid

@@ -57,8 +57,11 @@
 <link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <style>
-    #addrec:hover, .tts-delete:hover, .tts-edit:hover{
+    #addrec:hover, .tts-delete:hover, .tts-edit:hover, .tts-view:hover{
         cursor: pointer;
+    }
+    #div_id_resourcecategory{
+        display:none;
     }
 </style>
 {% endblock morecss %}
@@ -80,8 +83,22 @@
 </script>
 
 <script>
+function getUrlParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+}
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
+TTS.resourcecategory = getUrlParameter('resourcecategory');
 TTS.forms.addteacherresource = function(form, data) {
     $.ajax({
         headers : {
@@ -169,52 +186,51 @@ TTS.forms.renderteacher = function(data){
     var count = 0
     for(var i in data){
         var t = {};
-        //t.DT_RowId = data[i].teacherresourceid;
+        t.DT_RowId = data[i].teacherresourceid;
         t.slno = ++count;
         t.resourcetitle = data[i].resourcetitle;
         t.date = data[i].createddate;
-        t.view="<i class='flaticon-zoom38'></i>";
+        t.view="<i class='flaticon-zoom38 tts-view'></i>";
         dataset.push(t);
     }
-    if(TTS.forms.schooltable){
-        TTS.forms.schooltable.fnClearTable();
-        TTS.forms.schooltable.fnAddData(
+    if (TTS.forms.table) {
+        TTS.forms.table.fnClearTable();
+        TTS.forms.table.fnAddData(
             dataset
         );
     }else{
-        TTS.forms.schooltable = $('#teacherlist-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
+        TTS.forms.table = $('#teacherlist-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
             "data":     dataset,
             "columns":  headers
         });
     }
 };
 
-
 $(document).ready(function(){
     TTS.utils.ajaxloaderstart();
+    var url = "/api/admin/teacherresourcesinfo/?schoolid="+$(school_name).val()+"&resourcecategory="+TTS.resourcecategory+"&format=json";
     $.ajax({
-        "url":"/api/admin/teacherresourcesinfo/?schoolid="+$(school_name).val()+"&format=json",
+        "url":url,
         "type":"GET"
     }).done(function(data){
-        if (data.length) {
-            TTS.forms.renderteacher(data);
-            TTS.utils.ajaxloaderstop();
-        } else {
-            TTS.forms.schooltable.fnClearTable();
-        }
+        TTS.forms.renderteacher(data);
+        TTS.utils.ajaxloaderstop();
     });
     $("#school_name").change(function(){    
         $.ajax({
-            "url":"/api/admin/teacherresourcesinfo/?schoolid="+$(school_name).val()+"&format=json",
+            "url":"/api/admin/teacherresourcesinfo/?schoolid="+$(school_name).val()+"&resourcecategory="+TTS.resourcecategory+"&format=json",
             "type":"GET"
         }).done(function(data){
-            TTS.forms.renderteacher(data);
+            if(data.length){
+                TTS.forms.renderteacher(data);
+            }else{
+                TTS.forms.table.fnClearTable();
+            }
         });
     })
-    $('#teacherlist-main-tbl').on('click', '.tts-edit', function(e){
+    $('#teacherlist-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();
-        TTS.forms.editschool();
-        //window.location = 'teacherslist?teacherid'=this.id;
+        window.location ='viewteacherresource?teacherresourceid='+this.id;
     });
     $('#teacherlist-main-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();

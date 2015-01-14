@@ -555,3 +555,7 @@ def viewbulletinboard(request):
 def viewassignwrittenwork(request):
     return render(request, 'portalteacher/viewassignwrittenwork.html')
 
+@login_required
+@switchlanguage
+def viewteacherresource(request):
+    return render(request, 'portalteacher/viewteacherresource.html')
