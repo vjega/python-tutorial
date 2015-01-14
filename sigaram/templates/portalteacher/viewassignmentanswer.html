@@ -73,14 +73,7 @@
                 <table class="table table-striped table-bordered table-hover" >
                     <div class="row">
                         <div class="col-lg-12">
-                            <div id="sendnoticeboard" class="col-lg-12">
-                                <a href="javascript:void(0)" id="sendnoticeboard" >
-                                    {% trans "Send to Noticeboard" %}
-                                </a>
-                            </div>
-                            <div id="alreadysentnoticeboard" class="col-lg-12">
-                                {% trans "Resource already Sent to Noticeboard" %}
-                            </div>
+                            <div id="sendnoticeboardhtml" class="col-lg-12"></div>
                         </div>
                         <div class="col-lg-12">
                             <label class="col-lg-2">{% trans "Title" %}</label>
@@ -100,7 +93,8 @@
                             <div class="col-lg-10" id="audio-player"></div>
                         </div>
                         <div class="col-lg-12">
-                            <label class="col-lg-12">{% trans "Answer" %} </label>
+                            <label class="col-lg-2">{% trans "Answer" %}</label>
+                            <div class="col-lg-2">{% trans "Show" %}</div>
                         </div>    
                     </div>
    
@@ -191,22 +185,22 @@
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}   
 
-
 TTS.forms.renderassignedresourceinfo = function(data){
     $("#assignedid").val(data[0].id);
     $("#resource-title").html(data[0].resourcetitle);
     $("#assigned-date").html(data[0].createddate);
     $("#answerd-date").html(data[0].answereddate);
     $("#student-name").html(data[0].firstname+" "+data[0].lastname);
-    $("#student-answer").html(data[0].answertext);    
+    $("#student-answer").html(data[0].answertext);
     $("#original-text").html(data[0].originaltext);
     if(data[0].answerurl){
         $("#audio-player").html('<audio src="../static/audio/'+data[0].answerurl+'" controls=""></audio><br />');
     }
+    
     if(data[0].isbillboard == 0){
-        $('#alreadysentnoticeboard').hide();
+        $('#sendnoticeboardhtml').html('<a href="javascript:void(0)" id="sendnoticeboard" >{% trans "Send to Noticeboard" %}</a>');
     }else if(data[0].isbillboard == 1){
-        $('#sendnoticeboard').hide();
+        $('#sendnoticeboardhtml').html('{% trans "Resource already Sent to Noticeboard" %}');
     }
 
     if(data[0].rubric_id){
@@ -236,7 +230,13 @@ TTS.forms.renderrubrictableinfo = function(rubtable, rubdata){
     var td = '';
     var answercheck = '';
     var rubchecks = {};
-   
+    var thnumber = [];
+    var maxVal = '';
+    $.each(th, function(idx, value){
+        thnumber[idx] = value.match(/\d+/)[0];
+    });
+    maxVal = Math.max.apply(Math,thnumber);
+
     tableHTML += "<table id='rubrics-table' class='table table-striped table-bordered table-hover'>";
     tableHTML += "<thead><tr><th>&nbsp;</th>";
     $("#max-mark").val(th.length);
@@ -251,16 +251,16 @@ TTS.forms.renderrubrictableinfo = function(rubtable, rubdata){
         tableHTML += "<tr>";
         $(td).each(function(i,j){
             if(i > 0){
-                answercheck="<input onclick='TTS.forms.setmarks("+x+","+(--td.length)+")' class='chkrub mark-"+x+"' id='m"+x+"-"+i+"' name='mark-"+x+"' type='radio'>";
+                answercheck="<input onclick='TTS.forms.setmarks("+x+","+thnumber[(i-1)]+")' class='chkrub mark-"+x+"' id='m"+x+"-"+i+"' name='mark-"+x+"' type='radio'>";
             }else{
                 answercheck="";
             }
             tableHTML += "<td>"+answercheck+" "+j+"</td>";
         });
-        tableHTML += "<td><input class='totals' id='tmark-"+x+"' style='width:30px;text-align:center' readonly type='text' value=''> / "+th.length+"</td>";
+        tableHTML += "<td><input class='totals' id='tmark-"+x+"' style='width:30px;text-align:center' readonly type='text' value=''> / "+maxVal+"</td>";
         tableHTML += "</tr>";
     });
-    tableHTML += "</tbody><tfoot><tr><td style='text-align:center' colspan="+(th.length+1)+"><strong>{% trans 'Total' %}</strong></td><td><input id='ttls' style='width:30px;text-align:center' readonly type='text' value=''> / "+(th.length)*(tddataobj.length)+"</td></tr></tfoot>";
+    tableHTML += "</tbody><tfoot><tr><td style='text-align:center' colspan="+(th.length+1)+"><strong>{% trans 'Total' %}</strong></td><td><input id='ttls' style='width:30px;text-align:center' readonly type='text' value=''> / "+maxVal*(tddataobj.length)+"</td></tr></tfoot>";
     tableHTML += "</table>";
     tableHTML += '<button class="btn btn-primary" id="save-rubric-marks">{% trans "Save" %} {% trans "Result" %}</button>';
     $("#rubrics-vote").html(tableHTML);
@@ -554,14 +554,14 @@ $(document).ready(function(){
         var spanid = $(this).attr("id");
         TTS.forms.editanswerlist(spanid);
     });
-
-    $("a#sendnoticeboard").click(function(){
+    $("body").on("click","a#sendnoticeboard", function(event){
+        var assignedid = $("#assignedid").val();
         $.ajax({
             headers : {
                 'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
             },
             type:'POST',
-            url : '/api/admin/billboardresource/?resourceid='+resourceid+'&studentid='+studentid
+            url : '/api/admin/billboardresource/?assignedresourceid='+assignedid+'&studentid='+studentid
         }).done(function(msg) {
             if(msg = 'saved')
                 alert("Resource sent to Noticeboard");

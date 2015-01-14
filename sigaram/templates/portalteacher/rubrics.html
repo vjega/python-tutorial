@@ -64,27 +64,30 @@ TTS.forms = TTS.forms || {}
 TTS.forms.renderrubricsinfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
-              "class": "text-center"  
+              "class": "text-center",
+              "data" : "slno"  
             },
-            { "title": "{% trans "Title" %}"},
-            { "title": "{% trans "Detail" %}"},
-            { "title": "{% trans "Teacher" %}" },
-            { "title": "{% trans "Date Time" %}"}, 
+            { "title": "{% trans "Title" %}", "data" : "title"},
+            { "title": "{% trans "Detail" %}", "data" : "detail"},
+            { "title": "{% trans "Teacher" %}", "data" : "teacher"},
+            { "title": "{% trans "Date Time" %}", "data" : "time"}, 
             { "title": "{% trans "Delete" %}",
-              "class": "text-center"  
+              "class": "text-center", 
+              "data" : "delete"  
             }, 
         ];
     var dataset = [];
     var count = 0
     for(var i in data){
-        var t = [];
-        t.push(++count);
-        t.push(data[i].title);
-        t.push(data[i].description);
-        t.push(data[i].teacher);
-        t.push(data[i].ts);
-        t.push("<i class='tts-delete fa fa-trash fa-lg'></i>");
-        dataset.push(t);
+        dataset.push({
+            "DT_RowId" : data[i].slno,
+            "slno" : ++count,
+            "title": data[i].title,
+            "detail": data[i].description,
+            "teacher": data[i].teacher,
+            "time" : data[i].ts,
+            "delete" : "<i class='tts-delete fa fa-trash fa-lg'></i>"
+        });
     }
 
     $('#rubrics-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
@@ -93,6 +96,21 @@ TTS.forms.renderrubricsinfo = function(data){
     });
 
 };
+
+TTS.forms.delrubric = function(id) {
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'DELETE',
+        url : '/api/admin/rubricsheader/'+id
+    }).done(function( msg ) {
+        alert("Rubric deleted successfully");
+        window.location.reload();
+    }).error(function(msg){
+        alert("Something Bad Happended");
+    });
+}
 
 $(document).ready(function(){
     TTS.utils.ajaxloaderstart();
@@ -105,16 +123,21 @@ $(document).ready(function(){
     });
    
     $('#rubrics-main-tbl').on('click', '.tts-delete', function(e){
-        if (!window.confirm("Do you want to delete this record?")) {
-            return false;
+        e.stopPropagation();
+        if (window.confirm("Do you want to delete this record?")) {
+            delid = $(this).parent().parent().prop("id");
+            TTS.forms.delrubric(delid);
         }
-        alert("Record Deleted")
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         //TTS.forms.addrubrics();
         window.location = 'rubric_edit';
 
     });
+
+    $("#rubrics-main-tbl").on("click", "tbody tr", function(){
+        window.location = "/teacher/rubric_view?rubricid="+$(this).prop('id');
+    })
    
 });
 

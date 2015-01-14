@@ -69,7 +69,7 @@ TTS.forms = TTS.forms || {};
 TTS.forms.addexam = function(form, data) {
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'POST',
         data: data,
@@ -169,11 +169,11 @@ TTS.forms.delannouncement = function(id) {
     //console.log(id);
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'DELETE',
         url : '/api/admin/bulletinboardlist/'+id
-    }).done(function( msg ) {
+    }).done(function(dialogItself,msg ) {
         dialogItself.close();
         location.reload();
     }).error(function(msg){
@@ -203,7 +203,7 @@ $('#admin-main-tbl').on('click', '.tts-delete', function(e){
             return false;
         }
         //console.log($(this).parent().parent().prop("id"))
-        //TTS.forms.delannouncement($(this).parent().parent().prop("id"));
+        TTS.forms.delannouncement($(this).parent().parent().prop("id"));
         window.location.reload();
     
     });

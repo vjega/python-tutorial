@@ -1,0 +1,183 @@
+{% extends 'portalteacher/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block topcontent %}
+<div class="row">
+    <div class="form-group" class="col-sm-3">
+        <div class="col-sm-1">
+           
+        </div>
+    </div>
+</div>
+
+{% endblock topcontent %}
+{% block botcontent %}
+
+<div class="col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% trans "Rubrics" %} 
+        </div>
+        <div style="padding:10px">
+        <!-- /.panel-heading -->
+            <div class="gentable" id ="rub_mtx_head rub_mtx_rows">
+                {% crispy form %}
+            </div>
+            <div class="bs-docs-grid">
+                <div class="row show-grid col-lg-12">
+                    <div class="col-lg-12" id="rubrics-vote">
+
+                    </div>
+                    <input type="hidden" id="max-mark">
+                </div>
+            </div>
+            <table class="form-horizontal">
+                <tr height="65">
+                    <td>
+                        <a class="btn btn-primary" href="javascript: window.history.go(-1)">
+                            Go back to list
+                        </a>
+                    </td>
+                </tr>
+            </table><br />
+        </div>  
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+                <!-- /.col-lg-12 -->
+{% endblock botcontent%}
+
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<style>
+    #addrec:hover, .tts-edit:hover, .tts-delete:hover, #admin-main-tbl tbody tr:hover {
+        cursor: pointer;
+    }
+    table#rubrics-table thead tr th,
+    table#rubrics-table tfoot tr td{
+        text-align: center;
+        height: 45px;
+        background-color: #337ab7;
+        color: #ffffff;
+        font-weight: bold;
+    }
+    table#rubrics-table tbody tr td:nth-child(1) { 
+        background-color: #d3d3d3;
+        font-weight: bold;
+    }       
+</style>
+{% endblock morecss %}
+
+{% block morescript %}
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}">
+
+</script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+{% endblock morescript %}
+
+{% block scriptcontent %}
+<script id="rubrics-form" type="text/x-jsrender">
+
+</script>
+<style>
+    td, th{
+        color: #000;
+    }
+    .tblhead {
+        border:1px solid grey; background-color:#ccc!important;color:#000;
+    }
+    .tblbody {
+        border:0 none;background-color:#fff!importan;color:#000;
+    }
+    .fulltext{
+        border:none;
+    }
+    .headtext{
+        width:90%;
+        background-color:#d0d0d0;
+    }
+    .bodytext{
+        width:98%;
+        background-color:#fff;
+    }
+    .note-editable{
+        height: 80px;
+    }
+    .form-group{
+        height: 35px;
+    }
+</style>
+
+<script>
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}
+
+TTS.forms.renderrubrictableinfo = function(data){
+    var rubricdata = data.rh;
+    var tableHTML = '';
+    var thdata = data.rmh[0];
+    var th = thdata.split('~~');
+    var tddataobj = data.rmb;
+    var td = '';
+    var answercheck = '';
+    var rubchecks = {};
+    var thnumber = [];
+    var maxVal = '';
+    $.each(th, function(idx, value){
+        thnumber[idx] = value.match(/\d+/)[0];
+    });
+    maxVal = Math.max.apply(Math,thnumber);
+
+    $("#id_Title").val(rubricdata[1]);
+    $("#id_Detail").val(rubricdata[2]);
+    $(".summernote").code(rubricdata[3]);
+
+    tableHTML += "<table id='rubrics-table' class='table table-striped table-bordered table-hover'>";
+    tableHTML += "<thead><tr><th>&nbsp;</th>";
+    $("#max-mark").val(th.length);
+    $(th).each(function(k,v){
+        tableHTML += "<th>"+v+"</th>";
+    });
+
+    tableHTML += "<th>{% trans 'Total' %}</th></tr></thead>";
+    tableHTML += "<tbody>";
+    $(tddataobj).each(function(x,tddata){
+        td = tddata[0].split('~~');
+        tableHTML += "<tr>";
+        $(td).each(function(i,j){
+            /*if(i > 0){
+                answercheck="<input class='chkrub mark-"+x+"' id='m"+x+"-"+i+"' name='mark-"+x+"' type='radio'>";
+            }else{
+                answercheck="";
+            }*/
+            tableHTML += "<td>"+answercheck+" "+j+"</td>";
+        });
+        tableHTML += "<td><input class='totals' id='tmark-"+x+"' style='width:30px;text-align:center' readonly type='text' value=''> / "+maxVal+"</td>";
+        tableHTML += "</tr>";
+    });
+    tableHTML += "</tbody><tfoot><tr><td style='text-align:center' colspan="+(th.length+1)+"><strong>{% trans 'Total' %}</strong></td><td><input id='ttls' style='width:30px;text-align:center' readonly type='text' value=''> / "+maxVal*(tddataobj.length)+"</td></tr></tfoot>";
+    tableHTML += "</table>";
+    $("#rubrics-vote").html(tableHTML);
+}
+
+$(document).ready(function(){
+    var rubricid = TTS.utils.getUrlParameter('rubricid');
+    $('.summernote').summernote();
+    $.ajax({
+        "url":"/api/admin/rubrics/"+rubricid,
+        "type":"GET"
+    }).done(function(data){
+        TTS.forms.renderrubrictableinfo(data);
+    });
+});
+
+</script>
+{% endblock scriptcontent %}

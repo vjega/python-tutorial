@@ -70,8 +70,9 @@ class ChapterinfoSerializer(serializers.HyperlinkedModelSerializer):
 class ClassroominfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Classroominfo
-        fields = ('classroomid',  'assessmentid','resourceid',
-                  'writtenworkid')
+        fields = ('classroomid', 'resourceid', 'resourcetype', 'studentid', 
+                  'rating', 'ratingcount', 'votescount', 'lastvotedby', 
+                  'postedby', 'posteddate', 'schoolid', 'classid')
         depth = 2
 
 class AdminschoolSerializer(serializers.HyperlinkedModelSerializer):
@@ -134,7 +135,7 @@ class BulletinboardlistinfoSerializer(serializers.HyperlinkedModelSerializer):
 class BillboardSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Billboardinfo
-        fields = ('billboardid','assessmentid','resourceid','writtenworkid',
+        fields = ('billboardid','resourceid','resourcetype',
                   'studentid','votescount','lastvotedby','lastvoteddate','postedby',
                                                                         'posteddate')
 

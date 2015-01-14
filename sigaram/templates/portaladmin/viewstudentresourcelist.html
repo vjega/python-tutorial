@@ -28,7 +28,7 @@
                 <div id="resource-description"></div><br />
                 </table>
                 <div class="col-lg-12" id="view-resource">
-                     <a href="#" id="view-resource">View</a>
+                     <a href="#" id="view-resource">{% trans 'View' %}</a>
                 </div>
             </div>
             <!-- /.table-responsive -->
@@ -72,16 +72,18 @@ TTS.forms.renderteacherresourceinfo = function(data){
 
     $("#resource-title").html(data.resourcetitle);
     $("#resource-description").html(data.resourcetitle);
-    if (data.resourcetype == "video") {
-        window.open("/static/"+data.videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
-    } 
-    if (data.resourcetype == "audio") {
-        $("#view-resource").show();
-        window.open("/static/"+data.audiourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
-    }
-    if (data.resourcetype === "text") {
-        $("#view-resource").hide();
-    }
+    $("#view-resource").click(function(){
+        if (data.resourcetype == "video") {
+            window.open("/static/"+data.videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
+        } 
+        if (data.resourcetype == "audio") {
+            $("#view-resource").show();
+            window.open("/static/"+data.audiourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
+        }
+        if (data.resourcetype === "text") {
+            $("#view-resource").hide();
+        }
+    });
 };
 /*
 function openwindow(videourl) {
@@ -103,23 +105,13 @@ function getUrlParameter(sParam)
 }
 
 $(document).ready(function(){
-    /*var resourceid = getUrlParameter('resourceid');
+    var resourceid = getUrlParameter('resourceid');
     $.ajax({
         "url":"/api/admin/resourceinfo/"+resourceid+"/?format=json",
         "type":"GET"
     }).done(function(data){
         //console.log(data);
         TTS.forms.renderteacherresourceinfo(data);
-    });*/
-    $("#view-resource").click(function(){
-        var resourceid = getUrlParameter('resourceid');
-        $.ajax({
-            "url":"/api/admin/resourceinfo/"+resourceid+"/?format=json",
-            "type":"GET"
-        }).done(function(data){
-            //console.log(data);
-            TTS.forms.renderteacherresourceinfo(data);
-        });
     });
 });
 

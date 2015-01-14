@@ -51,13 +51,20 @@
     <div class="form-group">
         <textarea class="summernote"></textarea>
     </div>
-    <div class="form-group">
-       <button class="btn btn-warning" id="connect-rubrics"><i class="flaticon-a10"></i> {% trans "Connect" %} {% trans "Rubrics" %}</button>
-    </div>
-    <div class="form-group" id="set_rubric_text">
-            
-    </div>
+    <div class="row">
 
+        <div class="form-group col-lg-2">
+           <button class="btn btn-warning" id="connect-rubrics"><i class="flaticon-a10"></i> {% trans "Connect" %} {% trans "Rubrics" %}</button>
+        </div>
+
+        <div class="bs-docs-grid col-lg-10">
+            <div class="row show-grid" style="margin-top:0px">
+                <div class="col-lg-12" style="display:none" id="set_rubric_text">
+                </div>
+            </div>
+        </div>
+
+    </div>
     <div class="row">
 <div class="col-lg-8">
     <div class="panel panel-default">
@@ -215,20 +222,21 @@ TTS.forms.rubricslist = function() {
                     return false;
                 }
                 var rid = $(".rubric_id:checked").prop("id");
-                var assgtext = $(".rubric_id:checked").prop("name");
+                var assgtext = $(".rubric_id:checked").prop("value");
                 $("#set_rubric_id").val(rid);
+                $("#set_rubric_text").show();
                 $("#set_rubric_text").html(assgtext);
                 dialogRef.close();
             });
 
         },
-        buttons: [{
+        buttons: [/*{
             label: '{% trans "Add" %}',
             cssClass: 'btn-primary',
             onshown: function(msg){
 
             }
-            },{
+            },*/{
             label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
@@ -376,7 +384,7 @@ TTS.forms.rubricinfo = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.id = "<input type='radio' class='rubric_id' name='"+data[i].title+"' id='"+data[i].slno+"' />";
+        t.id = "<input type='radio' class='rubric_id' name='chkrubrics' value='"+data[i].title+"' id='"+data[i].slno+"' />";
         t.title = data[i].title;
         t.teacher = data[i].teacher;
         dataset.push(t);
@@ -401,7 +409,7 @@ TTS.forms.renderresourceinfo = function(data){
     for(var i in data){
         var t = [];
         t.push("<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].resourceid+"' value='"+data[i].resourceid+"' />");
-        t.push("<p class='col-sm-3 pull-left'><img src=http://10tsigaram.com/dbinterface/"+data[i].thumbnailurl+"></p> " + data[i].resourcetitle);
+        t.push("<p class='col-sm-3 pull-left'><!--img src=http://10tsigaram.com/dbinterface/"+data[i].thumbnailurl+"--></p> " + data[i].resourcetitle);
         dataset.push(t);
     }
 

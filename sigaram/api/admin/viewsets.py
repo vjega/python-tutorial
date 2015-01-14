@@ -232,17 +232,24 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.TeacherresourceinfoSerializer
 
     def list(self, request):
+        l =  request.user.groups.values_list('name',flat=True)[0]
         # schoolid   = request.GET.get('schoolid')
         # classid   = request.GET.get('classid')
         # section   = request.GET.get('section')
         # chapterid = request.GET.get('chapterid')
         # categoryid = request.GET.get('resourcecategory')
-
+        joincond=''
+        fieldcond=''
         schoolid    = ''
         classid     = ''
         section     = ''
         chapterid   = ''
         categoryid  = ''
+        if l == 'Admin' :
+            fieldcond="ci.shortname as levelname"
+            joincond="INNER JOIN classinfo ci ON ci.classid=tri.classid"
+        else :
+            fieldcond="'' as levelname"
 
         if request.GET.get('schoolid'):
             schoolid = "AND tri.schoolid='%s'" % (request.GET.get('schoolid'))
@@ -260,10 +267,10 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         SELECT  tri.teacherresourceid,
                 tri.resourcetitle,
                 tri.createddate,
-                ci.shortname as levelname,
+                %s,
                 tri.resourcetype
         FROM teacherresourceinfo tri
-        INNER JOIN classinfo ci ON ci.classid=tri.classid
+        %s
         WHERE isdeleted=0
         %s 
         %s 
@@ -271,7 +278,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         %s 
         %s
         ORDER BY tri.createddate DESC
-        """ % (schoolid,classid,section,chapterid,categoryid)
+        """ % (fieldcond,joincond,schoolid,classid,section,chapterid,categoryid)
         cursor = connection.cursor()
         # print sql
 
@@ -350,19 +357,17 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         ri = models.Resourceinfo()
-        #print request.DATA, type(request.DATA)
+        print request.DATA, type(request.DATA)
         ridata =  json.loads(dict(request.DATA).keys()[0])
-        #print ridata
         category = ridata.get('categoryid')
         if category == 'text' :
             categoryid = 0
-        elif category == 'audio':
-            categoryid = 1
-        elif category == 'video':
-            category = 2
         elif category == 'image':
-            category = 3
-
+            categoryid = 1
+        # elif category == 'audio':
+        #     categoryid = 2
+        elif category == 'video':
+            categoryid = 2
 
         ri.categoryid = categoryid
         ri.classid = int(ridata.get('classid'))
@@ -501,15 +506,17 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
                 AND classid=%s
                 AND section='%s' 
             GROUP BY chapterid'''%(categoryid, classid, sectionid)
+            # print sql;
             cursor = connection.cursor()
             cursor.execute(sql)
             cnt = cursor.fetchall()
-            # print serializer.data
             for i, d in enumerate(serializer.data):
+                serializer.data[i]['rescount']=0
                 for c in cnt:
                     if serializer.data[i]['chapterid'] == c[0]:
                         serializer.data[i]['rescount'] = c[1]
                         break
+            # print serializer.data
         return Response(serializer.data)
  
 class AdminclassinfoViewSet(viewsets.ModelViewSet): 
@@ -666,6 +673,7 @@ class AdminrubricsViewSet(viewsets.ModelViewSet):
         return Response('"msg":"update"')
 
     def destroy(self, request, pk=None):
+        models.RubricsHeader.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
 class AssignresourceinfoViewSet(viewsets.ModelViewSet):
@@ -903,7 +911,10 @@ class StudentAssignResource(viewsets.ModelViewSet):
                ari.answertext,
                ari.studentid,
                ari.isanswered,
-               ari.issaved
+               ari.issaved,
+               ari.rubric_id,
+               ari.rubric_marks,
+               ari.rubric_n_mark
         FROM assignresourceinfo ari
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         WHERE assignedid = %s
@@ -1190,6 +1201,7 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
                ari.isanswered,
                ari.issaved,
                ari.isbillboard,
+               ari.isclassroom,
                ari.rubric_marks,
                ari.rubric_n_mark,
                ari.answerurl
@@ -1269,15 +1281,21 @@ class Bulletinboardlist(viewsets.ModelViewSet):
 
     def create(self, request):
         data = json.loads(dict(request.DATA).keys()[0])
+
         #Saving annoucement
         bbi = models.Bulletinboardinfo()
         bbi.messagetitle = data.get('messagetitle')
         bbi.message = data.get('message')
-        bbi.attachmenturl = data.get('attachmenturl')
+        bbi.attachmenturl = data.get('attachmenturl',0)
         if data.get('cattype') == 'schools':
             bbi.schoolid = data.get('schoolid')
         else:
             bbi.schoolid = 0 #data.get('schoolid')
+        if data.get('cattype') == 'all_schools':
+            bbi.allschool = data.get('allschool')
+        else:
+            bbi.allschool = 0
+            bbi.schoolid = 0
         bbi.classid = data.get('classid',0)
         bbi.isrecord = data.get('isrecord',0)
         bbi.postedby = request.user.id
@@ -1286,6 +1304,20 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         bbiid = bbi.bulletinboardid
         #print "created id is %s"%bbi.bulletinboardid
         #saving annoument target
+        for rl in data.get('resourcelist'):
+            bmi = models.Bulletinmappinginfo()
+            bmi.bulletinboardid = bbiid
+            bmi.viewtype = 0    
+            bmi.postedby = request.user.id
+            bmi.userid = request.user.username
+            if data.get('cattype') == 'schools':
+                bmi.schoolid = data.get('schoolid')
+                bmi.classid = rl
+            else:
+                bmi.schoolid = 0
+                bmi.classid = 0
+            bmi.save()
+
         for rl in data.get('resourcelist'):
             bmi = models.Bulletinmappinginfo()
             bmi.bulletinboardid = bbiid
@@ -1305,7 +1337,22 @@ class Bulletinboardlist(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         queryset = models.Bulletinboardinfo.objects.filter(pk=pk)[0]
         serializer = adminserializers.BulletinboardlistinfoSerializer(queryset, many=False)
-        return Response(serializer.data)    
+        return Response(serializer.data)
+
+    def destroy(self, request, pk=None):
+        sql = """
+        DELETE FROM bulletinmappinginfo 
+        WHERE bulletinboardid=%s
+        """ %pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        sql = """
+        DELETE FROM bulletinboardinfo 
+        WHERE bulletinboardid=%s
+        """ %pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        return Response('"msg":"delete"')
 
 class BillboardViewSet(viewsets.ModelViewSet):
     queryset = models.Billboardinfo.objects.all()
@@ -1583,10 +1630,9 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
     def create(self, request):
         billboard = models.Billboardinfo()
         studentid  = request.GET.get('studentid');
-        resourceid = request.GET.get('resourceid');
-        billboard.assessmentid = 0
-        billboard.resourceid = resourceid
-        billboard.writtenworkid = 0
+        assignedresourceid = request.GET.get('assignedresourceid');
+        billboard.resourceid = assignedresourceid
+        billboard.resourcetype = 'ar'
         billboard.studentid = str(studentid)
         billboard.votescount = 0
         billboard.lastvotedby = 0
@@ -1597,8 +1643,7 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
         sql = '''
         UPDATE assignresourceinfo
             SET isbillboard = 1
-        WHERE studentid = '%s'
-            AND resourceid = '%s' ''' % (str(studentid), resourceid)
+        WHERE assignedid = '%s' ''' % (assignedresourceid)
 
         cursor = connection.cursor()
         cursor.execute(sql)        
@@ -1918,3 +1963,32 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
     def destroy(self, request, pk):
         models.Admininfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
+
+class ClassinfoViewSet(viewsets.ModelViewSet): 
+    queryset = models.Classroominfo.objects.all()
+    serializer_class = adminserializers.ClassroominfoSerializer
+
+    def create(self, request):
+        classroom = models.Classroominfo()
+        classroomdata =  json.loads(request.DATA.keys()[0])
+        classroom.resourceid            = classroomdata.get('assignedresourceid')
+        classroom.resourcetype          = 'ar'        
+        classroom.studentid             = str(classroomdata.get('studentid'))
+        classroom.rating                = 0
+        classroom.ratingcount           = 0
+        classroom.votescount            = 0
+        classroom.lastvotedby           = 0
+        classroom.postedby              = str(request.user.username)
+        classroom.schoolid              = request.session.get('stu_schoolid')
+        classroom.classid               = request.session.get('stu_classid')
+        classroom.posteddate            = time.strftime('%Y-%m-%d %H:%M:%S')
+        classroom.save()
+
+        sql = '''
+        UPDATE assignresourceinfo
+            SET isclassroom = 1
+        WHERE assignedid = '%s' ''' % (classroomdata.get('assignedresourceid'))
+        cursor = connection.cursor()
+        cursor.execute(sql)
+
+        return Response(request.DATA)
