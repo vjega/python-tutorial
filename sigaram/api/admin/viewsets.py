@@ -1337,7 +1337,22 @@ class Bulletinboardlist(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         queryset = models.Bulletinboardinfo.objects.filter(pk=pk)[0]
         serializer = adminserializers.BulletinboardlistinfoSerializer(queryset, many=False)
-        return Response(serializer.data)    
+        return Response(serializer.data)
+
+    def destroy(self, request, pk=None):
+        sql = """
+        DELETE FROM bulletinmappinginfo 
+        WHERE bulletinboardid=%s
+        """ %pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        sql = """
+        DELETE FROM bulletinboardinfo 
+        WHERE bulletinboardid=%s
+        """ %pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        return Response('"msg":"delete"')
 
 class BillboardViewSet(viewsets.ModelViewSet):
     queryset = models.Billboardinfo.objects.all()
