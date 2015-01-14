@@ -1350,6 +1350,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         DELETE FROM bulletinboardinfo 
         WHERE bulletinboardid=%s
         """ %pk
+        #print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         return Response('"msg":"delete"')

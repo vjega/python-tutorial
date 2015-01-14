@@ -173,8 +173,7 @@ TTS.forms.delannouncement = function(id) {
         },
         type:'DELETE',
         url : '/api/admin/bulletinboardlist/'+id
-    }).done(function(dialogItself,msg ) {
-        dialogItself.close();
+    }).done(function(msg ) {
         location.reload();
     }).error(function(msg){
         alert("Something Bad Happended");
@@ -203,9 +202,7 @@ $('#admin-main-tbl').on('click', '.tts-delete', function(e){
             return false;
         }
         //console.log($(this).parent().parent().prop("id"))
-        TTS.forms.delannouncement($(this).parent().parent().prop("id"));
-        window.location.reload();
-    
+        TTS.forms.delannouncement($(this).parent().parent().prop("id"));    
 });
 
 </script>
