@@ -44,6 +44,8 @@ router.register(r'audioupload',         	viewsets.AudioinfoViewSet)
 router.register(r'adminresources',         	viewsets.AdminresourceViewSet)
 router.register(r'classinfo',        		viewsets.ClassinfoViewSet)
 router.register(r'studentwrittenwork', 		viewsets.StudentWrittenWork)
+router.register(r'studentassignwrittenwork',viewsets.StudentAssignWrittenWork)
+router.register(r'assignedwrittenworkstudents',viewsets.AssignedWrittenworkStudents)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

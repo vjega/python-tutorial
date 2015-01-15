@@ -4,7 +4,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Assignment" %}</h2>
+        <h2 class="page-header">{% trans "Written Work" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -85,7 +85,7 @@
                         </div>
                         <div class="col-lg-12">
                             <label class="col-lg-2">{% trans "Title" %}</label>
-                            <div class="col-lg-10" id="resource-title"></div>
+                            <div class="col-lg-10" id="writtenwork-title"></div>
                         </div>
                         <div class="col-lg-12">
                             <label class="col-lg-2">{% trans "Assigned" %} {% trans "Date" %} </label>
@@ -193,9 +193,9 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}   
 
 
-TTS.forms.renderassignedresourceinfo = function(data){
+TTS.forms.renderassignedwrittenworkinfo = function(data){
     $("#assignedid").val(data[0].id);
-    $("#resource-title").html(data[0].resourcetitle);
+    $("#writtenwork-title").html(data[0].writtenworktitle);
     $("#assigned-date").html(data[0].createddate);
     $("#answerd-date").html(data[0].answereddate);
     $("#student-name").html(data[0].firstname+" "+data[0].lastname);
@@ -208,7 +208,7 @@ TTS.forms.renderassignedresourceinfo = function(data){
     if(data[0].isclassroom == 0){
         $('#sendclassroomhtml').html('<a href="javascript:void(0)" id="sendclassroom" >{% trans "Send to Classroom" %}</a>');
     }else if(data[0].isclassroom == 1){
-        $('#sendclassroomhtml').html('{% trans "Resource already Sent to Classroom" %}');
+        $('#sendclassroomhtml').html('{% trans "Writtenwork already Sent to Classroom" %}');
     }
 
     if(data[0].rubric_id){
@@ -456,7 +456,7 @@ TTS.forms.editanswer = function() {
                     },
                     type:'PUT',
                     data: data,
-                    url : '/api/admin/studentassignresource/'+assign_id
+                    url : '/api/admin/studentwrittenwork/'+assign_id
                 }).done(function(msg) {
                     //console.log(msg);
                     dialogItself.close();
@@ -505,16 +505,15 @@ TTS.forms.settotalmarks = function() {
 };
 
 $(document).ready(function(){
-    var resourceid = TTS.utils.getUrlParameter('resourceid');
+    var writtenwork = TTS.utils.getUrlParameter('writtenworkid');
     var studentid = TTS.utils.getUrlParameter('studentid');
     var assignedid = $("#assignedid").val();
 
     $.ajax({
-        "url":"/api/admin/assignedresourcestudents/"+resourceid+"/?studentid="+studentid+"&format=json",
+        "url":"/api/admin/assignedwrittenworkstudents/"+writtenwork+"/?studentid="+studentid+"&format=json",
         "type":"GET"
     }).done(function(data){
-        //console.log(data);
-        TTS.forms.renderassignedresourceinfo(data);
+       TTS.forms.renderassignedwrittenworkinfo(data);
     });
     
     $("#student-answer,#student-answer p").on("mouseup", function(event){
@@ -533,7 +532,7 @@ $(document).ready(function(){
         var crdata = {
             assignedid   : assignedid,
             studentid    : studentid,
-            assignedtype : 'ar'
+            assignedtype : 'aw'
         }
         $.ajax({
             headers : {
@@ -544,7 +543,7 @@ $(document).ready(function(){
             url : '/api/admin/classinfo/'
         }).done(function(msg) {
             if(msg = 'saved')
-                alert("Resource sent to classroom");
+                alert("Writtenwork sent to classroom");
             location.reload();
         });
     });

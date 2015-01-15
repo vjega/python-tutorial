@@ -308,3 +308,13 @@ def stickynoteslist(request):
 @switchlanguage
 def viewbulletinboard(request):
     return render(request, 'portalstudent/viewbulletinboard.html')
+
+@login_required
+@switchlanguage
+def viewassignwrittenwork(request):
+    return render(request, 'portalstudent/viewassignwrittenwork.html')
+
+@login_required
+@switchlanguage
+def viewassignwrittenworkanswer(request):
+    return render(request, 'portalstudent/viewassignwrittenworkanswer.html')
