@@ -5,7 +5,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Administrators" %}</h2>
+        <h2 class="page-header">{% trans "My works" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -14,8 +14,8 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans "Administrators" %} {% trans "List" %}
-            <span id="add" class="add">({% trans "Add" %})</span>
+            {% trans "My works" %} 
+            <span id="add" class="add"></span>
              <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
         </div>
         <!-- /.panel-heading -->
@@ -60,7 +60,7 @@
 {% block scriptcontent %}
 <script id="myresourcelist-form" type="text/x-jsrender">
     <div id="file-uploader">File Uploader Comes Here...</div> 
-    {% crispy adminform %}
+    {% crispy form %}
 </script>
 
 <script>
@@ -79,9 +79,12 @@ function getUrlParameter(sParam)
 } 
 window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
-TTS.section = getUrlParameter('section');
+TTS.folderid = getUrlParameter('folderid');
 /* ADMIN Crud Starts Here*/
 TTS.forms.addmyworks = function(form, data) {
+    data = JSON.parse(data)
+    data['folderid'] = TTS.folderid;
+    data = JSON.stringify(data)
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -116,7 +119,7 @@ TTS.forms.delmyworks = function(id) {
 
 TTS.forms.showmyworkform = function() {
     BootstrapDialog.show({
-        title: '{% trans "Add My Works" %}',
+        title: '{% trans "Add" %} {% trans "My works" %}',
         message: $($('#myresourcelist-form').render()),
         onshown: function(){
             TTS.forms.upload();
@@ -127,7 +130,7 @@ TTS.forms.showmyworkform = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-myresourcelist");
-                //console.log(data);
+                console.log(data);
                 TTS.forms.addmyworks(dialogItself, data); 
             }
             },{
@@ -167,11 +170,11 @@ TTS.forms.rendermywork = function(data){
     var count = 0
     for (var i in data) {
         var t = {};
-        t.DT_RowId = data[i].adminid;
+        t.DT_RowId = data[i].resourceid;
         t.slno = ++count;
-        t.Title = data[i].firstname + " "+data[i].lastname;
-        t.Date = data[i].emailid;
-        t.Type = data[i].emailid;
+        t.Title = data[i].resourcetitle;
+        t.Date = data[i].createddate;
+        t.Type = data[i].resourcetype;
         t.delete = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);
     }
@@ -211,7 +214,7 @@ TTS.forms.upload = function(elm) {
 $(document).ready(function(){
     TTS.utils.ajaxloaderstart();
     $.ajax({
-        "url":"/api/admin/adminresources/?format=json",
+        "url":"/api/admin/adminresources/?folderid="+TTS.folderid+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.rendermywork(data);

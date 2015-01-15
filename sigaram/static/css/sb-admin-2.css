@@ -563,3 +563,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', end
 a{
     text-decoration: none !important;
 }
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
