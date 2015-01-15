@@ -281,15 +281,22 @@ class Assignwrittenworkinfo(models.Model):
     studentid = models.CharField(max_length=500)
     assigntext = models.TextField()
     issaved = models.IntegerField()
-    ispublished = models.IntegerField()
+    isanswered = models.IntegerField()
     originaltext = models.TextField(db_column='originalText')  # Field name made lowercase.
-    answer = models.TextField(blank=True)
+    answertext = models.TextField(blank=True)
     answerrating = models.IntegerField()
     isbillboard = models.IntegerField()
     isclassroom = models.IntegerField()
     assignedby = models.CharField(max_length=500)
+    rubric_id = models.IntegerField()
     assigneddate = models.DateTimeField()
     publisheddate = models.DateTimeField()
+    answerurl = models.TextField()
+    isrecord = models.IntegerField()
+    replyformat = models.CharField(max_length=100)
+    answereddate = models.DateTimeField()
+    rubric_marks = models.CharField(max_length=100)
+    rubric_n_mark = models.CharField(max_length=100)
 
     class Meta:
         managed = False

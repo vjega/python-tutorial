@@ -3,9 +3,7 @@
 {% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html lang="en" >
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -48,7 +46,6 @@
 </head>
 
 <body class="">
-
     <div id="wrapper" class="">
         <!-- user menu top -->
         <div class="navbar navbar-default navbar-fixed-top purple-blue">
@@ -65,7 +62,7 @@
                             <li>
                                 <a href="">
                                     <i class="fa fa-user"></i>
-                                    Welcome {{ user.get_username }} [Admin]
+                                    Welcome {{ user.get_full_name|default:user.username }} [Student]
                                 </a>
                             </li>
                             <li>

@@ -114,9 +114,8 @@ class TeacherViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        print "Hi"
+        # print "Hi"
         """
-        print request.DATA
         teacher = models.Teacherinfo.objects.get(pk=pk)
         teacherdata =  json.loads(request.DATA.keys()[0])
         teacher.username = teacherdata.get('username')
@@ -132,7 +131,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def partial_update(self, request, pk=None):
-        print "Hi"
+        # print "Hi"
         pass
 
     def retrieve(self, request, pk=None):
@@ -357,7 +356,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         ri = models.Resourceinfo()
-        print request.DATA, type(request.DATA)
+        # print request.DATA, type(request.DATA)
         ridata =  json.loads(dict(request.DATA).keys()[0])
         category = ridata.get('categoryid')
         if category == 'text' :
@@ -431,14 +430,24 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
         result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
         return Response(result)
 
-    def create(self, request):    
+    def create(self, request):
         data = json.loads(dict(request.DATA).keys()[0]);
-        students = data.get('students');
+
+        students = data.get('students')
         title = data.get('title')
-        note = data.get('note');
+        note = data.get('note')
         schoolid = request.session.get('schoolid')
         classid = request.session.get('classid')
-        attachmenturl = data.get('attachmenturl')
+
+        if data.get('rubricid'):
+            rubric_id = data.get('rubricid')
+        else:
+            rubric_id = 0
+
+        if data.get('attachmenturl'):
+            attachmenturl = data.get('attachmenturl')
+        else:
+            attachmenturl = 0
 
         writtenwork = models.Writtenworkinfo()
         writtenwork.writtenworktitle= title
@@ -448,6 +457,7 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
         writtenwork.classid         = classid
         writtenwork.isassigned      = 0
         writtenwork.isdeleted       = 0
+        writtenwork.answereddate    = '1910-01-01'
         writtenwork.createdby       = str(request.user.username)
         writtenwork.createddate     = time.strftime('%Y-%m-%d %H:%M:%S')
         writtenwork.save()
@@ -465,9 +475,12 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
             awwi.answerrating = 0
             awwi.isbillboard = 0
             awwi.isclassroom = 0
+            awwi.rubric_id = rubric_id
+            awwi.isanswered = 0
+            awwi.answereddate = '1910-01-01'
             awwi.assignedby = str(request.user.username)
-            awwi.assigneddate = '2015-01-01 00:00:00'
-            awwi.publisheddate = '2015-01-01 00:00:00' #time.strftime('%Y-%m-%d %H:%M:%S')
+            awwi.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+            awwi.publisheddate = time.strftime('%Y-%m-%d %H:%M:%S')
             awwi.save()
         
         return Response(request.DATA)
@@ -519,49 +532,6 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             # print serializer.data
         return Response(serializer.data)
  
-class AdminclassinfoViewSet(viewsets.ModelViewSet): 
-    queryset = models.Classroominfo.objects.all()
-    serializer_class = adminserializers.ClassroominfoSerializer
-
-    def list(self, request):
-        sql = """
-        SELECT DISTINCT 
-           cri.classroomid,
-           cri.assessmentid, 
-           cri.resourceid,
-           -- al.assessmenttype,
-           -- al.assessmenttitle,
-           -- ri.resourcetype,
-           -- ri.resourcetitle,
-           -- wwi.writtenworktitle,
-           cri.writtenworkid, 
-           -- si.firstname,
-           -- si.imageurl,
-           date(cri.posteddate) as posteddate,
-           cri.studentid
-        FROM classroominfo cri
-        /*
-        -- LEFT OUTER JOIN assignassessmentinfo aai ON aai.assessmentid = cri.assessmentid 
-                        -- AND aai.studentid = cri.studentid 
-        -- LEFT OUTER JOIN assessmentlist al ON al.assessmentid = cri.assessmentid 
-        -- LEFT OUTER JOIN assignresourceinfo ari  ON ari.resourceid = cri.resourceid 
-                        -- AND ari.studentid = cri.studentid 
-        -- LEFT OUTER JOIN resourceinfo ri ON ri.resourceid = cri.resourceid
-        -- LEFT OUTER JOIN assignwrittenworkinfo awwi ON awwi.writtenworkid = cri.writtenworkid
-        -- LEFT OUTER JOIN writtenworkinfo wwi ON wwi.writtenworkid = cri.writtenworkid
-        -- LEFT OUTER JOIN logininfo li ON li.loginid = cri.studentid
-        -- LEFT OUTER JOIN studentinfo si ON si.username = li.username
-        WHERE ( ari.isclassroom =1 OR 
-                 aai.isclassroom =1 OR 
-                awwi.isclassroom=1 ) 
-        */
-        ORDER BY cri.classroomid DESC
-        """
-        queryset = models.Classroominfo.objects.raw(sql)
-        serializer_class = adminserializers.ClassroominfoSerializer
-        serializer = adminserializers.ClassroominfoSerializer(queryset, many=True)        
-        return Response({"test":"test"})
-
 class AdminschoolViewSet(viewsets.ModelViewSet):
 
     queryset = models.Schoolinfo.objects.all().order_by('schoolname')
@@ -1941,11 +1911,33 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
     queryset = models.AdminResources.objects.filter(isdeleted=0).order_by('-createddate')
     serializer_class = adminserializers.AdminresourceSerializer
 
+    def list(self, request):
+        print request.GET.get('folderid');
+        sql = '''
+        SELECT  resource_folder_id,
+                resourcetype,
+                resourcetitle,
+                resourcedescription,
+                fileurl,
+                isdeleted,
+                createddate
+        FROM admin_resources 
+        WHERE resource_folder_id=%s
+        '''  % (request.GET.get('folderid'))
+        # print sql;
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
     def create(self, request):
-        # print request;
         admin = models.AdminResources()
         admindata =  json.loads(request.DATA.keys()[0])
-        print admindata;
+        # print admindata;
         admin.resourcetype = admindata.get('resourcetype')
         admin.resourcetitle = admindata.get('resourcetitle')
         admin.resourcedescription = admindata.get('resourcedescription')
@@ -1954,7 +1946,7 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
         admin.audiourl = 0
         admin.videourl = 0
         admin.isdeleted = 0
-        admin.resource_folder_id = request.GET.get('folderid')
+        admin.resource_folder_id = admindata.get('folderid')
         admin.fileurl = admindata.get('fileurl')
         admin.createdby = request.user.id
         admin.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -1972,11 +1964,43 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Classroominfo.objects.all()
     serializer_class = adminserializers.ClassroominfoSerializer
 
+    def list(self, request):
+        l =  request.user.groups.values_list('name',flat=True)[0]
+        if l == 'Admin':
+            wherecond = ""
+        else:
+            wherecond = "cri.schoolid='%s' AND cri.classid = '%s'"%(request.session.get('schoolid'),
+                request.session.get('classid'))
+
+        sql = '''
+        SELECT  cri.resourceid,
+                cri.resourcetype,
+                cri.studentid,
+                ri.originaltext,
+                ri.resourcetitle,
+                si.firstname,
+                cri.posteddate
+        FROM classroominfo cri
+        INNER JOIN assignresourceinfo ari ON ari.assignedid=cri.resourceid
+        INNER JOIN resourceinfo ri ON ri.resourceid=ari.resourceid
+        INNER JOIN studentinfo si ON si.username=cri.studentid
+        %s
+        '''%wherecond 
+        print sql;       
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
     def create(self, request):
         classroom = models.Classroominfo()
         classroomdata =  json.loads(request.DATA.keys()[0])
-        classroom.resourceid            = classroomdata.get('assignedresourceid')
-        classroom.resourcetype          = 'ar'        
+        classroom.resourceid            = classroomdata.get('assignedid')
+        classroom.resourcetype          = str(classroomdata.get('assignedtype'))
         classroom.studentid             = str(classroomdata.get('studentid'))
         classroom.rating                = 0
         classroom.ratingcount           = 0
@@ -1988,11 +2012,372 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
         classroom.posteddate            = time.strftime('%Y-%m-%d %H:%M:%S')
         classroom.save()
 
-        sql = '''
-        UPDATE assignresourceinfo
-            SET isclassroom = 1
-        WHERE assignedid = '%s' ''' % (classroomdata.get('assignedresourceid'))
+        if classroomdata.get('assignedtype') == 'ar':
+            sql = '''
+            UPDATE assignresourceinfo
+                SET isclassroom = 1
+            WHERE assignedid = '%s' ''' % (classroomdata.get('assignedid'))
+
+        if classroomdata.get('assignedtype') == 'aw':
+            sql = '''
+            UPDATE assignwrittenworkinfo
+                SET isclassroom = 1
+            WHERE assignwrittenworkid = '%s' ''' % (classroomdata.get('assignedid'))
+
         cursor = connection.cursor()
         cursor.execute(sql)
 
         return Response(request.DATA)
+
+
+class StudentWrittenWork(viewsets.ModelViewSet):
+    queryset = models.Assignwrittenworkinfo.objects.all()
+    #serializer_class = adminserializers.MindmapSerializer
+
+    def update(self, request, pk=None):
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        
+        awwi = models.Assignwrittenworkinfo.objects.get(pk=pk)
+        
+        awwi.answertext = data.get('answertext')
+
+        if data.get('originaltext'):
+            awwi.originaltext = data.get('originaltext')
+
+        if data.get('answerurl'):
+            awwi.answerurl = data.get('answerurl')
+            awwi.isrecord = 1
+
+        if data.get('isanswered'):
+            awwi.isanswered = data.get('isanswered')
+            awwi.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
+
+        if data.get('issaved'):
+            awwi.issaved = data.get('issaved')
+        
+        print awwi
+
+        awwi.save()
+
+        assignedid  = pk;
+        spanid      = data.get('spanid');
+        fulltext    = data.get('fulltext');
+        orig        = data.get('orig');
+        modified    = data.get('modified');
+        usertype    = data.get('type');
+        answertext  = data.get('answertext');
+
+        ar = models.Editingtext()
+        ar.editid       = int(assignedid)
+        ar.spanid       = str(spanid)
+        ar.previoustext = str(orig)
+        ar.edittext     = str(modified)
+        ar.typeofresource = 0
+        ar.isapproved   = 0
+        ar.isrejected   = 0
+        ar.editedby     = request.user.username
+        ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
+        ar.usertype     = int(usertype)
+
+        ar.save()
+
+        return Response({'msg':True})
+
+    def list(self, request):
+
+        datecond = ''
+        if request.GET.get('fdate') and request.GET.get('tdate'):
+            datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+                request.GET.get('tdate'))
+        sql = '''
+        SELECT awwi.assignwrittenworkid AS id,
+               awwi.isrecord,
+               awwi.answerurl,
+               wwi.writtenworkid,
+               wwi.writtenworktitle,
+               date(assigneddate) as createddate,
+               date(answereddate) as answereddate,
+               awwi.studentid,
+               awwi.isanswered,
+               awwi.issaved
+        FROM assignwrittenworkinfo awwi
+        INNER JOIN writtenworkinfo wwi on wwi.writtenworkid = awwi.writtenworkid 
+        WHERE awwi.studentid='%s'
+              %s
+        GROUP BY wwi.writtenworkid, awwi.answereddate
+        ORDER BY awwi.assignwrittenworkid DESC''' % (request.user.username, datecond)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+    def retrieve(self, request, pk=None):
+        sql = '''
+        SELECT assignedid AS id,
+               ri.resourceid,
+               ari.isrecord,
+               ari.answerurl,
+               ri.videourl,
+               resourcetitle,
+               date(assigneddate) as createddate,
+               resourcetype,
+               thumbnailurl,
+               ari.answertext,
+               ari.studentid,
+               ari.isanswered,
+               ari.issaved,
+               ari.rubric_id,
+               ari.rubric_marks,
+               ari.rubric_n_mark
+        FROM assignresourceinfo ari
+        INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
+        WHERE assignedid = %s
+        ''' % pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
+        #print result
+        return Response(result)
+
+    def create(self, request):
+        data = json.loads(dict(request.DATA).keys()[0]);
+        students = data.get('students');
+        resource = data.get('resource');
+        rubricid = data.get('rubricid');
+        assigntext = data.get('assigntext');
+       # print resource
+        #print students
+       # print resource, students
+        for r in resource:
+            for s in students:
+                ar = models.Assignresourceinfo()
+                ar.resourceid = int(r)
+                ar.studentid = str(s)
+                ar.assigntext = str(assigntext)
+                ar.isanswered = 0
+                ar.issaved = 0
+                ar.isrecord = 0
+                ar.answerrating = 0
+                ar.isbillboard = 0
+                ar.isclassroom = 0
+                ar.answereddate = '1910-01-01'
+                ar.assignedby = request.user.username
+                ar.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+                ar.isdelete = 0
+                ar.rubric_id = int(rubricid)
+                ar.old_edit = 0
+                ar.save()   
+        
+        return Response(request.DATA)
+
+
+class StudentAssignWrittenWork(viewsets.ModelViewSet):
+    queryset = models.Assignwrittenworkinfo.objects.all()
+    #serializer_class = adminserializers.MindmapSerializer
+
+    def update(self, request, pk=None):
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        
+        awwi = models.Assignwrittenworkinfo.objects.get(pk=pk)
+        
+        awwi.answertext = data.get('answertext')
+
+        if data.get('originaltext'):
+            awwi.originaltext = data.get('originaltext')
+
+        if data.get('answerurl'):
+            awwi.answerurl = data.get('answerurl')
+            awwi.isrecord = 1
+
+        if data.get('isanswered'):
+            awwi.isanswered = data.get('isanswered')
+            awwi.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
+
+        if data.get('issaved'):
+            awwi.issaved = data.get('issaved')
+        
+        awwi.save()
+
+        # assignedid  = pk;
+        
+        # spanid      = data.get('spanid');
+        # fulltext    = data.get('fulltext');
+        # orig        = data.get('orig');
+        # modified    = data.get('modified');
+        # usertype    = data.get('type');
+        # answertext  = data.get('answertext');
+
+        # ar = models.Editingtext()
+        # ar.editid       = int(assignedid)
+        # ar.spanid       = str(spanid)
+        # ar.previoustext = str(orig)
+        # ar.edittext     = str(modified)
+        # ar.typeofresource = 0
+        # ar.isapproved   = 0
+        # ar.isrejected   = 0
+        # ar.editedby     = request.user.username
+        # ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
+        # ar.usertype     = int(usertype)
+
+        # ar.save()
+
+        return Response({'msg':True})
+
+    def list(self, request):
+
+        datecond = ''
+        if request.GET.get('fdate') and request.GET.get('tdate'):
+            datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+                request.GET.get('tdate'))
+        sql = '''
+        SELECT assignedid AS id,
+               ari.isrecord,
+               ari.answerurl,
+               ri.resourceid,
+               resourcetitle,
+               date(assigneddate) as createddate,
+               date(answereddate) as answereddate,
+               resourcetype,
+               thumbnailurl,
+               ari.studentid,
+               ari.isanswered,
+               ari.issaved
+        FROM assignresourceinfo ari
+        INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
+        WHERE isdeleted=0
+              AND ari.studentid='%s'
+              AND ari.IsDelete=0
+              /*AND ri.categoryid=0*/
+              %s
+        GROUP BY ari.resourceid, ari.answereddate
+        ORDER BY ari.assignedid DESC''' % (request.user.username, datecond)
+        cursor = connection.cursor()
+        
+        #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
+        cursor.execute(sql)
+        #cursor.execute(sql, "3680")
+        #print dir(cursor)
+        #result = cursor.fetchall()
+        #print return [
+        
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+    def retrieve(self, request, pk=None):
+        sql = '''
+        SELECT awwi.assignwrittenworkid AS id,
+               awwi.isrecord,
+               awwi.answerurl,
+               wwi.writtenworkid,
+               wwi.writtenworktitle,
+               wwi.description,
+               wwi.writtenimage,
+               date(assigneddate) as createddate,
+               date(answereddate) as answereddate,
+               awwi.studentid,
+               awwi.isanswered,
+               awwi.issaved,
+               awwi.rubric_id,
+               awwi.rubric_marks,
+               awwi.answertext,
+               awwi.rubric_n_mark
+        FROM assignwrittenworkinfo awwi
+        INNER JOIN writtenworkinfo wwi on wwi.writtenworkid = awwi.writtenworkid 
+        WHERE awwi.assignwrittenworkid='%s'
+        ''' % pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
+        #print result
+        return Response(result)
+
+    def create(self, request):
+        data = json.loads(dict(request.DATA).keys()[0]);
+        students = data.get('students');
+        resource = data.get('resource');
+        rubricid = data.get('rubricid');
+        assigntext = data.get('assigntext');
+       # print resource
+        #print students
+       # print resource, students
+        for r in resource:
+            for s in students:
+                ar = models.Assignresourceinfo()
+                ar.resourceid = int(r)
+                ar.studentid = str(s)
+                ar.assigntext = str(assigntext)
+                ar.isanswered = 0
+                ar.issaved = 0
+                ar.isrecord = 0
+                ar.answerrating = 0
+                ar.isbillboard = 0
+                ar.isclassroom = 0
+                ar.answereddate = '1910-01-01'
+                ar.assignedby = request.user.username
+                ar.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+                ar.isdelete = 0
+                ar.rubric_id = int(rubricid)
+                ar.old_edit = 0
+                ar.save()   
+        
+        return Response(request.DATA)
+
+
+class AssignedWrittenworkStudents(viewsets.ModelViewSet):
+    queryset = models.Assignwrittenworkinfo.objects.all()
+    #serializer_class = adminserializers.MindmapSerializer
+
+    def retrieve(self, request, pk=None):
+        studentcond = ''
+        if request.GET.get('studentid'):
+            studentcond = "AND awwi.studentid = '" + request.GET.get('studentid') + "'"
+
+        sql = '''
+        SELECT 
+                awwi.assignwrittenworkid AS id,
+                awwi.isrecord,
+                awwi.answerurl,
+                wwi.writtenworkid,
+                wwi.writtenworktitle,
+                wwi.description,
+                wwi.writtenimage,
+                date(assigneddate) as createddate,
+                date(answereddate) as answereddate,
+                awwi.studentid,
+                awwi.isanswered,
+                awwi.issaved,
+                awwi.rubric_id,
+                awwi.rubric_marks,
+                awwi.answertext,
+                awwi.rubric_n_mark,
+                awwi.assignedby,
+                au.first_name as firstname,
+                au.last_name as lastname,
+                awwi.originaltext,
+                awwi.isbillboard,
+                awwi.isclassroom
+        FROM assignwrittenworkinfo awwi
+        INNER JOIN writtenworkinfo wwi on wwi.writtenworkid = awwi.writtenworkid 
+        INNER JOIN auth_user au on au.username = awwi.studentid 
+        WHERE awwi.writtenworkid=%s
+              %s
+        GROUP BY awwi.studentid
+        ORDER BY assigneddate DESC''' % (pk, studentcond)
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)

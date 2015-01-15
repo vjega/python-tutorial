@@ -12,8 +12,9 @@
 {% block botcontent %}
 <div class="col-lg-12">
     <div class="panel panel-default">
-        <div class="panel-heading ">
-            <div class='col-lg-5'>    
+            <div class="panel-heading">
+            <div class="row">
+                <div class='col-lg-5'>    
                     <div class="form-group">
                         <div class="col-lg-5">
                             <label>{% trans "From Date" %}: </label>
@@ -43,25 +44,44 @@
                         </div>
                     </div>
                 </div>
-               <button type="button" class="btn btn-primary">{% trans "Search" %}</button>
-        </div>
-
-
+                <div class='col-lg-2'>
+                    <div class="form-group">
+                        <button class="btn btn-success" id="date-search" type="button">{% trans "Search" %}</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <br />
 
         <!-- /.panel-heading -->
             <div role="tabpanel">
                   <!-- Nav tabs -->
                   <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#new" aria-controls="new" role="tab" data-toggle="tab">New</a></li>
-                    <li role="presentation"><a href="#saved" aria-controls="saved" role="tab" data-toggle="tab">Saved</a></li>
-                    <li role="presentation"><a href="#completed" aria-controls="completed" role="tab" data-toggle="tab">Completed</a></li>
+                    <li role="presentation" class="active"><a href="#new" aria-controls="new" role="tab" data-toggle="tab">{% trans "New" %}</a></li>
+                    <li role="presentation"><a href="#saved" aria-controls="saved" role="tab" data-toggle="tab">{% trans "Saved" %}</a></li>
+                    <li role="presentation"><a href="#completed" aria-controls="completed" role="tab" data-toggle="tab">{% trans "Completed" %}</a></li>
                   </ul>
 
                   <!-- Tab panes -->
                   <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="new">...</div>
-                    <div role="tabpanel" class="tab-pane" id="saved">...</div>
-                    <div role="tabpanel" class="tab-pane" id="completed">...</div>
+                    <div role="tabpanel" class="tab-pane active" id="new">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover writtenworklist" id="writtenwork-list-new">
+                            </table>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="saved">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover writtenworklist" id="writtenwork-list-saved">
+                            </table>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="completed">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover writtenworklist" id="writtenwork-list-answered">
+                            </table>
+                        </div>
+                    </div>
                   </div>
 
                 </div>
@@ -72,13 +92,15 @@
                 <!-- /.col-lg-12 -->
 {% endblock botcontent%}
 {% block morecss %}
+
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<link rel="stylesheet" href="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/master/build/css/bootstrap-datetimepicker.min.css">
 <style>
-    #addrec:hover, #admin-main-tbl tbody tr:hover{
+    .writtenworklist tbody tr:hover{
         cursor: pointer;
-    }
+    }    
 </style>
 {% endblock morecss %}
 
@@ -91,13 +113,129 @@
 </script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 <script>
+    window.TTS = window.TTS || {}
+    TTS.forms = TTS.forms || {}   
+
+    TTS.forms.assignedstudentwrittenwork = function(data){
+
+        var headers = [
+                { "title": "{% trans "Sl No." %}",
+                  "class": "text-center" ,
+                  "data" :"slno"
+                },
+                { "title": "{% trans "Title" %}",
+                  "data" :"title"
+                },
+                { "title": "{% trans "Date" %}",
+                  "data" :"date"
+                },
+                { "title": "{% trans "Type" %}" ,
+                  "data" :"type"
+                },
+            ];
+
+
+        var dataset_new = [];
+        var dataset_saved = [];
+        var dataset_answered = [];
+        var count_new = 0
+        var count_saved = 0
+        var count_answered = 0
+        for(var i in data){
+           
+            if (!data[i].issaved && !data[i].isanswered) {
+                var t = [];
+                t.DT_RowId = "vww_"+data[i].id;
+                t.slno=++count_new;
+                t.title=data[i].writtenworktitle;
+                t.date=data[i].createddate;
+                t.type='Image';
+                dataset_new.push(t);
+            }
+            if (data[i].issaved && !data[i].isanswered) {
+                var t = [];
+                t.DT_RowId = "vww_"+data[i].id;
+                t.slno=++count_saved;
+                t.title=data[i].writtenworktitle;
+                t.date=data[i].answereddate;
+                t.type='Image';
+                dataset_saved.push(t);
+            }
+            if (data[i].isanswered) {
+                var t = [];
+                t.DT_RowId = "vwa_"+data[i].writtenworkid+"_"+data[i].studentid;
+                t.slno=++count_answered;
+                t.title=data[i].writtenworktitle;
+                t.date=data[i].answereddate;
+                t.type='Image';
+                dataset_answered.push(t);
+            }
+        }
+
+        $('#writtenwork-list-new').dataTable({"language" : TTS.utils.datatable_ta,
+            "data":     dataset_new,
+            "columns":  headers
+        });
+        $('#writtenwork-list-saved').dataTable({"language" : TTS.utils.datatable_ta,
+            "data":     dataset_saved,
+            "columns":  headers
+        });
+        $('#writtenwork-list-answered').dataTable({"language" : TTS.utils.datatable_ta,
+            "data":     dataset_answered,
+            "columns":  headers
+        });
+    };
+
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
+    $.ajax({
+        "url":"/api/admin/studentwrittenwork/?format=json",
+        "type":"GET"
+    }).done(function(data){
+        console.log(data);
+        TTS.forms.assignedstudentwrittenwork(data);
+        TTS.utils.ajaxloaderstop();
+    });
+    $('.writtenworklist').on('click','tbody tr',function(e){
+        var x = this.id;
+        x = x.split("_");
+
+        if(x[0] == 'vww'){
+            window.location='viewassignwrittenwork?writtenworkid='+x[1];
+        }
+        
+        if(x[0] == 'vwa'){
+        window.location='viewassignwrittenworkanswer?writtenworkid='+x[1]+'&studentid='+x[2];
+        }
+    });
+    /*$("#fromdatepicker").on("dp.change",function (e) {
+       $('#todatepicker').data("DateTimePicker").setMinDate(e.date);
+    });
+    $("#todatepicker").on("dp.change",function (e) {
+       $('#fromdatepicker').data("DateTimePicker").setMaxDate(e.date);
+    });*/
+
+    $('#date-search').click(function(){
+        //alert($("#fromdatepicker input").val());
+        var fromdate = $("#fromdatepicker input").val();
+        var todate = $("#todatepicker input").val();
+        $.ajax({
+            "url":"/api/admin/studentassignresource/?fdate="+fromdate+"&tdate="+todate+"&format=json",
+            "type":"GET"
+        }).done(function(data){
+            TTS.forms.assignedstudentwrittenwork(data);
+        });
+    });
+
+});
+
+</script>
+<script>
     $('#fromdate,#tilldate').datetimepicker({
         pickTime: false
     });
-});
 </script>
 
 {% endblock morescript %}
-

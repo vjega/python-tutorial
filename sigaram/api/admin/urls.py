@@ -14,7 +14,6 @@ router.register(r'teacherresourcesinfo',  	viewsets.TeacherresourceinfoViewSet)
 router.register(r'resourceinfo',          	viewsets.ResourceinfoViewSet)
 router.register(r'writtenworkinfo',       	viewsets.WrittenworkinfoViewSet)
 router.register(r'chapterinfo',           	viewsets.ChapterinfoViewSet)
-router.register(r'adminclassinfo',        	viewsets.AdminclassinfoViewSet)
 router.register(r'adminschool',        	  	viewsets.AdminschoolViewSet)
 router.register(r'classlist',             	viewsets.AdminclasslistViewSet)
 router.register(r'assignresourceinfo',    	viewsets.AssignresourceinfoViewSet)
@@ -43,6 +42,10 @@ router.register(r'auth_user',         		viewsets.AuthuserViewSet)
 router.register(r'audioupload',         	viewsets.AudioinfoViewSet)
 router.register(r'adminresources',         	viewsets.AdminresourceViewSet)
 router.register(r'classinfo',        		viewsets.ClassinfoViewSet)
+router.register(r'studentwrittenwork', 		viewsets.StudentWrittenWork)
+router.register(r'studentassignwrittenwork',viewsets.StudentAssignWrittenWork)
+router.register(r'assignedwrittenworkstudents',viewsets.AssignedWrittenworkStudents)
+
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
