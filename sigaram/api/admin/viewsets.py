@@ -1943,7 +1943,6 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.AdminresourceSerializer
 
     def list(self, request):
-        print request;
         sql = '''
         SELECT  resourcetype,
                 resourcetitle,
