@@ -64,7 +64,7 @@
                             <li>
                                 <a href="">
                                     <i class="fa fa-user"></i>
-                                    Welcome {{ user.get_username }} [Admin]
+                                    Welcome {{ user.get_full_name|default:user.username }} [Admin]
                                 </a>
                             </li>
                             <li>
