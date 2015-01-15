@@ -640,10 +640,11 @@ class AdminrubricsViewSet(viewsets.ModelViewSet):
         adminrubrics = models.RubricsHeader()
         rubricmatrix = models.RubricMatrix()
         rubricsdata =  json.loads(request.DATA.keys()[0])
+
         rubbodydata = rubricsdata.get('mtx_body')
         rubheaderdata = rubricsdata.get('mtx_head')
         
-        adminrubrics.title = rubricsdata.get('instn')
+        adminrubrics.title = rubricsdata.get('ttl')
         adminrubrics.description = rubricsdata.get('desc')
         adminrubrics.instruction = rubricsdata.get('instn')
         adminrubrics.teacher = request.user.username
