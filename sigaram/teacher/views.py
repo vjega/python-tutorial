@@ -559,3 +559,8 @@ def viewassignwrittenwork(request):
 @switchlanguage
 def viewteacherresource(request):
     return render(request, 'portalteacher/viewteacherresource.html')
+
+@login_required
+@switchlanguage
+def viewassignwrittenworkanswer(request):
+    return render(request, 'portalteacher/viewassignwrittenworkanswer.html')

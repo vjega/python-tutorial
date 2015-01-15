@@ -346,12 +346,9 @@ TTS.forms.ressave = function(){
         type:"POST",
         data: JSON.stringify(data)
     }).done(function(data){
-        //console.log(data);
         alert("Chapter assigned Successfully"); 
         location.reload();
     }).error(function(err, msg){
-        console.log(err, msg);
-        return false;
         alert("I didnt save the data");
     });
 }

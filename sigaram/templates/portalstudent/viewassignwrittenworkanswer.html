@@ -553,7 +553,7 @@ $(document).ready(function(){
         var assignedid = $("#assignedid").val();
         $.ajax({
             type:'GET',
-            url : '/api/admin/editanswer/'+editingid+'/?assignedid='+assignedid
+            url : '/api/admin/editanswerwrittenwork/'+editingid+'/?assignedid='+assignedid
         }).done(function(msg) {
             if(msg == 'approved')
                 TTS.forms.changeapproveicon(editingid);

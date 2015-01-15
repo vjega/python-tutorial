@@ -513,8 +513,9 @@ TTS.forms.ressave = function(){
     ans_n_arr.push($("#max-mark").val());
     var ans = ansarr.join("~");
     var ans_n = ans_n_arr.join(",");
-    data['ans'] = ans;
-    data['ans_n'] = ans_n;
+    data['ans']          = ans;
+    data['ans_n']        = ans_n;
+    data['assignedtype'] = 'ar';
     var assignedid = $("#assignedid").val();
 
     $.ajax({
@@ -526,7 +527,6 @@ TTS.forms.ressave = function(){
         data: JSON.stringify(data)
     }).done(function(data){
         alert("Rubric marks updated successfully");
-        //location.reload();
     }).error(function(err, msg){
         alert("I didnt update the rubric marks");
     });
@@ -561,7 +561,7 @@ $(document).ready(function(){
                 'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
             },
             type:'POST',
-            url : '/api/admin/billboardresource/?assignedresourceid='+assignedid+'&studentid='+studentid
+            url : '/api/admin/billboardresource/?assignedid='+assignedid+'&studentid='+studentid+'&assignedtype=ar'
         }).done(function(msg) {
             if(msg = 'saved')
                 alert("Resource sent to Noticeboard");
@@ -575,7 +575,7 @@ $(document).ready(function(){
         var assignedid = $("#assignedid").val();
         $.ajax({
             type:'GET',
-            url : '/api/admin/editanswer/'+editingid+'/?assignedid='+assignedid
+            url : '/api/admin/editanswerresource/'+editingid+'/?assignedid='+assignedid
         }).done(function(msg) {
             if(msg == 'approved')
                 TTS.forms.changeapproveicon(editingid);
