@@ -499,7 +499,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', end
     margin: 0;
     font-family: arial, sans-serif;
     font-weight: bold;
-    visibility: hidden;
+    /*visibility: hidden;*/
     z-index: 8;
     position: absolute;
     text-align: center;
