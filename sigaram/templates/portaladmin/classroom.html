@@ -51,19 +51,175 @@
 <!-- /.col-lg-12 -->
 {% endblock botcontent%}
 
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+
+<style>
+    #addrec:hover, #admin-main-tbl tbody tr:hover {
+        cursor: pointer;
+    }
+</style>
+{% endblock morecss %}
+
 {% block morescript %}
+<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<!--<script>
-    $(document).ready(function(){
-        $('#admin-main-tbl').dataTable();
-    });
-</script>-->
-{% endblock scriptcontent %}
+<script>
+window.TTS = window.TTS || {};
+TTS.forms = TTS.forms || {};
 
-{% block morecss %}
-<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
-{% endblock morecss %}
+TTS.forms.addexam = function(form, data) {
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'POST',
+        data: data,
+        url : '/api/admin/classinfo/'
+    }).done(function( msg ) {
+        form.close();
+        location.reload();
+        //dialogItself.close();
+    });
+}
+
+TTS.forms.showexamform = function() {
+    BootstrapDialog.show({
+        title: 'Add Exam',
+        message: $($('#announcement-form').render()),
+        onshown: function(){
+            TTS.forms.upload();
+            $('.summernote').summernote();
+        },
+        buttons: [{
+            label: '{% trans "Save" %}',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#add-announcement");
+                TTS.forms.addexam(dialogItself, data); 
+            }
+            },{
+            label: '{% trans "Close" %}',
+            action: function(dlg){
+                dlg.close();
+            }
+        }]
+    });
+};
+
+TTS.forms.upload = function(elm) {
+    console.log(elm);
+    var uploader = new qq.FileUploader({
+        action: "/admin/admin-img-upload",
+        element: $('#file-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#id_fileurl").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
+    });
+};
+
+TTS.forms.renderannouncement = function(data){
+    var headers = [
+            { "title": "{% trans "Sl No." %}",
+              "class": "text-center",
+              "data" : "slno"  
+            },
+            { "title": "{% trans "Title" %}",
+              "data" : "title"
+            },
+            { "title": "{% trans "Type" %}",
+              "data" : "type"
+            },
+            { "title": "{% trans "Student" %}",
+              "data" : "student"
+            },
+            { "title": "{% trans "Date" %}",
+              "data" : "date"
+            },  
+        ];
+    var dataset = [];
+    
+    var count = 0
+    for(var i in data){
+        var t = {};
+        //t.DT_RowId = data[i].bulletinboardid;
+        t.slno = ++count;
+        t.title = data[i].resourcetitle;
+        t.type = data[i].resourcetype;
+        t.student = data[i].firstname;
+        t.date = data[i].posteddate;
+        dataset.push(t);
+    }
+
+    $('#admin-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
+        "data":     dataset,
+        "columns":  headers
+    });
+
+};
+TTS.forms.delannouncement = function(id) {
+    //console.log(id);
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'DELETE',
+        url : '/api/admin/classinfo/'+id
+    }).done(function(msg ) {
+        location.reload();
+    }).error(function(msg){
+        alert("Something Bad Happended");
+    });
+}
+
+$(document).ready(function(){
+    $.ajax({
+        "url":"/api/admin/classinfo/?format=json",
+        "type":"GET"
+    }).done(function(data){
+        TTS.forms.renderannouncement(data);
+    });
+    $("#page-wrapper").on("click", "#addrec", function(){
+        window.location = 'bulletinboard';
+        //TTS.forms.showexamform();
+    });
+
+});
+$('#admin-main-tbl').on('click', 'tbody tr', function(){
+        //window.location = 'viewbulletinboard?id='+this.id;
+});
+$('#admin-main-tbl').on('click', '.tts-delete', function(e){
+        e.stopPropagation();
+        if (!window.confirm("Do you want to delete this record?")) {
+            return false;
+        }
+        //console.log($(this).parent().parent().prop("id"))
+        TTS.forms.delannouncement($(this).parent().parent().prop("id"));    
+});
+
+</script>
+{% endblock scriptcontent %}

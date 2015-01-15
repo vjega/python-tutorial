@@ -22,7 +22,9 @@ def togglelanguage(request):
         request.session["django_language"] = 'ta'
     elif request.session.get("django_language") == 'ta':
         request.session["django_language"] = 'en'
-    
+    else:
+        request.session["django_language"] = 'ta'
+
     return redirect(request.META.get('HTTP_REFERER','/admin/home/'))
      
 def user_landing(request):
@@ -43,8 +45,8 @@ def user_landing(request):
     elif group == 'Student':
         from portaladmin.models import Studentinfo
         t = Studentinfo.objects.filter(username=request.user.username)[0]
-        request.session['stu_schoolid'] = t.schoolid
-        request.session['stu_classid'] =  t.classid
+        request.session['schoolid'] = request.session['stu_schoolid'] = t.schoolid
+        request.session['classid'] =  request.session['stu_classid'] =  t.classid
         return redirect('/student/home')
 
     elif group == 'Admin':
