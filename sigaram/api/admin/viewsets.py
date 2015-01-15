@@ -61,8 +61,8 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
         adminfolder = models.AdminFolders()
         data =  json.loads(request.DATA.keys()[0])
         adminfolder.folder_name = data.get('folder_name')
-        adminfolder.folder_description = data.get('remark')
-        adminfolder.folder_order = data.get('order_no')
+        adminfolder.folder_description = data.get('folder_name')
+        adminfolder.folder_order = 1#data.get('order_no')
         adminfolder.added_date = time.strftime('%Y-%m-%d %H:%M:%S')
         adminfolder.userid = request.user.username
         adminfolder.save()
@@ -640,10 +640,11 @@ class AdminrubricsViewSet(viewsets.ModelViewSet):
         adminrubrics = models.RubricsHeader()
         rubricmatrix = models.RubricMatrix()
         rubricsdata =  json.loads(request.DATA.keys()[0])
+
         rubbodydata = rubricsdata.get('mtx_body')
         rubheaderdata = rubricsdata.get('mtx_head')
         
-        adminrubrics.title = rubricsdata.get('instn')
+        adminrubrics.title = rubricsdata.get('ttl')
         adminrubrics.description = rubricsdata.get('desc')
         adminrubrics.instruction = rubricsdata.get('instn')
         adminrubrics.teacher = request.user.username
