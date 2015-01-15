@@ -1,6 +1,5 @@
 $(function() {
     $('#side-menu').metisMenu();
-    TTS.utils.ajaxloaderstart("Loading Page");
 });
 
 //Loads the correct sidebar on window load,
