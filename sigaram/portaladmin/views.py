@@ -189,17 +189,17 @@ def resourcetype(request):
     folders = [{
         "id": "1",
         "categoryid": "0",
-        "name" :u"Reading",
+        "name" :_(u"Reading"),
         "href" :u"chapterlist"
         },{
         "id": "2",
         "categoryid": "1",
-        "name" :u"Image dialog",
+        "name" :_(u"Image dialog"),
         "href" :u"chapterlist"
         },{
         "id": "3",
         "categoryid": "2",
-        "name" :u"Writing board",
+        "name" :_(u"Writing board"),
         "href" :u"chapterlist"
         }]
     classid = request.GET.get('classid')

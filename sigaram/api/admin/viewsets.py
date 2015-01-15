@@ -114,9 +114,8 @@ class TeacherViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        print "Hi"
+        # print "Hi"
         """
-        print request.DATA
         teacher = models.Teacherinfo.objects.get(pk=pk)
         teacherdata =  json.loads(request.DATA.keys()[0])
         teacher.username = teacherdata.get('username')
@@ -132,7 +131,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def partial_update(self, request, pk=None):
-        print "Hi"
+        # print "Hi"
         pass
 
     def retrieve(self, request, pk=None):
@@ -357,7 +356,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         ri = models.Resourceinfo()
-        print request.DATA, type(request.DATA)
+        # print request.DATA, type(request.DATA)
         ridata =  json.loads(dict(request.DATA).keys()[0])
         category = ridata.get('categoryid')
         if category == 'text' :
@@ -538,49 +537,6 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             # print serializer.data
         return Response(serializer.data)
  
-class AdminclassinfoViewSet(viewsets.ModelViewSet): 
-    queryset = models.Classroominfo.objects.all()
-    serializer_class = adminserializers.ClassroominfoSerializer
-
-    def list(self, request):
-        sql = """
-        SELECT DISTINCT 
-           cri.classroomid,
-           cri.assessmentid, 
-           cri.resourceid,
-           -- al.assessmenttype,
-           -- al.assessmenttitle,
-           -- ri.resourcetype,
-           -- ri.resourcetitle,
-           -- wwi.writtenworktitle,
-           cri.writtenworkid, 
-           -- si.firstname,
-           -- si.imageurl,
-           date(cri.posteddate) as posteddate,
-           cri.studentid
-        FROM classroominfo cri
-        /*
-        -- LEFT OUTER JOIN assignassessmentinfo aai ON aai.assessmentid = cri.assessmentid 
-                        -- AND aai.studentid = cri.studentid 
-        -- LEFT OUTER JOIN assessmentlist al ON al.assessmentid = cri.assessmentid 
-        -- LEFT OUTER JOIN assignresourceinfo ari  ON ari.resourceid = cri.resourceid 
-                        -- AND ari.studentid = cri.studentid 
-        -- LEFT OUTER JOIN resourceinfo ri ON ri.resourceid = cri.resourceid
-        -- LEFT OUTER JOIN assignwrittenworkinfo awwi ON awwi.writtenworkid = cri.writtenworkid
-        -- LEFT OUTER JOIN writtenworkinfo wwi ON wwi.writtenworkid = cri.writtenworkid
-        -- LEFT OUTER JOIN logininfo li ON li.loginid = cri.studentid
-        -- LEFT OUTER JOIN studentinfo si ON si.username = li.username
-        WHERE ( ari.isclassroom =1 OR 
-                 aai.isclassroom =1 OR 
-                awwi.isclassroom=1 ) 
-        */
-        ORDER BY cri.classroomid DESC
-        """
-        queryset = models.Classroominfo.objects.raw(sql)
-        serializer_class = adminserializers.ClassroominfoSerializer
-        serializer = adminserializers.ClassroominfoSerializer(queryset, many=True)        
-        return Response({"test":"test"})
-
 class AdminschoolViewSet(viewsets.ModelViewSet):
 
     queryset = models.Schoolinfo.objects.all().order_by('schoolname')
@@ -1961,17 +1917,19 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.AdminresourceSerializer
 
     def list(self, request):
+        print request.GET.get('folderid');
         sql = '''
-        SELECT  resourcetype,
+        SELECT  resource_folder_id,
+                resourcetype,
                 resourcetitle,
                 resourcedescription,
                 fileurl,
                 isdeleted,
                 createddate
         FROM admin_resources 
-        -- WHERE resource_folder_id
-        ORDER BY createddate DESC
-        ''' # % (request.user.username, datecond)
+        WHERE resource_folder_id=%s
+        '''  % (request.GET.get('folderid'))
+        # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -1984,7 +1942,7 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
     def create(self, request):
         admin = models.AdminResources()
         admindata =  json.loads(request.DATA.keys()[0])
-        print admindata;
+        # print admindata;
         admin.resourcetype = admindata.get('resourcetype')
         admin.resourcetitle = admindata.get('resourcetitle')
         admin.resourcedescription = admindata.get('resourcedescription')
@@ -2010,6 +1968,38 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
 class ClassinfoViewSet(viewsets.ModelViewSet): 
     queryset = models.Classroominfo.objects.all()
     serializer_class = adminserializers.ClassroominfoSerializer
+
+    def list(self, request):
+        l =  request.user.groups.values_list('name',flat=True)[0]
+        if l == 'Admin':
+            wherecond = ""
+        else:
+            wherecond = "cri.schoolid='%s' AND cri.classid = '%s'"%(request.session.get('schoolid'),
+                request.session.get('classid'))
+
+        sql = '''
+        SELECT  cri.resourceid,
+                cri.resourcetype,
+                cri.studentid,
+                ri.originaltext,
+                ri.resourcetitle,
+                si.firstname,
+                cri.posteddate
+        FROM classroominfo cri
+        INNER JOIN assignresourceinfo ari ON ari.assignedid=cri.resourceid
+        INNER JOIN resourceinfo ri ON ri.resourceid=ari.resourceid
+        INNER JOIN studentinfo si ON si.username=cri.studentid
+        %s
+        '''%wherecond 
+        print sql;       
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
 
     def create(self, request):
         classroom = models.Classroominfo()
