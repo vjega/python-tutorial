@@ -1942,8 +1942,10 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.AdminresourceSerializer
 
     def create(self, request):
+        # print request;
         admin = models.AdminResources()
         admindata =  json.loads(request.DATA.keys()[0])
+        print admindata;
         admin.resourcetype = admindata.get('resourcetype')
         admin.resourcetitle = admindata.get('resourcetitle')
         admin.resourcedescription = admindata.get('resourcedescription')
@@ -1952,7 +1954,7 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
         admin.audiourl = 0
         admin.videourl = 0
         admin.isdeleted = 0
-        admin.resource_folder_id = admindata.get('resource_folder_id')
+        admin.resource_folder_id = request.GET.get('folderid')
         admin.fileurl = admindata.get('fileurl')
         admin.createdby = request.user.id
         admin.createddate = time.strftime('%Y-%m-%d %H:%M:%S')

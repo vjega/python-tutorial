@@ -506,7 +506,7 @@ def topics(request):
 @switchlanguage
 def myresourcelist(request):
     return render(request, 'portaladmin/myresourcelist.html', 
-                                        {"adminform" : MyresourcelistForm.MyresourcelistForm()})
+                                        {"form" : MyresourcelistForm.MyresourcelistForm()})
 
 @login_required
 @switchlanguage
