@@ -1942,8 +1942,29 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
     queryset = models.AdminResources.objects.filter(isdeleted=0).order_by('-createddate')
     serializer_class = adminserializers.AdminresourceSerializer
 
+    def list(self, request):
+        print request;
+        sql = '''
+        SELECT  resourcetype,
+                resourcetitle,
+                resourcedescription,
+                fileurl,
+                isdeleted,
+                createddate
+        FROM admin_resources 
+        -- WHERE resource_folder_id
+        ORDER BY createddate DESC
+        ''' # % (request.user.username, datecond)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
     def create(self, request):
-        # print request;
         admin = models.AdminResources()
         admindata =  json.loads(request.DATA.keys()[0])
         print admindata;
@@ -1955,7 +1976,7 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
         admin.audiourl = 0
         admin.videourl = 0
         admin.isdeleted = 0
-        admin.resource_folder_id = request.GET.get('folderid')
+        admin.resource_folder_id = admindata.get('folderid')
         admin.fileurl = admindata.get('fileurl')
         admin.createdby = request.user.id
         admin.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
