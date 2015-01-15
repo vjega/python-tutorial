@@ -90,7 +90,7 @@ TTS.utils.getCookie = function(name)  {
 
 TTS.utils.datatable_ta = {
     "emptyTable":     "அட்டவணையில் பதிவுகள் எதுவும் இல்லை",
-    "info":           "_START_  இருந்து _END_ வரை (மொத்தம் _TOTAL_)",
+    "info":           "_START_ இலிருந்து _END_ வரை (மொத்தம் _TOTAL_)",
     "infoEmpty":      "அட்டவணையில் பதிவுகள் எதுவும் இல்லை",
     "infoFiltered":   "(_MAX_ பதிவுகளிலிருந்து வடிகட்டப்பட்டது)",
     "infoPostFix":    "",
