@@ -519,7 +519,7 @@ $(document).ready(function(){
     $("#removeStudent").click(function(){
         $('#sltStudentList :selected').each(function(i, selected){ 
             var studentid = $(selected).val(); 
-            $("#sltStudentList option[value="+studentid+"]").remove();
+            $("#sltStudentList option[value='"+studentid+"']").remove();
         });
     });
 
