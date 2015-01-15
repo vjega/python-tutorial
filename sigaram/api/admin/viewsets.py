@@ -433,16 +433,11 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     def create(self, request):
         data = json.loads(dict(request.DATA).keys()[0]);
 
-        print data
-
-        
         students = data.get('students')
         title = data.get('title')
         note = data.get('note')
         schoolid = request.session.get('schoolid')
         classid = request.session.get('classid')
-
-        
 
         if data.get('rubricid'):
             rubric_id = data.get('rubricid')
@@ -454,8 +449,6 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
         else:
             attachmenturl = 0
 
-        print rubric_id
-
         writtenwork = models.Writtenworkinfo()
         writtenwork.writtenworktitle= title
         writtenwork.description     = note
@@ -464,6 +457,7 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
         writtenwork.classid         = classid
         writtenwork.isassigned      = 0
         writtenwork.isdeleted       = 0
+        writtenwork.answereddate    = '1910-01-01'
         writtenwork.createdby       = str(request.user.username)
         writtenwork.createddate     = time.strftime('%Y-%m-%d %H:%M:%S')
         writtenwork.save()
@@ -471,7 +465,6 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
         writtenworkid = writtenwork.writtenworkid
 
         for s in students:
-            print s
             awwi = models.Assignwrittenworkinfo()
             awwi.writtenworkid = writtenworkid
             awwi.studentid = str(s)
@@ -483,6 +476,8 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
             awwi.isbillboard = 0
             awwi.isclassroom = 0
             awwi.rubric_id = rubric_id
+            awwi.isanswered = 0
+            awwi.answereddate = '1910-01-01'
             awwi.assignedby = str(request.user.username)
             awwi.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
             awwi.publisheddate = time.strftime('%Y-%m-%d %H:%M:%S')
