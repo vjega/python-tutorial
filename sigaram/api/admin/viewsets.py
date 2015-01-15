@@ -431,8 +431,9 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
         result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
         return Response(result)
 
-    def create(self, request):    
+    def create(self, request):
         data = json.loads(dict(request.DATA).keys()[0]);
+        rubric_id = data.get('rubricid');
         students = data.get('students');
         title = data.get('title')
         note = data.get('note');
