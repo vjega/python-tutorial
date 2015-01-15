@@ -4,7 +4,7 @@ from crispy_forms.helper import FormHelper
 from portaladmin import models
 #from crispy_forms.layout import Submit
 class MyresourcelistForm(forms.Form):
-    categoryid     = forms.ChoiceField(
+    resourcetype   = forms.ChoiceField(
         label      = _("Category"),
         required   = True,
         choices    = [('text', 'Text'), ('audio', 'Audio'),('video','Video'),

@@ -200,4 +200,5 @@ class AudiouploadSerializer(serializers.HyperlinkedModelSerializer):
 class AdminresourceSerializer(serializers.HyperlinkedModelSerializer):
       class Meta:
         model = models.AdminResources
-        fields = ('resourcetype', 'resourcetitle','resourcedescription','fileurl','isdeleted')
+        fields = ('resourcetype', 'resourcetitle','resourcedescription','fileurl','isdeleted',
+                  'createddate')
