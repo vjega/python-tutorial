@@ -530,3 +530,9 @@ def resources(request):
 
     return render(request, 'portaladmin/resources.html', 
                   {"folders":folders,'resources':resources})
+
+@login_required
+@switchlanguage
+def classviewassign(request):
+    return render(request, 'portaladmin/classviewassign.html')
+    

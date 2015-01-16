@@ -20,26 +20,6 @@
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover" 
                     id="admin-main-tbl">
-                    <thead>
-                        <tr>
-                            {% for head in teacherslist.head %}
-                            <th>{{head}}</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for body in teacherslist.body %}
-                        <tr class="gradeX">
-                            <td>{{body.no}}</td>
-                            <td><img src="{{body.img}}" /></td>
-                            <td>{{body.loginname}}</td>
-                            <td>{{body.name}}</td>
-                            <td>{{body.email}}</td>
-                            <td><i class="fa fa-pencil fa-fw"></i></td>
-                            <td><i class="fa fa-trash fa-fw"></i></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
                 </table>
             </div>
             <!-- /.table-responsive -->
@@ -79,69 +59,6 @@
 window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
 
-TTS.forms.addexam = function(form, data) {
-    $.ajax({
-        headers : {
-            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
-        },
-        type:'POST',
-        data: data,
-        url : '/api/admin/classinfo/'
-    }).done(function( msg ) {
-        form.close();
-        location.reload();
-        //dialogItself.close();
-    });
-}
-
-TTS.forms.showexamform = function() {
-    BootstrapDialog.show({
-        title: 'Add Exam',
-        message: $($('#announcement-form').render()),
-        onshown: function(){
-            TTS.forms.upload();
-            $('.summernote').summernote();
-        },
-        buttons: [{
-            label: '{% trans "Save" %}',
-            cssClass: 'btn-primary',
-            action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-announcement");
-                TTS.forms.addexam(dialogItself, data); 
-            }
-            },{
-            label: '{% trans "Close" %}',
-            action: function(dlg){
-                dlg.close();
-            }
-        }]
-    });
-};
-
-TTS.forms.upload = function(elm) {
-    console.log(elm);
-    var uploader = new qq.FileUploader({
-        action: "/admin/admin-img-upload",
-        element: $('#file-uploader')[0],
-        multiple: false,
-        onComplete: function(id, fileName, responseJSON) {
-            if(responseJSON.success) {
-                $("#id_fileurl").val(responseJSON.path.replace('static/', ''));
-            } else {
-                alert("upload failed!");
-            }
-        },
-        onAllComplete: function(uploads) {
-            // the maps look like this: {file: FileObject, response: JSONServerResponse}
-        },
-        params: {
-            'csrf_token': '{{ csrf_token }}',
-            'csrf_name': 'csrfmiddlewaretoken',
-            'csrf_xname': 'X-CSRFToken',
-        },
-    });
-};
-
 TTS.forms.renderannouncement = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
@@ -166,7 +83,7 @@ TTS.forms.renderannouncement = function(data){
     var count = 0
     for(var i in data){
         var t = {};
-        //t.DT_RowId = data[i].bulletinboardid;
+        t.DT_RowId = data[i].resourcetype+"_"+data[i].resourceid;
         t.slno = ++count;
         t.title = data[i].resourcetitle;
         t.type = data[i].resourcetype;
@@ -181,45 +98,20 @@ TTS.forms.renderannouncement = function(data){
     });
 
 };
-TTS.forms.delannouncement = function(id) {
-    //console.log(id);
-    $.ajax({
-        headers : {
-            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
-        },
-        type:'DELETE',
-        url : '/api/admin/classinfo/'+id
-    }).done(function(msg ) {
-        location.reload();
-    }).error(function(msg){
-        alert("Something Bad Happended");
-    });
-}
 
 $(document).ready(function(){
     $.ajax({
         "url":"/api/admin/classinfo/?format=json",
         "type":"GET"
     }).done(function(data){
+        console.log(data);
         TTS.forms.renderannouncement(data);
     });
-    $("#page-wrapper").on("click", "#addrec", function(){
-        window.location = 'bulletinboard';
-        //TTS.forms.showexamform();
+    $('#admin-main-tbl').on('click', 'tbody tr', function(){
+        window.location = 'classviewassign?id='+this.id;
     });
+});
 
-});
-$('#admin-main-tbl').on('click', 'tbody tr', function(){
-        //window.location = 'viewbulletinboard?id='+this.id;
-});
-$('#admin-main-tbl').on('click', '.tts-delete', function(e){
-        e.stopPropagation();
-        if (!window.confirm("Do you want to delete this record?")) {
-            return false;
-        }
-        //console.log($(this).parent().parent().prop("id"))
-        TTS.forms.delannouncement($(this).parent().parent().prop("id"));    
-});
 
 </script>
 {% endblock scriptcontent %}
