@@ -105,28 +105,6 @@ TTS.forms.renderassignedresourceinfo = function(data){
     window.open("http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
 };*/
 
-$(document).ready(function(){
-    var writtenworkid = TTS.utils.getUrlParameter('writtenworkid');
-    $.ajax({
-        "url":"/api/admin/writtenworkinfo/"+writtenworkid+"/?format=json",
-        "type":"GET"
-    }).done(function(data){
-        console.log(data);
-        TTS.forms.renderassignedresourceinfo(data);
-    });
-    $.ajax({
-        "url":"/api/admin/assignedresourcestudents/"+writtenworkid+"?format=json",
-        "type":"GET"
-    }).done(function(data){
-        TTS.forms.renderstudentlist(data);
-    });
-    $("#studentlist").on("click", ".cgreen", function(){
-        var studentid = $(this).parent().parent().prop("id");
-        window.location = 'viewassignmentanswer?writtenworkid='+writtenworkid+'&studentid='+studentid;
-    });
-});
-
-
 TTS.forms.renderstudentlist = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
@@ -165,6 +143,25 @@ TTS.forms.renderstudentlist = function(data){
     });
 }
 
+$(document).ready(function(){
+    var writtenworkid = TTS.utils.getUrlParameter('writtenworkid');
+    $.ajax({
+        "url":"/api/admin/writtenworkinfo/"+writtenworkid+"/?format=json",
+        "type":"GET"
+    }).done(function(data){
+        TTS.forms.renderassignedresourceinfo(data);
+    });
+    $.ajax({
+        "url":"/api/admin/assignedwrittenworkstudents/"+writtenworkid+"?format=json",
+        "type":"GET"
+    }).done(function(data){
+        TTS.forms.renderstudentlist(data);
+    });
+    $("#studentlist").on("click", ".cgreen", function(){
+        var studentid = $(this).parent().parent().prop("id");
+        window.location = 'viewassignwrittenworkanswer?writtenworkid='+writtenworkid+'&studentid='+studentid;
+    });
+});
 
 </script>
 
