@@ -1969,7 +1969,7 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
         if l == 'Admin':
             wherecond = ""
         else:
-            wherecond = "cri.schoolid='%s' AND cri.classid = '%s'"%(request.session.get('schoolid'),
+            wherecond = "AND cri.schoolid='%s' AND cri.classid = '%s'"%(request.session.get('schoolid'),
                 request.session.get('classid'))
 
         sql = '''
