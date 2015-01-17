@@ -137,7 +137,6 @@ TTS.forms.editteacher = function(id, data) {
                     data: data,
                     url : '/api/admin/teacher/'+id
                 }).done(function( msg ) {
-                    dialogItself.close();
                     location.reload();
                 });
             }
