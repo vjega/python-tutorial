@@ -82,14 +82,14 @@ class TeacherViewSet(viewsets.ModelViewSet):
         username = request.GET.get('username')
        
         if schoolid and classid and username:
-            queryset = models.Teacherinfo.objects.filter(schoolid=schoolid, classid=classid).order_by('-createddate')
+            queryset = models.Teacherinfo.objects.filter(schoolid=schoolid, classid=classid, isdelete=0).order_by('-createddate')
         elif schoolid:
-            queryset = models.Teacherinfo.objects.filter(schoolid=schoolid).order_by('-createddate')
+            queryset = models.Teacherinfo.objects.filter(schoolid=schoolid, isdelete=0).order_by('-createddate')
         elif username:
-            queryset = models.Teacherinfo.objects.filter(username=username)
+            queryset = models.Teacherinfo.objects.filter(username=username, isdelete=0)
 
         else:
-            queryset = models.Teacherinfo.objects.all()
+            queryset = models.Teacherinfo.objects.all(isdelete=0)
 
         serializer = adminserializers.TeacherinfoSerializer(queryset, many=True)
         return Response(serializer.data)
@@ -295,6 +295,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         teacherresource.section = teacherresourcedata.get('section',0)
         teacherresource.resourcetype = restype
         teacherresource.resourcetitle = teacherresourcedata.get('resourcetitle')
+        teacherresource.originaltext = teacherresourcedata.get('resourcetitle')
         teacherresource.documenturl = "" #teacherresourcedata.get('documenturl')
         teacherresource.imageurl = "" #teacherresourcedata.get('imageurl')
         teacherresource.audiourl = "" #teacherresourcedata.get('audiourl')
@@ -320,6 +321,9 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         return Response('"msg":"update"')
 
     def destroy(self, request, pk=None):
+        allschool = models.Teacherresourceinfo.objects.get(pk=pk)
+        allschool.isdeleted = 1
+        allschool.save()
         return Response('"msg":"delete"')
     
 
@@ -712,7 +716,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title = data.get('title')
         cal.start = data.get('start')
         cal.end = data.get('end')
-        cal.color = '#337ab7'
+        cal.color = data.get('color')
         cal.allday = data.get('alldayevents')
         cal.eventcreatedby = request.user.username
         cal.eventeditedby = request.user.username
@@ -729,11 +733,8 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title = data.get('title')
         cal.start = data.get('start')
         cal.end = data.get('end')
-        cal.color = '#d9534f'
+        cal.color = data.get('color')
         cal.allday = data.get('alldayevents')
-        #cal.eventcreatedby = request.user.username
-        #cal.start = time.strftime('%Y-%m-%d %H:%M:%S')
-        #cal.end = time.strftime('%Y-%m-%d %H:%M:%S')
         cal.eventcreatedby = request.user.username
         cal.eventeditedby = request.user.username
         cal.isdeleted = 0
