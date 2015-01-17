@@ -742,7 +742,7 @@ msgstr "எனது வேலை"
 #: templates/portalteacher/viewstudentwrittenworks.html:7
 #: templates/portalteacher/writtenwork.html:8
 msgid "Written Work"
-msgstr "எழுத்து வேலை"
+msgstr "எழுத்துவேலை"
 
 #: student/views.py:56 templates/portalstudent/studentviewassessments.html:7
 msgid "Practicals"
@@ -822,7 +822,7 @@ msgstr "கட்டுரை"
 
 #: teacher/views.py:225
 msgid "writing"
-msgstr "எழுத்து வேலை"
+msgstr "எழுத்துவேலை"
 
 #: teacher/views.py:230
 msgid "Multimedia"
@@ -1178,7 +1178,7 @@ msgstr "மாணவர்"
 
 #: templates/portaladmin/billboard.html:169
 msgid "Writing lesson"
-msgstr "எழுத்து வேலை"
+msgstr "எழுத்துவேலை"
 
 #: templates/portaladmin/billboard.html:172
 msgid "Fill"
@@ -1808,14 +1808,12 @@ msgid "Middle"
 msgstr ""
 
 #: templates/portalteacher/viewassignwrittenwork.html:7
-#, fuzzy
-#| msgid "Written Work"
 msgid "Written"
-msgstr "எழுத்து வேலை"
+msgstr "எழுத்து "
 
 #: templates/portalteacher/viewassignwrittenwork.html:7
 msgid "Work"
-msgstr ""
+msgstr "வேலை"
 
 #: templates/portalteacher/viewassignwrittenworkanswer.html:210
 msgid "Writtenwork already Sent to Noticeboard"

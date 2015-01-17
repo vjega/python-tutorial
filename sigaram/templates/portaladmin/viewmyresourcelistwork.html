@@ -78,7 +78,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
 $(document).ready(function(){  
     var id = getUrlParameter('folderid');
     $.ajax({
-        "url":"/api/admin/bulletinboardlist/"+id+"/?format=json",
+        "url":"/api/admin/adminresources/"+id+"/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacherresourceinfo(data);
