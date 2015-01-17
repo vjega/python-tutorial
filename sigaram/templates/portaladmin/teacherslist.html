@@ -151,15 +151,13 @@ TTS.forms.editteacher = function(id, data) {
 };
 
 TTS.forms.delteacher = function(id) {
-    //console.log(id);
     $.ajax({
-         headers : {
+        headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'DELETE',
         url : '/api/admin/teacher/'+id
     }).done(function( msg ) {
-        dialogItself.close();
         location.reload();
     }).error(function(msg){
         alert("Something Bad Happended");
@@ -286,7 +284,6 @@ $(document).ready(function(){
         }
         //console.log($(this).parent().parent().prop("id"))
         TTS.forms.delteacher($(this).parent().parent().prop("id"));
-        window.location.reload();
     
     });
     $("#page-wrapper").on("click", "#addrec", function(){
