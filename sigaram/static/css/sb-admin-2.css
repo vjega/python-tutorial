@@ -568,3 +568,7 @@ a{
    padding: 0 !important;
    margin: 0 !important;
 }
+
+div.panel-body {
+    background: transparent;
+}
