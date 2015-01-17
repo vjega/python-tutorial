@@ -85,8 +85,13 @@ TTS.forms.renderannouncement = function(data){
         var t = {};
         t.DT_RowId = data[i].resourcetype+"_"+data[i].resourceid+"_"+data[i].studentid;
         t.slno = ++count;
-        t.title = data[i].resourcetitle;
-        t.type = data[i].resourcetype;
+        t.title = data[i].title;
+        if(data[i].resourcetype == 'ar'){
+            t.type = '{% trans "Assignment" %}';
+        }
+        if(data[i].resourcetype == 'aw'){
+            t.type = '{% trans "Written Work" %}';
+        }
         t.student = data[i].firstname;
         t.date = data[i].posteddate;
         dataset.push(t);
@@ -112,7 +117,7 @@ $(document).ready(function(){
         if(x[0] == 'ar'){
             window.location = 'classviewassignmentanswer?resourceid='+x[1]+'&studentid='+x[2];
         }else if(x[0] == 'aw'){
-            window.location = 'classviewassignwrittenworkanswer?resourceid='+x[1]+'&studentid='+x[2];
+            window.location = 'classviewassignwrittenworkanswer?writtenworkid='+x[1]+'&studentid='+x[2];
         }else{
             return false;
         }
