@@ -89,7 +89,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
             queryset = models.Teacherinfo.objects.filter(username=username, isdelete=0)
 
         else:
-            queryset = models.Teacherinfo.objects.all(isdelete=0)
+            queryset = models.Teacherinfo.objects.filter(isdelete=0)
 
         serializer = adminserializers.TeacherinfoSerializer(queryset, many=True)
         return Response(serializer.data)
