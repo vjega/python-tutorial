@@ -202,10 +202,12 @@ $(document).ready(function() {
         {
             TTS.forms.showcalform(start, end, allDay);
         },
-        eventDrop: function (event) {
+        eventDrop: function (event,delta,revertFunc) {
             alert(event.title + " was dropped on " + event.start.format("YYYY-MM-DD hh:mm"));
             if (confirm("Are you sure about this change?")) {
                 TTS.forms.updatecalevent(event,"event_drop");
+            }else{
+                revertFunc();
             }
         },
         eventResize: function (event, delta, revertFunc) {
@@ -217,6 +219,8 @@ $(document).ready(function() {
             } */
             
             console.log(event);
+            console.log(event.start.format());
+
             /*
             console.log("Resize");
             console.log(event.id);
@@ -224,7 +228,7 @@ $(document).ready(function() {
             console.log(event.start.format());
             console.log(event.end.format());
             */
-            
+
             /*eventResize: function(event, delta, revertFunc) {
                 alert(event.title + " end is now " + event.end.format());
 
