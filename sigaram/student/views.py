@@ -246,8 +246,8 @@ def studentviewassessments(request):
 
 @login_required
 @switchlanguage
-def studentclassroom(request):
-    return render(request, 'portalstudent/studentclassroom.html')
+def classroom(request):
+    return render(request, 'portalstudent/classroom.html')
 
 @login_required
 @switchlanguage
@@ -318,3 +318,13 @@ def viewassignwrittenwork(request):
 @switchlanguage
 def viewassignwrittenworkanswer(request):
     return render(request, 'portalstudent/viewassignwrittenworkanswer.html')
+
+@login_required
+@switchlanguage
+def classviewassignmentanswer(request):
+    return render(request, 'portalstudent/classviewassignmentanswer.html') 
+
+@login_required
+@switchlanguage
+def classviewassignwrittenworkanswer(request):
+    return render(request, 'portalstudent/classviewassignwrittenworkanswer.html')
