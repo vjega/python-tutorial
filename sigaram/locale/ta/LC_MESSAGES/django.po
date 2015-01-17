@@ -1708,7 +1708,7 @@ msgstr "வகுப்பறைக்குள் செலுத்தப்�
 
 #: templates/portalstudent/viewassignwrittenworkanswer.html:211
 msgid "Writtenwork already Sent to Classroom"
-msgstr "வகுப்பறைக்குள் எழுத்து செலுத்தப்பட்டது"
+msgstr "எழுத்துவேலை வகுப்பறைக்குள் செலுத்தப்பட்டது"
 
 #: templates/portalstudent/viewstudentwork.html:22
 msgid "Insert Classrooms"
