@@ -117,6 +117,7 @@ window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
 $("#save").click(function(){
     TTS.forms.bulletinboardinfo();
+
 });
 
 $("#cancel").click(function(){
@@ -145,7 +146,7 @@ TTS.forms.bulletinboardinfo = function(){
         data: JSON.stringify(data)
     }).done(function(data){
         alert("Saved Successfully");
-        location.reload();
+        window.location='bulletinboardlist';
     }).error(function(err, msg){
         alert("I didnt save the data");
     });

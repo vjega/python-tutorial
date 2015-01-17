@@ -295,6 +295,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         teacherresource.section = teacherresourcedata.get('section',0)
         teacherresource.resourcetype = restype
         teacherresource.resourcetitle = teacherresourcedata.get('resourcetitle')
+        teacherresource.originaltext = teacherresourcedata.get('resourcetitle')
         teacherresource.documenturl = "" #teacherresourcedata.get('documenturl')
         teacherresource.imageurl = "" #teacherresourcedata.get('imageurl')
         teacherresource.audiourl = "" #teacherresourcedata.get('audiourl')
@@ -320,6 +321,9 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         return Response('"msg":"update"')
 
     def destroy(self, request, pk=None):
+        allschool = models.Teacherresourceinfo.objects.get(pk=pk)
+        allschool.isdeleted = 1
+        allschool.save()
         return Response('"msg":"delete"')
     
 
