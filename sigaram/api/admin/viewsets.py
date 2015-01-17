@@ -82,14 +82,14 @@ class TeacherViewSet(viewsets.ModelViewSet):
         username = request.GET.get('username')
        
         if schoolid and classid and username:
-            queryset = models.Teacherinfo.objects.filter(schoolid=schoolid, classid=classid).order_by('-createddate')
+            queryset = models.Teacherinfo.objects.filter(schoolid=schoolid, classid=classid, isdelete=0).order_by('-createddate')
         elif schoolid:
-            queryset = models.Teacherinfo.objects.filter(schoolid=schoolid).order_by('-createddate')
+            queryset = models.Teacherinfo.objects.filter(schoolid=schoolid, isdelete=0).order_by('-createddate')
         elif username:
-            queryset = models.Teacherinfo.objects.filter(username=username)
+            queryset = models.Teacherinfo.objects.filter(username=username, isdelete=0)
 
         else:
-            queryset = models.Teacherinfo.objects.all()
+            queryset = models.Teacherinfo.objects.all(isdelete=0)
 
         serializer = adminserializers.TeacherinfoSerializer(queryset, many=True)
         return Response(serializer.data)
