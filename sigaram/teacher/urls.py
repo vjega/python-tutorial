@@ -70,8 +70,8 @@ urlpatterns = patterns('teacher.views',
     url(r'^viewtopic$','viewtopic',name='viewtopic'),
     url(r'^viewpost$','viewpost',name='viewpost'),
     url(r'^newtopic$','newtopic',name='newtopic'),
-    url(r'^billviewassignmentanswer$',  'billviewassignmentanswer', 
-                                                         name="billviewassignmentanswer"),
+    url(r'^classviewassignmentanswer$',  'classviewassignmentanswer', 
+                                                         name="classviewassignmentanswer"),
     url(r'^bulletinboard-upload$',      'bulletinboard_uploader', 
                                                          name="bulletinboard-uploader"),
     url(r'^viewbulletinboard$',          'viewbulletinboard', 
@@ -86,4 +86,8 @@ urlpatterns = patterns('teacher.views',
                                                          name='viewmyresourcelist'),
     url(r'^myresourcelist$',           'myresourcelist', 
                                                          name="myresourcelist"),
+
+
+    url(r'^classviewassignwrittenworkanswer$',   'classviewassignwrittenworkanswer',  
+                                                         name='viewassignwrittenworkanswer')
 )
