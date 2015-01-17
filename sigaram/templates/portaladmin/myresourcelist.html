@@ -40,7 +40,7 @@
 <link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <style>
-    #addrec:hover, .tts-delete:hover{
+    #addrec:hover, .tts-delete:hover, #admin-main-tbl tbody tr:hover{
         cursor: pointer;
     }
 </style>
@@ -64,24 +64,13 @@
 </script>
 
 <script>
-function getUrlParameter(sParam)
-{
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++) 
-    {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam) 
-        {
-            return sParameterName[1];
-        }
-    }
-} 
 window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
-TTS.folderid = getUrlParameter('folderid');
-/* ADMIN Crud Starts Here*/
+TTS.folderid = TTS.utils.getUrlParameter('folderid');
+/*
+ ADMIN Crud Starts Here*/
 TTS.forms.addmyworks = function(form, data) {
+    console.log(data);
     data = JSON.parse(data)
     data['folderid'] = TTS.folderid;
     data = JSON.stringify(data)
@@ -119,7 +108,7 @@ TTS.forms.delmyworks = function(id) {
 
 TTS.forms.showmyworkform = function() {
     BootstrapDialog.show({
-        title: '{% trans "Add" %} {% trans "My works" %}',
+        title: '{% trans "My works" %}',
         message: $($('#myresourcelist-form').render()),
         onshown: function(){
             TTS.forms.upload();
@@ -130,7 +119,6 @@ TTS.forms.showmyworkform = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-myresourcelist");
-                console.log(data);
                 TTS.forms.addmyworks(dialogItself, data); 
             }
             },{
@@ -187,14 +175,13 @@ TTS.forms.rendermywork = function(data){
 };
 
 TTS.forms.upload = function(elm) {
-    console.log(elm);
     var uploader = new qq.FileUploader({
         action: "/admin/admin-img-upload",
         element: $('#file-uploader')[0],
         multiple: false,
         onComplete: function(id, fileName, responseJSON) {
             if(responseJSON.success) {
-                $("#id_image").val(responseJSON.path.replace('static/', ''));
+                $("#id_fileurl").val(responseJSON.path.replace('static/', ''));
             } else {
                 alert("upload failed!");
             }
@@ -225,8 +212,10 @@ $(document).ready(function(){
         if (!window.confirm("Do you want to delete this record?")) {
             return false;
         }
-        console.log($(this).parent().parent().prop("id"));
-        TTS.forms.delmyworks($(this).parent().parent().prop("id"));
+       TTS.forms.delmyworks($(this).parent().parent().prop("id"));
+    });
+    $('#admin-main-tbl').on('click', 'tbody tr', function(){
+        window.location = 'viewmyresourcelist?folderid='+TTS.folderid+'&resourceid='+this.id;
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.showmyworkform();

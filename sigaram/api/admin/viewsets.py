@@ -1884,7 +1884,7 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
     def create(self, request):
         admin = models.AdminResources()
         admindata =  json.loads(request.DATA.keys()[0])
-        # print admindata;
+        print admindata.get('fileurl');
         admin.resourcetype = admindata.get('resourcetype')
         admin.resourcetitle = admindata.get('resourcetitle')
         admin.resourcedescription = admindata.get('resourcedescription')
