@@ -538,11 +538,11 @@ def classviewassignmentanswer(request):
     
 @login_required
 @switchlanguage
-<<<<<<< HEAD
 def viewmyresourcelist(request):
     return render(request, 'portaladmin/viewmyresourcelistwork.html')
-    
-=======
+
+@login_required
+@switchlanguage   
 def classviewassignwrittenworkanswer(request):
     return render(request, 'portaladmin/classviewassignwrittenworkanswer.html')    
->>>>>>> 9b98439304d98f79ee7fd3eff339af6a351292e9
+

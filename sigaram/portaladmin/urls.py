@@ -85,13 +85,9 @@ urlpatterns = patterns('portaladmin.views',
     url(r'^resources$',                 'resources',        name='resources'),
     url(r'^classviewassignmentanswer$', 'classviewassignmentanswer',  
                                                         name='classviewassignmentanswer'),
-<<<<<<< HEAD
     url(r'^viewmyresourcelist$', 'viewmyresourcelist',  
                                                         name='viewmyresourcelist'),
-=======
     url(r'^classviewassignwrittenworkanswer$', 'classviewassignwrittenworkanswer',  
                                                         name='classviewassignwrittenworkanswer'),
-    
->>>>>>> 9b98439304d98f79ee7fd3eff339af6a351292e9
     #(r'^api/', include(v1_api.urls)),
 )
