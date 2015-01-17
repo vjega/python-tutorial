@@ -990,12 +990,12 @@ msgstr "மூடு"
 #: templates/portaladmin/base.html:106 templates/portaladmin/index.html:7
 #: templates/portalstudent/base.html:107 templates/portalteacher/base.html:111
 msgid "Home"
-msgstr "மூலத் திரை "
+msgstr "மூலத்திரை"
 
 #: templates/portaladmin/base.html:112 templates/portaladmin/billboard.html:7
 #: templates/portalstudent/base.html:113 templates/portalteacher/base.html:116
 msgid "Billboard"
-msgstr "அறிவிப்புப் பலகை "
+msgstr "அறிவிப்புப் பலகை"
 
 #: templates/portaladmin/base.html:117 templates/portalforum/index.html:8
 #: templates/portalforum/index.html:19 templates/portalforum/newtopic.html:21
@@ -1012,7 +1012,7 @@ msgstr "அறிவிப்புப் பலகை "
 #: templates/portalteacher/viewtopic.html:7
 #: templates/portalteacher/viewtopic.html:17
 msgid "Forum"
-msgstr "கருத்துக்களம் "
+msgstr "கருத்துக்களம்"
 
 #: templates/portaladmin/base.html:133 templates/portaladmin/base.html:146
 #: templates/portaladmin/chapterlist.html:7
