@@ -536,3 +536,7 @@ def resources(request):
 def classviewassignmentanswer(request):
     return render(request, 'portaladmin/classviewassignmentanswer.html')
     
+@login_required
+@switchlanguage
+def classviewassignwrittenworkanswer(request):
+    return render(request, 'portaladmin/classviewassignwrittenworkanswer.html')    
