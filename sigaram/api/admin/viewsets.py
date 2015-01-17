@@ -89,7 +89,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
             queryset = models.Teacherinfo.objects.filter(username=username, isdelete=0)
 
         else:
-            queryset = models.Teacherinfo.objects.all(isdelete=0)
+            queryset = models.Teacherinfo.objects.filter(isdelete=0)
 
         serializer = adminserializers.TeacherinfoSerializer(queryset, many=True)
         return Response(serializer.data)
@@ -716,7 +716,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title = data.get('title')
         cal.start = data.get('start')
         cal.end = data.get('end')
-        cal.color = '#337ab7'
+        cal.color = data.get('color')
         cal.allday = data.get('alldayevents')
         cal.eventcreatedby = request.user.username
         cal.eventeditedby = request.user.username
@@ -733,11 +733,8 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title = data.get('title')
         cal.start = data.get('start')
         cal.end = data.get('end')
-        cal.color = '#d9534f'
+        cal.color = data.get('color')
         cal.allday = data.get('alldayevents')
-        #cal.eventcreatedby = request.user.username
-        #cal.start = time.strftime('%Y-%m-%d %H:%M:%S')
-        #cal.end = time.strftime('%Y-%m-%d %H:%M:%S')
         cal.eventcreatedby = request.user.username
         cal.eventeditedby = request.user.username
         cal.isdeleted = 0
