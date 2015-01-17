@@ -1859,9 +1859,9 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.AdminresourceSerializer
 
     def list(self, request):
-        print request.GET.get('folderid');
         sql = '''
-        SELECT  resource_folder_id,
+        SELECT  resource_id,
+                resource_folder_id,
                 resourcetype,
                 resourcetitle,
                 resourcedescription,
@@ -1904,7 +1904,7 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
         return Response('"msg":"update"')
 
     def destroy(self, request, pk):
-        models.Admininfo.objects.get(pk=pk).delete()
+        models.AdminResources.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
 class ClassinfoViewSet(viewsets.ModelViewSet): 
