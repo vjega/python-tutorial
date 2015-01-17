@@ -731,7 +731,7 @@ msgstr "குறிப்புகள்"
 #: templates/portaladmin/myresourcelist.html:17
 #: templates/portaladmin/myresourcelist.html:111
 msgid "My works"
-msgstr "எனது வேலை"
+msgstr "எனதுவேலை"
 
 #: student/views.py:49 student/views.py:183 teacher/views.py:55
 #: teacher/views.py:502 templates/portalstudent/studentwrittenwork.html:7

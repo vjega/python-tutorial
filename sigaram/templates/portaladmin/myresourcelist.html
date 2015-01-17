@@ -98,7 +98,6 @@ TTS.forms.delmyworks = function(id) {
         type:'DELETE',
         url : '/api/admin/adminresources/'+id
     }).done(function( msg ) {
-        dialogItself.close();
         location.reload();
     }).error(function(msg){
         alert("Something Bad Happended");
@@ -158,7 +157,7 @@ TTS.forms.rendermywork = function(data){
     var count = 0
     for (var i in data) {
         var t = {};
-        t.DT_RowId = data[i].resourceid;
+        t.DT_RowId = data[i].resource_id;
         t.slno = ++count;
         t.Title = data[i].resourcetitle;
         t.Date = data[i].createddate;
