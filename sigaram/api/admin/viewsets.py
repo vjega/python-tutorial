@@ -1859,9 +1859,9 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.AdminresourceSerializer
 
     def list(self, request):
-        print request.GET.get('folderid');
         sql = '''
-        SELECT  resource_folder_id,
+        SELECT  resource_id,
+                resource_folder_id,
                 resourcetype,
                 resourcetitle,
                 resourcedescription,
@@ -1884,7 +1884,7 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
     def create(self, request):
         admin = models.AdminResources()
         admindata =  json.loads(request.DATA.keys()[0])
-        # print admindata;
+        print admindata.get('fileurl');
         admin.resourcetype = admindata.get('resourcetype')
         admin.resourcetitle = admindata.get('resourcetitle')
         admin.resourcedescription = admindata.get('resourcedescription')
@@ -1904,7 +1904,7 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
         return Response('"msg":"update"')
 
     def destroy(self, request, pk):
-        models.Admininfo.objects.get(pk=pk).delete()
+        models.AdminResources.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
 class ClassinfoViewSet(viewsets.ModelViewSet): 
@@ -1919,27 +1919,59 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
             wherecond = "AND cri.schoolid='%s' AND cri.classid = '%s'"%(request.session.get('schoolid'),
                 request.session.get('classid'))
 
+        result = []
+
         sql = '''
-        SELECT  cri.resourceid,
-                cri.resourcetype,
-                cri.studentid,
-                ri.originaltext,
-                ri.resourcetitle,
-                si.firstname,
-                cri.posteddate
+        SELECT  cri.resourceid as assignedid,
+            cri.resourcetype,
+            cri.studentid,
+            ri.resourceid as resourceid,
+            ri.resourcetitle as title,
+            au.first_name as firstname,
+            cri.posteddate
         FROM classroominfo cri
         INNER JOIN assignresourceinfo ari ON ari.assignedid=cri.resourceid
         INNER JOIN resourceinfo ri ON ri.resourceid=ari.resourceid
-        INNER JOIN studentinfo si ON si.username=cri.studentid
+        INNER JOIN auth_user au ON au.username=cri.studentid
+        WHERE cri.resourcetype = "ar"
         %s
-        '''%wherecond
+        '''% wherecond
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
-        result =  [
+        resar =  [
             dict(zip([col[0] for col in desc], row))
             for row in cursor.fetchall()
         ]
+
+        sql = '''
+        SELECT  cri.resourceid as assignedid,
+                cri.resourcetype,
+                cri.studentid,
+                wwi.writtenworkid as resourceid,
+                wwi.writtenworktitle as title,
+                au.first_name as firstname,
+                cri.posteddate
+        FROM classroominfo cri
+        INNER JOIN assignwrittenworkinfo awwi ON awwi.assignwrittenworkid=cri.resourceid
+        INNER JOIN writtenworkinfo wwi ON wwi.writtenworkid=awwi.writtenworkid
+        INNER JOIN auth_user au ON au.username=cri.studentid
+        WHERE cri.resourcetype = "aw"
+        %s
+        '''% wherecond
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        resaw =  [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+
+        for x in resar:
+            result.append(x)
+        for x in resaw:
+            result.append(x)
+
         return Response(result)
 
     def create(self, request):

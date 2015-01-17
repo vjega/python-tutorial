@@ -55,6 +55,9 @@
     table#rubrics-table tbody tr td:nth-child(1) { 
         background-color: #d3d3d3;
         font-weight: bold;
+    }
+    input#ttls{
+        color:#000;
     }   
 </style>
 {% endblock morecss %}
@@ -570,10 +573,10 @@ $(document).ready(function(){
                 'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
             },
             type:'POST',
-            url : '/api/admin/billboardresource/?assignedid='+assignedid+'&studentid='+studentid+'&assignedtype=aw'
+            url : '/api/admin/billboardwrittenwork/?assignedid='+assignedid+'&studentid='+studentid+'&assignedtype=aw'
         }).done(function(msg) {
             if(msg = 'saved')
-                alert("Resource sent to Noticeboard");
+                alert("Writtenwork sent to Noticeboard");
 
             location.reload();
         });
