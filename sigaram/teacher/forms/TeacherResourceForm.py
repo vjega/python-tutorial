@@ -5,7 +5,7 @@ from portaladmin import models
 #from crispy_forms.layout import Submit
 class TeacherResourceForm(forms.Form):
     resourcetype  = forms.ChoiceField(
-        label      = _("Select School"),
+        label      = _("Type"),
         required   = True,
         choices    = [('text', 'Text'), ('audio', 'Audio'),('video','Video'), ('image', 'Image')]
     )
