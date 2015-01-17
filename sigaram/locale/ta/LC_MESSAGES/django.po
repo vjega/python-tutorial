@@ -1359,7 +1359,7 @@ msgstr ""
 #: templates/portalteacher/viewassignmentanswer.html:201
 #: templates/portalteacher/viewassignwrittenworkanswer.html:208
 msgid "Send to Noticeboard"
-msgstr ""
+msgstr "அறிவிப்புப்பலகைக்குள் செலுத்து"
 
 #: templates/portaladmin/classviewassign.html:155
 #: templates/portalteacher/viewassignmentanswer.html:203

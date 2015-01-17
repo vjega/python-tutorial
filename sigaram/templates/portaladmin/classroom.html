@@ -83,8 +83,7 @@ TTS.forms.renderannouncement = function(data){
     var count = 0
     for(var i in data){
         var t = {};
-        //t.DT_RowId = data[i].resourcetype+"_"+data[i].resourceid;
-        t.DT_RowId = data[i].resourceid;
+        t.DT_RowId = data[i].resourcetype+"_"+data[i].resourceid+"_"+data[i].studentid;
         t.slno = ++count;
         t.title = data[i].resourcetitle;
         t.type = data[i].resourcetype;
@@ -109,7 +108,15 @@ $(document).ready(function(){
         TTS.forms.renderannouncement(data);
     });
     $('#admin-main-tbl').on('click', 'tbody tr', function(){
-        window.location = 'classviewassign?id='+this.id;
+        var x = this.id.split('_');
+        if(x[0] == 'ar'){
+            window.location = 'classviewassignmentanswer?resourceid='+x[1]+'&studentid='+x[2];
+        }else if(x[0] == 'aw'){
+            window.location = 'classviewassignwrittenworkanswer?resourceid='+x[1]+'&studentid='+x[2];
+        }else{
+            return false;
+        }
+        
     });
 });
 
