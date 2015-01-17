@@ -83,7 +83,8 @@ TTS.forms.renderannouncement = function(data){
     var count = 0
     for(var i in data){
         var t = {};
-        t.DT_RowId = data[i].resourcetype+"_"+data[i].resourceid;
+        //t.DT_RowId = data[i].resourcetype+"_"+data[i].resourceid;
+        t.DT_RowId = data[i].resourceid;
         t.slno = ++count;
         t.title = data[i].resourcetitle;
         t.type = data[i].resourcetype;
