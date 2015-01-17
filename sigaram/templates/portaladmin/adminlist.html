@@ -96,7 +96,6 @@ TTS.forms.ediadmin = function(form, id, data) {
 }
 
 TTS.forms.deladmin = function(id) {
-    //console.log(id);
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -104,7 +103,6 @@ TTS.forms.deladmin = function(id) {
         type:'DELETE',
         url : '/api/admin/admin/'+id
     }).done(function( msg ) {
-        dialogItself.close();
         location.reload();
     }).error(function(msg){
         alert("Something Bad Happended");
@@ -224,7 +222,6 @@ $(document).ready(function(){
             return false;
         }
         TTS.forms.deladmin($(this).parent().parent().prop("id"));
-        window.location.reload();
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.showadminform();

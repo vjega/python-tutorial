@@ -4,7 +4,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Deliverables" %}</h2>
+        <h2 class="page-header">{% trans "Written Work" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -31,11 +31,12 @@
                 <div>
                     <h3>{% trans "Title" %}:</h3>
                 </div><br />
-                <div id="resource-title"></div><br />
-                <div id="view-resource"></div><br />
+                <div id="writtenwork-title"></div><br />
+                <div id="view-writtenwork"></div><br />
                 <div>
                     <h3>{% trans "Note" %}:</h3>
                 </div><br />
+                <div id="writtenwork-note"></div><br />
                 <!--div class="form-group"> 
                     <label>{% trans "Answer" %} {% trans "Type" %}</label>
                     <select id="answer-type" name="answer-type">
@@ -152,11 +153,11 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}   
 
 
-TTS.forms.renderassignedresourceinfo = function(data){
-    console.log(data); 
+TTS.forms.renderassignedwrittenworkinfo = function(data){
     $(".summernote").code(data.answertext);
-    $("#resource-title").html(data.resourcetitle);
-    $("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.videourl+"');\" >View</a>");
+    $("#writtenwork-title").html(data.writtenworktitle);
+    $("#writtenwork-note").html(data.description);
+    $("#view-writtenwork").html("<a target='_blank' href='/static/"+data.writtenimage+"'>{% trans 'View' %}</a>");
     if(data.isrecord && data.answerurl){
         $("#show-recorder").prop('checked',true);
         $("#audio-player").html('<audio src="/static/audio/'+data.answerurl+'" controls=""></audio><br />');    
@@ -182,7 +183,6 @@ TTS.forms.settotalmarks = function() {
 };
 
 TTS.forms.renderrubrictableinfo = function(rubtable, rubdata){
-    console.log(rubdata);
     var rubricid = rubdata.rubric_marks;
     var rubricmark = rubdata.rubric_n_mark.split(",");
     var tableHTML = '';
@@ -233,13 +233,9 @@ TTS.forms.renderrubrictableinfo = function(rubtable, rubdata){
     TTS.forms.settotalmarks();
 }
 
-
-function openwindow(videourl) {
-    window.open("../static/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
-}
 TTS.forms.ressave = function(savesend){
     var data = {};
-    var assignedid = TTS.utils.getUrlParameter('assignedid');
+    var writtenworkid = TTS.utils.getUrlParameter('writtenworkid');
     data.originaltext = $(".summernote").code();
     data.answertext = $(".summernote").code();
     data.answertype = $(".isaudio:checked").val();
@@ -271,12 +267,12 @@ TTS.forms.ressave = function(savesend){
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
-        url:"/api/admin/studentassignresource/"+assignedid+"/",
+        url:"/api/admin/studentassignwrittenwork/"+writtenworkid+"/",
         type:"PUT",
         data: data
     }).done(function(data){
         if(data.msg)
-            window.location = 'assignedresourcelist';
+            window.location = 'studentwrittenwork';
     }).error(function(err, msg){
         alert("I didnt save the data");
     });
@@ -293,7 +289,7 @@ $(document).ready(function(){
         $('#audio-player').hide();
     });
 
-    var assignedid = TTS.utils.getUrlParameter('assignedid');
+    var writtenworkid = TTS.utils.getUrlParameter('writtenworkid');
 
     $("#res-save").click(function(){
         TTS.forms.ressave('save');
@@ -302,10 +298,10 @@ $(document).ready(function(){
         TTS.forms.ressave('send');
     });
     $.ajax({
-        "url":"/api/admin/studentassignresource/"+assignedid+"/?format=json",
+        "url":"/api/admin/studentassignwrittenwork/"+writtenworkid+"/?format=json",
         "type":"GET"
     }).done(function(data){
-        TTS.forms.renderassignedresourceinfo(data);
+        TTS.forms.renderassignedwrittenworkinfo(data);
     });
 
 });

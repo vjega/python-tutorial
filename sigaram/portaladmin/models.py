@@ -247,7 +247,7 @@ class Auth_user(models.Model):
 
 
 class Assignresourceinfo(models.Model):
-    assignedid = models.BigIntegerField(db_column='assignedid', primary_key=True)
+    assignedid = models.AutoField(primary_key=True)
     resourceid = models.BigIntegerField()
     studentid = models.CharField(max_length=500)
     assigntext = models.TextField()
