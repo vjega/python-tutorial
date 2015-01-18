@@ -89,5 +89,7 @@ urlpatterns = patterns('teacher.views',
 
 
     url(r'^classviewassignwrittenworkanswer$',   'classviewassignwrittenworkanswer',  
-                                                         name='viewassignwrittenworkanswer')
+                                                         name='viewassignwrittenworkanswer'),
+    url(r'^viewresourcelist$',   'viewresourcelist',  
+                                                         name='viewresourcelist'),   
 )
