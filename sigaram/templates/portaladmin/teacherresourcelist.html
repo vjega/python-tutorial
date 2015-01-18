@@ -190,24 +190,11 @@ var updateChapter = function(){
     });
 };
 
-function getUrlParameter(sParam)
-{
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++) 
-    {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam) 
-        {
-            return sParameterName[1];
-        }
-    }
-}
-
 $(document).ready(function(){
-    var id = getUrlParameter('resourcecategory');
+    //var id = getUrlParameter('resourcecategory');
      $.ajax({
-        "url":"/api/admin/teacherresourcesinfo/?resourcecategory="+id+"&format=json",
+        "url":"/api/admin/teacherresourcesinfo/?format=json",
+        //"url":"/api/admin/teacherresourcesinfo/?resourcecategory="+id+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacherresourceinfo(data);

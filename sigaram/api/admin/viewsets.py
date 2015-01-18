@@ -322,7 +322,11 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         allschool.isdeleted = 1
         allschool.save()
         return Response('"msg":"delete"')
-    
+
+    def retrieve(self, request, pk=None):
+        queryset = models.Teacherresourceinfo.objects.get(pk=pk)
+        serializer = adminserializers.TeacherresourceinfoSerializer(queryset, many=False)
+        return Response(serializer.data)
 
 class ResourceinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Resourceinfo.objects.all()
@@ -1935,7 +1939,6 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
     def create(self, request):
         admin = models.AdminResources()
         admindata =  json.loads(request.DATA.keys()[0])
-        print admindata.get('fileurl');
         admin.resourcetype = admindata.get('resourcetype')
         admin.resourcetitle = admindata.get('resourcetitle')
         admin.resourcedescription = admindata.get('resourcedescription')
@@ -1995,7 +1998,7 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
             for row in cursor.fetchall()
         ]
 
-        print sql
+        #print sql
 
         sql = '''
         SELECT  cri.resourceid as assignedid,
@@ -2020,7 +2023,7 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
             for row in cursor.fetchall()
         ]
 
-        print sql
+        #print sql
 
         for x in resar:
             result.append(x)
@@ -2088,7 +2091,7 @@ class StudentWrittenWork(viewsets.ModelViewSet):
         if data.get('issaved'):
             awwi.issaved = data.get('issaved')
         
-        print awwi
+        #print awwi
 
         awwi.save()
 

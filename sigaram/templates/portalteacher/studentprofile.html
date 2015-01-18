@@ -10,7 +10,7 @@
 </div>
 <div class="row">
     {% for folder in folders%}
-    <a href="{{folder.href}}?studentid={{user}}">
+    <a href="{{folder.href}}">
     <div class="col-lg-3 col-md-6">
         <div class="panel panel-yellow">
             <div class="panel-heading">
@@ -20,6 +20,7 @@
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="tent-medium">{{folder.name}}</div>
+
                     </div>
                 </div>
             </div>
