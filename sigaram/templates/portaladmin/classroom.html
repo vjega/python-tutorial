@@ -92,8 +92,8 @@ TTS.forms.renderannouncement = function(data){
         if(data[i].resourcetype == 'aw'){
             t.type = '{% trans "Written Work" %}';
         }
-        t.student   = data[i].firstname;
-        t.date      = data[i].posteddate;
+        t.student = data[i].firstname;
+        t.date = data[i].posteddate;
         dataset.push(t);
     }
 
