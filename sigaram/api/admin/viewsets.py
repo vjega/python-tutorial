@@ -1564,9 +1564,11 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
     def list(self, request):
         result = []
         sql = '''
+        SELECT * FROM 
+        (
         SELECT  bbi.resourceid as assignedid,
-            bbi.resourcetype,
-            bbi.studentid,
+            bbi.resourcetype as resourcetype,
+            bbi.studentid as studentid,
             ri.resourceid as resourceid,
             ri.resourcetitle as title,
             concat(au.first_name,' ',au.last_name) as firstname,
@@ -1575,20 +1577,13 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
         INNER JOIN assignresourceinfo ari ON ari.assignedid=bbi.resourceid
         INNER JOIN resourceinfo ri ON ri.resourceid=ari.resourceid
         INNER JOIN auth_user au ON au.username=bbi.studentid
-        WHERE bbi.resourcetype = "ar" 
-        '''
-        cursor = connection.cursor()
-        cursor.execute(sql)
-        desc = cursor.description
-        resar =  [
-            dict(zip([col[0] for col in desc], row))
-            for row in cursor.fetchall()
-        ]
-
-        sql = '''
+        WHERE bbi.resourcetype = "ar"
+        )
+        UNION ALL
+        (
         SELECT  bbi.resourceid as assignedid,
-                bbi.resourcetype,
-                bbi.studentid,
+                bbi.resourcetype as resourcetype,
+                bbi.studentid as studentid,
                 wwi.writtenworkid as resourceid,
                 wwi.writtenworktitle as title,
                 concat(au.first_name,' ',au.last_name) as firstname,
@@ -1597,20 +1592,16 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
         INNER JOIN assignwrittenworkinfo awwi ON awwi.assignwrittenworkid=bbi.resourceid
         INNER JOIN writtenworkinfo wwi ON wwi.writtenworkid=awwi.writtenworkid
         INNER JOIN auth_user au ON au.username=bbi.studentid
-        WHERE bbi.resourcetype = "aw" 
+        WHERE bbi.resourcetype = "aw"
+        ) as temp ORDER BY posteddate DESC
         '''
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
-        resaw =  [
+        result =  [
             dict(zip([col[0] for col in desc], row))
             for row in cursor.fetchall()
         ]
-
-        for x in resar:
-            result.append(x)
-        for x in resaw:
-            result.append(x)
 
         return Response(result)
 
