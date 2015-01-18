@@ -114,8 +114,6 @@ class TeacherViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        # print "Hi"
-        """
         teacher = models.Teacherinfo.objects.get(pk=pk)
         teacherdata =  json.loads(request.DATA.keys()[0])
         teacher.username = teacherdata.get('username')
@@ -127,7 +125,6 @@ class TeacherViewSet(viewsets.ModelViewSet):
         teacher.classid = teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
         teacher.save()
-        """
         return Response(request.DATA)
 
     def partial_update(self, request, pk=None):

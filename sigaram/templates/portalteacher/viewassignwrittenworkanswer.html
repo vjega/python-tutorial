@@ -573,7 +573,7 @@ $(document).ready(function(){
                 'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
             },
             type:'POST',
-            url : '/api/admin/billboardwrittenwork/?assignedid='+assignedid+'&studentid='+studentid+'&assignedtype=aw'
+            url : '/api/admin/billboardresource/?assignedid='+assignedid+'&studentid='+studentid+'&assignedtype=aw'
         }).done(function(msg) {
             if(msg = 'saved')
                 alert("Writtenwork sent to Noticeboard");
