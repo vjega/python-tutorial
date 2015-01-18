@@ -1655,9 +1655,8 @@ msgstr "மதிப்பீடு"
 #: templates/portalstudent/viewassignmentanswer.html:209
 #: templates/portalstudent/viewassignwrittenworkanswer.html:209
 #, fuzzy
-#| msgid "Insert Classrooms"
 msgid "Send to Classroom"
-msgstr "வகுப்பறை"
+msgstr "வகுப்பறைக்குள் செலுத்து"
 
 #: templates/portalstudent/viewassignmentanswer.html:211
 msgid "Resource already sent to classroom"
