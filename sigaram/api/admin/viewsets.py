@@ -1325,18 +1325,18 @@ class BillboardViewSet(viewsets.ModelViewSet):
     def list(self, request):
         sql = """
         SELECT distinct bbi.assessmentid, 
-                bbri.rating,
-                bbi.resourceid,
-                asl.assessmenttype,
-                asl.assessmenttitle,
-                ri.resourcetype,
-                ri.resourcetitle,
-                writtenworkinfo.writtenworktitle,
-                bbi.writtenworkid, 
-                studentinfo.firstname,
-                studentinfo.imageurl,
-                date(bbi.posteddate) as posteddate,
-                bbi.studentid 
+            bbri.rating,
+            bbi.resourceid,
+            asl.assessmenttype,
+            asl.assessmenttitle,
+            ri.resourcetype,
+            ri.resourcetitle,
+            writtenworkinfo.writtenworktitle,
+            bbi.writtenworkid, 
+            studentinfo.firstname,
+            studentinfo.imageurl,
+            date(bbi.posteddate) as posteddate,
+            bbi.studentid 
         FROM billboardinfo bbi
         LEFT OUTER JOIN assignassessmentinfo asm ON asm.assessmentid = bbi.assessmentid 
             AND asm.studentid = bbi.studentid 
@@ -1559,6 +1559,60 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
         cursor.execute(sql)        
 
         return Response('saved')
+
+    def list(self, request):
+        result = []
+        sql = '''
+        SELECT  bbi.resourceid as assignedid,
+            bbi.resourcetype,
+            bbi.studentid,
+            ri.resourceid as resourceid,
+            ri.resourcetitle as title,
+            concat(au.first_name,' ',au.last_name) as firstname,
+            date(bbi.posteddate) as posteddate
+        FROM billboardinfo bbi
+        INNER JOIN assignresourceinfo ari ON ari.assignedid=bbi.resourceid
+        INNER JOIN resourceinfo ri ON ri.resourceid=ari.resourceid
+        INNER JOIN auth_user au ON au.username=bbi.studentid
+        WHERE bbi.resourcetype = "ar" 
+        '''
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        resar =  [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+
+        sql = '''
+        SELECT  bbi.resourceid as assignedid,
+                bbi.resourcetype,
+                bbi.studentid,
+                wwi.writtenworkid as resourceid,
+                wwi.writtenworktitle as title,
+                concat(au.first_name,' ',au.last_name) as firstname,
+                date(bbi.posteddate) as posteddate
+        FROM billboardinfo bbi
+        INNER JOIN assignwrittenworkinfo awwi ON awwi.assignwrittenworkid=bbi.resourceid
+        INNER JOIN writtenworkinfo wwi ON wwi.writtenworkid=awwi.writtenworkid
+        INNER JOIN auth_user au ON au.username=bbi.studentid
+        WHERE bbi.resourcetype = "aw" 
+        '''
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        resaw =  [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+
+        for x in resar:
+            result.append(x)
+        for x in resaw:
+            result.append(x)
+
+        return Response(result)
+
 
 class TopicViewSet(viewsets.ModelViewSet):
 
@@ -1927,8 +1981,8 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
             cri.studentid,
             ri.resourceid as resourceid,
             ri.resourcetitle as title,
-            au.first_name as firstname,
-            cri.posteddate
+            concat(au.first_name,' ',au.last_name) as firstname,
+            date(cri.posteddate) as posteddate
         FROM classroominfo cri
         INNER JOIN assignresourceinfo ari ON ari.assignedid=cri.resourceid
         INNER JOIN resourceinfo ri ON ri.resourceid=ari.resourceid
@@ -1944,14 +1998,16 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
             for row in cursor.fetchall()
         ]
 
+        print sql
+
         sql = '''
         SELECT  cri.resourceid as assignedid,
                 cri.resourcetype,
                 cri.studentid,
                 wwi.writtenworkid as resourceid,
                 wwi.writtenworktitle as title,
-                au.first_name as firstname,
-                cri.posteddate
+                concat(au.first_name,' ',au.last_name) as firstname,
+                date(cri.posteddate) as posteddate                
         FROM classroominfo cri
         INNER JOIN assignwrittenworkinfo awwi ON awwi.assignwrittenworkid=cri.resourceid
         INNER JOIN writtenworkinfo wwi ON wwi.writtenworkid=awwi.writtenworkid
@@ -1966,6 +2022,8 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
             dict(zip([col[0] for col in desc], row))
             for row in cursor.fetchall()
         ]
+
+        print sql
 
         for x in resar:
             result.append(x)

@@ -544,8 +544,8 @@ def newtopic(request):
     return render(request, 'portalteacher/newtopic.html', {"form" : NewtopicForm.NewtopicForm()})
 
 @switchlanguage
-def billviewassignmentanswer(request):
-    return render(request, 'portalteacher/billviewassignmentanswer.html')
+def classviewassignmentanswer(request):
+    return render(request, 'portalteacher/classviewassignmentanswer.html')
 
 @login_required
 @switchlanguage
@@ -576,3 +576,10 @@ def myresourcelist(request):
 @switchlanguage
 def viewmyresourcelist(request):
     return render(request, 'portalteacher/viewmyresourcelistwork.html')
+
+
+
+@login_required
+@switchlanguage
+def classviewassignwrittenworkanswer(request):
+    return render(request, 'portalteacher/classviewassignwrittenworkanswer.html')
