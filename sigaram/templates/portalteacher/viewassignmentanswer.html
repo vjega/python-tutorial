@@ -579,7 +579,11 @@ $(document).ready(function(){
             location.reload();
         });
     });
-    
+    $("body").on("click","span.tc,span.sc", function(event){
+        event.stopPropagation();
+        var spanid = $(this).attr("id");
+        TTS.forms.editanswerlist(spanid);
+    });    
     /*$("body").on("click","i.rejected", function(event){
         var editingid = $(this).parent().parent().attr("id");
         var assignedid = $("#assignedid").val();
