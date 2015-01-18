@@ -349,7 +349,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         if categoryid:
             kwarg['categoryid'] = categoryid
 
-        queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('resourceid')
+        queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('-createddate')
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
