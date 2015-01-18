@@ -546,3 +546,7 @@ def viewmyresourcelist(request):
 def classviewassignwrittenworkanswer(request):
     return render(request, 'portaladmin/classviewassignwrittenworkanswer.html')    
 
+@login_required
+@switchlanguage
+def rubrics(request):
+    return render(request, 'portaladmin/rubrics.html')
