@@ -501,10 +501,10 @@ def studentprofile(request):
         },{
         "id"   :"2",
         "name" :_("Written Work"),
-        "href" :"viewstudentwrittenworks"
+        "href" :"viewstudentwrittenworks?studentid=%s" % request.GET.get('studentid') 
         }]
     return render(request, 'portalteacher/studentprofile.html', 
-                  {"folders":folders,"user":user})
+                  {"folders":folders})
 
 @login_required
 @switchlanguage
@@ -577,9 +577,12 @@ def myresourcelist(request):
 def viewmyresourcelist(request):
     return render(request, 'portalteacher/viewmyresourcelistwork.html')
 
-
-
 @login_required
 @switchlanguage
 def classviewassignwrittenworkanswer(request):
     return render(request, 'portalteacher/classviewassignwrittenworkanswer.html')
+
+@login_required
+@switchlanguage
+def viewresourcelist(request):
+    return render(request, 'portalteacher/viewresourcelist.html')

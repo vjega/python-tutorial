@@ -46,6 +46,7 @@
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
@@ -114,7 +115,7 @@ TTS.forms.renderstudentwork = function(data){
         "columns":  headers
     });
 };
-$(document).ready(function(){
+/*$(document).ready(function(){
     $.ajax({
         "url":"/api/student/resourceinfo/?studentid="+TTS.studentid+"&format=json",
         "type":"GET"
@@ -126,7 +127,20 @@ $(document).ready(function(){
         alert(studentid);
         window.location = 'viewstudentresource?resourceid='+this.id;
     });
+});*/
+$(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
+    $.ajax({
+        "url":"/api/admin/resourceinfo/?studentid=&studentloginid=&format=json",
+        "type":"GET"
+    }).done(function(data){
+        TTS.forms.renderstudentwork(data);
+        TTS.utils.ajaxloaderstop();
+    });
+     $('#studentassigned-resource-tbl').on('click', 'tbody tr', function(){
+        var studentid = getUrlParameter('studentid');
+        window.location = 'viewstudentresource?resourceid='+this.id;
+    });
 });
-
 </script>
 {% endblock scriptcontent %}

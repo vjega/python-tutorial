@@ -71,7 +71,7 @@ TTS.forms.addschool = function() {
                 $.ajax({
                     headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
-                      },
+                    },
                     type:'POST',
                     data: data,
                     url : '/api/admin/adminschool/'
