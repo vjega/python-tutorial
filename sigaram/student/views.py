@@ -120,8 +120,8 @@ def resourcetype(request):
         "name" :_("Composition"),
         "href" :"extras"
         }]
-    classid = request.GET.get('classid')
-    section = request.GET.get('section')
+    classid = request.GET.get('classid',1)
+    section = request.GET.get('section','a')
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
                            #'body':studentresourcetype_body}
