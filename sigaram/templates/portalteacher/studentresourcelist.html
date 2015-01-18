@@ -135,7 +135,9 @@ TTS.forms.renderteacherresourceinfo = function(data){
         var t = {};
         t.slno= ++count;
         t.DT_RowId = data[i].resourceid;
-        t.title ="<p class='col-sm-3 pull-left'><img src=http://10tsigaram.com/dbinterface/"+data[i].thumbnailurl+"></p> " + "<a href='javascript:void(0)' id='"+data[i].resourceid+"' ></a>"+data[i].resourcetitle;
+        var temp = data[i].imageurl || data[i].audiourl || data[i].videourl;
+        console.log(temp);
+        t.title ="<a href='/static/"+temp+"' id='"+data[i].resourceid+"' ><p class='col-sm-3 pull-left'><img src='/static/"+data[i].thumbnailurl+"'></p> " + data[i].resourcetitle +"</a>";
         t.date= data[i].createddate;
         t.assignment="<a href='javascript:void(0)' class='assignment' id='"+data[i].resourceid+"' ><i class='fa fa-share fa-2x'></i></a>";
         dataset.push(t);
@@ -178,8 +180,9 @@ $(document).ready(function(){
         window.location = 'studentresourcelist?categoryid=1&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.section;
     });*/
     $('#studetresource-main-tbl').on('click', 'tbody tr', function(){
-        window.location = 'http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/studentresources/.swf';
-
+        var temp = $(this).prop('html');
+        console.log(this);
+        //window.location = '/static/studentresources/'+temp;
     });
     $('#studetresource-main-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();
