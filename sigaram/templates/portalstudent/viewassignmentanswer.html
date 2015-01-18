@@ -526,7 +526,7 @@ $(document).ready(function(){
     });
 
     $("body").on("click","span.tc,span.sc", function(event){
-        //event.stopPropagation();
+        event.stopPropagation();
         var spanid = $(this).attr("id");
         TTS.forms.editanswerlist(spanid);
     });
