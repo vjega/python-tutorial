@@ -205,9 +205,10 @@ function getUrlParameter(sParam)
 }
 
 $(document).ready(function(){
-    var id = getUrlParameter('resourcecategory');
+    //var id = getUrlParameter('resourcecategory');
      $.ajax({
-        "url":"/api/admin/teacherresourcesinfo/?resourcecategory="+id+"&format=json",
+        "url":"/api/admin/teacherresourcesinfo/?format=json",
+        //"url":"/api/admin/teacherresourcesinfo/?resourcecategory="+id+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacherresourceinfo(data);
