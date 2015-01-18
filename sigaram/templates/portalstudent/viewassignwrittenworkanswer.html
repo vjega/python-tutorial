@@ -197,6 +197,7 @@ TTS.forms = TTS.forms || {}
 
 
 TTS.forms.renderassignedwrittenworkinfo = function(data){
+    TTS.forms.studentid = data[0].studentid;
     $("#assignedid").val(data[0].id);
     $("#writtenwork-title").html(data[0].writtenworktitle);
     $("#assigned-date").html(data[0].createddate);
@@ -552,15 +553,18 @@ $(document).ready(function(){
     });
 
     $("body").on("click","i.rejected", function(event){
-        var editingid = $(this).parent().parent().attr("id");
-        var assignedid = $("#assignedid").val();
-        $.ajax({
-            type:'GET',
-            url : '/api/admin/editanswerwrittenwork/'+editingid+'/?assignedid='+assignedid
-        }).done(function(msg) {
-            if(msg == 'approved')
-                TTS.forms.changeapproveicon(editingid);
-        });
+        var sesstudent = "{{user.username}}";
+        if(sesstudent == TTS.forms.studentid){
+            var editingid = $(this).parent().parent().attr("id");
+            var assignedid = $("#assignedid").val();
+            $.ajax({
+                type:'GET',
+                url : '/api/admin/editanswerwrittenwork/'+editingid+'/?assignedid='+assignedid
+            }).done(function(msg) {
+                if(msg == 'approved')
+                    TTS.forms.changeapproveicon(editingid);
+            });
+        }
     });
 
 });

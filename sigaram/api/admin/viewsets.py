@@ -1565,7 +1565,7 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
         result = []
         sql = '''
         SELECT * FROM 
-        (
+        ((
         SELECT  bbi.resourceid as assignedid,
             bbi.resourcetype as resourcetype,
             bbi.studentid as studentid,
@@ -1593,7 +1593,7 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
         INNER JOIN writtenworkinfo wwi ON wwi.writtenworkid=awwi.writtenworkid
         INNER JOIN auth_user au ON au.username=bbi.studentid
         WHERE bbi.resourcetype = "aw"
-        ) as temp ORDER BY posteddate DESC
+        )) as temp ORDER BY posteddate DESC
         '''
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -1967,6 +1967,8 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
         result = []
 
         sql = '''
+        SELECT * FROM 
+        ((
         SELECT  cri.resourceid as assignedid,
             cri.resourcetype,
             cri.studentid,
@@ -1980,18 +1982,9 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
         INNER JOIN auth_user au ON au.username=cri.studentid
         WHERE cri.resourcetype = "ar"
         %s
-        '''% wherecond
-        cursor = connection.cursor()
-        cursor.execute(sql)
-        desc = cursor.description
-        resar =  [
-            dict(zip([col[0] for col in desc], row))
-            for row in cursor.fetchall()
-        ]
-
-        #print sql
-
-        sql = '''
+        )
+        UNION ALL
+        (
         SELECT  cri.resourceid as assignedid,
                 cri.resourcetype,
                 cri.studentid,
@@ -2005,21 +1998,15 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
         INNER JOIN auth_user au ON au.username=cri.studentid
         WHERE cri.resourcetype = "aw"
         %s
-        '''% wherecond
+        )) as temp ORDER BY posteddate DESC
+        '''% (wherecond, wherecond)
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
-        resaw =  [
+        result =  [
             dict(zip([col[0] for col in desc], row))
             for row in cursor.fetchall()
         ]
-
-        #print sql
-
-        for x in resar:
-            result.append(x)
-        for x in resaw:
-            result.append(x)
 
         return Response(result)
 
