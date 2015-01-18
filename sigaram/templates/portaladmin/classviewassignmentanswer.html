@@ -144,7 +144,7 @@
                         </div>
                     </div>                    
 
-                    <!--div class="row">
+                    <div class="row">
                         <div class="col-lg-12">
                             <label class="col-lg-12">{% trans "Rubrics" %} {% trans "Evaluation" %}</label>
                         </div>
@@ -156,7 +156,7 @@
                                 Rubrics Evaluation
                             </div>
                         </div>
-                    </div-->                    
+                    </div>                    
                     
 
                 <!--div id="view-resource">
@@ -206,11 +206,16 @@ TTS.forms.renderassignedresourceinfo = function(data){
         $("#audio-player").html('<audio src="../static/audio/'+data[0].answerurl+'" controls=""></audio><br />');
     }
     
-    /*if(data[0].isbillboard == 0){
-        $('#sendnoticeboardhtml').html('<a href="javascript:void(0)" id="sendnoticeboard" >{% trans "Send to Noticeboard" %}</a>');
-    }else if(data[0].isbillboard == 1){
-        $('#sendnoticeboardhtml').html('{% trans "Resource already Sent to Noticeboard" %}');
-    }*/
+    if(data[0].isclassroom){
+        $.ajax({
+            "url":"/api/admin/rubrics/peerrubricsreview/?resourceid="+data[0].id,
+            "type":"GET"
+        }).done(function(data){
+            control.log(data);
+            //return false;
+            //TTS.forms.renderrubrictableinfo(rubricdata, data);
+        });
+    }
 
     if(data[0].rubric_id){
         $.ajax({
@@ -559,7 +564,7 @@ $(document).ready(function(){
     });
 
     $("body").on("click","span.tc,span.sc", function(event){
-        //event.stopPropagation();
+        event.stopPropagation();
         var spanid = $(this).attr("id");
         TTS.forms.editanswerlist(spanid);
     });

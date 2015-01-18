@@ -2546,3 +2546,49 @@ class EditAnswerWrittenworkViewSet(viewsets.ModelViewSet):
         cursor.execute(sql)
 
         return Response('approved')      
+
+class PeerRubricsReviewViewSet(viewsets.ModelViewSet):
+
+    queryset = models.RubricsHeader.objects.all().order_by('-slno')
+    serializer_class = adminserializers.AdminrubricsSerializer
+
+    def create(self, request):
+        adminrubrics = models.RubricsHeader()
+        rubricmatrix = models.RubricMatrix()
+        rubricsdata =  json.loads(request.DATA.keys()[0])
+
+        rubbodydata = rubricsdata.get('mtx_body')
+        rubheaderdata = rubricsdata.get('mtx_head')
+        
+        adminrubrics.title = rubricsdata.get('ttl')
+        adminrubrics.description = rubricsdata.get('desc')
+        adminrubrics.instruction = rubricsdata.get('instn')
+        adminrubrics.teacher = request.user.username
+        adminrubrics.status = 0
+        adminrubrics.ts = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminrubrics.save()
+
+        refno = adminrubrics.slno
+
+        for idx, bd in enumerate(rubbodydata):
+            rubricmatrix.refno = refno
+            rubricmatrix.datatype = 'B'
+            rubricmatrix.jdata = bd
+            rubricmatrix.disp_order = idx+1
+            rubricmatrix.save()
+
+        for idy, hd in enumerate(rubheaderdata):
+            rubricmatrix.refno = refno
+            rubricmatrix.datatype = 'H'
+            rubricmatrix.jdata = hd
+            rubricmatrix.disp_order = idy
+            rubricmatrix.save()
+
+        return Response(request.DATA);
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        models.RubricsHeader.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
