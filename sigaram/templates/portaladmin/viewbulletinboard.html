@@ -70,7 +70,11 @@ TTS.forms.renderteacherresourceinfo = function(data){
     $("#resource-title").html(data.messagetitle);
     $("#resource-announcer").html(data.message);
     $("#resource-date").html(data.posteddate);
-    $("#view-resource").html("<a target='_blank' href='../static/"+data.attachmenturl+"'' >{% trans 'View' %}</a>");
+    if (data.attachmenturl!=0) {
+        $("#view-resource").html("<a target='_blank' href='../static/"+data.attachmenturl+"'' >{% trans 'View' %}</a>");
+    }else {
+        $("#view-resource").html("{% trans 'No Attachement' %}</a>");
+    }
     //console.log(data.resourcetype)
 
 };
