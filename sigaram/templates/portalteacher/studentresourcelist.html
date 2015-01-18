@@ -136,8 +136,12 @@ TTS.forms.renderteacherresourceinfo = function(data){
         t.slno= ++count;
         t.DT_RowId = data[i].resourceid;
         var temp = data[i].imageurl || data[i].audiourl || data[i].videourl;
-        console.log(temp);
-        t.title ="<a href='/static/"+temp+"' id='"+data[i].resourceid+"' ><p class='col-sm-3 pull-left'><img src='/static/"+data[i].thumbnailurl+"'></p> " + data[i].resourcetitle +"</a>";
+        if (temp) {
+            temp = "/static/"+temp;
+        } else {
+            temp = "#";
+        } 
+        t.title ="<a href='"+temp+"' id='"+data[i].resourceid+"' ><p class='col-sm-3 pull-left'><img src='/static/"+data[i].thumbnailurl+"'></p> " + data[i].resourcetitle +"</a>";
         t.date= data[i].createddate;
         t.assignment="<a href='javascript:void(0)' class='assignment' id='"+data[i].resourceid+"' ><i class='fa fa-share fa-2x'></i></a>";
         dataset.push(t);
