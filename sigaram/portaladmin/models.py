@@ -390,7 +390,7 @@ class Bulletinboardinfo(models.Model):
         WHERE %s
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
-        LIMIT 2"""% (fieldcond,joincond,wherecond)
+        LIMIT 10"""% (fieldcond,joincond,wherecond)
         cursor = connection.cursor()
         cursor.execute(sql)
         x = dictfetchall(cursor)
