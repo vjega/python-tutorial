@@ -1574,8 +1574,7 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
         INNER JOIN assignresourceinfo ari ON ari.assignedid=bbi.resourceid
         INNER JOIN resourceinfo ri ON ri.resourceid=ari.resourceid
         INNER JOIN auth_user au ON au.username=bbi.studentid
-        WHERE bbi.resourcetype = "ar"
-        ORDER BY bbi.posteddate
+        WHERE bbi.resourcetype = "ar" 
         '''
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -1597,8 +1596,7 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
         INNER JOIN assignwrittenworkinfo awwi ON awwi.assignwrittenworkid=bbi.resourceid
         INNER JOIN writtenworkinfo wwi ON wwi.writtenworkid=awwi.writtenworkid
         INNER JOIN auth_user au ON au.username=bbi.studentid
-        WHERE bbi.resourcetype = "aw"
-        ORDER BY bbi.posteddate
+        WHERE bbi.resourcetype = "aw" 
         '''
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -1990,7 +1988,6 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
         INNER JOIN resourceinfo ri ON ri.resourceid=ari.resourceid
         INNER JOIN auth_user au ON au.username=cri.studentid
         WHERE cri.resourcetype = "ar"
-        ORDER BY cri.posteddate desc
         %s
         '''% wherecond
         cursor = connection.cursor()
@@ -2000,6 +1997,8 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
             dict(zip([col[0] for col in desc], row))
             for row in cursor.fetchall()
         ]
+
+        print sql
 
         sql = '''
         SELECT  cri.resourceid as assignedid,
@@ -2014,7 +2013,6 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
         INNER JOIN writtenworkinfo wwi ON wwi.writtenworkid=awwi.writtenworkid
         INNER JOIN auth_user au ON au.username=cri.studentid
         WHERE cri.resourcetype = "aw"
-        ORDER BY cri.posteddate desc
         %s
         '''% wherecond
         cursor = connection.cursor()
@@ -2024,6 +2022,8 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
             dict(zip([col[0] for col in desc], row))
             for row in cursor.fetchall()
         ]
+
+        print sql
 
         for x in resar:
             result.append(x)
