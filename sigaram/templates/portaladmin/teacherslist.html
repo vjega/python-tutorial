@@ -116,13 +116,13 @@ TTS.forms.showteacherform = function() {
 
 TTS.forms.editteacher = function(id, data) {
     BootstrapDialog.show({
-        title: 'Edit Teacher',
+        title: 'Edit Student',
         message: $($('#teacher-form').render()),
         onshown: function(){
+            TTS.forms.upload();
             $("#add-teacher").find("input,select").each(function(){
                 $(this).val(data[this['name']]);
             });
-            TTS.forms.upload();
         },
         buttons: [{
             label: 'Update',
@@ -137,6 +137,7 @@ TTS.forms.editteacher = function(id, data) {
                     data: data,
                     url : '/api/admin/teacher/'+id
                 }).done(function( msg ) {
+                    dialogItself.close();
                     location.reload();
                 });
             }
@@ -265,7 +266,7 @@ $(document).ready(function(){
         }).done(function(data){
             TTS.forms.renderteacher(data);
         });
-    })
+    });
     $('#teacherlist-main-tbl').on('click', '.tts-edit', function(e){
         e.stopPropagation();
         var id = $(this).parent().parent().prop('id');
