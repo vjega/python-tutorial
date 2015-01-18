@@ -1,0 +1,147 @@
+{% extends 'portalteacher/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block topcontent %}
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Rubrics" %}</h2>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+{% endblock topcontent %}
+
+{% block botcontent %}
+<div class="col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {% trans "Rubrics" %}
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover" 
+                    id="rubrics-main-tbl">
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+<!-- /.col-lg-12 -->
+{% endblock botcontent%}
+
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<style>
+    #addrec:hover, #rubrics-main-tbl tbody tr:hover,.tts-delete:hover{
+        cursor: pointer;
+    }
+</style>
+{% endblock morecss %}
+
+
+{% block morescript %}
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+{% endblock morescript %}
+
+{% block scriptcontent %}
+
+
+<script>
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}
+
+
+TTS.forms.renderrubricsinfo = function(data){
+    var headers = [
+            { "title": "{% trans "Sl No." %}",
+              "class": "text-center",
+              "data" : "slno"  
+            },
+            { "title": "{% trans "Title" %}", "data" : "title"},
+            { "title": "{% trans "Detail" %}", "data" : "detail"},
+            { "title": "{% trans "Teacher" %}", "data" : "teacher"},
+            { "title": "{% trans "Date Time" %}", "data" : "time"}, 
+            { "title": "{% trans "Delete" %}",
+              "class": "text-center", 
+              "data" : "delete"  
+            }, 
+        ];
+    var dataset = [];
+    var count = 0
+    for(var i in data){
+        dataset.push({
+            "DT_RowId" : data[i].slno,
+            "slno" : ++count,
+            "title": data[i].title,
+            "detail": data[i].description,
+            "teacher": data[i].teacher,
+            "time" : data[i].ts,
+            "delete" : "<i class='tts-delete fa fa-trash fa-lg'></i>"
+        });
+    }
+
+    $('#rubrics-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
+        "data":     dataset,
+        "columns":  headers
+    });
+
+};
+
+TTS.forms.delrubric = function(id) {
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'DELETE',
+        url : '/api/admin/rubricsheader/'+id
+    }).done(function( msg ) {
+        alert("Rubric deleted successfully");
+        window.location.reload();
+    }).error(function(msg){
+        alert("Something Bad Happended");
+    });
+}
+
+$(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
+    $.ajax({
+        "url":"/api/admin/rubricsheader/?format=json",
+        "type":"GET"
+    }).done(function(data){
+        TTS.forms.renderrubricsinfo(data);
+        TTS.utils.ajaxloaderstop();
+    });
+   
+    $('#rubrics-main-tbl').on('click', '.tts-delete', function(e){
+        e.stopPropagation();
+        if (window.confirm("Do you want to delete this record?")) {
+            delid = $(this).parent().parent().prop("id");
+            TTS.forms.delrubric(delid);
+        }
+    });
+    
+    $("#page-wrapper").on("click", "#addrec", function(){
+        //TTS.forms.addrubrics();
+        window.location = 'rubric_edit';
+
+    });
+
+    $("#rubrics-main-tbl").on("click", "tbody tr", function(){
+        window.location = "/teacher/rubric_view?rubricid="+$(this).prop('id');
+    })
+   
+});
+
+</script>
+
+{% endblock scriptcontent %}
