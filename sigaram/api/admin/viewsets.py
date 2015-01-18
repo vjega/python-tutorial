@@ -1569,12 +1569,13 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
             ri.resourceid as resourceid,
             ri.resourcetitle as title,
             concat(au.first_name,' ',au.last_name) as firstname,
-            bbi.posteddate
+            date(bbi.posteddate) as posteddate
         FROM billboardinfo bbi
         INNER JOIN assignresourceinfo ari ON ari.assignedid=bbi.resourceid
         INNER JOIN resourceinfo ri ON ri.resourceid=ari.resourceid
         INNER JOIN auth_user au ON au.username=bbi.studentid
         WHERE bbi.resourcetype = "ar"
+        ORDER BY bbi.posteddate
         '''
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -1591,12 +1592,13 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
                 wwi.writtenworkid as resourceid,
                 wwi.writtenworktitle as title,
                 concat(au.first_name,' ',au.last_name) as firstname,
-                bbi.posteddate
+                date(bbi.posteddate) as posteddate
         FROM billboardinfo bbi
         INNER JOIN assignwrittenworkinfo awwi ON awwi.assignwrittenworkid=bbi.resourceid
         INNER JOIN writtenworkinfo wwi ON wwi.writtenworkid=awwi.writtenworkid
         INNER JOIN auth_user au ON au.username=bbi.studentid
         WHERE bbi.resourcetype = "aw"
+        ORDER BY bbi.posteddate
         '''
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -1982,12 +1984,13 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
             ri.resourceid as resourceid,
             ri.resourcetitle as title,
             concat(au.first_name,' ',au.last_name) as firstname,
-            cri.posteddate
+            date(cri.posteddate) as posteddate
         FROM classroominfo cri
         INNER JOIN assignresourceinfo ari ON ari.assignedid=cri.resourceid
         INNER JOIN resourceinfo ri ON ri.resourceid=ari.resourceid
         INNER JOIN auth_user au ON au.username=cri.studentid
         WHERE cri.resourcetype = "ar"
+        ORDER BY cri.posteddate desc
         %s
         '''% wherecond
         cursor = connection.cursor()
@@ -2005,12 +2008,13 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
                 wwi.writtenworkid as resourceid,
                 wwi.writtenworktitle as title,
                 concat(au.first_name,' ',au.last_name) as firstname,
-                cri.posteddate
+                date(cri.posteddate) as posteddate                
         FROM classroominfo cri
         INNER JOIN assignwrittenworkinfo awwi ON awwi.assignwrittenworkid=cri.resourceid
         INNER JOIN writtenworkinfo wwi ON wwi.writtenworkid=awwi.writtenworkid
         INNER JOIN auth_user au ON au.username=cri.studentid
         WHERE cri.resourcetype = "aw"
+        ORDER BY cri.posteddate desc
         %s
         '''% wherecond
         cursor = connection.cursor()
