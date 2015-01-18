@@ -15,7 +15,8 @@ from teacher.forms import ( RubricsForm,
                             AnnouncementForm,
                             StickyinfoForm,
                             NewtopicForm,
-                            MyprofileForm
+                            MyprofileForm,
+                            MyresourcelistForm
                             ) 
 
 from ajaxuploader.views import AjaxFileUploader  
@@ -543,8 +544,8 @@ def newtopic(request):
     return render(request, 'portalteacher/newtopic.html', {"form" : NewtopicForm.NewtopicForm()})
 
 @switchlanguage
-def billviewassignmentanswer(request):
-    return render(request, 'portalteacher/billviewassignmentanswer.html')
+def classviewassignmentanswer(request):
+    return render(request, 'portalteacher/classviewassignmentanswer.html')
 
 @login_required
 @switchlanguage
@@ -564,3 +565,21 @@ def viewteacherresource(request):
 @switchlanguage
 def viewassignwrittenworkanswer(request):
     return render(request, 'portalteacher/viewassignwrittenworkanswer.html')
+
+@login_required
+@switchlanguage
+def myresourcelist(request):
+    return render(request, 'portalteacher/myresourcelist.html', 
+                                        {"form" : MyresourcelistForm.MyresourcelistForm()})
+
+@login_required
+@switchlanguage
+def viewmyresourcelist(request):
+    return render(request, 'portalteacher/viewmyresourcelistwork.html')
+
+
+
+@login_required
+@switchlanguage
+def classviewassignwrittenworkanswer(request):
+    return render(request, 'portalteacher/classviewassignwrittenworkanswer.html')

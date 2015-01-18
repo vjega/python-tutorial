@@ -47,6 +47,7 @@ router.register(r'studentassignwrittenwork',viewsets.StudentAssignWrittenWork)
 router.register(r'assignedwrittenworkstudents',viewsets.AssignedWrittenworkStudents)
 router.register(r'editanswerresource',      viewsets.EditAnswerResourceViewSet)
 router.register(r'editanswerwrittenwork',   viewsets.EditAnswerWrittenworkViewSet)
+router.register(r'peerrubricsreview',   	viewsets.PeerRubricsReviewViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

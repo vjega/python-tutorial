@@ -141,7 +141,7 @@ TTS.forms.upload = function(elm) {
 
 TTS.forms.showteacherresource = function() {
     BootstrapDialog.show({
-        title: '{% trans "Add" %} {% trans "Teachers" %} {% trans "Share" %}',
+        title: '{% trans "Teachers" %} {% trans "Share" %}',
         message: $($('#teacherresource-form').render()),
         onshown: function(){
             TTS.forms.upload();
@@ -163,7 +163,19 @@ TTS.forms.showteacherresource = function() {
     });
 };
 
-
+TTS.forms.delteachershare = function(id) {
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'DELETE',
+        url : '/api/admin/teacherresourcesinfo/'+id
+    }).done(function( msg ) {
+        location.reload();
+    }).error(function(msg){
+        alert("Something Bad Happended");
+    });
+}
 
 TTS.forms.renderteacher = function(data){
     var headers = [
@@ -178,7 +190,12 @@ TTS.forms.renderteacher = function(data){
               "data" : "date"  
             },
             { "title": "{% trans "View" %}",
+              "class": "text-center",
               "data" : "view"  
+            }, 
+            { "title": "{% trans "Delete" %}",
+              "class": "text-center",
+              "data" : "delete"  
             }, 
            
         ];
@@ -190,7 +207,8 @@ TTS.forms.renderteacher = function(data){
         t.slno = ++count;
         t.resourcetitle = data[i].resourcetitle;
         t.date = data[i].createddate;
-        t.view="<i class='flaticon-zoom38 tts-view'></i>";
+        t.view="<i class='flaticon-zoom38 tts-view' id="+data[i].teacherresourceid+"></i>";
+        t.delete = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);
     }
     if (TTS.forms.table) {
@@ -228,7 +246,7 @@ $(document).ready(function(){
             }
         });
     })
-    $('#teacherlist-main-tbl').on('click', 'tbody tr',function(e){
+    $('#teacherlist-main-tbl').on('click', '.tts-view',function(e){
         e.stopPropagation();
         window.location ='viewteacherresource?teacherresourceid='+this.id;
     });
@@ -237,8 +255,7 @@ $(document).ready(function(){
         if (!window.confirm("Do you want to delete this record?")) {
             return false;
         }
-        alert("Record Deleted")
-        window.location = 'teacherslist';
+        TTS.forms.delteachershare($(this).parent().parent().prop("id"));
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.showteacherresource();

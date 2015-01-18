@@ -4,7 +4,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Written Work" %}</h2>
+        <h2 class="page-header">{% trans "Assignments" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -24,17 +24,16 @@
         font-size: 15px;
         font-weight: bold;
     }
-    span.sc {
-        color: red !important;
-        cursor: pointer;
-        display: inline;
-    }
     span.tc {
         color: #40c040 !important;
         cursor: pointer;
         display: inline;
     }
-
+    span.sc {
+        color: red !important;
+        cursor: pointer;
+        display: inline;
+    }
     span.tc:hover, span.sc:hover {
         background-color: yellow !important;
     }
@@ -59,7 +58,7 @@
     }
     input#ttls{
         color:#000;
-    }     
+    } 
 </style>
 {% endblock morecss %}
 
@@ -78,17 +77,17 @@
 <div id='dialog'></div>
 <div class="col-lg-12">
     <div class="panel panel-default">
-        <!-- /.panel-heading -->
+               <!-- /.panel-heading -->
         <div class="panel-body">
             <div class="table-responsive" id="assignment-answer">
                 <table class="table table-striped table-bordered table-hover" >
                     <div class="row">
-                        <div class="col-lg-12">
-                            <div id="sendclassroomhtml" class="col-lg-12"></div>
-                        </div>
+                        <!--div class="col-lg-12">
+                            <div id="sendnoticeboardhtml" class="col-lg-12"></div>
+                        </div-->
                         <div class="col-lg-12">
                             <label class="col-lg-2">{% trans "Title" %}</label>
-                            <div class="col-lg-10" id="writtenwork-title"></div>
+                            <div class="col-lg-10" id="resource-title"></div>
                         </div>
                         <div class="col-lg-12">
                             <label class="col-lg-2">{% trans "Assigned" %} {% trans "Date" %} </label>
@@ -104,7 +103,7 @@
                             <div class="col-lg-10" id="audio-player"></div>
                         </div>
                         <div class="col-lg-12">
-                            <label class="col-lg-12">{% trans "Answer" %} </label>
+                            <label class="col-lg-2">{% trans "Answer" %}</label>
                         </div>    
                     </div>
    
@@ -139,7 +138,7 @@
                     <div class="bs-docs-grid">
                         <div class="row show-grid col-lg-12">
                             <div class="col-lg-12" id="rubrics-vote">
-                                
+
                             </div>
                             <input type="hidden" id="max-mark">
                         </div>
@@ -161,7 +160,7 @@
                     
 
                 <!--div id="view-resource">
-                     <a href="javascript:void(0)" onclick="window.open('http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../udbinterface/studentresources/12771A-L3-RP5(HA).swf','wdwSearch','top=100,left=100,width=1024,height=768,scrollbars=1,menu=0');">View</a>
+                     <a href="javascript:void(0)" onclick="window.open('http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/studentresources/12771A-L3-RP5(HA).swf','wdwSearch','top=100,left=100,width=1024,height=768,scrollbars=1,menu=0');">View</a>
                 </div-->
 
                 </table>
@@ -195,24 +194,23 @@
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}   
 
-
-TTS.forms.renderassignedwrittenworkinfo = function(data){
+TTS.forms.renderassignedresourceinfo = function(data){
     $("#assignedid").val(data[0].id);
-    $("#writtenwork-title").html(data[0].writtenworktitle);
+    $("#resource-title").html(data[0].resourcetitle);
     $("#assigned-date").html(data[0].createddate);
     $("#answerd-date").html(data[0].answereddate);
     $("#student-name").html(data[0].firstname+" "+data[0].lastname);
-    $("#student-answer").html(data[0].answertext);    
+    $("#student-answer").html(data[0].answertext);
     $("#original-text").html(data[0].originaltext);
     if(data[0].answerurl){
         $("#audio-player").html('<audio src="../static/audio/'+data[0].answerurl+'" controls=""></audio><br />');
     }
-
-    if(data[0].isclassroom == 0){
-        $('#sendclassroomhtml').html('<a href="javascript:void(0)" id="sendclassroom" >{% trans "Send to Classroom" %}</a>');
-    }else if(data[0].isclassroom == 1){
-        $('#sendclassroomhtml').html('{% trans "Writtenwork already Sent to Classroom" %}');
-    }
+    
+    /*if(data[0].isbillboard == 0){
+        $('#sendnoticeboardhtml').html('<a href="javascript:void(0)" id="sendnoticeboard" >{% trans "Send to Noticeboard" %}</a>');
+    }else if(data[0].isbillboard == 1){
+        $('#sendnoticeboardhtml').html('{% trans "Resource already Sent to Noticeboard" %}');
+    }*/
 
     if(data[0].rubric_id){
         $.ajax({
@@ -222,6 +220,7 @@ TTS.forms.renderassignedwrittenworkinfo = function(data){
             TTS.forms.renderrubrictableinfo(rubricdata, data);
         });
     }
+
     //$("#view-resource").html("<a href='#' onclick=\"TTS.forms.openwindow('"+data.videourl+"');\" >View</a>");
 };
 
@@ -246,7 +245,7 @@ TTS.forms.renderrubrictableinfo = function(rubtable, rubdata){
         thnumber[idx] = value.match(/\d+/)[0];
     });
     maxVal = Math.max.apply(Math,thnumber);
-   
+
     tableHTML += "<table id='rubrics-table' class='table table-striped table-bordered table-hover'>";
     tableHTML += "<thead><tr><th>&nbsp;</th>";
     $("#max-mark").val(th.length);
@@ -261,7 +260,7 @@ TTS.forms.renderrubrictableinfo = function(rubtable, rubdata){
         tableHTML += "<tr>";
         $(td).each(function(i,j){
             if(i > 0){
-                answercheck="<input class='chkrub mark-"+x+"' id='m"+x+"-"+i+"' name='mark-"+x+"'  disabled='disabled' type='radio'>";
+                answercheck="<input onclick='TTS.forms.setmarks("+x+","+thnumber[(i-1)]+")' class='chkrub mark-"+x+"' id='m"+x+"-"+i+"' name='mark-"+x+"' type='radio'>";
             }else{
                 answercheck="";
             }
@@ -272,6 +271,7 @@ TTS.forms.renderrubrictableinfo = function(rubtable, rubdata){
     });
     tableHTML += "</tbody><tfoot><tr><td style='text-align:center' colspan="+(th.length+1)+"><strong>{% trans 'Total' %}</strong></td><td><input id='ttls' style='width:30px;text-align:center' readonly type='text' value=''> / "+maxVal*(tddataobj.length)+"</td></tr></tfoot>";
     tableHTML += "</table>";
+    tableHTML += '<button class="btn btn-primary" id="save-rubric-marks">{% trans "Save" %} {% trans "Result" %}</button>';
     $("#rubrics-vote").html(tableHTML);
     rubricid = rubricid.split('~');
     $.each(rubricid, function(idx, value){
@@ -280,7 +280,6 @@ TTS.forms.renderrubrictableinfo = function(rubtable, rubdata){
     })
     TTS.forms.settotalmarks();
 }
-
 
 TTS.forms.renderanswereditinginfo = function(data, isapproved){
     var spanid = data[0].spanid;
@@ -362,9 +361,9 @@ TTS.forms.editanswerlist = function(spanid){
                             var uid         = $("#spanid").val();
                             var assignedid  = $("#assignedid").val();
                             var origtext    = $("#student-answer").html();
-                            var modified    = modtext;
-                            var type        = 1;
                             var prevtext    = $("#prev-text").val();
+                            var modified    = modtext;
+                            var type        = 2;
                             //var answertext  = TTS.forms.marktext(fulltext,origtext,uid,type);
                             
                             var data = {
@@ -378,7 +377,7 @@ TTS.forms.editanswerlist = function(spanid){
 
                             $.ajax({
                                 headers : {
-                                      'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                                    'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
                                 },
                                 type:'POST',
                                 data: data,
@@ -441,7 +440,7 @@ TTS.forms.editanswer = function() {
                 var fulltext    = $("#student-answer").html();
                 var origtext    = x;
                 var modified    = modtext;
-                var type        = 1;
+                var type        = 2;
                 var answertext  = TTS.forms.marktext(fulltext,origtext,uid,type);
                 
                 var data = {
@@ -459,9 +458,8 @@ TTS.forms.editanswer = function() {
                     },
                     type:'PUT',
                     data: data,
-                    url : '/api/admin/studentwrittenwork/'+assign_id
+                    url : '/api/admin/studentassignresource/'+assign_id
                 }).done(function(msg) {
-                    //console.log(msg);
                     dialogItself.close();
                     alert("Answer corrected successfully");
                     location.reload();
@@ -477,7 +475,6 @@ TTS.forms.editanswer = function() {
 };
 
 TTS.forms.marktext = function(original, marker, uid, usertype){
-    //alert(original+" --> "+marker+" --> "+uid+" --> "+usertype);
     if(usertype == 1)
         usertype = 'sc';
 
@@ -501,22 +498,59 @@ TTS.forms.changeapproveicon = function(editingid){
                                                 .addClass('fa-check approved');
 };
 
+TTS.forms.setmarks = function(row, mark) {
+    $("#tmark-"+row).val(mark);
+    TTS.forms.settotalmarks();
+};
 TTS.forms.settotalmarks = function() {
     var x=0;
     $('.totals').each(function(){x += parseInt($(this).val()) || 0;});
     $('#ttls').val(x);
 };
 
-$(document).ready(function(){
-    var writtenwork = TTS.utils.getUrlParameter('writtenworkid');
-    var studentid = TTS.utils.getUrlParameter('studentid');
+
+TTS.forms.ressave = function(){
+    var data = {}
+    var ansarr=[];
+    var ans_n_arr = [];
+    $("input:checked.chkrub").each(function(){
+        ansarr.push($(this).attr("id"));
+    });
+    $("input.totals").each(function(){
+        ans_n_arr.push($(this).val());
+    });
+    ans_n_arr.push($("#max-mark").val());
+    var ans = ansarr.join("~");
+    var ans_n = ans_n_arr.join(",");
+    data['ans']          = ans;
+    data['ans_n']        = ans_n;
+    data['assignedtype'] = 'ar';
     var assignedid = $("#assignedid").val();
 
     $.ajax({
-        "url":"/api/admin/assignedwrittenworkstudents/"+writtenwork+"/?studentid="+studentid+"&format=json",
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        url:"/api/admin/rubrics/"+assignedid,
+        type:"PUT",
+        data: JSON.stringify(data)
+    }).done(function(data){
+        alert("Rubric marks updated successfully");
+    }).error(function(err, msg){
+        alert("I didnt update the rubric marks");
+    });
+}
+
+$(document).ready(function(){
+    var resourceid = TTS.utils.getUrlParameter('resourceid');
+    var studentid = TTS.utils.getUrlParameter('studentid');
+
+    $.ajax({
+        "url":"/api/admin/assignedresourcestudents/"+resourceid+"/?studentid="+studentid+"&format=json",
         "type":"GET"
     }).done(function(data){
-       TTS.forms.renderassignedwrittenworkinfo(data);
+        //console.log(data);
+        TTS.forms.renderassignedresourceinfo(data);
     });
     
     $("#student-answer,#student-answer p").on("mouseup", function(event){
@@ -529,40 +563,36 @@ $(document).ready(function(){
         var spanid = $(this).attr("id");
         TTS.forms.editanswerlist(spanid);
     });
-
-    $("body").on("click","a#sendclassroom", function(event){
+    /*$("body").on("click","a#sendnoticeboard", function(event){
         var assignedid = $("#assignedid").val();
-        var crdata = {
-            assignedid   : assignedid,
-            studentid    : studentid,
-            assignedtype : 'aw'
-        }
         $.ajax({
             headers : {
                 'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
-            },      
-            type: 'POST',
-            data: JSON.stringify(crdata),
-            url : '/api/admin/classinfo/'
+            },
+            type:'POST',
+            url : '/api/admin/billboardresource/?assignedid='+assignedid+'&studentid='+studentid+'&assignedtype=ar'
         }).done(function(msg) {
             if(msg = 'saved')
-                alert("Writtenwork sent to classroom");
+                alert("Resource sent to Noticeboard");
+
             location.reload();
         });
-    });
-
+    });*/
+    
     $("body").on("click","i.rejected", function(event){
         var editingid = $(this).parent().parent().attr("id");
         var assignedid = $("#assignedid").val();
         $.ajax({
             type:'GET',
-            url : '/api/admin/editanswerwrittenwork/'+editingid+'/?assignedid='+assignedid
+            url : '/api/admin/editanswerresource/'+editingid+'/?assignedid='+assignedid
         }).done(function(msg) {
             if(msg == 'approved')
                 TTS.forms.changeapproveicon(editingid);
         });
     });
-
+    $("body").on("click","#save-rubric-marks", function(event){
+        TTS.forms.ressave();
+    });
 });
 
 </script>

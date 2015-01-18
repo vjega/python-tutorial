@@ -113,7 +113,7 @@ $(document).ready(function(){
         "url":"/api/admin/teacherassignedresource/"+resourceid+"/?format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
+        //console.log(data);
         TTS.forms.renderassignedresourceinfo(data);
     });
     $.ajax({
