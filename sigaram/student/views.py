@@ -155,7 +155,7 @@ def sturesourcetype(request):
         # {
         # "id": "3",
         # "name" :_("Composition"),
-        # "href" :"extras"
+        # "href" :"studentresourceunits"
         # }
         ]
     classid = request.GET.get('classid')

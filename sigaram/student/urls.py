@@ -65,6 +65,4 @@ urlpatterns = patterns('student.views',
                                                             name='classviewassignwrittenworkanswer'),
     url(r'^sturesourcetype$', 'sturesourcetype',  
                                                             name='sturesourcetype'),
-    url(r'^extras$', 'extras',  
-                                                            name='extras'),
 )
