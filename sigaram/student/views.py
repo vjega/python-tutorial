@@ -109,16 +109,16 @@ def resourcetype(request):
         "id": "2",
         "categoryid": "1",
         "name" :_("Animation"),
-        "href" :"studentresourceunits"
+        "href" :"assignedresourcelist"
         },{
         "id": "3",
         "categoryid": "2",
         "name" :_("Writing board"),
-        "href" :"studentresourceunits"
+        "href" :"assignedresourcelist"
         },{
         "id": "3",
         "name" :_("Composition"),
-        "href" :"extras"
+        "href" :"assignedresourcelist"
         }]
     classid = request.GET.get('classid',1)
     section = request.GET.get('section','a')
@@ -131,6 +131,44 @@ def resourcetype(request):
                   "classid":classid,
                   "section":section}
                   )
+
+
+@login_required
+@switchlanguage
+def sturesourcetype(request):
+    folders = [{
+        "id": "1",
+        "categoryid": "0",
+        "name" :_("Reading"),
+        "href" :"studentresourceunits"
+        },{
+        "id": "2",
+        "categoryid": "1",
+        "name" :_("Animation"),
+        "href" :"studentresourceunits"
+        },{
+        "id": "3",
+        "categoryid": "2",
+        "name" :_("Writing board"),
+        "href" :"studentresourceunits"
+        },{
+        "id": "3",
+        "name" :_("Composition"),
+        "href" :"extras"
+        }]
+    classid = request.GET.get('classid')
+    section = request.GET.get('section')
+    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
+    #studentresourcetype = {'head':studentresourcetype_head, 
+                           #'body':studentresourcetype_body}
+    return render(request, 'portalstudent/resource_type.html', 
+                  {"folders":folders,
+                  "resourcetype":resourcetype,
+                  "classid":classid,
+                  "section":section}
+                  )
+
+
 
 @login_required
 @switchlanguage
