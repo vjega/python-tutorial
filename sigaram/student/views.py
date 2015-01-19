@@ -27,7 +27,7 @@ def home(request):
     folders = [{
         "color": u"primary",
         "icon" : u"file-text-o",
-        "link" : u"studentresourcetype",
+        "link" : u"resourcetype",
         "caption": _("Assignments"),
         "stat": 25
         }, {
