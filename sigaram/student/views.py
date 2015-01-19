@@ -152,11 +152,11 @@ def sturesourcetype(request):
         "name" :_("Writing board"),
         "href" :"studentresourceunits"
         },
-        # {
-        # "id": "3",
-        # "name" :_("Composition"),
-        # "href" :"studentresourceunits"
-        # }
+        {
+        "id": "3",
+        "name" :_("Composition"),
+        "href" :"studentresourceunits"
+        }
         ]
     classid = request.GET.get('classid')
     section = request.GET.get('section')
