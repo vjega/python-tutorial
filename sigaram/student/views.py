@@ -104,7 +104,7 @@ def resourcetype(request):
         "id": "1",
         "categoryid": "0",
         "name" :_("Reading"),
-        "href" :"studentresourceunits"
+        "href" :"assignedresourcelist"
         },{
         "id": "2",
         "categoryid": "1",
