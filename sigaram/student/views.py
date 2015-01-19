@@ -151,11 +151,13 @@ def sturesourcetype(request):
         "categoryid": "2",
         "name" :_("Writing board"),
         "href" :"studentresourceunits"
-        },{
-        "id": "3",
-        "name" :_("Composition"),
-        "href" :"extras"
-        }]
+        },
+        # {
+        # "id": "3",
+        # "name" :_("Composition"),
+        # "href" :"extras"
+        # }
+        ]
     classid = request.GET.get('classid')
     section = request.GET.get('section')
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
