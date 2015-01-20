@@ -566,6 +566,7 @@ class AdminschoolViewSet(viewsets.ModelViewSet):
 
 
     def destroy(self, request, pk=None):
+        models.Schoolinfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
 class AdminclasslistViewSet(viewsets.ModelViewSet):
