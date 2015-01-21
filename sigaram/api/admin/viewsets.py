@@ -401,6 +401,12 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         ri.save()
         return Response(request.DATA)
 
+    def destroy(self, request, pk=None):
+        studentres = models.Resourceinfo.objects.get(pk=pk)
+        studentres.isdeleted = 1
+        studentres.save()
+        return Response('"msg":"delete"')
+
 class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Writtenworkinfo.objects.all()
     serializer_class = adminserializers.WrittenworkinfoSerializer
