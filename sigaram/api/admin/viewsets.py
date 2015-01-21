@@ -13,7 +13,6 @@ from portaladmin import models
 import  adminserializers
 
 def loginname_to_userid(usertype, username):
-
     if usertype =='Admin':
         m = models.Admininfo.objects.filter(username=username)[0]
         return m.adminid
@@ -25,7 +24,6 @@ def loginname_to_userid(usertype, username):
         return m.studentid
 
 class AdmininfoViewSet(viewsets.ModelViewSet):
-
     queryset = models.Admininfo.objects.filter(isdelete=0).order_by('-createddate')
     serializer_class = adminserializers.AdminInfoSerializer
 
@@ -605,6 +603,7 @@ class AdminclasslistViewSet(viewsets.ModelViewSet):
         return Response('"msg":"update"')
 
     def destroy(self, request, pk=None):
+        models.Classinfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
 class AdminrubricsViewSet(viewsets.ModelViewSet):
