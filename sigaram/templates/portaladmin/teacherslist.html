@@ -277,7 +277,7 @@ $(document).ready(function(){
         var id = $(this).parent().parent().prop('id');
         console.log(id);
         $.ajax({
-            url: '/api/admin/teacher/'+id,
+             url: '/api/admin/teacher/'+id,
             type: 'GET'
         }).done(function(data){
             TTS.forms.editteacher(id,data);
