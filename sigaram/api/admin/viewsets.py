@@ -153,17 +153,17 @@ class studentViewSet(viewsets.ModelViewSet):
         schoolids  =  request.GET.get('schoolids')
 
         if schoolid and classid:
-            queryset = models.Studentinfo.objects.filter(schoolid=schoolid, classid=classid).order_by('-createddate')
+            queryset = models.Studentinfo.objects.filter(schoolid=schoolid, classid=classid, isdelete=0).order_by('-createddate')
         elif schoolid:
-            queryset = models.Studentinfo.objects.filter(schoolid=schoolid).order_by('-createddate')
+            queryset = models.Studentinfo.objects.filter(schoolid=schoolid, isdelete=0).order_by('-createddate')
         elif schoolids:
             schools = schoolids.split(",")
             q = Q()
             for s in schools:
                 q |= Q(schoolid=s)
-            queryset = models.Studentinfo.objects.filter(q, classid=classid)
+            queryset = models.Studentinfo.objects.filter(q, classid=classid, isdelete=0)
         else:
-            queryset = models.Studentinfo.objects.all()
+            queryset = models.Studentinfo.objects.filter(isdelete=0)
         
         serializer = adminserializers.StudentinfoSerializer(queryset, many=True)
         return Response(serializer.data)

@@ -275,7 +275,6 @@ $(document).ready(function(){
     $('#teacherlist-main-tbl').on('click', '.tts-edit', function(e){
         e.stopPropagation();
         var id = $(this).parent().parent().prop('id');
-        console.log(id);
         $.ajax({
              url: '/api/admin/teacher/'+id,
             type: 'GET'

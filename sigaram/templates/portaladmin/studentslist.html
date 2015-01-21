@@ -104,6 +104,20 @@ TTS.forms.addstudent = function(form, data) {
     });
 }
 
+TTS.forms.delstudent = function(id) {
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'DELETE',
+        url : '/api/admin/student/'+id
+    }).done(function( msg ) {
+        location.reload();
+    }).error(function(msg){
+        alert("Something Bad Happended");
+    });
+}
+
 TTS.forms.showstudentform = function() {
     BootstrapDialog.show({
         title: 'Add Student',
@@ -198,7 +212,7 @@ TTS.forms.renderstudentlist = function(data){
     
     var count = 0
     for(var i in data){
-        var t = [];
+        var t = {};
         t.DT_RowId = data[i].studentid;
         t.slno = ++count;
        if (data[i].imageurl){
@@ -310,10 +324,7 @@ $(document).ready(function(){
         if (!window.confirm("Do you want to delete this record?")) {
             return false;
         }
-        //console.log($(this).parent().parent().parent().prop("id"))
-        TTS.forms.delteacher($(this).parent().parent().prop("id"));
-        window.location.reload();
-    
+        TTS.forms.delstudent($(this).parent().parent().prop("id"));
     });    
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.showstudentform();
