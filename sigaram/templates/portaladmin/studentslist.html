@@ -218,11 +218,12 @@ TTS.forms.renderstudentlist = function(data){
         TTS.forms.table.fnAddData(
             dataset
         );
+    }else {
+        TTS.forms.table = $('#student-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
+            "data":     dataset,
+            "columns":  headers
+        });
     }
-    TTS.forms.table = $('#student-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
-        "data":     dataset,
-        "columns":  headers
-    });
 
 };
 
@@ -257,12 +258,12 @@ $(document).ready(function(){
         "url":url,
         "type":"GET"
     }).done(function(data){
-        if (data.length) {
-            TTS.forms.renderstudentlist(data);
-            TTS.utils.ajaxloaderstop();
-        } else {
-            TTS.forms.table.fnClearTable();
-        }
+        // if (data.length) {
+        TTS.forms.renderstudentlist(data);
+        TTS.utils.ajaxloaderstop();
+        // } else {
+            //TTS.forms.table.fnClearTable();
+        //}
     });
 
     $("#school_name").change(function(){
