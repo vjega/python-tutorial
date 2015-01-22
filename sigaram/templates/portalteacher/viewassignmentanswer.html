@@ -3,8 +3,8 @@
 {% load i18n %}
 {% block topcontent %}
 <div class="row">
-    <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Assignments" %}</h2>
+    <div class="row">
+        <h2 class="page-header">{% trans "Assignment" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -75,7 +75,7 @@
 {% block botcontent %}
 <input type="hidden" value="" name="assignedid" id="assignedid">
 <div id='dialog'></div>
-<div class="col-lg-12">
+<div class="row">
     <div class="panel panel-default">
                <!-- /.panel-heading -->
         <div class="panel-body">
@@ -96,7 +96,7 @@
                             <div class="col-sm-4" id="answerd-date"></div>
                         </div>
                         <div class="col-lg-12">
-                            <label class="col-lg-2">{% trans "Creator" %} </label>
+                            <label class="col-lg-2">{% trans "Students" %} </label>
                             <div class="col-lg-10" id="student-name"></div>
                         </div>
                         <div class="col-lg-12">
@@ -118,7 +118,7 @@
 
                     <div class="row">
                         <div class="col-lg-12">
-                            <label class="col-lg-12">{% trans "Original" %} {% trans "Text" %}</label>
+                            <label class="col-lg-12">{% trans "First" %} {% trans "Text" %}</label>
                         </div>
                     </div>
 
