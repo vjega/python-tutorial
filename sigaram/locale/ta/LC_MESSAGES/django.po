@@ -1615,8 +1615,6 @@ msgid "Add School"
 msgstr "புதிய பள்ளி"
 
 #: templates/portaladmin/schoollist.html:95
-#, fuzzy
-#| msgid "Add School"
 msgid "Edit School"
 msgstr "பள்ளி விவரம்"
 
