@@ -405,7 +405,7 @@ msgstr ""
 #: templates/portalteacher/statisticsstudentslist.html:14
 #: templates/portalteacher/students.html:25
 msgid "Select School"
-msgstr "பள்ளிகள்"
+msgstr "பள்ளி"
 
 #: portaladmin/forms/StudentForm.py:14
 #: portaladmin/forms/StudentresourceListForm.py:26
@@ -1496,7 +1496,7 @@ msgstr "பதிவு"
 #: templates/portalteacher/viewassignwrittenworkanswer.html:148
 #: templates/portalteacher/viewassignwrittenworkanswer.html:621
 msgid "Show"
-msgstr ""
+msgstr "காண்க"
 
 #: templates/portaladmin/classviewassignmentanswer.html:144
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:144
@@ -1601,7 +1601,7 @@ msgstr "புள்ளி விவரம்"
 #: templates/portalteacher/viewassignmentanswer.html:620
 #: templates/portalteacher/viewassignwrittenworkanswer.html:618
 msgid "Hide"
-msgstr ""
+msgstr "மறைத்துவை"
 
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:228
 #: templates/portalstudent/classviewassignmentanswer.html:227
