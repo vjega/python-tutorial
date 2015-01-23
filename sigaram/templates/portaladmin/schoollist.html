@@ -125,6 +125,20 @@ TTS.forms.editschool = function(id, data) {
     });
 };
 
+TTS.forms.delschool = function(id) {
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'DELETE',
+        url : '/api/admin/adminschool/'+id
+    }).done(function( msg ) {
+        location.reload();
+    }).error(function(msg){
+        alert("Something Bad Happended");
+    });
+}
+
 TTS.forms.renderadminschool = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
@@ -172,7 +186,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.utils.ajaxloaderstop();
-         if (data.length) {
+        if (data.length) {
             TTS.forms.renderadminschool(data);
         } else {
             TTS.forms.table.fnClearTable();
@@ -198,7 +212,7 @@ $(document).ready(function(){
             return false;
         }
         alert("Record Deleted")
-        window.location = 'schoollist';
+        TTS.forms.delschool($(this).parent().parent().prop("id"));
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.addschool();

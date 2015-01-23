@@ -31,7 +31,7 @@
                             <i class="fa fa-{{folder.icon}} fa-5x"></i>
                         </div>
                         <div class="col-xs-7 text-right">
-                            <div class="tent-medium">{{folder.stat}}</div>
+                            <!-- <div class="tent-medium">{{folder.stat}}</div> -->
                             <div class="tent-medium">{{folder.caption}}</div>
                         </div>
                     </div>
@@ -123,7 +123,9 @@
                 {% endautoescape %}
                 </div>
                 <!-- /.list-group -->
-                <a href="bulletinboardlist" class="btn btn-default btn-block">View All Announcement</a>
+                <a href="bulletinboardlist" class="btn btn-default btn-block">
+                    {% trans "View All Announcement" %}
+                </a>
             </div>
             <!-- /.panel-body -->
         </div>
@@ -144,8 +146,8 @@
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
   .modal-backdrop {z-index: 0 !important}
-  p {display:inline;}
-  a.nfolder {color: blue;}
+    p{display:inline;}
+    #new-folder{color:black;}
 </style>
 {% endblock morecss %}
 

@@ -40,7 +40,7 @@
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 
 <style>
-    #addrec:hover, #admin-main-tbl tbody tr:hover {
+    #addrec:hover, .title:hover, .tts-delete:hover {
         cursor: pointer;
     }
 </style>
@@ -136,7 +136,8 @@ TTS.forms.renderannouncement = function(data){
               "data" : "slno"  
             },
             { "title": "{% trans "Title" %}",
-              "data" : "title"
+              "data" : "title",
+              "class":"title"
             },
             { "title": "{% trans "Announcer" %}",
               "data" : "declared"

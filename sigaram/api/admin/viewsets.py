@@ -13,7 +13,6 @@ from portaladmin import models
 import  adminserializers
 
 def loginname_to_userid(usertype, username):
-
     if usertype =='Admin':
         m = models.Admininfo.objects.filter(username=username)[0]
         return m.adminid
@@ -25,7 +24,6 @@ def loginname_to_userid(usertype, username):
         return m.studentid
 
 class AdmininfoViewSet(viewsets.ModelViewSet):
-
     queryset = models.Admininfo.objects.filter(isdelete=0).order_by('-createddate')
     serializer_class = adminserializers.AdminInfoSerializer
 
@@ -155,17 +153,17 @@ class studentViewSet(viewsets.ModelViewSet):
         schoolids  =  request.GET.get('schoolids')
 
         if schoolid and classid:
-            queryset = models.Studentinfo.objects.filter(schoolid=schoolid, classid=classid).order_by('-createddate')
+            queryset = models.Studentinfo.objects.filter(schoolid=schoolid, classid=classid, isdelete=0).order_by('-createddate')
         elif schoolid:
-            queryset = models.Studentinfo.objects.filter(schoolid=schoolid).order_by('-createddate')
+            queryset = models.Studentinfo.objects.filter(schoolid=schoolid, isdelete=0).order_by('-createddate')
         elif schoolids:
             schools = schoolids.split(",")
             q = Q()
             for s in schools:
                 q |= Q(schoolid=s)
-            queryset = models.Studentinfo.objects.filter(q, classid=classid)
+            queryset = models.Studentinfo.objects.filter(q, classid=classid, isdelete=0)
         else:
-            queryset = models.Studentinfo.objects.all()
+            queryset = models.Studentinfo.objects.filter(isdelete=0)
         
         serializer = adminserializers.StudentinfoSerializer(queryset, many=True)
         return Response(serializer.data)
@@ -403,6 +401,12 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         ri.save()
         return Response(request.DATA)
 
+    def destroy(self, request, pk=None):
+        studentres = models.Resourceinfo.objects.get(pk=pk)
+        studentres.isdeleted = 1
+        studentres.save()
+        return Response('"msg":"delete"')
+
 class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Writtenworkinfo.objects.all()
     serializer_class = adminserializers.WrittenworkinfoSerializer
@@ -566,6 +570,7 @@ class AdminschoolViewSet(viewsets.ModelViewSet):
 
 
     def destroy(self, request, pk=None):
+        models.Schoolinfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
 class AdminclasslistViewSet(viewsets.ModelViewSet):
@@ -604,6 +609,7 @@ class AdminclasslistViewSet(viewsets.ModelViewSet):
         return Response('"msg":"update"')
 
     def destroy(self, request, pk=None):
+        models.Classinfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
 class AdminrubricsViewSet(viewsets.ModelViewSet):
