@@ -15,12 +15,12 @@ class SchoolListForm(forms.Form):
         required = True,
         widget = forms.TextInput({ "placeholder": _("Short Name")})
     )
-    description = forms.CharField(
-        label = _("Reference"),
-        max_length = 100,
-        required = True,
-        widget = forms.TextInput({ "placeholder": _("Reference")})
-    )
+    # description = forms.CharField(
+    #     label = _("Reference"),
+    #     max_length = 100,
+    #     required = True,
+    #     widget = forms.TextInput({ "placeholder": _("Reference")})
+    # )
     def __init__(self, *args, **kwargs):
         super(SchoolListForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
