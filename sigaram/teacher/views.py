@@ -523,6 +523,12 @@ def mindmaplist(request):
 
 @login_required
 @switchlanguage
+def mindmapedit(request):
+    return render(request, 'portalteacher/mindmap.html', {})
+    
+
+@login_required
+@switchlanguage
 def stickynoteslist(request):
     return render(request, 'portalteacher/stickynoteslist.html',{'form':StickyinfoForm.StickyinfoForm()})                     
 
