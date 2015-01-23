@@ -186,7 +186,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.utils.ajaxloaderstop();
-         if (data.length) {
+        if (data.length) {
             TTS.forms.renderadminschool(data);
         } else {
             TTS.forms.table.fnClearTable();

@@ -64,7 +64,7 @@ def home(request):
         }]
 
     recent_acitivity_head = [_("Sl No."),
-                             _("Assignments"),
+                             _("Activities"),
                              _("Date")]
     admin_folders = models.AdminFolders.folders(request)
     announcement_body = models.Bulletinboardinfo.announcement(request)
@@ -520,6 +520,12 @@ def viewstudentwrittenworks(request):
 @switchlanguage
 def mindmaplist(request):
     return render(request, "portalteacher/mindmaplist.html", {})
+
+@login_required
+@switchlanguage
+def mindmapedit(request):
+    return render(request, 'portalteacher/mindmap.html', {})
+    
 
 @login_required
 @switchlanguage

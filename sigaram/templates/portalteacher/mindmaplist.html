@@ -128,11 +128,11 @@ $(document).ready(function(){
         window.location.reload();
     });
     $("#page-wrapper").on("click", "#addrec", function(){
-        window.location = "/admin/mindmapedit?new=true"
+        window.location = "/teacher/mindmapedit?new=true"
     });
     $("#page-wrapper").on("click", ".tts-edit", function(e){
         e.stopPropagation;
-        window.location = "/admin/mindmapedit?editid="+$(this).parent().parent().prop("id");
+        window.location = "/teacher/mindmapedit?editid="+$(this).parent().parent().prop("id");
     });
 });
 
