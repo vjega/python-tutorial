@@ -61,7 +61,7 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 TTS.forms.addschool = function() {
     BootstrapDialog.show({
-        title: 'Add School',
+        title: '{% trans "Add School" %}',
         message: $($('#school-form').render()),
         buttons: [{
             label: '{% trans "Save" %}',
@@ -92,7 +92,7 @@ TTS.forms.addschool = function() {
 
 TTS.forms.editschool = function(id, data) {
     BootstrapDialog.show({
-        title: 'Edit School',
+        title: '{% trans "Edit School" %}',
         message: $($('#school-form').render()),
         onshown: function(){
             $("#add-school").find("input,select").each(function(){

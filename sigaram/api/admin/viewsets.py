@@ -551,7 +551,7 @@ class AdminschoolViewSet(viewsets.ModelViewSet):
         schooldata =  json.loads(request.DATA.keys()[0])
         adminschools.schoolname = schooldata.get('schoolname')
         adminschools.shortname = schooldata.get('shortname')
-        adminschools.description = schooldata.get('description')
+        adminschools.description = schooldata.get('schoolname')
         adminschools.createdby = request.user.id
         adminschools.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         adminschools.save()
@@ -981,6 +981,7 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
               %s
         GROUP BY resourceid 
         ORDER BY assigneddate DESC''' % (request.user.username, datecond)
+        print sql;
 
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
