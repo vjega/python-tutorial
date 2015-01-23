@@ -76,57 +76,35 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-
-TTS.forms.addclassroom = function(form, data) {
-    $.ajax({
-        headers : {
-            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
-        },
-        type:'POST',
-        data: data,
-        url : '/api/admin/classlist/'
-    }).done(function( msg ) {
-        form.close();
-        location.reload();
-        //dialogItself.close();
-    });
-}
-
-TTS.forms.delclassroom = function(id) {
-    $.ajax({
-        headers : {
-            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
-        },
-        type:'DELETE',
-        url : '/api/admin/classlist/'+id
-    }).done(function( msg ) {
-        location.reload();
-    }).error(function(msg){
-        alert("Something Bad Happended");
-    });
-}
-
-TTS.forms.showclassroom = function() {
+TTS.forms.addclassroom = function() {
     BootstrapDialog.show({
         title: 'Add Classroom',
-        /*onshown: function(dialogRef){
+        onshown: function(dialogRef){
             //console.log('hi');
             $("#id_classname").html($("#school_name").html());
             $("#id_classid").html(("1"));
             //$('.summernote').summernote();
-        },*/
+        },
         message: $($('#classlist-form').render()),
         buttons: [{
             label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-classlist");
-                TTS.forms.addclassroom(dialogItself, data); 
+                $.ajax({
+                    type:'POST',
+                    data: data,
+                    url : '/api/admin/classlist/'
+                }).done(function( msg ) {
+                    dialogItself.close();
+                    location.reload();
+                    //dialogItself.close();
+                });
             }
             },{
             label: '{% trans "Close" %}',
-            action: function(dlg){
-                dlg.close();
+            action: function(dialogItself){
+                dialogItself.close();
             }
         }]
     });
@@ -153,8 +131,7 @@ TTS.forms.renderclassroom = function(data){
     
     var count = 0
     for(var i in data){
-        var t = {};
-        t.DT_RowId = data[i].classid;
+        var t = [];
         t.slno = ++count;
         t.classname = data[i].classname;
         t.shortname = data[i].shortname;
@@ -181,11 +158,10 @@ $(document).ready(function(){
             return false;
         }
         alert("Record Deleted")
-        //console.log($(this).parent().parent().prop("id"));
-        TTS.forms.delclassroom($(this).parent().parent().prop("id"));
+        window.location = 'classlist';
     });
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.showclassroom();
+        TTS.forms.addclassroom();
     });
 });
 

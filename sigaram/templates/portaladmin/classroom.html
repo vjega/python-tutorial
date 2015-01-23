@@ -77,6 +77,10 @@ TTS.forms.renderannouncement = function(data){
             { "title": "{% trans "Date" %}",
               "data" : "date"
             },  
+            { "title": "{% trans "Delete" %}",
+              "class": "text-center",
+              "data" : "del"
+            }, 
         ];
     var dataset = [];
     
@@ -94,6 +98,7 @@ TTS.forms.renderannouncement = function(data){
         }
         t.student = data[i].firstname;
         t.date = data[i].posteddate;
+        t.del = "<i class='fa fa-trash fa-lg tts-delete' id='"+data[i].id+"'></i>";
         dataset.push(t);
     }
 
@@ -104,12 +109,25 @@ TTS.forms.renderannouncement = function(data){
 
 };
 
+TTS.forms.delclassroom = function(id) {
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'DELETE',
+        url : '/api/admin/classinfo/'+id
+    }).done(function( msg ) {
+        location.reload();
+    }).error(function(msg){
+        alert("Something Bad Happended");
+    });
+}
+
 $(document).ready(function(){
     $.ajax({
         "url":"/api/admin/classinfo/?format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
         TTS.forms.renderannouncement(data);
     });
     $('#admin-main-tbl').on('click', 'tbody tr', function(){
@@ -121,7 +139,13 @@ $(document).ready(function(){
         }else{
             return false;
         }
-        
+    });
+    $('#admin-main-tbl').on('click', '.tts-delete', function(e){
+        e.stopPropagation();
+        if (!window.confirm("Do you want to delete this record?")) {
+            return false;
+        }
+        TTS.forms.delclassroom(this.id);
     });
 });
 

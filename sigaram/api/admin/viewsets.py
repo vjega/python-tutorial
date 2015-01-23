@@ -1976,7 +1976,8 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
         sql = '''
         SELECT * FROM 
         ((
-        SELECT  cri.resourceid as assignedid,
+        SELECT cri.classroomid as id, 
+            cri.resourceid as assignedid,
             cri.resourcetype,
             cri.studentid,
             ri.resourceid as resourceid,
@@ -1992,13 +1993,14 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
         )
         UNION ALL
         (
-        SELECT  cri.resourceid as assignedid,
-                cri.resourcetype,
-                cri.studentid,
-                wwi.writtenworkid as resourceid,
-                wwi.writtenworktitle as title,
-                concat(au.first_name,' ',au.last_name) as firstname,
-                date(cri.posteddate) as posteddate                
+        SELECT cri.classroomid as id,
+            cri.resourceid as assignedid,
+            cri.resourcetype,
+            cri.studentid,
+            wwi.writtenworkid as resourceid,
+            wwi.writtenworktitle as title,
+            concat(au.first_name,' ',au.last_name) as firstname,
+            date(cri.posteddate) as posteddate                
         FROM classroominfo cri
         INNER JOIN assignwrittenworkinfo awwi ON awwi.assignwrittenworkid=cri.resourceid
         INNER JOIN writtenworkinfo wwi ON wwi.writtenworkid=awwi.writtenworkid
@@ -2050,6 +2052,9 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
 
         return Response(request.DATA)
 
+    def destroy(self, request, pk):
+        models.Classroominfo.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
 
 class StudentWrittenWork(viewsets.ModelViewSet):
     queryset = models.Assignwrittenworkinfo.objects.all()
