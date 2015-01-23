@@ -76,7 +76,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
             window.open("/static/"+data.documenturl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
         }
         if (data.resourcetype === "image") {
-            $("#view-resource").html("<a href='#' onclick=\"openwindow('image','"+data.imageurl+"');\" ></a>"); 
+            window.open("/static/"+data.imageurl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
         }
     });
 

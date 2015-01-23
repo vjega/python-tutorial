@@ -37,7 +37,7 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
-    #addrec:hover, #adminschool-main-tbl tbody tr:hover{
+    #addrec:hover, .schoolname:hover{
         cursor: pointer;
     }
 </style>
@@ -146,7 +146,8 @@ TTS.forms.renderadminschool = function(data){
               "data" : "slno"  
             },
             { "title": "{% trans "Name" %}" ,
-              "data" : "schoolname"
+              "data" : "schoolname",
+              "class":"schoolname"
             },
             { "title": "{% trans "Shortname" %}",
               "data" : "shortname"

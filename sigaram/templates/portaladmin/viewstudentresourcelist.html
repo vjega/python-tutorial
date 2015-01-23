@@ -77,11 +77,10 @@ TTS.forms.renderteacherresourceinfo = function(data){
             window.open("/static/"+data.videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
         } 
         if (data.resourcetype == "audio") {
-            $("#view-resource").show();
             window.open("/static/"+data.audiourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
         }
         if (data.resourcetype === "text") {
-            $("#view-resource").hide();
+            window.open("/static/"+data.documenturl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
         }
     });
 };

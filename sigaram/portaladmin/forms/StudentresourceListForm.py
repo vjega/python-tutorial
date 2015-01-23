@@ -5,9 +5,9 @@ from portaladmin import models
 #from crispy_forms.layout import Submit
 class StudentresourceListForm(forms.Form):
     categoryid     = forms.ChoiceField(
-        label      = _("Category"),
+        label      = _("Type"),
         required   = True,
-        choices    = [('text', 'Text'),('image', 'Image'),
+        choices    = [('text', 'Text'),('image', 'Image'),('video', 'Video')
                          ]
     )
     fileurl = forms.CharField(
@@ -28,12 +28,12 @@ class StudentresourceListForm(forms.Form):
         choices  = [(opt.classid, opt.shortname) for opt in models.Classinfo.objects.all()],
     )
     section      = forms.ChoiceField(
-        label    = _("Select Level"),
+        label    = _("Class"),
         required = True,
         choices  = [('a', 'A'), ('b','B')]
     )
     resourcetype = forms.ChoiceField(
-        label    = _("Folders"),
+        label    = _("Component"),
         required = True,
         choices  = [('0', 'Reading'), ('1','Picture conversation'),('2','Doodle Board'),('3','Picture composition')]
     )

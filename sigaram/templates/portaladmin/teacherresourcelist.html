@@ -83,7 +83,7 @@ TTS.forms.addteacherresource = function(form, data) {
 
 TTS.forms.showteacherresource = function() {
     BootstrapDialog.show({
-        title: 'Add TeacherResource',
+        title: '{% trans "Teacher" %} {% trans "Resources" %}',
         message: $($('#teacherresource-form').render()),
         onshown: function(){
             TTS.forms.upload();

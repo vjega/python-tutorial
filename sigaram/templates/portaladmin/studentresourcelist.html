@@ -112,7 +112,7 @@ TTS.forms.delstudentres = function(id) {
 
 TTS.forms.showstudentresource = function() {
     BootstrapDialog.show({
-        title: 'Add Student Resources',
+        title: '{% trans "Add Student Resources" %}',
         message: $($('#studentresource-form').render()),
         onshown: function(dialogRef){
             $("#id_section").val(TTS.section);
