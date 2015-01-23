@@ -10,22 +10,22 @@ class TeacherForm(forms.Form):
         choices  = [(opt.schoolid,opt.schoolname) for opt in models.Schoolinfo.objects.all().order_by('schoolname')],
     )
     classid = forms.ChoiceField(
-        label = _("Select Class"),
+        label = _("Class"),
         required = True,
         choices  = [(opt.classid, opt.shortname) for opt in models.Classinfo.objects.all()],
     )
     firstname = forms.CharField(
-        label = _("First Name"),
+        label = _("Name"),
         max_length = 100,
         required = True,
-        widget = forms.TextInput({ "placeholder": _("First Name")})
+        widget = forms.TextInput({ "placeholder": _("Name")})
     )
-    lastname = forms.CharField(
-        label = _("Last Name"),
-        max_length = 100,
-        required = True,
-        widget = forms.TextInput({ "placeholder": _("last Name")})
-    )
+    # lastname = forms.CharField(
+    #     label = _("Last Name"),
+    #     max_length = 100,
+    #     required = True,
+    #     widget = forms.TextInput({ "placeholder": _("last Name")})
+    # )
     username = forms.CharField(
         label = _("User Name"),
         max_length = 100,

@@ -144,7 +144,7 @@ msgstr "பயனர் பெயர்"
 #: templates/portalteacher/adminlist.html:76
 #: templates/portalteacher/students.html:66
 msgid "Password"
-msgstr "கடவு சொல்"
+msgstr "மறைச்சொல்"
 
 #: portaladmin/forms/AdminForm.py:19 portaladmin/forms/AdminForm.py:22
 #: portaladmin/forms/ChapterInfoForm.py:19
