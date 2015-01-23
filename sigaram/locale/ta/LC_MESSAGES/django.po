@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-23 18:44+0000\n"
+"POT-Creation-Date: 2015-01-23 18:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,7 +150,16 @@ msgstr "கடவு சொல்"
 #: portaladmin/forms/ChapterInfoForm.py:19
 #: portaladmin/forms/ChapterInfoForm.py:22 portaladmin/forms/StudentForm.py:19
 #: portaladmin/forms/StudentForm.py:22
+#: templates/portaladmin/classviewassignmentanswer.html:122
+#: templates/portaladmin/classviewassignwrittenworkanswer.html:122
+#: templates/portalstudent/classviewassignmentanswer.html:122
+#: templates/portalstudent/classviewassignwrittenworkanswer.html:122
+#: templates/portalstudent/viewassignmentanswer.html:123
+#: templates/portalstudent/viewassignwrittenworkanswer.html:123
+#: templates/portalteacher/classviewassignmentanswer.html:122
+#: templates/portalteacher/classviewassignwrittenworkanswer.html:122
 #: templates/portalteacher/viewassignmentanswer.html:122
+#: templates/portalteacher/viewassignwrittenworkanswer.html:122
 msgid "First"
 msgstr "முதல்"
 
@@ -836,16 +845,6 @@ msgid "Video"
 msgstr "ஒலிஒழிப்படம்"
 
 #: student/views.py:259
-#: templates/portaladmin/classviewassignmentanswer.html:122
-#: templates/portaladmin/classviewassignwrittenworkanswer.html:122
-#: templates/portalstudent/classviewassignmentanswer.html:122
-#: templates/portalstudent/classviewassignwrittenworkanswer.html:122
-#: templates/portalstudent/viewassignmentanswer.html:123
-#: templates/portalstudent/viewassignwrittenworkanswer.html:123
-#: templates/portalteacher/classviewassignmentanswer.html:122
-#: templates/portalteacher/classviewassignwrittenworkanswer.html:122
-#: templates/portalteacher/viewassignmentanswer.html:122
-#: templates/portalteacher/viewassignwrittenworkanswer.html:122
 msgid "Text"
 msgstr "எழுத்து"
 
@@ -1461,9 +1460,10 @@ msgstr "முடித்த"
 #: templates/portalstudent/viewassignwrittenworkanswer.html:123
 #: templates/portalteacher/classviewassignmentanswer.html:122
 #: templates/portalteacher/classviewassignwrittenworkanswer.html:122
+#: templates/portalteacher/viewassignmentanswer.html:122
 #: templates/portalteacher/viewassignwrittenworkanswer.html:122
-msgid "Original"
-msgstr "மூலம்"
+msgid "Record"
+msgstr "பதிவு"
 
 #: templates/portaladmin/classviewassignmentanswer.html:126
 #: templates/portaladmin/classviewassignmentanswer.html:148
@@ -2019,6 +2019,9 @@ msgstr ""
 #| msgid "Animation"
 msgid "Action"
 msgstr "பட உரையாடல்"
+
+#~ msgid "Original"
+#~ msgstr "மூலம்"
 
 #~ msgid "Creator"
 #~ msgstr "உண்டாக்கியவர்"
