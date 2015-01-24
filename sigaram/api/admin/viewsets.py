@@ -790,10 +790,10 @@ class StudentAssignResource(viewsets.ModelViewSet):
         ari.answertext = data.get('answertext')
 
         if data.get('originaltext'):
-            ari.originaltext = data.get('originaltext')
+            ari.originaltext = unicode(data.get('originaltext'))
 
         if data.get('answerurl'):
-            ari.answerurl = data.get('answerurl')
+            ari.answerurl = unicode(data.get('answerurl'))
             ari.isrecord = 1
 
         if data.get('isanswered'):
@@ -816,8 +816,8 @@ class StudentAssignResource(viewsets.ModelViewSet):
         ar = models.Editingtext()
         ar.editid       = int(assignedid)
         ar.spanid       = str(spanid)
-        ar.previoustext = str(orig)
-        ar.edittext     = str(modified)
+        ar.previoustext = unicode(orig)
+        ar.edittext     = unicode(modified)
         ar.typeofresource = 0
         ar.isapproved   = 0
         ar.isrejected   = 0
@@ -2093,8 +2093,8 @@ class StudentWrittenWork(viewsets.ModelViewSet):
         ar = models.Editingtext()
         ar.editid       = int(assignedid)
         ar.spanid       = str(spanid)
-        ar.previoustext = str(orig)
-        ar.edittext     = str(modified)
+        ar.previoustext = unicode(orig)
+        ar.edittext     = unicode(modified)
         ar.typeofresource = 0
         ar.isapproved   = 0
         ar.isrejected   = 0
@@ -2180,7 +2180,7 @@ class StudentWrittenWork(viewsets.ModelViewSet):
                 ar = models.Assignresourceinfo()
                 ar.resourceid = int(r)
                 ar.studentid = str(s)
-                ar.assigntext = str(assigntext)
+                ar.assigntext = unicode(assigntext)
                 ar.isanswered = 0
                 ar.issaved = 0
                 ar.isrecord = 0
@@ -2336,7 +2336,7 @@ class StudentAssignWrittenWork(viewsets.ModelViewSet):
                 ar = models.Assignresourceinfo()
                 ar.resourceid = int(r)
                 ar.studentid = str(s)
-                ar.assigntext = str(assigntext)
+                ar.assigntext = unicode(assigntext)
                 ar.isanswered = 0
                 ar.issaved = 0
                 ar.isrecord = 0
