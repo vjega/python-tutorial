@@ -1122,3 +1122,19 @@ class Stickyinfo(models.Model):
     class Meta:
         managed = False
         db_table = 'stickyinfo'
+
+
+class Assignmindmapinfo(models.Model):
+    assignedid  = models.AutoField(primary_key=True)
+    mindmapid   = models.BigIntegerField()
+    studentid   = models.CharField(max_length=500)
+    assigntext  = models.TextField()
+    mapdata     = models.TextField()
+    answereddate= models.DateTimeField()
+    assignedby  = models.CharField(max_length=500)
+    assigneddate= models.DateTimeField()
+    isdelete    = models.IntegerField(db_column='IsDelete')  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table= 'assignmindmapinfo'        
