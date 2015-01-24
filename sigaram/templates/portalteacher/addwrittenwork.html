@@ -313,6 +313,13 @@ TTS.forms.renderschoolinfo = function(data){
     });
 };
 
+function addslashes(str) {
+    str=str.replace(/\\/g,'\\\\');
+    str=str.replace(/\'/g,'\\\'');
+    str=str.replace(/\"/g,'\\"');
+    str=str.replace(/\0/g,'\\0');
+    return str;
+}
 
 TTS.forms.ressave = function(){
     
@@ -321,9 +328,14 @@ TTS.forms.ressave = function(){
     }*/
     
     var data = {};
+    var title = '';
+    var note = '';
     data.students = [];
-    data.title = $("#title").code();
-    data.note = $("#note").code();
+    title = $("#title").code();
+    note = $("#note").code();
+    data.title = addslashes(title);
+    data.note = addslashes(note);
+
     if($("#uploadurl").val()){
         data.attachmenturl = $("#uploadurl").val();
     }
@@ -337,7 +349,6 @@ TTS.forms.ressave = function(){
     $("#sltStudentList>option").each(function(){
         data.students.push($(this).val());
     });
-
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')

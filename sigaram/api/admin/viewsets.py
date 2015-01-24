@@ -447,7 +447,6 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
         note = data.get('note')
         schoolid = request.session.get('schoolid')
         classid = request.session.get('classid')
-
         if data.get('rubricid'):
             rubric_id = data.get('rubricid')
         else:
@@ -457,10 +456,9 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
             attachmenturl = data.get('attachmenturl')
         else:
             attachmenturl = 0
-
         writtenwork = models.Writtenworkinfo()
-        writtenwork.writtenworktitle= title
-        writtenwork.description     = note
+        writtenwork.writtenworktitle= unicode(title)
+        writtenwork.description     = unicode(note)
         writtenwork.writtenimage    = attachmenturl
         writtenwork.schoolid        = schoolid
         writtenwork.classid         = classid
@@ -472,12 +470,11 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
         writtenwork.save()
 
         writtenworkid = writtenwork.writtenworkid
-
         for s in students:
             awwi = models.Assignwrittenworkinfo()
             awwi.writtenworkid = writtenworkid
-            awwi.studentid = str(s)
-            awwi.assigntext = str(note)
+            awwi.studentid = unicode(s)
+            awwi.assigntext = unicode(note)
             awwi.issaved = 0
             awwi.ispublished = 0
             awwi.isrecord = 0
