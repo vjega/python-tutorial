@@ -11,22 +11,22 @@ class StudentForm(forms.Form):
         choices  = [(opt.schoolid, opt.schoolname) for opt in models.Schoolinfo.objects.all().order_by('schoolname')],
     )
     classid = forms.ChoiceField(
-        label = _("Select Class"),
+        label = _("Class"),
         required = True,
         choices  = [(opt.classid, opt.shortname) for opt in models.Classinfo.objects.all()],
     )
     firstname = forms.CharField(
-        label = "%s %s"%(_("First"),_("Name")),
+        label = _("Name"),
         max_length = 100,
         required = True,
         widget = forms.TextInput({ "placeholder": "%s %s"%(_("First"),_("Name"))})
     )
-    lastname = forms.CharField(
-        label = "%s %s"%(_("last"),_("Name")),
-        max_length = 100,
-        required = True,
-        widget = forms.TextInput({ "placeholder": "%s %s"%(_("Last"),_("Name"))})
-    )
+    # lastname = forms.CharField(
+    #     label = "%s %s"%(_("last"),_("Name")),
+    #     max_length = 100,
+    #     required = True,
+    #     widget = forms.TextInput({ "placeholder": "%s %s"%(_("Last"),_("Name"))})
+    # )
     username = forms.CharField(
         label = _("User Name"),
         max_length = 100,

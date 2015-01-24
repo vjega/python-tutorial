@@ -64,7 +64,7 @@
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
 <style>
-    #addrec:hover, .tts-edit:hover, .tts-delete:hover, #student-main-tbl tbody tr:hover {
+    #addrec:hover, .tts-edit:hover, .tts-delete:hover, .studentname:hover {
         cursor: pointer;
     }
 </style>
@@ -153,7 +153,7 @@ TTS.forms.editstudent = function(id, data) {
             });
         },
         buttons: [{
-            label: 'Update',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-student");
@@ -189,7 +189,8 @@ TTS.forms.renderstudentlist = function(data){
               "data" : "image"  
             },
             { "title": "{% trans "Name" %}",
-              "data" : "name"  
+              "data" : "name",
+              "class":"studentname"
             },
             /*{ "title": "{% trans "Username" %}",
               "data" : "username"  
