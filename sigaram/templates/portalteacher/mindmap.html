@@ -98,7 +98,7 @@ $(document).ready(function(){
       url : url,
       data : postdata
     }).done(function(data){
-      window.location = "/admin/mindmaplist"
+      window.location = "/teacher/mindmaplist"
     }).error(function(msg,err){
 
     })
@@ -164,11 +164,7 @@ TTS.forms.mindmap = function(node){
   padding-left:1em;
 }
 #container {
-  /*background-color: blue;*/
-  top:0;
-  width:100%;
-  height:100%;
-  z-index:1;
+  
 }
 </style>
 {% endblock morecss %}
