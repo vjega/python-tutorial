@@ -4,19 +4,18 @@
 {% load i18n %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">Mindmap <input type="button" class='btn btn-primary' id="mindmap-save" value="Save" /></h2>
+        <h2 class="page-header">{% trans "Mindmap" %}<input type="button" class='btn btn-primary' id="mindmap-save" value={% trans "Save" %} /></h2>
         <code>
           Double Click to edit &amp; add a new node.
           Single Click to collapse/hide or select a node
         </code>
-
     </div>
     <!-- /.col-lg-12 -->
 </div>
 <div class="row">
   <div class="col-lg-4">
     <div class="form-group">
-      <label for="maptitle">Map Title</label>
+      <label for="maptitle">{% trans "Title" %}</label>
       <input type="email" class="form-control" id="maptitle" value="Untitled">
     </div> 
   </div>
@@ -108,20 +107,20 @@ $(document).ready(function(){
 
 TTS.forms.mindmap = function(node){
    BootstrapDialog.show({
-        title: 'Add MindMap',
+        title: '{% trans "Add MindMap" %}',
         message: $($('#admin-form').render()),
         onshown: function(){
           $('#summernote').val(node.label()).summernote();
         },
         buttons: [{
-            label: 'Update Text',
+            label: '{% trans "Update Text" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
               node.label("<span>"+$('#summernote').code()+"<span>");
               dialogItself.close();   
             }},
             {
-            label: 'Add New Node',
+            label: '{% trans "Add New Node" %}',
             action: function(dialogItself){
                 var newnode = node.obj.addNode(node);
                 newnode.label("<span>Untitled Node</span>");
@@ -129,7 +128,7 @@ TTS.forms.mindmap = function(node){
                 dialogItself.close();
             }},
             {
-            label: 'Delete Node',
+            label: '{% trans "Delete Node" %}',
             action: function(dialogItself){
                 if(!node.obj.parent){;
                   alert("Root cannot be deleted");
@@ -165,7 +164,7 @@ TTS.forms.mindmap = function(node){
   padding-left:1em;
 }
 #container {
-  background-color: blue;
+  /*background-color: blue;*/
   top:0;
   width:100%;
   height:100%;
