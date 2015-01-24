@@ -23,6 +23,9 @@ def loginname_to_userid(usertype, username):
         m = models.Studentinfo.objects.filter(username=username)[0]
         return m.studentid
 
+def summer_decode(str):
+    return str.replace('~',':').replace('#','=').replace('^',';')
+
 class AdmininfoViewSet(viewsets.ModelViewSet):
     queryset = models.Admininfo.objects.filter(isdelete=0).order_by('-createddate')
     serializer_class = adminserializers.AdminInfoSerializer
@@ -441,12 +444,14 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         data = json.loads(dict(request.DATA).keys()[0]);
-
         students = data.get('students')
         title = data.get('title')
+        title = summer_decode(title)
         note = data.get('note')
+        note = summer_decode(note)
         schoolid = request.session.get('schoolid')
         classid = request.session.get('classid')
+
         if data.get('rubricid'):
             rubric_id = data.get('rubricid')
         else:
@@ -456,6 +461,7 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
             attachmenturl = data.get('attachmenturl')
         else:
             attachmenturl = 0
+
         writtenwork = models.Writtenworkinfo()
         writtenwork.writtenworktitle= unicode(title)
         writtenwork.description     = unicode(note)
@@ -787,10 +793,10 @@ class StudentAssignResource(viewsets.ModelViewSet):
         
         ari = models.Assignresourceinfo.objects.get(pk=pk)
         
-        ari.answertext = data.get('answertext')
+        ari.answertext = summer_decode(unicode(data.get('answertext')))
 
         if data.get('originaltext'):
-            ari.originaltext = unicode(data.get('originaltext'))
+            ari.originaltext = summer_decode(unicode(data.get('originaltext')))
 
         if data.get('answerurl'):
             ari.answerurl = unicode(data.get('answerurl'))
@@ -806,16 +812,16 @@ class StudentAssignResource(viewsets.ModelViewSet):
         ari.save()
 
         assignedid  = pk;
-        spanid      = data.get('spanid');
-        fulltext    = data.get('fulltext');
-        orig        = data.get('orig');
-        modified    = data.get('modified');
+        spanid      = summer_decode(data.get('spanid'));
+        fulltext    = summer_decode(data.get('fulltext'));
+        orig        = summer_decode(data.get('orig'));
+        modified    = summer_decode(data.get('modified'));
         usertype    = data.get('type');
-        answertext  = data.get('answertext');
+        answertext  = summer_decode(data.get('answertext'));
 
         ar = models.Editingtext()
         ar.editid       = int(assignedid)
-        ar.spanid       = str(spanid)
+        ar.spanid       = unicode(spanid)
         ar.previoustext = unicode(orig)
         ar.edittext     = unicode(modified)
         ar.typeofresource = 0
@@ -906,7 +912,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
         students = data.get('students');
         resource = data.get('resource');
         rubricid = data.get('rubricid');
-        assigntext = data.get('assigntext');
+        assigntext = summer_decode(data.get('assigntext'));
        # print resource
         #print students
        # print resource, students
@@ -915,7 +921,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
                 ar = models.Assignresourceinfo()
                 ar.resourceid = int(r)
                 ar.studentid = str(s)
-                ar.assigntext = str(assigntext)
+                ar.assigntext = unicode(assigntext)
                 ar.isanswered = 0
                 ar.issaved = 0
                 ar.isrecord = 0
@@ -941,10 +947,10 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         data = {k:v[0] for k, v in dict(request.DATA).items()}
         #print data
         ari = models.Assignresourceinfo.objects.get(pk=pk)
-        ari.originaltext = data.get('originaltext')
-        ari.answertext = data.get('answertext')
-        ari.answerurl = data.get('answerurl')
-        ari.isrecord = 1
+        ari.originaltext    = summer_decode(unicode(data.get('originaltext')))
+        ari.answertext      = summer_decode(unicode(data.get('answertext')))
+        ari.answerurl       = data.get('answerurl')
+        ari.isrecord        = 1
         if data.get('isanswered'):
             ari.isanswered = data.get('isanswered')
             ari.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -1024,7 +1030,7 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         students = data.get('students');
         resource = data.get('resource');
         rubricid = data.get('rubricid');
-        assigntext = data.get('assigntext');
+        assigntext = summer_decode(data.get('assigntext'));
         #print resource
         #print students
         #print resource, students
@@ -1033,7 +1039,7 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
                 ar = models.Assignresourceinfo()
                 ar.resourceid = int(r)
                 ar.studentid = int(s)
-                ar.assigntext = str(assigntext)
+                ar.assigntext = unicode(assigntext)
                 ar.isanswered = 0
                 ar.issaved = 0
                 ar.isrecord = 0
@@ -2207,10 +2213,10 @@ class StudentAssignWrittenWork(viewsets.ModelViewSet):
         
         awwi = models.Assignwrittenworkinfo.objects.get(pk=pk)
         
-        awwi.answertext = data.get('answertext')
+        awwi.answertext = summer_decode(data.get('answertext'))
 
         if data.get('originaltext'):
-            awwi.originaltext = data.get('originaltext')
+            awwi.originaltext = summer_decode(data.get('originaltext'))
 
         if data.get('answerurl'):
             awwi.answerurl = data.get('answerurl')
@@ -2498,7 +2504,7 @@ class EditAnswerWrittenworkViewSet(viewsets.ModelViewSet):
         SELECT previoustext
         FROM editingtext 
         WHERE spanid = '%s'
-            AND isapproved = 1 ''' % (str(spanid))
+            AND isapproved = 1 ''' % (unicode(spanid))
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
@@ -2506,20 +2512,23 @@ class EditAnswerWrittenworkViewSet(viewsets.ModelViewSet):
             previoustext = result[0];
 
         approvedanswertext = answertext.replace(previoustext,edittext)
+        
 
         #updating approved answer text
         sql = '''
         UPDATE assignwrittenworkinfo 
            SET answertext = '%s'
-           WHERE assignwrittenworkid = '%s' ''' % (MySQLdb.escape_string(unicode(approvedanswertext)), assignedid)
+           WHERE assignwrittenworkid = '%s' ''' % (unicode(approvedanswertext), assignedid)
         cursor = connection.cursor()
         cursor.execute(sql)
 
+        return Response('approved')
+        
         #resetting the previous one if set
         sql = '''
         UPDATE editingtext
             SET isapproved = 0
-        WHERE spanid = '%s' ''' % (spanid)
+        WHERE spanid = '%s' ''' % (unicode(spanid))
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -2532,7 +2541,7 @@ class EditAnswerWrittenworkViewSet(viewsets.ModelViewSet):
         cursor = connection.cursor()
         cursor.execute(sql)
 
-        return Response('approved')      
+        return Response('approved')
 
 class PeerRubricsReviewViewSet(viewsets.ModelViewSet):
 

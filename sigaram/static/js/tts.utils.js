@@ -72,6 +72,13 @@ TTS.utils.ajaxloaderstop =  function (sParam) {
     $("#top-notification").css('visibility','hidden');
 }
 
+
+TTS.utils.summer_encode = function (str) {
+    return str.replace(/:/g, "~")
+              .replace(/=/g, '#')
+              .replace(/;/g, '^');
+}
+
 TTS.utils.getCookie = function(name)  {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {

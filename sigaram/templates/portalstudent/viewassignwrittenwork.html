@@ -238,10 +238,10 @@ TTS.forms.renderrubrictableinfo = function(rubtable, rubdata){
 
 TTS.forms.ressave = function(savesend){
     var data = {};
-    var writtenworkid = TTS.utils.getUrlParameter('writtenworkid');
-    data.originaltext = $(".summernote").code();
-    data.answertext = $(".summernote").code();
-    data.answertype = $(".isaudio:checked").val();
+    var writtenworkid   = TTS.utils.getUrlParameter('writtenworkid');
+    data.originaltext   = TTS.utils.summer_encode($(".summernote").code());
+    data.answertext     = TTS.utils.summer_encode($(".summernote").code());
+    data.answertype     = $(".isaudio:checked").val();
 
     if($("#filenamecreated").val()){
         data.answerurl = $("#filenamecreated").val();
