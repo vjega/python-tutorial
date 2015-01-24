@@ -1517,8 +1517,8 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         et = models.Editingtext()
         et.editid       = int(assignedid)
         et.spanid       = str(spanid)
-        et.previoustext = str(prevtext)
-        et.edittext     = str(modified)
+        et.previoustext = unicode(prevtext)
+        et.edittext     = unicode(modified)
         et.typeofresource = 0
         et.isapproved   = 0
         et.isrejected   = 0
@@ -2447,7 +2447,7 @@ class EditAnswerResourceViewSet(viewsets.ModelViewSet):
         sql = '''
         UPDATE assignresourceinfo 
            SET answertext = '%s'
-           WHERE assignedid = '%s' ''' % (MySQLdb.escape_string(approvedanswertext), assignedid)
+           WHERE assignedid = '%s' ''' % (MySQLdb.escape_string(unicode(approvedanswertext)), assignedid)
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -2464,7 +2464,7 @@ class EditAnswerResourceViewSet(viewsets.ModelViewSet):
         UPDATE editingtext
             SET isapproved = 1,
             previoustext = "%s"
-        WHERE editingid = '%s' ''' % (edittext, pk)
+        WHERE editingid = '%s' ''' % (unicode(edittext), pk)
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -2511,7 +2511,7 @@ class EditAnswerWrittenworkViewSet(viewsets.ModelViewSet):
         sql = '''
         UPDATE assignwrittenworkinfo 
            SET answertext = '%s'
-           WHERE assignwrittenworkid = '%s' ''' % (MySQLdb.escape_string(approvedanswertext), assignedid)
+           WHERE assignwrittenworkid = '%s' ''' % (MySQLdb.escape_string(unicode(approvedanswertext)), assignedid)
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -2528,7 +2528,7 @@ class EditAnswerWrittenworkViewSet(viewsets.ModelViewSet):
         UPDATE editingtext
             SET isapproved = 1,
             previoustext = "%s"
-        WHERE editingid = '%s' ''' % (edittext, pk)
+        WHERE editingid = '%s' ''' % (unicode(edittext), pk)
         cursor = connection.cursor()
         cursor.execute(sql)
 
