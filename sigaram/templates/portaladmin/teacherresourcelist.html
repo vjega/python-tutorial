@@ -65,47 +65,6 @@
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 
-TTS.forms.addteacherresource = function(form, data) {
-    $.ajax({
-        headers : {
-            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
-        },
-        type:'POST',
-        data: data,
-        url : '/api/admin/teacherresourcesinfo/'
-    }).done(function( msg ) {
-        //console.log(data)
-        form.close();
-        location.reload();
-        //dialogItself.close();
-    });
-}
-
-/*TTS.forms.showteacherresource = function() {
-    BootstrapDialog.show({
-        title: '{% trans "Teacher" %} {% trans "Resources" %}',
-        message: $($('#teacherresource-form').render()),
-        onshown: function(){
-            TTS.forms.upload();
-            $('.summernote').summernote();
-            updateChapter();
-        },
-        buttons: [{
-            label: '{% trans "Save" %}',
-            cssClass: 'btn-primary',
-            action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-teacherresource");
-                TTS.forms.addteacherresource(dialogItself, data); 
-            }
-            },{
-            label: '{% trans "Close" %}',
-            action: function(dlg){
-                dlg.close();
-            }
-        }]
-    });
-};
-*/
 TTS.forms.delteacherres = function(id) {
     $.ajax({
         headers : {
