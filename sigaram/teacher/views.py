@@ -617,8 +617,7 @@ def assignmindmap(request):
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/assignmindmap.html',{'schools':schools,'classes':classes})
 
-@login_required
-@switchlanguage
+
 def assignedmindmaplist(request):
     return render(request, 'portalteacher/assignedmindmaplist.html')
 
@@ -636,3 +635,9 @@ def viewassignmindmapanswer(request):
 @switchlanguage
 def viewmindmap(request):
     return render(request, 'portalteacher/viewmindmap.html')    
+
+@login_required
+@switchlanguage
+def addteachershare(request):
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    return render(request, 'portalteacher/addteachershare.html',{'schools':schools})
