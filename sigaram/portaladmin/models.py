@@ -1002,6 +1002,7 @@ class Topicinfo(models.Model):
     forumid = models.BigIntegerField()
     topicname = models.CharField(max_length=1000)
     totalpost = models.IntegerField()
+    topicdetails = models.TextField()
     lastpostedby = models.BigIntegerField()
     lastposteddate = models.DateTimeField()
     createdby = models.BigIntegerField()
