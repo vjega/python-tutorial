@@ -616,3 +616,9 @@ def assignmindmap(request):
     schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/assignmindmap.html',{'schools':schools,'classes':classes})
+
+@login_required
+@switchlanguage
+def addteachershare(request):
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    return render(request, 'portalteacher/addteachershare.html',{'schools':schools})
