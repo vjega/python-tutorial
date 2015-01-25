@@ -569,3 +569,8 @@ def viewteacherres(request):
 @switchlanguage
 def viewstudentres(request):
     return render(request, 'portaladmin/viewstudentres.html')
+
+@login_required
+@switchlanguage
+def addstickynote(request):
+    return render(request, 'portaladmin/addstickynote.html')
