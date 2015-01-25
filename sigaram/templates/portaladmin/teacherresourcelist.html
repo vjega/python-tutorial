@@ -124,30 +124,6 @@ TTS.forms.renderteacherresourceinfo = function(data){
 
 };
 
-/*TTS.forms.upload = function(elm) {
-    //console.log(elm);
-    var uploader = new qq.FileUploader({
-        action: "/admin/student-teacherres-upload",
-        element: $('#file-uploader')[0],
-        multiple: false,
-        onComplete: function(id, fileName, responseJSON) {
-            if(responseJSON.success) {
-                $("#id_fileurl").val(responseJSON.path.replace('static/', ''));
-            } else {
-                alert("upload failed!");
-            }
-        },
-        onAllComplete: function(uploads) {
-            // the maps look like this: {file: FileObject, response: JSONServerResponse}
-        },
-        params: {
-            'csrf_token': '{{ csrf_token }}',
-            'csrf_name': 'csrfmiddlewaretoken',
-            'csrf_xname': 'X-CSRFToken',
-        },
-    });
-};*/
-
 var updateChapter = function(){
     $.ajax({
         'url': "/api/admin/chapterinfo/?classid="+$("#id_classid").val()

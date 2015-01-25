@@ -285,7 +285,6 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         return Response(result)
 
     def create(self, request):
-        print request
         teacherresource = models.Teacherresourceinfo()
         teacherresourcedata =  json.loads(request.DATA.keys()[0])
         restype = teacherresourcedata.get('resourcetype')
