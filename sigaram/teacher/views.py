@@ -61,6 +61,13 @@ def home(request):
         "link" : u"viewassessments",
         "caption": _("Exercises"),
         "stat": 125
+        },
+        {
+        "color": u"primary",
+        "icon" : u"sitemap",
+        "link" : u"teacherviewmindmap",
+        "caption": _("Mindmap"),
+        "stat": 125
         }]
 
     recent_acitivity_head = [_("Sl No."),

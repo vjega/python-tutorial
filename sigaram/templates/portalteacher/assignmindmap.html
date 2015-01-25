@@ -42,6 +42,7 @@
 
 {% block botcontent %}
 <input type="hidden" id="set_rubric_id" name="rub_id" value="" />
+<input type="hidden" id="mapdata" name="mapdata" />
 <div class="row">
 
     <div class="form-group" class="col-sm-2">
@@ -406,15 +407,11 @@ TTS.forms.ressave = function(){
     }*/
     
     var data = {};
-    data.resource = 0;
-    data.students = [];
-    data.rubricid = 0;
-    data.assigntext = $(".summernote").code();
-    if(TTS.utils.getUrlParameter('resourceid')){
-        data.resource = TTS.utils.getUrlParameter('resourceid');
-    }
-    if($("#set_rubric_id").val()){
-        data.rubricid = $("#set_rubric_id").val();
+    data.students   = [];
+    data.assigntext = TTS.utils.summer_encode($(".summernote").code());
+    data.mapdata    = TTS.utils.summer_encode($("#mapdata").val());
+    if(TTS.utils.getUrlParameter('mindmapid')){
+        data.mindmapid = TTS.utils.getUrlParameter('mindmapid');
     }
     $("#sltStudentList>option").each(function(){
         data.students.push($(this).val());
@@ -423,12 +420,11 @@ TTS.forms.ressave = function(){
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
-        url:"/api/admin/studentassignresource/",
+        url:"/api/admin/assignmindmapinfo/",
         type:"POST",
         data: JSON.stringify(data)
     }).done(function(data){
-        //console.log(data);
-        alert("Chapter assigned Successfully");
+        alert("Mindmap assigned Successfully");
         location.reload();
     }).error(function(err, msg){
         alert("I didnt save the data");
@@ -445,6 +441,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         $("#mindmaptitle").html(data.title);
+        $("#mapdata").val(data.mapdata);
     });
     
     $.ajax({
@@ -454,7 +451,6 @@ $(document).ready(function(){
         TTS.forms.renderschoolinfo(data);
     });
     
-
     $("body").on("change", "#school_name",function(){
 
         if($("#school_name").val() == 'all'){
