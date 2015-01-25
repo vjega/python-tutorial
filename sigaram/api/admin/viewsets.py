@@ -1098,6 +1098,7 @@ class StickynotesResource(viewsets.ModelViewSet):
     def create(self, request):
         stickynotes = models.stickynotes()
         data = json.loads(dict(request.DATA).keys()[0])
+        stickynotes.stickylistid = 0#data.get('stickytext')
         stickynotes.stickytext = data.get('stickytext')
         stickynotes.name = data.get('name')
         stickynotes.xyz = data.get('xyz')
