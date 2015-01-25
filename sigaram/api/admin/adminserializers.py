@@ -209,3 +209,9 @@ class AssignmindmapinfoSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('mindmapid','studentid','assigntext','mapdata','assigneddate',
                     'isdelete','assignedby','answertext','answereddate',
                     'assignedby','assigneddate','isanswered','issaved','isdelete')
+
+class PostinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Postinfo
+        fields = ('postid', 'topicid','forumid',
+                  'postdetails', 'postedby','posteddate','parentid')

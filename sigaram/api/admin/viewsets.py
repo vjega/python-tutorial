@@ -1098,6 +1098,7 @@ class StickynotesResource(viewsets.ModelViewSet):
     def create(self, request):
         stickynotes = models.stickynotes()
         data = json.loads(dict(request.DATA).keys()[0])
+        stickynotes.stickylistid = 0#data.get('stickytext')
         stickynotes.stickytext = data.get('stickytext')
         stickynotes.name = data.get('name')
         stickynotes.xyz = data.get('xyz')
@@ -2683,7 +2684,6 @@ class AssignmindmapinfoViewSet(viewsets.ModelViewSet):
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
 
-
 class TeacherAssignedmindmapViewSet(viewsets.ModelViewSet):
     queryset = models.Assignmindmapinfo.objects.all()
     serializer_class = adminserializers.AssignmindmapinfoSerializer
@@ -2763,3 +2763,21 @@ class TeacherAssignedmindmapViewSet(viewsets.ModelViewSet):
                 for row in cursor.fetchall()
             ]
         return Response(result)
+
+class PostinfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Postinfo.objects.all()
+    serializer_class = adminserializers.PostinfoSerializer
+
+    def create(self, request):
+        postinfo = models.Postinfo()
+        postinfodata =  json.loads(request.DATA.keys()[0])
+        postinfo.postid = postinfodata.get('postid')
+        postinfo.topicid = postinfodata.get('topicid')
+        postinfo.forumid = postinfodata.get('forumid')
+        postinfo.parentid = postinfodata.get('parentid')
+        postinfo.postdetails = postinfodata.get('postdetails',0)
+        postinfo.postedby = request.user.id
+        postinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        postinfo.save()
+        return Response(request.DATA)

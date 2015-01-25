@@ -50,7 +50,7 @@ router.register(r'editanswerwrittenwork',   viewsets.EditAnswerWrittenworkViewSe
 router.register(r'peerrubricsreview',   	viewsets.PeerRubricsReviewViewSet)
 router.register(r'assignmindmapinfo',    	viewsets.AssignmindmapinfoViewSet)
 router.register(r'teacherassignedmindmap',  viewsets.TeacherAssignedmindmapViewSet)
-
+router.register(r'postinfo',    	        viewsets.PostinfoViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
