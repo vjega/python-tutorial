@@ -42,7 +42,7 @@ class Activitylog(models.Model):
             INNER JOIN logininfo li ON li.loginid = al.loginid 
             -- WHERE al.loginid = {$loginid} 
             ORDER by activityid DESC 
-            LIMIT 10""";
+            LIMIT 5""";
         cursor = connection.cursor()
         cursor.execute(sql)
         return dictfetchall(cursor)
@@ -390,7 +390,7 @@ class Bulletinboardinfo(models.Model):
         WHERE %s
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
-        LIMIT 2"""% (fieldcond,joincond,wherecond)
+        LIMIT 10"""% (fieldcond,joincond,wherecond)
         cursor = connection.cursor()
         cursor.execute(sql)
         x = dictfetchall(cursor)
@@ -1122,3 +1122,21 @@ class Stickyinfo(models.Model):
     class Meta:
         managed = False
         db_table = 'stickyinfo'
+
+
+class Assignmindmapinfo(models.Model):
+    assignedid  = models.AutoField(primary_key=True)
+    mindmapid   = models.BigIntegerField()
+    studentid   = models.CharField(max_length=500)
+    assigntext  = models.TextField()
+    mapdata     = models.TextField()
+    answereddate= models.DateTimeField()
+    assignedby  = models.CharField(max_length=500)
+    assigneddate= models.DateTimeField()
+    isanswered  = models.IntegerField()
+    issaved     = models.IntegerField()
+    isdelete    = models.IntegerField(db_column='IsDelete')  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table= 'assignmindmapinfo'        

@@ -16,6 +16,7 @@ TTS.utils.serilaizeJson =  function (form){
     return JSON.stringify(indexed_array);
 };
 
+
 TTS.utils.guid = (function() {
   function s4() {
     return Math.floor((1 + Math.random()) * 0x10000)
@@ -70,6 +71,13 @@ TTS.utils.ajaxloaderstart =  function (sParam) {
 
 TTS.utils.ajaxloaderstop =  function (sParam) {
     $("#top-notification").css('visibility','hidden');
+}
+
+
+TTS.utils.summer_encode = function (str) {
+    return str.replace(/:/g, "~")
+              .replace(/=/g, '#')
+              .replace(/;/g, '^');
 }
 
 TTS.utils.getCookie = function(name)  {

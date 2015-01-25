@@ -1,0 +1,528 @@
+{% extends 'portalteacher/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block topcontent %}
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Students" %} {% trans "Mindmap" %}</h2>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+{% endblock topcontent %}
+
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<style>
+    #addrec:hover, #admin-main-tbl tbody tr:hover{
+        cursor: pointer;
+    }
+    .note-editable{
+        height: 80px;
+    }
+    i.flaticon-a10{
+        margin-left: -20px;
+    }
+    .btn.btn-warning{
+        font-size: 20px;
+    }
+</style>
+{% endblock morecss %}
+
+
+{% block morescript %}
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+{% endblock morescript %}
+
+{% block botcontent %}
+<input type="hidden" id="set_rubric_id" name="rub_id" value="" />
+<input type="hidden" id="mapdata" name="mapdata" />
+<div class="row">
+
+    <div class="form-group" class="col-sm-2">
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Heading" %}</label>
+        <div class="control" id="mindmaptitle"></div>
+    </div>
+
+    <!--div class="form-group" class="col-sm-2">
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Answer" %} {% trans "Type" %}</label>
+        <div class="control">
+            <select id="answertype" name="answertype">
+                <option value="text">Text</option>
+                <option value="image">Image</option>
+                <option value="audio">Audio</option>
+                <option value="video">Video</option>
+            </select>
+        </div>
+    </div-->
+    <br />
+    <div class="form-group" class="col-sm-2">
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Reference" %}</label>
+    </div>
+    </div>
+    <div class="form-group">
+        <textarea class="summernote"></textarea>
+    </div>
+
+    <!--div class="row">
+
+        <div class="form-group col-lg-2">
+           <button class="btn btn-warning" id="connect-rubrics"><i class="flaticon-a10"></i> {% trans "Connect" %} {% trans "Rubrics" %}</button>
+        </div>
+
+        <div class="bs-docs-grid col-lg-10">
+            <div class="row show-grid" style="margin-top:0px">
+                <div class="col-lg-12" style="display:none" id="set_rubric_text">
+                </div>
+            </div>
+        </div>
+
+    </div-->
+
+    <div class="row">
+
+<div class="col-lg-12">
+    <div class="panel panel-default">
+        <div align="center" class="panel-heading">
+            <span id="addrec">
+                <a href="javascript:void(0)" class="btn btn-success btn-sm"><i class="fa fa-plus-square fa-lg"></i> {% trans "Add" %}</a>
+            </span>
+            <a href="javascript:void(0)" class="btn btn-success btn-sm" id="removeStudent"><i class="fa fa-remove fa-lg"></i> {% trans "Remove" %}</a>
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <select style="width:100%;height:250px;" id='sltStudentList' name='sltStudentList' multiple="">
+                        
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div align="center" class="panel-footer">
+            <!--button class="btn btn-success btn-lg" id="connect-rubrics">
+                <i class="flaticon-a10"></i> {% trans "Connect" %} {% trans "Rubrics" %}
+            </button-->
+            <button class="btn btn-success btn-lg" id="res-send">
+                <i class="fa fa-share fa-lg"></i> {% trans "Send" %}
+            </button>
+            
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+</div>
+{% endblock botcontent%}
+
+{% block scriptcontent %}
+
+<script id="rubricslist" type="text/x-jsrender">
+<div class="row">
+    <div class="control-group col-lg-7">
+        <div class="controls">
+            <button class="btn btn-success" id="choose-rubric"> {% trans "Select" %}</button>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover"  id="rubrics-list">
+                
+            </table>
+        </div>    
+    </div>
+</div>
+</script>
+
+
+<script id="assessmentassigninglist" type="text/x-jsrender">
+<div class="row">
+    <div class="control-group col-lg-7">
+        <div class="controls">
+            <select name="school_name" class="form-control" id="school_name">
+                <option value="all">All</option>
+                {% for school in schools %}
+                <option value="{{school.schoolid}}">{{school.schoolname}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="control-group col-lg-4">
+        <div class="controls">
+            <select name="classid" class="form-control" id="classid">
+                {% for class in classes %}
+                <option value="{{class.classid}}">{{class.shortname}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-lg-12">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered table-hover"  id="assessment-assigning-list">
+                
+            </table>
+        </div>    
+    </div>
+</div>
+</script>
+
+<script>
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}
+
+TTS.forms.renderstudentlist = function(data){
+
+    var dataset = [];
+    
+    var count = 0
+    for(var i in data){
+        var t = [];
+        t.id = "<input type='checkbox' class='case' name='schoolname' id='"+data[i].username+"' value='"+data[i].firstname+" "+data[i].lastname+"' />";
+
+        t.name = data[i].firstname+" "+data[i].lastname;
+        dataset.push(t);
+    }   
+    TTS.forms.asstable.fnClearTable();
+    TTS.forms.asstable.fnAddData(
+        dataset
+    );
+    return true;
+    
+    /*
+    TTS.forms.table2 = $('#assessment-assigning-list').dataTable({"language" : TTS.utils.datatable_ta,
+        "data":     dataset,
+        "columns":  headers
+    });
+    */
+};
+
+TTS.forms.assessmentassigninglist = function() {
+    BootstrapDialog.show({  
+         title: '{% trans "Name" %} {% trans "List" %}',
+        message: $($('#assessmentassigninglist').render()),
+        onshown: function(dialogRef){
+            $.ajax({
+                "url":"/api/admin/adminschool/?format=json",
+                "type":"GET"
+            }).done(function(data){
+                //console.log(data);
+                TTS.forms.renderschoolinfo(data);
+            });
+        },
+        buttons: [{
+            label: '{% trans "Add" %}',
+            cssClass: 'btn-primary',
+            action: function(){
+                //var data = TTS.utils.serilaizeJson("#newfolderfrm");
+                /*var data = '';
+                $.ajax({
+                    type:'POST',
+                    data: {'data':data},
+                    url : '/api/admin/addfolder'
+                }).done(function( msg ) {
+                    console.log(msg);
+                    //dialogItself.close();
+                });*/
+
+                if($("#school_name").val() == 'all'){
+                    var schoolids = [];
+                    $("input:checkbox[name=schoolname]:checked").each(function () {
+                        schoolids.push($(this).attr("id"));
+                    });
+
+                    var ids = schoolids.join(',');
+
+                    $.ajax({
+                        "url":"/api/admin/student/?schoolids="+ids+"&classid="+$("#classid").val()+"&format=json",
+                        "type":"GET"
+                    }).done(function(data){
+                        if (data.length) {
+                            $.each(data, function( index, value ) {
+                                var studentlist = "#sltStudentList";
+                                if(!$(studentlist +"  option[value*='" + value.username + "']").length > 0){
+                                    $("#sltStudentList").append('<option value="'+value.username+'">'+value.firstname+' '+value.lastname+'</option>');
+                                }
+                            });
+                        } else {
+                            alert("no data");
+                        }
+                    });
+
+                }else{
+
+                    $("input:checkbox[name=schoolname]:checked").each(function () {
+                        var id = $(this).attr("id");
+                        var name = $(this).val();
+                        var studentlist = "#sltStudentList";
+                        if(!$(studentlist +"  option[value*='" + id + "']").length > 0){
+                            $("#sltStudentList").append('<option value="'+id+'">'+name+'</option>'); 
+                        }   
+                    });
+
+                }
+
+            }
+            },{
+            label: '{% trans "Close" %}',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
+        }]
+    });
+};
+
+/*TTS.forms.rubricslist = function() {
+    BootstrapDialog.show({  
+        title: 'Rubrics List',
+        message: $($('#rubricslist').render()),
+        onshown: function(dialogRef){
+            $.ajax({
+                "url":"/api/admin/rubricsheader/?format=json",
+                "type":"GET"
+            }).done(function(data){
+                TTS.forms.rubricinfo(data);
+            });
+
+            $("body").on("click", "#choose-rubric",function(){
+                if(!$(".rubric_id:checked").length) {
+                    alert("Select atleast one rubric");
+                    return false;
+                }
+                var rid = $(".rubric_id:checked").prop("id");
+                var assgtext = $(".rubric_id:checked").prop("value");
+                $("#set_rubric_id").val(rid);
+                $("#set_rubric_text").show();
+                $("#set_rubric_text").html(assgtext);
+                dialogRef.close();
+            });
+
+        },
+        buttons: [/*{
+            label: 'Add',
+            cssClass: 'btn-primary',
+            onshown: function(msg){
+
+            }
+            },*//*{
+            label: '{% trans "Close" %}',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
+        }]
+    });
+};*/
+
+/*TTS.forms.rubricinfo = function(data){
+    var headers = [
+            { "title": "{% trans "Select" %}",
+              "class": "text-center",
+              "data" : "id",
+              "bSortable": false
+            },
+            { "title": "{% trans "Title" %}",
+              "data" : "title"
+            },
+            { "title": "{% trans "Teacher" %}",
+              "data" : "teacher"
+            },
+        ];
+    var dataset = [];
+    var count = 0
+    for(var i in data){
+        var t = [];
+        t.id = "<input type='radio' class='rubric_id' name='chkrubrics' value='"+data[i].title+"' id='"+data[i].slno+"' />";
+        t.title = data[i].title;
+        t.teacher = data[i].teacher;
+        dataset.push(t);
+    }
+
+    TTS.forms.asstable = $('#rubrics-list').dataTable({"language" : TTS.utils.datatable_ta,
+        "data":     dataset,
+        "columns":  headers
+    });
+};*/
+
+
+TTS.forms.renderschoolinfoagain = function(data){
+    var dataset = [];
+    
+    var count = 0
+    for(var i in data){
+        var t = [];
+       t.id = "<input type='checkbox' class='case' name='schoolname' id='"+data[i].schoolid+"' value='"+data[i].schoolname+"' />";
+        t.name = data[i].schoolname;
+        dataset.push(t);
+    }
+
+   TTS.forms.asstable.fnClearTable();
+   TTS.forms.asstable.fnAddData(
+        dataset
+    );
+    return true;
+};
+   
+TTS.forms.renderschoolinfo = function(data){
+    var headers = [
+            { "title": "<input type='checkbox' id='selectall'>",
+              "class": "text-center",
+              "data" : "id",
+              "bSortable": false
+            },
+            { "title": "{% trans "Name" %}",
+              "data" : "name"
+            },
+        ];
+    var dataset = [];
+    var count = 0
+    for(var i in data){
+        var t = [];
+        t.id = "<input type='checkbox' class='case' name='schoolname' id='"+data[i].schoolid+"' value='"+data[i].schoolname+"' />";
+        t.name = data[i].schoolname;
+        dataset.push(t);
+    }
+
+    TTS.forms.asstable = $('#assessment-assigning-list').dataTable({"language" : TTS.utils.datatable_ta,
+        "data":     dataset,
+        "columns":  headers
+    });
+};
+
+
+TTS.forms.ressave = function(){
+    
+    /*if (!$(".case:checked").length){
+        alert("Select atleast one resource");
+    }*/
+    
+    var data = {};
+    data.students   = [];
+    data.assigntext = TTS.utils.summer_encode($(".summernote").code());
+    data.mapdata    = TTS.utils.summer_encode($("#mapdata").val());
+    if(TTS.utils.getUrlParameter('mindmapid')){
+        data.mindmapid = TTS.utils.getUrlParameter('mindmapid');
+    }
+    $("#sltStudentList>option").each(function(){
+        data.students.push($(this).val());
+    })
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        url:"/api/admin/assignmindmapinfo/",
+        type:"POST",
+        data: JSON.stringify(data)
+    }).done(function(data){
+        alert("Mindmap assigned Successfully");
+        location.reload();
+    }).error(function(err, msg){
+        alert("I didnt save the data");
+    });
+}
+
+
+$(document).ready(function(){
+
+    var mindmapid = TTS.utils.getUrlParameter('mindmapid');
+
+    $.ajax({
+        "url":"/api/admin/mindmap/"+mindmapid,
+        "type":"GET"
+    }).done(function(data){
+        $("#mindmaptitle").html(data.title);
+        $("#mapdata").val(data.mapdata);
+    });
+    
+    $.ajax({
+        "url":"/api/admin/adminschool/?format=json",
+        "type":"GET"
+    }).done(function(data){
+        TTS.forms.renderschoolinfo(data);
+    });
+    
+    $("body").on("change", "#school_name",function(){
+
+        if($("#school_name").val() == 'all'){
+            $.ajax({
+                "url":"/api/admin/adminschool/?format=json",
+                "type":"GET"
+            }).done(function(data){
+                //console.log(data);
+                TTS.forms.renderschoolinfoagain(data);
+            });
+        }else{
+            $.ajax({
+                "url":"/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json",
+                "type":"GET"
+            }).done(function(data){
+                if (data.length) {
+                    TTS.forms.renderstudentlist(data);
+                } else {
+                    TTS.forms.table.fnClearTable();
+                }
+            });
+        }
+    })
+    $("body").on("change", "#classid",function(){
+        $.ajax({
+            "url":"/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json",
+            "type":"GET"
+        }).done(function(data){
+            if (data.length) {
+                TTS.forms.renderstudentlist(data);
+            } else {
+                TTS.forms.asstable.fnClearTable();
+            }
+        });
+    });
+    $('#admin-main-tbl tbody').on('click', 'tr', function(){
+        window.location = 'teacherresourcelist?id='+this.id;
+    });
+    $("#page-wrapper").on("click", "#addrec", function(){
+        TTS.forms.assessmentassigninglist();
+        
+    });
+    $('.summernote').summernote();
+
+    // add multiple select / deselect functionality
+    $("body").on("click", "#selectall", function () {
+          $('.case').attr('checked', this.checked);
+    });
+    // if all checkbox are selected, check the selectall checkbox
+    // and viceversa
+    $("body").on("click", ".case",function(){
+        if($(".case").length == $(".case:checked").length) {
+            $("#selectall").attr("checked", "checked");
+        } else {
+            $("#selectall").removeAttr("checked");
+        }
+    });    
+    /*$("#connect-rubrics").on("click", function(){
+        TTS.forms.rubricslist();
+    });*/
+    $("#removeStudent").click(function(){
+        $('#sltStudentList :selected').each(function(i, selected){ 
+            var studentid = $(selected).val(); 
+            $("#sltStudentList option[value='"+studentid+"']").remove();
+        });
+    });
+
+    $("#res-send").click(function(){
+        TTS.forms.ressave();
+    });
+
+});
+</script>
+
+{% endblock scriptcontent %}

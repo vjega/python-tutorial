@@ -13,7 +13,6 @@ from portaladmin import models
 import  adminserializers
 
 def loginname_to_userid(usertype, username):
-
     if usertype =='Admin':
         m = models.Admininfo.objects.filter(username=username)[0]
         return m.adminid
@@ -24,8 +23,10 @@ def loginname_to_userid(usertype, username):
         m = models.Studentinfo.objects.filter(username=username)[0]
         return m.studentid
 
-class AdmininfoViewSet(viewsets.ModelViewSet):
+def summer_decode(str):
+    return str.replace('~',':').replace('#','=').replace('^',';')
 
+class AdmininfoViewSet(viewsets.ModelViewSet):
     queryset = models.Admininfo.objects.filter(isdelete=0).order_by('-createddate')
     serializer_class = adminserializers.AdminInfoSerializer
 
@@ -114,8 +115,6 @@ class TeacherViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        # print "Hi"
-        """
         teacher = models.Teacherinfo.objects.get(pk=pk)
         teacherdata =  json.loads(request.DATA.keys()[0])
         teacher.username = teacherdata.get('username')
@@ -127,7 +126,6 @@ class TeacherViewSet(viewsets.ModelViewSet):
         teacher.classid = teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
         teacher.save()
-        """
         return Response(request.DATA)
 
     def partial_update(self, request, pk=None):
@@ -158,17 +156,17 @@ class studentViewSet(viewsets.ModelViewSet):
         schoolids  =  request.GET.get('schoolids')
 
         if schoolid and classid:
-            queryset = models.Studentinfo.objects.filter(schoolid=schoolid, classid=classid).order_by('-createddate')
+            queryset = models.Studentinfo.objects.filter(schoolid=schoolid, classid=classid, isdelete=0).order_by('-createddate')
         elif schoolid:
-            queryset = models.Studentinfo.objects.filter(schoolid=schoolid).order_by('-createddate')
+            queryset = models.Studentinfo.objects.filter(schoolid=schoolid, isdelete=0).order_by('-createddate')
         elif schoolids:
             schools = schoolids.split(",")
             q = Q()
             for s in schools:
                 q |= Q(schoolid=s)
-            queryset = models.Studentinfo.objects.filter(q, classid=classid)
+            queryset = models.Studentinfo.objects.filter(q, classid=classid, isdelete=0)
         else:
-            queryset = models.Studentinfo.objects.all()
+            queryset = models.Studentinfo.objects.filter(isdelete=0)
         
         serializer = adminserializers.StudentinfoSerializer(queryset, many=True)
         return Response(serializer.data)
@@ -287,6 +285,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         return Response(result)
 
     def create(self, request):
+        print request
         teacherresource = models.Teacherresourceinfo()
         teacherresourcedata =  json.loads(request.DATA.keys()[0])
         restype = teacherresourcedata.get('resourcetype')
@@ -325,7 +324,11 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         allschool.isdeleted = 1
         allschool.save()
         return Response('"msg":"delete"')
-    
+
+    def retrieve(self, request, pk=None):
+        queryset = models.Teacherresourceinfo.objects.get(pk=pk)
+        serializer = adminserializers.TeacherresourceinfoSerializer(queryset, many=False)
+        return Response(serializer.data)
 
 class ResourceinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Resourceinfo.objects.all()
@@ -348,7 +351,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         if categoryid:
             kwarg['categoryid'] = categoryid
 
-        queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('resourceid')
+        queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('-createddate')
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -402,6 +405,12 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         ri.save()
         return Response(request.DATA)
 
+    def destroy(self, request, pk=None):
+        studentres = models.Resourceinfo.objects.get(pk=pk)
+        studentres.isdeleted = 1
+        studentres.save()
+        return Response('"msg":"delete"')
+
 class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Writtenworkinfo.objects.all()
     serializer_class = adminserializers.WrittenworkinfoSerializer
@@ -436,10 +445,11 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         data = json.loads(dict(request.DATA).keys()[0]);
-
         students = data.get('students')
         title = data.get('title')
+        title = summer_decode(title)
         note = data.get('note')
+        note = summer_decode(note)
         schoolid = request.session.get('schoolid')
         classid = request.session.get('classid')
 
@@ -454,8 +464,8 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
             attachmenturl = 0
 
         writtenwork = models.Writtenworkinfo()
-        writtenwork.writtenworktitle= title
-        writtenwork.description     = note
+        writtenwork.writtenworktitle= unicode(title)
+        writtenwork.description     = unicode(note)
         writtenwork.writtenimage    = attachmenturl
         writtenwork.schoolid        = schoolid
         writtenwork.classid         = classid
@@ -467,12 +477,11 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
         writtenwork.save()
 
         writtenworkid = writtenwork.writtenworkid
-
         for s in students:
             awwi = models.Assignwrittenworkinfo()
             awwi.writtenworkid = writtenworkid
-            awwi.studentid = str(s)
-            awwi.assigntext = str(note)
+            awwi.studentid = unicode(s)
+            awwi.assigntext = unicode(note)
             awwi.issaved = 0
             awwi.ispublished = 0
             awwi.isrecord = 0
@@ -522,7 +531,9 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             WHERE categoryid=%s
                 AND classid=%s
                 AND section='%s' 
-            GROUP BY chapterid'''%(categoryid, classid, sectionid)
+            GROUP BY chapterid
+            ORDER BY chapterid
+            '''%(categoryid, classid, sectionid)
             # print sql;
             cursor = connection.cursor()
             cursor.execute(sql)
@@ -546,7 +557,7 @@ class AdminschoolViewSet(viewsets.ModelViewSet):
         schooldata =  json.loads(request.DATA.keys()[0])
         adminschools.schoolname = schooldata.get('schoolname')
         adminschools.shortname = schooldata.get('shortname')
-        adminschools.description = schooldata.get('description')
+        adminschools.description = schooldata.get('schoolname')
         adminschools.createdby = request.user.id
         adminschools.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         adminschools.save()
@@ -565,6 +576,7 @@ class AdminschoolViewSet(viewsets.ModelViewSet):
 
 
     def destroy(self, request, pk=None):
+        models.Schoolinfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
 class AdminclasslistViewSet(viewsets.ModelViewSet):
@@ -603,6 +615,7 @@ class AdminclasslistViewSet(viewsets.ModelViewSet):
         return Response('"msg":"update"')
 
     def destroy(self, request, pk=None):
+        models.Classinfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
 class AdminrubricsViewSet(viewsets.ModelViewSet):
@@ -783,13 +796,13 @@ class StudentAssignResource(viewsets.ModelViewSet):
         
         ari = models.Assignresourceinfo.objects.get(pk=pk)
         
-        ari.answertext = data.get('answertext')
+        ari.answertext = summer_decode(unicode(data.get('answertext')))
 
         if data.get('originaltext'):
-            ari.originaltext = data.get('originaltext')
+            ari.originaltext = summer_decode(unicode(data.get('originaltext')))
 
         if data.get('answerurl'):
-            ari.answerurl = data.get('answerurl')
+            ari.answerurl = unicode(data.get('answerurl'))
             ari.isrecord = 1
 
         if data.get('isanswered'):
@@ -802,18 +815,18 @@ class StudentAssignResource(viewsets.ModelViewSet):
         ari.save()
 
         assignedid  = pk;
-        spanid      = data.get('spanid');
-        fulltext    = data.get('fulltext');
-        orig        = data.get('orig');
-        modified    = data.get('modified');
+        spanid      = summer_decode(data.get('spanid'));
+        fulltext    = summer_decode(data.get('fulltext'));
+        orig        = summer_decode(data.get('orig'));
+        modified    = summer_decode(data.get('modified'));
         usertype    = data.get('type');
-        answertext  = data.get('answertext');
+        answertext  = summer_decode(data.get('answertext'));
 
         ar = models.Editingtext()
         ar.editid       = int(assignedid)
-        ar.spanid       = str(spanid)
-        ar.previoustext = str(orig)
-        ar.edittext     = str(modified)
+        ar.spanid       = unicode(spanid)
+        ar.previoustext = unicode(orig)
+        ar.edittext     = unicode(modified)
         ar.typeofresource = 0
         ar.isapproved   = 0
         ar.isrejected   = 0
@@ -902,7 +915,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
         students = data.get('students');
         resource = data.get('resource');
         rubricid = data.get('rubricid');
-        assigntext = data.get('assigntext');
+        assigntext = summer_decode(data.get('assigntext'));
        # print resource
         #print students
        # print resource, students
@@ -911,7 +924,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
                 ar = models.Assignresourceinfo()
                 ar.resourceid = int(r)
                 ar.studentid = str(s)
-                ar.assigntext = str(assigntext)
+                ar.assigntext = unicode(assigntext)
                 ar.isanswered = 0
                 ar.issaved = 0
                 ar.isrecord = 0
@@ -937,10 +950,10 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         data = {k:v[0] for k, v in dict(request.DATA).items()}
         #print data
         ari = models.Assignresourceinfo.objects.get(pk=pk)
-        ari.originaltext = data.get('originaltext')
-        ari.answertext = data.get('answertext')
-        ari.answerurl = data.get('answerurl')
-        ari.isrecord = 1
+        ari.originaltext    = summer_decode(unicode(data.get('originaltext')))
+        ari.answertext      = summer_decode(unicode(data.get('answertext')))
+        ari.answerurl       = data.get('answerurl')
+        ari.isrecord        = 1
         if data.get('isanswered'):
             ari.isanswered = data.get('isanswered')
             ari.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -974,6 +987,7 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
               %s
         GROUP BY resourceid 
         ORDER BY assigneddate DESC''' % (request.user.username, datecond)
+        print sql;
 
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
@@ -1019,7 +1033,7 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         students = data.get('students');
         resource = data.get('resource');
         rubricid = data.get('rubricid');
-        assigntext = data.get('assigntext');
+        assigntext = summer_decode(data.get('assigntext'));
         #print resource
         #print students
         #print resource, students
@@ -1028,7 +1042,7 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
                 ar = models.Assignresourceinfo()
                 ar.resourceid = int(r)
                 ar.studentid = int(s)
-                ar.assigntext = str(assigntext)
+                ar.assigntext = unicode(assigntext)
                 ar.isanswered = 0
                 ar.issaved = 0
                 ar.isrecord = 0
@@ -1231,7 +1245,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         WHERE %s
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
-        LIMIT 2"""% (fieldcond,joincond,wherecond)
+        LIMIT 10"""% (fieldcond,joincond,wherecond)
         # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -1247,8 +1261,8 @@ class Bulletinboardlist(viewsets.ModelViewSet):
 
         #Saving annoucement
         bbi = models.Bulletinboardinfo()
-        bbi.messagetitle = data.get('messagetitle')
-        bbi.message = data.get('message')
+        bbi.messagetitle = summer_decode(data.get('messagetitle'))
+        bbi.message = summer_decode(data.get('message'))
         bbi.attachmenturl = data.get('attachmenturl',0)
         if data.get('cattype') == 'schools':
             bbi.schoolid = data.get('schoolid')
@@ -1512,8 +1526,8 @@ class EditAnswerViewSet(viewsets.ModelViewSet):
         et = models.Editingtext()
         et.editid       = int(assignedid)
         et.spanid       = str(spanid)
-        et.previoustext = str(prevtext)
-        et.edittext     = str(modified)
+        et.previoustext = unicode(prevtext)
+        et.edittext     = unicode(modified)
         et.typeofresource = 0
         et.isapproved   = 0
         et.isrejected   = 0
@@ -1563,9 +1577,11 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
     def list(self, request):
         result = []
         sql = '''
+        SELECT * FROM 
+        ((
         SELECT  bbi.resourceid as assignedid,
-            bbi.resourcetype,
-            bbi.studentid,
+            bbi.resourcetype as resourcetype,
+            bbi.studentid as studentid,
             ri.resourceid as resourceid,
             ri.resourcetitle as title,
             concat(au.first_name,' ',au.last_name) as firstname,
@@ -1574,20 +1590,13 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
         INNER JOIN assignresourceinfo ari ON ari.assignedid=bbi.resourceid
         INNER JOIN resourceinfo ri ON ri.resourceid=ari.resourceid
         INNER JOIN auth_user au ON au.username=bbi.studentid
-        WHERE bbi.resourcetype = "ar" 
-        '''
-        cursor = connection.cursor()
-        cursor.execute(sql)
-        desc = cursor.description
-        resar =  [
-            dict(zip([col[0] for col in desc], row))
-            for row in cursor.fetchall()
-        ]
-
-        sql = '''
+        WHERE bbi.resourcetype = "ar"
+        )
+        UNION ALL
+        (
         SELECT  bbi.resourceid as assignedid,
-                bbi.resourcetype,
-                bbi.studentid,
+                bbi.resourcetype as resourcetype,
+                bbi.studentid as studentid,
                 wwi.writtenworkid as resourceid,
                 wwi.writtenworktitle as title,
                 concat(au.first_name,' ',au.last_name) as firstname,
@@ -1596,20 +1605,16 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
         INNER JOIN assignwrittenworkinfo awwi ON awwi.assignwrittenworkid=bbi.resourceid
         INNER JOIN writtenworkinfo wwi ON wwi.writtenworkid=awwi.writtenworkid
         INNER JOIN auth_user au ON au.username=bbi.studentid
-        WHERE bbi.resourcetype = "aw" 
+        WHERE bbi.resourcetype = "aw"
+        )) as temp ORDER BY posteddate DESC
         '''
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
-        resaw =  [
+        result =  [
             dict(zip([col[0] for col in desc], row))
             for row in cursor.fetchall()
         ]
-
-        for x in resar:
-            result.append(x)
-        for x in resaw:
-            result.append(x)
 
         return Response(result)
 
@@ -1938,7 +1943,6 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
     def create(self, request):
         admin = models.AdminResources()
         admindata =  json.loads(request.DATA.keys()[0])
-        print admindata.get('fileurl');
         admin.resourcetype = admindata.get('resourcetype')
         admin.resourcetitle = admindata.get('resourcetitle')
         admin.resourcedescription = admindata.get('resourcedescription')
@@ -1976,7 +1980,10 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
         result = []
 
         sql = '''
-        SELECT  cri.resourceid as assignedid,
+        SELECT * FROM 
+        ((
+        SELECT cri.classroomid as id, 
+            cri.resourceid as assignedid,
             cri.resourcetype,
             cri.studentid,
             ri.resourceid as resourceid,
@@ -1989,46 +1996,32 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
         INNER JOIN auth_user au ON au.username=cri.studentid
         WHERE cri.resourcetype = "ar"
         %s
-        '''% wherecond
-        cursor = connection.cursor()
-        cursor.execute(sql)
-        desc = cursor.description
-        resar =  [
-            dict(zip([col[0] for col in desc], row))
-            for row in cursor.fetchall()
-        ]
-
-        print sql
-
-        sql = '''
-        SELECT  cri.resourceid as assignedid,
-                cri.resourcetype,
-                cri.studentid,
-                wwi.writtenworkid as resourceid,
-                wwi.writtenworktitle as title,
-                concat(au.first_name,' ',au.last_name) as firstname,
-                date(cri.posteddate) as posteddate                
+        )
+        UNION ALL
+        (
+        SELECT cri.classroomid as id,
+            cri.resourceid as assignedid,
+            cri.resourcetype,
+            cri.studentid,
+            wwi.writtenworkid as resourceid,
+            wwi.writtenworktitle as title,
+            concat(au.first_name,' ',au.last_name) as firstname,
+            date(cri.posteddate) as posteddate                
         FROM classroominfo cri
         INNER JOIN assignwrittenworkinfo awwi ON awwi.assignwrittenworkid=cri.resourceid
         INNER JOIN writtenworkinfo wwi ON wwi.writtenworkid=awwi.writtenworkid
         INNER JOIN auth_user au ON au.username=cri.studentid
         WHERE cri.resourcetype = "aw"
         %s
-        '''% wherecond
+        )) as temp ORDER BY posteddate DESC
+        '''% (wherecond, wherecond)
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
-        resaw =  [
+        result =  [
             dict(zip([col[0] for col in desc], row))
             for row in cursor.fetchall()
         ]
-
-        print sql
-
-        for x in resar:
-            result.append(x)
-        for x in resaw:
-            result.append(x)
 
         return Response(result)
 
@@ -2065,6 +2058,9 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
 
         return Response(request.DATA)
 
+    def destroy(self, request, pk):
+        models.Classroominfo.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
 
 class StudentWrittenWork(viewsets.ModelViewSet):
     queryset = models.Assignwrittenworkinfo.objects.all()
@@ -2091,7 +2087,7 @@ class StudentWrittenWork(viewsets.ModelViewSet):
         if data.get('issaved'):
             awwi.issaved = data.get('issaved')
         
-        print awwi
+        #print awwi
 
         awwi.save()
 
@@ -2106,8 +2102,8 @@ class StudentWrittenWork(viewsets.ModelViewSet):
         ar = models.Editingtext()
         ar.editid       = int(assignedid)
         ar.spanid       = str(spanid)
-        ar.previoustext = str(orig)
-        ar.edittext     = str(modified)
+        ar.previoustext = unicode(orig)
+        ar.edittext     = unicode(modified)
         ar.typeofresource = 0
         ar.isapproved   = 0
         ar.isrejected   = 0
@@ -2193,7 +2189,7 @@ class StudentWrittenWork(viewsets.ModelViewSet):
                 ar = models.Assignresourceinfo()
                 ar.resourceid = int(r)
                 ar.studentid = str(s)
-                ar.assigntext = str(assigntext)
+                ar.assigntext = unicode(assigntext)
                 ar.isanswered = 0
                 ar.issaved = 0
                 ar.isrecord = 0
@@ -2220,10 +2216,10 @@ class StudentAssignWrittenWork(viewsets.ModelViewSet):
         
         awwi = models.Assignwrittenworkinfo.objects.get(pk=pk)
         
-        awwi.answertext = data.get('answertext')
+        awwi.answertext = summer_decode(data.get('answertext'))
 
         if data.get('originaltext'):
-            awwi.originaltext = data.get('originaltext')
+            awwi.originaltext = summer_decode(data.get('originaltext'))
 
         if data.get('answerurl'):
             awwi.answerurl = data.get('answerurl')
@@ -2349,7 +2345,7 @@ class StudentAssignWrittenWork(viewsets.ModelViewSet):
                 ar = models.Assignresourceinfo()
                 ar.resourceid = int(r)
                 ar.studentid = str(s)
-                ar.assigntext = str(assigntext)
+                ar.assigntext = unicode(assigntext)
                 ar.isanswered = 0
                 ar.issaved = 0
                 ar.isrecord = 0
@@ -2460,7 +2456,7 @@ class EditAnswerResourceViewSet(viewsets.ModelViewSet):
         sql = '''
         UPDATE assignresourceinfo 
            SET answertext = '%s'
-           WHERE assignedid = '%s' ''' % (MySQLdb.escape_string(approvedanswertext), assignedid)
+           WHERE assignedid = '%s' ''' % (MySQLdb.escape_string(unicode(approvedanswertext)), assignedid)
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -2477,7 +2473,7 @@ class EditAnswerResourceViewSet(viewsets.ModelViewSet):
         UPDATE editingtext
             SET isapproved = 1,
             previoustext = "%s"
-        WHERE editingid = '%s' ''' % (edittext, pk)
+        WHERE editingid = '%s' ''' % (unicode(edittext), pk)
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -2511,7 +2507,7 @@ class EditAnswerWrittenworkViewSet(viewsets.ModelViewSet):
         SELECT previoustext
         FROM editingtext 
         WHERE spanid = '%s'
-            AND isapproved = 1 ''' % (str(spanid))
+            AND isapproved = 1 ''' % (unicode(spanid))
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
@@ -2519,20 +2515,23 @@ class EditAnswerWrittenworkViewSet(viewsets.ModelViewSet):
             previoustext = result[0];
 
         approvedanswertext = answertext.replace(previoustext,edittext)
+        
 
         #updating approved answer text
         sql = '''
         UPDATE assignwrittenworkinfo 
            SET answertext = '%s'
-           WHERE assignwrittenworkid = '%s' ''' % (MySQLdb.escape_string(approvedanswertext), assignedid)
+           WHERE assignwrittenworkid = '%s' ''' % (unicode(approvedanswertext), assignedid)
         cursor = connection.cursor()
         cursor.execute(sql)
 
+        return Response('approved')
+        
         #resetting the previous one if set
         sql = '''
         UPDATE editingtext
             SET isapproved = 0
-        WHERE spanid = '%s' ''' % (spanid)
+        WHERE spanid = '%s' ''' % (unicode(spanid))
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -2541,11 +2540,11 @@ class EditAnswerWrittenworkViewSet(viewsets.ModelViewSet):
         UPDATE editingtext
             SET isapproved = 1,
             previoustext = "%s"
-        WHERE editingid = '%s' ''' % (edittext, pk)
+        WHERE editingid = '%s' ''' % (unicode(edittext), pk)
         cursor = connection.cursor()
         cursor.execute(sql)
 
-        return Response('approved')      
+        return Response('approved')
 
 class PeerRubricsReviewViewSet(viewsets.ModelViewSet):
 
@@ -2591,4 +2590,46 @@ class PeerRubricsReviewViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         models.RubricsHeader.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
+
+class AssignmindmapinfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Assignmindmapinfo.objects.all()
+    serializer_class = adminserializers.AssignmindmapinfoSerializer
+
+    def list(self, request):
+        mindmapid = request.GET.get('mindmapid')
+       
+        if mindmapid :
+            queryset = models.Assignmindmapinfo.objects.filter(mindmapid=mindmapid)
+        else:
+            queryset = models.Assignmindmapinfo.objects.all()
+
+        serializer = adminserializers.AssignmindmapinfoSerializer(queryset, many=True)
+
+        return Response(serializer.data) 
+
+    def create(self, request):
+        assigndata =  json.loads(request.DATA.keys()[0])
+
+        for s in assigndata.get('students'):
+            assignmindmapinfo = models.Assignmindmapinfo()
+            assignmindmapinfo.mindmapid     = assigndata.get('mindmapid')
+            assignmindmapinfo.assigntext    = summer_decode(unicode(assigndata.get('assigntext')))
+            assignmindmapinfo.mapdata       = summer_decode(unicode(assigndata.get('mapdata')))
+            assignmindmapinfo.studentid     = str(s)
+            assignmindmapinfo.isdelete      = 0
+            assignmindmapinfo.issaved       = 0
+            assignmindmapinfo.isanswered    = 0
+            assignmindmapinfo.assignedby    = str(request.user.username)
+            assignmindmapinfo.assigneddate  = time.strftime('%Y-%m-%d %H:%M:%S')
+            assignmindmapinfo.answereddate  = time.strftime('%Y-%m-%d %H:%M:%S')
+            assignmindmapinfo.save()
+
+        return Response('"msg":"created"')
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
         return Response('"msg":"delete"')

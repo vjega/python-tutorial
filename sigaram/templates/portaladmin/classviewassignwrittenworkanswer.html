@@ -19,7 +19,8 @@
     #assignment-answer .col-lg-12 {
         margin: 5px 0;
     }
-    #student-answer{
+    #student-answer,
+    #original-text{
         font-family: anjal inaimathi sch book,inaimathi sch book,monospace;
         font-size: 15px;
         font-weight: bold;
@@ -96,7 +97,7 @@
                             <div class="col-sm-4" id="answerd-date"></div>
                         </div>
                         <div class="col-lg-12">
-                            <label class="col-lg-2">{% trans "Creator" %} </label>
+                            <label class="col-lg-2">{% trans "Student" %} </label>
                             <div class="col-lg-10" id="student-name"></div>
                         </div>
                         <div class="col-lg-12">
@@ -113,15 +114,23 @@
                                 
                             </div>
                         </div>
-                    </div>   
+                    </div>  
 
                     <div class="row">
                         <div class="col-lg-12">
-                            <label class="col-lg-12">{% trans "Original" %} {% trans "Text" %}</label>
+                            <label class="col-lg-2">
+                                {% trans "First" %} {% trans "Record" %}
+                            </label>
+                            <div class="col-lg-2">
+                                <a href="javascript:void(0)" class="showhide">
+                                    <span>{% trans "Show" %}</span>
+                                    <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="bs-docs-grid">
+                    <div class="bs-docs-grid" style="display:none">
                         <div class="row show-grid col-lg-12">
                             <div class="col-lg-12" id="original-text">
                                 
@@ -131,11 +140,19 @@
 
                     <div class="row">
                         <div class="col-lg-12">
-                            <label class="col-lg-12">{% trans "Rubrics" %} {% trans "Vote" %}</label>
+                            <label class="col-lg-2">
+                                {% trans "Rubrics" %} {% trans "Vote" %}
+                            </label>
+                            <div class="col-lg-2">
+                                <a href="javascript:void(0)" class="showhide">
+                                    <span>{% trans "Show" %}</span>
+                                    <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="bs-docs-grid">
+                    <div class="bs-docs-grid" style="display:none">
                         <div class="row show-grid col-lg-12">
                             <div class="col-lg-12" id="rubrics-vote">
                                 
@@ -595,6 +612,16 @@ $(document).ready(function(){
     });
     $("body").on("click","#save-rubric-marks", function(event){
         TTS.forms.ressave();
+    });
+    $(".showhide").click(function(){
+        if($(this).children().is(".fa-arrow-right")) {
+            $(this).find("i").removeClass('fa-arrow-right').addClass('fa-arrow-down');
+            $(this).find("span").text('{% trans "Hide" %}');
+        }else{
+            $(this).find("i").addClass('fa-arrow-right').removeClass('fa-arrow-down');
+            $(this).find("span").text('{% trans "Show" %}');
+        }
+        $(this).parent().parent().parent().next().toggle('slow');
     });
 });
 

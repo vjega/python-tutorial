@@ -70,8 +70,8 @@
 
 {% block scriptcontent %}
 <script id="teacher-form" type="text/x-jsrender">
-<div id="file-uploader">File Uploader Comes Here...</div> 
-{% crispy form %}
+    <div id="file-uploader">File Uploader Comes Here...</div> 
+    {% crispy form %}
 </script>
 <script>
 window.TTS = window.TTS || {}
@@ -93,7 +93,7 @@ TTS.forms.addteacher = function(form, data) {
 
 TTS.forms.showteacherform = function() {
     BootstrapDialog.show({
-        title: 'Add Teacher',
+        title: '{% trans "Add Teacher" %}',
         message: $($('#teacher-form').render()),
         onshown: function(){
             TTS.forms.upload();
@@ -116,19 +116,20 @@ TTS.forms.showteacherform = function() {
 
 TTS.forms.editteacher = function(id, data) {
     BootstrapDialog.show({
-        title: 'Edit Teacher',
+        title: '{% trans "Edit Student" %}',
         message: $($('#teacher-form').render()),
         onshown: function(){
+            TTS.forms.upload();
             $("#add-teacher").find("input,select").each(function(){
                 $(this).val(data[this['name']]);
             });
-            TTS.forms.upload();
         },
         buttons: [{
             label: 'Update',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-teacher");
+                alert(data)
                 $.ajax({
                     headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -137,6 +138,7 @@ TTS.forms.editteacher = function(id, data) {
                     data: data,
                     url : '/api/admin/teacher/'+id
                 }).done(function( msg ) {
+                    dialogItself.close();
                     location.reload();
                 });
             }
@@ -196,7 +198,7 @@ TTS.forms.renderteacher = function(data){
     var dataset = [];
     var count = 0
     for(var i in data){
-        var t = [];
+        var t = {};
         t.DT_RowId = data[i].teacherid;
         t.slno = ++count;
         if (data[i].imageurl){
@@ -263,14 +265,18 @@ $(document).ready(function(){
             "url":"/api/admin/teacher/?schoolid="+$("#school_name").val()+"&format=json",
             "type":"GET"
         }).done(function(data){
-            TTS.forms.renderteacher(data);
+            if (data.length) {
+                TTS.forms.renderteacher(data);
+            } else {
+                TTS.forms.table.fnClearTable();
+            }
         });
-    })
+    });
     $('#teacherlist-main-tbl').on('click', '.tts-edit', function(e){
         e.stopPropagation();
         var id = $(this).parent().parent().prop('id');
         $.ajax({
-            url: '/api/admin/teacher/'+id,
+             url: '/api/admin/teacher/'+id,
             type: 'GET'
         }).done(function(data){
             TTS.forms.editteacher(id,data);
@@ -281,7 +287,6 @@ $(document).ready(function(){
         if (!window.confirm("Do you want to delete this record?")) {
             return false;
         }
-        //console.log($(this).parent().parent().prop("id"))
         TTS.forms.delteacher($(this).parent().parent().prop("id"));
     
     });

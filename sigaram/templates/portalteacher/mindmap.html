@@ -1,0 +1,175 @@
+{% extends 'portaladmin/base.html' %}
+{% load staticfiles %}
+{% block topcontent %}
+{% load i18n %}
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Mindmap" %}<input type="button" class='btn btn-primary' id="mindmap-save" value={% trans "Save" %} /></h2>
+        <code>
+          Double Click to edit &amp; add a new node.
+          Single Click to collapse/hide or select a node
+        </code>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row">
+  <div class="col-lg-4">
+    <div class="form-group">
+      <label for="maptitle">{% trans "Title" %}</label>
+      <input type="email" class="form-control" id="maptitle" value="Untitled">
+    </div> 
+  </div>
+</div>
+{% endblock topcontent %}
+{% block botcontent %}
+<div class="panel panel-default">
+<div class="panel-heading">
+  {% trans "Mindmap" %}
+</div>
+<div id="container" class="panel-body">
+  
+</div>
+</div>
+{% endblock botcontent%}
+
+{% block morescript %}
+<script id="admin-form" type="text/x-jsrender">
+    <textarea id="summernote"></textarea>
+</script>
+<script src="{%static "bower_components/jquery-ui/jquery-ui.min.js" %}"></script>
+<script src="{%static "bower_components/raphael/raphael.js" %}"></script>
+<script src="{%static "bower_components/buzzmap/buzzmap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static  "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+
+{% endblock morescript %}
+
+{% block scriptcontent %}
+<script>
+
+function getUrlParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+}  
+
+window.TTS = window.TTS || {};
+TTS.global = TTS.global || {}; 
+TTS.forms = TTS.forms || {}; 
+$(document).ready(function(){
+  if (getUrlParameter("new")==="true") {
+      TTS.global.buzzmapdoc = $('#container').buzzmap({
+          structure: JSON.stringify({"label":"<span>Buzzmap</span>","children":[{"label":"<span>Untitled</span>","children":[]}]}),
+          editable: true
+      });
+  } else {
+    $.ajax({
+      headers : {
+          'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+      },
+      url:'/api/admin/mindmap/'+getUrlParameter("editid"),
+      type: 'GET'
+    }).done(function(data){
+      $("#maptitle").val(data['title']);
+      TTS.global.buzzmapdoc = $('#container').buzzmap({
+        structure: data['mapdata'],
+        editable: true
+      });
+    });
+  }  
+
+  $("#mindmap-save").click(function(){
+    var postdata = {}
+    postdata['mapdata'] = TTS.global.buzzmapdoc.serialize();
+    postdata['title'] = $("#maptitle").val();
+    var type = (getUrlParameter("new")==="true") ? "POST" : "PUT";
+    var url  = (getUrlParameter("new")==="true") ? '/api/admin/mindmap/' : '/api/admin/mindmap/'+getUrlParameter("editid")
+    console.log(postdata);
+    $.ajax({
+      headers : {
+        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+      },
+      type:type,
+      url : url,
+      data : postdata
+    }).done(function(data){
+      window.location = "/teacher/mindmaplist"
+    }).error(function(msg,err){
+
+    })
+  });
+});
+
+TTS.forms.mindmap = function(node){
+   BootstrapDialog.show({
+        title: '{% trans "Add MindMap" %}',
+        message: $($('#admin-form').render()),
+        onshown: function(){
+          $('#summernote').val(node.label()).summernote();
+        },
+        buttons: [{
+            label: '{% trans "Update Text" %}',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+              node.label("<span>"+$('#summernote').code()+"<span>");
+              dialogItself.close();   
+            }},
+            {
+            label: '{% trans "Add New Node" %}',
+            action: function(dialogItself){
+                var newnode = node.obj.addNode(node);
+                newnode.label("<span>Untitled Node</span>");
+                //alert("Adding a new Node");
+                dialogItself.close();
+            }},
+            {
+            label: '{% trans "Delete Node" %}',
+            action: function(dialogItself){
+                if(!node.obj.parent){;
+                  alert("Root cannot be deleted");
+                  dialogItself.close();
+                  return null;
+                };
+                node.removeNode();
+                node.obj.animate();
+                dialogItself.close();
+            }},
+            {
+            label: '{% trans "Close" %}',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
+        }]
+    });
+};
+</script>
+{% endblock scriptcontent %}
+
+{% block morecss %}
+<!--
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+-->
+<link rel="stylesheet" href="{%static "bower_components/buzzmap/styles.css" %}" />
+
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<style>
+#instr {
+  clear:left;
+  padding-left:1em;
+}
+#container {
+  
+}
+</style>
+{% endblock morecss %}

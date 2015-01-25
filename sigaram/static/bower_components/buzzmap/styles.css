@@ -1,8 +1,8 @@
 body {
-  background:blue;
+  /*background:blue;*/
 }
 .buzzmap .node {
-  z-index: 100;
+  /*z-index: 100;*/
   cursor: default;
   display: block;
   

@@ -47,6 +47,7 @@ urlpatterns = patterns('teacher.views',
     url(r'^viewassignmentanswer$',   'viewassignmentanswer',  
                                                         name='viewassignmentanswer'),
     url(r'^mindmaplist$',               'mindmaplist',  name='mindmapnew'),
+    url(r'^mindmapedit$',               'mindmapedit',  name='mindmap'),
     url(r'^sticky-notes$',          'stickynotes',      name='stickynotes'),
     url(r'^billboard$',             'billboard',        name="billboard"),
     url(r'^activitystatistics$',    'activitystatistics',     
@@ -89,5 +90,11 @@ urlpatterns = patterns('teacher.views',
 
 
     url(r'^classviewassignwrittenworkanswer$',   'classviewassignwrittenworkanswer',  
-                                                         name='viewassignwrittenworkanswer')
+                                                         name='viewassignwrittenworkanswer'),
+    url(r'^viewresourcelist$',   'viewresourcelist',  
+                                                         name='viewresourcelist'),   
+    url(r'^studentmindmaplist$',   'studentmindmaplist',  
+                                                         name='studentmindmaplist'),
+    url(r'^assignmindmap$',   'assignmindmap',  
+                                                         name='assignmindmap'),
 )

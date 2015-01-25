@@ -37,7 +37,7 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
-    #addrec:hover, #adminschool-main-tbl tbody tr:hover{
+    #addrec:hover, .schoolname:hover, .tts-edit:hover, .tts-delete:hover{
         cursor: pointer;
     }
 </style>
@@ -61,7 +61,7 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 TTS.forms.addschool = function() {
     BootstrapDialog.show({
-        title: 'Add School',
+        title: '{% trans "Add School" %}',
         message: $($('#school-form').render()),
         buttons: [{
             label: '{% trans "Save" %}',
@@ -71,7 +71,7 @@ TTS.forms.addschool = function() {
                 $.ajax({
                     headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
-                      },
+                    },
                     type:'POST',
                     data: data,
                     url : '/api/admin/adminschool/'
@@ -92,7 +92,7 @@ TTS.forms.addschool = function() {
 
 TTS.forms.editschool = function(id, data) {
     BootstrapDialog.show({
-        title: 'Edit School',
+        title: '{% trans "Edit School" %}',
         message: $($('#school-form').render()),
         onshown: function(){
             $("#add-school").find("input,select").each(function(){
@@ -100,7 +100,7 @@ TTS.forms.editschool = function(id, data) {
             });
         },
         buttons: [{
-            label: 'Update',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-school");
@@ -125,6 +125,20 @@ TTS.forms.editschool = function(id, data) {
     });
 };
 
+TTS.forms.delschool = function(id) {
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'DELETE',
+        url : '/api/admin/adminschool/'+id
+    }).done(function( msg ) {
+        location.reload();
+    }).error(function(msg){
+        alert("Something Bad Happended");
+    });
+}
+
 TTS.forms.renderadminschool = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
@@ -132,7 +146,8 @@ TTS.forms.renderadminschool = function(data){
               "data" : "slno"  
             },
             { "title": "{% trans "Name" %}" ,
-              "data" : "schoolname"
+              "data" : "schoolname",
+              "class":"schoolname"
             },
             { "title": "{% trans "Shortname" %}",
               "data" : "shortname"
@@ -172,13 +187,13 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.utils.ajaxloaderstop();
-         if (data.length) {
+        if (data.length) {
             TTS.forms.renderadminschool(data);
         } else {
             TTS.forms.table.fnClearTable();
         }
     });
-    $('#adminschool-main-tbl').on('click', 'tbody tr', function(){
+    $('#adminschool-main-tbl').on('click', 'tbody tr .schoolname', function(){
         window.location = 'classlist?id='+this.id;
     });
     $('#adminschool-main-tbl').on('click', '.tts-edit', function(e){
@@ -198,7 +213,7 @@ $(document).ready(function(){
             return false;
         }
         alert("Record Deleted")
-        window.location = 'schoollist';
+        TTS.forms.delschool($(this).parent().parent().prop("id"));
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.addschool();

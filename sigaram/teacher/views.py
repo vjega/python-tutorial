@@ -61,10 +61,17 @@ def home(request):
         "link" : u"viewassessments",
         "caption": _("Exercises"),
         "stat": 125
+        },
+        {
+        "color": u"primary",
+        "icon" : u"sitemap",
+        "link" : u"teacherviewmindmap",
+        "caption": _("Mindmap"),
+        "stat": 125
         }]
 
     recent_acitivity_head = [_("Sl No."),
-                             _("Assignments"),
+                             _("Activities"),
                              _("Date")]
     admin_folders = models.AdminFolders.folders(request)
     announcement_body = models.Bulletinboardinfo.announcement(request)
@@ -201,9 +208,14 @@ def studentresourcetype(request):
         "name" :_("Writing board"),
         "href" :"studentresourceunits"
         },{
-        "id": "3",
+        "id": "4",
         "name" :_("Composition"),
         "href" :"extras"
+        },{
+        "id": "5",
+        "categoryid": "4",
+        "name" :_("Mindmap"),
+        "href" :"studentmindmaplist"        
         }]
     classid = request.GET.get('classid')
     section = request.GET.get('section')
@@ -501,10 +513,10 @@ def studentprofile(request):
         },{
         "id"   :"2",
         "name" :_("Written Work"),
-        "href" :"viewstudentwrittenworks"
+        "href" :"viewstudentwrittenworks?studentid=%s" % request.GET.get('studentid') 
         }]
     return render(request, 'portalteacher/studentprofile.html', 
-                  {"folders":folders,"user":user})
+                  {"folders":folders})
 
 @login_required
 @switchlanguage
@@ -520,6 +532,12 @@ def viewstudentwrittenworks(request):
 @switchlanguage
 def mindmaplist(request):
     return render(request, "portalteacher/mindmaplist.html", {})
+
+@login_required
+@switchlanguage
+def mindmapedit(request):
+    return render(request, 'portalteacher/mindmap.html', {})
+    
 
 @login_required
 @switchlanguage
@@ -577,9 +595,24 @@ def myresourcelist(request):
 def viewmyresourcelist(request):
     return render(request, 'portalteacher/viewmyresourcelistwork.html')
 
-
-
 @login_required
 @switchlanguage
 def classviewassignwrittenworkanswer(request):
     return render(request, 'portalteacher/classviewassignwrittenworkanswer.html')
+
+@login_required
+@switchlanguage
+def viewresourcelist(request):
+    return render(request, 'portalteacher/viewresourcelist.html')
+
+@login_required
+@switchlanguage
+def studentmindmaplist(request):
+    return render(request, 'portalteacher/studentmindmaplist.html')
+
+@login_required
+@switchlanguage
+def assignmindmap(request):
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portalteacher/assignmindmap.html',{'schools':schools,'classes':classes})

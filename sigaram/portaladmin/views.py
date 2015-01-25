@@ -201,6 +201,11 @@ def resourcetype(request):
         "categoryid": "2",
         "name" :_(u"Writing board"),
         "href" :u"chapterlist"
+        },{
+        "id": "3",
+        "categoryid": "2",
+        "name" :_("Composition"),
+        "href" :u"chapterlist"
         }]
     classid = request.GET.get('classid')
     section = request.GET.get('section')
@@ -550,3 +555,11 @@ def classviewassignwrittenworkanswer(request):
 @switchlanguage
 def rubrics(request):
     return render(request, 'portaladmin/rubrics.html')
+
+@login_required
+@switchlanguage
+def viewteacherres(request):
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portaladmin/viewteacherres.html',
+                             {'schools':schools, 'classes':classes })

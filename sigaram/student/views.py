@@ -55,7 +55,15 @@ def home(request):
         "link" : u"studentviewassessments",
         "caption": _("Practicals"),
         "stat": 125
+        },
+        {
+        "color": u"primary",
+        "icon" : u"sitemap",
+        "link" : u"studentviewmindmap",
+        "caption": _("Mindmap"),
+        "stat": 125
         }]
+
 
     recent_acitivity_head = [_("Sl No."),
                              _("Assignments"),
@@ -101,31 +109,76 @@ def studentresourcetype(request):
 @switchlanguage
 def resourcetype(request):
     folders = [{
-        "categoryid" : "0",
-        "id"         : "1",
-        "name"       : _("Reading"),
-        "href"       :"assignedresourcelist"
+        "id": "1",
+        "categoryid": "0",
+        "name" :_("Reading"),
+        "href" :"assignedresourcelist"
         },{
-        "categoryid" : "1",
-        "id"         : "2",
-        "name"       :_("Image dialog"),
-        "href"       :"assignedresourcelist"
+        "id": "2",
+        "categoryid": "1",
+        "name" :_("Animation"),
+        "href" :"assignedresourcelist"
         },{
-        "categoryid" : "3",
-        "id"         : "3",
-        "name"       :_("Writing board"),
-        "href"       :"assignedresourcelist"
+        "id": "3",
+        "categoryid": "2",
+        "name" :_("Writing board"),
+        "href" :"assignedresourcelist"
         },{
-        "categoryid" : "4",
-        "id"         : "4",
-        "name"       :_("Comprehension"),
-        "href"       :"assignedresourcelist"
+        "id": "3",
+        "name" :_("Composition"),
+        "href" :"assignedresourcelist"
         }]
+    classid = request.GET.get('classid',1)
+    section = request.GET.get('section','a')
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
                            #'body':studentresourcetype_body}
     return render(request, 'portalstudent/resource_type.html', 
-                  {"folders":folders,'resourcetype':resourcetype})
+                  {"folders":folders,
+                  "resourcetype":resourcetype,
+                  "classid":classid,
+                  "section":section}
+                  )
+
+
+@login_required
+@switchlanguage
+def sturesourcetype(request):
+    folders = [{
+        "id": "1",
+        "categoryid": "0",
+        "name" :_("Reading"),
+        "href" :"studentresourceunits"
+        },{
+        "id": "2",
+        "categoryid": "1",
+        "name" :_("Animation"),
+        "href" :"studentresourceunits"
+        },{
+        "id": "3",
+        "categoryid": "2",
+        "name" :_("Writing board"),
+        "href" :"studentresourceunits"
+        },
+        {
+        "id": "3",
+        "name" :_("Composition"),
+        "href" :"studentresourceunits"
+        }
+        ]
+    classid = request.GET.get('classid')
+    section = request.GET.get('section')
+    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
+    #studentresourcetype = {'head':studentresourcetype_head, 
+                           #'body':studentresourcetype_body}
+    return render(request, 'portalstudent/resource_type.html', 
+                  {"folders":folders,
+                  "resourcetype":resourcetype,
+                  "classid":classid,
+                  "section":section}
+                  )
+
+
 
 @login_required
 @switchlanguage
@@ -328,3 +381,18 @@ def classviewassignmentanswer(request):
 @switchlanguage
 def classviewassignwrittenworkanswer(request):
     return render(request, 'portalstudent/classviewassignwrittenworkanswer.html')
+
+@login_required
+@switchlanguage
+def studentviewmindmap(request):
+    return render(request, 'portalstudent/studentviewmindmap.html')
+
+@login_required
+@switchlanguage
+def viewassignmindmap(request):
+    return render(request, 'portalstudent/viewassignmindmap.html')
+
+@login_required
+@switchlanguage
+def viewassignmindmapanswer(request):
+    return render(request, 'portalstudent/viewassignmindmapanswer.html')    

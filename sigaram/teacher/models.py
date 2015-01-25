@@ -59,7 +59,7 @@ class Activitylog(models.Model):
             INNER JOIN logininfo li ON li.loginid = al.loginid 
             -- WHERE al.loginid = {$loginid} 
             ORDER by activityid DESC 
-            LIMIT 10""";
+            LIMIT 5""";
         cursor = connection.cursor()
         cursor.execute(sql)
         return dictfetchall(cursor)

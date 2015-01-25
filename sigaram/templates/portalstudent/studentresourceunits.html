@@ -4,7 +4,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Resources" %}</h2>
+        <h2 class="page-header">{% trans "Student" %} {% trans "Resources" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -14,7 +14,7 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans "Resources" %}
+            {% trans "Student" %} {% trans "Resources" %}
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
@@ -71,9 +71,9 @@ TTS.forms.renderchapterinfo = function(data){
             { "title": "{% trans "Title" %}",
                "data" :"title"
             },
-            { "title": "{% trans "Assignment" %}",
+            /*{ "title": "{% trans "Assignment" %}",
               "data" :"assignment"
-            },
+            },*/
             
         ];
     var dataset = [];
@@ -83,7 +83,7 @@ TTS.forms.renderchapterinfo = function(data){
         t.DT_RowId = data[i].chapterid;
         t.icon="<i class='fa fa-book fa-2x'></i>";
         t.title=data[i].chaptername;
-        t.assignment="<a href='javascript:void(0)' class='assignment' id='"+data[i].teacherresourceid+"' ><i class='fa fa-share fa-2x'></i></a>";
+        /*t.assignment="<a href='javascript:void(0)' class='assignment' id='"+data[i].teacherresourceid+"' ><i class='fa fa-share fa-2x'></i></a>";*/
         dataset.push(t);
     }
 
@@ -95,10 +95,8 @@ TTS.forms.renderchapterinfo = function(data){
 };
 $(document).ready(function(){
     TTS.utils.ajaxloaderstart();
-    //url":"/api/admin/chapterinfo/?classid="+TTS.classid+"&section="+TTS.section+"&format=json",
     $.ajax({
-        "url":"/api/admin/chapterinfo/",
-
+        "url":"/api/admin/chapterinfo/?classid="+TTS.classid+"&section="+TTS.section+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderchapterinfo(data);
@@ -106,8 +104,8 @@ $(document).ready(function(){
     });
     $('#admin-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();
-        // window.location = 'studentresourcelist?categoryid='+TTS.categoryid+'&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.section;
-        window.location = 'studentresourcelist'
+        window.location = 'studentresourcelist?categoryid='+TTS.categoryid+'&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.section;
+        //window.location = 'studentresourcelist'
     });
     $('#admin-main-tbl').on('click', '.assignment',function(e){
         e.stopPropagation();

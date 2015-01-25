@@ -37,7 +37,7 @@
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <style>
-    #addrec:hover, .tts-delete:hover{
+    #addrec:hover, .tts-delete:hover, #studetresource-main-tbl tbody tr:hover{
         cursor: pointer;
     }
 </style>
@@ -57,27 +57,12 @@
 
 
 <script>
-
-function getUrlParameter(sParam)
-{
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++) 
-    {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam) 
-        {
-            return sParameterName[1];
-        }
-    }
-} 
-
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-TTS.categoryid = getUrlParameter('categoryid');
-TTS.chapterid = getUrlParameter('chapterid');
-TTS.classid = getUrlParameter('classid');
-TTS.section = getUrlParameter('section');
+TTS.categoryid = TTS.utils.getUrlParameter('categoryid');
+TTS.chapterid = TTS.utils.getUrlParameter('chapterid');
+TTS.classid = TTS.utils.getUrlParameter('classid');
+TTS.section = TTS.utils.getUrlParameter('section');
 TTS.forms.addstudentresource = function() {
     BootstrapDialog.show({
         title: 'Student Resources',
@@ -117,19 +102,25 @@ TTS.forms.addstudentresource = function() {
 TTS.forms.renderteacherresourceinfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
-              "class": "text-center"  
+              "class": "text-center",
+              "data":"slno"  
             },
-            { "title": "{% trans "Title" %}"},
-            { "title": "{% trans "Date" %}" },
+            { "title": "{% trans "Title" %}",
+              "data" :"title"
+            },
+            { "title": "{% trans "Date" %}",
+              "data":"date"
+            },
            
         ];
     var dataset = [];
     var count = 0
     for(var i in data){
-        var t = [];
-        t.push(++count);
-        t.push(data[i].resourcetitle);
-        t.push(data[i].createddate);
+        var t = {};
+        t.DT_RowId = data[i].teacherresourceid;
+        t.slno=++count;
+        t.title=data[i].resourcetitle;
+        t.date=data[i].createddate;
         dataset.push(t);
     }
 
@@ -157,8 +148,6 @@ var updateChapter = function(){
     });
 };
 
-
-
 $(document).ready(function(){
     TTS.utils.ajaxloaderstart();
     $.ajax({
@@ -172,7 +161,7 @@ $(document).ready(function(){
     $('#studetresource-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();
         //console.log("Hello");
-        //window.location = 'viewstudentresourcelist.html?categoryid=1&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.classid;
+        window.location = 'viewresourcelist?categoryid=1&chapterid='+this.id+'&classid='+TTS.classid+'&section='+TTS.classid+'&resourceid='+this.id;
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.addstudentresource();

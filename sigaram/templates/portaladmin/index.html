@@ -121,7 +121,8 @@
                 {% endautoescape %}
                 </div>
                 <!-- /.list-group -->
-                <a href="bulletinboardlist" class="btn btn-default btn-block">View All Announcement</a>
+                <a href="bulletinboardlist" class="btn btn-default btn-block">
+                    {% trans "View All Announcement" %}</a>
             </div>
             <!-- /.panel-body -->
         </div>
@@ -135,9 +136,8 @@
 <style>
   .modal-backdrop {z-index: 0 !important}
   p {display:inline;}
-  a.nfolder {color: blue;}
-
-  .fa.fa-plus-square.fa-1x.nfolder {
+  #new-folder {color: #191919;}
+  .fa.fa-plus-square.fa-1x {
     color: #fff;
   }
 

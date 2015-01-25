@@ -5,30 +5,30 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Classrooms" %}</h2>
+        <h2 class="page-header">{% trans "Class" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
-<div class="row">
+<!-- <div class="row">
     <div class="form-group" class="col-sm-2">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Select School" %}</label>
+        <label for="folder_name" class="col-sm-2 control-label schoolname">{% trans "Select School" %}</label>
         <div class="col-sm-4">
-            <select name="school_name" class="form-control" id="school_name">
+            <!-- <select name="school_name" class="form-control" id="school_name">
                 {% for school in schools%}
                 <option value="{{school.schoolid}}">
                     {{school.schoolname}}
                 </option>
                 {% endfor %}
-            </select>
-        </div>
+            </select> -->
+       <!--  </div>
     </div>
-</div>
+</div>-->
 {% endblock topcontent %}
 {% block botcontent %}
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans "Classrooms" %}
+            {% trans "Class" %}
             <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
         </div>
         <!-- /.panel-heading -->
@@ -55,6 +55,7 @@
     #addrec:hover, .tts-delete:hover{
         cursor: pointer;
     }
+    .schoolname{color:white;}
 </style>
 {% endblock morecss %}
 
@@ -78,7 +79,7 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 TTS.forms.addclassroom = function() {
     BootstrapDialog.show({
-        title: 'Add Classroom',
+        title: '{% trans "Add Classroom" %}',
         onshown: function(dialogRef){
             //console.log('hi');
             $("#id_classname").html($("#school_name").html());
@@ -92,6 +93,9 @@ TTS.forms.addclassroom = function() {
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-classlist");
                 $.ajax({
+                    headers : {
+                      'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                    },
                     type:'POST',
                     data: data,
                     url : '/api/admin/classlist/'

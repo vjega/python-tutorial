@@ -432,7 +432,7 @@ TTS.forms.ressave = function(){
     data.resource = [];
     data.students = [];
     data.rubricid = 0;
-    data.assigntext = $(".summernote").code();
+    data.assigntext = TTS.utils.summer_encode($(".summernote").code());
 
     if($("#set_rubric_id").val()){
         data.rubricid = $("#set_rubric_id").val();
