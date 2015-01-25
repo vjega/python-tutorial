@@ -1650,6 +1650,7 @@ class TopicViewSet(viewsets.ModelViewSet):
         topics.topicid = topicinfodata.get('topicid',0)
         topics.forumid = topicinfodata.get('forumid',0)
         topics.totalpost = topicinfodata.get('totalpost',0)
+        topics.topicdetails = topicinfodata.get('topicdetails',0)
         topics.forumid = topicinfodata.get('forumid',0)
         topics.topicname = topicinfodata.get('topicname',0)
         topics.createdby = request.user.id
