@@ -1,4 +1,4 @@
-{% extends 'portaladmin/base.html' %}
+{% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% load crispy_forms_tags %}
@@ -36,12 +36,100 @@
 
 {% block morecss %}
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
-<link href="{%static "css/color.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <style>
-#addrec:hover, .tts-delete:hover{
-    cursor: pointer;
+    #addrec:hover, .tts-delete:hover{
+        cursor: pointer;
+    }
+
+.yellow{
+    background-color:#FDFB8C;
+    border:1px solid #DEDC65;   
+}
+
+.yellow_header{
+    background-color:#DEDC65;   
+}
+
+.blue{
+    background-color:#A6E3FC;
+    border:1px solid #75C5E7;   
+}
+.blue_header{
+    background-color:#75C5E7;   
+}
+
+.green{
+    background-color:#A5F88B;
+    border:1px solid #98E775;   
+}
+
+.green_header{
+    background-color:#98E775;   
+}
+
+.red{
+    background-color:#ff6666;
+    border:1px solid #ff3232;
+}
+
+.red_header{
+    background-color:#ff3232;   
+}
+
+.purple{
+    background-color: #d29fd3;
+    border: 1px solid #bc5fbd; 
+}
+
+.purple_header{
+    background-color:#bc5fbd;   
+}
+
+.pink{
+    background-color:#FFAEC9;
+    border:1px solid #f46998;   
+}
+
+.pink_header{
+    background-color:#f46998;   
+}
+
+.grey{
+    background-color:#F5F5f5;
+    border:1px solid #737373;  
+}
+
+.grey_header{
+    background-color:#737373;   
+}
+
+.orange{
+    background-color:#FF7F27;
+    border:1px solid #EB6712;  
+}
+
+.orange_header{
+    background-color:#EB6712;   
+}
+
+.maroon{
+    background-color: #e0d9bc;
+    border: 1px solid #c4b18f; 
+}
+
+.maroon_header{
+    background-color:#c4b18f;   
+}
+
+.gold{
+    background-color: #fcbb22;
+    border: 1px solid #fdb221; 
+}
+
+.gold_header{
+    background-color:#fdb221;   
 }
 
 .sticky_note{
@@ -199,11 +287,11 @@
 <script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
-<!-- <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script> -->
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
 <script src="{% static "js/tts.utils.js" %}"></script>
+<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
@@ -218,7 +306,6 @@
 <script id="sticky-text" type="text/sticky">
 <div class='color_container'>
     <div id='preview_color' class='yellow'>Preview</div>
-    <div class='control-label col-sm-4'>Color</div>
         <div class='control-label col-sm-8 color_values' id="color-swatch">
     </div>
 </div>
@@ -231,8 +318,6 @@ TTS.forms = TTS.forms || {};
 /* End of Admin CRUD */
 
 TTS.forms.addstickynote = function(form, data) {
-    console.log("after ", data);
-    //return true;
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -272,10 +357,8 @@ TTS.forms.showstickyform = function() {
                 var data = TTS.utils.serilaizeJson("#add-sticky");
                 var select_color = $("#preview_color").attr("class");
                 data = JSON.parse(data);
-                //data['stickytext'] = data['stickytext'].replace('="', "='").replace('">',"'>");
-                //data['color'] = select_color;
-                //data['stickylistid'] = TTS.utils.getUrlParameter('id');
-                console.log("before ", data);
+                data['color'] = select_color;
+                data['stickylistid'] = TTS.utils.getUrlParameter('id');
                 TTS.forms.addstickynote(dialogItself, JSON.stringify(data)); 
             }
             },{
@@ -323,16 +406,14 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
             });
         },
         buttons: [{
-            label: '{% trans "Save" %}',
+            label: 'Update',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-student");
                 data = JSON.parse(data);
-                //data['stickytext'] = data['stickytext'].replace('="', "='").replace('">',"'>");
                 data['color'] = $("#preview_color").attr("class");
-                console.log(data);
                 $.ajax({
-                     headers : {
+                    headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
                     },
                     type:'PUT',
@@ -354,7 +435,7 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
 
 TTS.forms.delstickynotes = function(id) {
     $.ajax({
-        headers : {
+         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'DELETE',
@@ -392,6 +473,7 @@ TTS.forms.showstickycommentform = function(stickyid) {
                 var data = TTS.utils.serilaizeJson("#add-stickycomment");
                 data = JSON.parse(data);
                 data['stickyid'] = stickyid;
+                //data['stickylistid'] = 
                 TTS.forms.addstickycomment(dialogItself, JSON.stringify(data)); 
             }
             },{
@@ -457,13 +539,15 @@ TTS.forms.renderstickynotes = function(data){
 //?stickyid=1
 
 $(document).ready(function(){
+  
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.showstickyform();
+        TTS.utils.ajaxloaderstop();
     });
 
     TTS.utils.ajaxloaderstart();
     $.ajax({
-       "url":"/api/admin/stickynotes/?id="+TTS.utils.getUrlParameter("id")+"&format=json",
+        "url":"/api/admin/stickynotes/?id="+TTS.utils.getUrlParameter("id")+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstickynotes(data);
@@ -474,7 +558,7 @@ $(document).ready(function(){
 });
 
 function load_onclick_events (){
-    //$(".sticky_header").parent().draggable({handle: '.sticky_header'});
+    $(".sticky_header").parent().draggable({handle: '.sticky_header'});
     
     $("#sticky-placeholder").on("click", ".editrec", function(){
         var elm = $(this).parent().parent().find(".sticky_content")[0];
@@ -490,6 +574,7 @@ function load_onclick_events (){
         }
         var delete_id = $(this).attr("name");
         TTS.forms.delstickynotes(delete_id);
+        //window.location.reload();
     });
 
     $("#sticky-placeholder").on("click", ".sticky_comment", function(){

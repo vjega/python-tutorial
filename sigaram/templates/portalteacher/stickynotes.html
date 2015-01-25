@@ -441,7 +441,6 @@ TTS.forms.delstickynotes = function(id) {
         type:'DELETE',
         url : '/api/admin/stickynotes/'+id
     }).done(function( msg ) {
-        dialogItself.close();
         location.reload();
     }).error(function(msg){
         alert("Something Bad Happended");
@@ -575,7 +574,7 @@ function load_onclick_events (){
         }
         var delete_id = $(this).attr("name");
         TTS.forms.delstickynotes(delete_id);
-        window.location.reload();
+        //window.location.reload();
     });
 
     $("#sticky-placeholder").on("click", ".sticky_comment", function(){
