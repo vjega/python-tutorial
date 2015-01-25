@@ -2588,3 +2588,45 @@ class PeerRubricsReviewViewSet(viewsets.ModelViewSet):
     def destroy(self, request, pk=None):
         models.RubricsHeader.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
+
+class AssignmindmapinfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Assignmindmapinfo.objects.all()
+    serializer_class = adminserializers.AssignmindmapinfoSerializer
+
+    def list(self, request):
+        mindmapid = request.GET.get('mindmapid')
+       
+        if mindmapid :
+            queryset = models.Assignmindmapinfo.objects.filter(mindmapid=mindmapid)
+        else:
+            queryset = models.Assignmindmapinfo.objects.all()
+
+        serializer = adminserializers.AssignmindmapinfoSerializer(queryset, many=True)
+
+        return Response(serializer.data) 
+
+    def create(self, request):
+        assigndata =  json.loads(request.DATA.keys()[0])
+
+        for s in assigndata.get('students'):
+            assignmindmapinfo = models.Assignmindmapinfo()
+            assignmindmapinfo.mindmapid     = assigndata.get('mindmapid')
+            assignmindmapinfo.assigntext    = summer_decode(unicode(assigndata.get('assigntext')))
+            assignmindmapinfo.mapdata       = summer_decode(unicode(assigndata.get('mapdata')))
+            assignmindmapinfo.studentid     = str(s)
+            assignmindmapinfo.isdelete      = 0
+            assignmindmapinfo.issaved       = 0
+            assignmindmapinfo.isanswered    = 0
+            assignmindmapinfo.assignedby    = str(request.user.username)
+            assignmindmapinfo.assigneddate  = time.strftime('%Y-%m-%d %H:%M:%S')
+            assignmindmapinfo.answereddate  = time.strftime('%Y-%m-%d %H:%M:%S')
+            assignmindmapinfo.save()
+
+        return Response('"msg":"created"')
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')

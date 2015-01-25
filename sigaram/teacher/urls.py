@@ -93,4 +93,8 @@ urlpatterns = patterns('teacher.views',
                                                          name='viewassignwrittenworkanswer'),
     url(r'^viewresourcelist$',   'viewresourcelist',  
                                                          name='viewresourcelist'),   
+    url(r'^studentmindmaplist$',   'studentmindmaplist',  
+                                                         name='studentmindmaplist'),
+    url(r'^assignmindmap$',   'assignmindmap',  
+                                                         name='assignmindmap'),
 )

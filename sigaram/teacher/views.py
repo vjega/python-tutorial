@@ -61,6 +61,13 @@ def home(request):
         "link" : u"viewassessments",
         "caption": _("Exercises"),
         "stat": 125
+        },
+        {
+        "color": u"primary",
+        "icon" : u"sitemap",
+        "link" : u"teacherviewmindmap",
+        "caption": _("Mindmap"),
+        "stat": 125
         }]
 
     recent_acitivity_head = [_("Sl No."),
@@ -201,9 +208,14 @@ def studentresourcetype(request):
         "name" :_("Writing board"),
         "href" :"studentresourceunits"
         },{
-        "id": "3",
+        "id": "4",
         "name" :_("Composition"),
         "href" :"extras"
+        },{
+        "id": "5",
+        "categoryid": "4",
+        "name" :_("Mindmap"),
+        "href" :"studentmindmaplist"        
         }]
     classid = request.GET.get('classid')
     section = request.GET.get('section')
@@ -592,3 +604,15 @@ def classviewassignwrittenworkanswer(request):
 @switchlanguage
 def viewresourcelist(request):
     return render(request, 'portalteacher/viewresourcelist.html')
+
+@login_required
+@switchlanguage
+def studentmindmaplist(request):
+    return render(request, 'portalteacher/studentmindmaplist.html')
+
+@login_required
+@switchlanguage
+def assignmindmap(request):
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portalteacher/assignmindmap.html',{'schools':schools,'classes':classes})
