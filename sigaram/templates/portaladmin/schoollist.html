@@ -37,7 +37,7 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
-    #addrec:hover, .schoolname:hover{
+    #addrec:hover, .schoolname:hover, .tts-edit:hover, .tts-delete:hover{
         cursor: pointer;
     }
 </style>
@@ -100,7 +100,7 @@ TTS.forms.editschool = function(id, data) {
             });
         },
         buttons: [{
-            label: 'Update',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-school");
@@ -193,7 +193,7 @@ $(document).ready(function(){
             TTS.forms.table.fnClearTable();
         }
     });
-    $('#adminschool-main-tbl').on('click', 'tbody tr', function(){
+    $('#adminschool-main-tbl').on('click', 'tbody tr .schoolname', function(){
         window.location = 'classlist?id='+this.id;
     });
     $('#adminschool-main-tbl').on('click', '.tts-edit', function(e){

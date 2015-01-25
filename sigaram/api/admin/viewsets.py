@@ -292,8 +292,8 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         teacherresource.classid = teacherresourcedata.get('classid',0)
         teacherresource.section = teacherresourcedata.get('section',0)
         teacherresource.resourcetype = restype
-        teacherresource.resourcetitle = teacherresourcedata.get('resourcetitle')
-        teacherresource.originaltext = teacherresourcedata.get('resourcetitle')
+        teacherresource.resourcetitle = summer_decode(teacherresourcedata.get('resourcetitle'))
+        teacherresource.originaltext = summer_decode(teacherresourcedata.get('resourcetitle'))
         teacherresource.documenturl = "" #teacherresourcedata.get('documenturl')
         teacherresource.imageurl = "" #teacherresourcedata.get('imageurl')
         teacherresource.audiourl = "" #teacherresourcedata.get('audiourl')
@@ -381,8 +381,8 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         ri.resourcetype = category
         ri.chapterid = ridata.get('chapterid')
         ri.resourceid = ridata.get('resourceid')
-        ri.resourcetitle = ridata.get('resourcetitle')
-        ri.resourcedescription = ridata.get('resourcedescription', "")
+        ri.resourcetitle = summer_decode(ridata.get('resourcetitle'))
+        ri.resourcedescription = summer_decode(ridata.get('resourcedescription', ""))
         ri.thumbnailurl = ridata.get('thumbnailurl', "")
         ri.documenturl = ""
         ri.imageurl = ""
@@ -530,7 +530,9 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             WHERE categoryid=%s
                 AND classid=%s
                 AND section='%s' 
-            GROUP BY chapterid'''%(categoryid, classid, sectionid)
+            GROUP BY chapterid
+            ORDER BY chapterid
+            '''%(categoryid, classid, sectionid)
             # print sql;
             cursor = connection.cursor()
             cursor.execute(sql)
@@ -543,6 +545,11 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
                         break
             # print serializer.data
         return Response(serializer.data)
+
+     # def retrieve(self, request, pk=None):
+     #    queryset = models.Chapterinfo.objects.filter(pk=pk)[0]
+     #    serializer = adminserializers.ChapterinfoSerializer(queryset, many=False)
+     #    return Response(serializer.data)
  
 class AdminschoolViewSet(viewsets.ModelViewSet):
 
@@ -614,6 +621,11 @@ class AdminclasslistViewSet(viewsets.ModelViewSet):
     def destroy(self, request, pk=None):
         models.Classinfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
+
+    def retrieve(self, request, pk=None):
+        queryset = models.Classinfo.objects.filter(pk=pk)[0]
+        serializer = adminserializers.AdminclasslistSerializer(queryset, many=False)
+        return Response(serializer.data)
 
 class AdminrubricsViewSet(viewsets.ModelViewSet):
 
@@ -1258,8 +1270,8 @@ class Bulletinboardlist(viewsets.ModelViewSet):
 
         #Saving annoucement
         bbi = models.Bulletinboardinfo()
-        bbi.messagetitle = data.get('messagetitle')
-        bbi.message = data.get('message')
+        bbi.messagetitle = summer_decode(data.get('messagetitle'))
+        bbi.message = summer_decode(data.get('message'))
         bbi.attachmenturl = data.get('attachmenturl',0)
         if data.get('cattype') == 'schools':
             bbi.schoolid = data.get('schoolid')
