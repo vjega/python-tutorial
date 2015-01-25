@@ -65,7 +65,7 @@ def home(request):
         {
         "color": u"primary",
         "icon" : u"sitemap",
-        "link" : u"teacherviewmindmap",
+        "link" : u"assignedmindmaplist",
         "caption": _("Mindmap"),
         "stat": 125
         }]
@@ -616,6 +616,25 @@ def assignmindmap(request):
     schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/assignmindmap.html',{'schools':schools,'classes':classes})
+
+
+def assignedmindmaplist(request):
+    return render(request, 'portalteacher/assignedmindmaplist.html')
+
+@login_required
+@switchlanguage
+def viewmindmapassignedstudentlist(request):
+    return render(request, 'portalteacher/viewmindmapassignedstudentlist.html')
+
+@login_required
+@switchlanguage
+def viewassignmindmapanswer(request):
+    return render(request, 'portalteacher/viewassignmindmapanswer.html')
+
+@login_required
+@switchlanguage
+def viewmindmap(request):
+    return render(request, 'portalteacher/viewmindmap.html')    
 
 @login_required
 @switchlanguage

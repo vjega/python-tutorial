@@ -2684,6 +2684,86 @@ class AssignmindmapinfoViewSet(viewsets.ModelViewSet):
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
 
+class TeacherAssignedmindmapViewSet(viewsets.ModelViewSet):
+    queryset = models.Assignmindmapinfo.objects.all()
+    serializer_class = adminserializers.AssignmindmapinfoSerializer
+
+    def list(self, request):
+        datecond = ''
+        if request.GET.get('fdate') and request.GET.get('tdate'):
+            datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+            request.GET.get('tdate'))
+
+        retrivemindmapcond = ''
+        if request.GET.get('assignedid'):
+            retrivemindmapcond = "AND assignedid = '%s'" % (request.GET.get('assignedid'))
+            
+        sql = '''
+        SELECT ammi.assignedid AS id,
+               ammi.mindmapid,
+               mmi.title,
+               ammi.assigntext,
+               ammi.answertext,
+               ammi.mapdata,
+               date(assigneddate) as createddate,
+               date(answereddate) as answereddate,
+               ammi.studentid,
+               ammi.isanswered,
+               ammi.issaved
+        FROM assignmindmapinfo ammi
+        INNER JOIN mindmap mmi on mmi.id = ammi.mindmapid 
+        WHERE mmi.isdelete=0
+              AND ammi.assignedby='%s'
+              AND ammi.IsDelete=0
+              %s
+              %s
+        GROUP BY ammi.mindmapid, ammi.assigneddate
+        ORDER BY ammi.assignedid DESC''' % (request.user.username, datecond, retrivemindmapcond)
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result = [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+        return Response(result)
+
+    def retrieve(self, request, pk=None):
+
+        sql = '''
+        SELECT ammi.assignedid AS id,
+               ammi.mindmapid,
+               mmi.title,
+               ammi.assigntext,
+               ammi.answertext,
+               ammi.mapdata,
+               date(assigneddate) as createddate,
+               date(answereddate) as answereddate,
+               ammi.studentid,
+               ammi.isanswered,
+               au.first_name as firstname,
+               au.last_name as lastname,
+               ammi.issaved
+        FROM assignmindmapinfo ammi
+        INNER JOIN mindmap mmi on mmi.id = ammi.mindmapid 
+        INNER JOIN auth_user au on au.username = ammi.studentid 
+        WHERE mmi.isdelete=0
+              AND ammi.assignedby='%s'
+              AND ammi.IsDelete=0
+              AND ammi.mindmapid = %s
+        GROUP BY ammi.studentid
+        ORDER BY ammi.assignedid DESC''' % (request.user.username, pk)
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
 class PostinfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Postinfo.objects.all()
@@ -2701,6 +2781,3 @@ class PostinfoViewSet(viewsets.ModelViewSet):
         postinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         postinfo.save()
         return Response(request.DATA)
-
-   
-
