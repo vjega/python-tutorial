@@ -208,10 +208,9 @@ $(document).ready(function(){
         TTS.forms.ressave('send');
     });
     $.ajax({
-        "url":"/api/admin/assignmindmapinfo/?assignedid="+assignedid+"&format=json",
+        "url":"/api/admin/teacherassignedmindmap/?assignedid="+assignedid+"&format=json",
         "type":"GET"
     }).done(function(data){
-        //console.log(data);
         TTS.forms.renderassignedmindmapinfo(data);
     });
 
