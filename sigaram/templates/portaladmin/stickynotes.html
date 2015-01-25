@@ -231,6 +231,8 @@ TTS.forms = TTS.forms || {};
 /* End of Admin CRUD */
 
 TTS.forms.addstickynote = function(form, data) {
+    console.log("after ", data);
+    //return true;
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -270,8 +272,10 @@ TTS.forms.showstickyform = function() {
                 var data = TTS.utils.serilaizeJson("#add-sticky");
                 var select_color = $("#preview_color").attr("class");
                 data = JSON.parse(data);
-                data['color'] = select_color;
-                data['stickylistid'] = TTS.utils.getUrlParameter('id');
+                //data['stickytext'] = data['stickytext'].replace('="', "='").replace('">',"'>");
+                //data['color'] = select_color;
+                //data['stickylistid'] = TTS.utils.getUrlParameter('id');
+                console.log("before ", data);
                 TTS.forms.addstickynote(dialogItself, JSON.stringify(data)); 
             }
             },{
@@ -324,7 +328,9 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-student");
                 data = JSON.parse(data);
+                //data['stickytext'] = data['stickytext'].replace('="', "='").replace('">',"'>");
                 data['color'] = $("#preview_color").attr("class");
+                console.log(data);
                 $.ajax({
                      headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')

@@ -1896,8 +1896,54 @@ msgstr "அறிவிப்புப்பலகைக்குள் செ�
 msgid "Dashboard"
 msgstr "முகப்பு"
 
+#: templates/portalstudent/studentresourcelist.html:123
+msgid "category"
+msgstr "பகுப்பு"
+
+#: templates/portalstudent/viewassignmentanswer.html:118
+#: templates/portalstudent/viewassignwrittenworkanswer.html:118
+#: templates/portalteacher/viewassignmentanswer.html:111
+#: templates/portalteacher/viewassignwrittenworkanswer.html:117
+msgid "Original"
+msgstr "மூலம்"
+
+#: templates/portalstudent/viewassignmentanswer.html:132
+#: templates/portalstudent/viewassignmentanswer.html:147
+#: templates/portalstudent/viewassignwrittenworkanswer.html:132
+#: templates/portalstudent/viewassignwrittenworkanswer.html:147
+#: templates/portalteacher/addwrittenwork.html:63
+#: templates/portalteacher/assignchapter.html:57
+#: templates/portalteacher/assignresource.html:75
+#: templates/portalteacher/assignresource.html:109
+#: templates/portalteacher/base.html:181
+#: templates/portalteacher/rubric_edit.html:20
+#: templates/portalteacher/rubric_view.html:20
+#: templates/portalteacher/rubrics.html:7
+#: templates/portalteacher/rubrics.html:17
+#: templates/portalteacher/viewassignmentanswer.html:125
+#: templates/portalteacher/viewassignmentanswer.html:140
+#: templates/portalteacher/viewassignwrittenworkanswer.html:131
+#: templates/portalteacher/viewassignwrittenworkanswer.html:146
+msgid "Rubrics"
+msgstr "ருப்ரிக்ஸ்"
+
+#: templates/portalstudent/viewassignmentanswer.html:132
+#: templates/portalstudent/viewassignwrittenworkanswer.html:132
+#: templates/portalteacher/viewassignmentanswer.html:125
+#: templates/portalteacher/viewassignwrittenworkanswer.html:131
+msgid "Vote"
+msgstr ""
+
+#: templates/portalstudent/viewassignmentanswer.html:147
+#: templates/portalstudent/viewassignwrittenworkanswer.html:147
+#: templates/portalteacher/viewassignmentanswer.html:140
+#: templates/portalteacher/viewassignwrittenworkanswer.html:146
+msgid "Evaluation"
+msgstr "மதிப்பீடு"
+
 #: templates/portalstudent/viewassignmentanswer.html:230
 #: templates/portalstudent/viewassignwrittenworkanswer.html:230
+
 msgid "Send to Classroom"
 msgstr "வகுப்பறைக்குள் செலுத்தவும்"
 

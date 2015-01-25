@@ -228,14 +228,6 @@ $(document).ready(function() {
             console.log(event.start.format());
             console.log(event.end.format());
             */
-
-            /*eventResize: function(event, delta, revertFunc) {
-                alert(event.title + " end is now " + event.end.format());
-
-                if (!confirm("is this okay?")) {
-                    revertFunc();
-                }
-             }*/
         },
         eventClick: function(calEvent, jsEvent, view) {
             TTS.forms.updatecalform(calEvent, jsEvent, view);
