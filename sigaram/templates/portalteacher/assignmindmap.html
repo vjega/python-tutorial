@@ -443,6 +443,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         $("#mindmaptitle").html(data.title);
+        $("#mapdata").val(data.mapdata);
         $("#viewmindmap").html("<a style='color:#000;font-weight:bold' href='viewmindmap?mindmapid="+data.id+"' target='_blank'>{% trans 'View' %}</a>");
     });
     

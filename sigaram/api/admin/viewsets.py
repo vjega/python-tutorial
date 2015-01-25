@@ -996,7 +996,7 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
               %s
         GROUP BY resourceid 
         ORDER BY assigneddate DESC''' % (request.user.username, datecond)
-        print sql;
+        #print sql;
 
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
@@ -1650,6 +1650,7 @@ class TopicViewSet(viewsets.ModelViewSet):
         topics.topicid = topicinfodata.get('topicid',0)
         topics.forumid = topicinfodata.get('forumid',0)
         topics.totalpost = topicinfodata.get('totalpost',0)
+        topics.topicdetails = topicinfodata.get('topicdetails',0)
         topics.forumid = topicinfodata.get('forumid',0)
         topics.topicname = topicinfodata.get('topicname',0)
         topics.createdby = request.user.id
@@ -2768,6 +2769,34 @@ class PostinfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Postinfo.objects.all()
     serializer_class = adminserializers.PostinfoSerializer
+    def list(self, request):
+        print request.GET.get('forumid')
+        sql = '''
+            SELECT ti.topicid,
+                   ti.topicname,
+                   ti.topicdetails,
+                   ti.createddate as topic_createddate,
+                   p.postid,
+                   p.postdetails,
+                   p.posteddate as parent_posteddate,
+                   p.parentid,
+                   p.postedby,
+                   pp.postdetails,
+                   pp.posteddate as child_posteddate,
+                   pp.postedby,
+                   ti.forumid
+            FROM topicinfo ti
+            LEFT JOIN postinfo p ON  p.topicid = ti.topicid
+            LEFT JOIN postinfo pp ON pp.parentid = p.postid
+            WHERE ti.topicid = '%s' ''' % request.GET.get('topicid')
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result = [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+        return Response(result)
 
     def create(self, request):
         postinfo = models.Postinfo()
