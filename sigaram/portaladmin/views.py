@@ -20,7 +20,8 @@ from portaladmin.forms import (AdminForm,
                    BillviewassignmentanswerForm,
                    BillcomprehensionanswerratingForm,
                    StickyinfoForm,
-                   MyresourcelistForm
+                   MyresourcelistForm,
+                   TopicsForm
                     )
 from ajaxuploader.views import AjaxFileUploader
 #from ajaxuploader.backends.easythumbnails import EasyThumbnailUploadBackend

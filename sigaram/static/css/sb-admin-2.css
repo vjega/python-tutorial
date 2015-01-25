@@ -572,3 +572,11 @@ a{
 div.panel-body {
     background: transparent;
 }
+
+ul.forum, ul.forum ul{
+    list-style: none
+}
+
+ul.forum li {
+    line-height: 60px;
+}
