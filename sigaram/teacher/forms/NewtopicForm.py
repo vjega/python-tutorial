@@ -9,7 +9,7 @@ class NewtopicForm(forms.Form):
         required = True,
         widget   = forms.Textarea({ "class": "summernote"})
     )
-    name = forms.CharField(
+    topicdetails = forms.CharField(
         label    = _("Content"),
         required = True,
         widget   = forms.Textarea({ "class": "summernote"})
