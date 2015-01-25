@@ -794,6 +794,7 @@ class PeerRubricsReview(models.Model):
 class Postinfo(models.Model):
     postid = models.BigIntegerField(primary_key=True)
     topicid = models.BigIntegerField()
+    parentid = models.IntegerField()
     forumid = models.BigIntegerField()
     postdetails = models.TextField()
     postedby = models.BigIntegerField()
@@ -1129,6 +1130,7 @@ class Assignmindmapinfo(models.Model):
     mindmapid   = models.BigIntegerField()
     studentid   = models.CharField(max_length=500)
     assigntext  = models.TextField()
+    answertext  = models.TextField()
     mapdata     = models.TextField()
     answereddate= models.DateTimeField()
     assignedby  = models.CharField(max_length=500)

@@ -711,6 +711,7 @@
       acceleration: 5,
 
       lineWidth: '5px',
+      lineColor: '#000',
       lineColor: '#888',
       lineOpacity: 0.8,
 

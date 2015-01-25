@@ -49,6 +49,7 @@ router.register(r'editanswerresource',      viewsets.EditAnswerResourceViewSet)
 router.register(r'editanswerwrittenwork',   viewsets.EditAnswerWrittenworkViewSet)
 router.register(r'peerrubricsreview',   	viewsets.PeerRubricsReviewViewSet)
 router.register(r'assignmindmapinfo',    	viewsets.AssignmindmapinfoViewSet)
+router.register(r'postinfo',    	        viewsets.PostinfoViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

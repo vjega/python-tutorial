@@ -28,7 +28,7 @@
     <div class="panel panel-default">
                <!-- /.panel-heading -->
         <div class="panel-body">
-            <div class="table-responsive">
+            
                 <table class="table table-striped table-bordered table-hover"
                      id="admin-main-tbl">
                 <div class="row"> 
@@ -57,16 +57,10 @@
                 <div class="row"> 
                     <div class="col-md-12"><h4><strong>{% trans "Answer" %}:</strong></h4></div>
                 </div> 
-                <div class="form-group">
-                    <textarea class="summernote text_area" id="answertext"></textarea>
+                <div class="row">
+                    <div class="col-md-12" id="answertext"></div>
                 </div>
-                <div class="form-group">
-                    <button class="btn btn-success btn-lg" id="res-save">{% trans 'Save' %}</button>
-                    <button class="btn btn-success btn-lg" id="res-send">{% trans 'Send' %}</button>
-                </div>    
                 </table>
-            </div>
-            <!-- /.table-responsive -->
         </div>
         <!-- /.panel-body -->
     </div>
@@ -121,7 +115,7 @@ var mindmapid = TTS.utils.getUrlParameter('mindmapid');
 TTS.forms.renderassignedmindmapinfo = function(data){
     $("#mindmap-title").html(data[0].title);
     $("#mindmap-note").html(data[0].assigntext);
-    $("#answertext").code(data[0].answertext);
+    $("#answertext").html(data[0].answertext);
     TTS.global.buzzmapdoc = $('#container').buzzmap({
         structure: data[0].mapdata,
         editable: true
@@ -161,7 +155,8 @@ TTS.forms.ressave = function(savesend){
     });
 }
 TTS.forms.mindmap = function(node){
-   BootstrapDialog.show({
+    return false;
+   /*BootstrapDialog.show({
         title: '{% trans "Add MindMap" %}',
         message: $($('#admin-form').render()),
         onshown: function(){
@@ -200,7 +195,7 @@ TTS.forms.mindmap = function(node){
                 dialogItself.close();
             }
         }]
-    });
+    });*/
 };
 $(document).ready(function(){
     $('.summernote').summernote();
@@ -220,27 +215,6 @@ $(document).ready(function(){
         //console.log(data);
         TTS.forms.renderassignedmindmapinfo(data);
     });
-
-    /*$("#mindmap-save").click(function(){
-        var postdata = {}
-        postdata['mapdata'] = TTS.global.buzzmapdoc.serialize();
-        postdata['title'] = $("#mindmap-title").html();
-        var type = (TTS.utils.getUrlParameter("new")==="true") ? "POST" : "PUT";
-        var url  = (TTS.utils.getUrlParameter("new")==="true") ? '/api/admin/mindmap/' : '/api/admin/studentassignmindmap/'+TTS.utils.getUrlParameter("assignedid")
-        $.ajax({
-            headers : {
-                'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
-            },
-            type:type,
-            url : url,
-            data : postdata
-        }).done(function(data){
-            alert("Mindmap updated successfully");
-            //window.location = "/teacher/mindmaplist"
-        }).error(function(msg,err){
-            alert("Mindmap not updated");
-        })
-    });*/
 
 });
 </script>

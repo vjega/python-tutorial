@@ -109,7 +109,6 @@
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}">
-
 </script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
@@ -147,7 +146,7 @@
                 t.DT_RowId = "vmm_"+data[i].id;
                 t.slno=++count_new;
                 t.title=data[i].title;
-                t.date=data[i].assigneddate;
+                t.date=data[i].createddate;
                 dataset_new.push(t);
             }
             if (data[i].issaved && !data[i].isanswered) {
@@ -155,15 +154,16 @@
                 t.DT_RowId = "vmm_"+data[i].id;
                 t.slno=++count_saved;
                 t.title=data[i].title;
-                t.date=data[i].assigneddate;
+                t.date=data[i].createddate;
                 dataset_saved.push(t);
             }
             if (data[i].isanswered) {
                 var t = [];
-                t.DT_RowId = "vma_"+data[i].mindmapid+"_"+data[i].studentid;
+                //t.DT_RowId = "vma_"+data[i].mindmapid+"_"+data[i].studentid;
+                t.DT_RowId = "vma_"+data[i].id;
                 t.slno=++count_answered;
                 t.title=data[i].title;
-                t.date=data[i].assigneddate;
+                t.date=data[i].createddate;
                 dataset_answered.push(t);
             }
         }
@@ -188,21 +188,20 @@ $(document).ready(function(){
         "url":"/api/admin/assignmindmapinfo/?format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
-        return false;
-        TTS.forms.assignedstudentwrittenwork(data);
+        TTS.forms.assignedstudentmindmap(data);
         TTS.utils.ajaxloaderstop();
     });
     $('.mindmaplist').on('click','tbody tr',function(e){
         var x = this.id;
         x = x.split("_");
 
-        if(x[0] == 'vww'){
+        if(x[0] == 'vmm'){
             window.location='viewassignmindmap?assignedid='+x[1];
         }
         
-        if(x[0] == 'vwa'){
-            window.location='viewassignmindmapanswer?mindmapid='+x[1]+'&studentid='+x[2];
+        if(x[0] == 'vma'){
+            //window.location='viewassignmindmapanswer?mindmapid='+x[1]+'&studentid='+x[2];
+            window.location='viewassignmindmapanswer?assignedid='+x[1];
         }
     });
     /*$("#fromdatepicker").on("dp.change",function (e) {
@@ -220,7 +219,7 @@ $(document).ready(function(){
             "url":"/api/admin/studentassignresource/?fdate="+fromdate+"&tdate="+todate+"&format=json",
             "type":"GET"
         }).done(function(data){
-            TTS.forms.assignedstudentwrittenwork(data);
+            TTS.forms.assignedstudentmindmap(data);
         });
     });
 
