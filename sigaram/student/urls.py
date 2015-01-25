@@ -67,4 +67,8 @@ urlpatterns = patterns('student.views',
                                                             name='sturesourcetype'),
     url(r'^studentviewmindmap$', 'studentviewmindmap',  
                                                             name='studentviewmindmap'),
+    url(r'^viewassignmindmap$', 'viewassignmindmap',  
+                                                            name='viewassignmindmap'),
+    url(r'^viewassignmindmapanswer$', 'viewassignmindmapanswer',  
+                                                            name='viewassignmindmapanswer'),    
 )

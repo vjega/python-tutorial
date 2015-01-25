@@ -386,3 +386,13 @@ def classviewassignwrittenworkanswer(request):
 @switchlanguage
 def studentviewmindmap(request):
     return render(request, 'portalstudent/studentviewmindmap.html')
+
+@login_required
+@switchlanguage
+def viewassignmindmap(request):
+    return render(request, 'portalstudent/viewassignmindmap.html')
+
+@login_required
+@switchlanguage
+def viewassignmindmapanswer(request):
+    return render(request, 'portalstudent/viewassignmindmapanswer.html')    

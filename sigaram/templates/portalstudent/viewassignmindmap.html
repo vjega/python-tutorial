@@ -1,0 +1,312 @@
+{% extends 'portalstudent/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block topcontent %}
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Mindmap" %}</h2>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+{% endblock topcontent %}
+
+{% block morescript %}
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+<script type="text/javascript" src="{%static "FlashWavRecorder/html/js/swfobject.js"%}"></script>
+<script type="text/javascript" src="{%static "FlashWavRecorder/html/js/recorder.js"%}"></script>
+<script type="text/javascript" src="{%static "js/audiorecorder.js"%}"></script>
+{% endblock morescript %}
+
+{% block botcontent %}
+<div class="col-lg-12">
+    <div class="panel panel-default">
+               <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover"
+                     id="admin-main-tbl">
+                <div>
+                    <h3>{% trans "Title" %}:</h3>
+                </div><br />
+                <div id="writtenwork-title"></div><br />
+                <div id="view-writtenwork"></div><br />
+                <div>
+                    <h3>{% trans "Note" %}:</h3>
+                </div><br />
+                <div id="writtenwork-note"></div><br />
+                <!--div class="form-group"> 
+                    <label>{% trans "Answer" %} {% trans "Type" %}</label>
+                    <select id="answer-type" name="answer-type">
+                        <option value="text">Text</option>
+                        <option value="audio">Audio</option>
+                    </select>
+                </div--> 
+                <!--div class="form-group">
+                    {% trans "Answer" %} {% trans "Type" %}
+                </div>
+                <div class="form-group">
+                    <input id="show-recorder" type="radio" class="isaudio" value="audio" name="isaudio"> 
+                    <label for="show-recorder">Audio</label> 
+                    <input id="hide-recorder" type="radio" value="text" 
+                                        name="isaudio" class="isaudio" checked="checked">
+                    <label for="hide-recorder">Text</label> 
+                </div> <br />
+                <div id="audio-player"></div>
+                <section class="recorder-container">
+                    <div class="recorder">
+                        <div class="level">
+                            <div class="progress"></div>
+                        </div>
+                        <button class="start-recording" onclick="FWRecorder.record('audio', 'audio.wav');">
+                            <i class="fa fa-circle fa-fw text-danger"></i>
+                        </button>
+                        <button class="stop-recording" onclick="FWRecorder.stopRecording('audio');">
+                            <i class="fa fa-stop fa-fw"></i>
+                            <!-- img src="{%static "FlashWavRecorder/html/images/stop.png" %}" alt="Stop Recording"/ -->
+                        <!--/button>
+                        <button class="start-playing" onclick="FWRecorder.playBack('audio');" title="Play">
+                            <i class="fa fa-play fa-fw"></i>
+                            <!-- img src="{%static "FlashWavRecorder/html/images/play.png" %}" alt="Play"/ -->
+                        <!--/button>
+                        <div class="upload" style="display: inline-block">
+                            <div id="flashcontent">
+                                <p>Your browser must have JavaScript enabled and the Adobe Flash Player installed.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <form id="uploadForm" name="uploadForm" action="/api/admin/audioupload/?format=json">
+                        <input id="authenticity_token" name="authenticity_token" value="xxxxx" type="hidden">
+                        <input id="upload_file[parent_id]" name="upload_file[parent_id]" value="1" type="hidden">
+                        File Name: <input id="uploadfilename" name="uploadfilename"  type="text">
+                        <input id="format" name="format" value="json" type="hidden">
+                    </form>
+                    <input type="hidden" id="filenamecreated">
+                    
+                </section -->
+                <div class="form-group"> 
+                    <label>{% trans "Answer" %}</label>
+                </div> 
+                <div class="form-group">
+                    <textarea class="summernote text_area"></textarea>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success btn-lg" id="res-save">{% trans 'Save' %}</button>
+                    <button class="btn btn-success btn-lg" id="res-send">{% trans 'Send' %}</button>
+                </div>    
+                <!--div class="bs-docs-grid">
+                    <div class="row show-grid col-lg-12">
+                        <div class="col-lg-12" id="rubrics-vote"></div>
+                        <input type="hidden" id="max-mark">
+                    </div>
+                </div-->                    
+                
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+<!-- /.col-lg-12 -->
+{% endblock botcontent%}
+
+{% block morecss %}
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<link type="text/css" rel="stylesheet" href="{%static "FlashWavRecorder/html/basic/basic.css"%}">
+<style>
+    #addrec:hover, #admin-main-tbl tbody tr:hover{
+        cursor: pointer;
+    }
+    .note-editable{
+        height: 80px;
+    }
+    section.recorder-container{
+        display: none;
+    }
+    table#rubrics-table thead tr th,
+    table#rubrics-table tfoot tr td{
+        text-align: center;
+        height: 45px;
+        background-color: #337ab7;
+        color: #ffffff;
+        font-weight: bold;
+    }
+    table#rubrics-table tbody tr td:nth-child(1) { 
+        background-color: #d3d3d3;
+        font-weight: bold;
+    }    
+    input#ttls{
+        color:#000;
+    } 
+</style>
+{% endblock morecss %}
+
+
+{% block scriptcontent %}
+
+<script>
+
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}   
+
+var mindmapid = TTS.utils.getUrlParameter('mindmapid');
+
+TTS.forms.renderassignedmindmapinfo = function(data){
+    $(".summernote").code(data.answertext);
+    $("#writtenwork-title").html(data.writtenworktitle);
+    $("#writtenwork-note").html(data.description);
+    $("#view-writtenwork").html("<a target='_blank' href='/static/"+data.writtenimage+"'>{% trans 'View' %}</a>");
+    if(data.isrecord && data.answerurl){
+        $("#show-recorder").prop('checked',true);
+        $("#audio-player").html('<audio src="/static/audio/'+data.answerurl+'" controls=""></audio><br />');    
+    }else{
+        $("#show-recorder").prop('checked',false);
+    }
+
+    if(data.rubric_id){
+        $.ajax({
+            "url":"/api/admin/rubrics/"+data.rubric_id,
+            "type":"GET"
+        }).done(function(rubricdata){
+            TTS.forms.renderrubrictableinfo(rubricdata, data);
+        });
+    }
+
+};
+
+TTS.forms.settotalmarks = function() {
+    var x=0;
+    $('.totals').each(function(){x += parseInt($(this).val()) || 0;});
+    $('#ttls').val(x);
+};
+
+TTS.forms.renderrubrictableinfo = function(rubtable, rubdata){
+    var rubricid    = rubdata.rubric_marks;
+    var rubricmark  = rubdata.rubric_n_mark.split(",");
+    var tableHTML   = '';
+    var thdata      = rubtable.rmh[0];
+    var th          = thdata.split('~~');
+    var tddataobj   = rubtable.rmb;
+    var td          = '';
+    var answercheck = '';
+    var rubchecks   = {};
+    var thnumber    = [];
+    var maxVal      = '';
+    $.each(th, function(idx, value){
+        thnumber[idx] = value.match(/\d+/)[0];
+    });
+    maxVal = Math.max.apply(Math,thnumber);
+   
+    tableHTML += "<table id='rubrics-table' class='table table-striped table-bordered table-hover'>";
+    tableHTML += "<thead><tr><th>&nbsp;</th>";
+    $("#max-mark").val(th.length);
+    $(th).each(function(k,v){
+        tableHTML += "<th>"+v+"</th>";
+    });
+
+    tableHTML += "<th>{% trans 'Total' %}</th></tr></thead>";
+    tableHTML += "<tbody>";
+    $(tddataobj).each(function(x,tddata){
+        td = tddata[0].split('~~');
+        tableHTML += "<tr>";
+        $(td).each(function(i,j){
+            if(i > 0){
+                answercheck="<input class='chkrub mark-"+x+"' id='m"+x+"-"+i+"' name='mark-"+x+"'  disabled='disabled' type='radio'>";
+            }else{
+                answercheck="";
+            }
+            tableHTML += "<td>"+answercheck+" "+j+"</td>";
+        });
+        tableHTML += "<td><input class='totals' id='tmark-"+x+"' style='width:30px;text-align:center' readonly type='text' value=''> / "+maxVal+"</td>";
+        tableHTML += "</tr>";
+    });
+    tableHTML += "</tbody><tfoot><tr><td style='text-align:center' colspan="+(th.length+1)+"><strong>{% trans 'Total' %}</strong></td><td><input id='ttls' style='width:30px;text-align:center' readonly type='text' value=''> / "+maxVal*(tddataobj.length)+"</td></tr></tfoot>";
+    tableHTML += "</table>";
+    $("#rubrics-vote").html(tableHTML);
+    rubricid = rubricid.split('~');
+    $.each(rubricid, function(idx, value){
+        $("#"+value).prop("checked", true);
+        $("#tmark-"+idx).val(rubricmark[idx])
+    })
+    TTS.forms.settotalmarks();
+}
+
+TTS.forms.ressave = function(savesend){
+    var data = {};
+    var writtenworkid   = TTS.utils.getUrlParameter('writtenworkid');
+    data.originaltext   = TTS.utils.summer_encode($(".summernote").code());
+    data.answertext     = TTS.utils.summer_encode($(".summernote").code());
+    data.answertype     = $(".isaudio:checked").val();
+
+    if($("#filenamecreated").val()){
+        data.answerurl = $("#filenamecreated").val();
+    }else{
+        data.answerurl = '';
+    }
+
+    if(data.answertype == 'audio')
+        data.isrecord = 1;
+    else
+        data.isrecord = 0;
+
+    if(savesend == 'save')
+        data.issaved = 1;
+    else
+        data.issaved = 0;
+
+    if(savesend == 'send')
+        data.isanswered = 1;
+    else
+        data.isanswered = 0;
+
+    data.type = 1;
+
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        url:"/api/admin/studentassignwrittenwork/"+writtenworkid+"/",
+        type:"PUT",
+        data: data
+    }).done(function(data){
+        if(data.msg)
+            window.location = 'studentwrittenwork';
+    }).error(function(err, msg){
+        alert("I didnt save the data");
+    });
+}
+$(document).ready(function(){
+    $('.summernote').summernote();
+    $('#recorder-wrap').hide();
+    $('#show-recorder').on("click",function(){
+        $('section.recorder-container').show();
+        $('#audio-player').show();
+    });
+    $('#hide-recorder').on("click",function(){
+        $('section.recorder-container').hide();
+        $('#audio-player').hide();
+    });
+
+    var writtenworkid = TTS.utils.getUrlParameter('writtenworkid');
+
+    $("#res-save").click(function(){
+        TTS.forms.ressave('save');
+    });
+    $("#res-send").click(function(){
+        TTS.forms.ressave('send');
+    });
+    $.ajax({
+        "url":"/api/admin/studentassignmindmap/"+mindmapid+"/?format=json",
+        "type":"GET"
+    }).done(function(data){
+        TTS.forms.renderassignedmindmapinfo(data);
+    });
+
+});
+</script>
+{% endblock scriptcontent %}
