@@ -1133,6 +1133,8 @@ class Assignmindmapinfo(models.Model):
     answereddate= models.DateTimeField()
     assignedby  = models.CharField(max_length=500)
     assigneddate= models.DateTimeField()
+    isanswered  = models.IntegerField()
+    issaved     = models.IntegerField()
     isdelete    = models.IntegerField(db_column='IsDelete')  # Field name made lowercase.
 
     class Meta:

@@ -2593,7 +2593,7 @@ class AssignmindmapinfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Assignmindmapinfo.objects.all()
     serializer_class = adminserializers.AssignmindmapinfoSerializer
-    
+
     def list(self, request):
         mindmapid = request.GET.get('mindmapid')
        
@@ -2616,6 +2616,8 @@ class AssignmindmapinfoViewSet(viewsets.ModelViewSet):
             assignmindmapinfo.mapdata       = summer_decode(unicode(assigndata.get('mapdata')))
             assignmindmapinfo.studentid     = str(s)
             assignmindmapinfo.isdelete      = 0
+            assignmindmapinfo.issaved       = 0
+            assignmindmapinfo.isanswered    = 0
             assignmindmapinfo.assignedby    = str(request.user.username)
             assignmindmapinfo.assigneddate  = time.strftime('%Y-%m-%d %H:%M:%S')
             assignmindmapinfo.answereddate  = time.strftime('%Y-%m-%d %H:%M:%S')

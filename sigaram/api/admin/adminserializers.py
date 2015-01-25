@@ -208,4 +208,4 @@ class AssignmindmapinfoSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Assignmindmapinfo
         fields = ('mindmapid','studentid','assigntext','mapdata','assigneddate',
                     'isdelete','assignedby','answertext','answereddate',
-                    'assignedby','assigneddate','isdelete')
+                    'assignedby','assigneddate','isanswered','issaved','isdelete')
