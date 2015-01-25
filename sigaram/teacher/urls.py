@@ -97,4 +97,11 @@ urlpatterns = patterns('teacher.views',
                                                          name='studentmindmaplist'),
     url(r'^assignmindmap$',   'assignmindmap',  
                                                          name='assignmindmap'),
+    url(r'^assignedmindmaplist$',   'assignedmindmaplist',  
+                                                         name='assignedmindmaplist'),
+    url(r'^viewmindmapassignedstudentlist$',   'viewmindmapassignedstudentlist',  
+                                                         name='viewmindmapassignedstudentlist'),
+    url(r'^viewassignmindmapanswer$',   'viewassignmindmapanswer',  
+                                                         name='viewassignmindmapanswer'),
+    url(r'^viewmindmap$',               'viewmindmap',   name='viewmindmap')
 )

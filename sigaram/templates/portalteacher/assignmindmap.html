@@ -49,7 +49,9 @@
         <label for="folder_name" class="col-sm-2 control-label">{% trans "Heading" %}</label>
         <div class="control" id="mindmaptitle"></div>
     </div>
-
+    <div class="row col-sm-12">
+        <div class="col-sm-12" id="viewmindmap"></div>
+    </div><br />
     <!--div class="form-group" class="col-sm-2">
         <label for="folder_name" class="col-sm-2 control-label">{% trans "Answer" %} {% trans "Type" %}</label>
         <div class="control">
@@ -441,7 +443,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         $("#mindmaptitle").html(data.title);
-        $("#mapdata").val(data.mapdata);
+        $("#viewmindmap").html("<a style='color:#000;font-weight:bold' href='viewmindmap?mindmapid="+data.id+"' target='_blank'>{% trans 'View' %}</a>");
     });
     
     $.ajax({
