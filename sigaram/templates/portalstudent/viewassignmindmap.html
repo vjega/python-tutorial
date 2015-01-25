@@ -4,7 +4,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Written Work" %}</h2>
+        <h2 class="page-header">{% trans "Mindmap" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -44,7 +44,7 @@
                         <option value="audio">Audio</option>
                     </select>
                 </div--> 
-                <div class="form-group">
+                <!--div class="form-group">
                     {% trans "Answer" %} {% trans "Type" %}
                 </div>
                 <div class="form-group">
@@ -66,11 +66,11 @@
                         <button class="stop-recording" onclick="FWRecorder.stopRecording('audio');">
                             <i class="fa fa-stop fa-fw"></i>
                             <!-- img src="{%static "FlashWavRecorder/html/images/stop.png" %}" alt="Stop Recording"/ -->
-                        </button>
+                        <!--/button>
                         <button class="start-playing" onclick="FWRecorder.playBack('audio');" title="Play">
                             <i class="fa fa-play fa-fw"></i>
                             <!-- img src="{%static "FlashWavRecorder/html/images/play.png" %}" alt="Play"/ -->
-                        </button>
+                        <!--/button>
                         <div class="upload" style="display: inline-block">
                             <div id="flashcontent">
                                 <p>Your browser must have JavaScript enabled and the Adobe Flash Player installed.</p>
@@ -85,7 +85,7 @@
                     </form>
                     <input type="hidden" id="filenamecreated">
                     
-                </section>
+                </section -->
                 <div class="form-group"> 
                     <label>{% trans "Answer" %}</label>
                 </div> 
@@ -96,12 +96,12 @@
                     <button class="btn btn-success btn-lg" id="res-save">{% trans 'Save' %}</button>
                     <button class="btn btn-success btn-lg" id="res-send">{% trans 'Send' %}</button>
                 </div>    
-                <div class="bs-docs-grid">
+                <!--div class="bs-docs-grid">
                     <div class="row show-grid col-lg-12">
                         <div class="col-lg-12" id="rubrics-vote"></div>
                         <input type="hidden" id="max-mark">
                     </div>
-                </div>                    
+                </div-->                    
                 
                 </table>
             </div>
@@ -140,7 +140,6 @@
         background-color: #d3d3d3;
         font-weight: bold;
     }    
-
     input#ttls{
         color:#000;
     } 
@@ -155,8 +154,9 @@
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}   
 
+var mindmapid = TTS.utils.getUrlParameter('mindmapid');
 
-TTS.forms.renderassignedwrittenworkinfo = function(data){
+TTS.forms.renderassignedmindmapinfo = function(data){
     $(".summernote").code(data.answertext);
     $("#writtenwork-title").html(data.writtenworktitle);
     $("#writtenwork-note").html(data.description);
@@ -186,17 +186,17 @@ TTS.forms.settotalmarks = function() {
 };
 
 TTS.forms.renderrubrictableinfo = function(rubtable, rubdata){
-    var rubricid = rubdata.rubric_marks;
-    var rubricmark = rubdata.rubric_n_mark.split(",");
-    var tableHTML = '';
-    var thdata = rubtable.rmh[0];
-    var th = thdata.split('~~');
-    var tddataobj = rubtable.rmb;
-    var td = '';
+    var rubricid    = rubdata.rubric_marks;
+    var rubricmark  = rubdata.rubric_n_mark.split(",");
+    var tableHTML   = '';
+    var thdata      = rubtable.rmh[0];
+    var th          = thdata.split('~~');
+    var tddataobj   = rubtable.rmb;
+    var td          = '';
     var answercheck = '';
-    var rubchecks = {};
-    var thnumber = [];
-    var maxVal = '';
+    var rubchecks   = {};
+    var thnumber    = [];
+    var maxVal      = '';
     $.each(th, function(idx, value){
         thnumber[idx] = value.match(/\d+/)[0];
     });
@@ -301,10 +301,10 @@ $(document).ready(function(){
         TTS.forms.ressave('send');
     });
     $.ajax({
-        "url":"/api/admin/studentassignwrittenwork/"+writtenworkid+"/?format=json",
+        "url":"/api/admin/studentassignmindmap/"+mindmapid+"/?format=json",
         "type":"GET"
     }).done(function(data){
-        TTS.forms.renderassignedwrittenworkinfo(data);
+        TTS.forms.renderassignedmindmapinfo(data);
     });
 
 });

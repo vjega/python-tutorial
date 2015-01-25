@@ -202,3 +202,10 @@ class AdminresourceSerializer(serializers.HyperlinkedModelSerializer):
         model = models.AdminResources
         fields = ('resource_folder_id','resourcetype', 'resourcetitle','resourcedescription','fileurl','isdeleted',
                   'createddate')
+
+class AssignmindmapinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Assignmindmapinfo
+        fields = ('mindmapid','studentid','assigntext','mapdata','assigneddate',
+                    'isdelete','assignedby','answertext','answereddate',
+                    'assignedby','assigneddate','isanswered','issaved','isdelete')

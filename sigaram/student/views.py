@@ -55,7 +55,15 @@ def home(request):
         "link" : u"studentviewassessments",
         "caption": _("Practicals"),
         "stat": 125
+        },
+        {
+        "color": u"primary",
+        "icon" : u"sitemap",
+        "link" : u"studentviewmindmap",
+        "caption": _("Mindmap"),
+        "stat": 125
         }]
+
 
     recent_acitivity_head = [_("Sl No."),
                              _("Assignments"),
@@ -373,3 +381,18 @@ def classviewassignmentanswer(request):
 @switchlanguage
 def classviewassignwrittenworkanswer(request):
     return render(request, 'portalstudent/classviewassignwrittenworkanswer.html')
+
+@login_required
+@switchlanguage
+def studentviewmindmap(request):
+    return render(request, 'portalstudent/studentviewmindmap.html')
+
+@login_required
+@switchlanguage
+def viewassignmindmap(request):
+    return render(request, 'portalstudent/viewassignmindmap.html')
+
+@login_required
+@switchlanguage
+def viewassignmindmapanswer(request):
+    return render(request, 'portalstudent/viewassignmindmapanswer.html')    
