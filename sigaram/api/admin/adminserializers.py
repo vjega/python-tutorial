@@ -214,4 +214,4 @@ class PostinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Postinfo
         fields = ('postid', 'topicid','forumid',
-                  'postdetails', 'postedby','posteddate')
+                  'postdetails', 'postedby','posteddate','parentid')

@@ -2636,34 +2636,8 @@ class AssignmindmapinfoViewSet(viewsets.ModelViewSet):
 
 class PostinfoViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Postinfo.all()
+    queryset = models.Postinfo.objects.all()
     serializer_class = adminserializers.PostinfoSerializer
-
-     def list(self, request):
-        forumid = request.GET.get('forumid')
-        sql = """
-        SELECT topicid,
-                forumid,
-                topicname,
-                totalpost,
-                date(lastposteddate) as lastposteddate,
-                lastpostedby,
-                firstname,
-                totalpost 
-        FROM topicinfo ti 
-        LEFT OUTER JOIN logininfo li ON li.loginid = ti.lastpostedby 
-        WHERE ti.forumid=%s
-        ORDER BY topicid """ % forumid
-        cursor = connection.cursor()
-        #print sql
-        cursor.execute(sql)
-        desc = cursor.description
-        result =  [
-                dict(zip([col[0] for col in desc], row))
-                for row in cursor.fetchall()
-            ]
-        return Response(result)
-
 
     def create(self, request):
         postinfo = models.Postinfo()
@@ -2671,8 +2645,9 @@ class PostinfoViewSet(viewsets.ModelViewSet):
         postinfo.postid = postinfodata.get('postid')
         postinfo.topicid = postinfodata.get('topicid')
         postinfo.forumid = postinfodata.get('forumid')
-        postinfo.postdetails = postinfodata.get('postdetails')
-        postinfo.postedby = postinfodata.get('postedby')
+        postinfo.parentid = postinfodata.get('parentid')
+        postinfo.postdetails = postinfodata.get('postdetails',0)
+        postinfo.postedby = request.user.id
         postinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         postinfo.save()
         return Response(request.DATA)

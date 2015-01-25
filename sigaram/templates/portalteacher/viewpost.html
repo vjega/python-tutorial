@@ -133,6 +133,8 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
+
+
 /*TTS.forms.update_chapter_list = function () {
     var classid = $("#classid").val();
     var section = $("#section").val();
@@ -399,14 +401,32 @@ TTS.forms.viewpostreply = function( dataObj ) {
     return viewpostHTML;
 };
  */
+  
 
 $("#main_thread_reply").click(function (){
     $(".reply_textarea").toggle("slow");
 });
 
 $("#save_main_thread_reply").click(function (){
-   $("#thread_reply_textarea").val();
-   alert ($("#thread_reply_textarea").val());
+   topic=TTS.utils.getUrlParameter("topicid");
+   forumid=TTS.utils.getUrlParameter("forumid");
+   var jsondata ={
+            postdetails : $("#thread_reply_textarea").val(),
+            topicid : topic,
+            forumid : forumid,
+            parentid :0
+        };
+   $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'POST',
+        data: JSON.stringify(jsondata),
+        url : '/api/admin/postinfo/'
+    }).done(function( msg ) {
+        alert(msg);
+
+    });
 });
 </script>
 
