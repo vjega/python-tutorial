@@ -315,10 +315,8 @@ $(document).ready(function(){
         TTS.forms.delstudentres($(this).parent().parent().prop("id"));
     });
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.showstudentresource();
-        //updateClass();
-        //updateselectedChapter();
-        //updatesection();
+        window.location = "viewstudentres?categoryid="+TTS.categoryid+"&chapterid="+TTS.chapterid+"&classid="+TTS.classid+"&section="+TTS.section;
+        //TTS.forms.showstudentresource();
     });
     $("body").on('change', '#id_classid', function(){
         updateChapter();

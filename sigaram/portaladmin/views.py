@@ -204,7 +204,7 @@ def resourcetype(request):
         "href" :u"chapterlist"
         },{
         "id": "3",
-        "categoryid": "2",
+        "categoryid": "3",
         "name" :_("Composition"),
         "href" :u"chapterlist"
         }]
@@ -564,3 +564,8 @@ def viewteacherres(request):
     classes = models.Classinfo.objects.all()
     return render(request, 'portaladmin/viewteacherres.html',
                              {'schools':schools, 'classes':classes })
+
+@login_required
+@switchlanguage
+def viewstudentres(request):
+    return render(request, 'portaladmin/viewstudentres.html')

@@ -285,7 +285,6 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         return Response(result)
 
     def create(self, request):
-        print request
         teacherresource = models.Teacherresourceinfo()
         teacherresourcedata =  json.loads(request.DATA.keys()[0])
         restype = teacherresourcedata.get('resourcetype')
@@ -293,8 +292,8 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         teacherresource.classid = teacherresourcedata.get('classid',0)
         teacherresource.section = teacherresourcedata.get('section',0)
         teacherresource.resourcetype = restype
-        teacherresource.resourcetitle = teacherresourcedata.get('resourcetitle')
-        teacherresource.originaltext = teacherresourcedata.get('resourcetitle')
+        teacherresource.resourcetitle = summer_decode(teacherresourcedata.get('resourcetitle'))
+        teacherresource.originaltext = summer_decode(teacherresourcedata.get('resourcetitle'))
         teacherresource.documenturl = "" #teacherresourcedata.get('documenturl')
         teacherresource.imageurl = "" #teacherresourcedata.get('imageurl')
         teacherresource.audiourl = "" #teacherresourcedata.get('audiourl')
@@ -382,8 +381,8 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         ri.resourcetype = category
         ri.chapterid = ridata.get('chapterid')
         ri.resourceid = ridata.get('resourceid')
-        ri.resourcetitle = ridata.get('resourcetitle')
-        ri.resourcedescription = ridata.get('resourcedescription', "")
+        ri.resourcetitle = summer_decode(ridata.get('resourcetitle'))
+        ri.resourcedescription = summer_decode(ridata.get('resourcedescription', ""))
         ri.thumbnailurl = ridata.get('thumbnailurl', "")
         ri.documenturl = ""
         ri.imageurl = ""
@@ -546,6 +545,11 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
                         break
             # print serializer.data
         return Response(serializer.data)
+
+     # def retrieve(self, request, pk=None):
+     #    queryset = models.Chapterinfo.objects.filter(pk=pk)[0]
+     #    serializer = adminserializers.ChapterinfoSerializer(queryset, many=False)
+     #    return Response(serializer.data)
  
 class AdminschoolViewSet(viewsets.ModelViewSet):
 
@@ -617,6 +621,11 @@ class AdminclasslistViewSet(viewsets.ModelViewSet):
     def destroy(self, request, pk=None):
         models.Classinfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
+
+    def retrieve(self, request, pk=None):
+        queryset = models.Classinfo.objects.filter(pk=pk)[0]
+        serializer = adminserializers.AdminclasslistSerializer(queryset, many=False)
+        return Response(serializer.data)
 
 class AdminrubricsViewSet(viewsets.ModelViewSet):
 
@@ -2288,14 +2297,7 @@ class StudentAssignWrittenWork(viewsets.ModelViewSet):
         GROUP BY ari.resourceid, ari.answereddate
         ORDER BY ari.assignedid DESC''' % (request.user.username, datecond)
         cursor = connection.cursor()
-        
-        #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
-        #cursor.execute(sql, "3680")
-        #print dir(cursor)
-        #result = cursor.fetchall()
-        #print return [
-        
         desc = cursor.description
         result =  [
                 dict(zip([col[0] for col in desc], row))
@@ -2593,21 +2595,49 @@ class PeerRubricsReviewViewSet(viewsets.ModelViewSet):
         return Response('"msg":"delete"')
 
 class AssignmindmapinfoViewSet(viewsets.ModelViewSet):
-
     queryset = models.Assignmindmapinfo.objects.all()
     serializer_class = adminserializers.AssignmindmapinfoSerializer
 
     def list(self, request):
-        mindmapid = request.GET.get('mindmapid')
-       
-        if mindmapid :
-            queryset = models.Assignmindmapinfo.objects.filter(mindmapid=mindmapid)
-        else:
-            queryset = models.Assignmindmapinfo.objects.all()
+        datecond = ''
+        if request.GET.get('fdate') and request.GET.get('tdate'):
+            datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+            request.GET.get('tdate'))
 
-        serializer = adminserializers.AssignmindmapinfoSerializer(queryset, many=True)
+        retrivemindmapcond = ''
+        if request.GET.get('assignedid'):
+            retrivemindmapcond = "AND assignedid = '%s'" % (request.GET.get('assignedid'))
+            
+        sql = '''
+        SELECT ammi.assignedid AS id,
+               ammi.mindmapid,
+               mmi.title,
+               ammi.assigntext,
+               ammi.answertext,
+               ammi.mapdata,
+               date(assigneddate) as createddate,
+               date(answereddate) as answereddate,
+               ammi.studentid,
+               ammi.isanswered,
+               ammi.issaved
+        FROM assignmindmapinfo ammi
+        INNER JOIN mindmap mmi on mmi.id = ammi.mindmapid 
+        WHERE mmi.isdelete=0
+              AND ammi.studentid='%s'
+              AND ammi.IsDelete=0
+              %s
+              %s
+        GROUP BY ammi.mindmapid, ammi.answereddate
+        ORDER BY ammi.assignedid DESC''' % (request.user.username, datecond, retrivemindmapcond)
 
-        return Response(serializer.data) 
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result = [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+        return Response(result)
 
     def create(self, request):
         assigndata =  json.loads(request.DATA.keys()[0])
@@ -2628,7 +2658,26 @@ class AssignmindmapinfoViewSet(viewsets.ModelViewSet):
 
         return Response('"msg":"created"')
 
+    # def retrieve(self, request, pk=None):
+    #     queryset = models.Assignmindmapinfo.objects.get(pk=pk)
+    #     serializer = adminserializers.AssignmindmapinfoSerializer(queryset, many=False)
+    #     return Response(serializer.data)
+
     def update(self, request, pk=None):
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        ammi = models.Assignmindmapinfo.objects.get(pk=pk)
+        ammi.answertext = summer_decode(unicode(data.get('answertext')))
+        ammi.mapdata    = summer_decode(unicode(data.get('mapdata')))
+
+        if data.get('isanswered'):
+            ammi.isanswered = data.get('isanswered')
+            ammi.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
+
+        if data.get('issaved'):
+            ammi.issaved = data.get('issaved')
+        
+        ammi.save()
+
         return Response('"msg":"update"')
 
     def destroy(self, request, pk=None):
