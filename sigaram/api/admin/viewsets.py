@@ -2604,7 +2604,7 @@ class AssignmindmapinfoViewSet(viewsets.ModelViewSet):
 
         serializer = adminserializers.AssignmindmapinfoSerializer(queryset, many=True)
 
-        return Response(serializer.data)
+        return Response(serializer.data) 
 
     def create(self, request):
         assigndata =  json.loads(request.DATA.keys()[0])
