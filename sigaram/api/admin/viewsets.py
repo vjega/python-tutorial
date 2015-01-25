@@ -1258,8 +1258,8 @@ class Bulletinboardlist(viewsets.ModelViewSet):
 
         #Saving annoucement
         bbi = models.Bulletinboardinfo()
-        bbi.messagetitle = data.get('messagetitle')
-        bbi.message = data.get('message')
+        bbi.messagetitle = summer_decode(data.get('messagetitle'))
+        bbi.message = summer_decode(data.get('message'))
         bbi.attachmenturl = data.get('attachmenturl',0)
         if data.get('cattype') == 'schools':
             bbi.schoolid = data.get('schoolid')
