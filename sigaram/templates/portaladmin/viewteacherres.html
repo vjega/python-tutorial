@@ -5,7 +5,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Add Announcement" %}</h2>
+        <h2 class="page-header">{% trans "Teacher" %}{% trans "Resources" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -74,18 +74,16 @@
 </div><br />
 <div class="row" id="folderdetails">
     <div>
-        <label class="col-lg-2">{% trans "Select Folder" %}</label>
+        <label class="col-lg-2">{% trans "Chapter" %}</label>
         <span >
-            <select class="col-lg-3" name="folder" class="form-control" id="folder">
-                <option value="1">Lesson Plan</option>
-                <option value="2">School's resources</option>
+            <select class="col-lg-3" name="folder" class="form-control" id="id_chapterid">
             </select>
         <span>
     </div>
-</div>
+</div><br />
 {% endblock topcontent %}
 {% block botcontent %}
-<!-- <div class="row">
+<div class="row">
     <div id="file-uploader">File Uploader Comes Here...</div> 
     <input type="hidden" id="uploadurl">
     <div class="form-group" class="col-sm-2">
@@ -94,15 +92,7 @@
     <div class="form-group">
         <textarea id="title" class="summernote"></textarea>
     </div>
-</div>
-<div class="row">
-    <div class="form-group" class="col-sm-2">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Announcment" %}</label>
-    </div><br />
-    <div class="form-group">
-        <textarea id="announcement" class="summernote"></textarea>
-    </div>
-</div>
+</div><br />
 <div align="center">   
     <span>
         <button class="btn btn-primary btn-sm" id="save">
@@ -112,7 +102,7 @@
             <i class="fa fa-times fa-lg"></i> {% trans "Cancel" %} 
         </button>
     </span>
-</div> -->
+</div>
 {% endblock botcontent%}
 
 {% block morecss %}
@@ -142,5 +132,88 @@
 {% endblock morescript %}
 
 {% block scriptcontent %}
+<script>
+window.TTS = window.TTS || {};
+TTS.forms = TTS.forms || {};
+$("#save").click(function(){
+    TTS.forms.teacherresource();
 
+});
+
+/*$("#cancel").click(function(){
+    window.location='teacherresourcelist';
+});*/
+
+TTS.forms.teacherresource = function(){  
+    var data = {};
+    data.resourcetitle = TTS.utils.summer_encode($("#title").code());
+    data.resourcetype = $("#category").val();
+    data.schoolid=$('#school_name').val();
+    data.classid=$('#class_name').val();
+    data.section=$('#section').val();
+    data.resourcecategory=$('#folder').val();
+    data.chapterid=$('#id_chapterid').val();
+    data.fileurl = $("#uploadurl").val();
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:"POST",
+        url:"/api/admin/teacherresourcesinfo/",
+        data: JSON.stringify(data)
+    }).done(function(data){
+        alert("Saved Successfully");
+        window.location='teacherresourcelist';
+    }).error(function(err, msg){
+        alert("I didnt save the data");
+    });
+}
+
+var updateChapter = function(){
+    $.ajax({
+        'url': "/api/admin/chapterinfo/?classid="+$("#class_name").val()
+                +"&section="+$("#section").val(),
+        'type':'GET'
+    }).done(function(data){
+        //console.log(data)
+        opt = "";
+        for (d in data){
+            opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"<option>\n";
+        }
+        $("#id_chapterid").html(opt);
+    });
+};
+
+
+$(document).ready(function(){
+    updateChapter();
+    $('.summernote').summernote();
+    $("#class_name").on('change',function(){
+        updateChapter();
+    });
+    $("#section").on('change',function(){
+        updateChapter();
+    });
+    var uploader = new qq.FileUploader({
+        action: "/admin/student-teacherres-upload",
+        element: $('#file-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#uploadurl").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
+    });
+});
+</script>
 {% endblock scriptcontent %}

@@ -285,6 +285,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         return Response(result)
 
     def create(self, request):
+        print request
         teacherresource = models.Teacherresourceinfo()
         teacherresourcedata =  json.loads(request.DATA.keys()[0])
         restype = teacherresourcedata.get('resourcetype')
@@ -530,7 +531,9 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             WHERE categoryid=%s
                 AND classid=%s
                 AND section='%s' 
-            GROUP BY chapterid'''%(categoryid, classid, sectionid)
+            GROUP BY chapterid
+            ORDER BY chapterid
+            '''%(categoryid, classid, sectionid)
             # print sql;
             cursor = connection.cursor()
             cursor.execute(sql)
