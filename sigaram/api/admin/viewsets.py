@@ -89,7 +89,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
             queryset = models.Teacherinfo.objects.filter(username=username, isdelete=0)
 
         else:
-            queryset = models.Teacherinfo.objects.all(isdelete=0)
+            queryset = models.Teacherinfo.objects.filter(isdelete=0)
 
         serializer = adminserializers.TeacherinfoSerializer(queryset, many=True)
         return Response(serializer.data)
@@ -716,7 +716,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title = data.get('title')
         cal.start = data.get('start')
         cal.end = data.get('end')
-        cal.color = '#337ab7'
+        cal.color = data.get('color')
         cal.allday = data.get('alldayevents')
         cal.eventcreatedby = request.user.username
         cal.eventeditedby = request.user.username
@@ -733,11 +733,8 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title = data.get('title')
         cal.start = data.get('start')
         cal.end = data.get('end')
-        cal.color = '#d9534f'
+        cal.color = data.get('color')
         cal.allday = data.get('alldayevents')
-        #cal.eventcreatedby = request.user.username
-        #cal.start = time.strftime('%Y-%m-%d %H:%M:%S')
-        #cal.end = time.strftime('%Y-%m-%d %H:%M:%S')
         cal.eventcreatedby = request.user.username
         cal.eventeditedby = request.user.username
         cal.isdeleted = 0
@@ -1328,18 +1325,18 @@ class BillboardViewSet(viewsets.ModelViewSet):
     def list(self, request):
         sql = """
         SELECT distinct bbi.assessmentid, 
-                bbri.rating,
-                bbi.resourceid,
-                asl.assessmenttype,
-                asl.assessmenttitle,
-                ri.resourcetype,
-                ri.resourcetitle,
-                writtenworkinfo.writtenworktitle,
-                bbi.writtenworkid, 
-                studentinfo.firstname,
-                studentinfo.imageurl,
-                date(bbi.posteddate) as posteddate,
-                bbi.studentid 
+            bbri.rating,
+            bbi.resourceid,
+            asl.assessmenttype,
+            asl.assessmenttitle,
+            ri.resourcetype,
+            ri.resourcetitle,
+            writtenworkinfo.writtenworktitle,
+            bbi.writtenworkid, 
+            studentinfo.firstname,
+            studentinfo.imageurl,
+            date(bbi.posteddate) as posteddate,
+            bbi.studentid 
         FROM billboardinfo bbi
         LEFT OUTER JOIN assignassessmentinfo asm ON asm.assessmentid = bbi.assessmentid 
             AND asm.studentid = bbi.studentid 
@@ -1562,6 +1559,60 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
         cursor.execute(sql)        
 
         return Response('saved')
+
+    def list(self, request):
+        result = []
+        sql = '''
+        SELECT  bbi.resourceid as assignedid,
+            bbi.resourcetype,
+            bbi.studentid,
+            ri.resourceid as resourceid,
+            ri.resourcetitle as title,
+            concat(au.first_name,' ',au.last_name) as firstname,
+            date(bbi.posteddate) as posteddate
+        FROM billboardinfo bbi
+        INNER JOIN assignresourceinfo ari ON ari.assignedid=bbi.resourceid
+        INNER JOIN resourceinfo ri ON ri.resourceid=ari.resourceid
+        INNER JOIN auth_user au ON au.username=bbi.studentid
+        WHERE bbi.resourcetype = "ar" 
+        '''
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        resar =  [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+
+        sql = '''
+        SELECT  bbi.resourceid as assignedid,
+                bbi.resourcetype,
+                bbi.studentid,
+                wwi.writtenworkid as resourceid,
+                wwi.writtenworktitle as title,
+                concat(au.first_name,' ',au.last_name) as firstname,
+                date(bbi.posteddate) as posteddate
+        FROM billboardinfo bbi
+        INNER JOIN assignwrittenworkinfo awwi ON awwi.assignwrittenworkid=bbi.resourceid
+        INNER JOIN writtenworkinfo wwi ON wwi.writtenworkid=awwi.writtenworkid
+        INNER JOIN auth_user au ON au.username=bbi.studentid
+        WHERE bbi.resourcetype = "aw" 
+        '''
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        resaw =  [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+
+        for x in resar:
+            result.append(x)
+        for x in resaw:
+            result.append(x)
+
+        return Response(result)
+
 
 class TopicViewSet(viewsets.ModelViewSet):
 
@@ -1862,9 +1913,9 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.AdminresourceSerializer
 
     def list(self, request):
-        print request.GET.get('folderid');
         sql = '''
-        SELECT  resource_folder_id,
+        SELECT  resource_id,
+                resource_folder_id,
                 resourcetype,
                 resourcetitle,
                 resourcedescription,
@@ -1887,7 +1938,7 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
     def create(self, request):
         admin = models.AdminResources()
         admindata =  json.loads(request.DATA.keys()[0])
-        # print admindata;
+        print admindata.get('fileurl');
         admin.resourcetype = admindata.get('resourcetype')
         admin.resourcetitle = admindata.get('resourcetitle')
         admin.resourcedescription = admindata.get('resourcedescription')
@@ -1907,7 +1958,7 @@ class AdminresourceViewSet(viewsets.ModelViewSet):
         return Response('"msg":"update"')
 
     def destroy(self, request, pk):
-        models.Admininfo.objects.get(pk=pk).delete()
+        models.AdminResources.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
 class ClassinfoViewSet(viewsets.ModelViewSet): 
@@ -1922,27 +1973,63 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
             wherecond = "AND cri.schoolid='%s' AND cri.classid = '%s'"%(request.session.get('schoolid'),
                 request.session.get('classid'))
 
+        result = []
+
         sql = '''
-        SELECT  cri.resourceid,
-                cri.resourcetype,
-                cri.studentid,
-                ri.originaltext,
-                ri.resourcetitle,
-                si.firstname,
-                cri.posteddate
+        SELECT  cri.resourceid as assignedid,
+            cri.resourcetype,
+            cri.studentid,
+            ri.resourceid as resourceid,
+            ri.resourcetitle as title,
+            concat(au.first_name,' ',au.last_name) as firstname,
+            date(cri.posteddate) as posteddate
         FROM classroominfo cri
         INNER JOIN assignresourceinfo ari ON ari.assignedid=cri.resourceid
         INNER JOIN resourceinfo ri ON ri.resourceid=ari.resourceid
-        INNER JOIN studentinfo si ON si.username=cri.studentid
+        INNER JOIN auth_user au ON au.username=cri.studentid
+        WHERE cri.resourcetype = "ar"
         %s
-        '''%wherecond
+        '''% wherecond
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
-        result =  [
+        resar =  [
             dict(zip([col[0] for col in desc], row))
             for row in cursor.fetchall()
         ]
+
+        print sql
+
+        sql = '''
+        SELECT  cri.resourceid as assignedid,
+                cri.resourcetype,
+                cri.studentid,
+                wwi.writtenworkid as resourceid,
+                wwi.writtenworktitle as title,
+                concat(au.first_name,' ',au.last_name) as firstname,
+                date(cri.posteddate) as posteddate                
+        FROM classroominfo cri
+        INNER JOIN assignwrittenworkinfo awwi ON awwi.assignwrittenworkid=cri.resourceid
+        INNER JOIN writtenworkinfo wwi ON wwi.writtenworkid=awwi.writtenworkid
+        INNER JOIN auth_user au ON au.username=cri.studentid
+        WHERE cri.resourcetype = "aw"
+        %s
+        '''% wherecond
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        resaw =  [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+
+        print sql
+
+        for x in resar:
+            result.append(x)
+        for x in resaw:
+            result.append(x)
+
         return Response(result)
 
     def create(self, request):
@@ -2459,3 +2546,49 @@ class EditAnswerWrittenworkViewSet(viewsets.ModelViewSet):
         cursor.execute(sql)
 
         return Response('approved')      
+
+class PeerRubricsReviewViewSet(viewsets.ModelViewSet):
+
+    queryset = models.RubricsHeader.objects.all().order_by('-slno')
+    serializer_class = adminserializers.AdminrubricsSerializer
+
+    def create(self, request):
+        adminrubrics = models.RubricsHeader()
+        rubricmatrix = models.RubricMatrix()
+        rubricsdata =  json.loads(request.DATA.keys()[0])
+
+        rubbodydata = rubricsdata.get('mtx_body')
+        rubheaderdata = rubricsdata.get('mtx_head')
+        
+        adminrubrics.title = rubricsdata.get('ttl')
+        adminrubrics.description = rubricsdata.get('desc')
+        adminrubrics.instruction = rubricsdata.get('instn')
+        adminrubrics.teacher = request.user.username
+        adminrubrics.status = 0
+        adminrubrics.ts = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminrubrics.save()
+
+        refno = adminrubrics.slno
+
+        for idx, bd in enumerate(rubbodydata):
+            rubricmatrix.refno = refno
+            rubricmatrix.datatype = 'B'
+            rubricmatrix.jdata = bd
+            rubricmatrix.disp_order = idx+1
+            rubricmatrix.save()
+
+        for idy, hd in enumerate(rubheaderdata):
+            rubricmatrix.refno = refno
+            rubricmatrix.datatype = 'H'
+            rubricmatrix.jdata = hd
+            rubricmatrix.disp_order = idy
+            rubricmatrix.save()
+
+        return Response(request.DATA);
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        models.RubricsHeader.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')

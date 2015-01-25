@@ -52,16 +52,9 @@ TTS.forms.showcalform = function(start, end, allDay) {
         onshown: function(){
             $('#id_title').val("New Event");
             $('#id_start').val(start.format('YYYY-MM-DD hh:mm'));
-            $('#id_end').val(start.format('YYYY-MM-DD hh:mm'));
-            
-            //next date
-            //$('#id_end').val(end.format('YYYY-MM-DD hh:mm LT'));
-            
+            $('#id_end').val(start.format('YYYY-MM-DD hh:mm'));      
             $('#id_start,#id_end').datetimepicker({
                 format: 'YYYY-MM-DD hh:mm',
-                //todayHighlight: true,
-                //showMeridian: true,
-                //minDate:new Date()
             });
         },
         buttons: [{
@@ -82,35 +75,43 @@ TTS.forms.showcalform = function(start, end, allDay) {
 
 TTS.forms.saveCal = function () {
     var data = TTS.utils.serilaizeJson("#cal-event");
+    data = JSON.parse(data);
+    data['color'] = "#337ab7";
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'POST',
-        data: data,
+        data: JSON.stringify(data),
         url : '/api/admin/calendar/'
     }).done(function( msg ) {
-        data = JSON.parse(data);
         TTS.forms.calendar.fullCalendar('renderEvent',
         {
             title: data.title,
             start: data.start,
             end: data.end,
+            color:data.color,
             alldayevents:$("#id_alldayevents").is(':checked')
         },
         true // make the event "stick"
         );
+        location.reload();
     });
 }
 
 TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
+    if(calEvent.end === null){
+        var end_date = calEvent.start.format("YYYY-MM-DD hh:mm")
+    }else{
+        var end_date = calEvent.end.format("YYYY-MM-DD hh:mm")
+    }
     BootstrapDialog.show({
             title: 'Edit Event',
             message: $($('#cal-form').render()),
             onshown: function(){
                 $('#id_title').val(calEvent.title);
                 $('#id_start').val(calEvent.start.format("YYYY-MM-DD hh:mm"));
-                $('#id_end').val(calEvent.end.format("YYYY-MM-DD hh:mm"));
+                $('#id_end').val(end_date);
                 $('#id_start,#id_end').datetimepicker({
                     format: 'YYYY-MM-DD hh:mm',
                 });
@@ -121,6 +122,7 @@ TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
                 action: function(dialogItself){
                     var data = TTS.utils.serilaizeJson("#cal-event");
                     data = JSON.parse(data);
+                    data['color'] = "#f0ad4e";
                     $.ajax({
                         headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -142,12 +144,17 @@ TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
     });
 }
 
-TTS.forms.updatecalevent = function (event){
-    console.log(event);
+TTS.forms.updatecalevent = function (event,type){
+    if(event.end === null){
+        var end_date = event.start.format("YYYY-MM-DD hh:mm")
+    }else{
+        var end_date = event.end.format("YYYY-MM-DD hh:mm")
+    }
     var data = {
         "title" : event.title,
-        "start" : event.start.format(),
-        "end" : event.start.format()
+        "start" : event.start.format("YYYY-MM-DD hh:mm"),
+        "end"   : end_date,
+        "color" : event.color
     }
     $.ajax({
         headers : {
@@ -157,7 +164,7 @@ TTS.forms.updatecalevent = function (event){
         data: JSON.stringify(data),
         url : '/api/admin/calendar/'+event.id
     }).done(function( msg ) {
-        //location.reload();
+        location.reload();
     });
 };
 
@@ -177,17 +184,17 @@ TTS.forms.deletecalevent = function(event_id) {
 
 $(document).ready(function() {
     TTS.forms.calendar = $('#calendar').fullCalendar({
-        selectable: true,
-        selectHelper: true,
-        resizable: true,
-        droppable: true,
-        editable:true,
         header:
         {
             left: 'prev,next today',
             center: 'title',
             right: 'month,agendaWeek,agendaDay'
         },
+        selectable: true,
+        selectHelper: true,
+        resizable: true,
+        droppable: true,
+        editable: true,
         events:{
             url:'/api/admin/calendar/'
         },
@@ -195,28 +202,32 @@ $(document).ready(function() {
         {
             TTS.forms.showcalform(start, end, allDay);
         },
-        eventDrop: function (event, dayDelta, minuteDelta, jsEvent, ui, view) {
-            alert(event.title + " was dropped on " + event.start.format());
+        eventDrop: function (event,delta,revertFunc) {
+            alert(event.title + " was dropped on " + event.start.format("YYYY-MM-DD hh:mm"));
             if (confirm("Are you sure about this change?")) {
-                TTS.forms.updatecalevent(event);
-            }
-        },
-        eventResize: function (event, delta, revertFunc) {
-            alert(event.title + " end is now " + event.end.format());
-            if (confirm("Are you sure want this change?")) {
-                TTS.forms.updatecalevent(event);
+                TTS.forms.updatecalevent(event,"event_drop");
             }else{
                 revertFunc();
             }
+        },
+        eventResize: function (event, delta, revertFunc) {
+            /*alert(event.title + " end is now " + event.end.format("YYYY-MM-DD hh:mm"));
+            if (confirm("Are you sure want this change?")) {
+                TTS.forms.updatecalevent(event,"event_resize");
+            }else{
+                revertFunc();
+            } */
             
+            console.log(event);
+            console.log(event.start.format());
+
             /*
             console.log("Resize");
-            console.log(event);
             console.log(event.id);
             console.log(event.title);
             console.log(event.start.format());
-            console.log(event.end.format());*/
-            
+            console.log(event.end.format());
+            */
         },
         eventClick: function(calEvent, jsEvent, view) {
             TTS.forms.updatecalform(calEvent, jsEvent, view);
@@ -230,7 +241,6 @@ $(document).ready(function() {
                     TTS.forms.deletecalevent(event._id);
                 }
             });
-            //$(element).find(".fc-time").remove();
         }
         
     })

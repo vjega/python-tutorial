@@ -23,12 +23,6 @@
                     <h3>{% trans "Title" %}:</h3>
                 </div><br />
                 <div><h3 id="resource-title"></h3></div><br />
-                <div>
-                    <h3>{% trans "Announcer" %}:</h3>
-                </div><br />
-                <div><h3 id="resource-announcer"></h3></div>
-                <div id="resource-date"></div>
-                <br />
                 <div id="view-resource">
                 </div>
             </table>
@@ -46,18 +40,16 @@
 
 {% endblock morecss %}
 
-
-
 {% block morescript %}
+<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 
 {% endblock morescript %}
-
-
 {% block scriptcontent %}
 
 <script>
@@ -67,36 +59,17 @@ TTS.forms = TTS.forms || {}
 
 
 TTS.forms.renderteacherresourceinfo = function(data){
-    $("#resource-title").html(data.messagetitle);
-    $("#resource-announcer").html(data.message);
-    $("#resource-date").html(data.posteddate);
-    if (data.attachmenturl!=0) {
-        $("#view-resource").html("<a target='_blank' href='../static/"+data.attachmenturl+"'' >{% trans 'View' %}</a>");
-    }else {
-        $("#view-resource").html("{% trans 'No Attachement' %}</a>");
-    }
+    $("#resource-title").html(data[0].resourcetitle);
+    $("#view-resource").html("<a target='_blank' href='../static/"+data[0].fileurl+"'' >{% trans 'View' %}</a>");
     //console.log(data.resourcetype)
 
 };
 
-function getUrlParameter(sParam)
-{
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++) 
-    {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam) 
-        {
-            return sParameterName[1];
-        }
-    }
-}
-
 $(document).ready(function(){  
-    var id = getUrlParameter('id');
+    var id = TTS.utils.getUrlParameter('folderid');
+    var resourceid = TTS.utils.getUrlParameter('resourceid');
     $.ajax({
-        "url":"/api/admin/bulletinboardlist/"+id+"/?format=json",
+        "url":"/api/admin/adminresources/?folderid="+id+"&resource_id="+resourceid+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacherresourceinfo(data);

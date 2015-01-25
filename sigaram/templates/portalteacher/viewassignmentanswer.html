@@ -1,6 +1,14 @@
 {% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
+{% block topcontent %}
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Assignments" %}</h2>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+{% endblock topcontent %}
 {% block morecss %}
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
@@ -48,7 +56,9 @@
         background-color: #d3d3d3;
         font-weight: bold;
     }
-    
+    input#ttls{
+        color:#000;
+    } 
 </style>
 {% endblock morecss %}
 

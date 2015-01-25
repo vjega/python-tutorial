@@ -46,7 +46,7 @@ def user_landing(request):
         from portaladmin.models import Studentinfo
         t = Studentinfo.objects.filter(username=request.user.username)[0]
         request.session['schoolid'] = request.session['stu_schoolid'] = t.schoolid
-        request.session['classid'] =  request.session['stu_classid'] =  t.classid
+        request.session['classid']  = request.session['stu_classid']  = t.classid
         return redirect('/student/home')
 
     elif group == 'Admin':
