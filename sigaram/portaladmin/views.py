@@ -555,3 +555,11 @@ def classviewassignwrittenworkanswer(request):
 @switchlanguage
 def rubrics(request):
     return render(request, 'portaladmin/rubrics.html')
+
+@login_required
+@switchlanguage
+def viewteacherres(request):
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portaladmin/viewteacherres.html',
+                             {'schools':schools, 'classes':classes })

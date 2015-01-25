@@ -57,10 +57,10 @@
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<script id="teacherresource-form" type="text/x-jsrender">
+<!-- <script id="teacherresource-form" type="text/x-jsrender">
 <div id="file-uploader">File Uploader Comes Here...</div> 
 {% crispy form %}
-</script>
+</script>-->
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
@@ -81,7 +81,7 @@ TTS.forms.addteacherresource = function(form, data) {
     });
 }
 
-TTS.forms.showteacherresource = function() {
+/*TTS.forms.showteacherresource = function() {
     BootstrapDialog.show({
         title: '{% trans "Teacher" %} {% trans "Resources" %}',
         message: $($('#teacherresource-form').render()),
@@ -105,7 +105,7 @@ TTS.forms.showteacherresource = function() {
         }]
     });
 };
-
+*/
 TTS.forms.delteacherres = function(id) {
     $.ajax({
         headers : {
@@ -165,7 +165,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
 
 };
 
-TTS.forms.upload = function(elm) {
+/*TTS.forms.upload = function(elm) {
     //console.log(elm);
     var uploader = new qq.FileUploader({
         action: "/admin/student-teacherres-upload",
@@ -187,7 +187,7 @@ TTS.forms.upload = function(elm) {
             'csrf_xname': 'X-CSRFToken',
         },
     });
-};
+};*/
 
 var updateChapter = function(){
     $.ajax({
@@ -230,7 +230,8 @@ $(document).ready(function(){
     });
 
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.showteacherresource();
+        window.location =' viewteacherres?teacherresourceid='+this.id;
+        //TTS.forms.showteacherresource();
     });
     $("body").on('change', '#id_classid', function(){
         updateChapter();
