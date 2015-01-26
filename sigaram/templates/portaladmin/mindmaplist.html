@@ -59,13 +59,14 @@
 window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
 
-TTS.forms.deladmin = function(id) {
+TTS.forms.delmindmap = function(id) {
     $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
         type:'DELETE',
         url : '/api/admin/mindmap/'+id
     }).done(function( msg ) {
-        console.log(msg);
-        return false;
         location.reload();
     }).error(function(msg){
         alert("Something Bad Happended");
@@ -123,9 +124,7 @@ $(document).ready(function(){
         if (!window.confirm("Do you want to delete this record?")) {
             return false;
         }
-        //alert($(this).parent().parent().prop("id"));
-        TTS.forms.deladmin($(this).parent().parent().prop("id"));
-        window.location.reload();
+        TTS.forms.delmindmap($(this).parent().parent().prop("id"));
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         window.location = "/admin/mindmapedit?new=true"
