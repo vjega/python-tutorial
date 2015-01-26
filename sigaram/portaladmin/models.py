@@ -366,18 +366,21 @@ class Bulletinboardinfo(models.Model):
         fieldcond=""
         joincond=""
         wherecond = ""
-        if l == 'Admin' or l == 'Teacher' :
+        if l == 'Admin' :
             fieldcond="au.first_name AS postedby"
             joincond="INNER JOIN auth_user au ON au.username = bmi.userid"
-            wherecond = "bmi.userid = '%s'"%req.user.username
+        elif l == 'Teacher' :
+            fieldcond="au.first_name AS postedby"
+            joincond="INNER JOIN auth_user au ON au.username = bmi.userid"
+            wherecond = "WHERE bmi.userid = '%s'"%req.user.username
+        
         else:
             fieldcond="'' AS postedby"
             joincond=""
-            wherecond = """bmi.schoolid = '%s'
+            wherecond = """WHERE bmi.schoolid = '%s'
                            AND bmi.classid = '%s' 
                         """%(req.session.get('stu_schoolid'), 
                              req.session.get('stu_classid'))
-        
         sql = """
         SELECT  bbi.bulletinboardid,
                 bbi.messagetitle,
@@ -387,10 +390,11 @@ class Bulletinboardinfo(models.Model):
         FROM bulletinboardinfo bbi
         INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
         %s
-        WHERE %s
+        %s
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
         LIMIT 10"""% (fieldcond,joincond,wherecond)
+        print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         x = dictfetchall(cursor)

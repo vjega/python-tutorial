@@ -21,12 +21,12 @@ class StudentForm(forms.Form):
         required = True,
         widget = forms.TextInput({ "placeholder": "%s %s"%(_("First"),_("Name"))})
     )
-    # lastname = forms.CharField(
-    #     label = "%s %s"%(_("last"),_("Name")),
-    #     max_length = 100,
-    #     required = True,
-    #     widget = forms.TextInput({ "placeholder": "%s %s"%(_("Last"),_("Name"))})
-    # )
+    lastname = forms.CharField(
+        label = "%s %s"%(_("last"),_("Name")),
+        max_length = 100,
+        required = True,
+        widget = forms.TextInput({ "placeholder": "%s %s"%(_("Last"),_("Name"))})
+    )
     username = forms.CharField(
         label = _("User Name"),
         max_length = 100,
