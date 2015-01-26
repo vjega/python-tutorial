@@ -93,5 +93,7 @@ urlpatterns = patterns('portaladmin.views',
     url(r'^viewteacherres$',         'viewteacherres',  name='viewteacherres'),
     url(r'^viewstudentres$',         'viewstudentres',  name='viewstudentres'),
     url(r'^addstickynote$',          'addstickynote',    name='addstickynote'),
+    url(r'^summernote_image_test$',  'summernote_image_test',    
+                                                        name='summernote_image_test'),
     #(r'^api/', include(v1_api.urls)),
 )
