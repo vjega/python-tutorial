@@ -1093,7 +1093,8 @@ class StickynotesResource(viewsets.ModelViewSet):
         %s
         GROUP BY s.id, 
                  s.stickytext,
-                 s.color''' %wherecond
+                 s.color
+        ORDER BY s.createddate DESC''' %wherecond
         #print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -1105,11 +1106,9 @@ class StickynotesResource(viewsets.ModelViewSet):
         return Response(result)
 
     def create(self, request):
-        print '*'*40
-        print request.GET.get('id')
         stickynotes = models.stickynotes()
         data = json.loads(dict(request.DATA).keys()[0])
-        stickynotes.stickylistid = request.GET.get('id')
+        stickynotes.stickylistid = data.get('stickylistid')
         stickynotes.stickytext = data.get('stickytext')
         stickynotes.name = data.get('name')
         stickynotes.xyz = data.get('xyz')
@@ -1820,7 +1819,7 @@ class ExtraslistViewSet(viewsets.ModelViewSet):
 
 class StickyinfoViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Stickyinfo.objects.all()
+    queryset = models.Stickyinfo.objects.filter().order_by('-createddate')
     serializer_class = adminserializers.StickyinfoSerializer
 
     def create(self, request):
