@@ -794,6 +794,9 @@ class MindmapViewSet(viewsets.ModelViewSet):
         mm.save()
         return Response(request.DATA)
         
+    def destroy(self, request, pk):
+        models.Mindmap.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
 
 
 class StudentAssignResource(viewsets.ModelViewSet):

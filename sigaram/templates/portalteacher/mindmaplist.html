@@ -37,7 +37,9 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
-    #addrec:hover, .tts-delete:hover{
+    #addrec:hover, 
+    .tts-edit:hover, 
+    .tts-delete:hover{
         cursor: pointer;
     }
 </style>
@@ -81,10 +83,11 @@ TTS.forms.renderadmin = function(data){
               "data" : "slno"  
             },
             
-            { "title": "{% trans "Name" %}",
+            { "title": "{% trans "Title" %}",
               "data" : "title"
             }, 
-            { "title": "{% trans "Name" %}",
+            { "title": "{% trans "Edit" %}",
+              "class": "text-center",
               "data" : "edi"
             }, 
             { "title": "{% trans "Delete" %}",
