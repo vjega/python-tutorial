@@ -1075,8 +1075,11 @@ class StickynotesResource(viewsets.ModelViewSet):
     serializer_class = adminserializers.StickynotesSerializer
 
     def list(self, request):
-       # print '*'*40
+        # print '*'*40
         #print request.GET.get('id')
+        wherecond=""
+        if request.GET.get('id'):
+           wherecond=" WHERE s.stickylistid='%s'" %request.GET.get('id')
         sql = '''
         SELECT s.id,
                 s.stickylistid,
@@ -1087,10 +1090,11 @@ class StickynotesResource(viewsets.ModelViewSet):
             group_concat(sc.createddate SEPARATOR "~") as createddate
         FROM stickynotes s
         LEFT JOIN stickycomments sc ON sc.stickyid = s.id
-        WHERE s.stickylistid='%s'
+        %s
         GROUP BY s.id, 
                  s.stickytext,
-                 s.color''' %request.GET.get('id')
+                 s.color''' %wherecond
+        #print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -1101,6 +1105,7 @@ class StickynotesResource(viewsets.ModelViewSet):
         return Response(result)
 
     def create(self, request):
+        print '*'*40
         print request.GET.get('id')
         stickynotes = models.stickynotes()
         data = json.loads(dict(request.DATA).keys()[0])
@@ -1271,7 +1276,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
         LIMIT 10"""% (fieldcond,joincond,wherecond)
-        print sql;
+        #print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description

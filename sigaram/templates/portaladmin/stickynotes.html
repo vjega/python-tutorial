@@ -295,6 +295,13 @@
 {% endblock morescript %}
 
 {% block scriptcontent %}
+<script id="sticky-form" type="text/x-jsrender">
+    {% crispy form %}
+</script>
+
+<script id="stickycomment-form" type="text/x-jsrender">
+    {% crispy Cform %}
+</script>
 
 <script id="sticky-text" type="text/sticky">
 <div class='color_container'>
@@ -307,10 +314,11 @@
 <script>
 window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
-TTS.id=TTS.utils.getUrlParameter("id");
+
 /* End of Admin CRUD */
 
 TTS.forms.addstickynote = function(form, data) {
+    alert(data)
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -319,6 +327,7 @@ TTS.forms.addstickynote = function(form, data) {
         data: data,
         url : '/api/admin/stickynotes/'
     }).done(function( msg ) {
+        alert()
         form.close();
         location.reload();
         //dialogItself.close();
@@ -534,15 +543,13 @@ TTS.forms.renderstickynotes = function(data){
 $(document).ready(function(){
   
     $("#page-wrapper").on("click", "#addrec", function(){
-        //TTS.forms.showstickyform();
-        //TTS.utils.ajaxloaderstop();
-        window.location="addstickynote?id"+TTS.utils.getUrlParameter("id");
+        TTS.forms.showstickyform();
+        TTS.utils.ajaxloaderstop();
     });
 
     TTS.utils.ajaxloaderstart();
     $.ajax({
-        //'url': "/api/admin/stickynotes/"+TTS.id,
-        'url': "/api/admin/stickynotes/",
+        "url":"/api/admin/stickynotes/?id="+TTS.utils.getUrlParameter("id")+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstickynotes(data);
