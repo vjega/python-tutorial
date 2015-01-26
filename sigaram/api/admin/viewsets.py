@@ -1071,6 +1071,9 @@ class StickynotesResource(viewsets.ModelViewSet):
     serializer_class = adminserializers.StickynotesSerializer
 
     def list(self, request):
+        wherecond=''
+        if request.GET.get('id'):
+            wherecond="WHERE s.stickylistid=%s" % request.GET.get('id')
         sql = '''
         SELECT s.id,
             s.stickytext,
@@ -1080,6 +1083,7 @@ class StickynotesResource(viewsets.ModelViewSet):
             group_concat(sc.createddate SEPARATOR "~") as createddate
         FROM stickynotes s
         LEFT JOIN stickycomments sc ON sc.stickyid = s.id
+        %s
         GROUP BY s.id, 
                  s.stickytext,
                  s.color, 
