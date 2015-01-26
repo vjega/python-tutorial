@@ -52,33 +52,6 @@ class TopicinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Topicinfo.objects .all()
     serializer_class = forumserializers.TopicinfoSerializer
 
-    def list(self, request):
-        forumid = request.GET.get('forumid')
-        forumname = request.GET.get('forumname')
-        replyid =request.GET.get('replyid')
-        sql = """
-        SELECT topicid,
-                forumid,
-                topicname,
-                totalpost,
-                date(lastposteddate) as lastposteddate,
-                lastpostedby,
-                firstname,
-                totalpost 
-        FROM topicinfo ti 
-        LEFT OUTER JOIN logininfo li ON li.loginid = ti.lastpostedby 
-        WHERE ti.forumid=%s
-        ORDER BY topicid """ % forumid
-        cursor = connection.cursor()
-        #print sql
-        cursor.execute(sql)
-        desc = cursor.description
-        result =  [
-                dict(zip([col[0] for col in desc], row))
-                for row in cursor.fetchall()
-            ]
-        return Response(result)
-
     def create(self, request):
         topicinfo = models.Topicinfo()
         topicinfodata =  json.loads(request.DATA.keys()[0])
@@ -87,6 +60,7 @@ class TopicinfoViewSet(viewsets.ModelViewSet):
         topicinfo.topicname = topicinfodata.get('topicname',0)
         topicinfo.totaltopic = topicinfodata.get('totaltopic',0)
         topicinfo.totalpost = topicinfodata.get('totalpost',0)
+        topicinfo.topicdetails = topicinfodata.get('topicdetails',0)
         topicinfo.createdby = request.user.id
         topicinfo.lastpostedby = request.user.id
         topicinfo.lastposteddate = time.strftime('%Y-%m-%d %H:%M:%S')
