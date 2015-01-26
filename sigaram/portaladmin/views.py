@@ -269,6 +269,7 @@ def viewstudentresourcelist(request):
                   })
 
 @login_required
+@switchlanguage
 def viewstudentwrittenworks(request):
     viewstudentwrittenworks_head = [('Sl No.'),
                          _('Name'),

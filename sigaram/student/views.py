@@ -312,30 +312,35 @@ def viewassignresource(request):
 def viewassignmentanswer(request):
     return render(request, 'portalstudent/viewassignmentanswer.html') 
 
-@switchlanguage
+@login_required
 @switchlanguage
 def stickynotes(request):
     return render(request, 'portalstudent/stickynotes.html', 
                                         {'form':StickyForm.StickyForm(),
                                          'Cform':StickyCommentForm.StickyCommentForm()
                                          })    
+@login_required
 @switchlanguage
 def billboard(request):
     return render(request, 'portalstudent/billboard.html')
 
+@login_required
 @switchlanguage
 def billviewassignmentanswer(request):
     return render(request, 'portalstudent/billviewassignmentanswer.html')
 
+@login_required
 @switchlanguage
 def bulletinboardlist(request):
     return render(request, 'portalstudent/bulletinboardlist.html')
 
+@login_required
 @switchlanguage
 def bulletinboardlist(request):
     return render(request, 'portalstudent/bulletinboardlist.html')
 
 
+@login_required
 @switchlanguage
 def studentresourceunits(request):
     return render(request, 'portalstudent/studentresourceunits.html',
@@ -343,6 +348,7 @@ def studentresourceunits(request):
                    'section': request.GET.get('section')    
                   })
 
+@login_required
 @switchlanguage
 def studentresourcelist(request):
     return render(request, 'portalstudent/studentresourcelist.html')

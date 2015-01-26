@@ -555,12 +555,17 @@ def viewtopic(request):
    foruminfo = models.Foruminfo.objects.all()
    return render(request, 'portalteacher/viewtopic.html')
 
+@login_required
+@switchlanguage
 def viewpost(request):
     return render(request, 'portalteacher/viewpost.html')
 
+@login_required
+@switchlanguage
 def newtopic(request):
     return render(request, 'portalteacher/newtopic.html', {"form" : NewtopicForm.NewtopicForm()})
 
+@login_required
 @switchlanguage
 def classviewassignmentanswer(request):
     return render(request, 'portalteacher/classviewassignmentanswer.html')
@@ -570,6 +575,7 @@ def classviewassignmentanswer(request):
 def viewbulletinboard(request):
     return render(request, 'portalteacher/viewbulletinboard.html')
 
+@login_required
 @switchlanguage
 def viewassignwrittenwork(request):
     return render(request, 'portalteacher/viewassignwrittenwork.html')
@@ -618,6 +624,8 @@ def assignmindmap(request):
     return render(request, 'portalteacher/assignmindmap.html',{'schools':schools,'classes':classes})
 
 
+@login_required
+@switchlanguage
 def assignedmindmaplist(request):
     return render(request, 'portalteacher/assignedmindmaplist.html')
 
