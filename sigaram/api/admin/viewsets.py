@@ -77,7 +77,6 @@ class TeacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
     serializer_class = adminserializers.TeacherinfoSerializer
     def list(self, request):
-
         schoolid =  request.GET.get('schoolid')
         classid  =  request.GET.get('classid')
         username = request.GET.get('username')
@@ -131,12 +130,6 @@ class TeacherViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, pk=None):
         # print "Hi"
         pass
-
-    def retrieve(self, request, pk=None):
-        queryset = models.Teacherinfo.objects.filter(username=request.user.username)[0]
-        serializer = adminserializers.TeacherinfoSerializer(queryset, many=False)
-        return Response(serializer.data)
-        
 
     @delete_login('Teacher')
     def destroy(self, request, pk):
