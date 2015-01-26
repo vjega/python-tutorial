@@ -129,6 +129,10 @@ TTS.forms.renderviewfourminfo = function(data){
               "data" : "topicname" ,
               "class": "viewtopicname" 
             },
+            { "title": "{% trans "Topic details" %}",
+              "data" : "topicdetails" ,
+              "class": "topicdetails" 
+            },
             { "title": "{% trans "Total Comments" %}",
               "data" : "totalpost"  
             },
@@ -149,10 +153,12 @@ TTS.forms.renderviewfourminfo = function(data){
         t.slno = ++count;
         t.topicname = data[i].topicname;
         t.totalpost = data[i].totalpost;
+        t.topicdetails = data[i].topicdetails;
         t.lastpostedby = data[i].lastpostedby;
         t.lastposteddate = data[i].lastposteddate;
         dataset.push(t);
     }
+    console.log(dataset);
 
     $('#viewforum-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
@@ -163,7 +169,8 @@ TTS.forms.renderviewfourminfo = function(data){
 
 $(document).ready(function(){
     $.ajax({
-        "url":"/api/forum/topicinfo/?forumid="+TTS.utils.getUrlParameter("forumid")+"&format=json",
+        //"url":"/api/forum/topicinfo/?forumid="+TTS.utils.getUrlParameter("forumid")+"&format=json",
+        "url":"/api/forum/topicinfo/?format=json",
         "type":"GET"
     }).done(function(data){
         if (data.length) {
@@ -180,12 +187,12 @@ $(document).ready(function(){
         var myString = this.id;
         var arr = myString.split('/');
 
-        window.location ='viewpost?forumid='+arr[0]+'&topicid='+arr[1]+'&topicname='+$($(this).find(".viewtopicname")[0]).text()+'&forumname='+TTS.utils.getUrlParameter("forumname");
+        window.location ='viewpost?topicid='+arr[1]+'&topicname='+$($(this).find(".viewtopicname")[0]).text();
         //console.log(this.id);
     });
 
     $("#wrapper").on("click", "#addrec", function(){
-        window.location ='newtopic?forumid='+TTS.utils.getUrlParameter("forumid")+'&forumname='+TTS.utils.getUrlParameter("forumname");
+        window.location ='newtopic'
     });
 
     $("#page-wrapper").on("click", "#addrec", function(){

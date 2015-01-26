@@ -274,8 +274,7 @@ TTS.forms.renderviewforum = function(data){
     var t = {};
     $("#topic_header").html(data[0].topicname);
     $("#topic_header_posteddate").html("On "+data[0].topic_createddate);
-    //$("#topic_details").html(data[0].topicdetails);
-    $("#topic_details").html("DB The new release of windows 10 has a brand new browser. Do you think that this will change the fortune of Internet Explore and Microsoft share in browser marker?");
+    $("#topic_details").html(data[0].topicdetails);
     $("#topic_posteddate").html("On "+data[0].parent_posteddate);
     for(var i in data){
         /*t.postdetails = data[i].postdetails;
