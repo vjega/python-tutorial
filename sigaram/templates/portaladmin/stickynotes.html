@@ -1,4 +1,4 @@
-{% extends 'portalteacher/base.html' %}
+{% extends 'portaladmin/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% load crispy_forms_tags %}
@@ -295,6 +295,13 @@
 {% endblock morescript %}
 
 {% block scriptcontent %}
+<script id="sticky-form" type="text/x-jsrender">
+    {% crispy form %}
+</script>
+
+<script id="stickycomment-form" type="text/x-jsrender">
+    {% crispy Cform %}
+</script>
 
 <script id="sticky-text" type="text/sticky">
 <div class='color_container'>
@@ -311,6 +318,7 @@ TTS.forms = TTS.forms || {};
 /* End of Admin CRUD */
 
 TTS.forms.addstickynote = function(form, data) {
+    alert(data)
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -319,6 +327,7 @@ TTS.forms.addstickynote = function(form, data) {
         data: data,
         url : '/api/admin/stickynotes/'
     }).done(function( msg ) {
+        alert()
         form.close();
         location.reload();
         //dialogItself.close();
@@ -534,9 +543,8 @@ TTS.forms.renderstickynotes = function(data){
 $(document).ready(function(){
   
     $("#page-wrapper").on("click", "#addrec", function(){
-        //TTS.forms.showstickyform();
-        //TTS.utils.ajaxloaderstop();
-        window.location="addstickynote?id="+TTS.utils.getUrlParameter("id");
+        TTS.forms.showstickyform();
+        TTS.utils.ajaxloaderstop();
     });
 
     TTS.utils.ajaxloaderstart();
