@@ -25,42 +25,13 @@
             <div class="pull-right">
                 <input type="button" id="main_thread_reply" class="btn btn-primary" value="Reply to thread" />
             </div>
-            <div id="comments">
-                
-            </div>
         </div>
-        <!-- /.panel-body -->
-    </div>
+        <div id="comments">
+        </div>
+        <div id="comments">
+        </div>
     <!-- /.panel -->
 </div>
-<div class="row reply_textarea">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            {% trans "Title" %} Main thread Reply
-        </div>
-        <!-- /.panel-heading -->
-        <div class="panel-body">
-            <div class="form-group col-sm-12">
-                <div class="controls col-sm-12">
-                    <textarea id="thread_reply_textarea" placeholder="Thread reply" rows="6" id="detail_content" class="textinput textInput form-control"></textarea> 
-                </div>
-            </div>
-            <div class="form-group col-sm-12">
-                <div class="controls col-sm-11">
-                </div>
-                <div class="controls col-sm-1">
-                    <button class="btn btn-primary center-block" id="save_main_thread_reply">Save</button>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- /.panel-body -->
-    </div>
-    <!-- /.panel -->
-    
-</div>
-
 {% endblock botcontent%}
 
 {% block morecss %}
@@ -75,6 +46,10 @@
 
     .reply_textarea, .hide_comment{
         display:none;
+    }
+
+    .reply_comment{
+       cursor:pointer;
     }
 
 </style>
@@ -106,9 +81,10 @@ TTS.forms.renderviewforum = function(data){
 };
 
 TTS.forms.processcomment = function (obj) {
-    c = "<ul>";
+    console.log(obj);
+    c = "<ul class='forum'>";
     for (var i in obj['comments']) {
-        c += "<li>"+obj['comments'][i]['comment']+"<i class='fa fa-reply'></i></li>";
+        c += "<li><img src='http://placehold.it/50x50'> "+obj['comments'][i]['postdetails']+" <i class='fa fa-reply reply_comment'></i></li>";
         if (typeof (obj['comments'][i]['comments']) !== 'undefined' 
             && obj['comments'][i]['comments'].length ){
             c += TTS.forms.processcomment(obj['comments'][i]);
@@ -119,21 +95,28 @@ TTS.forms.processcomment = function (obj) {
 }
 
 $(document).ready(function(){
-   
     $.ajax({
         "url":"/api/admin/topicinfo/"+TTS.utils.getUrlParameter('topicid')+"/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderviewforum(data);
-    }); 
+    });
+
+    setTimeout(function(){ new_test(); }, 100); 
 });
-  
-$(".reply_comment").click(function (){
-    var id = $(this).attr("alt");
-    var name = $(this).attr("name");
-    $(".comment_text_area_"+id).toggle("slow");
-    $("#comment_reply_textarea_"+id).attr("name",name)
-});
+
+
+var new_test = function (){ 
+    $(".reply_comment").click(function (){
+        console.log();
+        $(".reply_textarea").hide("slow");
+        var id = $(this).attr("alt");
+        var name = $(this).attr("name");
+        $(".comment_text_area").toggle("slow");
+        //$(".comment_text_area"+id).toggle("slow");
+        //$("#comment_reply_textarea_"+id).attr("name",name)
+    });
+} 
 
 $(".save_comment_reply").click(function (){
     var id = $(this).attr("alt");
@@ -164,7 +147,7 @@ $("#save_main_thread_reply").click(function (){
    var jsondata ={
             postdetails : $("#thread_reply_textarea").val(),
             topicid : TTS.utils.getUrlParameter("topicid"),
-            forumid : TTS.utils.getUrlParameter("forumid"),
+            forumid : TTS.utils.getUrlParameter("topicid"),
             parentid :0
         };
    $.ajax({

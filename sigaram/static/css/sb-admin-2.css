@@ -580,3 +580,7 @@ ul.forum, ul.forum ul{
 ul.forum li {
     line-height: 60px;
 }
+
+.reply_comment{
+    cursor:pointer;
+}

@@ -77,7 +77,6 @@ class TeacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
     serializer_class = adminserializers.TeacherinfoSerializer
     def list(self, request):
-
         schoolid =  request.GET.get('schoolid')
         classid  =  request.GET.get('classid')
         username = request.GET.get('username')
@@ -131,12 +130,6 @@ class TeacherViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, pk=None):
         # print "Hi"
         pass
-
-    def retrieve(self, request, pk=None):
-        queryset = models.Teacherinfo.objects.filter(username=request.user.username)[0]
-        serializer = adminserializers.TeacherinfoSerializer(queryset, many=False)
-        return Response(serializer.data)
-        
 
     @delete_login('Teacher')
     def destroy(self, request, pk):
@@ -1078,14 +1071,11 @@ class StickynotesResource(viewsets.ModelViewSet):
     serializer_class = adminserializers.StickynotesSerializer
 
     def list(self, request):
-        # print '*'*40
-        #print request.GET.get('id')
-        wherecond=""
+        wherecond=''
         if request.GET.get('id'):
-           wherecond=" WHERE s.stickylistid='%s'" %request.GET.get('id')
+            wherecond="WHERE s.stickylistid=%s" % request.GET.get('id')
         sql = '''
         SELECT s.id,
-                s.stickylistid,
             s.stickytext,
             s.color,
             group_concat(sc.stickycomment SEPARATOR "~") as comments,
@@ -1096,6 +1086,7 @@ class StickynotesResource(viewsets.ModelViewSet):
         %s
         GROUP BY s.id, 
                  s.stickytext,
+                 s.color, 
                  s.color
         ORDER BY s.createddate DESC''' %wherecond
         #print sql;
@@ -1107,7 +1098,6 @@ class StickynotesResource(viewsets.ModelViewSet):
                 for row in cursor.fetchall()
             ]
         return Response(result)
-
     def create(self, request):
         stickynotes = models.stickynotes()
         data = json.loads(dict(request.DATA).keys()[0])
@@ -1138,11 +1128,6 @@ class StickynotesResource(viewsets.ModelViewSet):
     def destroy(self, request, pk):
         models.stickynotes.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
-
-    def retrieve(self, request, pk=None):
-        queryset = models.stickynotes.objects.filter(pk=pk)[0]
-        serializer = adminserializers.StickynotesSerializer(queryset, many=False)
-        return Response(serializer.data)
 
 class StudentinfoViewSet(viewsets.ModelViewSet):
 
@@ -1248,18 +1233,14 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         fieldcond=""
         joincond=""
         wherecond = ""
-        if l == 'Admin' :
+        if l == 'Admin' or l == 'Teacher' :
             fieldcond="au.first_name AS postedby"
             joincond="INNER JOIN auth_user au ON au.username = bmi.userid"
-        elif l == 'Teacher' :
-            fieldcond="au.first_name AS postedby"
-            joincond="INNER JOIN auth_user au ON au.username = bmi.userid"
-            wherecond = "WHERE bmi.userid = '%s'"%request.user.username
-        
+            wherecond = "bmi.userid = '%s'"%request.user.username
         else:
             fieldcond="'' AS postedby"
             joincond=""
-            wherecond = """WHERE bmi.schoolid = '%s'
+            wherecond = """bmi.schoolid = '%s'
                            AND bmi.classid = '%s' 
                         """%(request.session.get('stu_schoolid'), 
                              request.session.get('stu_classid'))
@@ -1274,11 +1255,11 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         FROM bulletinboardinfo bbi
         INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
         %s
-        %s
+        WHERE %s
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
         LIMIT 10"""% (fieldcond,joincond,wherecond)
-        #print sql;
+        # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -2754,6 +2735,21 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
     queryset = models.Topicinfo.objects .all()
     serializer_class = adminserializers.TopicsSerializer
 
+    def treeify(self, flatlist, idAttr = 'postid', parentAttr = 'parentid', childrenAttr = 'comments'):
+
+        treeList = [];
+        lookup = {};
+        for fl in flatlist:
+            lookup[fl[idAttr]] = fl
+            fl[childrenAttr] = []
+        
+        for fl in flatlist:
+            try:
+                lookup[fl[parentAttr]][childrenAttr].append(fl)
+            except Exception as e:
+                treeList.append(fl)
+        return treeList
+
     def list(self, request):
         topicid = request.GET.get('topicid')
         topicname = request.GET.get('topicname')
@@ -2777,39 +2773,26 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         cursor.execute(sql)
         desc = cursor.description
         result = dict(zip([col[0] for col in desc], cursor.fetchone()))
-        result['comments'] = [
-            {'name':'jega',
-            'date':'2015-01-26',
-            'comment':'I dont agree',
-            'comments' : [
-                {'name':'deepak',
-                'date':'2015-01-26',
-                'comment':'I dont agree'
-                },
-                {'name':'mala',
-                'date':'2015-01-26',
-                'comment':'I dont agree',
-                'comments':[
-                    {'name':'deepak',
-                    'date':'2015-01-26',
-                    'comment':'I dont agree'
-                    }
-                    ]
-                }
-
-            ]
-            },
-            {'name':'deepak',
-            'date':'2015-01-26',
-            'comment':'I second comment'
-            },
-            {'name':'mala',
-            'date':'2015-01-26',
-            'comment':'I third agree'
-            },
-        ] 
-        
+        sql = '''
+        SELECT   p.postid,
+                   p.postdetails,
+                   p.parentid,
+                   p.posteddate as parent_posteddate,
+                   p.parentid,
+                   p.postedby
+            FROM postinfo p
+            WHERE p.topicid = '1'
+        '''
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result_comment = [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+        result['comments'] = self.treeify(result_comment)
         return Response(result)
+    
     def create(self, request):
         topics = models.Topicinfo()
         topicinfodata =  json.loads(request.DATA.keys()[0])
