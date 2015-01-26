@@ -182,7 +182,8 @@ TTS.forms.renderstudentlist = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false  
             },
             { "title": "{% trans "Photo" %}",
               "class": "text-center",  
@@ -201,12 +202,14 @@ TTS.forms.renderstudentlist = function(data){
             }, 
             { "title": "{% trans "Edit" %}",
               "class": "text-center",
-              "data" : "edit"  
+              "data" : "edit",
+              "bSortable":false  
 
             }, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center",
-              "data" : "delete"  
+              "data" : "delete",
+              "bSortable":false  
             }, 
         ];
     var dataset = [];
@@ -276,6 +279,7 @@ $(document).ready(function(){
         // if (data.length) {
         TTS.forms.renderstudentlist(data);
         TTS.utils.ajaxloaderstop();
+         $("table#student-main-tbl thead tr th").removeClass('sorting_asc');
         // } else {
             //TTS.forms.table.fnClearTable();
         //}
