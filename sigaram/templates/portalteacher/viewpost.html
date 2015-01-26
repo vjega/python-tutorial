@@ -25,10 +25,23 @@
             <div class="pull-right">
                 <input type="button" id="main_thread_reply" class="btn btn-primary" value="Reply to thread" />
             </div>
-        </div>
-        <div id="comments">
-        </div>
-        <div id="comments">
+            <br />
+            <br />
+            <div class="reply_textarea">
+                <div class="form-group col-sm-12">
+                    <div class="controls col-sm-12">
+                        <textarea id="thread_reply_textarea" placeholder="Thread reply" rows="3" id="detail_content" class="textinput textInput form-control"></textarea> 
+                    </div>
+                </div>
+                <div class="form-group col-sm-12">
+                    <div class="controls col-sm-11">
+                    </div>
+                    <div class="controls col-sm-1">
+                        <button class="btn btn-primary center-block" id="save_main_thread_reply">Save</button>
+                    </div>
+                </div>
+            </div>
+            <div id="comments"></div>
         </div>
     <!-- /.panel -->
 </div>
@@ -51,6 +64,10 @@
     .reply_comment{
        cursor:pointer;
     }
+    .user_details{
+        color: grey;
+        font-style: italic;
+    }
 
 </style>
 {% endblock morecss %}
@@ -63,6 +80,17 @@
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
 <script src="{% static "js/tts.utils.js" %}"></script>
+
+<script id="render-textarea" type="text/forum">
+    <div class="comment_text_area form-group panel-body">
+        <div class="form-group row">
+            <textarea class="comment_reply_textarea textinput form-control" placeholder="Reply..."
+            rows="2"></textarea> 
+        </div>
+        <button class="save_comment_reply btn btn-primary center-block pull-right">Save</button>
+    </div>
+</script>
+
 {% endblock morescript %}
 
 {% block scriptcontent %}
@@ -81,10 +109,9 @@ TTS.forms.renderviewforum = function(data){
 };
 
 TTS.forms.processcomment = function (obj) {
-    console.log(obj);
     c = "<ul class='forum'>";
     for (var i in obj['comments']) {
-        c += "<li><img src='http://placehold.it/50x50'> "+obj['comments'][i]['postdetails']+" <i class='fa fa-reply reply_comment'></i></li>";
+        c += "<li><img src='{% static "img/blank_img.png" %}'> "+obj['comments'][i]['postdetails']+" <span class='user_details'> "+obj['comments'][i]['postedby']+" says on: "+obj['comments'][i]['posteddate']+"</span> &nbsp;&nbsp;<i class='fa fa-reply reply_comment' name='"+obj['comments'][i]['postid']+"'></i> <div id='new_div' style='display: none;'></div></li>";
         if (typeof (obj['comments'][i]['comments']) !== 'undefined' 
             && obj['comments'][i]['comments'].length ){
             c += TTS.forms.processcomment(obj['comments'][i]);
@@ -101,30 +128,20 @@ $(document).ready(function(){
     }).done(function(data){
         TTS.forms.renderviewforum(data);
     });
-
-    setTimeout(function(){ new_test(); }, 100); 
 });
 
+$("body").one("click",".reply_comment" ,function (){
+    var postid = $(this).attr("name");
+    $(this).parent().append($("#render-textarea").text());
+    $(this).parent().find('textarea').attr("name",postid);
+});
 
-var new_test = function (){ 
-    $(".reply_comment").click(function (){
-        console.log();
-        $(".reply_textarea").hide("slow");
-        var id = $(this).attr("alt");
-        var name = $(this).attr("name");
-        $(".comment_text_area").toggle("slow");
-        //$(".comment_text_area"+id).toggle("slow");
-        //$("#comment_reply_textarea_"+id).attr("name",name)
-    });
-} 
-
-$(".save_comment_reply").click(function (){
-    var id = $(this).attr("alt");
+$("body").on("click", ".save_comment_reply", function(){
     var jsondata ={
-            postdetails : $("#comment_reply_textarea_"+id).val(),
+            postdetails : $(this).parent().find("textarea").val(),
             topicid : TTS.utils.getUrlParameter("topicid"),
-            forumid : TTS.utils.getUrlParameter("forumid"),
-            parentid :$("#comment_reply_textarea_"+id).attr("name")
+            forumid : 0,
+            parentid :$(this).parent().find("textarea").attr("name")
         };
    $.ajax({
         headers : {
@@ -134,10 +151,10 @@ $(".save_comment_reply").click(function (){
         data: JSON.stringify(jsondata),
         url : '/api/admin/postinfo/'
     }).done(function( msg ) {
+        $(this).parent().find("textarea").val("");
         location.reload();
     });
-
-});
+})
 
 $("#main_thread_reply").click(function (){
     $(".reply_textarea").toggle("slow");
@@ -147,7 +164,6 @@ $("#save_main_thread_reply").click(function (){
    var jsondata ={
             postdetails : $("#thread_reply_textarea").val(),
             topicid : TTS.utils.getUrlParameter("topicid"),
-            forumid : TTS.utils.getUrlParameter("topicid"),
             parentid :0
         };
    $.ajax({
@@ -158,6 +174,7 @@ $("#save_main_thread_reply").click(function (){
         data: JSON.stringify(jsondata),
         url : '/api/admin/postinfo/'
     }).done(function( msg ) {
+        $("#thread_reply_textarea").val("");
         location.reload();
     });
 });
