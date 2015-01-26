@@ -2747,6 +2747,21 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
     queryset = models.Topicinfo.objects .all()
     serializer_class = adminserializers.TopicsSerializer
 
+    def treeify(self, flatlist, idAttr = 'postid', parentAttr = 'parentid', childrenAttr = 'comments'):
+
+        treeList = [];
+        lookup = {};
+        for fl in flatlist:
+            lookup[fl[idAttr]] = fl
+            fl[childrenAttr] = []
+        
+        for fl in flatlist:
+            try:
+                lookup[fl[parentAttr]][childrenAttr].append(fl)
+            except Exception as e:
+                treeList.append(fl)
+        return treeList
+
     def list(self, request):
         topicid = request.GET.get('topicid')
         topicname = request.GET.get('topicname')
@@ -2770,39 +2785,31 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         cursor.execute(sql)
         desc = cursor.description
         result = dict(zip([col[0] for col in desc], cursor.fetchone()))
-        result['comments'] = [
-            {'name':'jega',
-            'date':'2015-01-26',
-            'comment':'I dont agree',
-            'comments' : [
-                {'name':'deepak',
-                'date':'2015-01-26',
-                'comment':'I dont agree'
-                },
-                {'name':'mala',
-                'date':'2015-01-26',
-                'comment':'I dont agree',
-                'comments':[
-                    {'name':'deepak',
-                    'date':'2015-01-26',
-                    'comment':'I dont agree'
-                    }
-                    ]
-                }
 
-            ]
-            },
-            {'name':'deepak',
-            'date':'2015-01-26',
-            'comment':'I second comment'
-            },
-            {'name':'mala',
-            'date':'2015-01-26',
-            'comment':'I third agree'
-            },
-        ] 
-        
+        sql = '''
+        SELECT   p.postid,
+                   p.postdetails,
+                   p.parentid,
+                   p.posteddate as parent_posteddate,
+                   p.parentid,
+                   p.postedby,
+                   pp.postdetails,
+                   pp.posteddate as child_posteddate,
+                   pp.postedby                
+            FROM postinfo p
+            LEFT JOIN postinfo pp ON pp.parentid = p.postid
+        where p.topicid = '1'
+        '''
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result_comment = [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+        result['comments'] = self.treeify(result_comment)
         return Response(result)
+    
     def create(self, request):
         topics = models.Topicinfo()
         topicinfodata =  json.loads(request.DATA.keys()[0])
