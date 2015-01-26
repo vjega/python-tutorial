@@ -77,7 +77,6 @@ class TeacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
     serializer_class = adminserializers.TeacherinfoSerializer
     def list(self, request):
-
         schoolid =  request.GET.get('schoolid')
         classid  =  request.GET.get('classid')
         username = request.GET.get('username')
@@ -131,12 +130,6 @@ class TeacherViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, pk=None):
         # print "Hi"
         pass
-
-    def retrieve(self, request, pk=None):
-        queryset = models.Teacherinfo.objects.filter(username=request.user.username)[0]
-        serializer = adminserializers.TeacherinfoSerializer(queryset, many=False)
-        return Response(serializer.data)
-        
 
     @delete_login('Teacher')
     def destroy(self, request, pk):
@@ -794,6 +787,9 @@ class MindmapViewSet(viewsets.ModelViewSet):
         mm.save()
         return Response(request.DATA)
         
+    def destroy(self, request, pk):
+        models.Mindmap.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
 
 
 class StudentAssignResource(viewsets.ModelViewSet):
@@ -1086,7 +1082,10 @@ class StickynotesResource(viewsets.ModelViewSet):
         LEFT JOIN stickycomments sc ON sc.stickyid = s.id
         GROUP BY s.id, 
                  s.stickytext,
-                 s.color''' 
+                 s.color, 
+                 s.color
+        ORDER BY s.createddate DESC''' %wherecond
+        #print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -1098,7 +1097,7 @@ class StickynotesResource(viewsets.ModelViewSet):
     def create(self, request):
         stickynotes = models.stickynotes()
         data = json.loads(dict(request.DATA).keys()[0])
-        stickynotes.stickylistid = 0#data.get('stickytext')
+        stickynotes.stickylistid = data.get('stickylistid')
         stickynotes.stickytext = data.get('stickytext')
         stickynotes.name = data.get('name')
         stickynotes.xyz = data.get('xyz')
@@ -1800,7 +1799,7 @@ class ExtraslistViewSet(viewsets.ModelViewSet):
 
 class StickyinfoViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Stickyinfo.objects.all()
+    queryset = models.Stickyinfo.objects.filter().order_by('-createddate')
     serializer_class = adminserializers.StickyinfoSerializer
 
     def create(self, request):
@@ -2732,6 +2731,21 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
     queryset = models.Topicinfo.objects .all()
     serializer_class = adminserializers.TopicsSerializer
 
+    def treeify(self, flatlist, idAttr = 'postid', parentAttr = 'parentid', childrenAttr = 'comments'):
+
+        treeList = [];
+        lookup = {};
+        for fl in flatlist:
+            lookup[fl[idAttr]] = fl
+            fl[childrenAttr] = []
+        
+        for fl in flatlist:
+            try:
+                lookup[fl[parentAttr]][childrenAttr].append(fl)
+            except Exception as e:
+                treeList.append(fl)
+        return treeList
+
     def list(self, request):
         topicid = request.GET.get('topicid')
         topicname = request.GET.get('topicname')
@@ -2755,7 +2769,26 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         cursor.execute(sql)
         desc = cursor.description
         result = dict(zip([col[0] for col in desc], cursor.fetchone()))
+        sql = '''
+        SELECT   p.postid,
+                   p.postdetails,
+                   p.parentid,
+                   p.posteddate as parent_posteddate,
+                   p.parentid,
+                   p.postedby
+            FROM postinfo p
+            WHERE p.topicid = '1'
+        '''
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result_comment = [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+        result['comments'] = self.treeify(result_comment)
         return Response(result)
+    
     def create(self, request):
         topics = models.Topicinfo()
         topicinfodata =  json.loads(request.DATA.keys()[0])

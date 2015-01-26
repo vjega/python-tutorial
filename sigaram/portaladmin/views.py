@@ -575,3 +575,8 @@ def viewstudentres(request):
 @switchlanguage
 def addstickynote(request):
     return render(request, 'portaladmin/addstickynote.html')
+
+@login_required
+@switchlanguage
+def summernote_image_test(request):
+    return render(request, 'portaladmin/summernote_image_test.html')    

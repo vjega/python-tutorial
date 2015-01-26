@@ -28,47 +28,8 @@
         </div>
         <div id="comments">
         </div>
-        <div class="hide_comment comment_text_area form-group panel-body">
-            <div class="form-group col-sm-12">
-                <div class="controls col-sm-12">
-                    <textarea id="comment_reply_textarea" placeholder="Comment reply" rows="6" id="detail_content" class="textinput textInput form-control"></textarea> 
-                </div>
-            </div>
-            <div class="form-group col-sm-12">
-                <div class="controls col-sm-11">
-                </div>
-                <div class="controls col-sm-1">
-                    <button class="save_comment_reply btn btn-primary center-block" alt="{{x}}" id="save_comment_reply">Save</button>
-                </div>
+        <div id="comments">
         </div>
-
-        <!-- /.panel-body -->
-    </div>
-    <!-- /.panel -->
-</div>
-
-<div class="reply_textarea">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            {% trans "Title" %} Main thread Reply
-        </div>
-        <!-- /.panel-heading -->
-        <div class="panel-body">
-            <div class="form-group col-sm-12">
-                <div class="controls col-sm-12">
-                    <textarea id="thread_reply_textarea" placeholder="Thread reply" rows="6" id="detail_content" class="textinput textInput form-control"></textarea> 
-                </div>
-            </div>
-            <div class="form-group col-sm-12">
-                <div class="controls col-sm-11">
-                </div>
-                <div class="controls col-sm-1">
-                    <button class="btn btn-primary center-block" id="save_main_thread_reply">Save</button>
-                </div>
-            </div>
-        </div>
-        <!-- /.panel-body -->
-    </div>
     <!-- /.panel -->
 </div>
 {% endblock botcontent%}
@@ -120,9 +81,10 @@ TTS.forms.renderviewforum = function(data){
 };
 
 TTS.forms.processcomment = function (obj) {
+    console.log(obj);
     c = "<ul class='forum'>";
     for (var i in obj['comments']) {
-        c += "<li><img src='http://placehold.it/50x50'> "+obj['comments'][i]['comment']+" <i class='fa fa-reply reply_comment'></i></li>";
+        c += "<li><img src='http://placehold.it/50x50'> "+obj['comments'][i]['postdetails']+" <i class='fa fa-reply reply_comment'></i></li>";
         if (typeof (obj['comments'][i]['comments']) !== 'undefined' 
             && obj['comments'][i]['comments'].length ){
             c += TTS.forms.processcomment(obj['comments'][i]);
