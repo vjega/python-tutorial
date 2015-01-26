@@ -55,32 +55,17 @@
 
 {% block scriptcontent %}
 <script>
-
-function getUrlParameter(sParam)
-{
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++) 
-    {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam) 
-        {
-            return sParameterName[1];
-        }
-    }
-}  
-
-
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-TTS.categoryid = getUrlParameter('categoryid');
-TTS.classid = getUrlParameter('classid');
-TTS.section = getUrlParameter('section');
+TTS.categoryid =TTS.utils.getUrlParameter('categoryid');
+TTS.classid = TTS.utils.getUrlParameter('classid');
+TTS.section = TTS.utils.getUrlParameter('section');
 TTS.forms.renderchapterinfo = function(data){
      var headers = [
             { "title": "&nbsp;",
               "class": "text-center",
-              "data":"icon"  
+              "data":"icon",
+              "bSortable":false  
             },
             { "title": "{% trans "Title" %}",
               "data" :"title"
@@ -115,6 +100,7 @@ $(document).ready(function(){
         TTS.utils.ajaxloaderstop();
         //console.log(data);
         TTS.forms.renderchapterinfo(data);
+        $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
     });
     $('#admin-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();
