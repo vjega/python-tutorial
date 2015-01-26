@@ -1075,14 +1075,8 @@ class StickynotesResource(viewsets.ModelViewSet):
     serializer_class = adminserializers.StickynotesSerializer
 
     def list(self, request):
-        # print '*'*40
-        #print request.GET.get('id')
-        wherecond=""
-        if request.GET.get('id'):
-           wherecond=" WHERE s.stickylistid='%s'" %request.GET.get('id')
         sql = '''
         SELECT s.id,
-                s.stickylistid,
             s.stickytext,
             s.color,
             group_concat(sc.stickycomment SEPARATOR "~") as comments,
@@ -1090,11 +1084,9 @@ class StickynotesResource(viewsets.ModelViewSet):
             group_concat(sc.createddate SEPARATOR "~") as createddate
         FROM stickynotes s
         LEFT JOIN stickycomments sc ON sc.stickyid = s.id
-        %s
         GROUP BY s.id, 
                  s.stickytext,
-                 s.color''' %wherecond
-        #print sql;
+                 s.color''' 
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -1103,13 +1095,10 @@ class StickynotesResource(viewsets.ModelViewSet):
                 for row in cursor.fetchall()
             ]
         return Response(result)
-
     def create(self, request):
-        print '*'*40
-        print request.GET.get('id')
         stickynotes = models.stickynotes()
         data = json.loads(dict(request.DATA).keys()[0])
-        stickynotes.stickylistid = request.GET.get('id')
+        stickynotes.stickylistid = 0#data.get('stickytext')
         stickynotes.stickytext = data.get('stickytext')
         stickynotes.name = data.get('name')
         stickynotes.xyz = data.get('xyz')
@@ -1136,11 +1125,6 @@ class StickynotesResource(viewsets.ModelViewSet):
     def destroy(self, request, pk):
         models.stickynotes.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
-
-    def retrieve(self, request, pk=None):
-        queryset = models.stickynotes.objects.filter(pk=pk)[0]
-        serializer = adminserializers.StickynotesSerializer(queryset, many=False)
-        return Response(serializer.data)
 
 class StudentinfoViewSet(viewsets.ModelViewSet):
 
@@ -1246,18 +1230,14 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         fieldcond=""
         joincond=""
         wherecond = ""
-        if l == 'Admin' :
+        if l == 'Admin' or l == 'Teacher' :
             fieldcond="au.first_name AS postedby"
             joincond="INNER JOIN auth_user au ON au.username = bmi.userid"
-        elif l == 'Teacher' :
-            fieldcond="au.first_name AS postedby"
-            joincond="INNER JOIN auth_user au ON au.username = bmi.userid"
-            wherecond = "WHERE bmi.userid = '%s'"%request.user.username
-        
+            wherecond = "bmi.userid = '%s'"%request.user.username
         else:
             fieldcond="'' AS postedby"
             joincond=""
-            wherecond = """WHERE bmi.schoolid = '%s'
+            wherecond = """bmi.schoolid = '%s'
                            AND bmi.classid = '%s' 
                         """%(request.session.get('stu_schoolid'), 
                              request.session.get('stu_classid'))
@@ -1272,11 +1252,11 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         FROM bulletinboardinfo bbi
         INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
         %s
-        %s
+        WHERE %s
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
         LIMIT 10"""% (fieldcond,joincond,wherecond)
-        #print sql;
+        # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -2775,38 +2755,6 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         cursor.execute(sql)
         desc = cursor.description
         result = dict(zip([col[0] for col in desc], cursor.fetchone()))
-        result['comments'] = [
-            {'name':'jega',
-            'date':'2015-01-26',
-            'comment':'I dont agree',
-            'comments' : [
-                {'name':'deepak',
-                'date':'2015-01-26',
-                'comment':'I dont agree'
-                },
-                {'name':'mala',
-                'date':'2015-01-26',
-                'comment':'I dont agree',
-                'comments':[
-                    {'name':'deepak',
-                    'date':'2015-01-26',
-                    'comment':'I dont agree'
-                    }
-                    ]
-                }
-
-            ]
-            },
-            {'name':'deepak',
-            'date':'2015-01-26',
-            'comment':'I second comment'
-            },
-            {'name':'mala',
-            'date':'2015-01-26',
-            'comment':'I third agree'
-            },
-        ] 
-        
         return Response(result)
     def create(self, request):
         topics = models.Topicinfo()
