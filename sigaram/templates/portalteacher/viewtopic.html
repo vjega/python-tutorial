@@ -158,8 +158,6 @@ TTS.forms.renderviewfourminfo = function(data){
         t.lastposteddate = data[i].lastposteddate;
         dataset.push(t);
     }
-    console.log(dataset);
-
     $('#viewforum-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
@@ -169,8 +167,7 @@ TTS.forms.renderviewfourminfo = function(data){
 
 $(document).ready(function(){
     $.ajax({
-        //"url":"/api/forum/topicinfo/?forumid="+TTS.utils.getUrlParameter("forumid")+"&format=json",
-        "url":"/api/forum/topicinfo/?format=json",
+        "url":"/api/admin/topicinfo/?format=json",
         "type":"GET"
     }).done(function(data){
         if (data.length) {
@@ -187,7 +184,7 @@ $(document).ready(function(){
         var myString = this.id;
         var arr = myString.split('/');
 
-        window.location ='viewpost?topicid='+arr[1]+'&topicname='+$($(this).find(".viewtopicname")[0]).text();
+        window.location ='viewpost?topicid='+arr[1];
         //console.log(this.id);
     });
 
