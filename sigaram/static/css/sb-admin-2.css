@@ -578,7 +578,8 @@ ul.forum, ul.forum ul{
 }
 
 ul.forum li {
-    line-height: 60px;
+    line-height: 30px;
+    margin-bottom: 30px;
 }
 
 .reply_comment{

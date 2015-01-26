@@ -53,7 +53,7 @@
 window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
 
-TTS.forms.addstickynote = function(form, data) {
+TTS.forms.addstickynote = function(data) {
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -64,13 +64,47 @@ TTS.forms.addstickynote = function(form, data) {
     }).done(function(msg) {
         console.log(msg);
         return false;
-        //location.reload();
+        location.reload();
     });
 }
 
 $(document).ready(function(){
     $('.summernote').summernote()
+    $('#save').click(function(){
+        data = {};
+        data['summernotedata'] = $("#title").code();
+        console.log(data['summernotedata']);
+        //TTS.forms.addstickynote(JSON.stringify(data));
+    });
+
+    $('.summernote').summernote({
+        height: 200,
+        onImageUpload: function(files, editor, welEditable) {
+            sendFile(files[0], editor, welEditable);
+        }
+    });
+
 });
+
+function sendFile(file, editor, welEditable) {
+    console.log(file);
+    console.log(editor);
+    console.log(welEditable);
+    data = new FormData();
+    data.append("file", file);
+    console.log(data);
+    $.ajax({
+        data: data,
+        type: "POST",
+        url: "",
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(url) {
+            editor.insertImage(welEditable, url);
+        }
+    });
+}
 
 </script>
 {% endblock scriptcontent %}
