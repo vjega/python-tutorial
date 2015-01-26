@@ -105,4 +105,5 @@ urlpatterns = patterns('teacher.views',
                                                          name='viewassignmindmapanswer'),
     url(r'^viewmindmap$',               'viewmindmap',   name='viewmindmap'),
     url(r'^addteachershare$',   'addteachershare',       name='addteachershare'),
+    url(r'^calendar$',                  'calendar',     name='calendar'),
 )
