@@ -1096,7 +1096,8 @@ class StickynotesResource(viewsets.ModelViewSet):
         %s
         GROUP BY s.id, 
                  s.stickytext,
-                 s.color''' %wherecond
+                 s.color
+        ORDER BY s.createddate DESC''' %wherecond
         #print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -1108,11 +1109,9 @@ class StickynotesResource(viewsets.ModelViewSet):
         return Response(result)
 
     def create(self, request):
-        print '*'*40
-        print request.GET.get('id')
         stickynotes = models.stickynotes()
         data = json.loads(dict(request.DATA).keys()[0])
-        stickynotes.stickylistid = request.GET.get('id')
+        stickynotes.stickylistid = data.get('stickylistid')
         stickynotes.stickytext = data.get('stickytext')
         stickynotes.name = data.get('name')
         stickynotes.xyz = data.get('xyz')
@@ -1651,44 +1650,6 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
 
         return Response(result)
 
-
-class TopicViewSet(viewsets.ModelViewSet):
-
-    queryset = models.Topicinfo.objects .all()
-    serializer_class = adminserializers.TopicsSerializer
-
-    def list(self, request):
-        topicid = request.GET.get('topicid')
-        topicname = request.GET.get('topicname')
-        if topicid :
-            queryset = models.Topicinfo.objects.filter(topicid=topicid)
-        else:
-            queryset = models.Topicinfo.objects.all()
-        serializer = adminserializers.TopicsSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def create(self, request):
-        topics = models.Topicinfo()
-        topicinfodata =  json.loads(request.DATA.keys()[0])
-        topics.topicid = topicinfodata.get('topicid',0)
-        topics.forumid = topicinfodata.get('forumid',0)
-        topics.totalpost = topicinfodata.get('totalpost',0)
-        topics.topicdetails = topicinfodata.get('topicdetails',0)
-        topics.forumid = topicinfodata.get('forumid',0)
-        topics.topicname = topicinfodata.get('topicname',0)
-        topics.createdby = request.user.id
-        topics.lastpostedby = request.user.id
-        topics.lastposteddate = time.strftime('%Y-%m-%d %H:%M:%S')
-        topics.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
-        topics.save()
-        return Response(request.DATA)
-
-    def update(self, request, pk=None):
-        return Response('"msg":"update"')
-
-    def destroy(self, request, pk=None):
-        return Response('"msg":"delete"')
-        
 class ThreadsViewSet(viewsets.ModelViewSet):
 
     queryset = models.Threaddetails.objects.all()
@@ -1861,7 +1822,7 @@ class ExtraslistViewSet(viewsets.ModelViewSet):
 
 class StickyinfoViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Stickyinfo.objects.all()
+    queryset = models.Stickyinfo.objects.filter().order_by('-createddate')
     serializer_class = adminserializers.StickyinfoSerializer
 
     def create(self, request):
@@ -2788,48 +2749,160 @@ class TeacherAssignedmindmapViewSet(viewsets.ModelViewSet):
             ]
         return Response(result)
 
+class TopicInfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Topicinfo.objects .all()
+    serializer_class = adminserializers.TopicsSerializer
+
+    def list(self, request):
+        topicid = request.GET.get('topicid')
+        topicname = request.GET.get('topicname')
+        if topicid :
+            queryset = models.Topicinfo.objects.filter(topicid=topicid)
+        else:
+            queryset = models.Topicinfo.objects.all()
+        serializer = adminserializers.TopicsSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        sql = '''
+            SELECT ti.topicname,
+                   ti.topicdetails,
+                   ti.createddate,
+                   a.username
+            FROM topicinfo ti
+            LEFT JOIN auth_user a ON a.id = ti.createdby
+            WHERE ti.topicid = '1' '''
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result = dict(zip([col[0] for col in desc], cursor.fetchone()))
+        result['comments'] = [
+            {'name':'jega',
+            'date':'2015-01-26',
+            'comment':'I dont agree',
+            'comments' : [
+                {'name':'deepak',
+                'date':'2015-01-26',
+                'comment':'I dont agree'
+                },
+                {'name':'mala',
+                'date':'2015-01-26',
+                'comment':'I dont agree',
+                'comments':[
+                    {'name':'deepak',
+                    'date':'2015-01-26',
+                    'comment':'I dont agree'
+                    }
+                    ]
+                }
+
+            ]
+            },
+            {'name':'deepak',
+            'date':'2015-01-26',
+            'comment':'I second comment'
+            },
+            {'name':'mala',
+            'date':'2015-01-26',
+            'comment':'I third agree'
+            },
+        ] 
+        
+        return Response(result)
+    def create(self, request):
+        topics = models.Topicinfo()
+        topicinfodata =  json.loads(request.DATA.keys()[0])
+        topics.topicid = topicinfodata.get('topicid',0)
+        topics.forumid = topicinfodata.get('forumid',0)
+        topics.totalpost = topicinfodata.get('totalpost',0)
+        topics.topicdetails = topicinfodata.get('topicdetails',0)
+        topics.forumid = topicinfodata.get('forumid',0)
+        topics.topicname = topicinfodata.get('topicname',0)
+        topics.createdby = request.user.id
+        topics.lastpostedby = request.user.id
+        topics.lastposteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        topics.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        topics.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        return Response('"msg":"delete"')
+
 class PostinfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Postinfo.objects.all()
     serializer_class = adminserializers.PostinfoSerializer
-    def list(self, request):
-        print request.GET.get('forumid')
-        sql = '''
-            SELECT ti.topicid,
-                   ti.topicname,
-                   ti.topicdetails,
-                   ti.createddate as topic_createddate,
-                   p.postid,
-                   p.postdetails,
-                   p.posteddate as parent_posteddate,
-                   p.parentid,
-                   p.postedby,
-                   pp.postdetails,
-                   pp.posteddate as child_posteddate,
-                   pp.postedby,
-                   ti.forumid
-            FROM topicinfo ti
-            LEFT JOIN postinfo p ON  p.topicid = ti.topicid
-            LEFT JOIN postinfo pp ON pp.parentid = p.postid
-            WHERE ti.topicid = '%s' ''' % request.GET.get('topicid')
-        cursor = connection.cursor()
-        cursor.execute(sql)
-        desc = cursor.description
-        result = [
-            dict(zip([col[0] for col in desc], row))
-            for row in cursor.fetchall()
-        ]
-        return Response(result)
+    # def list(self, request):
+    #     print request.GET.get('topicid')
+    #     """
+    #     sql = '''
+    #         SELECT ti.topicid,
+    #                ti.topicname,
+    #                ti.topicdetails,
+    #                ti.createddate as topic_createddate,
+    #                p.postid,
+    #                p.postdetails,
+    #                p.posteddate as parent_posteddate,
+    #                p.parentid,
+    #                p.postedby,
+    #                pp.postdetails,
+    #                pp.posteddate as child_posteddate,
+    #                pp.postedby,
+    #                ti.forumid
+    #         FROM topicinfo ti
+    #         LEFT JOIN postinfo p ON  p.topicid = ti.topicid
+    #         LEFT JOIN postinfo pp ON pp.parentid = p.postid
+    #         WHERE ti.topicid = '%s' ''' % request.GET.get('topicid')
+    #     """
+    #     sql = '''
+    #         SELECT ti.topicname,
+    #                ti.topicdetails,
+    #                ti.createddate,
+    #                a.username
+    #         FROM topicinfo ti
+    #         LEFT JOIN auth_user a ON a.id = ti.createdby
+    #         WHERE ti.topicid = '1' '''
+    #     cursor = connection.cursor()
+    #     cursor.execute(sql)
+    #     desc = cursor.description
+    #     result = [
+    #         dict(zip([col[0] for col in desc], row))
+    #         for row in cursor.fetchall()
+    #     ]
+    #     return Response(result)
 
-    def create(self, request):
-        postinfo = models.Postinfo()
-        postinfodata =  json.loads(request.DATA.keys()[0])
-        postinfo.postid = postinfodata.get('postid')
-        postinfo.topicid = postinfodata.get('topicid')
-        postinfo.forumid = postinfodata.get('forumid')
-        postinfo.parentid = postinfodata.get('parentid')
-        postinfo.postdetails = postinfodata.get('postdetails',0)
-        postinfo.postedby = request.user.id
-        postinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
-        postinfo.save()
-        return Response(request.DATA)
+    # def retrieve(self, request, pk=None):
+    #     sql = '''
+    #     SELECT   p.postid,
+    #                p.postdetails,
+    #                p.posteddate as parent_posteddate,
+    #                p.parentid,
+    #                p.postedby,
+    #                pp.postdetails,
+    #                pp.posteddate as child_posteddate,
+    #                pp.postedby                
+    #         FROM postinfo p
+    #         LEFT JOIN postinfo pp ON pp.parentid = p.postid
+    #     where p.topicid = '1'
+    #     '''
+    #     cursor = connection.cursor()
+    #     cursor.execute(sql)
+    #     result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
+    #     return Response(result)
+
+    # def create(self, request):
+    #     postinfo = models.Postinfo()
+    #     postinfodata =  json.loads(request.DATA.keys()[0])
+    #     postinfo.postid = postinfodata.get('postid')
+    #     postinfo.topicid = postinfodata.get('topicid')
+    #     postinfo.forumid = postinfodata.get('forumid')
+    #     postinfo.parentid = postinfodata.get('parentid')
+    #     postinfo.postdetails = postinfodata.get('postdetails',0)
+    #     postinfo.postedby = request.user.id
+    #     postinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+    #     postinfo.save()
+    #     return Response(request.DATA)

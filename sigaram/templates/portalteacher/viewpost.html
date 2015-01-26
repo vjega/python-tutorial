@@ -25,6 +25,9 @@
             <div class="pull-right">
                 <input type="button" id="main_thread_reply" class="btn btn-primary" value="Reply to thread" />
             </div>
+            <div id="comments">
+                
+            </div>
         </div>
         <!-- /.panel-body -->
     </div>
@@ -49,72 +52,14 @@
                     <button class="btn btn-primary center-block" id="save_main_thread_reply">Save</button>
                 </div>
             </div>
+
         </div>
+
         <!-- /.panel-body -->
     </div>
     <!-- /.panel -->
+    
 </div>
-{% for x in '123' %}
-<div class="">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            {% trans "Reply" %}
-        </div>
-        <!-- /.panel-heading -->
-        <div class="panel-body">
-            <ul class="forum">
-            <li>
-            <img src="http://placehold.it/50x50">
-            I dont agree
-            <div class="pull-right">
-            <input type="button" class="btn btn-primary reply_comment" name="{{x|add:"10"}}" alt="{{x}}" value="Reply to comment" />
-            </div>
-                <ul>
-                    <li>
-                        <img src="http://placehold.it/50x50"> Why so? I still believe MS can do something on IE
-                        <div class="pull-right">
-                            <input type="button" class="btn btn-primary reply_comment" name="{{x|add:"20"}}" alt="{{x}}" value="Reply to comment" />
-                        </div>
-                    </li>
-                    <ul>
-                        <li>
-                            <img src="http://placehold.it/50x50"> Why so? I still believe MS can do something on IE
-                            <div class="pull-right">
-                                <input type="button" class="btn btn-primary reply_comment" name="{{x|add:"30"}}" alt="{{x}}" value="Reply to comment" />
-                            </div>
-                        </li>
-                    </ul>
-                    <li>
-                        <img src="http://placehold.it/50x50"> For the last 10 year, they diversed from standard. Now they are paying the price
-                        <div class="pull-right">
-                            <input type="button" class="btn btn-primary reply_comment" name="{{x|add:"40"}}" alt="{{x}}" value="Reply to comment" />
-                        </div>
-                    </li>
-                </ul>
-            </li>
-            </ul>
-            
-        </div>
-        
-        <div class="hide_comment comment_text_area_{{x}} form-group panel-body">
-            <div class="form-group col-sm-12">
-                <div class="controls col-sm-12">
-                    <textarea id="comment_reply_textarea_{{x}}" placeholder="Comment reply" rows="6" id="detail_content" class="textinput textInput form-control"></textarea> 
-                </div>
-            </div>
-            <div class="form-group col-sm-12">
-                <div class="controls col-sm-11">
-                </div>
-                <div class="controls col-sm-1">
-                    <button class="save_comment_reply btn btn-primary center-block" alt="{{x}}" id="save_comment_reply">Save</button>
-                </div>
-        </div>
-        
-        <!-- /.panel-body -->
-    </div>
-    <!-- /.panel -->
-</div>
-{% endfor %}
 
 {% endblock botcontent%}
 
@@ -153,35 +98,33 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 
 TTS.forms.renderviewforum = function(data){
-    var dataset = [];
-    var t = {};
-    $("#topic_header").html(data[0].topicname);
-    $("#topic_header_posteddate").html("On "+data[0].topic_createddate);
-    $("#topic_details").html(data[0].topicdetails);
-    $("#topic_posteddate").html("On "+data[0].parent_posteddate);
-    for(var i in data){
-        /*t.postdetails = data[i].postdetails;
-        t.firstname = data[i].firstname;
-        t.posteddate = data[i].posteddate;
-        t.reply = "<i class='tts-reply fa fa-reply fa-lg'></i>";
-        t.view = "<i class='fa fa-plus-square fa-lg'></i>";
-        t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";*/
-    }
-    //dataset.push(t);
+    $("#topic_header").html(data['topicname']);
+    $("#topic_header_posteddate").html(data['username'] +" On "+data['createddate']);
+    $("#topic_details").html(data['topicdetails']);
+    var comments = TTS.forms.processcomment(data);
+    $("#comments").html(comments);
 };
 
+TTS.forms.processcomment = function (obj) {
+    c = "<ul>";
+    for (var i in obj['comments']) {
+        c += "<li>"+obj['comments'][i]['comment']+"<i class='fa fa-reply'></i></li>";
+        if (typeof (obj['comments'][i]['comments']) !== 'undefined' 
+            && obj['comments'][i]['comments'].length ){
+            c += TTS.forms.processcomment(obj['comments'][i]);
+        }
+    }
+    c += "</ul>";
+    return c
+}
 
 $(document).ready(function(){
    
     $.ajax({
-        "url":"/api/admin/postinfo/?topicid="+TTS.utils.getUrlParameter("topicid")+"&format=json",
+        "url":"/api/admin/topicinfo/"+TTS.utils.getUrlParameter('topicid')+"/?format=json",
         "type":"GET"
     }).done(function(data){
-        if (data.length) {
-            TTS.forms.renderviewforum(data);
-        } else {
-            //TTS.forms.table.fnClearTable();
-        }
+        TTS.forms.renderviewforum(data);
     }); 
 });
   
