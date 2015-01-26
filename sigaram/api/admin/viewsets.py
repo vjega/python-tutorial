@@ -2770,7 +2770,7 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
             LEFT JOIN auth_user a ON a.id = ti.createdby
             WHERE ti.topicid = '%s' ''' % (pk)
         cursor = connection.cursor()
-        print sql
+        #print sql
         cursor.execute(sql)
         desc = cursor.description
         result = dict(zip([col[0] for col in desc], cursor.fetchone()))
@@ -2785,7 +2785,7 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
             LEFT JOIN auth_user a ON a.id = p.postedby
             WHERE p.topicid = '%s' ''' % (pk)
         cursor = connection.cursor()
-        print sql
+        #print sql
         cursor.execute(sql)
         desc = cursor.description
         result_comment = [
@@ -2821,64 +2821,7 @@ class PostinfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Postinfo.objects.all()
     serializer_class = adminserializers.PostinfoSerializer
-    # def list(self, request):
-    #     print request.GET.get('topicid')
-    #     """
-    #     sql = '''
-    #         SELECT ti.topicid,
-    #                ti.topicname,
-    #                ti.topicdetails,
-    #                ti.createddate as topic_createddate,
-    #                p.postid,
-    #                p.postdetails,
-    #                p.posteddate as parent_posteddate,
-    #                p.parentid,
-    #                p.postedby,
-    #                pp.postdetails,
-    #                pp.posteddate as child_posteddate,
-    #                pp.postedby,
-    #                ti.forumid
-    #         FROM topicinfo ti
-    #         LEFT JOIN postinfo p ON  p.topicid = ti.topicid
-    #         LEFT JOIN postinfo pp ON pp.parentid = p.postid
-    #         WHERE ti.topicid = '%s' ''' % request.GET.get('topicid')
-    #     """
-    #     sql = '''
-    #         SELECT ti.topicname,
-    #                ti.topicdetails,
-    #                ti.createddate,
-    #                a.username
-    #         FROM topicinfo ti
-    #         LEFT JOIN auth_user a ON a.id = ti.createdby
-    #         WHERE ti.topicid = '1' '''
-    #     cursor = connection.cursor()
-    #     cursor.execute(sql)
-    #     desc = cursor.description
-    #     result = [
-    #         dict(zip([col[0] for col in desc], row))
-    #         for row in cursor.fetchall()
-    #     ]
-    #     return Response(result)
-
-    # def retrieve(self, request, pk=None):
-    #     sql = '''
-    #     SELECT   p.postid,
-    #                p.postdetails,
-    #                p.posteddate as parent_posteddate,
-    #                p.parentid,
-    #                p.postedby,
-    #                pp.postdetails,
-    #                pp.posteddate as child_posteddate,
-    #                pp.postedby                
-    #         FROM postinfo p
-    #         LEFT JOIN postinfo pp ON pp.parentid = p.postid
-    #     where p.topicid = '1'
-    #     '''
-    #     cursor = connection.cursor()
-    #     cursor.execute(sql)
-    #     result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
-    #     return Response(result)
-
+    
     def create(self, request):
         postinfo = models.Postinfo()
         postinfodata =  json.loads(request.DATA.keys()[0])
