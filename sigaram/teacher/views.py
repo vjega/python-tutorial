@@ -16,7 +16,8 @@ from teacher.forms import ( RubricsForm,
                             StickyinfoForm,
                             NewtopicForm,
                             MyprofileForm,
-                            MyresourcelistForm
+                            MyresourcelistForm,
+                            CalendarForm
                             ) 
 
 from ajaxuploader.views import AjaxFileUploader  
@@ -649,3 +650,8 @@ def viewmindmap(request):
 def addteachershare(request):
     schools = models.Schoolinfo.objects.all().order_by('schoolname')
     return render(request, 'portalteacher/addteachershare.html',{'schools':schools})
+
+@login_required
+@switchlanguage
+def calendar(request):
+    return render(request, 'portalteacher/calendar.html', {"calendarform" : CalendarForm.CalendarForm()})
