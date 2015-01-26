@@ -463,7 +463,7 @@ TTS.forms.addstickycomment = function(form, data) {
 
 TTS.forms.showstickycommentform = function(stickyid) {
     BootstrapDialog.show({
-        title: 'Add Sticky Comment',
+        title: '{% trans "Add Sticky Comment" %}',
         message: $($('#stickycomment-form').render()),
         buttons: [{
             label: '{% trans "Save" %}',
