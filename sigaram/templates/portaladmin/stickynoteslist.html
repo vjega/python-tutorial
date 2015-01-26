@@ -40,7 +40,7 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
-    #addrec:hover, .tts-delete:hover, .tts-edit:hover{
+    #addrec:hover, .tts-delete:hover, .tts-edit:hover, .sticky_title:hover{
         cursor: pointer;
     }
 </style>
@@ -106,7 +106,9 @@ TTS.forms.renderteacher = function(data){
             { "title": "{% trans "Sl No." %}",
               "class": "text-center"  
             },
-            { "title": "{% trans "Title" %}"},
+            { "title": "{% trans "Title" %}",
+              "class":"sticky_title"
+            },
             { "title": "{% trans "Date" %}" },
             
         ];

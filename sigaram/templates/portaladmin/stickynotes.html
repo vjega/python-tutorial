@@ -135,7 +135,7 @@
 .sticky_note{
     float: left;
     position: relative;
-    height: 300px;
+    height: 100px;
     width: 220px;
     margin: 10px;
     padding: 8px;
@@ -150,7 +150,7 @@
     height: 18px;
     width: 200px;
     margin-bottom: 10px;
-    cursor: crosshair;
+    cursor: pointer;
 }
 
 .sticky_footer {
@@ -196,8 +196,7 @@
 }
 
 .sticky_content {
-    height: 230px;
-    overflow-x: auto;
+   overflow-x: auto;
 }
 
 .color{
@@ -302,7 +301,6 @@
 <script id="stickycomment-form" type="text/x-jsrender">
     {% crispy Cform %}
 </script>
-
 <script id="sticky-text" type="text/sticky">
 <div class='color_container'>
     <div id='preview_color' class='yellow'>Preview</div>
@@ -318,7 +316,6 @@ TTS.forms = TTS.forms || {};
 /* End of Admin CRUD */
 
 TTS.forms.addstickynote = function(form, data) {
-    alert(data)
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -327,7 +324,6 @@ TTS.forms.addstickynote = function(form, data) {
         data: data,
         url : '/api/admin/stickynotes/'
     }).done(function( msg ) {
-        alert()
         form.close();
         location.reload();
         //dialogItself.close();
@@ -544,7 +540,8 @@ $(document).ready(function(){
   
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.showstickyform();
-        TTS.utils.ajaxloaderstop();
+        //TTS.utils.ajaxloaderstop();
+        //window.location="addstickynote?id="+TTS.utils.getUrlParameter("id");
     });
 
     TTS.utils.ajaxloaderstart();

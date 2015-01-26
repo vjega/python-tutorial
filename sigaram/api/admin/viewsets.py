@@ -77,7 +77,6 @@ class TeacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
     serializer_class = adminserializers.TeacherinfoSerializer
     def list(self, request):
-
         schoolid =  request.GET.get('schoolid')
         classid  =  request.GET.get('classid')
         username = request.GET.get('username')
@@ -131,12 +130,6 @@ class TeacherViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, pk=None):
         # print "Hi"
         pass
-
-    def retrieve(self, request, pk=None):
-        queryset = models.Teacherinfo.objects.filter(username=request.user.username)[0]
-        serializer = adminserializers.TeacherinfoSerializer(queryset, many=False)
-        return Response(serializer.data)
-        
 
     @delete_login('Teacher')
     def destroy(self, request, pk):
@@ -794,6 +787,9 @@ class MindmapViewSet(viewsets.ModelViewSet):
         mm.save()
         return Response(request.DATA)
         
+    def destroy(self, request, pk):
+        models.Mindmap.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
 
 
 class StudentAssignResource(viewsets.ModelViewSet):
@@ -1093,7 +1089,8 @@ class StickynotesResource(viewsets.ModelViewSet):
         %s
         GROUP BY s.id, 
                  s.stickytext,
-                 s.color''' %wherecond
+                 s.color
+        ORDER BY s.createddate DESC''' %wherecond
         #print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -1105,11 +1102,9 @@ class StickynotesResource(viewsets.ModelViewSet):
         return Response(result)
 
     def create(self, request):
-        print '*'*40
-        print request.GET.get('id')
         stickynotes = models.stickynotes()
         data = json.loads(dict(request.DATA).keys()[0])
-        stickynotes.stickylistid = request.GET.get('id')
+        stickynotes.stickylistid = data.get('stickylistid')
         stickynotes.stickytext = data.get('stickytext')
         stickynotes.name = data.get('name')
         stickynotes.xyz = data.get('xyz')
@@ -1820,7 +1815,7 @@ class ExtraslistViewSet(viewsets.ModelViewSet):
 
 class StickyinfoViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Stickyinfo.objects.all()
+    queryset = models.Stickyinfo.objects.filter().order_by('-createddate')
     serializer_class = adminserializers.StickyinfoSerializer
 
     def create(self, request):
