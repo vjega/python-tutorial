@@ -1,4 +1,4 @@
-{% extends 'portalteacher/base.html' %}
+{% extends 'portaladmin/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% load crispy_forms_tags %}
@@ -307,7 +307,7 @@
 <script>
 window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
-
+TTS.id=TTS.utils.getUrlParameter("id");
 /* End of Admin CRUD */
 
 TTS.forms.addstickynote = function(form, data) {
@@ -536,12 +536,13 @@ $(document).ready(function(){
     $("#page-wrapper").on("click", "#addrec", function(){
         //TTS.forms.showstickyform();
         //TTS.utils.ajaxloaderstop();
-        window.location="addstickynote?id="+TTS.utils.getUrlParameter("id");
+        window.location="addstickynote?id"+TTS.utils.getUrlParameter("id");
     });
 
     TTS.utils.ajaxloaderstart();
     $.ajax({
-        "url":"/api/admin/stickynotes/?id="+TTS.utils.getUrlParameter("id")+"&format=json",
+        //'url': "/api/admin/stickynotes/"+TTS.id,
+        'url': "/api/admin/stickynotes/",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstickynotes(data);
