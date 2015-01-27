@@ -2762,6 +2762,7 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
                 (SELECT count(*) FROM postinfo WHERE topicid=ti.topicid) AS tot_comment
         FROM topicinfo ti
         LEFT JOIN auth_user a ON a.id = ti.createdby
+        ORDER BY ti.createddate DESC
         '''
         cursor = connection.cursor()
         cursor.execute(sql)
