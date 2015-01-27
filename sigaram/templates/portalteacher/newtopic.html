@@ -4,11 +4,10 @@
 {% load crispy_forms_tags %}
 {% block topcontent %}
 <div class="row">
-    <div class="form-group" class="col-sm-3">
-        <div class="col-sm-1">
-           
-        </div>
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Forum" %}</h2>
     </div>
+    <!-- /.col-lg-12 -->
 </div>
 
 {% endblock topcontent %}
@@ -35,6 +34,9 @@
     <span>
         <button class="btn btn-primary btn-sm" id="save">
             <i class="fa fa-floppy-o fa-lg"></i> {% trans "Save" %} 
+        </button>
+        <button class="btn btn-primary btn-sm" id="cancel">
+            <i class="fa fa-times fa-lg"></i> {% trans "Cancel" %} 
         </button>
     </span>
 </div>
@@ -91,9 +93,10 @@ TTS.topicid = TTS.utils.getUrlParameter("topicid");
 
 $("#save").click(function(){
     TTS.forms.topicinfodetails();
-
 });
-
+$("#cancel").click(function(){
+    window.location ='viewtopic';
+});
 TTS.forms.topicinfodetails = function(){  
     var data = {};
     data.forumid=TTS.forumid;
@@ -101,16 +104,15 @@ TTS.forms.topicinfodetails = function(){
     data.forumname=TTS.forumname;
     data.topicname = TTS.utils.summer_encode($("#title").code());
     data.topicdetails = TTS.utils.summer_encode($("#notes").code());
-    console.log(data);
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:"POST",
-        url:"/api/forum/topicinfo/",
+        url:"/api/admin/topicinfo/",
         data: JSON.stringify(data)
     }).done(function(data){
-         window.location ='viewtopic?forumid='+TTS.utils.getUrlParameter("forumid")+'&forumname='+TTS.utils.getUrlParameter("forumname")
+        window.location ='viewtopic';
     }).error(function(err, msg){
         alert("I didnt save the data");
     });
