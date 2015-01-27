@@ -12,6 +12,9 @@ router.register(r'studentworkspaceinfo',viewsets.Studentworkspaceinfo)
 router.register(r'studentnotesinfo', 	viewsets.StudentnotesinfoViewSet)
 router.register(r'bulletinboardlist',   viewsets.Studentbulletinboardlist)
 #router.register(r'classroominfo',       viewsets.ClassroominfoViewSet)
+router.register(r'postinfo',    	     viewsets.PostinfoViewSet)
+router.register(r'topicinfo',    	     viewsets.TopicInfoViewSet)
+
 
 urlpatterns = [
     url(r'^', include(router.urls)),

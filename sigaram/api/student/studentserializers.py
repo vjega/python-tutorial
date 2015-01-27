@@ -52,3 +52,16 @@ class ClassroominfoSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('classroomid','assessmentid','resourceid','writtenworkid','studentid',
                   'rating','ratingcount','votescount','lastvotedby','lastvoteddate','postedby',
                   'posteddate')
+
+class TopicsSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Topicinfo
+        fields = ('topicid',  'forumid','topicname','topicdetails',
+                  'totalpost','createdby', 'createddate',
+                  'lastpostedby','lastposteddate')
+
+class PostinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Postinfo
+        fields = ('postid', 'topicid','forumid',
+                  'postdetails', 'postedby','posteddate','parentid')
