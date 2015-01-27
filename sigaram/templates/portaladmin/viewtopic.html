@@ -155,7 +155,7 @@ TTS.forms.renderviewfourminfo = function(data){
         t.DT_RowId = data[i].forumid+'/'+data[i].topicid;
         t.slno = ++count;
         t.topicname = data[i].topicname;
-        t.totalpost = data[i].totalpost;
+        t.totalpost = data[i].tot_comment;
         t.topicdetails = data[i].topicdetails;
         t.lastpostedby = data[i].username;
         t.del = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
