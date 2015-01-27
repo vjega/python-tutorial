@@ -2753,12 +2753,29 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
     def list(self, request):
         topicid = request.GET.get('topicid')
         topicname = request.GET.get('topicname')
-        if topicid :
-            queryset = models.Topicinfo.objects.filter(topicid=topicid).order_by('-createddate')
-        else:
-            queryset = models.Topicinfo.objects.filter().order_by('-createddate')
-            serializer = adminserializers.TopicsSerializer(queryset, many=True)
-        return Response(serializer.data)
+        # if topicid :
+        #     queryset = models.Topicinfo.objects.filter(topicid=topicid).order_by('-createddate')
+        # else:
+        #     queryset = models.Topicinfo.objects.filter().order_by('-createddate')
+        #     serializer = adminserializers.TopicsSerializer(queryset, many=True)
+        sql = '''
+        SELECT  ti.topicid,
+                ti.topicname,
+                ti.topicdetails,
+                ti.createddate,
+                a.first_name AS username,
+                (SELECT count(*) FROM postinfo WHERE topicid=ti.topicid) AS tot_comment
+        FROM topicinfo ti
+        LEFT JOIN auth_user a ON a.id = ti.createdby
+        '''
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
 
     def retrieve(self, request, pk=None):
         sql = '''
