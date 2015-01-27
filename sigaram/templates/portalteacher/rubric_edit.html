@@ -24,28 +24,34 @@
             <div class="gentable" id ="rub_mtx_head rub_mtx_rows">
                 {% crispy form %}
             </div>
-            <table class="form-horizontal">
-                <tr height="65">
-                    <td width="170">Column</td><td><input type='text' class="form-control" id='r-row' ></td>
-                    <td width="170"> &nbsp;&nbsp; Row</td><td><input type='text' class="form-control" id='r-col'></td>
-                    <td>&nbsp;&nbsp; <input type='button'class ="btn btn-primary " id="createTable" value= ' Create '/></td>
-                    <!--td>&nbsp;&nbsp; <input type='button' class ="btn btn-primary "id ="showexcelfile" value=' Excel Import'/>
-                    </td-->
-                </tr>
-                <tr>
-                    <!--td colspan='6' id='filedialog'>
-                        <input type='file' name='excelfile' id='excelfile'>
-                        <input type='submit' id='uploadexcel' value='Upload' >
-                    </td-->
-                    <td colspan='6' id='filedialog'>
+            <br />
+            <div role="tabpanel">
+              <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#manual" aria-controls="home" role="tab" data-toggle="tab">{% trans "Manual" %}</a></li>
+                    <li role="presentation"><a href="#excelimport" aria-controls="profile" role="tab" data-toggle="tab">{% trans "Excel Import" %}</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="manual">
+                        <table class="form-horizontal">
+                            <tr height="65">
+                                <td width="170">Column</td><td><input type='text' class="form-control" id='r-row' ></td>
+                                <td width="170"> &nbsp;&nbsp; Row</td><td><input type='text' class="form-control" id='r-col'></td>
+                                <td>&nbsp;&nbsp; <input type='button'class ="btn btn-primary " id="createTable" value= ' Create '/></td>
+                                <!--td>&nbsp;&nbsp; <input type='button' class ="btn btn-primary "id ="showexcelfile" value=' Excel Import'/>
+                                </td-->
+                            </tr>
+                        </table>
+                        <div id='dyntable' style='background-color:#ADFF2F'>
+                 
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="excelimport"><br />
                         <div id="file-uploader">File Uploader Comes Here...</div> 
                         <input type="hidden" id="uploadurl">
                         <button class="btn btn-primary" id="uploadexcel">Submit</button>
-                    </td>
-                </tr>
-            </table><br />
-            <div id='dyntable' style='background-color:#ADFF2F'>
-     
+                    </div>
+                </div>
             </div>
         </div>  
         <!-- /.panel-body -->
