@@ -140,14 +140,12 @@ TTS.forms.renderviewfourminfo = function(data){
               "class": "text-center" ,
               "data" : "lastpostedby"  
             },
-            { "title": "{% trans "By Last Day" %}",
-              "class": "text-center" ,
-              "data" : "lastposteddate"  
-            },
+            
         ];
     var dataset = [];
     var count = 0
     for(var i in data){
+        console.log(data);
         var t = {};
         t.DT_RowId = data[i].forumid+'/'+data[i].topicid;
         t.slno = ++count;
@@ -155,7 +153,6 @@ TTS.forms.renderviewfourminfo = function(data){
         t.totalpost = data[i].totalpost;
         t.topicdetails = data[i].topicdetails;
         t.lastpostedby = data[i].lastpostedby;
-        t.lastposteddate = data[i].lastposteddate;
         dataset.push(t);
     }
     $('#viewforum-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
