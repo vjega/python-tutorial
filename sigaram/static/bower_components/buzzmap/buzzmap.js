@@ -593,7 +593,7 @@
     
     this.moveTimer = 0;
     this.moving = false;
-		this.stopMovement = false;
+	this.stopMovement = false;
     this.fps = 0;
     
     window.setInterval(function() {
@@ -628,7 +628,7 @@
   Buzzmap.prototype.addNode = function (parent, label)
 	{
 		var node = this.nodes[this.nodes.length] = new Node(this, parent, label);
-    this.animate();
+    	this.animate();
 
 		return node;
 	};

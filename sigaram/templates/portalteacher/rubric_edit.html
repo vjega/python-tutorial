@@ -29,13 +29,18 @@
                     <td width="170">Column</td><td><input type='text' class="form-control" id='r-row' ></td>
                     <td width="170"> &nbsp;&nbsp; Row</td><td><input type='text' class="form-control" id='r-col'></td>
                     <td>&nbsp;&nbsp; <input type='button'class ="btn btn-primary " id="createTable" value= ' Create '/></td>
-                    <td>&nbsp;&nbsp; <!-- input type='button' class ="btn btn-primary "id ="showexcelfile" value=' Excel Import'/ -->
-                    </td>
+                    <!--td>&nbsp;&nbsp; <input type='button' class ="btn btn-primary "id ="showexcelfile" value=' Excel Import'/>
+                    </td-->
                 </tr>
                 <tr>
-                    <td colspan='6' id='filedialog'>
+                    <!--td colspan='6' id='filedialog'>
                         <input type='file' name='excelfile' id='excelfile'>
                         <input type='submit' id='uploadexcel' value='Upload' >
+                    </td-->
+                    <td colspan='6' id='filedialog'>
+                        <div id="file-uploader">File Uploader Comes Here...</div> 
+                        <input type="hidden" id="uploadurl">
+                        <button class="btn btn-primary" id="uploadexcel">Submit</button>
                     </td>
                 </tr>
             </table><br />
@@ -54,6 +59,7 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
 <style>
     #addrec:hover, .tts-edit:hover, .tts-delete:hover, #admin-main-tbl tbody tr:hover {
         cursor: pointer;
@@ -62,6 +68,7 @@
 {% endblock morecss %}
 
 {% block morescript %}
+<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}">
@@ -269,7 +276,65 @@ $(document).ready(function(){
         TTS.forms.showexcelfile();
     });
 
+    var uploader = new qq.FileUploader({
+        action: "/admin/rubric-upload",
+        element: $('#file-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#uploadurl").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
+    });
+
+    $("#uploadexcel").click(function(){
+        TTS.forms.ressave();
+    });
+
 });
+
+TTS.forms.ressave = function(){
+    var filepath = ''
+    if($("#uploadurl").val()){
+        filepath = $("#uploadurl").val();
+    }
+
+    var data = {
+        ttl         :$('#id_Title').val(),
+        desc        :$('#id_Detail').val(),
+        instn       :$('.summernote').code(),
+        filepath    :filepath
+    };
+    if(excelimport_field_validation()){
+        $.ajax({
+            headers : {
+                'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+            },
+            url:"/api/admin/rubricimport/",
+            type:"POST",
+            data: JSON.stringify(data)
+        }).done(function(data){
+            console.log(data);
+            return false;
+
+            alert("Chapter assigned Successfully"); 
+            location.reload();
+        }).error(function(err, msg){
+            //alert("I didnt save the data");
+        });
+    }
+}
+
     function send_rubrics() {
         var rows = parseInt($('#r-row').val());
         var cols = parseInt($('#r-col').val());
@@ -354,6 +419,18 @@ function field_validation() {
     }
     if ($("#r-col").val()=="") {
         alert("Col is required");
+        return false;
+    }
+    return true;
+}
+
+function excelimport_field_validation() {
+    if ($("#id_Title").val()=="") {
+        alert("Title is required");
+        return false;
+    }
+    if ($("#id_Detail").val()=="") {
+        alert("Detail is required");
         return false;
     }
     return true;
