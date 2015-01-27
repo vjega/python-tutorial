@@ -2768,8 +2768,9 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
                    a.username
             FROM topicinfo ti
             LEFT JOIN auth_user a ON a.id = ti.createdby
-            WHERE ti.topicid = '1' '''
+            WHERE ti.topicid = '%s' ''' % (pk)
         cursor = connection.cursor()
+        #print sql
         cursor.execute(sql)
         desc = cursor.description
         result = dict(zip([col[0] for col in desc], cursor.fetchone()))
@@ -2777,13 +2778,14 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         SELECT   p.postid,
                    p.postdetails,
                    p.parentid,
-                   p.posteddate as parent_posteddate,
+                   p.posteddate,
                    p.parentid,
-                   p.postedby
+                   a.username as postedby
             FROM postinfo p
-            WHERE p.topicid = '1'
-        '''
+            LEFT JOIN auth_user a ON a.id = p.postedby
+            WHERE p.topicid = '%s' ''' % (pk)
         cursor = connection.cursor()
+        #print sql
         cursor.execute(sql)
         desc = cursor.description
         result_comment = [
@@ -2819,6 +2821,20 @@ class PostinfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Postinfo.objects.all()
     serializer_class = adminserializers.PostinfoSerializer
+
+    def create(self, request):
+        postinfo = models.Postinfo()
+        postinfodata =  json.loads(request.DATA.keys()[0])
+        postinfo.postid = postinfodata.get('postid')
+        postinfo.topicid = postinfodata.get('topicid')
+        postinfo.forumid = postinfodata.get('forumid',0)
+        postinfo.parentid = postinfodata.get('parentid')
+        postinfo.postdetails = postinfodata.get('postdetails',0)
+        postinfo.postedby = request.user.id
+        postinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        postinfo.save()
+        return Response(request.DATA)
+
     # def list(self, request):
     #     print request.GET.get('topicid')
     #     """
