@@ -61,22 +61,6 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-/*TTS.forms.update_chapter_list = function () {
-    var classid = $("#classid").val();
-    var section = $("#section").val();
-    var url = "/api/admin/teacherresourcesinfo/?classid="+classid+"&section="+section+"&format=json";
-    $.ajax({
-        url  : url,
-        type : "GET"
-    })
-    .done(function(data){
-        var opt = "";
-        for (var d in data){
-            opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"</option>";
-        }
-        $("#chapterid").html(opt);
-    })
-};*/
 
 TTS.forms.addviewfourm = function(form, data) {
     $.ajax({
@@ -118,6 +102,22 @@ TTS.forms.showviewfourm = function() {
         }]
     });
 };
+
+TTS.forms.deltopic = function(id) {
+      var myString = id;
+        var arr = myString.split('/');
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'DELETE',
+        url : '/api/admin/topicinfo/'+arr[1]
+    }).done(function( msg ) {
+        location.reload();
+    }).error(function(msg){
+        alert("Something Bad Happended");
+    });
+}
 
 TTS.forms.renderviewfourminfo = function(data){
     var headers = [
@@ -186,7 +186,7 @@ $(document).ready(function(){
         if (!window.confirm("Do you want to delete this record?")) {
             return false;
         }
-        //TTS.forms.deladmin($(this).parent().parent().prop("id"));
+        TTS.forms.deltopic($(this).parent().parent().prop("id"));
     });
 
     $('#viewforum-main-tbl').on('click', 'tbody tr', function(){
