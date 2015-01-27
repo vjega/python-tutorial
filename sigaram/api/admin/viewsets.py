@@ -2783,8 +2783,7 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
                    a.username as postedby
             FROM postinfo p
             LEFT JOIN auth_user a ON a.id = p.postedby
-            WHERE p.topicid = '%s' 
-            ORDER BY posteddate DESC''' % (pk)
+            WHERE p.topicid = '%s' ''' % (pk)
         cursor = connection.cursor()
         #print sql
         cursor.execute(sql)
