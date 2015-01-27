@@ -2819,6 +2819,12 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         models.Topicinfo.objects.get(pk=pk).delete()
+        sql = """
+        DELETE FROM postinfo 
+        WHERE topicid=%s
+        """ %pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
         return Response('"msg":"delete"')
 
 class PostinfoViewSet(viewsets.ModelViewSet):
