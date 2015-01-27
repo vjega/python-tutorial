@@ -2837,3 +2837,60 @@ class PostinfoViewSet(viewsets.ModelViewSet):
         postinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         postinfo.save()
         return Response(request.DATA)
+
+class RubricImportViewSet(viewsets.ModelViewSet):
+
+    queryset = models.RubricsHeader.objects.all().order_by('-slno')
+    serializer_class = adminserializers.AdminrubricsSerializer
+
+    def create(self, request):
+        adminrubrics = models.RubricsHeader()
+        rubricmatrix = models.RubricMatrix()
+        rd = json.loads(request.DATA.keys()[0])
+
+        import xlrd, os
+
+        rd =  json.loads(request.DATA.keys()[0]);
+        filepath = rd.get('filepath');
+        fullpath = os.path.join('static/', filepath)
+        book     = xlrd.open_workbook(fullpath)
+        sheet    = book.sheet_by_index(0)
+        columns  = int(sheet.ncols)
+        rows     = int(sheet.nrows)
+        
+        adminrubrics.title       = rd.get('ttl')
+        adminrubrics.description = rd.get('desc')
+        adminrubrics.instruction = rd.get('instn')
+        adminrubrics.teacher     = request.user.username
+        adminrubrics.status      = 0
+        adminrubrics.ts          = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminrubrics.save()
+        
+        refno = adminrubrics.slno
+
+        headerdata = ''
+        for hd in range(0, columns):
+            headerdata += unicode(sheet.cell(0,hd).value)
+            if (hd != columns-1) and (hd != 0):
+                headerdata += "~~"
+
+        rubricmatrix.refno      = refno
+        rubricmatrix.datatype   = 'H'
+        rubricmatrix.jdata      = unicode(headerdata)
+        rubricmatrix.disp_order = 0
+        rubricmatrix.save()
+
+        for bdr in range(1, rows):
+            bodydata = ''
+            for bd in range(0, columns):
+                bodydata += unicode(sheet.cell(bdr,bd).value)
+                if bd != columns-1:
+                    bodydata += "~~"
+        
+            rubricmatrix.refno      = refno
+            rubricmatrix.datatype   = 'B'
+            rubricmatrix.jdata      = unicode(bodydata)
+            rubricmatrix.disp_order = bdr
+            rubricmatrix.save()
+
+        return Response("msg")
