@@ -1064,8 +1064,6 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         
         return Response(request.DATA)
 
-
-
 class StickynotesResource(viewsets.ModelViewSet):
     queryset = models.stickynotes.objects.all()
     serializer_class = adminserializers.StickynotesSerializer
@@ -2425,7 +2423,7 @@ class EditAnswerResourceViewSet(viewsets.ModelViewSet):
         sql = '''
         UPDATE assignresourceinfo 
            SET answertext = '%s'
-           WHERE assignedid = '%s' ''' % (MySQLdb.escape_string(unicode(approvedanswertext)), assignedid)
+           WHERE assignedid = '%s' ''' % (approvedanswertext.replace("'", '"'), assignedid)
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -2441,8 +2439,8 @@ class EditAnswerResourceViewSet(viewsets.ModelViewSet):
         sql = '''
         UPDATE editingtext
             SET isapproved = 1,
-            previoustext = "%s"
-        WHERE editingid = '%s' ''' % (unicode(edittext), pk)
+            previoustext = '%s'
+        WHERE editingid = '%s' ''' % (edittext.replace("'", '"'), pk)
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -2485,17 +2483,14 @@ class EditAnswerWrittenworkViewSet(viewsets.ModelViewSet):
 
         approvedanswertext = answertext.replace(previoustext,edittext)
         
-
         #updating approved answer text
         sql = '''
         UPDATE assignwrittenworkinfo 
            SET answertext = '%s'
-           WHERE assignwrittenworkid = '%s' ''' % (unicode(approvedanswertext), assignedid)
+           WHERE assignwrittenworkid = '%s' ''' % (approvedanswertext.replace("'", '"'), assignedid)
         cursor = connection.cursor()
         cursor.execute(sql)
 
-        return Response('approved')
-        
         #resetting the previous one if set
         sql = '''
         UPDATE editingtext
@@ -2508,8 +2503,8 @@ class EditAnswerWrittenworkViewSet(viewsets.ModelViewSet):
         sql = '''
         UPDATE editingtext
             SET isapproved = 1,
-            previoustext = "%s"
-        WHERE editingid = '%s' ''' % (unicode(edittext), pk)
+            previoustext = '%s'
+        WHERE editingid = '%s' ''' % (edittext.replace("'", '"'), pk)
         cursor = connection.cursor()
         cursor.execute(sql)
 
