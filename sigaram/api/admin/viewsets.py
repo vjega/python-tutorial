@@ -10,7 +10,7 @@ from api.admin import (create_login,
 from django.db.models import Q
 from django.db import connection
 from portaladmin import models
-import adminserializers
+import  adminserializers
 
 def loginname_to_userid(usertype, username):
     if usertype =='Admin':
@@ -2757,7 +2757,7 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
             queryset = models.Topicinfo.objects.filter(topicid=topicid)
         else:
             queryset = models.Topicinfo.objects.all()
-        serializer = adminserializers.TopicsSerializer(queryset, many=True)
+            serializer = adminserializers.TopicsSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
@@ -2783,7 +2783,9 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
                    a.username as postedby
             FROM postinfo p
             LEFT JOIN auth_user a ON a.id = p.postedby
-            WHERE p.topicid = '%s' ''' % (pk)
+            WHERE p.topicid = '%s' 
+            ORDER BY p.posteddate DESC''' % (pk)
+
         cursor = connection.cursor()
         #print sql
         cursor.execute(sql)
@@ -2815,13 +2817,14 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         return Response('"msg":"update"')
 
     def destroy(self, request, pk=None):
+        models.Topicinfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
 class PostinfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Postinfo.objects.all()
     serializer_class = adminserializers.PostinfoSerializer
-
+    
     def create(self, request):
         postinfo = models.Postinfo()
         postinfodata =  json.loads(request.DATA.keys()[0])
@@ -2834,131 +2837,3 @@ class PostinfoViewSet(viewsets.ModelViewSet):
         postinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         postinfo.save()
         return Response(request.DATA)
-
-    # def list(self, request):
-    #     print request.GET.get('topicid')
-    #     """
-    #     sql = '''
-    #         SELECT ti.topicid,
-    #                ti.topicname,
-    #                ti.topicdetails,
-    #                ti.createddate as topic_createddate,
-    #                p.postid,
-    #                p.postdetails,
-    #                p.posteddate as parent_posteddate,
-    #                p.parentid,
-    #                p.postedby,
-    #                pp.postdetails,
-    #                pp.posteddate as child_posteddate,
-    #                pp.postedby,
-    #                ti.forumid
-    #         FROM topicinfo ti
-    #         LEFT JOIN postinfo p ON  p.topicid = ti.topicid
-    #         LEFT JOIN postinfo pp ON pp.parentid = p.postid
-    #         WHERE ti.topicid = '%s' ''' % request.GET.get('topicid')
-    #     """
-    #     sql = '''
-    #         SELECT ti.topicname,
-    #                ti.topicdetails,
-    #                ti.createddate,
-    #                a.username
-    #         FROM topicinfo ti
-    #         LEFT JOIN auth_user a ON a.id = ti.createdby
-    #         WHERE ti.topicid = '1' '''
-    #     cursor = connection.cursor()
-    #     cursor.execute(sql)
-    #     desc = cursor.description
-    #     result = [
-    #         dict(zip([col[0] for col in desc], row))
-    #         for row in cursor.fetchall()
-    #     ]
-    #     return Response(result)
-
-    # def retrieve(self, request, pk=None):
-    #     sql = '''
-    #     SELECT   p.postid,
-    #                p.postdetails,
-    #                p.posteddate as parent_posteddate,
-    #                p.parentid,
-    #                p.postedby,
-    #                pp.postdetails,
-    #                pp.posteddate as child_posteddate,
-    #                pp.postedby                
-    #         FROM postinfo p
-    #         LEFT JOIN postinfo pp ON pp.parentid = p.postid
-    #     where p.topicid = '1'
-    #     '''
-    #     cursor = connection.cursor()
-    #     cursor.execute(sql)
-    #     result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
-    #     return Response(result)
-
-    # def create(self, request):
-    #     postinfo = models.Postinfo()
-    #     postinfodata =  json.loads(request.DATA.keys()[0])
-    #     postinfo.postid = postinfodata.get('postid')
-    #     postinfo.topicid = postinfodata.get('topicid')
-    #     postinfo.forumid = postinfodata.get('forumid')
-    #     postinfo.parentid = postinfodata.get('parentid')
-    #     postinfo.postdetails = postinfodata.get('postdetails',0)
-    #     postinfo.postedby = request.user.id
-    #     postinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
-    #     postinfo.save()
-    #     return Response(request.DATA)
-
-class RubricImportViewSet(viewsets.ModelViewSet):
-
-    queryset = models.RubricsHeader.objects.all().order_by('-slno')
-    serializer_class = adminserializers.AdminrubricsSerializer
-
-    def create(self, request):
-        adminrubrics = models.RubricsHeader()
-        rubricmatrix = models.RubricMatrix()
-        rd = json.loads(request.DATA.keys()[0])
-
-        import xlrd, os
-
-        rd =  json.loads(request.DATA.keys()[0]);
-        filepath = rd.get('filepath');
-        fullpath = os.path.join('static/', filepath)
-        book     = xlrd.open_workbook(fullpath)
-        sheet    = book.sheet_by_index(0)
-        columns  = int(sheet.ncols)
-        rows     = int(sheet.nrows)
-        
-        adminrubrics.title       = rd.get('ttl')
-        adminrubrics.description = rd.get('desc')
-        adminrubrics.instruction = rd.get('instn')
-        adminrubrics.teacher     = request.user.username
-        adminrubrics.status      = 0
-        adminrubrics.ts          = time.strftime('%Y-%m-%d %H:%M:%S')
-        adminrubrics.save()
-        
-        refno = adminrubrics.slno
-
-        headerdata = ''
-        for hd in range(0, columns):
-            headerdata += unicode(sheet.cell(0,hd).value)
-            if (hd != columns-1) and (hd != 0):
-                headerdata += "~~"
-
-        rubricmatrix.refno      = refno
-        rubricmatrix.datatype   = 'H'
-        rubricmatrix.jdata      = unicode(headerdata)
-        rubricmatrix.disp_order = 0
-        rubricmatrix.save()
-
-        for bdr in range(1, rows):
-            bodydata = ''
-            for bd in range(0, columns):
-                bodydata += unicode(sheet.cell(bdr,bd).value)
-                if bd != columns-1:
-                    bodydata += "~~"
-        
-            rubricmatrix.refno      = refno
-            rubricmatrix.datatype   = 'B'
-            rubricmatrix.jdata      = unicode(bodydata)
-            rubricmatrix.disp_order = bdr
-            rubricmatrix.save()
-
-        return Response("msg")
