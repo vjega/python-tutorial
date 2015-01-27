@@ -410,10 +410,11 @@ def viewtopic(request):
 
 @login_required
 @switchlanguage
-def viewpost(request):
-    return render(request, 'portalstudent/viewpost.html')
+def newtopic(request):
+    return render(request, 'portalstudent/newtopic.html')
 
 @login_required
 @switchlanguage
-def newtopic(request):
-    return render(request, 'portalstudent/newtopic.html')
+def viewpost(request):
+    return render(request, 'portalstudent/viewpost.html')
+
