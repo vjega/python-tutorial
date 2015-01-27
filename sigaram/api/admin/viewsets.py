@@ -2817,6 +2817,7 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         return Response('"msg":"update"')
 
     def destroy(self, request, pk=None):
+        models.Topicinfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
 class PostinfoViewSet(viewsets.ModelViewSet):
