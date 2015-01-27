@@ -2754,9 +2754,9 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         topicid = request.GET.get('topicid')
         topicname = request.GET.get('topicname')
         if topicid :
-            queryset = models.Topicinfo.objects.filter(topicid=topicid)
+            queryset = models.Topicinfo.objects.filter(topicid=topicid).order_by(createddate)
         else:
-            queryset = models.Topicinfo.objects.all()
+            queryset = models.Topicinfo.objects.all().order_by(createddate)
         serializer = adminserializers.TopicsSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -2783,7 +2783,8 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
                    a.username as postedby
             FROM postinfo p
             LEFT JOIN auth_user a ON a.id = p.postedby
-            WHERE p.topicid = '%s' ''' % (pk)
+            WHERE p.topicid = '%s' 
+            ORDER BY posteddate''' % (pk)
         cursor = connection.cursor()
         #print sql
         cursor.execute(sql)
