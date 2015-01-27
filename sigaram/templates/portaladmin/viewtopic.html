@@ -1,4 +1,4 @@
-{% extends 'portalteacher/base.html' %}
+{% extends 'portaladmin/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
@@ -137,6 +137,7 @@ TTS.forms.renderviewfourminfo = function(data){
               "data" : "totalpost"  
             },
             { "title": "{% trans "Last author" %}",
+              "class": "text-center" ,
               "data" : "lastpostedby"  
             },
             { "title": "{% trans "Delete" %}",

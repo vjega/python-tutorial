@@ -581,4 +581,21 @@ def addstickynote(request):
 @login_required
 @switchlanguage
 def summernote_image_test(request):
-    return render(request, 'portaladmin/summernote_image_test.html')    
+    return render(request, 'portaladmin/summernote_image_test.html')  
+
+
+@login_required
+@switchlanguage
+def viewtopic(request):
+   foruminfo = models.Foruminfo.objects.all()
+   return render(request, 'portaladmin/viewtopic.html')
+
+@login_required
+@switchlanguage
+def viewpost(request):
+    return render(request, 'portaladmin/viewpost.html')
+
+@login_required
+@switchlanguage
+def newtopic(request):
+    return render(request, 'portaladmin/newtopic.html')  

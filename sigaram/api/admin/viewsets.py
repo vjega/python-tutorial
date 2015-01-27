@@ -2749,9 +2749,9 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         topicid = request.GET.get('topicid')
         topicname = request.GET.get('topicname')
         if topicid :
-            queryset = models.Topicinfo.objects.filter(topicid=topicid)
+            queryset = models.Topicinfo.objects.filter(topicid=topicid).order_by('-createddate')
         else:
-            queryset = models.Topicinfo.objects.all()
+            queryset = models.Topicinfo.objects.filter().order_by('-createddate')
             serializer = adminserializers.TopicsSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -2760,7 +2760,7 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
             SELECT ti.topicname,
                    ti.topicdetails,
                    ti.createddate,
-                   a.username
+                   a.first_name AS username
             FROM topicinfo ti
             LEFT JOIN auth_user a ON a.id = ti.createdby
             WHERE ti.topicid = '%s' ''' % (pk)
@@ -2775,7 +2775,7 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
                    p.parentid,
                    p.posteddate,
                    p.parentid,
-                   a.username as postedby
+                   a.first_name AS postedby
             FROM postinfo p
             LEFT JOIN auth_user a ON a.id = p.postedby
             WHERE p.topicid = '%s' 
@@ -2793,16 +2793,19 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         return Response(result)
     
     def create(self, request):
+        print "*"*80
+        print request.user.get_full_name()
         topics = models.Topicinfo()
         topicinfodata =  json.loads(request.DATA.keys()[0])
         topics.topicid = topicinfodata.get('topicid',0)
         topics.forumid = topicinfodata.get('forumid',0)
         topics.totalpost = topicinfodata.get('totalpost',0)
-        topics.topicdetails = topicinfodata.get('topicdetails',0)
+        topics.topicdetails = summer_decode(topicinfodata.get('topicdetails',0))
         topics.forumid = topicinfodata.get('forumid',0)
-        topics.topicname = topicinfodata.get('topicname',0)
+        topics.topicname = summer_decode(topicinfodata.get('topicname',0))
         topics.createdby = request.user.id
         topics.lastpostedby = request.user.id
+        topics.username = request.user.get_full_name()
         topics.lastposteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         topics.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         topics.save()
@@ -2813,13 +2816,19 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         models.Topicinfo.objects.get(pk=pk).delete()
+        sql = """
+        DELETE FROM postinfo 
+        WHERE topicid=%s
+        """ %pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
         return Response('"msg":"delete"')
 
 class PostinfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Postinfo.objects.all()
     serializer_class = adminserializers.PostinfoSerializer
-    
+
     def create(self, request):
         postinfo = models.Postinfo()
         postinfodata =  json.loads(request.DATA.keys()[0])
