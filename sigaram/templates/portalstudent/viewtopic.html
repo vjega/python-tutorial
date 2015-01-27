@@ -141,11 +141,6 @@ TTS.forms.renderviewfourminfo = function(data){
               "class": "text-center" ,
               "data" : "lastpostedby"  
             },
-            { "title": "{% trans "Delete" %}",
-              "class": "text-center",
-              "data" : "del",
-              "bSortable":false
-            },
             
         ];
     var dataset = [];
@@ -158,7 +153,6 @@ TTS.forms.renderviewfourminfo = function(data){
         t.totalpost = data[i].totalpost;
         t.topicdetails = data[i].topicdetails;
         t.lastpostedby = data[i].lastpostedby;
-        t.del = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);
     }
     $('#viewforum-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
