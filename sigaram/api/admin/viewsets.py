@@ -2754,9 +2754,9 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         topicid = request.GET.get('topicid')
         topicname = request.GET.get('topicname')
         if topicid :
-            queryset = models.Topicinfo.objects.filter(topicid=topicid).order_by(createddate)
+            queryset = models.Topicinfo.objects.filter(topicid=topicid).order_by('createddate')
         else:
-            queryset = models.Topicinfo.objects.all().order_by(createddate)
+            queryset = models.Topicinfo.objects.all().order_by('createddate')
         serializer = adminserializers.TopicsSerializer(queryset, many=True)
         return Response(serializer.data)
 
