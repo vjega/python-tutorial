@@ -2765,7 +2765,7 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
             SELECT ti.topicname,
                    ti.topicdetails,
                    ti.createddate,
-                   a.username
+                   a.first_name AS username
             FROM topicinfo ti
             LEFT JOIN auth_user a ON a.id = ti.createdby
             WHERE ti.topicid = '%s' ''' % (pk)
@@ -2780,7 +2780,7 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
                    p.parentid,
                    p.posteddate,
                    p.parentid,
-                   a.username as postedby
+                   a.first_name AS postedby
             FROM postinfo p
             LEFT JOIN auth_user a ON a.id = p.postedby
             WHERE p.topicid = '%s' 
@@ -2798,6 +2798,8 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         return Response(result)
     
     def create(self, request):
+        print "*"*80
+        print request.user.get_full_name()
         topics = models.Topicinfo()
         topicinfodata =  json.loads(request.DATA.keys()[0])
         topics.topicid = topicinfodata.get('topicid',0)
@@ -2806,9 +2808,9 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         topics.topicdetails = summer_decode(topicinfodata.get('topicdetails',0))
         topics.forumid = topicinfodata.get('forumid',0)
         topics.topicname = summer_decode(topicinfodata.get('topicname',0))
-        topics.username = topicinfodata.get('username',0)
         topics.createdby = request.user.id
         topics.lastpostedby = request.user.id
+        topics.username = request.user.get_full_name()
         topics.lastposteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         topics.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         topics.save()

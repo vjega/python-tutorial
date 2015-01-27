@@ -1009,6 +1009,7 @@ class Topicinfo(models.Model):
     topicdetails = models.TextField()
     lastpostedby = models.BigIntegerField()
     lastposteddate = models.DateTimeField()
+    username = models.CharField(max_length=50)
     createdby = models.BigIntegerField()
     createddate = models.DateTimeField()
 

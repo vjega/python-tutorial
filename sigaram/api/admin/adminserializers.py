@@ -165,7 +165,7 @@ class TopicsSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Topicinfo
         fields = ('topicid',  'forumid','topicname','topicdetails',
                   'totalpost','createdby', 'createddate',
-                  'lastpostedby','lastposteddate')
+                  'lastpostedby','lastposteddate','username')
 
 class ThreadSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
