@@ -2732,7 +2732,7 @@ class TeacherAssignedmindmapViewSet(viewsets.ModelViewSet):
 
 class TopicInfoViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Topicinfo.objects .all()
+    queryset = models.Topicinfo.objects .order_by('-createddate')
     serializer_class = adminserializers.TopicsSerializer
 
     def treeify(self, flatlist, idAttr = 'postid', parentAttr = 'parentid', childrenAttr = 'comments'):
@@ -2804,6 +2804,7 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         topics.topicdetails = topicinfodata.get('topicdetails',0)
         topics.forumid = topicinfodata.get('forumid',0)
         topics.topicname = topicinfodata.get('topicname',0)
+        topics.username = topicinfodata.get('username',0)
         topics.createdby = request.user.id
         topics.lastpostedby = request.user.id
         topics.lastposteddate = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -2821,7 +2822,7 @@ class PostinfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Postinfo.objects.all()
     serializer_class = adminserializers.PostinfoSerializer
-    
+
     def create(self, request):
         postinfo = models.Postinfo()
         postinfodata =  json.loads(request.DATA.keys()[0])
