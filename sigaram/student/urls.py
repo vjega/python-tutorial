@@ -73,5 +73,5 @@ urlpatterns = patterns('student.views',
                                                             name='viewassignmindmapanswer'), 
     url(r'^viewtopic$',                 'viewtopic',        name='viewtopic'),
     url(r'^viewpost$',                  'viewpost',         name='viewpost'),
-    url(r'^newtopic$',                  'newtopic',         name='newtopic'),   
+    url(r'^newtopic$',                  'newtopic',         name='newtopic')   
 )
