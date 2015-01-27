@@ -1,4 +1,4 @@
-{% extends 'portalteacher/base.html' %}
+{% extends 'portalstudent/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
@@ -108,6 +108,7 @@ TTS.forms.showviewfourm = function() {
                 data = JSON.parse(data);
                 data['forumid'] = TTS.utils.getUrlParameter("forumid");
                 data['forumname'] = TTS.utils.getUrlParameter("forumname");
+                data = JSON.stringify(data);
                 TTS.forms.addviewfourm(dialogItself, data); 
             }
             },{
@@ -150,7 +151,6 @@ TTS.forms.renderviewfourminfo = function(data){
     var dataset = [];
     var count = 0
     for(var i in data){
-        //console.log(TTS.utils.getUrlParameter("lastpostedby"));
         var t = {};
         t.DT_RowId = data[i].forumid+'/'+data[i].topicid;
         t.slno = ++count;

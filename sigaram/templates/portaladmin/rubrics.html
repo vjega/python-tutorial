@@ -1,4 +1,4 @@
-{% extends 'portalteacher/base.html' %}
+{% extends 'portaladmin/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
@@ -65,7 +65,8 @@ TTS.forms.renderrubricsinfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false  
             },
             { "title": "{% trans "Title" %}", "data" : "title"},
             { "title": "{% trans "Detail" %}", "data" : "detail"},
@@ -73,7 +74,8 @@ TTS.forms.renderrubricsinfo = function(data){
             { "title": "{% trans "Date Time" %}", "data" : "time"}, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center", 
-              "data" : "delete"  
+              "data" : "delete",
+              "bSortable":false  
             }, 
         ];
     var dataset = [];
@@ -120,6 +122,7 @@ $(document).ready(function(){
     }).done(function(data){
         TTS.forms.renderrubricsinfo(data);
         TTS.utils.ajaxloaderstop();
+        $("table#rubrics-main-tbl thead tr th").removeClass('sorting_asc');
     });
    
     $('#rubrics-main-tbl').on('click', '.tts-delete', function(e){
