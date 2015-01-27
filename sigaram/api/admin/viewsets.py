@@ -2805,7 +2805,7 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         topics.forumid = topicinfodata.get('forumid',0)
         topics.topicname = topicinfodata.get('topicname',0)
         topics.createdby = request.user.id
-        topics.lastpostedby = request.user.id
+        topics.lastpostedby = str(request.user.username)
         topics.lastposteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         topics.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         topics.save()
