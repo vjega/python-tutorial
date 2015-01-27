@@ -2754,9 +2754,9 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         topicid = request.GET.get('topicid')
         topicname = request.GET.get('topicname')
         if topicid :
-            queryset = models.Topicinfo.objects.filter(topicid=topicid)
+            queryset = models.Topicinfo.objects.filter(topicid=topicid).order_by('-createddate')
         else:
-            queryset = models.Topicinfo.objects.filter(). order_by('-lastposteddate')
+            queryset = models.Topicinfo.objects.filter().order_by('-createddate')
             serializer = adminserializers.TopicsSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -2803,9 +2803,9 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         topics.topicid = topicinfodata.get('topicid',0)
         topics.forumid = topicinfodata.get('forumid',0)
         topics.totalpost = topicinfodata.get('totalpost',0)
-        topics.topicdetails = topicinfodata.get('topicdetails',0)
+        topics.topicdetails = summer_decode(topicinfodata.get('topicdetails',0))
         topics.forumid = topicinfodata.get('forumid',0)
-        topics.topicname = topicinfodata.get('topicname',0)
+        topics.topicname = summer_decode(topicinfodata.get('topicname',0))
         topics.username = topicinfodata.get('username',0)
         topics.createdby = request.user.id
         topics.lastpostedby = request.user.id
