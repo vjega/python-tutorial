@@ -207,7 +207,7 @@ class AssignmindmapinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Assignmindmapinfo
         fields = ('mindmapid','studentid','assigntext','mapdata','assigneddate',
-                    'isdelete','assignedby','answertext','answereddate',
+                    'isdelete','assignedby','answertext','comment','answereddate',
                     'assignedby','assigneddate','isanswered','issaved','isdelete')
 
 class PostinfoSerializer(serializers.HyperlinkedModelSerializer):

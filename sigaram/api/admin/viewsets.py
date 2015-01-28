@@ -2577,6 +2577,7 @@ class AssignmindmapinfoViewSet(viewsets.ModelViewSet):
                mmi.title,
                ammi.assigntext,
                ammi.answertext,
+               ammi.comment,
                ammi.mapdata,
                date(assigneddate) as createddate,
                date(answereddate) as answereddate,
@@ -2666,6 +2667,7 @@ class TeacherAssignedmindmapViewSet(viewsets.ModelViewSet):
                mmi.title,
                ammi.assigntext,
                ammi.answertext,
+               ammi.comment,
                ammi.mapdata,
                date(assigneddate) as createddate,
                date(answereddate) as answereddate,
@@ -2699,6 +2701,7 @@ class TeacherAssignedmindmapViewSet(viewsets.ModelViewSet):
                mmi.title,
                ammi.assigntext,
                ammi.answertext,
+               ammi.comment,
                ammi.mapdata,
                date(assigneddate) as createddate,
                date(answereddate) as answereddate,
@@ -2725,6 +2728,14 @@ class TeacherAssignedmindmapViewSet(viewsets.ModelViewSet):
                 for row in cursor.fetchall()
             ]
         return Response(result)
+
+    def update(self, request, pk=None):
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        ammi = models.Assignmindmapinfo.objects.get(pk=pk)
+        ammi.comment = summer_decode(unicode(data.get('comment')))
+        ammi.save()
+
+        return Response('"msg":"update"')
 
 class TopicInfoViewSet(viewsets.ModelViewSet):
 

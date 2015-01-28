@@ -1137,6 +1137,7 @@ class Assignmindmapinfo(models.Model):
     studentid   = models.CharField(max_length=500)
     assigntext  = models.TextField()
     answertext  = models.TextField()
+    comment     = models.TextField()
     mapdata     = models.TextField()
     answereddate= models.DateTimeField()
     assignedby  = models.CharField(max_length=500)

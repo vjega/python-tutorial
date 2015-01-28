@@ -59,6 +59,19 @@
                 <div class="row">
                     <div class="col-md-12" id="answertext"></div>
                 </div>
+                <div class="row"> 
+                    <div class="col-md-12"><h4><strong>{% trans "Comment" %}:</strong></h4></div>
+                </div> 
+                <div class="row">
+                    <div class="col-md-12">
+                        <textarea id="comment" class="summernote"></textarea>
+                    </div>
+                </div>
+                <div class="row"><br />
+                    <div class="col-md-12">
+                        <button class="btn btn-success btn-sm" id="res-send"><i class="fa fa-share fa-lg"></i> {% trans "Send" %}</button>
+                    </div>
+                </div>
                 </table>
         </div>
         <!-- /.panel-body -->
@@ -115,6 +128,7 @@ TTS.forms.renderassignedmindmapinfo = function(data){
     $("#mindmap-title").html(data[0].title);
     $("#mindmap-note").html(data[0].assigntext);
     $("#answertext").html(data[0].answertext);
+    $("#comment").code(data[0].comment);
     TTS.global.buzzmapdoc = $('#container').buzzmap({
         structure: data[0].mapdata,
         editable: true
@@ -122,33 +136,19 @@ TTS.forms.renderassignedmindmapinfo = function(data){
 };
 
 
-TTS.forms.ressave = function(savesend){
+TTS.forms.ressave = function(){
     var data = {};
     var assignedid   = TTS.utils.getUrlParameter('assignedid');
-
-    var mindmap         = TTS.global.buzzmapdoc.serialize();
-    data.mapdata        = TTS.utils.summer_encode(mindmap);
-    data.answertext     = TTS.utils.summer_encode($(".summernote").code());
-
-    if(savesend == 'save')
-        data.issaved = 1;
-    else
-        data.issaved = 0;
-
-    if(savesend == 'send')
-        data.isanswered = 1;
-    else
-        data.isanswered = 0;
-
+    data.comment     = TTS.utils.summer_encode($(".summernote").code());
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
-        url:"/api/admin/assignmindmapinfo/"+assignedid+"/",
+        url:"/api/admin/teacherassignedmindmap/"+assignedid+"/",
         type:"PUT",
         data: data
     }).done(function(data){
-        window.location = 'studentviewmindmap';
+        window.location = 'assignedmindmaplist';
     }).error(function(err, msg){
         alert("I didnt save the data");
     });
@@ -201,11 +201,8 @@ $(document).ready(function(){
 
     var assignedid = TTS.utils.getUrlParameter('assignedid');
 
-    $("#res-save").click(function(){
-        TTS.forms.ressave('save');
-    });
     $("#res-send").click(function(){
-        TTS.forms.ressave('send');
+        TTS.forms.ressave();
     });
     $.ajax({
         "url":"/api/admin/teacherassignedmindmap/?assignedid="+assignedid+"&format=json",
