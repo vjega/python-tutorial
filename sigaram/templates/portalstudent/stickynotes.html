@@ -18,6 +18,10 @@
             <span id="add" class="add">({% trans "Add" %})</span>
              <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
         </div>
+        <div class="col-lg-12">
+            <label>{% trans "Title" %}:</label>
+            <span id="resource-title"></span>
+        </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
             <div class="table-responsive">
@@ -176,6 +180,12 @@
 }
 
 .deleterec{
+    float: right;
+    margin: -1px 8px 0 0;
+    cursor: pointer;
+}
+
+.deletecomment{
     float: right;
     margin: -1px 8px 0 0;
     cursor: pointer;
@@ -445,6 +455,20 @@ TTS.forms.delstickynotes = function(id) {
     });
 }
 
+TTS.forms.delstickycomment = function(id) {
+    $.ajax({
+         headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'DELETE',
+        url : '/api/admin/stickycomments/'+id
+    }).done(function( msg ) {
+        location.reload();
+    }).error(function(msg){
+        alert("Something Bad Happended");
+    });
+}
+
 TTS.forms.addstickycomment = function(form, data) {
     $.ajax({
         headers : {
@@ -482,6 +506,10 @@ TTS.forms.showstickycommentform = function(stickyid) {
     });
 };
 
+TTS.forms.renderstickycomment = function(data){
+    $("#resource-title").html(data[0].title);
+};
+
 TTS.forms.renderstickynotes = function(data){
     var sticky_html = '';
     for(var i in data){
@@ -507,7 +535,12 @@ TTS.forms.renderstickynotes = function(data){
         if (data[i].createddate !==  null) {
             comdate = data[i].createddate.split("~");
         }
-        
+
+        var comid = []
+        if (data[i].commetid !==  null) {
+            comid = data[i].commetid.split("~");
+        }
+
         if (com.length) {
             sticky_html += "<div class='show_comment_icon'>";
             sticky_html += "<div class='show_comments' src='"+com.length+"' name='"+data[i].id+"'><i class='fa fa-caret-right'></i> &nbsp;&nbsp;</div>";
@@ -520,7 +553,7 @@ TTS.forms.renderstickynotes = function(data){
                 //sticky_html += "<div class='comment_by'>"+comby[i]+"</div>";
                 //sticky_html += "<div class='comment_date'>"+comdate[i]+"</div>";
                 //sticky_html += "</div>";
-                sticky_html += "<div class='comments'>"+com[i]+"</div>";
+                sticky_html += "<div class='comments'>"+com[i]+"<span class='pull-right deletecomment'  name='"+comid[i]+"'><i class='fa fa-trash'></i></span></div>";
                 sticky_html += "</div>";
             }
             sticky_html += "</div>";
@@ -547,6 +580,14 @@ $(document).ready(function(){
         TTS.forms.renderstickynotes(data);
     });
 
+    $.ajax({
+        "url":"/api/admin/stickynotes/"+TTS.utils.getUrlParameter("id"),
+        "type":"GET"
+    }).done(function(data){
+        TTS.forms.renderstickycomment(data);
+        TTS.utils.ajaxloaderstop();
+    });
+
     setTimeout(function(){ load_onclick_events() }, 500);
 });
 
@@ -568,6 +609,15 @@ function load_onclick_events (){
         var delete_id = $(this).attr("name");
         TTS.forms.delstickynotes(delete_id);
         window.location.reload();
+    });
+
+    $("#sticky-placeholder").on("click", ".deletecomment", function(){
+        if (!window.confirm("Do you want to delete this record?")) {
+            return false;
+        }
+        var delete_id = $(this).attr("name");
+        TTS.forms.delstickycomment(delete_id);
+        //window.location.reload();
     });
 
     $("#sticky-placeholder").on("click", ".sticky_comment", function(){
