@@ -18,6 +18,10 @@
             <span id="add" class="add">({% trans "Add" %})</span>
              <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
         </div>
+        <div class="col-lg-12">
+            <label>{% trans "Title" %}:</label>
+            <span id="resource-title"></span>
+        </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
             <div class="table-responsive">
@@ -501,6 +505,10 @@ TTS.forms.showstickycommentform = function(stickyid) {
     });
 };
 
+TTS.forms.renderstickycomment = function(data){
+    $("#resource-title").html(data[0].title);
+};
+
 TTS.forms.renderstickynotes = function(data){
     var sticky_html = '';
     for(var i in data){
@@ -573,6 +581,14 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstickynotes(data);
+        TTS.utils.ajaxloaderstop();
+    });
+
+    $.ajax({
+        "url":"/api/admin/stickynotes/"+TTS.utils.getUrlParameter("id"),
+        "type":"GET"
+    }).done(function(data){
+        TTS.forms.renderstickycomment(data);
         TTS.utils.ajaxloaderstop();
     });
 
