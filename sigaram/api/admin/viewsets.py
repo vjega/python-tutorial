@@ -728,16 +728,19 @@ class CalendarViewSet(viewsets.ModelViewSet):
         data = json.loads(dict(request.DATA).keys()[0])
         #return Response({})
         #data = {k:v[0] for k,v in dict(request.DATA).items()}
-        cal.title = data.get('title')
-        cal.start = data.get('start')
-        cal.end = data.get('end')
-        cal.color = data.get('color')
-        cal.allday = data.get('alldayevents')
-        cal.eventcreatedby = request.user.username
-        cal.eventeditedby = request.user.username
-        cal.isdeleted = 0
-        cal.createdby = request.user.id
-        cal.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        startdt = data.get('start')+":00"
+        enddt   = data.get('end')+":00"
+
+        cal.title           = data.get('title')
+        cal.start           = startdt
+        cal.end             = enddt
+        cal.color           = data.get('color')
+        cal.allday          = data.get('alldayevents')
+        cal.eventcreatedby  = request.user.username
+        cal.eventeditedby   = request.user.username
+        cal.isdeleted       = 0
+        cal.createdby       = request.user.id
+        cal.createddate     = time.strftime('%Y-%m-%d %H:%M:%S')
         cal.save()
         return Response(request.DATA)
 
@@ -745,18 +748,21 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal = models.Calendardetails.objects.get(pk=pk)  
         data = json.loads(dict(request.DATA).keys()[0])
         #data = {k:v[0] for k,v in dict(request.DATA).items()}
-        cal.title = data.get('title')
-        cal.start = data.get('start')
-        cal.end = data.get('end')
-        cal.color = data.get('color')
-        cal.allday = data.get('alldayevents')
-        cal.eventcreatedby = request.user.username
-        cal.eventeditedby = request.user.username
-        cal.isdeleted = 0
-        cal.createdby = request.user.id
-        cal.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        startdt             = data.get('start')+":00"
+        enddt               = data.get('end')+":00"
+        cal.title           = data.get('title')
+        cal.start           = startdt
+        cal.end             = enddt
+        cal.color           = data.get('color')
+        cal.allday          = data.get('alldayevents')
+        cal.eventcreatedby  = request.user.username
+        cal.eventeditedby   = request.user.username
+        cal.isdeleted       = 0
+        cal.createdby       = request.user.id
+        cal.createddate     = time.strftime('%Y-%m-%d %H:%M:%S')
         cal.save()
         return Response(request.DATA)
+        
     def destroy(self, request, pk):
         models.Calendardetails.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
