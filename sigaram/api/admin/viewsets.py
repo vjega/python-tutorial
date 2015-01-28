@@ -1076,6 +1076,7 @@ class StickynotesResource(viewsets.ModelViewSet):
         SELECT s.id,
             s.stickytext,
             s.color,
+            group_concat(sc.id SEPARATOR "~") as commetid,
             group_concat(sc.stickycomment SEPARATOR "~") as comments,
             group_concat(sc.commentby SEPARATOR "~") as commentby,
             group_concat(sc.createddate SEPARATOR "~") as createddate
