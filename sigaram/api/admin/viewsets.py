@@ -762,7 +762,6 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.createddate     = time.strftime('%Y-%m-%d %H:%M:%S')
         cal.save()
         return Response(request.DATA)
-        
     def destroy(self, request, pk):
         models.Calendardetails.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
@@ -824,28 +823,28 @@ class StudentAssignResource(viewsets.ModelViewSet):
             ari.issaved = data.get('issaved')
         
         ari.save()
+        if data.get('spanid'):
+            assignedid  = pk;
+            spanid      = summer_decode(data.get('spanid'));
+            fulltext    = summer_decode(data.get('fulltext'));
+            orig        = summer_decode(data.get('orig'));
+            modified    = summer_decode(data.get('modified'));
+            usertype    = data.get('type');
+            answertext  = summer_decode(data.get('answertext'));
 
-        assignedid  = pk;
-        spanid      = summer_decode(data.get('spanid'));
-        fulltext    = summer_decode(data.get('fulltext'));
-        orig        = summer_decode(data.get('orig'));
-        modified    = summer_decode(data.get('modified'));
-        usertype    = data.get('type');
-        answertext  = summer_decode(data.get('answertext'));
+            ar = models.Editingtext()
+            ar.editid       = int(assignedid)
+            ar.spanid       = unicode(spanid)
+            ar.previoustext = unicode(orig)
+            ar.edittext     = unicode(modified)
+            ar.typeofresource = 0
+            ar.isapproved   = 0
+            ar.isrejected   = 0
+            ar.editedby     = request.user.username
+            ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
+            ar.usertype     = int(usertype)
 
-        ar = models.Editingtext()
-        ar.editid       = int(assignedid)
-        ar.spanid       = unicode(spanid)
-        ar.previoustext = unicode(orig)
-        ar.edittext     = unicode(modified)
-        ar.typeofresource = 0
-        ar.isapproved   = 0
-        ar.isrejected   = 0
-        ar.editedby     = request.user.username
-        ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
-        ar.usertype     = int(usertype)
-
-        ar.save()
+            ar.save()
 
         return Response({'msg':True})
 
@@ -1082,7 +1081,6 @@ class StickynotesResource(viewsets.ModelViewSet):
         SELECT s.id,
             s.stickytext,
             s.color,
-            group_concat(sc.id SEPARATOR "~") as commetid,
             group_concat(sc.stickycomment SEPARATOR "~") as comments,
             group_concat(sc.commentby SEPARATOR "~") as commentby,
             group_concat(sc.createddate SEPARATOR "~") as createddate
@@ -1094,7 +1092,7 @@ class StickynotesResource(viewsets.ModelViewSet):
                  s.color, 
                  s.color
         ORDER BY s.createddate DESC''' %wherecond
-        print sql;
+        #print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -1129,23 +1127,6 @@ class StickynotesResource(viewsets.ModelViewSet):
         stickynotes.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         stickynotes.save()
         return Response(request.DATA)
-
-    def retrieve(self, request, pk=None):
-        sql = '''
-        SELECT  id,
-                title 
-        FROM stickyinfo
-        WHERE id='%s'
-        ''' % (pk)
-
-        cursor = connection.cursor()
-        cursor.execute(sql)
-        desc = cursor.description
-        result =  [
-                dict(zip([col[0] for col in desc], row))
-                for row in cursor.fetchall()
-            ]
-        return Response(result)
 
     def destroy(self, request, pk):
         models.stickynotes.objects.get(pk=pk).delete()
@@ -2846,8 +2827,8 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         return Response(result)
     
     def create(self, request):
-        # print "*"*80
-        # print request.user.get_full_name()
+        print "*"*80
+        print request.user.get_full_name()
         topics = models.Topicinfo()
         topicinfodata =  json.loads(request.DATA.keys()[0])
         topics.topicid = topicinfodata.get('topicid',0)
