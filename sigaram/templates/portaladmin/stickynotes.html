@@ -506,7 +506,7 @@ TTS.forms.showstickycommentform = function(stickyid) {
 };
 
 TTS.forms.renderstickycomment = function(data){
-    $("#resource-title").html(data[0].title);
+    $("#resource-title").html(data.title);
 };
 
 TTS.forms.renderstickynotes = function(data){
@@ -581,7 +581,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstickynotes(data);
-        TTS.utils.ajaxloaderstop();
+        //TTS.utils.ajaxloaderstop();
     });
 
     $.ajax({
