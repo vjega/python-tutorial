@@ -123,7 +123,8 @@ TTS.forms.renderviewfourminfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center" ,
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false 
             },
             { "title": "{% trans "Topics" %}",
               "data" : "topicname" ,
@@ -175,6 +176,7 @@ $(document).ready(function(){
     }).done(function(data){
         if (data.length) {
             TTS.forms.renderviewfourminfo(data);
+            $("table#viewforum-main-tbl thead tr th").removeClass('sorting_asc');
         } 
         
     });

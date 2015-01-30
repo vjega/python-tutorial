@@ -79,13 +79,15 @@ TTS.forms.rendermindmapinfo = function(data){
     var headers = [
             { "title": "&nbsp;",
               "class": "text-center",
-              "data":"icon"  
+              "data":"icon",
+              "bSortable":false  
             },
             { "title": "{% trans "Title" %}",
                "data" :"title"
             },
             { "title": "{% trans "Assignment" %}",
-              "data" :"assignment"
+              "data" :"assignment",
+              "bSortable":false
             },
         ];
     var dataset = [];
@@ -113,6 +115,7 @@ $(document).ready(function(){
     }).done(function(data){
         console.log(data);
         TTS.forms.rendermindmapinfo(data);
+        $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
     /*$('#admin-main-tbl').on('click', 'tbody tr',function(e){

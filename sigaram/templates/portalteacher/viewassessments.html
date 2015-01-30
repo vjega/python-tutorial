@@ -156,12 +156,14 @@ TTS.forms.editschool = function() {
 TTS.forms.renderteacherresourceinfo = function(data){
     var headers = [
                     { "title": "{% trans "Sl No." %}",
-                      "class": "text-center"  
+                      "class": "text-center",
+                      "bSortable":false  
                     },
                     { "title": "{% trans "Title" %}"},
                     { "title": "{% trans "Date" %}" },
                     { "title": "{% trans "Check" %}" },
-                    { "title": "{% trans "Remove" %}"}, 
+                    { "title": "{% trans "Delete" %}",
+                      "bSortable":false  }, 
                 ];
     var dataset = [];
     var count = 0
@@ -190,6 +192,7 @@ $(document).ready(function(){
     }).done(function(data){
         //console.log(data);
         TTS.forms.renderteacherresourceinfo(data);
+        $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
 

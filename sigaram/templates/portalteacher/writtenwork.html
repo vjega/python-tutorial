@@ -126,7 +126,8 @@ TTS.forms.writtenworklist = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center" ,
-              "data" :"slno"
+              "data" :"slno",
+              "bSortable":false
             },
             { "title": "{% trans "Title" %}",
               "data" :"title"
@@ -233,6 +234,7 @@ $(document).ready(function(){
     }).done(function(data){
         //console.log(data);
         TTS.forms.writtenworklist(data);
+        $("table#writtenwork-list-new thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
 
