@@ -57,7 +57,8 @@ TTS.forms.renderstudentlist = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false    
             },
             { "title": "{% trans "Photo" %}",
               "class": "text-center",  
@@ -108,8 +109,10 @@ $(document).ready(function(){
     TTS.utils.ajaxloaderstop();
         if (data.length) {
             TTS.forms.renderstudentlist(data);
+            $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
         } else {
             TTS.forms.table.fnClearTable();
+            $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
         }
     });
     $('#admin-main-tbl').on('click', 'tbody tr', function(){

@@ -116,7 +116,8 @@ TTS.forms.addstudentresource = function() {
 TTS.forms.renderteacherresourceinfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
-              "class": "text-center"  
+              "class": "text-center" ,
+              "bSortable":false  
             },
             { "title": "{% trans "Title" %}"},
             { "title": "{% trans "Date" %}" },
@@ -167,6 +168,7 @@ $(document).ready(function(){
     }).done(function(data){
         console.log(data);
         TTS.forms.renderteacherresourceinfo(data);
+        $("table#studetresource-main-tbl thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
     /*$('#studetresource-main-tbl').on('click', 'tbody tr',function(e){

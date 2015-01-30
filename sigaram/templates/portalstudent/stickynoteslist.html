@@ -104,7 +104,8 @@ TTS.forms.renderteacher = function(data){
     
     var headers = [
             { "title": "{% trans "Sl No." %}",
-              "class": "text-center"  
+              "class": "text-center" ,
+              "bSortable":false   
             },
             { "title": "{% trans "Title" %}",
               "class": "sticky_title"
@@ -146,6 +147,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacher(data);
+        $("table#sticky-list-tbl thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
     $('#sticky-list-tbl').on('click', 'tbody tr', function(){
