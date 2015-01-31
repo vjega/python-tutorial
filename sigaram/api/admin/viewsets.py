@@ -499,6 +499,8 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
         sectionid   = request.GET.get('section')
         chapterid = request.GET.get('chapterid')
         categoryid = request.GET.get('categoryid',0)
+        resourcecategory = request.GET.get('resourcecategory',0)
+        #print resourcecategory;
         
         kwarg = {}
         #kwarg['isdeleted'] = 0
@@ -515,7 +517,19 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             queryset = models.Chapterinfo.objects.all().order_by('chapterid')
 
         serializer = adminserializers.ChapterinfoSerializer(queryset, many=True)
-        if categoryid:
+        if resourcecategory:
+            sql = '''
+            SELECT chapterid, 
+                   count(*) AS cnt
+            FROM teacherresourceinfo 
+            WHERE classid=%s
+                AND section='%s' 
+                AND isdeleted=0
+                AND resourcecategory=%s
+            GROUP BY chapterid
+            ORDER BY chapterid
+            '''%(classid, sectionid,resourcecategory)
+        else:
             sql = '''
             SELECT chapterid, 
                    count(*) AS cnt
@@ -527,18 +541,6 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             GROUP BY chapterid
             ORDER BY chapterid
             '''%(categoryid, classid, sectionid)
-        else:
-            sql = '''
-            SELECT chapterid, 
-                   count(*) AS cnt
-            FROM teacherresourceinfo 
-            WHERE classid=%s
-                AND section='%s' 
-                AND isdeleted=0
-                AND resourcecategory=1
-            GROUP BY chapterid
-            ORDER BY chapterid
-            '''%(classid, sectionid)
         print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
