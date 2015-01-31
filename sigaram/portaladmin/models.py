@@ -1009,6 +1009,7 @@ class Topicinfo(models.Model):
     topicdetails = models.TextField()
     lastpostedby = models.BigIntegerField()
     lastposteddate = models.DateTimeField()
+    username = models.CharField(max_length=50)
     createdby = models.BigIntegerField()
     createddate = models.DateTimeField()
 
@@ -1136,6 +1137,7 @@ class Assignmindmapinfo(models.Model):
     studentid   = models.CharField(max_length=500)
     assigntext  = models.TextField()
     answertext  = models.TextField()
+    comment     = models.TextField()
     mapdata     = models.TextField()
     answereddate= models.DateTimeField()
     assignedby  = models.CharField(max_length=500)

@@ -1,4 +1,4 @@
-{% extends 'portalteacher/base.html' %}
+{% extends 'portaladmin/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
@@ -59,8 +59,9 @@
 {% block scriptcontent %}
 
 <script>
-window.TTS = window.TTS || {};
-TTS.forms = TTS.forms || {};
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}
+
 TTS.forms.addviewfourm = function(form, data) {
     $.ajax({
         headers : {
@@ -137,6 +138,7 @@ TTS.forms.renderviewfourminfo = function(data){
               "data" : "totalpost"  
             },
             { "title": "{% trans "Last author" %}",
+              "class": "text-center" ,
               "data" : "lastpostedby"  
             },
             { "title": "{% trans "Delete" %}",
@@ -160,9 +162,7 @@ TTS.forms.renderviewfourminfo = function(data){
         t.del = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);
     }
-
-    $('#viewforum-main-tbl').dataTable({
-        "language" : TTS.utils.datatable_ta,
+    $('#viewforum-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });

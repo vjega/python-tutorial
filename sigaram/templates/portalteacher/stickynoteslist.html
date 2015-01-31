@@ -118,12 +118,22 @@ TTS.forms.renderteacher = function(data){
     
     var headers = [
             { "title": "{% trans "Sl No." %}",
-              "class": "text-center"  
+              "class": "text-center",
+              "data":"slno",
+              "bSortable":false   
             },
             { "title": "{% trans "Title" %}",
-              "class": "sticky_title"  
+              "class":"sticky_title",
+              "data":"title"
             },
-            { "title": "{% trans "Date" %}" },
+            { "title": "{% trans "Date" %}",
+              "data":"date"
+            },
+            { "title": "{% trans "Delete" %}",
+              "class": "text-center",
+              "data" : "del",
+              "bSortable":false
+            }, 
             
         ];
     var dataset = [];
@@ -132,9 +142,10 @@ TTS.forms.renderteacher = function(data){
     for(var i in data){
         var t = [];
         t.DT_RowId = data[i].id;
-        t.push(++count);
-        t.push(data[i].title);
-        t.push(data[i].createddate);
+        t.slno=++count;
+        t.title=data[i].title;
+        t.date=data[i].createddate;
+        t.del = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);
     }
     if (TTS.forms.table) {
@@ -160,6 +171,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacher(data);
+        $("table#sticky-list-tbl thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
     $('#sticky-list-tbl').on('click', 'tbody tr', function(){

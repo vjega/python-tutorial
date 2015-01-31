@@ -100,7 +100,8 @@ TTS.forms.renderstudentnotes = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false   
             },
             { "title": "{% trans "Title" %}",
               "data" : "title"  
@@ -114,7 +115,8 @@ TTS.forms.renderstudentnotes = function(data){
             }, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center" ,
-              "data" : "delete" 
+              "data" : "delete",
+              "bSortable":false  
             }, 
         ];
     var dataset = [];
@@ -149,6 +151,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstudentnotes(data);
+        $("table#studentnotes-main-tbl thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
     $('#studentnotes-main-tbl').on('click', '.tts-delete', function(e){

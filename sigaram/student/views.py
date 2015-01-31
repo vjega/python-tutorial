@@ -402,3 +402,19 @@ def viewassignmindmap(request):
 @switchlanguage
 def viewassignmindmapanswer(request):
     return render(request, 'portalstudent/viewassignmindmapanswer.html')    
+
+@login_required
+@switchlanguage
+def viewtopic(request):
+   return render(request, 'portalstudent/viewtopic.html')
+
+@login_required
+@switchlanguage
+def newtopic(request):
+    return render(request, 'portalstudent/newtopic.html')
+
+@login_required
+@switchlanguage
+def viewpost(request):
+    return render(request, 'portalstudent/viewpost.html')
+

@@ -728,16 +728,19 @@ class CalendarViewSet(viewsets.ModelViewSet):
         data = json.loads(dict(request.DATA).keys()[0])
         #return Response({})
         #data = {k:v[0] for k,v in dict(request.DATA).items()}
-        cal.title = data.get('title')
-        cal.start = data.get('start')
-        cal.end = data.get('end')
-        cal.color = data.get('color')
-        cal.allday = data.get('alldayevents')
-        cal.eventcreatedby = request.user.username
-        cal.eventeditedby = request.user.username
-        cal.isdeleted = 0
-        cal.createdby = request.user.id
-        cal.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        startdt = data.get('start')+":00"
+        enddt   = data.get('end')+":00"
+
+        cal.title           = data.get('title')
+        cal.start           = startdt
+        cal.end             = enddt
+        cal.color           = data.get('color')
+        cal.allday          = data.get('alldayevents')
+        cal.eventcreatedby  = request.user.username
+        cal.eventeditedby   = request.user.username
+        cal.isdeleted       = 0
+        cal.createdby       = request.user.id
+        cal.createddate     = time.strftime('%Y-%m-%d %H:%M:%S')
         cal.save()
         return Response(request.DATA)
 
@@ -745,16 +748,18 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal = models.Calendardetails.objects.get(pk=pk)  
         data = json.loads(dict(request.DATA).keys()[0])
         #data = {k:v[0] for k,v in dict(request.DATA).items()}
-        cal.title = data.get('title')
-        cal.start = data.get('start')
-        cal.end = data.get('end')
-        cal.color = data.get('color')
-        cal.allday = data.get('alldayevents')
-        cal.eventcreatedby = request.user.username
-        cal.eventeditedby = request.user.username
-        cal.isdeleted = 0
-        cal.createdby = request.user.id
-        cal.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        startdt             = data.get('start')+":00"
+        enddt               = data.get('end')+":00"
+        cal.title           = data.get('title')
+        cal.start           = startdt
+        cal.end             = enddt
+        cal.color           = data.get('color')
+        cal.allday          = data.get('alldayevents')
+        cal.eventcreatedby  = request.user.username
+        cal.eventeditedby   = request.user.username
+        cal.isdeleted       = 0
+        cal.createdby       = request.user.id
+        cal.createddate     = time.strftime('%Y-%m-%d %H:%M:%S')
         cal.save()
         return Response(request.DATA)
     def destroy(self, request, pk):
@@ -818,28 +823,28 @@ class StudentAssignResource(viewsets.ModelViewSet):
             ari.issaved = data.get('issaved')
         
         ari.save()
+        if data.get('spanid'):
+            assignedid  = pk;
+            spanid      = summer_decode(data.get('spanid'));
+            fulltext    = summer_decode(data.get('fulltext'));
+            orig        = summer_decode(data.get('orig'));
+            modified    = summer_decode(data.get('modified'));
+            usertype    = data.get('type');
+            answertext  = summer_decode(data.get('answertext'));
 
-        assignedid  = pk;
-        spanid      = summer_decode(data.get('spanid'));
-        fulltext    = summer_decode(data.get('fulltext'));
-        orig        = summer_decode(data.get('orig'));
-        modified    = summer_decode(data.get('modified'));
-        usertype    = data.get('type');
-        answertext  = summer_decode(data.get('answertext'));
+            ar = models.Editingtext()
+            ar.editid       = int(assignedid)
+            ar.spanid       = unicode(spanid)
+            ar.previoustext = unicode(orig)
+            ar.edittext     = unicode(modified)
+            ar.typeofresource = 0
+            ar.isapproved   = 0
+            ar.isrejected   = 0
+            ar.editedby     = request.user.username
+            ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
+            ar.usertype     = int(usertype)
 
-        ar = models.Editingtext()
-        ar.editid       = int(assignedid)
-        ar.spanid       = unicode(spanid)
-        ar.previoustext = unicode(orig)
-        ar.edittext     = unicode(modified)
-        ar.typeofresource = 0
-        ar.isapproved   = 0
-        ar.isrejected   = 0
-        ar.editedby     = request.user.username
-        ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
-        ar.usertype     = int(usertype)
-
-        ar.save()
+            ar.save()
 
         return Response({'msg':True})
 
@@ -1064,8 +1069,6 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         
         return Response(request.DATA)
 
-
-
 class StickynotesResource(viewsets.ModelViewSet):
     queryset = models.stickynotes.objects.all()
     serializer_class = adminserializers.StickynotesSerializer
@@ -1078,6 +1081,7 @@ class StickynotesResource(viewsets.ModelViewSet):
         SELECT s.id,
             s.stickytext,
             s.color,
+            group_concat(sc.id SEPARATOR "~") as commetid,
             group_concat(sc.stickycomment SEPARATOR "~") as comments,
             group_concat(sc.commentby SEPARATOR "~") as commentby,
             group_concat(sc.createddate SEPARATOR "~") as createddate
@@ -1098,6 +1102,7 @@ class StickynotesResource(viewsets.ModelViewSet):
                 for row in cursor.fetchall()
             ]
         return Response(result)
+
     def create(self, request):
         stickynotes = models.stickynotes()
         data = json.loads(dict(request.DATA).keys()[0])
@@ -1128,6 +1133,18 @@ class StickynotesResource(viewsets.ModelViewSet):
     def destroy(self, request, pk):
         models.stickynotes.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
+
+    def retrieve(self, request, pk=None):
+        sql = '''
+        SELECT  id,
+                title
+        FROM stickyinfo 
+        WHERE id = %s
+        ''' % pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
+        return Response(result)
 
 class StudentinfoViewSet(viewsets.ModelViewSet):
 
@@ -2425,7 +2442,7 @@ class EditAnswerResourceViewSet(viewsets.ModelViewSet):
         sql = '''
         UPDATE assignresourceinfo 
            SET answertext = '%s'
-           WHERE assignedid = '%s' ''' % (MySQLdb.escape_string(unicode(approvedanswertext)), assignedid)
+           WHERE assignedid = '%s' ''' % (approvedanswertext.replace("'", '"'), assignedid)
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -2441,8 +2458,8 @@ class EditAnswerResourceViewSet(viewsets.ModelViewSet):
         sql = '''
         UPDATE editingtext
             SET isapproved = 1,
-            previoustext = "%s"
-        WHERE editingid = '%s' ''' % (unicode(edittext), pk)
+            previoustext = '%s'
+        WHERE editingid = '%s' ''' % (edittext.replace("'", '"'), pk)
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -2485,17 +2502,14 @@ class EditAnswerWrittenworkViewSet(viewsets.ModelViewSet):
 
         approvedanswertext = answertext.replace(previoustext,edittext)
         
-
         #updating approved answer text
         sql = '''
         UPDATE assignwrittenworkinfo 
            SET answertext = '%s'
-           WHERE assignwrittenworkid = '%s' ''' % (unicode(approvedanswertext), assignedid)
+           WHERE assignwrittenworkid = '%s' ''' % (approvedanswertext.replace("'", '"'), assignedid)
         cursor = connection.cursor()
         cursor.execute(sql)
 
-        return Response('approved')
-        
         #resetting the previous one if set
         sql = '''
         UPDATE editingtext
@@ -2508,8 +2522,8 @@ class EditAnswerWrittenworkViewSet(viewsets.ModelViewSet):
         sql = '''
         UPDATE editingtext
             SET isapproved = 1,
-            previoustext = "%s"
-        WHERE editingid = '%s' ''' % (unicode(edittext), pk)
+            previoustext = '%s'
+        WHERE editingid = '%s' ''' % (edittext.replace("'", '"'), pk)
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -2581,6 +2595,7 @@ class AssignmindmapinfoViewSet(viewsets.ModelViewSet):
                mmi.title,
                ammi.assigntext,
                ammi.answertext,
+               ammi.comment,
                ammi.mapdata,
                date(assigneddate) as createddate,
                date(answereddate) as answereddate,
@@ -2670,6 +2685,7 @@ class TeacherAssignedmindmapViewSet(viewsets.ModelViewSet):
                mmi.title,
                ammi.assigntext,
                ammi.answertext,
+               ammi.comment,
                ammi.mapdata,
                date(assigneddate) as createddate,
                date(answereddate) as answereddate,
@@ -2703,6 +2719,7 @@ class TeacherAssignedmindmapViewSet(viewsets.ModelViewSet):
                mmi.title,
                ammi.assigntext,
                ammi.answertext,
+               ammi.comment,
                ammi.mapdata,
                date(assigneddate) as createddate,
                date(answereddate) as answereddate,
@@ -2730,6 +2747,14 @@ class TeacherAssignedmindmapViewSet(viewsets.ModelViewSet):
             ]
         return Response(result)
 
+    def update(self, request, pk=None):
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        ammi = models.Assignmindmapinfo.objects.get(pk=pk)
+        ammi.comment = summer_decode(unicode(data.get('comment')))
+        ammi.save()
+
+        return Response('"msg":"update"')
+
 class TopicInfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Topicinfo.objects .all()
@@ -2753,19 +2778,37 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
     def list(self, request):
         topicid = request.GET.get('topicid')
         topicname = request.GET.get('topicname')
-        if topicid :
-            queryset = models.Topicinfo.objects.filter(topicid=topicid)
-        else:
-            queryset = models.Topicinfo.objects.all()
-            serializer = adminserializers.TopicsSerializer(queryset, many=True)
-        return Response(serializer.data)
+        # if topicid :
+        #     queryset = models.Topicinfo.objects.filter(topicid=topicid).order_by('-createddate')
+        # else:
+        #     queryset = models.Topicinfo.objects.filter().order_by('-createddate')
+        #     serializer = adminserializers.TopicsSerializer(queryset, many=True)
+        sql = '''
+        SELECT  ti.topicid,
+                ti.topicname,
+                ti.topicdetails,
+                ti.createddate,
+                a.first_name AS username,
+                (SELECT count(*) FROM postinfo WHERE topicid=ti.topicid) AS tot_comment
+        FROM topicinfo ti
+        LEFT JOIN auth_user a ON a.id = ti.createdby
+        ORDER BY ti.createddate DESC
+        '''
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
 
     def retrieve(self, request, pk=None):
         sql = '''
             SELECT ti.topicname,
                    ti.topicdetails,
                    ti.createddate,
-                   a.username
+                   a.first_name AS username
             FROM topicinfo ti
             LEFT JOIN auth_user a ON a.id = ti.createdby
             WHERE ti.topicid = '%s' ''' % (pk)
@@ -2780,7 +2823,7 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
                    p.parentid,
                    p.posteddate,
                    p.parentid,
-                   a.username as postedby
+                   a.first_name AS postedby
             FROM postinfo p
             LEFT JOIN auth_user a ON a.id = p.postedby
             WHERE p.topicid = '%s' 
@@ -2798,16 +2841,19 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         return Response(result)
     
     def create(self, request):
+        print "*"*80
+        print request.user.get_full_name()
         topics = models.Topicinfo()
         topicinfodata =  json.loads(request.DATA.keys()[0])
         topics.topicid = topicinfodata.get('topicid',0)
         topics.forumid = topicinfodata.get('forumid',0)
         topics.totalpost = topicinfodata.get('totalpost',0)
-        topics.topicdetails = topicinfodata.get('topicdetails',0)
+        topics.topicdetails = summer_decode(topicinfodata.get('topicdetails',0))
         topics.forumid = topicinfodata.get('forumid',0)
-        topics.topicname = topicinfodata.get('topicname',0)
+        topics.topicname = summer_decode(topicinfodata.get('topicname',0))
         topics.createdby = request.user.id
         topics.lastpostedby = request.user.id
+        topics.username = request.user.get_full_name()
         topics.lastposteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         topics.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         topics.save()
@@ -2818,13 +2864,19 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         models.Topicinfo.objects.get(pk=pk).delete()
+        sql = """
+        DELETE FROM postinfo 
+        WHERE topicid=%s
+        """ %pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
         return Response('"msg":"delete"')
 
 class PostinfoViewSet(viewsets.ModelViewSet):
 
     queryset = models.Postinfo.objects.all()
     serializer_class = adminserializers.PostinfoSerializer
-    
+
     def create(self, request):
         postinfo = models.Postinfo()
         postinfodata =  json.loads(request.DATA.keys()[0])
@@ -2837,3 +2889,60 @@ class PostinfoViewSet(viewsets.ModelViewSet):
         postinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         postinfo.save()
         return Response(request.DATA)
+
+class RubricImportViewSet(viewsets.ModelViewSet):
+
+    queryset = models.RubricsHeader.objects.all().order_by('-slno')
+    serializer_class = adminserializers.AdminrubricsSerializer
+
+    def create(self, request):
+        adminrubrics = models.RubricsHeader()
+        rubricmatrix = models.RubricMatrix()
+        rd = json.loads(request.DATA.keys()[0])
+
+        import xlrd, os
+
+        rd =  json.loads(request.DATA.keys()[0]);
+        filepath = rd.get('filepath');
+        fullpath = os.path.join('static/', filepath)
+        book     = xlrd.open_workbook(fullpath)
+        sheet    = book.sheet_by_index(0)
+        columns  = int(sheet.ncols)
+        rows     = int(sheet.nrows)
+        
+        adminrubrics.title       = rd.get('ttl')
+        adminrubrics.description = rd.get('desc')
+        adminrubrics.instruction = rd.get('instn')
+        adminrubrics.teacher     = request.user.username
+        adminrubrics.status      = 0
+        adminrubrics.ts          = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminrubrics.save()
+        
+        refno = adminrubrics.slno
+
+        headerdata = ''
+        for hd in range(0, columns):
+            headerdata += unicode(sheet.cell(0,hd).value)
+            if (hd != columns-1) and (hd != 0):
+                headerdata += "~~"
+
+        rubricmatrix.refno      = refno
+        rubricmatrix.datatype   = 'H'
+        rubricmatrix.jdata      = unicode(headerdata)
+        rubricmatrix.disp_order = 0
+        rubricmatrix.save()
+
+        for bdr in range(1, rows):
+            bodydata = ''
+            for bd in range(0, columns):
+                bodydata += unicode(sheet.cell(bdr,bd).value)
+                if bd != columns-1:
+                    bodydata += "~~"
+        
+            rubricmatrix.refno      = refno
+            rubricmatrix.datatype   = 'B'
+            rubricmatrix.jdata      = unicode(bodydata)
+            rubricmatrix.disp_order = bdr
+            rubricmatrix.save()
+
+        return Response("msg")

@@ -65,7 +65,8 @@ TTS.forms.renderrubricsinfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false  
             },
             { "title": "{% trans "Title" %}", "data" : "title"},
             { "title": "{% trans "Detail" %}", "data" : "detail"},
@@ -73,7 +74,8 @@ TTS.forms.renderrubricsinfo = function(data){
             { "title": "{% trans "Date Time" %}", "data" : "time"}, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center", 
-              "data" : "delete"  
+              "data" : "delete",
+              "bSortable":false  
             }, 
         ];
     var dataset = [];
@@ -119,6 +121,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderrubricsinfo(data);
+        $("table#rubrics-main-tbl thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
    

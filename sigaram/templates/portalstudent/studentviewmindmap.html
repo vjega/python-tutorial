@@ -122,7 +122,8 @@
         var headers = [
                 { "title": "{% trans "Sl No." %}",
                   "class": "text-center" ,
-                  "data" :"slno"
+                  "data" :"slno",
+                  "bSortable":false
                 },
                 { "title": "{% trans "Title" %}",
                   "data" :"title"
@@ -189,6 +190,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.assignedstudentmindmap(data);
+        $("table.mindmaplist thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
     $('.mindmaplist').on('click','tbody tr',function(e){

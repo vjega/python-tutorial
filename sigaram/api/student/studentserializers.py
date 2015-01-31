@@ -52,3 +52,4 @@ class ClassroominfoSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('classroomid','assessmentid','resourceid','writtenworkid','studentid',
                   'rating','ratingcount','votescount','lastvotedby','lastvoteddate','postedby',
                   'posteddate')
+

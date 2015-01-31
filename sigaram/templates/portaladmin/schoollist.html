@@ -143,7 +143,8 @@ TTS.forms.renderadminschool = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center" ,
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false     
             },
             { "title": "{% trans "Name" %}" ,
               "data" : "schoolname",
@@ -154,11 +155,13 @@ TTS.forms.renderadminschool = function(data){
             }, 
             { "title": "{% trans "Edit" %}",
               "class": "text-center",
-              "data" : "edit" 
+              "data" : "edit",
+              "bSortable":false    
             }, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center" ,
-              "data" : "delete" 
+              "data" : "delete",
+              "bSortable":false    
             }, 
         ];
     var dataset = [];
@@ -189,8 +192,10 @@ $(document).ready(function(){
         TTS.utils.ajaxloaderstop();
         if (data.length) {
             TTS.forms.renderadminschool(data);
+            $("table#adminschool-main-tbl thead tr th").removeClass('sorting_asc');
         } else {
             TTS.forms.table.fnClearTable();
+            $("table#adminschool-main-tbl thead tr th").removeClass('sorting_asc');
         }
     });
     $('#adminschool-main-tbl').on('click', 'tbody tr .schoolname', function(){

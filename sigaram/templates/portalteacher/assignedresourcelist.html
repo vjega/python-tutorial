@@ -102,7 +102,8 @@
         var headers = [
                 { "title": "{% trans "Sl No." %}",
                   "class": "text-center" ,
-                  "data" :"slno"
+                  "data" :"slno",
+                  "bSortable":false
                 },
                 { "title": "{% trans "Title" %}",
                   "data" :"title"
@@ -147,6 +148,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.assignedstudentresource(data);
+        $("table#resource-list thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
     $('.resourcelist').on('click','tbody tr',function(e){

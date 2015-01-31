@@ -182,7 +182,8 @@ TTS.forms.renderteacher = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"
+              "data" : "slno",
+              "bSortable":false
             },
             { "title": "{% trans "Heading" %}",
               "data" : "resourcetitle"  
@@ -192,11 +193,13 @@ TTS.forms.renderteacher = function(data){
             },
             { "title": "{% trans "View" %}",
               "class": "text-center",
-              "data" : "view"  
+              "data" : "view",
+              "bSortable":false 
             }, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center",
-              "data" : "delete"  
+              "data" : "delete",
+              "bSortable":false 
             }, 
            
         ];
@@ -233,6 +236,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacher(data);
+        $("table#teacherlist-main-tbl thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
     $("#school_name").change(function(){    
@@ -242,8 +246,10 @@ $(document).ready(function(){
         }).done(function(data){
             if(data.length){
                 TTS.forms.renderteacher(data);
+                $("table#teacherlist-main-tbl thead tr th").removeClass('sorting_asc');
             }else{
                 TTS.forms.table.fnClearTable();
+                $("table#teacherlist-main-tbl thead tr th").removeClass('sorting_asc');
             }
         });
     })

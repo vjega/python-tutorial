@@ -124,7 +124,8 @@ TTS.forms.renderviewfourminfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center" ,
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false    
             },
             { "title": "{% trans "Topics" %}",
               "data" : "topicname" ,
@@ -141,11 +142,6 @@ TTS.forms.renderviewfourminfo = function(data){
               "class": "text-center" ,
               "data" : "lastpostedby"  
             },
-            { "title": "{% trans "Delete" %}",
-              "class": "text-center",
-              "data" : "del",
-              "bSortable":false
-            },
             
         ];
     var dataset = [];
@@ -155,10 +151,9 @@ TTS.forms.renderviewfourminfo = function(data){
         t.DT_RowId = data[i].forumid+'/'+data[i].topicid;
         t.slno = ++count;
         t.topicname = data[i].topicname;
-        t.totalpost = data[i].totalpost;
+        t.totalpost = data[i].tot_comment;
         t.topicdetails = data[i].topicdetails;
-        t.lastpostedby = data[i].lastpostedby;
-        t.del = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
+        t.lastpostedby = data[i].username;
         dataset.push(t);
     }
     $('#viewforum-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
@@ -175,6 +170,7 @@ $(document).ready(function(){
     }).done(function(data){
         if (data.length) {
             TTS.forms.renderviewfourminfo(data);
+            $("table#viewforum-main-tbl thead tr th").removeClass('sorting_asc');
         } 
         
     });

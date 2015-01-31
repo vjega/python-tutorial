@@ -165,7 +165,7 @@ class TopicsSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Topicinfo
         fields = ('topicid',  'forumid','topicname','topicdetails',
                   'totalpost','createdby', 'createddate',
-                  'lastpostedby','lastposteddate')
+                  'lastpostedby','lastposteddate','username')
 
 class ThreadSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -207,7 +207,7 @@ class AssignmindmapinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Assignmindmapinfo
         fields = ('mindmapid','studentid','assigntext','mapdata','assigneddate',
-                    'isdelete','assignedby','answertext','answereddate',
+                    'isdelete','assignedby','answertext','comment','answereddate',
                     'assignedby','assigneddate','isanswered','issaved','isdelete')
 
 class PostinfoSerializer(serializers.HyperlinkedModelSerializer):

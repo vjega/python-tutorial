@@ -117,7 +117,8 @@ TTS.forms.renderteacherresourceinfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data":"slno"  
+              "data":"slno" ,
+              "bSortable":false 
             },
             { "title": "{% trans "Title" %}",
               "data" :"title"
@@ -126,7 +127,8 @@ TTS.forms.renderteacherresourceinfo = function(data){
               "data" :"date"
             },
             { "title": "{% trans "Assignment" %}",
-              "data":"assignment"
+              "data":"assignment",
+              "bSortable":false
             }, 
         ];
     var dataset = [];
@@ -176,6 +178,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacherresourceinfo(data);
+        $("table#studetresource-main-tbl thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
     /*$('#studetresource-main-tbl').on('click', 'tbody tr',function(e){

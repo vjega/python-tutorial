@@ -63,7 +63,8 @@ TTS.forms.renderannouncement = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"  
+              "data" : "slno"  ,
+              "bSortable":false  
             },
             { "title": "{% trans "Title" %}",
               "data" : "title"
@@ -111,6 +112,7 @@ $(document).ready(function(){
     }).done(function(data){
         console.log(data);
         TTS.forms.renderannouncement(data);
+        $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
     });
     $('#admin-main-tbl').on('click', 'tbody tr', function(){
         var x = this.id.split('_');

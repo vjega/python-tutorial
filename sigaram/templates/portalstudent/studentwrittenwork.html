@@ -123,7 +123,8 @@
         var headers = [
                 { "title": "{% trans "Sl No." %}",
                   "class": "text-center" ,
-                  "data" :"slno"
+                  "data" :"slno",
+                  "bSortable":false
                 },
                 { "title": "{% trans "Title" %}",
                   "data" :"title"
@@ -196,6 +197,7 @@ $(document).ready(function(){
     }).done(function(data){
         console.log(data);
         TTS.forms.assignedstudentwrittenwork(data);
+        $("table.writtenworklist thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
     $('.writtenworklist').on('click','tbody tr',function(e){
