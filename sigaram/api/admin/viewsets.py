@@ -541,7 +541,7 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             GROUP BY chapterid
             ORDER BY chapterid
             '''%(categoryid, classid, sectionid)
-        print sql;
+        #print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         cnt = cursor.fetchall()
