@@ -168,8 +168,10 @@ $(document).ready(function(){
 
     $('#date-search').click(function(){
         //alert($("#fromdatepicker input").val());
-        var fromdate = $("#fromdatepicker").val();
+        var fromdate = $("#fromdate").val();
         var todate = $("#todatepicker").val();
+        console.log(fromdate);
+        console.log(todate);
         $.ajax({
             "url":"/api/admin/teacherassignedresource/?fdate="+fromdate+"&tdate="+todate+"&format=json",
             "type":"GET"
