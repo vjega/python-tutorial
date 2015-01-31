@@ -41,6 +41,14 @@
                     </div>
                 </div>
             </div>
+        </div>
+    <!-- /.panel -->
+</div>
+<div class="">
+    <div class="panel panel-default">
+        <div class="comment_container panel-heading"></div>
+        <!-- /.panel-heading -->
+        <div class="panel-body comments_cont">
             <div id="comments"></div>
         </div>
     <!-- /.panel -->
@@ -61,12 +69,16 @@
         display:none;
     }
 
-    .reply_comment{
+    .reply_comment, .show_hide_comments{
        cursor:pointer;
     }
     .user_details{
-        color: grey;
+        color: gray;
         font-style: italic;
+    }
+
+    .comments_cont.panel-body {
+        display: none;
     }
 
 </style>
@@ -106,6 +118,14 @@ TTS.forms.renderviewforum = function(data){
     $("#topic_details").html(data['topicdetails']);
     var comments = TTS.forms.processcomment(data);
     $("#comments").html(comments);
+     $("#comments").html(comments);
+    if(data['comments'].length){
+        var html = "{% trans "Comments" %} ("+data['comments'].length+") &nbsp;&nbsp;<span><i class='show_hide_comments fa fa-caret-right'></i></span>";
+        $(".comment_container").html(html);
+    }else{
+        var html = "{% trans "No comment" %}"
+        $(".comment_container").html(html);
+    }
 };
 
 TTS.forms.processcomment = function (obj) {
@@ -177,6 +197,11 @@ $("#save_main_thread_reply").click(function (){
         $("#thread_reply_textarea").val("");
         location.reload();
     });
+});
+
+$("body").on("click",".show_hide_comments", function(){
+    $(this).toggleClass('fa fa-caret-right fa fa-caret-down','slow');
+    $(".comments_cont").toggle("slow")
 });
 </script>
 
