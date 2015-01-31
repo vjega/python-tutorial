@@ -7,7 +7,7 @@ import viewsets
 router = routers.DefaultRouter()
 router.register(r'student',        	    viewsets.studentViewSet)
 router.register(r'resourceinfo',   	    viewsets.ResourceinfoViewSet)
-router.register(r'writtenworkinfo',     viewsets.WrittenworkinfoViewSet)
+#router.register(r'writtenworkinfo',     viewsets.WrittenworkinfoViewSet)
 router.register(r'studentworkspaceinfo',viewsets.Studentworkspaceinfo)
 router.register(r'studentnotesinfo', 	viewsets.StudentnotesinfoViewSet)
 router.register(r'bulletinboardlist',   viewsets.Studentbulletinboardlist)
