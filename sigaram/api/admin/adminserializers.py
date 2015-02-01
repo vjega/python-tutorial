@@ -120,7 +120,7 @@ class MindmapSerializer(serializers.HyperlinkedModelSerializer):
 class StickynotesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.stickynotes
-        fields = ('id','stickytext','color','name')
+        fields = ('id','stickytext','attachment','color','name')
         
 class StickyCommentsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

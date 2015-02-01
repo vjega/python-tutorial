@@ -1122,6 +1122,7 @@ class StickynotesResource(viewsets.ModelViewSet):
         sql = '''
         SELECT s.id,
             s.stickytext,
+            s.attachment,
             s.color,
             group_concat(sc.id SEPARATOR "~") as commetid,
             group_concat(sc.stickycomment SEPARATOR "~") as comments,
@@ -1150,6 +1151,7 @@ class StickynotesResource(viewsets.ModelViewSet):
         data = json.loads(dict(request.DATA).keys()[0])
         stickynotes.stickylistid = data.get('stickylistid')
         stickynotes.stickytext = data.get('stickytext')
+        stickynotes.attachment = data.get('attachment')
         stickynotes.name = data.get('name')
         stickynotes.xyz = data.get('xyz')
         stickynotes.color = data.get('color')
@@ -1163,6 +1165,7 @@ class StickynotesResource(viewsets.ModelViewSet):
         stickynotes = models.stickynotes.objects.get(pk=pk)
         data =  json.loads(request.DATA.keys()[0])
         stickynotes.stickytext = data.get('stickytext')
+        stickynotes.attachment = data.get('attachment')
         stickynotes.name = data.get('name')
         stickynotes.xyz = data.get('xyz')
         stickynotes.color = data.get('color')
