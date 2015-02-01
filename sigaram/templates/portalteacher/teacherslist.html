@@ -129,8 +129,13 @@ $(document).ready(function(){
             "url":"/api/admin/teacher/?schoolid="+$("#school_name").val()+"&format=json",
             "type":"GET"
         }).done(function(data){
-            TTS.forms.renderteacher(data);
-            $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
+            if (data.length) {
+                TTS.forms.renderteacher(data);
+                $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
+            } else {
+                TTS.forms.table.fnClearTable();
+                $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
+            }
         });
     })
 
