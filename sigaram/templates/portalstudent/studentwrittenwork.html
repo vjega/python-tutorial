@@ -21,7 +21,7 @@
                         </div>    
                         <div class="col-lg-7" id='fromdate'>
                             <div class='input-group'>
-                                <input type='text' class="form-control" data-date-format="YYYY-MM-DD"/>
+                                <input type='text' id='startdate' class="form-control" data-date-format="DD-MM-YYYY"/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-lg-7" id='tilldate'>
                             <div class='input-group'>
-                                <input type='text' class="form-control" data-date-format="YYYY-MM-DD"/>
+                               <input type='text' id='enddate' class="form-control" data-date-format="DD-MM-YYYY"/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -174,11 +174,17 @@
                 dataset_answered.push(t);
             }
         }
-
-        $('#writtenwork-list-new').dataTable({"language" : TTS.utils.datatable_ta,
-            "data":     dataset_new,
-            "columns":  headers
-        });
+        if(TTS.forms.table){
+           TTS.forms.table.fnClearTable();
+           TTS.forms.table.fnAddData(
+                dataset_new
+            );
+        }else{
+            TTS.forms.table =  $('#writtenwork-list-new').dataTable({"language" : TTS.utils.datatable_ta,
+                "data":     dataset_new,
+                "columns":  headers
+            });
+        }
         $('#writtenwork-list-saved').dataTable({"language" : TTS.utils.datatable_ta,
             "data":     dataset_saved,
             "columns":  headers
@@ -187,6 +193,11 @@
             "data":     dataset_answered,
             "columns":  headers
         });
+       /* $('#writtenwork-list-new').dataTable({"language" : TTS.utils.datatable_ta,
+            "data":     dataset_new,
+            "columns":  headers
+        });
+        */
     };
 
 $(document).ready(function(){
@@ -195,7 +206,6 @@ $(document).ready(function(){
         "url":"/api/admin/studentwrittenwork/?format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
         TTS.forms.assignedstudentwrittenwork(data);
         $("table.writtenworklist thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
@@ -212,22 +222,23 @@ $(document).ready(function(){
         window.location='viewassignwrittenworkanswer?writtenworkid='+x[1]+'&studentid='+x[2];
         }
     });
-    /*$("#fromdatepicker").on("dp.change",function (e) {
-       $('#todatepicker').data("DateTimePicker").setMinDate(e.date);
-    });
-    $("#todatepicker").on("dp.change",function (e) {
-       $('#fromdatepicker').data("DateTimePicker").setMaxDate(e.date);
-    });*/
-
     $('#date-search').click(function(){
-        //alert($("#fromdatepicker input").val());
-        var fromdate = $("#fromdatepicker input").val();
-        var todate = $("#todatepicker input").val();
+        var fdate = $("#startdate").val();
+        var tdate = $("#enddate").val();
+        var fromdate=fdate.split('-').reverse().join('-');
+        var todate=tdate.split('-').reverse().join('-');
         $.ajax({
-            "url":"/api/admin/studentassignresource/?fdate="+fromdate+"&tdate="+todate+"&format=json",
+            "url":"/api/admin/studentwrittenwork/?fdate="+fromdate+"&tdate="+todate+"&format=json",
             "type":"GET"
         }).done(function(data){
-            TTS.forms.assignedstudentwrittenwork(data);
+            if (data.length) {
+                console.log(data)
+                TTS.forms.assignedstudentwrittenwork(data);
+                $("table.writtenworklist thead tr th").removeClass('sorting_asc');
+            } else {
+                TTS.forms.table.fnClearTable();
+                $("table.writtenworklist thead tr th").removeClass('sorting_asc');
+            }
         });
     });
 
