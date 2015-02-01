@@ -602,3 +602,8 @@ def viewpost(request):
 @switchlanguage
 def newtopic(request):
     return render(request, 'portaladmin/newtopic.html')  
+
+@login_required
+@switchlanguage
+def activitystatistics(request):
+    return render(request, 'portaladmin/activitystatistics.html') 

@@ -64,30 +64,36 @@ TTS.forms.renderstatistics = function(data){
     
     var headers = [
             { "title": "{% trans "Sl No." %}",
-              "class": "text-center"  
+              "class": "text-center",
+              "data":"slno"  
             },
             { "title": "{% trans "Photo" %}",
-              "class": "text-center"  
+              "class": "text-center",
+              "data":"photo"  
             },
             { "title": "{% trans "Name" %}",
-              "class":"title"
+              "class":"title",
+              "data":"name"
             },
-            { "title": "{% trans "Email Id" %}"}, 
+            { "title": "{% trans "Email Id" %}",
+              "data":"email"
+            }, 
              
         ];
     var dataset = [];
     
     var count = 0
     for(var i in data){
-        var t = [];
-        t.push(++count);
+        var t = {};
+        t.DT_RowId = data[i].studentid;
+        t.slno=++count;
         if (data[i].imageurl){
-            t.push("<img src='/static/"+data[i].imageurl+"' width='100' height='100'>");
+            t.photo="<img src='/static/"+data[i].imageurl+"' width='100' height='100'>";
         } else {
-            t.push("<img src='http://placehold.it/100x100'>");
+            t.photo="<img src='http://placehold.it/100x100'>";
         }
-        t.push(data[i].firstname + " "+data[i].lastname);
-        t.push(data[i].emailid);
+        t.name=data[i].firstname + " "+data[i].lastname;
+        t.email=data[i].emailid;
         dataset.push(t);
     }
     if (TTS.forms.table) {
@@ -132,7 +138,10 @@ $(document).ready(function(){
             }
         });
     });
-    //$('#admin-main-tbl').dataTable();
+    $('#admin-main-tbl').on('click','tbody tr',function(e){
+        e.stopPropagation();
+        window.location = 'activitystatistics?studentid='+this.id;
+    });
 });
 </script>
 {% endblock scriptcontent %}
