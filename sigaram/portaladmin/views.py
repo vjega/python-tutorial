@@ -601,7 +601,12 @@ def viewpost(request):
 @login_required
 @switchlanguage
 def newtopic(request):
-    return render(request, 'portaladmin/newtopic.html')  
+    return render(request, 'portaladmin/newtopic.html')
+    
+@login_required
+@switchlanguage
+def richmindmap(request):
+    return render(request, 'portaladmin/richmindmap.html')  
 
 @login_required
 @switchlanguage

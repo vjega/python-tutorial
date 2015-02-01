@@ -101,8 +101,9 @@ urlpatterns = patterns('portaladmin.views',
     url(r'^viewpost$',                  'viewpost',       name='viewpost'),
     url(r'^newtopic$',                  'newtopic',       name='newtopic'),
     url(r'^sticky_notes_upload$', 'sticky_notes_uploader', 
-                                                         name="sticky_notes_uploader"),   
+                                                        name="sticky_notes_uploader"),
     url(r'^activitystatistics$', 'activitystatistics', 
                                                          name="activitystatistics"), 
+    url(r'^richmindmap$', 'richmindmap', name="richmindmap")
     #(r'^api/', include(v1_api.urls)),
 )
