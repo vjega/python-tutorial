@@ -90,7 +90,6 @@ TTS.forms.addstudentresource = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-studentresource");
-                console.log(data);
                 $.ajax({
                     headers : {
                         'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
@@ -166,7 +165,6 @@ $(document).ready(function(){
         "url":"/api/admin/resourceinfo/?categoryid="+TTS.categoryid+"&chapterid="+TTS.chapterid+"&classid="+TTS.classid+"&section="+TTS.section+"&format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
         TTS.forms.renderteacherresourceinfo(data);
         $("table#studetresource-main-tbl thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();

@@ -72,9 +72,9 @@ TTS.forms.renderchapterinfo = function(data){
             { "title": "{% trans "Title" %}",
                "data" :"title"
             },
-            /*{ "title": "{% trans "Assignment" %}",
-              "data" :"assignment"
-            },*/
+            { "title": "{% trans "Count" %}",
+              "data" :"chaptercount"
+            },
             
         ];
     var dataset = [];
@@ -84,6 +84,7 @@ TTS.forms.renderchapterinfo = function(data){
         t.DT_RowId = data[i].chapterid;
         t.icon="<i class='fa fa-book fa-2x'></i>";
         t.title=data[i].chaptername;
+        t.chaptercount = data[i].rescount;
         /*t.assignment="<a href='javascript:void(0)' class='assignment' id='"+data[i].teacherresourceid+"' ><i class='fa fa-share fa-2x'></i></a>";*/
         dataset.push(t);
     }

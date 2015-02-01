@@ -408,9 +408,36 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.WrittenworkinfoSerializer
 
     def list(self, request):
-        queryset = models.Writtenworkinfo.objects.filter(createdby=str(request.user.username)).order_by('-createddate')
-        serializer = adminserializers.WrittenworkinfoSerializer(queryset, many=True)
-        return Response(serializer.data)
+        # queryset = models.Writtenworkinfo.objects.filter(createdby=str(request.user.username)).order_by('-createddate')
+        # serializer = adminserializers.WrittenworkinfoSerializer(queryset, many=True)
+        datecond = ''
+        if request.GET.get('fdate') and request.GET.get('tdate'):
+            datecond = "AND (wwi.createddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+                request.GET.get('tdate'))
+        sql = '''
+        SELECT assignwrittenworkid AS id,
+               wwi.writtenworkid,
+               wwi.writtenImage,
+               wwi.writtenworktitle,
+               date(wwi.createddate) as createddate,
+               awwi.studentid,
+               wwi.isassigned,
+               awwi.issaved
+        FROM assignwrittenworkinfo awwi
+        INNER JOIN writtenworkinfo wwi on wwi.writtenworkid = awwi.writtenworkid 
+        WHERE wwi.createdby = '%s'
+        %s
+        ORDER BY wwi.createddate DESC
+        ''' % (request.user.username,datecond)
+        print sql;
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
 
     def destroy(self, request, pk):
         models.Writtenworkinfo.objects.get(pk=pk).delete()
@@ -499,6 +526,8 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
         sectionid   = request.GET.get('section')
         chapterid = request.GET.get('chapterid')
         categoryid = request.GET.get('categoryid',0)
+        resourcecategory = request.GET.get('resourcecategory',0)
+        #print resourcecategory;
         
         kwarg = {}
         #kwarg['isdeleted'] = 0
@@ -515,7 +544,19 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             queryset = models.Chapterinfo.objects.all().order_by('chapterid')
 
         serializer = adminserializers.ChapterinfoSerializer(queryset, many=True)
-        if categoryid:
+        if resourcecategory:
+            sql = '''
+            SELECT chapterid, 
+                   count(*) AS cnt
+            FROM teacherresourceinfo 
+            WHERE classid=%s
+                AND section='%s' 
+                AND isdeleted=0
+                AND resourcecategory=%s
+            GROUP BY chapterid
+            ORDER BY chapterid
+            '''%(classid, sectionid,resourcecategory)
+        else:
             sql = '''
             SELECT chapterid, 
                    count(*) AS cnt
@@ -527,19 +568,7 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             GROUP BY chapterid
             ORDER BY chapterid
             '''%(categoryid, classid, sectionid)
-        else:
-            sql = '''
-            SELECT chapterid, 
-                   count(*) AS cnt
-            FROM teacherresourceinfo 
-            WHERE classid=%s
-                AND section='%s' 
-                AND isdeleted=0
-                AND resourcecategory=1
-            GROUP BY chapterid
-            ORDER BY chapterid
-            '''%(classid, sectionid)
-        print sql;
+        #print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         cnt = cursor.fetchall()
@@ -988,14 +1017,14 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
     def list(self, request):
         datecond = ''
         if request.GET.get('fdate') and request.GET.get('tdate'):
-            datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+            datecond = "AND (ari.assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
                 request.GET.get('tdate'))
 
         sql = '''
         SELECT assignedid AS id,
                ri.resourceid,
                resourcetitle,
-               date(assigneddate) as createddate,
+               date(ari.assigneddate) as createddate,
                resourcetype,
                thumbnailurl,
                ari.studentid,
@@ -1006,7 +1035,6 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         WHERE isdeleted=0
               AND ari.assignedby='%s'
               AND ari.IsDelete=0 
-              /*AND ri.categoryid=0 */
               %s
         GROUP BY resourceid 
         ORDER BY assigneddate DESC''' % (request.user.username, datecond)
