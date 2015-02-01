@@ -39,101 +39,14 @@
 {% endblock botcontent%}
 
 {% block morecss %}
-<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
-<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "css/plugins/dataTables.bootstrap.css" %}" >
+<link rel="stylesheet" href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<link rel="stylesheet" href="{%static "css/color.css" %}">
+<link rel="stylesheet" href="{%static "ajaxuploader/css/fileuploader.css" %}">
 <style>
-    #addrec:hover, .tts-delete:hover{
-        cursor: pointer;
-    }
-
-.yellow{
-    background-color:#FDFB8C;
-    border:1px solid #DEDC65;   
-}
-
-.yellow_header{
-    background-color:#DEDC65;   
-}
-
-.blue{
-    background-color:#A6E3FC;
-    border:1px solid #75C5E7;   
-}
-.blue_header{
-    background-color:#75C5E7;   
-}
-
-.green{
-    background-color:#A5F88B;
-    border:1px solid #98E775;   
-}
-
-.green_header{
-    background-color:#98E775;   
-}
-
-.red{
-    background-color:#ff6666;
-    border:1px solid #ff3232;
-}
-
-.red_header{
-    background-color:#ff3232;   
-}
-
-.purple{
-    background-color: #d29fd3;
-    border: 1px solid #bc5fbd; 
-}
-
-.purple_header{
-    background-color:#bc5fbd;   
-}
-
-.pink{
-    background-color:#FFAEC9;
-    border:1px solid #f46998;   
-}
-
-.pink_header{
-    background-color:#f46998;   
-}
-
-.grey{
-    background-color:#F5F5f5;
-    border:1px solid #737373;  
-}
-
-.grey_header{
-    background-color:#737373;   
-}
-
-.orange{
-    background-color:#FF7F27;
-    border:1px solid #EB6712;  
-}
-
-.orange_header{
-    background-color:#EB6712;   
-}
-
-.maroon{
-    background-color: #e0d9bc;
-    border: 1px solid #c4b18f; 
-}
-
-.maroon_header{
-    background-color:#c4b18f;   
-}
-
-.gold{
-    background-color: #fcbb22;
-    border: 1px solid #fdb221; 
-}
-
-.gold_header{
-    background-color:#fdb221;   
+#addrec:hover, .tts-delete:hover{
+    cursor: pointer;
 }
 
 .sticky_note{
@@ -287,6 +200,23 @@
     width:50%;
     overflow: hidden;
 }*/
+.fa-paper-clip:before {
+    content: "";
+    padding-right: 8px;
+    color:#000;
+}
+
+.cliprec:hover{
+    color :gray;
+}
+
+.modelbox_center {
+    text-align: center;
+}
+
+.add_form{
+    margin-left: 40px;
+}
 </style>
 {% endblock morecss %}
 
@@ -312,9 +242,15 @@
 <script id="sticky-text" type="text/sticky">
 <div class='color_container'>
     <div id='preview_color' class='yellow'>Preview</div>
+        <div class='control-label col-sm-4'>Color</div>
         <div class='control-label col-sm-8 color_values' id="color-swatch">
     </div>
 </div>
+<div class="file add_form">
+    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <div id="file-uploader">File Uploader Comes Here...</div> 
+        <input type="hidden" id="uploadurl">
+    </div>
 </script>
 
 <script>
@@ -338,6 +274,28 @@ TTS.forms.addstickynote = function(form, data) {
     });
 }
 
+TTS.forms.FileUploader = function() {
+    var uploader = new qq.FileUploader({
+        action: "/admin/sticky_notes_upload",
+        element: $('#file-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#uploadurl").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
+    });
+}
 TTS.forms.showstickyform = function() {
     var colors = ["yellow", "blue", "green","purple", "pink", "grey","red", "orange", "maroon", "gold"];
     BootstrapDialog.show({
@@ -354,6 +312,7 @@ TTS.forms.showstickyform = function() {
                 $("#preview_color").removeAttr("class");
                 $("#preview_color").attr("class",select_color);
             });
+            TTS.forms.FileUploader();
         },
 
         buttons: [{
@@ -365,6 +324,7 @@ TTS.forms.showstickyform = function() {
                 data = JSON.parse(data);
                 data['color'] = select_color;
                 data['stickylistid'] = TTS.utils.getUrlParameter('id');
+                data['attachment'] = $("#uploadurl").val();
                 TTS.forms.addstickynote(dialogItself, JSON.stringify(data)); 
             }
             },{
@@ -389,13 +349,17 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
    var colors = ["yellow", "blue", "green","purple", "pink", "grey","red", "orange", "maroon", "gold"];
     var color_div = "<div class='color_container'>"+
                         "<div id='preview_color' class='"+color+"'>Preview</div>"+
-                        "<div class='control-label col-sm-4'>color</div>"+
+                        "<div class='control-label col-sm-4'>Color</div>"+
                         "<div class='control-label col-sm-8 color_values'>";
     for (var i = 0; i < colors.length; i++) { 
        color_div += "<div class='color "+colors[i]+"' name='"+colors[i]+"' ></div>";
     }
 
-    color_div +="</div>";
+    color_div +="</div><br/>";
+    color_div +='<div class="file">'+
+                    '<div id="file-uploader">File Uploader Comes Here...</div>'+
+                    '<input type="hidden" id="uploadurl">'+
+                    '</div>';
     color_div +="</div>";
 
     BootstrapDialog.show({
@@ -410,6 +374,7 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
                 $("#preview_color").removeAttr("class");
                 $("#preview_color").attr("class",select_color);
             });
+           TTS.forms.FileUploader();
         },
         buttons: [{
             label: '{% trans "Save" %}',
@@ -418,6 +383,8 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
                 var data = TTS.utils.serilaizeJson("#add-student");
                 data = JSON.parse(data);
                 data['color'] = $("#preview_color").attr("class");
+                data['stickylistid'] = TTS.utils.getUrlParameter('id');
+                data['attachment'] = $("#uploadurl").val();
                 $.ajax({
                     headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -516,6 +483,10 @@ TTS.forms.renderstickynotes = function(data){
         sticky_html += "<div class='sticky_header "+data[i].color+"_header'>";
         sticky_html += "<span class='pull-right deleterec'  name='"+data[i].id+"'><i class='fa fa-trash'></i></span>&nbsp;";
         sticky_html += "<span class='pull-right editrec'  name='"+data[i].id+"'><i class='fa fa-pencil'></i></span> &nbsp;";
+        if(data[i].attachment != ''){
+            //sticky_html += TTS.forms.getfiletype(data[i].attachment,data[i].id)
+            sticky_html += '<span class="open_model_window pull-right cliprec" dir="'+data[i].attachment+'" name="'+data[i].id+'"><i class="fa fa-paper-clip"></i></span> &nbsp;';
+        }
         sticky_html += "</div>";
         sticky_html += "<div  name='"+data[i].color+"' src='"+data[i].id+"' class='sticky_content'>"+data[i].stickytext+"</div>";
         sticky_html += "<div  class='sticky_footer'>";
@@ -595,6 +566,35 @@ $(document).ready(function(){
     setTimeout(function(){ load_onclick_events() }, 500);
 });
 
+TTS.forms.getfiletype = function (filename,id){
+    var file_extention = filename.split('.').pop();
+    var type;
+    switch (file_extention) {
+        case 'jpg':
+        case 'jpeg':
+        case 'png':
+            type = "<div class='modelbox_center' name='"+id+"'><img src='/static/"+filename+"' /></div>";
+            break;
+        case 'mp3':
+        case 'wav':
+        case 'wma':
+        case 'm4a':
+            type = "<div class='modelbox_center' name='"+id+"'><audio controls><source src='/static/"+filename+"' type='audio/ogg'></audio> </div>";
+            break;
+        case 'avi':
+        case '3gp':
+        case 'mp4':
+        case 'mpg':
+        case 'swf':
+        case 'wmv':
+            type = "<div class='modelbox_center' name='"+id+"'><video width='320' height='240' controls><source src='/static/"+filename+"' type='video/mp4'></video></div>";
+            break;
+        default:
+            type = "<div class='modelbox_center'> <h4> Unkown file format <b>."+file_extention+"</b></h4></div>";
+    }
+    return type;
+}
+
 function load_onclick_events (){
     $(".sticky_header").parent().draggable({handle: '.sticky_header'});
     
@@ -654,6 +654,22 @@ function load_onclick_events (){
     $("#sticky-placeholder").on("mousedown", ".sticky_header", function(){
         var stickyelm = $(this).parent().css("z-index", 1);
     });
+
+    $("body").on("click",".open_model_window",function(){
+        var id = $(this).attr("name")
+        var path = $(this).attr("dir")
+        html_cont = TTS.forms.getfiletype(path,id);
+        BootstrapDialog.show({
+        title: 'Media',
+        message: $(html_cont),
+        buttons: [{
+            label: '{% trans "Close" %}',
+            action: function(dlg){
+                dlg.close();
+            }
+        }]
+        });
+    })
 }
 
 </script>

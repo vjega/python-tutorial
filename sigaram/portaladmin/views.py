@@ -61,6 +61,9 @@ writtenwork_uploader = AjaxFileUploader(UPLOAD_DIR='static/writtenwork')
 
 rubric_uploader = AjaxFileUploader(UPLOAD_DIR='static/rubric')
 
+sticky_notes_uploader = AjaxFileUploader(UPLOAD_DIR='static/stickynotes', 
+                                      DIMENSIONS=(250, 250))
+
 def layoutdemo(request):
     return render(request, 'portaladmin/layoutdemo.html')
 
