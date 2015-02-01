@@ -217,6 +217,7 @@
 .add_form{
     margin-left: 40px;
 }
+
 </style>
 {% endblock morecss %}
 
@@ -484,7 +485,6 @@ TTS.forms.renderstickynotes = function(data){
         sticky_html += "<span class='pull-right deleterec'  name='"+data[i].id+"'><i class='fa fa-trash'></i></span>&nbsp;";
         sticky_html += "<span class='pull-right editrec'  name='"+data[i].id+"'><i class='fa fa-pencil'></i></span> &nbsp;";
         if(data[i].attachment != ''){
-            //sticky_html += TTS.forms.getfiletype(data[i].attachment,data[i].id)
             sticky_html += '<span class="open_model_window pull-right cliprec" dir="'+data[i].attachment+'" name="'+data[i].id+'"><i class="fa fa-paper-clip"></i></span> &nbsp;';
         }
         sticky_html += "</div>";
@@ -568,18 +568,19 @@ $(document).ready(function(){
 
 TTS.forms.getfiletype = function (filename,id){
     var file_extention = filename.split('.').pop();
+    var name = filename.split('/').pop();
     var type;
     switch (file_extention) {
         case 'jpg':
         case 'jpeg':
         case 'png':
-            type = "<div class='modelbox_center' name='"+id+"'><img src='/static/"+filename+"' /></div>";
+            type = "<div class='modelbox_center' name='"+id+"'>Filename : "+name+" <br /><br /><img src='/static/"+filename+"' /></div>";
             break;
         case 'mp3':
         case 'wav':
         case 'wma':
         case 'm4a':
-            type = "<div class='modelbox_center' name='"+id+"'><audio controls><source src='/static/"+filename+"' type='audio/ogg'></audio> </div>";
+            type = "<div class='modelbox_center' name='"+id+"'>Filename : "+name+" <br /><br /><audio controls><source src='/static/"+filename+"' type='audio/ogg'></audio> </div>";
             break;
         case 'avi':
         case '3gp':
@@ -587,14 +588,13 @@ TTS.forms.getfiletype = function (filename,id){
         case 'mpg':
         case 'swf':
         case 'wmv':
-            type = "<div class='modelbox_center' name='"+id+"'><video width='320' height='240' controls><source src='/static/"+filename+"' type='video/mp4'></video></div>";
+            type = "<div class='modelbox_center' name='"+id+"'>Filename : "+name+" <br /><br /><video width='320' height='240' controls><source src='/static/"+filename+"' type='video/mp4'></video></div>";
             break;
         default:
             type = "<div class='modelbox_center'> <h4> Unkown file format <b>."+file_extention+"</b></h4></div>";
     }
     return type;
 }
-
 function load_onclick_events (){
     $(".sticky_header").parent().draggable({handle: '.sticky_header'});
     
