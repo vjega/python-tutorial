@@ -148,14 +148,14 @@
                         </ul>
                     </li>
                     
-                    <!-- <li>
+                    <li>
                         <a class="active" href="#">
                             <i class="fa fa-bar-chart-o fa-fw"></i>{% trans "Statistics" %}
                             <span class="fa arrow"></span>
                         </a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="statistics-activities">{% trans "Activities" %} {% trans "Statistics" %}</a>
+                                <a href="statistics-activities">{% trans "Login" %} {% trans "Statistics" %}</a>
                             </li>
                             <li>
                                 <a href="statistics-assignment">{% trans "Homework" %} {% trans "Statistics" %}</a>
@@ -164,7 +164,7 @@
                                 <a href="statistics-assessment">{% trans "Test" %} {% trans "Statistics" %}</a>
                             </li>
                         </ul>
-                    </li>-->
+                    </li>
                     <li>
                         <a class="active" href="classroom">
                             <i class="fa fa-building fa-fw"></i>{% trans "Classrooms" %}
@@ -234,6 +234,8 @@
     <!-- script src="js/plugins/morris/morris.min.js"></script -->
     <!-- script src="js/plugins/morris/morris-data.js"></script -->
 
+    <!-- jquery validation -->
+    <script src="{%static "bower_components/jquery-validation/dist/jquery.validate.min.js" %}"></script>
     <script src="{%static "js/sb-admin-2.js" %}"></script>
     {% block scriptcontent %}{% endblock %} 
 </body>

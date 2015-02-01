@@ -77,6 +77,21 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
+TTS.forms.saveclass = function(dialogItself){
+    var data = TTS.utils.serilaizeJson("#add-classlist");
+        $.ajax({
+            headers : {
+              'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+            },
+            type:'POST',
+            data: data,
+            url : '/api/admin/classlist/'
+        }).done(function( msg ) {
+            dialogItself.close();
+            location.reload();
+            //dialogItself.close();
+        });
+    };
 TTS.forms.addclassroom = function() {
     BootstrapDialog.show({
         title: '{% trans "Add Classroom" %}',
@@ -91,19 +106,24 @@ TTS.forms.addclassroom = function() {
             label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-classlist");
-                $.ajax({
-                    headers : {
-                      'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                $("#add-classlist").validate({
+                    rules: {
+                        classname: {
+                            required: true
+                        },
+                        shortname: {
+                            required: true
+                        }
                     },
-                    type:'POST',
-                    data: data,
-                    url : '/api/admin/classlist/'
-                }).done(function( msg ) {
-                    dialogItself.close();
-                    location.reload();
-                    //dialogItself.close();
+                    messages: {
+                        classname: "Class Name is required",
+                        shortname: "Short Name is required"
+                    }
                 });
+                if(!$("#add-classlist").valid()){
+                  return false;  
+                }
+            TTS.forms.saveclass(dialogItself);
             }
             },{
             label: '{% trans "Close" %}',

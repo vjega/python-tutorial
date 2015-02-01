@@ -66,6 +66,19 @@ TTS.forms.showcalform = function(start, end, allDay) {
             label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
                 action: function(dialogItself){
+                    $("#cal-event").validate({
+                    rules: {
+                        title: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        title: "Title is required",
+                    }
+                });
+                if(!$("#cal-event").valid()){
+                  return false;  
+                }
                     TTS.forms.saveCal();
                     dialogItself.close();
                 }

@@ -59,6 +59,21 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
+TTS.forms.saveschool = function(dialogItself){
+    var data = TTS.utils.serilaizeJson("#add-school");
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'POST',
+        data: data,
+        url : '/api/admin/adminschool/'
+    }).done(function( msg ) {
+        dialogItself.close();
+        location.reload();
+        //dialogItself.close();
+    });
+};
 TTS.forms.addschool = function() {
     BootstrapDialog.show({
         title: '{% trans "Add School" %}',
@@ -67,19 +82,24 @@ TTS.forms.addschool = function() {
             label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-school");
-                $.ajax({
-                    headers : {
-                        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                $("#add-school").validate({
+                    rules: {
+                        schoolname: {
+                            required: true
+                        },
+                        shortname: {
+                            required: true
+                        }
                     },
-                    type:'POST',
-                    data: data,
-                    url : '/api/admin/adminschool/'
-                }).done(function( msg ) {
-                    dialogItself.close();
-                    location.reload();
-                    //dialogItself.close();
+                    messages: {
+                        schoolname: "School Name is required",
+                        shortname: "Short Name is required"
+                    }
                 });
+                if(!$("#add-school").valid()){
+                  return false;  
+                }
+                TTS.forms.saveschool(dialogItself);
             }
             },{
             label: '{% trans "Close" %}',

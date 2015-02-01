@@ -607,3 +607,8 @@ def newtopic(request):
 @switchlanguage
 def richmindmap(request):
     return render(request, 'portaladmin/richmindmap.html')  
+
+@login_required
+@switchlanguage
+def activitystatistics(request):
+    return render(request, 'portaladmin/activitystatistics.html') 

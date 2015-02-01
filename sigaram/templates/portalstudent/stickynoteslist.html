@@ -88,6 +88,19 @@ TTS.forms.showadminform = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-sticky-info");
+                $("#add-sticky-info").validate({
+                    rules: {
+                        title: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        title: "Title is required",
+                    }
+                });
+                if(!$("#add-sticky-info").valid()){
+                  return false;  
+                }
                 //console.log(data);
                 TTS.forms.addadmin(dialogItself, data); 
             }

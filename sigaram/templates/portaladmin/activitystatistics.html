@@ -105,25 +105,21 @@
                   "data" :"slno",
                   "bSortable":false
                 },
-                { "title": "{% trans "Title" %}",
-                  "data" :"title"
+                { "title": "{% trans "Works" %}",
+                  "data" :"works"
                 },
                 { "title": "{% trans "Date" %}",
                   "data" :"date"
-                },
-                { "title": "{% trans "Type" %}" ,
-                  "data" :"type"
                 },
             ];
         var dataset = [];
         var count = 0
         for(var i in data){
-            var t = [];
+            var t = {};
             t.DT_RowId = data[i].resourceid;
             t.slno=++count;
-            t.title=data[i].resourcetitle;
+            t.works=data[i].resourcetitle;
             t.date=data[i].createddate;
-            t.type=data[i].resourcetype;
             dataset.push(t);
         }
         if (TTS.forms.table) {
@@ -154,18 +150,6 @@ $(document).ready(function(){
         e.stopPropagation();
         window.location = 'viewassignresource?resourceid='+this.id;
     });
-    /*$('#fromdatepicker').datetimepicker({
-        pickTime: true
-    });
-    $('#todatepicker').datetimepicker({
-        pickTime: true
-    });
-    $("#fromdatepicker").on("dp.change",function (e) {
-       $('#todatepicker').data("DateTimePicker").setMinDate(e.date);
-    });
-    $("#todatepicker").on("dp.change",function (e) {
-       $('#fromdatepicker').data("DateTimePicker").setMaxDate(e.date);
-    });*/
 
     $('#date-search').click(function(){
         var fdate = $("#startdate").val();
