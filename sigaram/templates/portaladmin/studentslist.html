@@ -130,6 +130,41 @@ TTS.forms.showstudentform = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-student");
+                $("#add-student").validate({
+                    rules: {
+                        firstname: {
+                            required: true
+                        },
+                        lastname: {
+                            required: true
+                        },
+                        username: {
+                            required: true
+                        },
+                        password: {
+                            required: true,
+                        },
+                        emailid: {
+                            required: true,
+                            email: true
+                        }
+                    },
+                    messages: {
+                        firstname: "First Name is required",
+                        lastname: "Last Name is required",
+                        username: "User Name is required",
+                        password: {
+                            required: "Please provide a password",
+                        },
+                        emailid: {
+                                required: "Email id is required",
+                                email: "Please enter a valid email address"
+                        },
+                    }
+                });
+                if(!$("#add-student").valid()){
+                  return false;  
+                }
                 TTS.forms.addstudent(dialogItself, data); 
             }
             },{

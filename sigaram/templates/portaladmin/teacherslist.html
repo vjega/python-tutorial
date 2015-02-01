@@ -103,6 +103,37 @@ TTS.forms.showteacherform = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-teacher");
+                $("#add-teacher").validate({
+                    rules: {
+                        firstname: {
+                            required: true
+                        },
+                        username: {
+                            required: true
+                        },
+                        password: {
+                            required: true,
+                        },
+                        emailid: {
+                            required: true,
+                            email: true
+                        }
+                    },
+                    messages: {
+                        firstname: "First Name is required",
+                        username: "User Name is required",
+                        password: {
+                            required: "Please provide a password",
+                        },
+                        emailid: {
+                                required: "Email id is required",
+                                email: "Please enter a valid email address"
+                        },
+                    }
+                });
+                if(!$("#add-teacher").valid()){
+                  return false;  
+                }
                 TTS.forms.addteacher(dialogItself, data); 
             }
             },{
