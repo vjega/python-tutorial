@@ -1,0 +1,219 @@
+{% extends 'portaladmin/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block topcontent %}
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Teacher" %}{% trans "Resources" %}</h2>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row">
+    <div >    
+        <label class="col-lg-2">{% trans "Type" %}</label>
+        <span>
+            <select id="category" class="col-lg-3"  >
+                <option value="text">Text</option>
+                <option value="audio">Audio</option>
+                <option value="video">Video</option>
+                <option value="image">Image</option>
+            </select>
+        </span>
+    </div>
+</div><br />
+<div class="row" id="schooldetails">
+    <div>
+        <label class="col-lg-2">{% trans "Select School" %}</label>
+        <span >
+            <select class="col-lg-3" name="school_name" class="form-control" id="school_name">
+                {% for school in schools%}
+                    <option value="{{school.schoolid}}">
+                        {{school.schoolname}}
+                    </option>
+                {% endfor %}
+            </select>
+        </span>
+    </div>
+</div><br />
+<div class="row" id="classdetails">
+    <div>
+        <label class="col-lg-2">{% trans "Class" %}</label>
+        <span >
+            <select class="col-lg-3" name="class_name" class="form-control" id="class_name">
+                {% for classes in classes%}
+                    <option value="{{classes.classid}}">
+                        {{classes.shortname}}
+                    </option>
+                {% endfor %}
+            </select>
+        </span>
+    </div>
+</div><br />
+<div class="row" id="sectiondetails">
+    <div>
+        <label class="col-lg-2">{% trans "Select Section" %}</label>
+        <span >
+            <select class="col-lg-3" name="section" class="form-control" id="section">
+                <option value="a">A</option>
+                <option value="b">B</option>
+            </select>
+        </span>
+    </div>
+</div><br />
+<div class="row" id="folderdetails">
+    <div>
+        <label class="col-lg-2">{% trans "Select Folder" %}</label>
+        <span >
+            <select class="col-lg-3" name="folder" class="form-control" id="folder">
+                <option value="1">Lesson Plan</option>
+                <option value="2">School's resources</option>
+            </select>
+        </span>
+    </div>
+</div><br />
+<div class="row" id="folderdetails">
+    <div>
+        <label class="col-lg-2">{% trans "Chapter" %}</label>
+        <span >
+            <select class="col-lg-3" name="folder" class="form-control" id="id_chapterid">
+            </select>
+        </span>
+    </div>
+</div><br />
+{% endblock topcontent %}
+{% block botcontent %}
+<div class="row">
+    <div id="file-uploader">File Uploader Comes Here...</div> 
+    <input type="hidden" id="uploadurl">
+    <div class="form-group" class="col-sm-2">
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Title" %}</label>
+    </div><br />
+    <div class="form-group">
+        <textarea id="title" class="summernote"></textarea>
+    </div>
+</div><br />
+<div align="center">   
+    <span>
+        <button class="btn btn-primary btn-sm" id="save">
+            <i class="fa fa-floppy-o fa-lg"></i> {% trans "Save" %} 
+        </button>
+        <button class="btn btn-primary btn-sm" id="cancel">
+            <i class="fa fa-times fa-lg"></i> {% trans "Cancel" %} 
+        </button>
+    </span>
+</div>
+{% endblock botcontent%}
+
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+
+<style>
+    #addrec:hover, .tts-delete:hover{
+        cursor: pointer;
+    }
+    #bulletinboard{
+        display:none;
+    }
+</style>
+{% endblock morecss %}
+
+{% block morescript %}
+<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+{% endblock morescript %}
+
+{% block scriptcontent %}
+<script>
+window.TTS = window.TTS || {};
+TTS.forms = TTS.forms || {};
+$("#save").click(function(){
+    TTS.forms.teacherresource();
+
+});
+
+$("#cancel").click(function(){
+    window.location='teacherresourcelist';
+});
+
+TTS.forms.teacherresource = function(){  
+    var data = {};
+    data.resourcetitle = TTS.utils.summer_encode($("#title").code());
+    data.resourcetype = $("#category").val();
+    data.schoolid=$('#school_name').val();
+    data.classid=$('#class_name').val();
+    data.section=$('#section').val();
+    data.resourcecategory=$('#folder').val();
+    data.chapterid=$('#id_chapterid').val();
+    data.fileurl = $("#uploadurl").val();
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:"POST",
+        url:"/api/admin/teacherresourcesinfo/",
+        data: JSON.stringify(data)
+    }).done(function(data){
+        alert("Saved Successfully");
+        window.location='teacherresourcelist';
+    }).error(function(err, msg){
+        alert("I didnt save the data");
+    });
+}
+
+var updateChapter = function(){
+    $.ajax({
+        'url': "/api/admin/chapterinfo/?classid="+$("#class_name").val()
+                +"&section="+$("#section").val(),
+        'type':'GET'
+    }).done(function(data){
+        //console.log(data)
+        opt = "";
+        for (d in data){
+            opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"<option>\n";
+        }
+        $("#id_chapterid").html(opt);
+    });
+};
+
+
+$(document).ready(function(){
+    updateChapter();
+    $('.summernote').summernote();
+    $("#class_name").on('change',function(){
+        updateChapter();
+    });
+    $("#section").on('change',function(){
+        updateChapter();
+    });
+    var uploader = new qq.FileUploader({
+        action: "/admin/student-teacherres-upload",
+        element: $('#file-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#uploadurl").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
+    });
+});
+</script>
+{% endblock scriptcontent %}

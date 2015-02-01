@@ -5,7 +5,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Sticky Note List" %}</h2>
+        <h2 class="page-header">{% trans "Sticky notes" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -15,7 +15,7 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans "Sticky" %} {% trans "List" %} 
+            {% trans "Sticky notes" %} {% trans "List" %} 
             </span>
              <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
         </div>
@@ -40,7 +40,7 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
-    #addrec:hover, .tts-delete:hover, .tts-edit:hover{
+    #addrec:hover, .tts-delete:hover, .tts-edit:hover, .sticky_title:hover{
         cursor: pointer;
     }
 </style>
@@ -77,9 +77,23 @@ TTS.forms.addadmin = function(form, data) {
     });
 }
 
+TTS.forms.delsticky = function(id) {
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'DELETE',
+        url : '/api/admin/stickyinfo/'+id
+    }).done(function( msg ) {
+        location.reload();
+    }).error(function(msg){
+        alert("Something Bad Happended");
+    });
+}
+
 TTS.forms.showadminform = function() {
     BootstrapDialog.show({
-        title: 'Add Sticky List',
+        title: '{% trans "Sticky notes" %}',
         message: $($('#stickylist-form').render()),
         onshown: function(){
         },
@@ -88,6 +102,19 @@ TTS.forms.showadminform = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-sticky-info");
+                $("#add-sticky-info").validate({
+                    rules: {
+                        title: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        title: "Title is required",
+                    }
+                });
+                if(!$("#add-sticky-info").valid()){
+                  return false;  
+                }
                 //console.log(data);
                 TTS.forms.addadmin(dialogItself, data); 
             }
@@ -104,12 +131,22 @@ TTS.forms.renderteacher = function(data){
     
     var headers = [
             { "title": "{% trans "Sl No." %}",
-              "class": "text-center"  
+              "class": "text-center",
+              "data":"slno",
+              "bSortable":false  
             },
             { "title": "{% trans "Title" %}",
-              "class": "text-center"  
+              "class":"sticky_title",
+              "data":"title"
             },
-            { "title": "{% trans "Date" %}" },
+            { "title": "{% trans "Date" %}",
+              "data":"date"
+            },
+            { "title": "{% trans "Delete" %}",
+              "class": "text-center",
+              "data" : "del",
+              "bSortable":false
+            }, 
             
         ];
     var dataset = [];
@@ -118,9 +155,10 @@ TTS.forms.renderteacher = function(data){
     for(var i in data){
         var t = [];
         t.DT_RowId = data[i].id;
-        t.push(++count);
-        t.push(data[i].title);
-        t.push(data[i].createddate);
+        t.slno=++count;
+        t.title=data[i].title;
+        t.date=data[i].createddate;
+        t.del = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);
     }
     if (TTS.forms.table) {
@@ -147,6 +185,7 @@ $(document).ready(function(){
     }).done(function(data){
         TTS.forms.renderteacher(data);
         TTS.utils.ajaxloaderstop();
+        $("table#sticky-list-tbl thead tr th").removeClass('sorting_asc');
     });
     $('#sticky-list-tbl').on('click', 'tbody tr', function(){
         window.location = 'sticky-notes?id='+this.id;
@@ -154,6 +193,13 @@ $(document).ready(function(){
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.showadminform();
+    });
+    $('#sticky-list-tbl').on('click', '.tts-delete', function(e){
+        e.stopPropagation();
+        if (!window.confirm("Do you want to delete this record?")) {
+            return false;
+        }
+        TTS.forms.delsticky($(this).parent().parent().prop("id"));
     });
     
 });

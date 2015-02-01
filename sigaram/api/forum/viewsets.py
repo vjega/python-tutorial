@@ -18,7 +18,9 @@ def loginname_to_userid(usertype, username):
     elif usertype =='Student':
         m = models.Studentinfo.objects.filter(username=username)[0]
         return m.studentid
-
+        
+def summer_decode(str):
+    return str.replace('~',':').replace('#','=').replace('^',';')
 
 class ForuminfoViewSet(viewsets.ModelViewSet):
 
@@ -52,41 +54,15 @@ class TopicinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Topicinfo.objects .all()
     serializer_class = forumserializers.TopicinfoSerializer
 
-    def list(self, request):
-        forumid = request.GET.get('forumid')
-        forumname = request.GET.get('forumname')
-        replyid =request.GET.get('replyid')
-        sql = """
-        SELECT topicid,
-                forumid,
-                topicname,
-                totalpost,
-                date(lastposteddate) as lastposteddate,
-                lastpostedby,
-                firstname,
-                totalpost 
-        FROM topicinfo ti 
-        LEFT OUTER JOIN logininfo li ON li.loginid = ti.lastpostedby 
-        WHERE ti.forumid=%s
-        ORDER BY topicid """ % forumid
-        cursor = connection.cursor()
-        #print sql
-        cursor.execute(sql)
-        desc = cursor.description
-        result =  [
-                dict(zip([col[0] for col in desc], row))
-                for row in cursor.fetchall()
-            ]
-        return Response(result)
-
     def create(self, request):
         topicinfo = models.Topicinfo()
         topicinfodata =  json.loads(request.DATA.keys()[0])
         topicinfo.topicid = topicinfodata.get('topicid',0)
         topicinfo.forumid = topicinfodata.get('forumid',0)
-        topicinfo.topicname = topicinfodata.get('topicname',0)
+        topics.topicname = summer_decode(topicinfodata.get('topicname',0))
         topicinfo.totaltopic = topicinfodata.get('totaltopic',0)
         topicinfo.totalpost = topicinfodata.get('totalpost',0)
+        topics.topicdetails = summer_decode(topicinfodata.get('topicdetails',0))
         topicinfo.createdby = request.user.id
         topicinfo.lastpostedby = request.user.id
         topicinfo.lastposteddate = time.strftime('%Y-%m-%d %H:%M:%S')

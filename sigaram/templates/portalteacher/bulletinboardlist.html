@@ -133,7 +133,8 @@ TTS.forms.renderannouncement = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false   
             },
             { "title": "{% trans "Title" %}",
               "data" : "title",
@@ -144,7 +145,8 @@ TTS.forms.renderannouncement = function(data){
             },
             { "title": "{% trans "Delete" %}",
               "class": "text-center",
-              "data" : "delete"
+              "data" : "delete",
+              "bSortable":false 
             },  
         ];
     var dataset = [];
@@ -187,6 +189,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderannouncement(data);
+        $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         window.location = 'bulletinboard';

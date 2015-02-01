@@ -1,0 +1,603 @@
+{% extends 'portalteacher/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block topcontent %}
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Sticky notes" %}</h2>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+{% endblock topcontent %}
+{% block botcontent %}
+<div class="row">
+    <div class="form-group" class="col-sm-2">
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Text of the note" %}</label>
+    </div><br />
+    <div class="form-group">
+        <textarea id="title" class="summernote"></textarea>
+    </div>
+    
+    <div class='color_container col-sm-12'>
+        <div class="col-sm-1"></div>
+        <div id='preview_color' class='yellow col-sm-4'>Preview</div>
+        <div class='control-label col-sm-7 color_values' id="color-swatch"></div>
+    </div>
+
+</div><br />
+<div align="center">   
+    <span>
+        <button class="btn btn-primary btn-sm" id="save">
+            <i class="fa fa-floppy-o fa-lg"></i> {% trans "Save" %} 
+        </button>
+        <button class="btn btn-primary btn-sm" id="cancel">
+            <i class="fa fa-times fa-lg"></i> {% trans "Cancel" %} 
+        </button>
+    </span>
+</div>
+{% endblock botcontent%}
+
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<style>
+    #addrec:hover, .tts-delete:hover{
+        cursor: pointer;
+    }
+
+.yellow{
+    background-color:#FDFB8C;
+    border:1px solid #DEDC65;   
+}
+
+.yellow_header{
+    background-color:#DEDC65;   
+}
+
+.blue{
+    background-color:#A6E3FC;
+    border:1px solid #75C5E7;   
+}
+.blue_header{
+    background-color:#75C5E7;   
+}
+
+.green{
+    background-color:#A5F88B;
+    border:1px solid #98E775;   
+}
+
+.green_header{
+    background-color:#98E775;   
+}
+
+.red{
+    background-color:#ff6666;
+    border:1px solid #ff3232;
+}
+
+.red_header{
+    background-color:#ff3232;   
+}
+
+.purple{
+    background-color: #d29fd3;
+    border: 1px solid #bc5fbd; 
+}
+
+.purple_header{
+    background-color:#bc5fbd;   
+}
+
+.pink{
+    background-color:#FFAEC9;
+    border:1px solid #f46998;   
+}
+
+.pink_header{
+    background-color:#f46998;   
+}
+
+.grey{
+    background-color:#F5F5f5;
+    border:1px solid #737373;  
+}
+
+.grey_header{
+    background-color:#737373;   
+}
+
+.orange{
+    background-color:#FF7F27;
+    border:1px solid #EB6712;  
+}
+
+.orange_header{
+    background-color:#EB6712;   
+}
+
+.maroon{
+    background-color: #e0d9bc;
+    border: 1px solid #c4b18f; 
+}
+
+.maroon_header{
+    background-color:#c4b18f;   
+}
+
+.gold{
+    background-color: #fcbb22;
+    border: 1px solid #fdb221; 
+}
+
+.gold_header{
+    background-color:#fdb221;   
+}
+
+.sticky_note{
+    float: left;
+    position: relative;
+    height: 300px;
+    width: 220px;
+    margin: 10px;
+    padding: 8px;
+    box-shadow: 1px 1px 1px 1px #d3d3d3;
+    overflow:hidden;
+    cursor:default;
+    font-family:Trebuchet MS,Tahoma,Myriad Pro,Arial,Verdana,sans-serif;
+    font-size:14px;
+}
+
+.sticky_header{
+    height: 18px;
+    width: 200px;
+    margin-bottom: 10px;
+    cursor: crosshair;
+}
+
+.sticky_footer {
+    border-top: 1px solid gray;
+    bottom: -3px;
+    position: relative;
+    width: 200px;
+}
+
+.table-bordered {
+    border: 0px solid #ddd !important;
+}
+
+.editrec{
+    float: right;
+    margin: -1px 8px 0 0;
+    cursor: pointer;
+}
+
+.editrec:hover{
+    color :#FFF;
+}
+
+.deleterec{
+    float: right;
+    margin: -1px 8px 0 0;
+    cursor: pointer;
+}
+
+.deleterec:hover{
+    color :#FFF;
+}
+
+
+.sticky_comment{
+    float: right;
+    margin-right: 4px;
+    cursor: pointer;
+}
+
+.sticky_comment:hover{
+    color :gray;
+}
+
+.sticky_content {
+    height: 230px;
+    overflow-x: auto;
+}
+
+.color{
+    cursor:pointer;
+    float:left;
+    height: 15px;
+    width: 15px;
+    margin: 0 5px 0 0;
+}
+
+.color_container{
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+#preview_color{
+    line-height: 100px;
+    width: 100px;
+}
+.slidingDiv{
+    display: none;
+}
+
+.show_comment_icon, .hide_comment_icon{
+    cursor: pointer;
+    float: left;
+    height: 22px;
+    margin-left: 3px;
+    margin-top: 3px;
+    width: 178px;
+}
+.show_comment_icon:hover, .hide_comment_icon:hover {
+    color :gray;
+}
+
+.show_comments, .hide_comments {
+    float: left;
+}
+
+.comment{
+    float: left;
+}
+
+.sticky_note {
+    z-index: 0
+}
+
+.comments{
+    float:left;
+    width:100%;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
+}
+
+.comment_details {
+    float: left;
+    color: gray;
+    font-style: italic;
+    height: 23px;
+    overflow: hidden;
+    width: 200px;
+}
+/*
+.comment_by{
+    float: left;
+    width:50%;
+    overflow: hidden;
+}
+
+.comment_date{
+    float: right;
+    width:50%;
+    overflow: hidden;
+}*/
+</style>
+{% endblock morecss %}
+
+{% block morescript %}
+<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+{% endblock morescript %}
+
+{% block scriptcontent %}
+<script>
+window.TTS = window.TTS || {};
+TTS.forms = TTS.forms || {};
+
+/* End of Admin CRUD */
+
+TTS.forms.addstickynote = function(form, data) {
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'POST',
+        data: data,
+        url : '/api/admin/stickynotes/'
+    }).done(function( msg ) {
+        form.close();
+        location.reload();
+        //dialogItself.close();
+    });
+}
+
+TTS.forms.showstickyform = function() {
+    $(".color_div").html($('#sticky-form').render() +  $("#sticky-text").text())
+    /*BootstrapDialog.show({
+        title: 'Add Sticky note',
+        message: $($('#sticky-form').render() +  $("#sticky-text").text()), 
+        onshown: function(){
+            var colors = ["yellow", "blue", "green","purple", "pink", "grey","red", "orange", "maroon", "gold"];
+            $('.summernote').summernote();
+            for (var i in colors) {
+               $("#color-swatch").append("<div class='color "+colors[i]+"' name='"+colors[i]+"' ></div>");
+            }
+            $(".color").on("click", function(){
+                var clsclr = $(this).prop("class").split(" ");
+                var select_color = findColor(colors, clsclr) ? findColor(colors, clsclr) : 'yellow';
+                $("#preview_color").removeAttr("class");
+                $("#preview_color").attr("class",select_color);
+            });
+        },
+
+        buttons: [{
+            label: '{% trans "Save" %}',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#add-sticky");
+                var select_color = $("#preview_color").attr("class");
+                data = JSON.parse(data);
+                data['color'] = select_color;
+                data['stickylistid'] = TTS.utils.getUrlParameter('id');
+                TTS.forms.addstickynote(dialogItself, JSON.stringify(data)); 
+            }
+            },{
+            label: '{% trans "Close" %}',
+            action: function(dlg){
+                dlg.close();
+            }
+        }]
+    });*/
+
+};
+
+function findColor(cls, color) {
+  for (c in cls) {
+    for (cs in color) {
+       if (cls[c] === color[cs])
+         return cls[c];
+    }
+  }
+}
+
+TTS.forms.editstickyform = function(edit_id, content, color) {
+   var colors = ["yellow", "blue", "green","purple", "pink", "grey","red", "orange", "maroon", "gold"];
+    var color_div = "<div class='color_container'>"+
+                        "<div id='preview_color' class='"+color+"'>Preview</div>"+
+                        "<div class='control-label col-sm-4'>color</div>"+
+                        "<div class='control-label col-sm-8 color_values'>";
+    for (var i = 0; i < colors.length; i++) { 
+       color_div += "<div class='color "+colors[i]+"' name='"+colors[i]+"' ></div>";
+    }
+
+    color_div +="</div>";
+    color_div +="</div>";
+
+    BootstrapDialog.show({
+        title: 'Edit Sticky note',
+        message: $($('#sticky-form').render() + color_div),
+        onshown: function(){
+            $('.summernote').summernote().code(content);
+
+           $(".color").on("click", function(){
+                var clsclr = $(this).prop("class").split(" ");
+                var select_color = findColor(colors, clsclr) ? findColor(colors, clsclr) : 'yellow';
+                $("#preview_color").removeAttr("class");
+                $("#preview_color").attr("class",select_color);
+            });
+        },
+        buttons: [{
+            label: '{% trans "Save" %}',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#add-student");
+                data = JSON.parse(data);
+                data['color'] = $("#preview_color").attr("class");
+                $.ajax({
+                    headers : {
+                        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                    },
+                    type:'PUT',
+                    data: JSON.stringify(data),
+                    url : '/api/admin/stickynotes/'+edit_id
+                }).done(function( msg ) {
+                    dialogItself.close();
+                    location.reload();
+                });
+            }
+            },{
+            label: '{% trans "Close" %}',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
+        }]
+    });
+};
+
+TTS.forms.delstickynotes = function(id) {
+    $.ajax({
+         headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'DELETE',
+        url : '/api/admin/stickynotes/'+id
+    }).done(function( msg ) {
+        location.reload();
+    }).error(function(msg){
+        alert("Something Bad Happended");
+    });
+}
+
+TTS.forms.addstickycomment = function(form, data) {
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'POST',
+        data: data,
+        url : '/api/admin/stickycomments/'
+    }).done(function( msg ) {
+        form.close();
+        location.reload();
+        //dialogItself.close();
+    });
+}
+
+TTS.forms.showstickycommentform = function(stickyid) {
+    BootstrapDialog.show({
+        title: 'Add Sticky Comment',
+        message: $($('#stickycomment-form').render()),
+        buttons: [{
+            label: '{% trans "Save" %}',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                var data = TTS.utils.serilaizeJson("#add-stickycomment");
+                data = JSON.parse(data);
+                data['stickyid'] = stickyid;
+                //data['stickylistid'] = 
+                TTS.forms.addstickycomment(dialogItself, JSON.stringify(data)); 
+            }
+            },{
+            label: '{% trans "Close" %}',
+            action: function(dlg){
+                dlg.close();
+            }
+        }]
+    });
+};
+
+TTS.forms.renderstickynotes = function(data){
+    var sticky_html = '';
+    for(var i in data){
+        sticky_html += "<div id='sticky_note_"+data[i].id+"' class='sticky_note "+data[i].color+"'>";
+        sticky_html += "<div class='sticky_header "+data[i].color+"_header'>";
+        sticky_html += "<span class='pull-right deleterec'  name='"+data[i].id+"'><i class='fa fa-trash'></i></span>&nbsp;";
+        sticky_html += "<span class='pull-right editrec'  name='"+data[i].id+"'><i class='fa fa-pencil'></i></span> &nbsp;";
+        sticky_html += "</div>";
+        sticky_html += "<div  name='"+data[i].color+"' src='"+data[i].id+"' class='sticky_content'>"+data[i].stickytext+"</div>";
+        sticky_html += "<div  class='sticky_footer'>";
+        sticky_html += "<span class='pull-right sticky_comment' id='sticky_comment_"+data[i].id+"' name='"+data[i].id+"'><i class='fa fa-comment'></i></span>";
+        var com = []
+        if (data[i].comments !==  null) {
+            com = data[i].comments.split("~");
+        }
+        
+        var comby = []
+        if (data[i].commentby !==  null) {
+            comby = data[i].commentby.split("~");
+        }
+
+        var comdate = []
+        if (data[i].createddate !==  null) {
+            comdate = data[i].createddate.split("~");
+        }
+        
+        if (com.length) {
+            sticky_html += "<div class='show_comment_icon'>";
+            sticky_html += "<div class='show_comments' src='"+com.length+"' name='"+data[i].id+"'><i class='fa fa-caret-right'></i> &nbsp;&nbsp;</div>";
+            sticky_html += "<div id='comment'>Comment ("+com.length+")</div>";
+            sticky_html += "</div>";
+            sticky_html += "<div class='slidingDiv' id='slidingDiv_"+data[i].id+"'>";
+            for (i in com){
+                sticky_html += "<div>";
+                sticky_html += "<div class='comment_details'>"+comby[i]+" &nbsp;&nbsp "+comdate[i]+"</div>";
+                //sticky_html += "<div class='comment_by'>"+comby[i]+"</div>";
+                //sticky_html += "<div class='comment_date'>"+comdate[i]+"</div>";
+                //sticky_html += "</div>";
+                sticky_html += "<div class='comments'>"+com[i]+"</div>";
+                sticky_html += "</div>";
+            }
+            sticky_html += "</div>";
+        } else {
+            sticky_html += "<div id='comment'>No comment</div>";
+        }
+        sticky_html += "</div>";
+        sticky_html += "</div>";
+    }
+    $('#sticky-placeholder').html(sticky_html); 
+};
+
+//?stickyid=1
+
+$(document).ready(function(){
+    $('.summernote').summernote()
+    $.ajax({
+        "url":"/api/admin/stickynotes/?id="+TTS.utils.getUrlParameter("id")+"&format=json",
+        "type":"GET"
+    }).done(function(data){
+        TTS.forms.renderstickynotes(data);
+        TTS.utils.ajaxloaderstop();
+    });
+    create_colors();
+    setTimeout(function(){ load_onclick_events() }, 500);
+});
+
+function load_onclick_events (){
+    $(".sticky_header").parent().draggable({handle: '.sticky_header'});
+    
+    $("#sticky-placeholder").on("click", ".editrec", function(){
+        var elm = $(this).parent().parent().find(".sticky_content")[0];
+        var elText = $(elm).text();
+        var color = $(elm).attr("name");
+        var stickyid = $(elm).attr("src");
+        TTS.forms.editstickyform(stickyid,elText,color);
+    });
+
+    $("#sticky-placeholder").on("click", ".deleterec", function(){
+        if (!window.confirm("Do you want to delete this record?")) {
+            return false;
+        }
+        var delete_id = $(this).attr("name");
+        TTS.forms.delstickynotes(delete_id);
+        //window.location.reload();
+    });
+
+    $("#sticky-placeholder").on("click", ".sticky_comment", function(){
+        var sticky_id = $(this).attr("name");
+        TTS.forms.showstickycommentform(sticky_id);
+    });
+
+    var sticky_height = '';
+    $("#sticky-placeholder").on("click", ".show_comment_icon", function(){
+       $(".slidingDiv").slideUp();
+       sticky_height = $(this).parent().parent().height();
+       $(this).parent().parent().height("auto");
+       $(this).parent().parent().find(".slidingDiv").slideDown();
+       $(this).find('i').toggleClass('fa fa-caret-right fa fa-caret-down');
+       $(this).toggleClass('show_comment_icon hide_comment_icon');
+    });
+
+    $("#sticky-placeholder").on("click", ".hide_comment_icon", function(){
+       $(".slidingDiv").slideUp();
+       $(this).parent().parent().height(sticky_height);
+       $(this).find('i').toggleClass('fa fa-caret-down fa fa-caret-right');
+       $(this).toggleClass('hide_comment_icon show_comment_icon');
+    });
+
+    $("#sticky-placeholder").on("mouseup", ".sticky_header", function(){
+         var zind = $(this).parent().css("z-index");
+         $(this).parent().css("z-index", 0);
+    });
+
+    $("#sticky-placeholder").on("mousedown", ".sticky_header", function(){
+        var stickyelm = $(this).parent().css("z-index", 1);
+    });
+}
+
+var create_colors = function(){
+    var colors = ["yellow", "blue", "green","purple", "pink", "grey","red", "orange", "maroon", "gold"];
+    for (var i in colors) {
+       $("#color-swatch").append("<div class='color "+colors[i]+"' name='"+colors[i]+"' ></div>");
+    }
+
+     $(".color").on("click", function(){
+                var clsclr = $(this).prop("class").split(" ");
+                var select_color = findColor(colors, clsclr) ? findColor(colors, clsclr) : 'yellow';
+                $("#preview_color").removeAttr("class");
+                $("#preview_color").attr("class",select_color);
+    });
+}
+</script>
+{% endblock scriptcontent %}

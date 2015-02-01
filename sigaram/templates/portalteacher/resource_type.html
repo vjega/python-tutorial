@@ -24,10 +24,10 @@
                 </div>
             </div>
                 <div class="panel-footer">
-                    <a href="resource_units?classid={{forloop.counter}}&section=a">
+                    <a href="resource_units?resourcecategory=1&classid={{forloop.counter}}&section=a">
                     <div class="col-xs-6 pull-left text-center"><span class='semester'>A</span></div>
                     </a>
-                    <a href="resource_units?classid={{forloop.counter}}&section=b">
+                    <a href="resource_units?resourcecategory=1&classid={{forloop.counter}}&section=b">
                     <div class="col-xs-6 pull-right text-center"><span class='semester'>B</span></div>
                     </a>
                     <div class="clearfix"></div>
@@ -40,19 +40,34 @@
 <!-- /.row -->
 {% endblock topcontent %}
 
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<style>
+    #addrec:hover, .tts-delete:hover, #studetresource-main-tbl tbody tr:hover{
+        cursor: pointer;
+    }
+</style>
+{% endblock morecss %}
+
 
 {% block morescript %}
-
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
 <script>
-    $(document).ready(function(){
-        
-    });
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}
+$(document).ready(function(){
+   var resourcecategory=TTS.utils.getUrlParameter('resourcecategory');
+   console.log(resourcecategory)
+});
 </script>
 {% endblock scriptcontent %}
-
-{% block morecss %}
-
-{% endblock morecss %}

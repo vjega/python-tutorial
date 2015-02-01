@@ -118,7 +118,7 @@
                     </li>
                     <li>
                     
-                        <a class="active" href="forum">
+                        <a class="active" href="viewtopic">
                             <i class="fa fa-comments fa-fw"></i>{% trans "Forum" %}
                         </a>
                         
@@ -171,6 +171,11 @@
                         </a>
                     </li>
                     <li>
+                        <a class="active" href="calendar">
+                            <i class="fa fa-calendar fa-fw"></i>{% trans "Calendar" %}
+                        </a>
+                    </li>
+                    <li>
                         <a class="active" href="rubrics">
                             <i class="fa fa-building fa-fw"></i>{% trans "Rubrics" %}
                         </a>
@@ -213,7 +218,8 @@
     <!-- script src="js/plugins/morris/raphael.min.js"></script -->
     <!-- script src="js/plugins/morris/morris.min.js"></script -->
     <!-- script src="js/plugins/morris/morris-data.js"></script -->
-
+    <!-- jquery validation -->
+    <script src="{%static "bower_components/jquery-validation/dist/jquery.validate.min.js" %}"></script>
     <script src="{%static "js/sb-admin-2.js" %}"></script>
     {% block scriptcontent %}{% endblock %} 
 </body>

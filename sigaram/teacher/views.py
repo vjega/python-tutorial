@@ -16,7 +16,8 @@ from teacher.forms import ( RubricsForm,
                             StickyinfoForm,
                             NewtopicForm,
                             MyprofileForm,
-                            MyresourcelistForm
+                            MyresourcelistForm,
+                            CalendarForm
                             ) 
 
 from ajaxuploader.views import AjaxFileUploader  
@@ -65,7 +66,7 @@ def home(request):
         {
         "color": u"primary",
         "icon" : u"sitemap",
-        "link" : u"teacherviewmindmap",
+        "link" : u"assignedmindmaplist",
         "caption": _("Mindmap"),
         "stat": 125
         }]
@@ -555,12 +556,17 @@ def viewtopic(request):
    foruminfo = models.Foruminfo.objects.all()
    return render(request, 'portalteacher/viewtopic.html')
 
+@login_required
+@switchlanguage
 def viewpost(request):
     return render(request, 'portalteacher/viewpost.html')
 
+@login_required
+@switchlanguage
 def newtopic(request):
     return render(request, 'portalteacher/newtopic.html', {"form" : NewtopicForm.NewtopicForm()})
 
+@login_required
 @switchlanguage
 def classviewassignmentanswer(request):
     return render(request, 'portalteacher/classviewassignmentanswer.html')
@@ -570,6 +576,7 @@ def classviewassignmentanswer(request):
 def viewbulletinboard(request):
     return render(request, 'portalteacher/viewbulletinboard.html')
 
+@login_required
 @switchlanguage
 def viewassignwrittenwork(request):
     return render(request, 'portalteacher/viewassignwrittenwork.html')
@@ -616,3 +623,35 @@ def assignmindmap(request):
     schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/assignmindmap.html',{'schools':schools,'classes':classes})
+
+
+@login_required
+@switchlanguage
+def assignedmindmaplist(request):
+    return render(request, 'portalteacher/assignedmindmaplist.html')
+
+@login_required
+@switchlanguage
+def viewmindmapassignedstudentlist(request):
+    return render(request, 'portalteacher/viewmindmapassignedstudentlist.html')
+
+@login_required
+@switchlanguage
+def viewassignmindmapanswer(request):
+    return render(request, 'portalteacher/viewassignmindmapanswer.html')
+
+@login_required
+@switchlanguage
+def viewmindmap(request):
+    return render(request, 'portalteacher/viewmindmap.html')    
+
+@login_required
+@switchlanguage
+def addteachershare(request):
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    return render(request, 'portalteacher/addteachershare.html',{'schools':schools})
+
+@login_required
+@switchlanguage
+def calendar(request):
+    return render(request, 'portalteacher/calendar.html', {"calendarform" : CalendarForm.CalendarForm()})

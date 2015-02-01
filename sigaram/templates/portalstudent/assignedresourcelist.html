@@ -21,7 +21,7 @@
                         </div>    
                         <div class="col-lg-7" id='fromdate'>
                             <div class='input-group'>
-                                <input type='text' class="form-control" data-date-format="YYYY-MM-DD"/>
+                                <input type='text' id='startdate' class="form-control" data-date-format="DD-MM-YYYY"/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-lg-7" id='tilldate'>
                             <div class='input-group'>
-                                <input type='text' class="form-control" data-date-format="YYYY-MM-DD"/>
+                               <input type='text' id='enddate' class="form-control" data-date-format="DD-MM-YYYY"/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -123,7 +123,8 @@
         var headers = [
                 { "title": "{% trans "Sl No." %}",
                   "class": "text-center" ,
-                  "data" :"slno"
+                  "data" :"slno",
+                  "bSortable":false 
                 },
                 { "title": "{% trans "Title" %}",
                   "data" :"title"
@@ -173,11 +174,18 @@
                 dataset_answered.push(t);
             }
         }
-
-        $('#resource-list-new').dataTable({"language" : TTS.utils.datatable_ta,
-            "data":     dataset_new,
-            "columns":  headers
-        });
+        if(TTS.forms.table){
+           TTS.forms.table.fnClearTable();
+           TTS.forms.table.fnAddData(
+                dataset_new
+            );
+        }else{
+            TTS.forms.table =  $('#resource-list-new').dataTable({"language" : TTS.utils.datatable_ta,
+                "data":     dataset_new,
+                "columns":  headers
+            });
+        }
+        
         $('#resource-list-saved').dataTable({"language" : TTS.utils.datatable_ta,
             "data":     dataset_saved,
             "columns":  headers
@@ -195,6 +203,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.assignedstudentresource(data);
+        $("table.resourcelist thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
     $('.resourcelist').on('click','tbody tr',function(e){
@@ -207,22 +216,22 @@ $(document).ready(function(){
             window.location = 'viewassignmentanswer?resourceid='+x[1]+'&studentid='+x[2];
 
     });
-    /*$("#fromdatepicker").on("dp.change",function (e) {
-       $('#todatepicker').data("DateTimePicker").setMinDate(e.date);
-    });
-    $("#todatepicker").on("dp.change",function (e) {
-       $('#fromdatepicker').data("DateTimePicker").setMaxDate(e.date);
-    });*/
-
     $('#date-search').click(function(){
-        //alert($("#fromdatepicker input").val());
-        var fromdate = $("#fromdatepicker input").val();
-        var todate = $("#todatepicker input").val();
+        var fdate = $("#startdate").val();
+        var tdate = $("#enddate").val();
+        var fromdate=fdate.split('-').reverse().join('-');
+        var todate=tdate.split('-').reverse().join('-');
         $.ajax({
             "url":"/api/admin/studentassignresource/?fdate="+fromdate+"&tdate="+todate+"&format=json",
             "type":"GET"
         }).done(function(data){
-            TTS.forms.assignedstudentresource(data);
+            if (data.length) {
+                TTS.forms.assignedstudentresource(data);
+                $("table.resourcelist thead tr th").removeClass('sorting_asc');
+            } else {
+                TTS.forms.table.fnClearTable();
+                $("table.resourcelist thead tr th").removeClass('sorting_asc');
+            }
         });
     });
 

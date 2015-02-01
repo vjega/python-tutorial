@@ -74,6 +74,7 @@
 <script src="{% static "js/tts.utils.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
@@ -83,7 +84,7 @@
 </script>
 
 <script>
-function getUrlParameter(sParam)
+/*function getUrlParameter(sParam)
 {
     var sPageURL = window.location.search.substring(1);
     var sURLVariables = sPageURL.split('&');
@@ -95,11 +96,11 @@ function getUrlParameter(sParam)
             return sParameterName[1];
         }
     }
-}
+}*/
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-TTS.resourcecategory = getUrlParameter('resourcecategory');
-TTS.forms.addteacherresource = function(form, data) {
+TTS.resourcecategory =TTS.utils.getUrlParameter('resourcecategory')
+/*TTS.forms.addteacherresource = function(form, data) {
     $.ajax({
         headers : {
              'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -162,7 +163,7 @@ TTS.forms.showteacherresource = function() {
         }]
     });
 };
-
+*/
 TTS.forms.delteachershare = function(id) {
     $.ajax({
         headers : {
@@ -181,7 +182,8 @@ TTS.forms.renderteacher = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"
+              "data" : "slno",
+              "bSortable":false
             },
             { "title": "{% trans "Heading" %}",
               "data" : "resourcetitle"  
@@ -191,11 +193,13 @@ TTS.forms.renderteacher = function(data){
             },
             { "title": "{% trans "View" %}",
               "class": "text-center",
-              "data" : "view"  
+              "data" : "view",
+              "bSortable":false 
             }, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center",
-              "data" : "delete"  
+              "data" : "delete",
+              "bSortable":false 
             }, 
            
         ];
@@ -232,6 +236,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacher(data);
+        $("table#teacherlist-main-tbl thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
     $("#school_name").change(function(){    
@@ -241,8 +246,10 @@ $(document).ready(function(){
         }).done(function(data){
             if(data.length){
                 TTS.forms.renderteacher(data);
+                $("table#teacherlist-main-tbl thead tr th").removeClass('sorting_asc');
             }else{
                 TTS.forms.table.fnClearTable();
+                $("table#teacherlist-main-tbl thead tr th").removeClass('sorting_asc');
             }
         });
     })
@@ -258,7 +265,7 @@ $(document).ready(function(){
         TTS.forms.delteachershare($(this).parent().parent().prop("id"));
     });
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.showteacherresource();
+        window.location ="addteachershare?resourcecategory="+TTS.resourcecategory;
     });
 });
 

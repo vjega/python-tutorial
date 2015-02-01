@@ -1,4 +1,4 @@
-{% extends 'portaladmin/base.html' %}
+{% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% block topcontent %}
 {% load i18n %}
@@ -22,8 +22,13 @@
 </div>
 {% endblock topcontent %}
 {% block botcontent %}
-<div id="container">
+<div class="panel panel-default">
+<div class="panel-heading">
+  {% trans "Mindmap" %}
+</div>
+<div id="container" class="panel-body">
   
+</div>
 </div>
 {% endblock botcontent%}
 

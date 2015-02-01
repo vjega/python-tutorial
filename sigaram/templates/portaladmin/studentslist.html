@@ -130,6 +130,41 @@ TTS.forms.showstudentform = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-student");
+                $("#add-student").validate({
+                    rules: {
+                        firstname: {
+                            required: true
+                        },
+                        lastname: {
+                            required: true
+                        },
+                        username: {
+                            required: true
+                        },
+                        password: {
+                            required: true,
+                        },
+                        emailid: {
+                            required: true,
+                            email: true
+                        }
+                    },
+                    messages: {
+                        firstname: "First Name is required",
+                        lastname: "Last Name is required",
+                        username: "User Name is required",
+                        password: {
+                            required: "Please provide a password",
+                        },
+                        emailid: {
+                                required: "Email id is required",
+                                email: "Please enter a valid email address"
+                        },
+                    }
+                });
+                if(!$("#add-student").valid()){
+                  return false;  
+                }
                 TTS.forms.addstudent(dialogItself, data); 
             }
             },{
@@ -182,7 +217,8 @@ TTS.forms.renderstudentlist = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false  
             },
             { "title": "{% trans "Photo" %}",
               "class": "text-center",  
@@ -201,12 +237,14 @@ TTS.forms.renderstudentlist = function(data){
             }, 
             { "title": "{% trans "Edit" %}",
               "class": "text-center",
-              "data" : "edit"  
+              "data" : "edit",
+              "bSortable":false  
 
             }, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center",
-              "data" : "delete"  
+              "data" : "delete",
+              "bSortable":false  
             }, 
         ];
     var dataset = [];
@@ -243,7 +281,7 @@ TTS.forms.renderstudentlist = function(data){
 };
 
 TTS.forms.upload = function(elm) {
-    console.log(elm);
+    //console.log(elm);
     var uploader = new qq.FileUploader({
         action: "/admin/student-img-upload",
         element: $('#file-uploader')[0],
@@ -276,6 +314,7 @@ $(document).ready(function(){
         // if (data.length) {
         TTS.forms.renderstudentlist(data);
         TTS.utils.ajaxloaderstop();
+        $("table#student-main-tbl thead tr th").removeClass('sorting_asc');
         // } else {
             //TTS.forms.table.fnClearTable();
         //}

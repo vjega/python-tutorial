@@ -11,7 +11,7 @@ class ForuminfoSerializer(serializers.HyperlinkedModelSerializer):
 class TopicinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Topicinfo
-        fields = ('topicid',  'forumid','topicname',
+        fields = ('topicid',  'forumid','topicname','topicdetails',
                   'totalpost','createdby', 'createddate',
                   'lastpostedby','lastposteddate')
 

@@ -59,24 +59,8 @@
 {% block scriptcontent %}
 
 <script>
-window.TTS = window.TTS || {}
-TTS.forms = TTS.forms || {}
-/*TTS.forms.update_chapter_list = function () {
-    var classid = $("#classid").val();
-    var section = $("#section").val();
-    var url = "/api/admin/teacherresourcesinfo/?classid="+classid+"&section="+section+"&format=json";
-    $.ajax({
-        url  : url,
-        type : "GET"
-    })
-    .done(function(data){
-        var opt = "";
-        for (var d in data){
-            opt += "<option value='"+data[d].chapterid+"'>"+data[d].chaptername+"</option>";
-        }
-        $("#chapterid").html(opt);
-    })
-};*/
+window.TTS = window.TTS || {};
+TTS.forms = TTS.forms || {};
 TTS.forms.addviewfourm = function(form, data) {
     $.ajax({
         headers : {
@@ -84,7 +68,7 @@ TTS.forms.addviewfourm = function(form, data) {
         },
         type:'POST',
         data: data,
-        url : '/api/forum/topicinfo/'
+        url : '/api/admin/topicinfo/'
     }).done(function( msg ) {
      //   console.log(data)
         form.close();
@@ -107,7 +91,6 @@ TTS.forms.showviewfourm = function() {
                 data = JSON.parse(data);
                 data['forumid'] = TTS.utils.getUrlParameter("forumid");
                 data['forumname'] = TTS.utils.getUrlParameter("forumname");
-                data = JSON.stringify(data);
                 TTS.forms.addviewfourm(dialogItself, data); 
             }
             },{
@@ -119,42 +102,67 @@ TTS.forms.showviewfourm = function() {
     });
 };
 
+TTS.forms.deltopic = function(id) {
+      var myString = id;
+        var arr = myString.split('/');
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'DELETE',
+        url : '/api/admin/topicinfo/'+arr[1]
+    }).done(function( msg ) {
+        location.reload();
+    }).error(function(msg){
+        alert("Something Bad Happended");
+    });
+}
+
 TTS.forms.renderviewfourminfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center" ,
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false 
             },
             { "title": "{% trans "Topics" %}",
               "data" : "topicname" ,
               "class": "viewtopicname" 
             },
+            { "title": "{% trans "Topic details" %}",
+              "data" : "topicdetails" ,
+              "class": "topicdetails" 
+            },
             { "title": "{% trans "Total Comments" %}",
               "data" : "totalpost"  
             },
             { "title": "{% trans "Last author" %}",
-              "class": "text-center" ,
               "data" : "lastpostedby"  
             },
-            { "title": "{% trans "By Last Day" %}",
-              "class": "text-center" ,
-              "data" : "lastposteddate"  
+            { "title": "{% trans "Delete" %}",
+              "class": "text-center",
+              "data" : "del",
+              "bSortable":false
             },
+            
         ];
     var dataset = [];
     var count = 0
     for(var i in data){
+        //console.log(TTS.utils.getUrlParameter("lastpostedby"));
         var t = {};
         t.DT_RowId = data[i].forumid+'/'+data[i].topicid;
         t.slno = ++count;
         t.topicname = data[i].topicname;
-        t.totalpost = data[i].totalpost;
-        t.lastpostedby = data[i].lastpostedby;
-        t.lastposteddate = data[i].lastposteddate;
+        t.totalpost = data[i].tot_comment;
+        t.topicdetails = data[i].topicdetails;
+        t.lastpostedby = data[i].username;
+        t.del = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);
     }
 
-    $('#viewforum-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
+    $('#viewforum-main-tbl').dataTable({
+        "language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });
@@ -163,29 +171,36 @@ TTS.forms.renderviewfourminfo = function(data){
 
 $(document).ready(function(){
     $.ajax({
-        "url":"/api/forum/topicinfo/?forumid="+TTS.utils.getUrlParameter("forumid")+"&format=json",
+        "url":"/api/admin/topicinfo/?format=json",
         "type":"GET"
     }).done(function(data){
         if (data.length) {
             TTS.forms.renderviewfourminfo(data);
+            $("table#viewforum-main-tbl thead tr th").removeClass('sorting_asc');
         } 
         
     });
     var dataname = TTS.utils.getUrlParameter("forumname");
     $("#headermsg").html(dataname);
 
-
+     $('#viewforum-main-tbl').on('click', '.tts-delete', function(e){
+        e.stopPropagation();
+        if (!window.confirm("Do you want to delete this record?")) {
+            return false;
+        }
+        TTS.forms.deltopic($(this).parent().parent().prop("id"));
+    });
 
     $('#viewforum-main-tbl').on('click', 'tbody tr', function(){
         var myString = this.id;
         var arr = myString.split('/');
 
-        window.location ='viewpost?forumid='+arr[0]+'&topicid='+arr[1]+'&topicname='+$($(this).find(".viewtopicname")[0]).text()+'&forumname='+TTS.utils.getUrlParameter("forumname");
+        window.location ='viewpost?topicid='+arr[1];
         //console.log(this.id);
     });
 
     $("#wrapper").on("click", "#addrec", function(){
-        window.location ='newtopic?forumid='+TTS.utils.getUrlParameter("forumid")+'&forumname='+TTS.utils.getUrlParameter("forumname");
+        window.location ='newtopic'
     });
 
     $("#page-wrapper").on("click", "#addrec", function(){

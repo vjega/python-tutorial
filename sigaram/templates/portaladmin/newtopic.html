@@ -1,0 +1,129 @@
+{% extends 'portaladmin/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block topcontent %}
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Forum" %}</h2>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+{% endblock topcontent %}
+{% block botcontent %}
+<div class="row">
+    <div class="form-group" class="col-sm-2">
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Title" %}</label>
+    </div>
+    <div align="center" id="headermsg"></div><br />
+
+    <div class="form-group">
+        <textarea id="title" class="summernote"></textarea>
+    </div>
+</div><br />
+<div class="row">
+    <div class="form-group" class="col-sm-2">
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Notes" %}</label>
+    </div><br />
+    <div class="form-group">
+        <textarea id="notes" class="summernote"></textarea>
+    </div>
+</div><br />
+<div align="center">   
+    <span>
+        <button class="btn btn-primary btn-sm" id="save">
+            <i class="fa fa-floppy-o fa-lg"></i> {% trans "Save" %} 
+        </button>
+        <button class="btn btn-primary btn-sm" id="cancel">
+            <i class="fa fa-times fa-lg"></i> {% trans "Cancel" %} 
+        </button>
+    </span>
+</div>
+<!--
+<div class="text-center">
+    <div>&nbsp;</div>
+    <button class="btn btn-primary" id="addrec">Save</button>
+</div>
+-->
+ <table class="table table-striped table-bordered table-hover" 
+            id="forum-main-tbl">
+</table>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+                <!-- /.col-lg-12 -->
+{% endblock botcontent%}
+
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<style>
+    #addrec:hover, .tts-edit:hover, .tts-delete:hover, #admin-main-tbl tbody tr:hover {
+        cursor: pointer;
+    }
+</style>
+{% endblock morecss %}
+
+{% block morescript %}
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}">
+
+</script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+{% endblock morescript %}
+
+{% block scriptcontent %}
+<script id="rubrics-form" type="text/x-jsrender">
+
+</script>
+
+
+<script>
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}
+TTS.forumid      = TTS.utils.getUrlParameter("forumid");
+TTS.forumname  = TTS.utils.getUrlParameter("forumname");
+TTS.topicid = TTS.utils.getUrlParameter("topicid");
+
+$("#save").click(function(){
+    TTS.forms.topicinfodetails();
+});
+$("#cancel").click(function(){
+    window.location ='viewtopic';
+});
+TTS.forms.topicinfodetails = function(){  
+    var data = {};
+    data.forumid=TTS.forumid;
+    data.topicid=TTS.topicid;
+    data.forumname=TTS.forumname;
+    data.topicname = TTS.utils.summer_encode($("#title").code());
+    data.topicdetails = TTS.utils.summer_encode($("#notes").code());
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:"POST",
+        url:"/api/admin/topicinfo/",
+        data: JSON.stringify(data)
+    }).done(function(data){
+        window.location ='viewtopic';
+    }).error(function(err, msg){
+        alert("I didnt save the data");
+    });
+}
+
+$(document).ready(function(){
+    $('.summernote').summernote();
+    var dataname  = TTS.utils.getUrlParameter("forumname");
+    $("#headermsg").html(dataname);
+
+});
+
+</script>
+{% endblock scriptcontent %}

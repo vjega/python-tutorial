@@ -37,7 +37,9 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
-    #addrec:hover, .tts-delete:hover{
+    #addrec:hover, 
+    .tts-edit:hover, 
+    .tts-delete:hover{
         cursor: pointer;
     }
 </style>
@@ -57,16 +59,14 @@
 window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
 
-TTS.forms.deladmin = function(id) {
-    console.log(id);
+TTS.forms.delmindmap = function(id) {
     $.ajax({
         headers : {
-            'X-CSRFToken' : JSON.parse(data).csrfmiddlewaretoken
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'DELETE',
-        url : '/api/admin/admin/'+id
+        url : '/api/admin/mindmap/'+id
     }).done(function( msg ) {
-        dialogItself.close();
         location.reload();
     }).error(function(msg){
         alert("Something Bad Happended");
@@ -78,18 +78,22 @@ TTS.forms.renderadmin = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false  
             },
             
-            { "title": "{% trans "Name" %}",
+            { "title": "{% trans "Title" %}",
               "data" : "title"
             }, 
-            { "title": "{% trans "Name" %}",
-              "data" : "edi"
+            { "title": "{% trans "Edit" %}",
+              "class": "text-center",
+              "data" : "edi",
+              "bSortable":false
             }, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center",
-              "data" : "del"
+              "data" : "del",
+              "bSortable":false
 
             }, 
         ];
@@ -110,22 +114,22 @@ TTS.forms.renderadmin = function(data){
         "data":     dataset,
         "columns":  headers
     });
-
 };
+
 $(document).ready(function(){
     $.ajax({
         "url":"/api/admin/mindmap/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderadmin(data);
+        $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
     });
     $('#admin-main-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();
         if (!window.confirm("Do you want to delete this record?")) {
             return false;
         }
-        TTS.forms.deladmin($(this).parent().parent().prop("id"));
-        window.location.reload();
+        TTS.forms.delmindmap($(this).parent().parent().prop("id"));
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         window.location = "/teacher/mindmapedit?new=true"

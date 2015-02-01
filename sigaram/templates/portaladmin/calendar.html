@@ -5,7 +5,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">Calendar </h2>
+        <h2 class="page-header">{% trans "Calendar" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -14,7 +14,7 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-             Calendar
+             {% trans "Calendar" %}
         </div>
         <!-- /.panel-heading -->
         <div id='calendar'></div>
@@ -51,19 +51,37 @@ TTS.forms.showcalform = function(start, end, allDay) {
         message: $($('#cal-form').render()),
         onshown: function(){
             $('#id_title').val("New Event");
-            $('#id_start').val(start.format('YYYY-MM-DD hh:mm'));
-            $('#id_end').val(start.format('YYYY-MM-DD hh:mm'));      
+            $('#id_start').val(start.format('YYYY-MM-DD HH:mm'));
+            $('#id_end').val(end.format('YYYY-MM-DD HH:mm'));      
+            $('#id_start,#id_end').datetimepicker({
+                format: 'YYYY-MM-DD HH:mm',
+            });
+            /*$('#id_start').val(start.format('YYYY-MM-DD hh:mm'));
+            $('#id_end').val(end.format('YYYY-MM-DD hh:mm'));      
             $('#id_start,#id_end').datetimepicker({
                 format: 'YYYY-MM-DD hh:mm',
-            });
+            });*/
         },
         buttons: [{
             label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
-            action: function(dialogItself){
-                TTS.forms.saveCal();
-                dialogItself.close();
-            }
+                action: function(dialogItself){
+                    $("#cal-event").validate({
+                    rules: {
+                        title: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        title: "Title is required",
+                    }
+                });
+                if(!$("#cal-event").valid()){
+                  return false;  
+                }
+                    TTS.forms.saveCal();
+                    dialogItself.close();
+                }
             },{
             label: '{% trans "Close" %}',
             action: function(dialogItself){
@@ -101,23 +119,23 @@ TTS.forms.saveCal = function () {
 
 TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
     if(calEvent.end === null){
-        var end_date = calEvent.start.format("YYYY-MM-DD hh:mm")
+        var end_date = calEvent.start.format("YYYY-MM-DD HH:mm")
     }else{
-        var end_date = calEvent.end.format("YYYY-MM-DD hh:mm")
+        var end_date = calEvent.end.format("YYYY-MM-DD HH:mm")
     }
     BootstrapDialog.show({
             title: 'Edit Event',
             message: $($('#cal-form').render()),
             onshown: function(){
                 $('#id_title').val(calEvent.title);
-                $('#id_start').val(calEvent.start.format("YYYY-MM-DD hh:mm"));
+                $('#id_start').val(calEvent.start.format("YYYY-MM-DD HH:mm"));
                 $('#id_end').val(end_date);
                 $('#id_start,#id_end').datetimepicker({
-                    format: 'YYYY-MM-DD hh:mm',
+                    format: 'YYYY-MM-DD HH:mm',
                 });
             },
             buttons: [{
-                label: 'Update',
+                label: '{% trans "Save" %}',
                 cssClass: 'btn-primary',
                 action: function(dialogItself){
                     var data = TTS.utils.serilaizeJson("#cal-event");
@@ -136,6 +154,16 @@ TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
                     });
                 }
             },{
+            label: '{% trans "Delete" %}',
+            cssClass: 'btn-danger',
+                action: function(dialogItself){
+                    if (confirm("Are you sure want to delete?")) {
+                        $('#calendar').fullCalendar('removeEvents',calEvent.id);
+                        TTS.forms.deletecalevent(calEvent.id);
+                    }
+                    dialogItself.close();
+                }
+            },{
             label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
@@ -146,13 +174,13 @@ TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
 
 TTS.forms.updatecalevent = function (event,type){
     if(event.end === null){
-        var end_date = event.start.format("YYYY-MM-DD hh:mm")
+        var end_date = event.start.format("YYYY-MM-DD HH:mm")
     }else{
-        var end_date = event.end.format("YYYY-MM-DD hh:mm")
+        var end_date = event.end.format("YYYY-MM-DD HH:mm")
     }
     var data = {
         "title" : event.title,
-        "start" : event.start.format("YYYY-MM-DD hh:mm"),
+        "start" : event.start.format("YYYY-MM-DD HH:mm"),
         "end"   : end_date,
         "color" : event.color
     }
@@ -176,7 +204,7 @@ TTS.forms.deletecalevent = function(event_id) {
         type:'DELETE',
         url : '/api/admin/calendar/'+event_id
     }).done(function( msg ) {
-        location.reload();
+        //location.reload();
     }).error(function(msg){
         alert("Something Bad Happended");
     });
@@ -203,7 +231,7 @@ $(document).ready(function() {
             TTS.forms.showcalform(start, end, allDay);
         },
         eventDrop: function (event,delta,revertFunc) {
-            alert(event.title + " was dropped on " + event.start.format("YYYY-MM-DD hh:mm"));
+            alert(event.title + " was dropped on " + event.start.format("YYYY-MM-DD HH:mm"));
             if (confirm("Are you sure about this change?")) {
                 TTS.forms.updatecalevent(event,"event_drop");
             }else{
@@ -211,7 +239,7 @@ $(document).ready(function() {
             }
         },
         eventResize: function (event, delta, revertFunc) {
-            /*alert(event.title + " end is now " + event.end.format("YYYY-MM-DD hh:mm"));
+            /*alert(event.title + " end is now " + event.end.format("YYYY-MM-DD HH:mm"));
             if (confirm("Are you sure want this change?")) {
                 TTS.forms.updatecalevent(event,"event_resize");
             }else{
@@ -228,27 +256,19 @@ $(document).ready(function() {
             console.log(event.start.format());
             console.log(event.end.format());
             */
-
-            /*eventResize: function(event, delta, revertFunc) {
-                alert(event.title + " end is now " + event.end.format());
-
-                if (!confirm("is this okay?")) {
-                    revertFunc();
-                }
-             }*/
         },
         eventClick: function(calEvent, jsEvent, view) {
             TTS.forms.updatecalform(calEvent, jsEvent, view);
         },
         eventRender: function(event, element) {
             element.append( "<div class='fc-resizer'></div>");
-            element.append( "<span class='closon'><i class='fa fa-trash'></i> </span>");
+            /*element.append( "<span class='closon'><i class='fa fa-trash'></i> </span>");
             element.find(".closon").click(function() {
                if (confirm("Are you sure want to delete?")) {
                     $('#calendar').fullCalendar('removeEvents',event._id);
                     TTS.forms.deletecalevent(event._id);
                 }
-            });
+            });*/
         }
         
     })

@@ -20,7 +20,8 @@ from portaladmin.forms import (AdminForm,
                    BillviewassignmentanswerForm,
                    BillcomprehensionanswerratingForm,
                    StickyinfoForm,
-                   MyresourcelistForm
+                   MyresourcelistForm,
+                   TopicsForm
                     )
 from ajaxuploader.views import AjaxFileUploader
 #from ajaxuploader.backends.easythumbnails import EasyThumbnailUploadBackend
@@ -57,6 +58,11 @@ student_teacherres_uploader = AjaxFileUploader(UPLOAD_DIR='static/teacherres')
 bulletinboard_uploader = AjaxFileUploader(UPLOAD_DIR='static/bulletinboard')
 
 writtenwork_uploader = AjaxFileUploader(UPLOAD_DIR='static/writtenwork')
+
+rubric_uploader = AjaxFileUploader(UPLOAD_DIR='static/rubric')
+
+sticky_notes_uploader = AjaxFileUploader(UPLOAD_DIR='static/stickynotes', 
+                                      DIMENSIONS=(250, 250))
 
 def layoutdemo(request):
     return render(request, 'portaladmin/layoutdemo.html')
@@ -203,7 +209,7 @@ def resourcetype(request):
         "href" :u"chapterlist"
         },{
         "id": "3",
-        "categoryid": "2",
+        "categoryid": "3",
         "name" :_("Composition"),
         "href" :u"chapterlist"
         }]
@@ -268,6 +274,7 @@ def viewstudentresourcelist(request):
                   })
 
 @login_required
+@switchlanguage
 def viewstudentwrittenworks(request):
     viewstudentwrittenworks_head = [('Sl No.'),
                          _('Name'),
@@ -555,3 +562,43 @@ def classviewassignwrittenworkanswer(request):
 @switchlanguage
 def rubrics(request):
     return render(request, 'portaladmin/rubrics.html')
+
+@login_required
+@switchlanguage
+def viewteacherres(request):
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portaladmin/viewteacherres.html',
+                             {'schools':schools, 'classes':classes })
+
+@login_required
+@switchlanguage
+def viewstudentres(request):
+    return render(request, 'portaladmin/viewstudentres.html')
+
+@login_required
+@switchlanguage
+def addstickynote(request):
+    return render(request, 'portaladmin/addstickynote.html')
+
+@login_required
+@switchlanguage
+def summernote_image_test(request):
+    return render(request, 'portaladmin/summernote_image_test.html')  
+
+
+@login_required
+@switchlanguage
+def viewtopic(request):
+   foruminfo = models.Foruminfo.objects.all()
+   return render(request, 'portaladmin/viewtopic.html')
+
+@login_required
+@switchlanguage
+def viewpost(request):
+    return render(request, 'portaladmin/viewpost.html')
+
+@login_required
+@switchlanguage
+def newtopic(request):
+    return render(request, 'portaladmin/newtopic.html')  

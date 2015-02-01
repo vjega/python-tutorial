@@ -601,7 +601,7 @@ $(document).ready(function(){
         });
     });*/
     
-    $("body").on("click","i.rejected", function(event){
+    /*$("body").on("click","i.rejected", function(event){
         var editingid = $(this).parent().parent().attr("id");
         var assignedid = $("#assignedid").val();
         $.ajax({
@@ -611,7 +611,7 @@ $(document).ready(function(){
             if(msg == 'approved')
                 TTS.forms.changeapproveicon(editingid);
         });
-    });
+    });*/
     $("body").on("click","#save-rubric-marks", function(event){
         TTS.forms.ressave();
     });

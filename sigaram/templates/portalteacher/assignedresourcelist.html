@@ -21,7 +21,7 @@
                         </div>    
                         <div class="col-lg-7" id='fromdate'>
                             <div class='input-group'>
-                                <input readonly="" type='text' class="form-control" data-date-format="YYYY-MM-DD"/>
+                                <input type='text' id='startdate' class="form-control" data-date-format="DD-MM-YYYY"/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -36,7 +36,8 @@
                         </div>
                         <div class="col-lg-7" id='tilldate'>
                             <div class='input-group'>
-                                <input type='text' class="form-control" data-date-format="YYYY-MM-DD"/>
+                                <input readonly="" type='text' class="form-control" data-date-format="YYYY-MM-DD"/>
+                                <input readonly="" type='text' id='enddate' class="form-control" data-date-format="DD-MM-YYYY"/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -102,7 +103,8 @@
         var headers = [
                 { "title": "{% trans "Sl No." %}",
                   "class": "text-center" ,
-                  "data" :"slno"
+                  "data" :"slno",
+                  "bSortable":false
                 },
                 { "title": "{% trans "Title" %}",
                   "data" :"title"
@@ -125,18 +127,17 @@
             t.type=data[i].resourcetype;
             dataset.push(t);
         }
-
-    if(TTS.forms.tablerl){
-       TTS.forms.tablerl.fnClearTable();
-       TTS.forms.tablerl.fnAddData(
-            dataset
-        );
-    }else{
-        TTS.forms.tablerl = $('#resource-list').dataTable({"language" : TTS.utils.datatable_ta,
-            "data":     dataset,
-            "columns":  headers
-        });
-    }
+        if (TTS.forms.table) {
+            TTS.forms.table.fnClearTable();
+            TTS.forms.table.fnAddData(
+                dataset
+            );
+        }else{
+            TTS.forms.table = $('#resource-list').dataTable({"language" : TTS.utils.datatable_ta,
+                "data":     dataset,
+                "columns":  headers
+            });
+        }
 };
 
 $(document).ready(function(){
@@ -147,6 +148,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.assignedstudentresource(data);
+        $("table#resource-list thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
     $('.resourcelist').on('click','tbody tr',function(e){
@@ -167,14 +169,23 @@ $(document).ready(function(){
     });*/
 
     $('#date-search').click(function(){
-        //alert($("#fromdatepicker input").val());
-        var fromdate = $("#fromdatepicker").val();
-        var todate = $("#todatepicker").val();
+        var fdate = $("#startdate").val();
+        var tdate = $("#enddate").val();
+        var fromdate=fdate.split('-').reverse().join('-');
+        var todate=tdate.split('-').reverse().join('-');
         $.ajax({
             "url":"/api/admin/teacherassignedresource/?fdate="+fromdate+"&tdate="+todate+"&format=json",
             "type":"GET"
         }).done(function(data){
-            TTS.forms.assignedstudentresource(data);
+            if (data.length) {
+                TTS.forms.assignedstudentresource(data);
+                $("table#resource-list thead tr th").removeClass('sorting_asc');
+            } else {
+                TTS.forms.table.fnClearTable();
+                $("table#resource-list thead tr th").removeClass('sorting_asc');
+            }
+            TTS.utils.ajaxloaderstop();
+           
         });
     });
     

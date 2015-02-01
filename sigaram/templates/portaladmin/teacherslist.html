@@ -103,6 +103,37 @@ TTS.forms.showteacherform = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-teacher");
+                $("#add-teacher").validate({
+                    rules: {
+                        firstname: {
+                            required: true
+                        },
+                        username: {
+                            required: true
+                        },
+                        password: {
+                            required: true,
+                        },
+                        emailid: {
+                            required: true,
+                            email: true
+                        }
+                    },
+                    messages: {
+                        firstname: "First Name is required",
+                        username: "User Name is required",
+                        password: {
+                            required: "Please provide a password",
+                        },
+                        emailid: {
+                                required: "Email id is required",
+                                email: "Please enter a valid email address"
+                        },
+                    }
+                });
+                if(!$("#add-teacher").valid()){
+                  return false;  
+                }
                 TTS.forms.addteacher(dialogItself, data); 
             }
             },{
@@ -125,7 +156,7 @@ TTS.forms.editteacher = function(id, data) {
             });
         },
         buttons: [{
-            label: 'Update',
+            label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-teacher");
@@ -169,7 +200,8 @@ TTS.forms.renderteacher = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"
+              "data" : "slno",
+              "bSortable":false
             },
             { "title": "{% trans "Photo" %}",
               "class": "text-center",  
@@ -186,12 +218,14 @@ TTS.forms.renderteacher = function(data){
             }, 
             { "title": "{% trans "Edit" %}",
               "class": "text-center",
-              "data" : "edit"  
+              "data" : "edit",
+              "bSortable":false  
 
             }, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center",
-              "data" : "delete"  
+              "data" : "delete",
+              "bSortable":false  
             }, 
            
         ];
@@ -259,6 +293,7 @@ $(document).ready(function(){
     }).done(function(data){
         TTS.forms.renderteacher(data);
         TTS.utils.ajaxloaderstop();
+        $("table#teacherlist-main-tbl thead tr th").removeClass('sorting_asc');
     });
     $("#school_name").change(function(){
         $.ajax({

@@ -145,9 +145,9 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
-  .modal-backdrop {z-index: 0 !important}
-    p{display:inline;}
-    #new-folder{color:black;}
+    .modal-backdrop { z-index: 0 !important }
+    p { display:inline; }
+    a#new-folder,a#new-folder i.nfolder { color:black; }
 </style>
 {% endblock morecss %}
 
@@ -189,6 +189,24 @@ TTS.forms.deletenewfolder = function(folder_id) {
         alert("Something Bad Happended");
     });
 }
+
+TTS.forms.foldersave = function() {    
+    var data = TTS.utils.serilaizeJson("#newfolderfrm");
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'POST',
+        data: data,
+        url : '/api/admin/adminfolders/'
+    }).done(function( msg ) {
+        //console.log(msg);
+        location.reload();
+        //dialogItself.close();
+    });
+};
+    
+
 $(document).ready(function(){
     $('#admin-main-tbl').dataTable();
     $("#page-wrapper").on("click", "#new-folder", function(){
@@ -199,20 +217,21 @@ $(document).ready(function(){
                 label: '{% trans "Save" %}',
                 cssClass: 'btn-primary',
                 action: function(){
-                    var data = TTS.utils.serilaizeJson("#newfolderfrm");
-                    $.ajax({
-                        headers : {
-                            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                    $("#newfolderfrm").validate({
+                        rules: {
+                            folder_name: {
+                                required: true
+                            }
                         },
-                        type:'POST',
-                        data: data,
-                        url : '/api/admin/adminfolders/'
-                    }).done(function( msg ) {
-                        //console.log(msg);
-                        location.reload();
-                        //dialogItself.close();
+                        messages: {
+                            folder_name: "Folder Name is required"
+                        }
                     });
-                }
+                    if(!$("#newfolderfrm").valid()){
+                      return false;  
+                    } 
+                    TTS.forms.foldersave();
+                    }
                 },{
                 label: '{% trans "Close" %}',
                 action: function(dialogItself){

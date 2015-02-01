@@ -123,6 +123,41 @@ TTS.forms.showadminform = function() {
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-admin");
                 //console.log(data);
+                $("#add-admin").validate({
+                    rules: {
+                        username: {
+                            required: true
+                        },
+                        password: {
+                            required: true,
+                        },
+                        firstname: {
+                            required: true
+                        },
+                        lastname: {
+                            required: true
+                        },
+                        emailid: {
+                            required: true,
+                            email: true
+                        }
+                    },
+                    messages: {
+                        username: "User Name is required",
+                        password: {
+                            required: "Please provide a password",
+                        },
+                        firstname: "First Name is required",
+                        lastname: "Last Name is required",
+                        emailid: {
+                                required: "Email id is required",
+                                email: "Please enter a valid email address"
+                        },
+                    }
+                });
+                if(!$("#add-admin").valid()){
+                  return false;  
+                }
                 TTS.forms.addadmin(dialogItself, data); 
             }
             },{
@@ -138,7 +173,8 @@ TTS.forms.renderadmin = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false
             },
             { "title": "{% trans "Photo" %}",
               "class": "text-center",
@@ -154,7 +190,8 @@ TTS.forms.renderadmin = function(data){
             }, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center",
-              "data" : "del"
+              "data" : "del",
+              "bSortable":false
             }, 
         ];
     var dataset = [];
@@ -175,13 +212,14 @@ TTS.forms.renderadmin = function(data){
         dataset.push(t);
     }
 
+    /*$('#admin-main-tbl').dataTable({*/
     $('#admin-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });
 
 };
-
+    
 TTS.forms.upload = function(elm) {
     console.log(elm);
     var uploader = new qq.FileUploader({
@@ -214,6 +252,7 @@ $(document).ready(function(){
     }).done(function(data){
         TTS.forms.renderadmin(data);
         TTS.utils.ajaxloaderstop();
+        $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
     });
     $('#admin-main-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();

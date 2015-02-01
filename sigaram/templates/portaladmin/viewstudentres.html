@@ -1,0 +1,245 @@
+{% extends 'portaladmin/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block topcontent %}
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Student" %}{% trans "Resources" %}</h2>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row">
+    <div >    
+        <label class="col-lg-2">{% trans "Type" %}</label>
+        <span>
+            <select id="category" class="col-lg-3"  >
+                <option value="text">Text</option>
+                <option value="image">Image</option>
+                <option value="video">Video</option>
+            </select>
+        </span>
+    </div>
+</div><br />
+<div class="row">
+    <div>
+        <label class="col-lg-2">{% trans "Class" %}</label>
+        <span>
+            <input class="col-lg-3" type="text" id="class_details" readonly>
+        </span>
+    </div>
+</div><br />
+<div class="row">
+    <div>
+        <label class="col-lg-2">{% trans "Select Section" %}</label>
+       <span>
+            <input class="col-lg-3" type="text" id="section" readonly>
+        </span>
+    </div>
+</div><br />
+<div class="row">
+    <div>
+        <label class="col-lg-2">{% trans "Component" %}</label>
+        <span>
+            <input class="col-lg-3" type="text" id="component" readonly>
+        </span>
+    </div>
+</div><br />
+<div class="row">
+    <div>
+        <label class="col-lg-2">{% trans "Chapter" %}</label>
+        <span>
+            <input class="col-lg-3" type="text" id="chapter_details" readonly>
+        </span>
+    </div>
+</div><br />
+{% endblock topcontent %}
+{% block botcontent %}
+<div class="row">
+    <div class="form-group" class="col-sm-2">
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Thumpnail upload" %}</label>
+        <span id="img-uploader">File Uploader Comes Here...</span>
+    </div> 
+    <input type="hidden" id="uploadurl">
+</div><br />
+<div class="row">
+    <div class="form-group" class="col-sm-2">
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Resource upload" %}</label>
+        <span id="file-uploader">File Uploader Comes Here...</span>
+    </div> 
+    <input type="hidden" id="thumpnailuploadurl">
+</div><br />
+<div class="row">
+    <div class="form-group" class="col-sm-2">
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Title" %}</label>
+    </div><br />
+    <div class="form-group">
+        <textarea id="title" class="summernote"></textarea>
+    </div>
+</div><br />
+<div class="row">
+    <div class="form-group" class="col-sm-2">
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Notes" %}</label>
+    </div><br />
+    <div class="form-group">
+        <textarea id="notes" class="summernote"></textarea>
+    </div>
+</div><br />
+<div align="center">   
+    <span>
+        <button class="btn btn-primary btn-sm" id="save">
+            <i class="fa fa-floppy-o fa-lg"></i> {% trans "Save" %} 
+        </button>
+        <button class="btn btn-primary btn-sm" id="cancel">
+            <i class="fa fa-times fa-lg"></i> {% trans "Cancel" %} 
+        </button>
+    </span>
+</div>
+{% endblock botcontent%}
+
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+
+<style>
+    #addrec:hover, .tts-delete:hover{
+        cursor: pointer;
+    }
+    #bulletinboard{
+        display:none;
+    }
+</style>
+{% endblock morecss %}
+
+{% block morescript %}
+<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+{% endblock morescript %}
+
+{% block scriptcontent %}
+<script>
+window.TTS = window.TTS || {};
+TTS.forms = TTS.forms || {};
+TTS.classid = TTS.utils.getUrlParameter('classid');
+TTS.section = TTS.utils.getUrlParameter('section');
+TTS.categoryid = TTS.utils.getUrlParameter('categoryid');
+TTS.chapterid = TTS.utils.getUrlParameter('chapterid');
+
+$("#save").click(function(){
+    TTS.forms.studentresource();
+
+});
+
+$("#cancel").click(function(){
+   window.location="studentresourcelist?categoryid="+TTS.categoryid+"&chapterid="+TTS.chapterid+"&classid="+TTS.classid+"&section="+TTS.section;
+});
+
+TTS.forms.studentresource = function(){  
+    var data = {};
+    data.classid=TTS.classid;
+    data.section=TTS.section;
+    data.categoryid = $("#category").val();
+    data.chapterid=TTS.chapterid;
+    data.resourcetitle = TTS.utils.summer_encode($("#title").code());
+    data.resourcedescription = TTS.utils.summer_encode($("#notes").code());
+    data.resourcetype = $("#category").val();
+    data.schoolid=$('#school_name').val();
+    data.resourcecategory=$('#folder').val();
+    data.thumbnailurl = $("#uploadurl").val();
+    data.fileurl = $("#thumpnailuploadurl").val();
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:"POST",
+        url:"/api/admin/resourceinfo/",
+        data: JSON.stringify(data)
+    }).done(function(data){
+        alert("Saved Successfully");
+        window.location="studentresourcelist?categoryid="+TTS.categoryid+"&chapterid="+TTS.chapterid+"&classid="+TTS.classid+"&section="+TTS.section;
+    }).error(function(err, msg){
+        alert("I didnt save the data");
+    });
+}
+
+var updateChapter = function(){
+    $.ajax({
+        'url': "/api/admin/chapterinfo/"+TTS.chapterid,
+        'type':'GET'
+    }).done(function(data){
+        $("#chapter_details").val(data.chaptername);
+    });
+};
+$(document).ready(function(){
+    updateChapter();
+    $.ajax({
+        'url': "/api/admin/classlist/"+TTS.classid,
+        'type':'GET'
+    }).done(function(data){
+       $("#class_details").val(data.shortname);
+    });
+    if (TTS.section == 'a') {
+        $("#section").val('A');
+    } else {
+       $("#section").val('B');
+    }
+    if (TTS.categoryid == 0) {
+        $("#component").val('{% trans "Reading" %}');
+    } else if (TTS.categoryid == 1){
+        $("#component").val('{% trans "Picture Conversation" %}');
+    } else if (TTS.categoryid == 2){
+        $("#component").val('{% trans "Doodle Board" %}');
+    } else {
+        $("#component").val('{% trans "Picture Composition" %}');
+    }
+    $('.summernote').summernote();
+    var uploader = new qq.FileUploader({
+        action: "/admin/student-studentres-upload",
+        element: $('#img-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#uploadurl").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
+    });
+    var uploader = new qq.FileUploader({
+        action: "/admin/student-studentres-upload",
+        element: $('#file-uploader')[0],
+        multiple: false,
+        onComplete: function(id, fileName, responseJSON) {
+            if(responseJSON.success) {
+                $("#thumpnailuploadurl").val(responseJSON.path.replace('static/', ''));
+            } else {
+                alert("upload failed!");
+            }
+        },
+        onAllComplete: function(uploads) {
+            // the maps look like this: {file: FileObject, response: JSONServerResponse}
+        },
+        params: {
+            'csrf_token': '{{ csrf_token }}',
+            'csrf_name': 'csrfmiddlewaretoken',
+            'csrf_xname': 'X-CSRFToken',
+        },
+    });
+});
+</script>
+{% endblock scriptcontent %}

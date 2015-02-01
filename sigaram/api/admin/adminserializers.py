@@ -120,7 +120,7 @@ class MindmapSerializer(serializers.HyperlinkedModelSerializer):
 class StickynotesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.stickynotes
-        fields = ('id','stickytext','color','name')
+        fields = ('id','stickytext','attachment','color','name')
         
 class StickyCommentsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -163,9 +163,9 @@ class BulletinmappinginfoSerializer(serializers.HyperlinkedModelSerializer):
 class TopicsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Topicinfo
-        fields = ('topicid',  'forumid','topicname',
+        fields = ('topicid',  'forumid','topicname','topicdetails',
                   'totalpost','createdby', 'createddate',
-                  'lastpostedby','lastposteddate')
+                  'lastpostedby','lastposteddate','username')
 
 class ThreadSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -207,5 +207,11 @@ class AssignmindmapinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Assignmindmapinfo
         fields = ('mindmapid','studentid','assigntext','mapdata','assigneddate',
-                    'isdelete','assignedby','answertext','answereddate',
+                    'isdelete','assignedby','answertext','comment','answereddate',
                     'assignedby','assigneddate','isanswered','issaved','isdelete')
+
+class PostinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Postinfo
+        fields = ('postid', 'topicid','forumid',
+                  'postdetails', 'postedby','posteddate','parentid')

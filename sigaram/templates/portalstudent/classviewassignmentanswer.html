@@ -212,6 +212,7 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}   
 
 TTS.forms.renderassignedresourceinfo = function(data){
+    TTS.forms.studentid = data[0].studentid;
     $("#assignedid").val(data[0].id);
     $("#resource-title").html(data[0].resourcetitle);
     $("#assigned-date").html(data[0].createddate);
@@ -597,15 +598,18 @@ $(document).ready(function(){
     });*/
     
     $("body").on("click","i.rejected", function(event){
-        var editingid = $(this).parent().parent().attr("id");
-        var assignedid = $("#assignedid").val();
-        $.ajax({
-            type:'GET',
-            url : '/api/admin/editanswerresource/'+editingid+'/?assignedid='+assignedid
-        }).done(function(msg) {
-            if(msg == 'approved')
-                TTS.forms.changeapproveicon(editingid);
-        });
+        var sesstudent = "{{user.username}}";
+        if(sesstudent == TTS.forms.studentid){
+            var editingid = $(this).parent().parent().attr("id");
+            var assignedid = $("#assignedid").val();
+            $.ajax({
+                type:'GET',
+                url : '/api/admin/editanswerresource/'+editingid+'/?assignedid='+assignedid
+            }).done(function(msg) {
+                if(msg == 'approved')
+                    TTS.forms.changeapproveicon(editingid);
+            });
+        }
     });
     $("body").on("click","#save-rubric-marks", function(event){
         TTS.forms.ressave();

@@ -57,54 +57,13 @@
 {% endblock morescript %}
 
 {% block scriptcontent %}
-<script id="teacherresource-form" type="text/x-jsrender">
+<!-- <script id="teacherresource-form" type="text/x-jsrender">
 <div id="file-uploader">File Uploader Comes Here...</div> 
 {% crispy form %}
-</script>
+</script>-->
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-
-TTS.forms.addteacherresource = function(form, data) {
-    $.ajax({
-        headers : {
-            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
-        },
-        type:'POST',
-        data: data,
-        url : '/api/admin/teacherresourcesinfo/'
-    }).done(function( msg ) {
-        //console.log(data)
-        form.close();
-        location.reload();
-        //dialogItself.close();
-    });
-}
-
-TTS.forms.showteacherresource = function() {
-    BootstrapDialog.show({
-        title: '{% trans "Teacher" %} {% trans "Resources" %}',
-        message: $($('#teacherresource-form').render()),
-        onshown: function(){
-            TTS.forms.upload();
-            $('.summernote').summernote();
-            updateChapter();
-        },
-        buttons: [{
-            label: '{% trans "Save" %}',
-            cssClass: 'btn-primary',
-            action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-teacherresource");
-                TTS.forms.addteacherresource(dialogItself, data); 
-            }
-            },{
-            label: '{% trans "Close" %}',
-            action: function(dlg){
-                dlg.close();
-            }
-        }]
-    });
-};
 
 TTS.forms.delteacherres = function(id) {
     $.ajax({
@@ -124,7 +83,8 @@ TTS.forms.renderteacherresourceinfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center" ,
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false    
             },
             { "title": "{% trans "Title" %}",
               "data" : "resourcetitle"  
@@ -141,7 +101,8 @@ TTS.forms.renderteacherresourceinfo = function(data){
             },
             { "title": "{% trans "Delete" %}",
               "class": "text-center" ,
-              "data" : "delete"  
+              "data" : "delete",
+              "bSortable":false   
             },
         ];
     var dataset = [];
@@ -163,30 +124,6 @@ TTS.forms.renderteacherresourceinfo = function(data){
         "columns":  headers
     });
 
-};
-
-TTS.forms.upload = function(elm) {
-    //console.log(elm);
-    var uploader = new qq.FileUploader({
-        action: "/admin/student-teacherres-upload",
-        element: $('#file-uploader')[0],
-        multiple: false,
-        onComplete: function(id, fileName, responseJSON) {
-            if(responseJSON.success) {
-                $("#id_fileurl").val(responseJSON.path.replace('static/', ''));
-            } else {
-                alert("upload failed!");
-            }
-        },
-        onAllComplete: function(uploads) {
-            // the maps look like this: {file: FileObject, response: JSONServerResponse}
-        },
-        params: {
-            'csrf_token': '{{ csrf_token }}',
-            'csrf_name': 'csrfmiddlewaretoken',
-            'csrf_xname': 'X-CSRFToken',
-        },
-    });
 };
 
 var updateChapter = function(){
@@ -212,6 +149,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacherresourceinfo(data);
+        $("table#teacherresource-main-tbl thead tr th").removeClass('sorting_asc');
     });
 
     $('#teacherresource-main-tbl').on('click', 'tbody tr',function(e){
@@ -230,7 +168,8 @@ $(document).ready(function(){
     });
 
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.showteacherresource();
+        window.location =' viewteacherres';
+        //TTS.forms.showteacherresource();
     });
     $("body").on('change', '#id_classid', function(){
         updateChapter();

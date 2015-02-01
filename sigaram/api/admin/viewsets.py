@@ -77,7 +77,6 @@ class TeacherViewSet(viewsets.ModelViewSet):
     queryset = models.Teacherinfo.objects.all()
     serializer_class = adminserializers.TeacherinfoSerializer
     def list(self, request):
-
         schoolid =  request.GET.get('schoolid')
         classid  =  request.GET.get('classid')
         username = request.GET.get('username')
@@ -131,12 +130,6 @@ class TeacherViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, pk=None):
         # print "Hi"
         pass
-
-    def retrieve(self, request, pk=None):
-        queryset = models.Teacherinfo.objects.filter(username=request.user.username)[0]
-        serializer = adminserializers.TeacherinfoSerializer(queryset, many=False)
-        return Response(serializer.data)
-        
 
     @delete_login('Teacher')
     def destroy(self, request, pk):
@@ -292,8 +285,8 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         teacherresource.classid = teacherresourcedata.get('classid',0)
         teacherresource.section = teacherresourcedata.get('section',0)
         teacherresource.resourcetype = restype
-        teacherresource.resourcetitle = teacherresourcedata.get('resourcetitle')
-        teacherresource.originaltext = teacherresourcedata.get('resourcetitle')
+        teacherresource.resourcetitle = summer_decode(teacherresourcedata.get('resourcetitle'))
+        teacherresource.originaltext = summer_decode(teacherresourcedata.get('resourcetitle'))
         teacherresource.documenturl = "" #teacherresourcedata.get('documenturl')
         teacherresource.imageurl = "" #teacherresourcedata.get('imageurl')
         teacherresource.audiourl = "" #teacherresourcedata.get('audiourl')
@@ -381,8 +374,8 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         ri.resourcetype = category
         ri.chapterid = ridata.get('chapterid')
         ri.resourceid = ridata.get('resourceid')
-        ri.resourcetitle = ridata.get('resourcetitle')
-        ri.resourcedescription = ridata.get('resourcedescription', "")
+        ri.resourcetitle = summer_decode(ridata.get('resourcetitle'))
+        ri.resourcedescription = summer_decode(ridata.get('resourcedescription', ""))
         ri.thumbnailurl = ridata.get('thumbnailurl', "")
         ri.documenturl = ""
         ri.imageurl = ""
@@ -415,9 +408,36 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.WrittenworkinfoSerializer
 
     def list(self, request):
-        queryset = models.Writtenworkinfo.objects.filter(createdby=str(request.user.username)).order_by('-createddate')
-        serializer = adminserializers.WrittenworkinfoSerializer(queryset, many=True)
-        return Response(serializer.data)
+        # queryset = models.Writtenworkinfo.objects.filter(createdby=str(request.user.username)).order_by('-createddate')
+        # serializer = adminserializers.WrittenworkinfoSerializer(queryset, many=True)
+        datecond = ''
+        if request.GET.get('fdate') and request.GET.get('tdate'):
+            datecond = "AND (wwi.createddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+                request.GET.get('tdate'))
+        sql = '''
+        SELECT assignwrittenworkid AS id,
+               wwi.writtenworkid,
+               wwi.writtenImage,
+               wwi.writtenworktitle,
+               date(wwi.createddate) as createddate,
+               awwi.studentid,
+               wwi.isassigned,
+               awwi.issaved
+        FROM assignwrittenworkinfo awwi
+        INNER JOIN writtenworkinfo wwi on wwi.writtenworkid = awwi.writtenworkid 
+        WHERE wwi.createdby = '%s'
+        %s
+        ORDER BY wwi.createddate DESC
+        ''' % (request.user.username,datecond)
+        print sql;
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
 
     def destroy(self, request, pk):
         models.Writtenworkinfo.objects.get(pk=pk).delete()
@@ -506,6 +526,8 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
         sectionid   = request.GET.get('section')
         chapterid = request.GET.get('chapterid')
         categoryid = request.GET.get('categoryid',0)
+        resourcecategory = request.GET.get('resourcecategory',0)
+        #print resourcecategory;
         
         kwarg = {}
         #kwarg['isdeleted'] = 0
@@ -522,7 +544,19 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             queryset = models.Chapterinfo.objects.all().order_by('chapterid')
 
         serializer = adminserializers.ChapterinfoSerializer(queryset, many=True)
-        if categoryid:
+        if resourcecategory:
+            sql = '''
+            SELECT chapterid, 
+                   count(*) AS cnt
+            FROM teacherresourceinfo 
+            WHERE classid=%s
+                AND section='%s' 
+                AND isdeleted=0
+                AND resourcecategory=%s
+            GROUP BY chapterid
+            ORDER BY chapterid
+            '''%(classid, sectionid,resourcecategory)
+        else:
             sql = '''
             SELECT chapterid, 
                    count(*) AS cnt
@@ -530,19 +564,27 @@ class ChapterinfoViewSet(viewsets.ModelViewSet):
             WHERE categoryid=%s
                 AND classid=%s
                 AND section='%s' 
-            GROUP BY chapterid'''%(categoryid, classid, sectionid)
-            # print sql;
-            cursor = connection.cursor()
-            cursor.execute(sql)
-            cnt = cursor.fetchall()
-            for i, d in enumerate(serializer.data):
-                serializer.data[i]['rescount']=0
-                for c in cnt:
-                    if serializer.data[i]['chapterid'] == c[0]:
-                        serializer.data[i]['rescount'] = c[1]
-                        break
+                AND isdeleted=0
+            GROUP BY chapterid
+            ORDER BY chapterid
+            '''%(categoryid, classid, sectionid)
+        #print sql;
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        cnt = cursor.fetchall()
+        for i, d in enumerate(serializer.data):
+            serializer.data[i]['rescount']=0
+            for c in cnt:
+                if serializer.data[i]['chapterid'] == c[0]:
+                    serializer.data[i]['rescount'] = c[1]
+                    break
             # print serializer.data
         return Response(serializer.data)
+
+     # def retrieve(self, request, pk=None):
+     #    queryset = models.Chapterinfo.objects.filter(pk=pk)[0]
+     #    serializer = adminserializers.ChapterinfoSerializer(queryset, many=False)
+     #    return Response(serializer.data)
  
 class AdminschoolViewSet(viewsets.ModelViewSet):
 
@@ -614,6 +656,11 @@ class AdminclasslistViewSet(viewsets.ModelViewSet):
     def destroy(self, request, pk=None):
         models.Classinfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
+
+    def retrieve(self, request, pk=None):
+        queryset = models.Classinfo.objects.filter(pk=pk)[0]
+        serializer = adminserializers.AdminclasslistSerializer(queryset, many=False)
+        return Response(serializer.data)
 
 class AdminrubricsViewSet(viewsets.ModelViewSet):
 
@@ -723,16 +770,19 @@ class CalendarViewSet(viewsets.ModelViewSet):
         data = json.loads(dict(request.DATA).keys()[0])
         #return Response({})
         #data = {k:v[0] for k,v in dict(request.DATA).items()}
-        cal.title = data.get('title')
-        cal.start = data.get('start')
-        cal.end = data.get('end')
-        cal.color = data.get('color')
-        cal.allday = data.get('alldayevents')
-        cal.eventcreatedby = request.user.username
-        cal.eventeditedby = request.user.username
-        cal.isdeleted = 0
-        cal.createdby = request.user.id
-        cal.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        startdt = data.get('start')+":00"
+        enddt   = data.get('end')+":00"
+
+        cal.title           = data.get('title')
+        cal.start           = startdt
+        cal.end             = enddt
+        cal.color           = data.get('color')
+        cal.allday          = data.get('alldayevents')
+        cal.eventcreatedby  = request.user.username
+        cal.eventeditedby   = request.user.username
+        cal.isdeleted       = 0
+        cal.createdby       = request.user.id
+        cal.createddate     = time.strftime('%Y-%m-%d %H:%M:%S')
         cal.save()
         return Response(request.DATA)
 
@@ -740,16 +790,18 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal = models.Calendardetails.objects.get(pk=pk)  
         data = json.loads(dict(request.DATA).keys()[0])
         #data = {k:v[0] for k,v in dict(request.DATA).items()}
-        cal.title = data.get('title')
-        cal.start = data.get('start')
-        cal.end = data.get('end')
-        cal.color = data.get('color')
-        cal.allday = data.get('alldayevents')
-        cal.eventcreatedby = request.user.username
-        cal.eventeditedby = request.user.username
-        cal.isdeleted = 0
-        cal.createdby = request.user.id
-        cal.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        startdt             = data.get('start')+":00"
+        enddt               = data.get('end')+":00"
+        cal.title           = data.get('title')
+        cal.start           = startdt
+        cal.end             = enddt
+        cal.color           = data.get('color')
+        cal.allday          = data.get('alldayevents')
+        cal.eventcreatedby  = request.user.username
+        cal.eventeditedby   = request.user.username
+        cal.isdeleted       = 0
+        cal.createdby       = request.user.id
+        cal.createddate     = time.strftime('%Y-%m-%d %H:%M:%S')
         cal.save()
         return Response(request.DATA)
     def destroy(self, request, pk):
@@ -782,6 +834,9 @@ class MindmapViewSet(viewsets.ModelViewSet):
         mm.save()
         return Response(request.DATA)
         
+    def destroy(self, request, pk):
+        models.Mindmap.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
 
 
 class StudentAssignResource(viewsets.ModelViewSet):
@@ -810,28 +865,28 @@ class StudentAssignResource(viewsets.ModelViewSet):
             ari.issaved = data.get('issaved')
         
         ari.save()
+        if data.get('spanid'):
+            assignedid  = pk;
+            spanid      = summer_decode(data.get('spanid'));
+            fulltext    = summer_decode(data.get('fulltext'));
+            orig        = summer_decode(data.get('orig'));
+            modified    = summer_decode(data.get('modified'));
+            usertype    = data.get('type');
+            answertext  = summer_decode(data.get('answertext'));
 
-        assignedid  = pk;
-        spanid      = summer_decode(data.get('spanid'));
-        fulltext    = summer_decode(data.get('fulltext'));
-        orig        = summer_decode(data.get('orig'));
-        modified    = summer_decode(data.get('modified'));
-        usertype    = data.get('type');
-        answertext  = summer_decode(data.get('answertext'));
+            ar = models.Editingtext()
+            ar.editid       = int(assignedid)
+            ar.spanid       = unicode(spanid)
+            ar.previoustext = unicode(orig)
+            ar.edittext     = unicode(modified)
+            ar.typeofresource = 0
+            ar.isapproved   = 0
+            ar.isrejected   = 0
+            ar.editedby     = request.user.username
+            ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
+            ar.usertype     = int(usertype)
 
-        ar = models.Editingtext()
-        ar.editid       = int(assignedid)
-        ar.spanid       = unicode(spanid)
-        ar.previoustext = unicode(orig)
-        ar.edittext     = unicode(modified)
-        ar.typeofresource = 0
-        ar.isapproved   = 0
-        ar.isrejected   = 0
-        ar.editedby     = request.user.username
-        ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
-        ar.usertype     = int(usertype)
-
-        ar.save()
+            ar.save()
 
         return Response({'msg':True})
 
@@ -863,6 +918,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
               %s
         GROUP BY ari.resourceid, ari.answereddate
         ORDER BY ari.assignedid DESC''' % (request.user.username, datecond)
+        print sql;
         cursor = connection.cursor()
         
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
@@ -962,14 +1018,14 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
     def list(self, request):
         datecond = ''
         if request.GET.get('fdate') and request.GET.get('tdate'):
-            datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+            datecond = "AND (ari.assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
                 request.GET.get('tdate'))
 
         sql = '''
         SELECT assignedid AS id,
                ri.resourceid,
                resourcetitle,
-               date(assigneddate) as createddate,
+               date(ari.assigneddate) as createddate,
                resourcetype,
                thumbnailurl,
                ari.studentid,
@@ -980,11 +1036,10 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         WHERE isdeleted=0
               AND ari.assignedby='%s'
               AND ari.IsDelete=0 
-              /*AND ri.categoryid=0 */
               %s
         GROUP BY resourceid 
         ORDER BY assigneddate DESC''' % (request.user.username, datecond)
-        print sql;
+        #print sql;
 
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
@@ -1056,25 +1111,32 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         
         return Response(request.DATA)
 
-
-
 class StickynotesResource(viewsets.ModelViewSet):
     queryset = models.stickynotes.objects.all()
     serializer_class = adminserializers.StickynotesSerializer
 
     def list(self, request):
+        wherecond=''
+        if request.GET.get('id'):
+            wherecond="WHERE s.stickylistid=%s" % request.GET.get('id')
         sql = '''
         SELECT s.id,
             s.stickytext,
+            s.attachment,
             s.color,
+            group_concat(sc.id SEPARATOR "~") as commetid,
             group_concat(sc.stickycomment SEPARATOR "~") as comments,
             group_concat(sc.commentby SEPARATOR "~") as commentby,
             group_concat(sc.createddate SEPARATOR "~") as createddate
         FROM stickynotes s
         LEFT JOIN stickycomments sc ON sc.stickyid = s.id
+        %s
         GROUP BY s.id, 
                  s.stickytext,
-                 s.color''' 
+                 s.color, 
+                 s.color
+        ORDER BY s.createddate DESC''' %wherecond
+        #print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -1083,10 +1145,13 @@ class StickynotesResource(viewsets.ModelViewSet):
                 for row in cursor.fetchall()
             ]
         return Response(result)
+
     def create(self, request):
         stickynotes = models.stickynotes()
         data = json.loads(dict(request.DATA).keys()[0])
+        stickynotes.stickylistid = data.get('stickylistid')
         stickynotes.stickytext = data.get('stickytext')
+        stickynotes.attachment = data.get('attachment')
         stickynotes.name = data.get('name')
         stickynotes.xyz = data.get('xyz')
         stickynotes.color = data.get('color')
@@ -1100,6 +1165,7 @@ class StickynotesResource(viewsets.ModelViewSet):
         stickynotes = models.stickynotes.objects.get(pk=pk)
         data =  json.loads(request.DATA.keys()[0])
         stickynotes.stickytext = data.get('stickytext')
+        stickynotes.attachment = data.get('attachment')
         stickynotes.name = data.get('name')
         stickynotes.xyz = data.get('xyz')
         stickynotes.color = data.get('color')
@@ -1112,6 +1178,18 @@ class StickynotesResource(viewsets.ModelViewSet):
     def destroy(self, request, pk):
         models.stickynotes.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
+
+    def retrieve(self, request, pk=None):
+        sql = '''
+        SELECT  id,
+                title
+        FROM stickyinfo 
+        WHERE id = %s
+        ''' % pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
+        return Response(result)
 
 class StudentinfoViewSet(viewsets.ModelViewSet):
 
@@ -1258,8 +1336,8 @@ class Bulletinboardlist(viewsets.ModelViewSet):
 
         #Saving annoucement
         bbi = models.Bulletinboardinfo()
-        bbi.messagetitle = data.get('messagetitle')
-        bbi.message = data.get('message')
+        bbi.messagetitle = summer_decode(data.get('messagetitle'))
+        bbi.message = summer_decode(data.get('message'))
         bbi.attachmenturl = data.get('attachmenturl',0)
         if data.get('cattype') == 'schools':
             bbi.schoolid = data.get('schoolid')
@@ -1615,43 +1693,6 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
 
         return Response(result)
 
-
-class TopicViewSet(viewsets.ModelViewSet):
-
-    queryset = models.Topicinfo.objects .all()
-    serializer_class = adminserializers.TopicsSerializer
-
-    def list(self, request):
-        topicid = request.GET.get('topicid')
-        topicname = request.GET.get('topicname')
-        if topicid :
-            queryset = models.Topicinfo.objects.filter(topicid=topicid)
-        else:
-            queryset = models.Topicinfo.objects.all()
-        serializer = adminserializers.TopicsSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def create(self, request):
-        topics = models.Topicinfo()
-        topicinfodata =  json.loads(request.DATA.keys()[0])
-        topics.topicid = topicinfodata.get('topicid',0)
-        topics.forumid = topicinfodata.get('forumid',0)
-        topics.totalpost = topicinfodata.get('totalpost',0)
-        topics.forumid = topicinfodata.get('forumid',0)
-        topics.topicname = topicinfodata.get('topicname',0)
-        topics.createdby = request.user.id
-        topics.lastpostedby = request.user.id
-        topics.lastposteddate = time.strftime('%Y-%m-%d %H:%M:%S')
-        topics.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
-        topics.save()
-        return Response(request.DATA)
-
-    def update(self, request, pk=None):
-        return Response('"msg":"update"')
-
-    def destroy(self, request, pk=None):
-        return Response('"msg":"delete"')
-        
 class ThreadsViewSet(viewsets.ModelViewSet):
 
     queryset = models.Threaddetails.objects.all()
@@ -1824,7 +1865,7 @@ class ExtraslistViewSet(viewsets.ModelViewSet):
 
 class StickyinfoViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Stickyinfo.objects.all()
+    queryset = models.Stickyinfo.objects.filter().order_by('-createddate')
     serializer_class = adminserializers.StickyinfoSerializer
 
     def create(self, request):
@@ -2285,14 +2326,7 @@ class StudentAssignWrittenWork(viewsets.ModelViewSet):
         GROUP BY ari.resourceid, ari.answereddate
         ORDER BY ari.assignedid DESC''' % (request.user.username, datecond)
         cursor = connection.cursor()
-        
-        #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
-        #cursor.execute(sql, "3680")
-        #print dir(cursor)
-        #result = cursor.fetchall()
-        #print return [
-        
         desc = cursor.description
         result =  [
                 dict(zip([col[0] for col in desc], row))
@@ -2453,7 +2487,7 @@ class EditAnswerResourceViewSet(viewsets.ModelViewSet):
         sql = '''
         UPDATE assignresourceinfo 
            SET answertext = '%s'
-           WHERE assignedid = '%s' ''' % (MySQLdb.escape_string(unicode(approvedanswertext)), assignedid)
+           WHERE assignedid = '%s' ''' % (approvedanswertext.replace("'", '"'), assignedid)
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -2469,8 +2503,8 @@ class EditAnswerResourceViewSet(viewsets.ModelViewSet):
         sql = '''
         UPDATE editingtext
             SET isapproved = 1,
-            previoustext = "%s"
-        WHERE editingid = '%s' ''' % (unicode(edittext), pk)
+            previoustext = '%s'
+        WHERE editingid = '%s' ''' % (edittext.replace("'", '"'), pk)
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -2513,17 +2547,14 @@ class EditAnswerWrittenworkViewSet(viewsets.ModelViewSet):
 
         approvedanswertext = answertext.replace(previoustext,edittext)
         
-
         #updating approved answer text
         sql = '''
         UPDATE assignwrittenworkinfo 
            SET answertext = '%s'
-           WHERE assignwrittenworkid = '%s' ''' % (unicode(approvedanswertext), assignedid)
+           WHERE assignwrittenworkid = '%s' ''' % (approvedanswertext.replace("'", '"'), assignedid)
         cursor = connection.cursor()
         cursor.execute(sql)
 
-        return Response('approved')
-        
         #resetting the previous one if set
         sql = '''
         UPDATE editingtext
@@ -2536,8 +2567,8 @@ class EditAnswerWrittenworkViewSet(viewsets.ModelViewSet):
         sql = '''
         UPDATE editingtext
             SET isapproved = 1,
-            previoustext = "%s"
-        WHERE editingid = '%s' ''' % (unicode(edittext), pk)
+            previoustext = '%s'
+        WHERE editingid = '%s' ''' % (edittext.replace("'", '"'), pk)
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -2590,21 +2621,50 @@ class PeerRubricsReviewViewSet(viewsets.ModelViewSet):
         return Response('"msg":"delete"')
 
 class AssignmindmapinfoViewSet(viewsets.ModelViewSet):
-
     queryset = models.Assignmindmapinfo.objects.all()
     serializer_class = adminserializers.AssignmindmapinfoSerializer
 
     def list(self, request):
-        mindmapid = request.GET.get('mindmapid')
-       
-        if mindmapid :
-            queryset = models.Assignmindmapinfo.objects.filter(mindmapid=mindmapid)
-        else:
-            queryset = models.Assignmindmapinfo.objects.all()
+        datecond = ''
+        if request.GET.get('fdate') and request.GET.get('tdate'):
+            datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+            request.GET.get('tdate'))
 
-        serializer = adminserializers.AssignmindmapinfoSerializer(queryset, many=True)
+        retrivemindmapcond = ''
+        if request.GET.get('assignedid'):
+            retrivemindmapcond = "AND assignedid = '%s'" % (request.GET.get('assignedid'))
+            
+        sql = '''
+        SELECT ammi.assignedid AS id,
+               ammi.mindmapid,
+               mmi.title,
+               ammi.assigntext,
+               ammi.answertext,
+               ammi.comment,
+               ammi.mapdata,
+               date(assigneddate) as createddate,
+               date(answereddate) as answereddate,
+               ammi.studentid,
+               ammi.isanswered,
+               ammi.issaved
+        FROM assignmindmapinfo ammi
+        INNER JOIN mindmap mmi on mmi.id = ammi.mindmapid 
+        WHERE mmi.isdelete=0
+              AND ammi.studentid='%s'
+              AND ammi.IsDelete=0
+              %s
+              %s
+        GROUP BY ammi.mindmapid, ammi.answereddate
+        ORDER BY ammi.assignedid DESC''' % (request.user.username, datecond, retrivemindmapcond)
 
-        return Response(serializer.data) 
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result = [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+        return Response(result)
 
     def create(self, request):
         assigndata =  json.loads(request.DATA.keys()[0])
@@ -2625,8 +2685,309 @@ class AssignmindmapinfoViewSet(viewsets.ModelViewSet):
 
         return Response('"msg":"created"')
 
+    # def retrieve(self, request, pk=None):
+    #     queryset = models.Assignmindmapinfo.objects.get(pk=pk)
+    #     serializer = adminserializers.AssignmindmapinfoSerializer(queryset, many=False)
+    #     return Response(serializer.data)
+
     def update(self, request, pk=None):
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        ammi = models.Assignmindmapinfo.objects.get(pk=pk)
+        ammi.answertext = summer_decode(unicode(data.get('answertext')))
+        ammi.mapdata    = summer_decode(unicode(data.get('mapdata')))
+
+        if data.get('isanswered'):
+            ammi.isanswered = data.get('isanswered')
+            ammi.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
+
+        if data.get('issaved'):
+            ammi.issaved = data.get('issaved')
+        
+        ammi.save()
+
         return Response('"msg":"update"')
 
     def destroy(self, request, pk=None):
         return Response('"msg":"delete"')
+
+class TeacherAssignedmindmapViewSet(viewsets.ModelViewSet):
+    queryset = models.Assignmindmapinfo.objects.all()
+    serializer_class = adminserializers.AssignmindmapinfoSerializer
+
+    def list(self, request):
+        datecond = ''
+        if request.GET.get('fdate') and request.GET.get('tdate'):
+            datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+            request.GET.get('tdate'))
+
+        retrivemindmapcond = ''
+        if request.GET.get('assignedid'):
+            retrivemindmapcond = "AND assignedid = '%s'" % (request.GET.get('assignedid'))
+            
+        sql = '''
+        SELECT ammi.assignedid AS id,
+               ammi.mindmapid,
+               mmi.title,
+               ammi.assigntext,
+               ammi.answertext,
+               ammi.comment,
+               ammi.mapdata,
+               date(assigneddate) as createddate,
+               date(answereddate) as answereddate,
+               ammi.studentid,
+               ammi.isanswered,
+               ammi.issaved
+        FROM assignmindmapinfo ammi
+        INNER JOIN mindmap mmi on mmi.id = ammi.mindmapid 
+        WHERE mmi.isdelete=0
+              AND ammi.assignedby='%s'
+              AND ammi.IsDelete=0
+              %s
+              %s
+        GROUP BY ammi.mindmapid, ammi.assigneddate
+        ORDER BY ammi.assignedid DESC''' % (request.user.username, datecond, retrivemindmapcond)
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result = [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+        return Response(result)
+
+    def retrieve(self, request, pk=None):
+
+        sql = '''
+        SELECT ammi.assignedid AS id,
+               ammi.mindmapid,
+               mmi.title,
+               ammi.assigntext,
+               ammi.answertext,
+               ammi.comment,
+               ammi.mapdata,
+               date(assigneddate) as createddate,
+               date(answereddate) as answereddate,
+               ammi.studentid,
+               ammi.isanswered,
+               au.first_name as firstname,
+               au.last_name as lastname,
+               ammi.issaved
+        FROM assignmindmapinfo ammi
+        INNER JOIN mindmap mmi on mmi.id = ammi.mindmapid 
+        INNER JOIN auth_user au on au.username = ammi.studentid 
+        WHERE mmi.isdelete=0
+              AND ammi.assignedby='%s'
+              AND ammi.IsDelete=0
+              AND ammi.mindmapid = %s
+        GROUP BY ammi.studentid
+        ORDER BY ammi.assignedid DESC''' % (request.user.username, pk)
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+    def update(self, request, pk=None):
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        ammi = models.Assignmindmapinfo.objects.get(pk=pk)
+        ammi.comment = summer_decode(unicode(data.get('comment')))
+        ammi.save()
+
+        return Response('"msg":"update"')
+
+class TopicInfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Topicinfo.objects .all()
+    serializer_class = adminserializers.TopicsSerializer
+
+    def treeify(self, flatlist, idAttr = 'postid', parentAttr = 'parentid', childrenAttr = 'comments'):
+
+        treeList = [];
+        lookup = {};
+        for fl in flatlist:
+            lookup[fl[idAttr]] = fl
+            fl[childrenAttr] = []
+        
+        for fl in flatlist:
+            try:
+                lookup[fl[parentAttr]][childrenAttr].append(fl)
+            except Exception as e:
+                treeList.append(fl)
+        return treeList
+
+    def list(self, request):
+        topicid = request.GET.get('topicid')
+        topicname = request.GET.get('topicname')
+        # if topicid :
+        #     queryset = models.Topicinfo.objects.filter(topicid=topicid).order_by('-createddate')
+        # else:
+        #     queryset = models.Topicinfo.objects.filter().order_by('-createddate')
+        #     serializer = adminserializers.TopicsSerializer(queryset, many=True)
+        sql = '''
+        SELECT  ti.topicid,
+                ti.topicname,
+                ti.topicdetails,
+                ti.createddate,
+                a.first_name AS username,
+                (SELECT count(*) FROM postinfo WHERE topicid=ti.topicid) AS tot_comment
+        FROM topicinfo ti
+        LEFT JOIN auth_user a ON a.id = ti.createdby
+        ORDER BY ti.createddate DESC
+        '''
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+    def retrieve(self, request, pk=None):
+        sql = '''
+            SELECT ti.topicname,
+                   ti.topicdetails,
+                   ti.createddate,
+                   a.first_name AS username
+            FROM topicinfo ti
+            LEFT JOIN auth_user a ON a.id = ti.createdby
+            WHERE ti.topicid = '%s' ''' % (pk)
+        cursor = connection.cursor()
+        #print sql
+        cursor.execute(sql)
+        desc = cursor.description
+        result = dict(zip([col[0] for col in desc], cursor.fetchone()))
+        sql = '''
+        SELECT   p.postid,
+                   p.postdetails,
+                   p.parentid,
+                   p.posteddate,
+                   p.parentid,
+                   a.first_name AS postedby
+            FROM postinfo p
+            LEFT JOIN auth_user a ON a.id = p.postedby
+            WHERE p.topicid = '%s' 
+            ORDER BY p.posteddate DESC''' % (pk)
+
+        cursor = connection.cursor()
+        #print sql
+        cursor.execute(sql)
+        desc = cursor.description
+        result_comment = [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+        result['comments'] = self.treeify(result_comment)
+        return Response(result)
+    
+    def create(self, request):
+        print "*"*80
+        print request.user.get_full_name()
+        topics = models.Topicinfo()
+        topicinfodata =  json.loads(request.DATA.keys()[0])
+        topics.topicid = topicinfodata.get('topicid',0)
+        topics.forumid = topicinfodata.get('forumid',0)
+        topics.totalpost = topicinfodata.get('totalpost',0)
+        topics.topicdetails = summer_decode(topicinfodata.get('topicdetails',0))
+        topics.forumid = topicinfodata.get('forumid',0)
+        topics.topicname = summer_decode(topicinfodata.get('topicname',0))
+        topics.createdby = request.user.id
+        topics.lastpostedby = request.user.id
+        topics.username = request.user.get_full_name()
+        topics.lastposteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        topics.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        topics.save()
+        return Response(request.DATA)
+
+    def update(self, request, pk=None):
+        return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        models.Topicinfo.objects.get(pk=pk).delete()
+        sql = """
+        DELETE FROM postinfo 
+        WHERE topicid=%s
+        """ %pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        return Response('"msg":"delete"')
+
+class PostinfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Postinfo.objects.all()
+    serializer_class = adminserializers.PostinfoSerializer
+
+    def create(self, request):
+        postinfo = models.Postinfo()
+        postinfodata =  json.loads(request.DATA.keys()[0])
+        postinfo.postid = postinfodata.get('postid')
+        postinfo.topicid = postinfodata.get('topicid')
+        postinfo.forumid = postinfodata.get('forumid',0)
+        postinfo.parentid = postinfodata.get('parentid')
+        postinfo.postdetails = postinfodata.get('postdetails',0)
+        postinfo.postedby = request.user.id
+        postinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        postinfo.save()
+        return Response(request.DATA)
+
+class RubricImportViewSet(viewsets.ModelViewSet):
+
+    queryset = models.RubricsHeader.objects.all().order_by('-slno')
+    serializer_class = adminserializers.AdminrubricsSerializer
+
+    def create(self, request):
+        adminrubrics = models.RubricsHeader()
+        rubricmatrix = models.RubricMatrix()
+        rd = json.loads(request.DATA.keys()[0])
+
+        import xlrd, os
+
+        rd =  json.loads(request.DATA.keys()[0]);
+        filepath = rd.get('filepath');
+        fullpath = os.path.join('static/', filepath)
+        book     = xlrd.open_workbook(fullpath)
+        sheet    = book.sheet_by_index(0)
+        columns  = int(sheet.ncols)
+        rows     = int(sheet.nrows)
+        
+        adminrubrics.title       = rd.get('ttl')
+        adminrubrics.description = rd.get('desc')
+        adminrubrics.instruction = rd.get('instn')
+        adminrubrics.teacher     = request.user.username
+        adminrubrics.status      = 0
+        adminrubrics.ts          = time.strftime('%Y-%m-%d %H:%M:%S')
+        adminrubrics.save()
+        
+        refno = adminrubrics.slno
+
+        headerdata = ''
+        for hd in range(0, columns):
+            headerdata += unicode(sheet.cell(0,hd).value)
+            if (hd != columns-1) and (hd != 0):
+                headerdata += "~~"
+
+        rubricmatrix.refno      = refno
+        rubricmatrix.datatype   = 'H'
+        rubricmatrix.jdata      = unicode(headerdata)
+        rubricmatrix.disp_order = 0
+        rubricmatrix.save()
+
+        for bdr in range(1, rows):
+            bodydata = ''
+            for bd in range(0, columns):
+                bodydata += unicode(sheet.cell(bdr,bd).value)
+                if bd != columns-1:
+                    bodydata += "~~"
+        
+            rubricmatrix.refno      = refno
+            rubricmatrix.datatype   = 'B'
+            rubricmatrix.jdata      = unicode(bodydata)
+            rubricmatrix.disp_order = bdr
+            rubricmatrix.save()
+
+        return Response("msg")

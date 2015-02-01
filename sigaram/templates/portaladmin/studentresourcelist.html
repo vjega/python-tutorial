@@ -144,7 +144,8 @@ TTS.forms.renderstudentresourceinfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center" ,
-              "data" : "slno"
+              "data" : "slno",
+              "bSortable":false
             },
             { "title": "{% trans "Title" %}",
               "data" : "title"
@@ -157,7 +158,8 @@ TTS.forms.renderstudentresourceinfo = function(data){
             }, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center",  
-              "data":"delete"
+              "data":"delete",
+              "bSortable":false
             }, 
     ];
     var dataset = [];
@@ -297,6 +299,7 @@ $(document).ready(function(){
     }).done(function(data){
         TTS.forms.renderstudentresourceinfo(data);
         TTS.utils.ajaxloaderstop();
+        $("table#studetresource-main-tbl thead tr th").removeClass('sorting_asc');
     });
     $('#studetresource-main-tbl').on('click', 'tbody tr',function(e){
         e.stopPropagation();
@@ -315,10 +318,8 @@ $(document).ready(function(){
         TTS.forms.delstudentres($(this).parent().parent().prop("id"));
     });
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.showstudentresource();
-        //updateClass();
-        //updateselectedChapter();
-        //updatesection();
+        window.location = "viewstudentres?categoryid="+TTS.categoryid+"&chapterid="+TTS.chapterid+"&classid="+TTS.classid+"&section="+TTS.section;
+        //TTS.forms.showstudentresource();
     });
     $("body").on('change', '#id_classid', function(){
         updateChapter();

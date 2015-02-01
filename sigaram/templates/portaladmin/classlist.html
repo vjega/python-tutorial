@@ -9,26 +9,26 @@
     </div>
     <!-- /.col-lg-12 -->
 </div>
-<div class="row">
+<!-- <div class="row">
     <div class="form-group" class="col-sm-2">
         <label for="folder_name" class="col-sm-2 control-label schoolname">{% trans "Select School" %}</label>
         <div class="col-sm-4">
-            <select name="school_name" class="form-control" id="school_name">
+            <!-- <select name="school_name" class="form-control" id="school_name">
                 {% for school in schools%}
                 <option value="{{school.schoolid}}">
                     {{school.schoolname}}
                 </option>
                 {% endfor %}
-            </select>
-        </div>
+            </select> -->
+       <!--  </div>
     </div>
-</div>
+</div>-->
 {% endblock topcontent %}
 {% block botcontent %}
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans "Classrooms" %}
+            {% trans "Class" %}
             <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
         </div>
         <!-- /.panel-heading -->
@@ -77,6 +77,21 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
+TTS.forms.saveclass = function(dialogItself){
+    var data = TTS.utils.serilaizeJson("#add-classlist");
+        $.ajax({
+            headers : {
+              'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+            },
+            type:'POST',
+            data: data,
+            url : '/api/admin/classlist/'
+        }).done(function( msg ) {
+            dialogItself.close();
+            location.reload();
+            //dialogItself.close();
+        });
+    };
 TTS.forms.addclassroom = function() {
     BootstrapDialog.show({
         title: '{% trans "Add Classroom" %}',
@@ -91,19 +106,24 @@ TTS.forms.addclassroom = function() {
             label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-classlist");
-                $.ajax({
-                    headers : {
-                      'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                $("#add-classlist").validate({
+                    rules: {
+                        classname: {
+                            required: true
+                        },
+                        shortname: {
+                            required: true
+                        }
                     },
-                    type:'POST',
-                    data: data,
-                    url : '/api/admin/classlist/'
-                }).done(function( msg ) {
-                    dialogItself.close();
-                    location.reload();
-                    //dialogItself.close();
+                    messages: {
+                        classname: "Class Name is required",
+                        shortname: "Short Name is required"
+                    }
                 });
+                if(!$("#add-classlist").valid()){
+                  return false;  
+                }
+            TTS.forms.saveclass(dialogItself);
             }
             },{
             label: '{% trans "Close" %}',
@@ -118,7 +138,8 @@ TTS.forms.renderclassroom = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center" ,
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false  
             },
             { "title": "{% trans "Class" %}" ,
               "data" : "classname"
@@ -128,7 +149,8 @@ TTS.forms.renderclassroom = function(data){
             }, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center" ,
-              "data" : "delete" 
+              "data" : "delete",
+              "bSortable":false 
             }, 
         ];
     var dataset = [];
@@ -155,6 +177,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderclassroom(data);
+        $("table#classlist-main-tbl thead tr th").removeClass('sorting_asc');
     });
     $('#classlist-main-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();

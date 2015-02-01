@@ -366,18 +366,21 @@ class Bulletinboardinfo(models.Model):
         fieldcond=""
         joincond=""
         wherecond = ""
-        if l == 'Admin' or l == 'Teacher' :
+        if l == 'Admin' :
             fieldcond="au.first_name AS postedby"
             joincond="INNER JOIN auth_user au ON au.username = bmi.userid"
-            wherecond = "bmi.userid = '%s'"%req.user.username
+        elif l == 'Teacher' :
+            fieldcond="au.first_name AS postedby"
+            joincond="INNER JOIN auth_user au ON au.username = bmi.userid"
+            wherecond = "WHERE bmi.userid = '%s'"%req.user.username
+        
         else:
             fieldcond="'' AS postedby"
             joincond=""
-            wherecond = """bmi.schoolid = '%s'
+            wherecond = """WHERE bmi.schoolid = '%s'
                            AND bmi.classid = '%s' 
                         """%(req.session.get('stu_schoolid'), 
                              req.session.get('stu_classid'))
-        
         sql = """
         SELECT  bbi.bulletinboardid,
                 bbi.messagetitle,
@@ -387,10 +390,11 @@ class Bulletinboardinfo(models.Model):
         FROM bulletinboardinfo bbi
         INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
         %s
-        WHERE %s
+        %s
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
         LIMIT 10"""% (fieldcond,joincond,wherecond)
+       # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         x = dictfetchall(cursor)
@@ -794,6 +798,7 @@ class PeerRubricsReview(models.Model):
 class Postinfo(models.Model):
     postid = models.BigIntegerField(primary_key=True)
     topicid = models.BigIntegerField()
+    parentid = models.IntegerField()
     forumid = models.BigIntegerField()
     postdetails = models.TextField()
     postedby = models.BigIntegerField()
@@ -1001,8 +1006,10 @@ class Topicinfo(models.Model):
     forumid = models.BigIntegerField()
     topicname = models.CharField(max_length=1000)
     totalpost = models.IntegerField()
+    topicdetails = models.TextField()
     lastpostedby = models.BigIntegerField()
     lastposteddate = models.DateTimeField()
+    username = models.CharField(max_length=50)
     createdby = models.BigIntegerField()
     createddate = models.DateTimeField()
 
@@ -1079,6 +1086,7 @@ class Mindmap(models.Model):
 class stickynotes(models.Model):
     stickylistid = models.BigIntegerField()
     stickytext = models.CharField(max_length=200)
+    attachment = models.CharField(max_length=200)
     name  = models.TextField()
     color = models.TextField()
     xyz = models.IntegerField()
@@ -1129,6 +1137,8 @@ class Assignmindmapinfo(models.Model):
     mindmapid   = models.BigIntegerField()
     studentid   = models.CharField(max_length=500)
     assigntext  = models.TextField()
+    answertext  = models.TextField()
+    comment     = models.TextField()
     mapdata     = models.TextField()
     answereddate= models.DateTimeField()
     assignedby  = models.CharField(max_length=500)

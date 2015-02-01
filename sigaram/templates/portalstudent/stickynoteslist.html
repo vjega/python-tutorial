@@ -40,7 +40,7 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
-    #addrec:hover, .tts-delete:hover, .tts-edit:hover{
+    #addrec:hover, .tts-delete:hover, .tts-edit:hover, .sticky_title:hover{
         cursor: pointer;
     }
 </style>
@@ -88,6 +88,19 @@ TTS.forms.showadminform = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-sticky-info");
+                $("#add-sticky-info").validate({
+                    rules: {
+                        title: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        title: "Title is required",
+                    }
+                });
+                if(!$("#add-sticky-info").valid()){
+                  return false;  
+                }
                 //console.log(data);
                 TTS.forms.addadmin(dialogItself, data); 
             }
@@ -104,10 +117,11 @@ TTS.forms.renderteacher = function(data){
     
     var headers = [
             { "title": "{% trans "Sl No." %}",
-              "class": "text-center"  
+              "class": "text-center" ,
+              "bSortable":false   
             },
             { "title": "{% trans "Title" %}",
-              "class": "text-center"  
+              "class": "sticky_title"
             },
             { "title": "{% trans "Date" %}" },
             
@@ -146,6 +160,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacher(data);
+        $("table#sticky-list-tbl thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
     $('#sticky-list-tbl').on('click', 'tbody tr', function(){
