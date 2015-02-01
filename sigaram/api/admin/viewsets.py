@@ -918,6 +918,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
               %s
         GROUP BY ari.resourceid, ari.answereddate
         ORDER BY ari.assignedid DESC''' % (request.user.username, datecond)
+        print sql;
         cursor = connection.cursor()
         
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
