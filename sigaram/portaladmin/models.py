@@ -170,28 +170,28 @@ class Assessmentanswers(models.Model):
         db_table = 'assessmentanswers'
 
 
-class Assessmentinfo(models.Model):
-    assessmentid = models.BigIntegerField(primary_key=True)
-    workspaceid = models.BigIntegerField()
-    assessmenttitle = models.CharField(max_length=500)
-    assessmenttype = models.CharField(max_length=200)
-    assessmenttext = models.TextField()
-    imageurl = models.CharField(max_length=1000)
-    videourl = models.CharField(max_length=1000)
-    audiourl = models.CharField(max_length=1000)
-    question = models.TextField()
-    classid = models.BigIntegerField()
-    schoolid = models.BigIntegerField()
-    answerformat = models.CharField(max_length=200)
-    isstarted = models.IntegerField()
-    enddate = models.DateTimeField(blank=True, null=True)
-    isended = models.IntegerField()
-    postedby = models.BigIntegerField()
-    posteddate = models.DateTimeField()
+# class Assessmentinfo(models.Model):
+#     assessmentid = models.BigIntegerField(primary_key=True)
+#     workspaceid = models.BigIntegerField()
+#     assessmenttitle = models.CharField(max_length=500)
+#     assessmenttype = models.CharField(max_length=200)
+#     assessmenttext = models.TextField()
+#     imageurl = models.CharField(max_length=1000)
+#     videourl = models.CharField(max_length=1000)
+#     audiourl = models.CharField(max_length=1000)
+#     question = models.TextField()
+#     classid = models.BigIntegerField()
+#     schoolid = models.BigIntegerField()
+#     answerformat = models.CharField(max_length=200)
+#     isstarted = models.IntegerField()
+#     enddate = models.DateTimeField(blank=True, null=True)
+#     isended = models.IntegerField()
+#     postedby = models.BigIntegerField()
+#     posteddate = models.DateTimeField()
 
-    class Meta:
-        managed = False
-        db_table = 'assessmentinfo'
+#     class Meta:
+#         managed = False
+#         db_table = 'assessmentinfo'
 
 
 class Assessmentlist(models.Model):
@@ -1149,3 +1149,19 @@ class Assignmindmapinfo(models.Model):
     class Meta:
         managed = False
         db_table= 'assignmindmapinfo'        
+
+class Assessmentinfo(models.Model):
+    id          = models.AutoField(primary_key=True)
+    title       = models.CharField(max_length=500)
+    instruction = models.TextField()
+    type        = models.CharField(max_length=500)
+    classid     = models.BigIntegerField()
+    schoolid    = models.BigIntegerField()
+    enddate     = models.DateTimeField()
+    createdby   = models.CharField(max_length=500)
+    createddate = models.DateTimeField()
+    isdeleted   = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table= 'assessmentinfo'

@@ -106,4 +106,6 @@ urlpatterns = patterns('teacher.views',
     url(r'^viewmindmap$',               'viewmindmap',   name='viewmindmap'),
     url(r'^addteachershare$',   'addteachershare',       name='addteachershare'),
     url(r'^calendar$',                  'calendar',     name='calendar'),
+    url(r'^viewassessmentqa$',          'viewassessmentqa',     
+                                                        name='viewassessmentqa'),
 )

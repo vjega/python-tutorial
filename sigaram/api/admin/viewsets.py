@@ -2932,3 +2932,39 @@ class RubricImportViewSet(viewsets.ModelViewSet):
             rubricmatrix.save()
 
         return Response("msg")
+
+
+class AssessmentInfoViewSet(viewsets.ModelViewSet):
+    queryset = models.Assessmentinfo.objects.all()
+    serializer_class = adminserializers.AssessmentinfoSerializer
+    def list(self, request):
+        queryset = models.Assessmentinfo.objects.filter(createdby=str(request.user.username)).order_by('-createddate')
+        serializer = adminserializers.AssessmentinfoSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        assessment = models.Assessmentinfo()
+        cdata =  json.loads(request.DATA.keys()[0])
+        assessment.title        = cdata.get('title')
+        assessment.instruction  = cdata.get('instruction')
+        assessment.schoolid     = request.session.get('schoolid')
+        assessment.classid      = request.session.get('classid')
+        assessment.type         = cdata.get('type')
+        assessment.enddate      = time.strftime('%Y-%m-%d %H:%M:%S')
+        assessment.createdby    = request.user.username
+        assessment.createddate  = time.strftime('%Y-%m-%d %H:%M:%S')
+        assessment.isdeleted    = 0
+        assessment.save()
+        return Response(request.DATA)
+
+    # def update(self, request, pk=None):
+    #     return Response('"msg":"update"')
+
+    def destroy(self, request, pk=None):
+        models.Assessmentinfo.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
+
+    # def retrieve(self, request, pk=None):
+    #     queryset = models.Classinfo.objects.filter(pk=pk)[0]
+    #     serializer = adminserializers.AdminclasslistSerializer(queryset, many=False)
+    #     return Response(serializer.data)

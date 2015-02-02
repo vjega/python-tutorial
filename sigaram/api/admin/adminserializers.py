@@ -215,3 +215,9 @@ class PostinfoSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Postinfo
         fields = ('postid', 'topicid','forumid',
                   'postdetails', 'postedby','posteddate','parentid')
+
+class AssessmentinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Assessmentinfo
+        fields = ('id', 'title','instruction','schoolid','classid',
+                  'createddate', 'createdby','enddate','isdeleted')

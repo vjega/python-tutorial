@@ -85,7 +85,10 @@
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <style>
-    #addrec:hover, #admin-main-tbl tbody tr:hover{
+    /*#addrec:hover, #admin-main-tbl tbody tr:hover{
+        cursor: pointer;
+    }*/ 
+    .tts-delete:hover{
         cursor: pointer;
     }
     #tabpanel{
@@ -254,8 +257,8 @@ $(document).ready(function(){
         TTS.utils.ajaxloaderstop();
     });
 
-    $('body').on('click', 'tr', function(){
-        window.location = 'viewassessmentqa?id='+this.id;
+    $('#admin-main-tbl tbody').on('click', 'tr', function(){
+        //window.location = 'teacherresourcelist?id='+this.id;
     });
     $('#admin-main-tbl tbody tr').on('click', '.tts-edit', function(e){
         e.stopPropagation();
