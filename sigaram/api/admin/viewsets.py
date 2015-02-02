@@ -1320,7 +1320,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         WHERE %s
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
-        LIMIT 10"""% (fieldcond,joincond,wherecond)
+        """% (fieldcond,joincond,wherecond)
         # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
