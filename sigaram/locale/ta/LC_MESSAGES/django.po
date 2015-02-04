@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-03 17:05+0000\n"
+"POT-Creation-Date: 2015-02-04 02:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1019,9 +1019,14 @@ msgid "Exercises Statistics"
 msgstr "புள்ளி விவரம்"
 
 #: templates/portaladmin/activitystatistics.html:7
-#: templates/portalteacher/assignedresourcelist.html:7
-msgid "Submission"
-msgstr "ஒப்படைப்பு"
+#: templates/portaladmin/base.html:153 templates/portaladmin/base.html:158
+#: templates/portaladmin/base.html:161 templates/portaladmin/base.html:164
+#: templates/portaladmin/statistics.html:7
+#: templates/portaladmin/statistics.html:30
+#: templates/portalteacher/base.html:160
+#: templates/portalteacher/statistics.html:7
+msgid "Statistics"
+msgstr "புள்ளி விவரம்"
 
 #: templates/portaladmin/activitystatistics.html:20
 #: templates/portalstudent/assignedresourcelist.html:20
@@ -1424,18 +1429,9 @@ msgstr "கருத்துக்களம்"
 msgid "Students"
 msgstr "மாணவர்"
 
-#: templates/portaladmin/base.html:153 templates/portaladmin/base.html:158
-#: templates/portaladmin/base.html:161 templates/portaladmin/base.html:164
-#: templates/portaladmin/statistics.html:7
-#: templates/portaladmin/statistics.html:30
-#: templates/portalteacher/base.html:160
-#: templates/portalteacher/statistics.html:7
-msgid "Statistics"
-msgstr "புள்ளி விவரம்"
-
 #: templates/portaladmin/base.html:158
 msgid "Login"
-msgstr ""
+msgstr "புகுபதிகை"
 
 #: templates/portaladmin/base.html:161
 msgid "Homework"
@@ -2199,6 +2195,10 @@ msgstr "நீக்கு"
 #: templates/portalteacher/adminlist.html:62
 msgid "Admin Name"
 msgstr "நிர்வாகியின் பெயர்"
+
+#: templates/portalteacher/assignedresourcelist.html:7
+msgid "Submission"
+msgstr "ஒப்படைப்பு"
 
 #: templates/portalteacher/assignmindmap.html:68
 #: templates/portalteacher/assignresource.html:65
