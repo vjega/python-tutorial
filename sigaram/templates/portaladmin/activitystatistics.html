@@ -152,11 +152,6 @@ $(document).ready(function(){
         $("table#resource-list thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
-    $('.resourcelist').on('click','tbody tr',function(e){
-        e.stopPropagation();
-        window.location = 'viewassignresource?resourceid='+this.id;
-    });
-
     $('#date-search').click(function(){
         var fdate = $("#startdate").val();
         var tdate = $("#enddate").val();
