@@ -99,7 +99,7 @@ TTS.forms.renderbillboard = function(data){
             t.type = '{% trans "Written Work" %}';
         }
         t.student = data[i].firstname;
-        t.date = data[i].posteddate;
+        t.date = TTS.utils.dateConv(data[i].posteddate);
         t.delete="<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }

@@ -71,7 +71,10 @@
 <style>
     .resourcelist tbody tr:hover{
         cursor: pointer;
-    }    
+    }  
+    #wrapper{
+        padding-top:60px;
+    }  
 </style>
 {% endblock morecss %}
 
@@ -119,7 +122,7 @@
             t.DT_RowId = data[i].mindmapid+"_"+data[i].id;
             t.slno=++count;
             t.title=data[i].title;
-            t.date=data[i].createddate;
+            t.date=TTS.utils.dateConv(data[i].createddate);
             dataset.push(t);
         }
 

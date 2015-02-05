@@ -99,6 +99,9 @@ $('#fromdate,#tilldate').datetimepicker({
     i.ww-delete{
         color: red;
     }
+    .table-responsive{
+        padding: 10px;
+    }
 </style>
 {% endblock morecss %}
 
@@ -152,7 +155,7 @@ TTS.forms.writtenworklist = function(data){
             t.DT_RowId  = "var_"+data[i].writtenworkid;
             t.slno      = ++count_new;
             t.title     = data[i].writtenworktitle;
-            t.date      = data[i].createddate;
+            t.date      =TTS.utils.dateConv(data[i].createddate);
             t.action    = "<i class='fa fa-close fa-lg ww-delete'></i>"
             dataset_new.push(t);
         }
