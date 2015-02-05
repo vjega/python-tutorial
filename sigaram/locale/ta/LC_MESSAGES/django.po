@@ -7,8 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-04 02:30+0000\n"
-"POT-Creation-Date: 2015-02-05 13:28+0000\n"
+"POT-Creation-Date: 2015-02-05 14:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,7 +91,6 @@ msgstr ""
 #: templates/portalteacher/addwrittenwork.html:362
 #: templates/portalteacher/assignchapter.html:377
 #: templates/portalteacher/assignchapter.html:406
-#: templates/portalteacher/assignedmindmaplist.html:108
 #: templates/portalteacher/assignedmindmaplist.html:111
 #: templates/portalteacher/assignedresourcelist.html:114
 #: templates/portalteacher/assignmindmap.html:336
@@ -625,7 +623,6 @@ msgstr "மாணவர்"
 
 #: portaladmin/views.py:93 portaladmin/views.py:307 portaladmin/views.py:345
 #: student/views.py:68 teacher/views.py:74
-#: templates/portaladmin/activitystatistics.html:103
 #: templates/portaladmin/activitystatistics.html:109
 #: templates/portaladmin/adminlist.html:174
 #: templates/portaladmin/billboard.html:64
@@ -670,7 +667,6 @@ msgstr "மாணவர்"
 #: templates/portalteacher/activitystatistics.html:102
 #: templates/portalteacher/adminlist.html:129
 #: templates/portalteacher/allschoolresourcelist.html:183
-#: templates/portalteacher/assignedmindmaplist.html:103
 #: templates/portalteacher/assignedmindmaplist.html:106
 #: templates/portalteacher/assignedresourcelist.html:109
 #: templates/portalteacher/billboard.html:64
@@ -711,7 +707,6 @@ msgid "Assignments"
 msgstr "ஒப்படைப்புகள்"
 
 #: portaladmin/views.py:95 student/views.py:70 teacher/views.py:76
-#: templates/portaladmin/activitystatistics.html:111
 #: templates/portaladmin/activitystatistics.html:117
 #: templates/portaladmin/billboard.html:78
 #: templates/portaladmin/billcomprehensionanswerrating.html:126
@@ -749,7 +744,6 @@ msgstr "ஒப்படைப்புகள்"
 #: templates/portalstudent/worklistinfo.html:112
 #: templates/portalteacher/activitystatistics.html:105
 #: templates/portalteacher/allschoolresourcelist.html:191
-#: templates/portalteacher/assignedmindmaplist.html:111
 #: templates/portalteacher/assignedmindmaplist.html:114
 #: templates/portalteacher/assignedresourcelist.html:117
 #: templates/portalteacher/billboard.html:78
@@ -1070,7 +1064,6 @@ msgstr "முடியும் தேதி"
 msgid "Search"
 msgstr "தேடு"
 
-#: templates/portaladmin/activitystatistics.html:108
 #: templates/portaladmin/activitystatistics.html:114
 msgid "Works"
 msgstr "வேலை"
@@ -2234,6 +2227,10 @@ msgstr ""
 #: templates/portalteacher/rubric_edit.html:32
 msgid "Excel Import"
 msgstr ""
+
+#: templates/portalteacher/rubric_view.html:39
+msgid "Go back to list"
+msgstr "பட்டியலிட திரும்பிப் போ"
 
 #: templates/portalteacher/stickynotes.html:456
 #, fuzzy
