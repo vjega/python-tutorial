@@ -207,7 +207,7 @@ TTS.forms.renderstudentlist = function(data){
 
 TTS.forms.rubricslist = function() {
     BootstrapDialog.show({  
-        title: 'Rubrics List',
+        title: '{% trans "Rubrics" %}',
         message: $($('#rubricslist').render()),
         onshown: function(dialogRef){
             $.ajax({
@@ -238,7 +238,7 @@ TTS.forms.rubricslist = function() {
 
             }
             },*/{
-            label: '{% trans "Close" %}',
+            label: '{% trans "Cancel" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }
@@ -261,7 +261,7 @@ TTS.forms.assessmentassigninglist = function() {
             });
         },
         buttons: [{
-            label: 'Add',
+            label: '{%trans "Add" %}',
             cssClass: 'btn-primary',
             action: function(){
                 //var data = TTS.utils.serilaizeJson("#newfolderfrm");

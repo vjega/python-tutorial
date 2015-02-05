@@ -280,7 +280,7 @@ def studentresourcelist(request):
 @login_required
 @switchlanguage
 def assignchapter(request):
-    schools = models.Schoolinfo.objects.all()
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/assignchapter.html', 
                     {'assignchapter':assignchapter,'schools':schools,
@@ -289,7 +289,7 @@ def assignchapter(request):
 @login_required
 @switchlanguage
 def assignresource(request):
-    schools = models.Schoolinfo.objects.all()
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/assignresource.html', 
                     {'assignresource':assignresource,'schools':schools,

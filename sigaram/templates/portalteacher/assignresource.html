@@ -126,7 +126,7 @@
 <div class="row">
     <div class="control-group col-lg-7">
         <div class="controls">
-            <button class="btn btn-success" id="choose-rubric"> {% trans "Select" %}</button>
+            <button class="btn btn-primary" id="choose-rubric"> {% trans "Select" %}</button>
         </div>
     </div>
 </div>
@@ -141,7 +141,6 @@
     </div>
 </div>
 </script>
-
 
 <script id="assessmentassigninglist" type="text/x-jsrender">
 <div class="row">
@@ -284,7 +283,7 @@ TTS.forms.assessmentassigninglist = function() {
 
 TTS.forms.rubricslist = function() {
     BootstrapDialog.show({  
-        title: 'Rubrics List',
+        title: '{% trans "Rubrics" %}',
         message: $($('#rubricslist').render()),
         onshown: function(dialogRef){
             $.ajax({
@@ -315,7 +314,7 @@ TTS.forms.rubricslist = function() {
 
             }
             },*/{
-            label: '{% trans "Close" %}',
+            label: '{% trans "Cancel" %}',
             action: function(dialogItself){
                 dialogItself.close();
             }
