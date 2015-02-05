@@ -134,7 +134,7 @@ TTS.forms.renderteacher = function(data){
         t.DT_RowId = data[i].id;
         t.push(++count);
         t.push(data[i].title);
-        t.push(data[i].createddate);
+        t.push(TTS.utils.datetimeConv(data[i].createddate));
         dataset.push(t);
     }
     if (TTS.forms.table) {

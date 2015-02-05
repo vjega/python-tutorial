@@ -87,7 +87,7 @@ TTS.forms.renderrubricsinfo = function(data){
             "title": data[i].title,
             "detail": data[i].description,
             "teacher": data[i].teacher,
-            "time" : data[i].ts,
+            "time" : TTS.utils.datetimeConv(data[i].ts),
             "delete" : "<i class='tts-delete fa fa-trash fa-lg'></i>"
         });
     }

@@ -17,6 +17,7 @@ TTS.utils.serilaizeJson =  function (form){
 };
 
 
+
 TTS.utils.guid = (function() {
   function s4() {
     return Math.floor((1 + Math.random()) * 0x10000)
@@ -79,6 +80,15 @@ TTS.utils.dateConv =  function (str) {
             '-'+date.getMonth()+1+
             '-'+date.getFullYear();
 }
+
+TTS.utils.datetimeConv = function(dtstring){
+    //2015-02-05T13:34:26Z
+    var t = dtstring.split('T');
+    var d = t[0].split('-')
+    return d[2] +'-'+ d[1] +'-'+d[0]+
+           ' '+t[1].replace('Z',''); 
+
+};
 
 
 TTS.utils.summer_encode = function (str) {

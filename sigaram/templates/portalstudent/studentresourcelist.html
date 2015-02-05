@@ -133,7 +133,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
             temp = "#";
         } 
         t.push("<a href='"+temp+"' id='"+data[i].resourceid+"' ><p class='col-sm-3 pull-left'><img src='/static/"+data[i].thumbnailurl+"'></p> " + data[i].resourcetitle +"</a>");
-        t.push(data[i].createddate);
+        t.push(TTS.utils.datetimeConv(data[i].createddate));
         dataset.push(t);
     }
 

@@ -99,7 +99,7 @@ TTS.forms.renderstudentwork = function(data){
         t.slno = ++count;
         t.title = data[i].resourcetitle;
         t.type = data[i].resourcetype;
-        t.date = data[i].createddate;
+        t.date = TTS.utils.datetimeConv(data[i].createddate);
         t.note = "<i> Note</i>";
         dataset.push(t);
     }

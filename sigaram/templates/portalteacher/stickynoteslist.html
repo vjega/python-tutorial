@@ -1,4 +1,4 @@
-{% extends 'portalteacher/base.html' %}
+TTS.utils.datetimeConv({% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% load crispy_forms_tags %}
@@ -42,6 +42,9 @@
 <style>
     #addrec:hover, .tts-delete:hover, .tts-edit:hover, .sticky_title:hover{
         cursor: pointer;
+    }
+    #wrapper{
+        padding-top:60px;
     }
 </style>
 {% endblock morecss %}
@@ -157,7 +160,7 @@ TTS.forms.renderteacher = function(data){
         t.DT_RowId = data[i].id;
         t.slno=++count;
         t.title=data[i].title;
-        t.date=data[i].createddate;
+        t.date=TTS.utils.datetimeConv(data[i].createddate);
         t.del = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);
     }

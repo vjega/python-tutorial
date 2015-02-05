@@ -144,7 +144,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
             temp = "#";
         } 
         t.title ="<a href='"+temp+"' id='"+data[i].resourceid+"' ><p class='col-sm-3 pull-left'><img src='/static/"+data[i].thumbnailurl+"'></p> " + data[i].resourcetitle +"</a>";
-        t.date= data[i].createddate;
+        t.date= TTS.utils.datetimeConv(data[i].createddate);
         t.assignment="<a href='javascript:void(0)' class='assignment' id='"+data[i].resourceid+"' ><i class='fa fa-share fa-2x'></i></a>";
         dataset.push(t);
     }
