@@ -53,7 +53,7 @@
                                 </div>
                             </a>
                                 <div class="folder-delete text-right">
-                                    <i id="new-folder-delete" class='fa fa-trash' name="{{folder.folder_id}}"></i>
+                                    <i id="new-folder-delete" class='fa fa-trash new-folder-delete' name="{{folder.folder_id}}"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
                                     <div class="tent-medium" >{{folder.folder_name}}</div>
@@ -233,7 +233,7 @@ $(document).ready(function(){
         });
     });
     
-    $("#new-folder-delete").on("click", function(){
+    $(".new-folder-delete").on("click", function(){
         if (confirm("Are you sure want to delete?")) {
             var folder_id = $(this).attr("name");
             TTS.forms.deletenewfolder(folder_id)

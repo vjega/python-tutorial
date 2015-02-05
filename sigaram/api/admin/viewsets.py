@@ -1805,6 +1805,12 @@ class RubricsViewSet(viewsets.ModelViewSet):
         adminrubrics.status = rubricsdata.get('status')
         adminrubrics.ts = time.strftime('%Y-%m-%d %H:%M:%S')
         adminrubrics.save()
+
+        # activity = models.Activitylog()
+        # activity.loginid=request.GET.username
+        # activity.pagename=viewassignmentanswer
+        # activity.operation=insert
+        # activity.stringsentence=insert
         return Response(request.DATA)
 
     def update(self, request, pk=None):
@@ -2886,8 +2892,6 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         return Response(result)
     
     def create(self, request):
-        print "*"*80
-        print request.user.get_full_name()
         topics = models.Topicinfo()
         topicinfodata =  json.loads(request.DATA.keys()[0])
         topics.topicid = topicinfodata.get('topicid',0)
