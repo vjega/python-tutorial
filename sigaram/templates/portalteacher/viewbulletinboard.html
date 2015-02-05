@@ -54,7 +54,7 @@
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
-
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 
@@ -69,7 +69,7 @@ TTS.forms = TTS.forms || {}
 TTS.forms.renderteacherresourceinfo = function(data){
     $("#resource-title").html(data.messagetitle);
     $("#resource-announcer").html(data.message);
-    $("#resource-date").html(data.posteddate);
+    $("#resource-date").html(TTS.utils.dateConv(data.posteddate));
     if (data.attachmenturl!=0) {
         $("#view-resource").html("<a target='_blank' href='../static/"+data.attachmenturl+"'' >{% trans 'View' %}</a>");
     }else {
