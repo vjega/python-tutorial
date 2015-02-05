@@ -608,3 +608,9 @@ ul.forum li {
 .heading{
         color:#fff;
 }
+.panel-heading{
+    font-weight: bold;
+}
+ .qq-upload-file, .qq-upload-size {
+        color: #FFFF00;
+}
