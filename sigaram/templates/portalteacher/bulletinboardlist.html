@@ -157,7 +157,9 @@ TTS.forms.renderannouncement = function(data){
         t.DT_RowId = data[i].bulletinboardid;
         t.slno = ++count;
         t.title = data[i].messagetitle;
-        t.declared = data[i].messagetitle + " "+data[i].postedby+"<br />"+data[i].posteddate;
+        t.declared = data[i].messagetitle + " "+data[i].postedby+"<br />"+
+                     TTS.utils.dateConv(data[i].posteddate);
+                     
         t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
