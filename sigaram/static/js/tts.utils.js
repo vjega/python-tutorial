@@ -73,6 +73,13 @@ TTS.utils.ajaxloaderstop =  function (sParam) {
     $("#top-notification").css('visibility','hidden');
 }
 
+TTS.utils.dateConv =  function (str) {
+        date = new Date(str);
+        return date.getDate()+
+            '-'+date.getMonth()+1+
+            '-'+date.getFullYear();
+}
+
 
 TTS.utils.summer_encode = function (str) {
     return str.replace(/:/g, "~")
