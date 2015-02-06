@@ -114,7 +114,8 @@ TTS.forms = TTS.forms || {}
 
 TTS.forms.renderviewforum = function(data){
     $("#topic_header").html(data['topicname']);
-    $("#topic_header_posteddate").html(data['username'] +" On "+data['createddate']);
+    $("#topic_header_posteddate").html(data['username'] +" On "
+                                                        +TTS.utils.datetimeConv(data['createddate']));
     $("#topic_details").html(data['topicdetails']);
     var comments = TTS.forms.processcomment(data);
     $("#comments").html(comments);

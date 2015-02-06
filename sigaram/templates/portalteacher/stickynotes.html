@@ -241,8 +241,8 @@
 
 <script id="sticky-text" type="text/sticky">
 <div class='color_container'>
-    <div id='preview_color' class='yellow'>Preview</div>
-        <div class='control-label col-sm-4'>Color</div>
+    <div id='preview_color' class='yellow'>{% trans "Preview" %}</div>
+        <div class='control-label col-sm-4'>{% trans "Color" %}</div>
         <div class='control-label col-sm-8 color_values' id="color-swatch">
     </div>
 </div>
@@ -301,7 +301,7 @@ TTS.forms.FileUploader = function() {
 TTS.forms.showstickyform = function() {
     var colors = ["yellow", "blue", "green","purple", "pink", "grey","red", "orange", "maroon", "gold"];
     BootstrapDialog.show({
-        title: 'Add Sticky note',
+        title: '{% trans "Add Sticky note" %}',
         message: $($('#sticky-form').render() +  $("#sticky-text").text()), 
         onshown: function(){
             $('.summernote').summernote();
@@ -529,7 +529,7 @@ TTS.forms.renderstickynotes = function(data){
             }
             sticky_html += "</div>";
         } else {
-            sticky_html += "<div id='comment'>No comment</div>";
+            sticky_html += "<div id='comment'>{% trans "No comment" %}</div>";
         }
         sticky_html += "</div>";
         sticky_html += "</div>";
