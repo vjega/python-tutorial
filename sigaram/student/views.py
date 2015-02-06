@@ -30,13 +30,15 @@ def home(request):
         "link" : u"resourcetype",
         "caption": _("Assignments"),
         "stat": 25
-        }, {
-        "color": u"green",
-        "icon" : u"book",
-        "link" : u"workspace",
-        "caption": _("My works"),
-        "stat": 64
-        }, {
+        },
+        # {
+        # "color": u"green",
+        # "icon" : u"book",
+        # "link" : u"workspace",
+        # "caption": _("My works"),
+        # "stat": 64
+        # },
+        {
         "color": u"yellow",
         "icon" : u"pencil-square-o",
         "link" : u"studentnoteslist",
@@ -49,13 +51,13 @@ def home(request):
         "caption": _("Written Work"),
         "stat": 125
         },
-        {
-        "color": u"green",
-        "icon" : u"desktop",
-        "link" : u"studentviewassessments",
-        "caption": _("Practicals"),
-        "stat": 125
-        },
+        # {
+        # "color": u"green",
+        # "icon" : u"desktop",
+        # "link" : u"studentviewassessments",
+        # "caption": _("Practicals"),
+        # "stat": 125
+        # },
         {
         "color": u"primary",
         "icon" : u"sitemap",
