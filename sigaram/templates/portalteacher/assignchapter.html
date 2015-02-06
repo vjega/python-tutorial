@@ -4,7 +4,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Assignments" %}</h2>
+        <h2 class="page-header">{% trans "Student" %} {% trans "Resources" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -46,7 +46,7 @@
 <input type="hidden" id="set_rubric_id" name="rub_id" value="" />
 <div class="row">
     <div class="form-group" class="col-sm-2">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Note" %}</label>
+        <label for="folder_name" class="col-sm-2 control-label heading">{% trans "Note" %}</label>
     </div>
     </div>
     <div class="form-group">
@@ -54,11 +54,11 @@
     </div>
     <div class="row">
 
-        <div class="form-group col-lg-2">
+        <div class="form-group col-lg-3">
            <button class="btn btn-warning" id="connect-rubrics"><i class="flaticon-a10"></i> {% trans "Connect" %} {% trans "Rubrics" %}</button>
         </div>
 
-        <div class="bs-docs-grid col-lg-10">
+        <div class="bs-docs-grid col-lg-9">
             <div class="row show-grid" style="margin-top:0px">
                 <div class="col-lg-12" style="display:none" id="set_rubric_text">
                 </div>

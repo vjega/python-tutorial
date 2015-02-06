@@ -10,7 +10,7 @@
 </div>
 <div class="row">
     <div class="form-group" class="col-sm-3">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Schools" %}
+        <label for="folder_name" class="col-sm-2 control-label heading">{% trans "Schools" %}
         </label>
         <div class="col-sm-4">
             <select name="school_name" class="form-control" id="school_name">
@@ -21,7 +21,7 @@
         </div>
     </div>
     <div class="form-group" class="col-sm-3" id="classdetails">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Class" %}</label>
+        <label for="folder_name" class="col-sm-2 control-label heading">{% trans "Class" %}</label>
         <div class="col-sm-2">
             <select name="classid" class="form-control" id="classid">
                 {% for class in classes %}
@@ -30,7 +30,7 @@
             </select>
         </div>
     </div>
-</div>
+</div><br>
 
 {% endblock topcontent %}
 {% block botcontent %}

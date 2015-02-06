@@ -11,7 +11,7 @@
 </div>
 <div class="row">
     <div>    
-        <label>{% trans "Select Any Users" %}</label>
+        <label class="heading">{% trans "Select Any Users" %}</label>
         <span>
             <select id="category">recentactivities
                 <option value="admin">Administrator</option>
@@ -22,6 +22,8 @@
     </div>
 </div><br />
 <div class="row" id="schooldetails">
+    <div class="col-lg-1">
+    </div>
     <div class="col-lg-2">
         <span >
             <select name="school_name" class="form-control" id="school_name">
@@ -303,5 +305,5 @@ $(document).ready(function(){
     });
     
 });
-</script>
+</script><br><br>
 {% endblock scriptcontent %}
