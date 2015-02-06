@@ -50,13 +50,15 @@ def home(request):
         "link" : u"assignedresourcelist",
         "caption": _("Assignment"),
         "stat": 25
-        },{
+        },
+        {
         "color": u"green",
         "icon" : u"pencil-square-o",
         "link" : u"writtenwork",
         "caption":_("Written Work"),
         "stat": 125
-        },{
+        },
+        {
         "color": u"red",
         "icon" : u"pencil",
         "link" : u"viewassessments",

@@ -14,7 +14,7 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans "Announcement " %}
+            {% trans "Announcement" %}
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
@@ -137,11 +137,11 @@ TTS.forms.renderannouncement = function(data){
             { "title": "{% trans "Announcer" %}",
               "data" : "declared"
             },
-            { "title": "{% trans "Delete" %}",
+            /*{ "title": "{% trans "Delete" %}",
               "class": "text-center",
               "data" : "delete",
               "bSortable":false  
-            },  
+            },  */
         ];
     var dataset = [];
     
@@ -152,7 +152,7 @@ TTS.forms.renderannouncement = function(data){
         t.slno = ++count;
         t.title = data[i].messagetitle;
         t.declared = data[i].messagetitle + " "+data[i].postedby+"<br />"+data[i].posteddate;
-        t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
+        //t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
 
