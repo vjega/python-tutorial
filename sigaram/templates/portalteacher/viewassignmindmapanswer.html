@@ -159,7 +159,19 @@ TTS.forms.mindmap = function(node){
         title: '{% trans "Add MindMap" %}',
         message: $($('#admin-form').render()),
         onshown: function(){
-          $('#summernote').val(node.label()).summernote();
+          $('#summernote').val(node.label()).summernote({
+          toolbar: [
+            ['edit',['undo','redo']],
+            ['style', ['style']], // no style button
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            //['insert', ['picture', 'link']], // no insert buttons
+            //['table', ['table']], // no table button
+            //['help', ['help']] //no help button
+          ]
+    });
         },
         buttons: [{
             label: '{% trans "Update Text" %}',
@@ -197,7 +209,19 @@ TTS.forms.mindmap = function(node){
     });*/
 };
 $(document).ready(function(){
-    $('.summernote').summernote();
+    $('.summernote').summernote({
+          toolbar: [
+            ['edit',['undo','redo']],
+            ['style', ['style']], // no style button
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            //['insert', ['picture', 'link']], // no insert buttons
+            //['table', ['table']], // no table button
+            //['help', ['help']] //no help button
+          ]
+    });
 
     var assignedid = TTS.utils.getUrlParameter('assignedid');
 
