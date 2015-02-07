@@ -30,7 +30,7 @@
             <div class="reply_textarea">
                 <div class="form-group col-sm-12">
                     <div class="controls col-sm-12">
-                        <textarea id="thread_reply_textarea" placeholder="Thread reply" rows="3" id="detail_content" class="textinput textInput form-control"></textarea> 
+                        <textarea id="thread_reply_textarea" placeholder={% trans "Thread reply" %} rows="3" id="detail_content" class="textinput textInput form-control"></textarea> 
                     </div>
                 </div>
                 <div class="form-group col-sm-12">
@@ -96,10 +96,10 @@
 <script id="render-textarea" type="text/forum">
     <div class="comment_text_area form-group panel-body">
         <div class="form-group row">
-            <textarea class="comment_reply_textarea textinput form-control" placeholder="Reply..."
-            rows="2"></textarea> 
+            <textarea class="comment_reply_textarea textinput form-control" placeholder=
+                                                            {% trans "Reply" %} rows="2"></textarea> 
         </div>
-        <button class="save_comment_reply btn btn-primary center-block pull-right">Save</button>
+        <button class="save_comment_reply btn btn-primary center-block pull-right">{% trans "Save" %}</button>
     </div>
 </script>
 
@@ -132,7 +132,7 @@ TTS.forms.renderviewforum = function(data){
 TTS.forms.processcomment = function (obj) {
     c = "<ul class='forum'>";
     for (var i in obj['comments']) {
-        c += "<li><img src='{% static "img/blank_img.png" %}'> "+obj['comments'][i]['postdetails']+" <span class='user_details'> "+obj['comments'][i]['postedby']+" says on: "+obj['comments'][i]['posteddate']+"</span> &nbsp;&nbsp;<i class='fa fa-reply reply_comment' name='"+obj['comments'][i]['postid']+"'></i> <div id='new_div' style='display: none;'></div></li>";
+        c += "<li><img src='{% static "img/blank_img.png" %}'> "+obj['comments'][i]['postdetails']+" <span class='user_details'> "+obj['comments'][i]['postedby']+" says on: "+TTS.utils.datetimeConv(obj['comments'][i]['posteddate'])+"</span> &nbsp;&nbsp;<i class='fa fa-reply reply_comment' name='"+obj['comments'][i]['postid']+"'></i> <div id='new_div' style='display: none;'></div></li>";
         if (typeof (obj['comments'][i]['comments']) !== 'undefined' 
             && obj['comments'][i]['comments'].length ){
             c += TTS.forms.processcomment(obj['comments'][i]);

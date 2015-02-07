@@ -73,7 +73,7 @@
     <div class="form-group" class="col-sm-2">
         <label for="folder_name" class="col-sm-2 control-label heading">{% trans "Title" %}</label>
     </div><br />
-    <div class="form-group">
+    <div class="form-group col-lg-12">
         <textarea id="title" class="summernote"></textarea>
     </div>
 </div><br />
@@ -81,7 +81,7 @@
     <div class="form-group" class="col-sm-2">
         <label for="folder_name" class="col-sm-2 control-label heading">{% trans "Notes" %}</label>
     </div><br />
-    <div class="form-group">
+    <div class="form-group col-lg-12">
         <textarea id="notes" class="summernote"></textarea>
     </div>
 </div><br />
@@ -199,7 +199,19 @@ $(document).ready(function(){
     } else {
         $("#component").val('{% trans "Picture Composition" %}');
     }
-    $('.summernote').summernote();
+    $('.summernote').summernote({
+          toolbar: [
+            ['edit',['undo','redo']],
+            ['style', ['style']], // no style button
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            //['insert', ['picture', 'link']], // no insert buttons
+            //['table', ['table']], // no table button
+            //['help', ['help']] //no help button
+          ]
+    });
     var uploader = new qq.FileUploader({
         action: "/admin/student-studentres-upload",
         element: $('#img-uploader')[0],
