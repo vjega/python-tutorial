@@ -306,7 +306,19 @@ TTS.forms.showstickyform = function() {
         title: 'Add Sticky note',
         message: $($('#sticky-form').render() +  $("#sticky-text").text()), 
         onshown: function(){
-            $('.summernote').summernote();
+            $('.summernote').summernote({
+          toolbar: [
+            ['edit',['undo','redo']],
+            ['style', ['style']], // no style button
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            //['insert', ['picture', 'link']], // no insert buttons
+            //['table', ['table']], // no table button
+            //['help', ['help']] //no help button
+          ]
+    });
             for (var i in colors) {
                $("#color-swatch").append("<div class='color "+colors[i]+"' name='"+colors[i]+"' ></div>");
             }
@@ -370,7 +382,19 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
         title: 'Edit Sticky note',
         message: $($('#sticky-form').render() + color_div),
         onshown: function(){
-            $('.summernote').summernote().code(content);
+            $('.summernote').summernote({
+          toolbar: [
+            ['edit',['undo','redo']],
+            ['style', ['style']], // no style button
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            //['insert', ['picture', 'link']], // no insert buttons
+            //['table', ['table']], // no table button
+            //['help', ['help']] //no help button
+          ]
+    }).code(content);
 
            $(".color").on("click", function(){
                 var clsclr = $(this).prop("class").split(" ");
