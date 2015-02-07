@@ -345,6 +345,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
 
         queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('-createddate')
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
+        print queryset;
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
@@ -429,7 +430,6 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
         %s
         ORDER BY wwi.createddate DESC
         ''' % (request.user.username,datecond)
-        print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -2995,3 +2995,44 @@ class RubricImportViewSet(viewsets.ModelViewSet):
             rubricmatrix.save()
 
         return Response("msg")
+
+class studentwrittenworkViewSet(viewsets.ModelViewSet):
+    queryset = models.Writtenworkinfo.objects.all()
+    serializer_class = adminserializers.WrittenworkinfoSerializer
+
+    def list(self, request):
+        fieldcond=""
+        if request.GET.get('writtenworkid'):
+            fieldcond="AND wwi.writtenworkid=%s"%request.GET.get('writtenworkid')
+        sql = '''
+        SELECT  wwi.writtenworkid,
+                wwi.writtenworktitle,
+                awi.answertext,
+                awi.isclassroom,
+                date(awi.assigneddate) AS assigneddate,
+                date(awi.publisheddate) AS publisheddate,
+                wwi.description,
+                au.first_name,
+                au.last_name,
+                date(awi.assigneddate) as assigneddate,
+                awi.studentid 
+        FROM writtenworkinfo wwi 
+        INNER JOIN assignwrittenworkinfo awi ON awi.writtenworkid = wwi.writtenworkid
+        INNER JOIN auth_user au ON au.username=awi.studentid 
+        WHERE awi.studentid = '%s'
+        %s
+        ORDER BY wwi.createddate DESC
+        ''' % (str(request.user.username),fieldcond)
+        print sql;
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+    def destroy(self, request, pk):
+        models.Writtenworkinfo.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')

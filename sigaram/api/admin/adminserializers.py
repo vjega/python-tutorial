@@ -59,7 +59,8 @@ class WrittenworkinfoSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Writtenworkinfo
         fields = ('writtenworkid',  'writtenworktitle','description',
                   'writtenimage','schoolid', 'classid','isassigned',
-                  'createdby','isdeleted','createddate')
+                  'createdby','isdeleted','createddate','publisheddate',
+                  'assigneddate','answertext','isclassroom')
 
 class ChapterinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

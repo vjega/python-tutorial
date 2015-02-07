@@ -512,7 +512,7 @@ def studentprofile(request):
     folders = [{
         "id"   :"1",
         "name" :_("Assignments"),
-        "href" :"studentassignedresourcelist"
+        "href" :"studentassignedresourcelist?studentid=%s" % request.GET.get('studentid')
         },{
         "id"   :"2",
         "name" :_("Written Work"),

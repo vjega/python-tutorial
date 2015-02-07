@@ -35,7 +35,7 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
-    #addrec:hover, #admin-main-tbl tbody tr:hover{
+    #addrec:hover, .tts-view:hover{
         cursor: pointer;
     }
 </style>
@@ -53,24 +53,24 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
+TTS.studentid = TTS.utils.getUrlParameter('studentid')
 TTS.forms.renderstudentwork = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"   
+              "data" : "slno",
+              "bSortable":false   
             },
             { "title": "{% trans "Title" %}",
               "data" : "title" 
             },
-            { "title": "{% trans "Type" %}",
-              "data" : "type" 
-            }, 
             { "title": "{% trans "Date" %}",
               "data" : "date" 
             }, 
             { "title": "{% trans "Note" %}",
               "class": "text-center",
-              "data" : "note"   
+              "data" : "note",
+              "bSortable":false   
             }, 
         ];
     
@@ -79,13 +79,12 @@ TTS.forms.renderstudentwork = function(data){
     var count = 0
     
     for(var i in data){
-        var t = [];
-        t.DT_RowId = data[i].resourceid;
+        var t = {};
+        t.DT_RowId = data[i].writtenworkid;
         t.slno = ++count;
-        t.title = data[i].resourcetitle;
-        t.type = data[i].resourcetype;
-        t.date = data[i].createddate;
-        t.note = "<i> Note</i>";
+        t.title = data[i].writtenworktitle;
+        t.date = TTS.utils.dateConv(data[i].assigneddate);
+        t.note = "<i class='flaticon-zoom38 tts-view' id="+data[i].writtenworkid+"></i>";
         dataset.push(t);
     }
     if (TTS.forms.table) {
@@ -102,13 +101,14 @@ TTS.forms.renderstudentwork = function(data){
 };
 $(document).ready(function(){
     $.ajax({
-        "url":"/api/student/resourceinfo/?studentid=&studentloginid=&format=json",
+        "url":"/api/admin/studentwrittenworkinfo/?studentid="+TTS.studentid+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstudentwork(data);
+        $("table#student-written-tbl thead tr th").removeClass('sorting_asc');
     });
-    $('#student-written-tbl').on('click', 'tbody tr', function(){
-        window.location = 'viewstudentwork?resourceid='+this.id;
+    $('#student-written-tbl').on('click', '.tts-view', function(){
+        window.location = 'viewstudentwork?studentid='+TTS.studentid+'&writtenworkid='+this.id;
     });
 });
 
