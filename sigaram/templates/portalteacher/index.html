@@ -208,7 +208,7 @@ TTS.forms.foldersave = function() {
     
 
 $(document).ready(function(){
-    $('#admin-main-tbl').dataTable();
+    $('#admin-main-tbl').dataTable({"language" : TTS.utils.datatable_ta});
     $("#page-wrapper").on("click", "#new-folder", function(){
         BootstrapDialog.show({
             title: "{% trans "New Folder" %}",

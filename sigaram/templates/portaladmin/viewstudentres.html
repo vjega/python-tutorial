@@ -11,7 +11,7 @@
 </div>
 <div class="row">
     <div >    
-        <label class="col-lg-2">{% trans "Type" %}</label>
+        <label class="col-lg-2 heading">{% trans "Type" %}</label>
         <span>
             <select id="category" class="col-lg-3"  >
                 <option value="text">Text</option>
@@ -23,7 +23,7 @@
 </div><br />
 <div class="row">
     <div>
-        <label class="col-lg-2">{% trans "Class" %}</label>
+        <label class="col-lg-2 heading">{% trans "Class" %}</label>
         <span>
             <input class="col-lg-3" type="text" id="class_details" readonly>
         </span>
@@ -31,7 +31,7 @@
 </div><br />
 <div class="row">
     <div>
-        <label class="col-lg-2">{% trans "Select Section" %}</label>
+        <label class="col-lg-2 heading">{% trans "Select Section" %}</label>
        <span>
             <input class="col-lg-3" type="text" id="section" readonly>
         </span>
@@ -39,7 +39,7 @@
 </div><br />
 <div class="row">
     <div>
-        <label class="col-lg-2">{% trans "Component" %}</label>
+        <label class="col-lg-2 heading">{% trans "Component" %}</label>
         <span>
             <input class="col-lg-3" type="text" id="component" readonly>
         </span>
@@ -47,7 +47,7 @@
 </div><br />
 <div class="row">
     <div>
-        <label class="col-lg-2">{% trans "Chapter" %}</label>
+        <label class="col-lg-2 heading">{% trans "Chapter" %}</label>
         <span>
             <input class="col-lg-3" type="text" id="chapter_details" readonly>
         </span>
@@ -57,21 +57,21 @@
 {% block botcontent %}
 <div class="row">
     <div class="form-group" class="col-sm-2">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Thumpnail upload" %}</label>
+        <label for="folder_name" class="col-sm-2 control-label heading">{% trans "Thumpnail upload" %}</label>
         <span id="img-uploader">File Uploader Comes Here...</span>
     </div> 
     <input type="hidden" id="uploadurl">
 </div><br />
 <div class="row">
     <div class="form-group" class="col-sm-2">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Resource upload" %}</label>
+        <label for="folder_name" class="col-sm-2 control-label heading">{% trans "Resource upload" %}</label>
         <span id="file-uploader">File Uploader Comes Here...</span>
     </div> 
     <input type="hidden" id="thumpnailuploadurl">
 </div><br />
 <div class="row">
     <div class="form-group" class="col-sm-2">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Title" %}</label>
+        <label for="folder_name" class="col-sm-2 control-label heading">{% trans "Title" %}</label>
     </div><br />
     <div class="form-group">
         <textarea id="title" class="summernote"></textarea>
@@ -79,7 +79,7 @@
 </div><br />
 <div class="row">
     <div class="form-group" class="col-sm-2">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Notes" %}</label>
+        <label for="folder_name" class="col-sm-2 control-label heading">{% trans "Notes" %}</label>
     </div><br />
     <div class="form-group">
         <textarea id="notes" class="summernote"></textarea>
@@ -94,7 +94,7 @@
             <i class="fa fa-times fa-lg"></i> {% trans "Cancel" %} 
         </button>
     </span>
-</div>
+</div><br><br>
 {% endblock botcontent%}
 
 {% block morecss %}

@@ -11,7 +11,7 @@
 </div>
 <div class="row">
     <div class="form-group" class="col-sm-2">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Select School" %}</label>
+        <label for="folder_name" class="col-sm-2 control-label heading">{% trans "Select School" %}</label>
         <div class="col-sm-4">
             <select name="school_name" class="form-control" id="school_name">
                 {% for school in schools%}
@@ -147,7 +147,7 @@ TTS.forms.showteacherform = function() {
 
 TTS.forms.editteacher = function(id, data) {
     BootstrapDialog.show({
-        title: '{% trans "Edit Student" %}',
+        title: '{% trans "Edit Teacher" %}',
         message: $($('#teacher-form').render()),
         onshown: function(){
             TTS.forms.upload();

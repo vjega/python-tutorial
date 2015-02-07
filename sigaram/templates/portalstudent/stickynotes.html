@@ -244,8 +244,8 @@
 
 <script id="sticky-text" type="text/sticky">
 <div class='color_container'>
-    <div id='preview_color' class='yellow'>Preview</div>
-        <div class='control-label col-sm-4'>Color</div>
+    <div id='preview_color' class='yellow'>{% trans "Preview" %}</div>
+        <div class='control-label col-sm-4'>{% trans "Color" %}</div>
         <div class='control-label col-sm-8 color_values' id="color-swatch">
     </div>
 </div>
@@ -352,8 +352,8 @@ function findColor(cls, color) {
 TTS.forms.editstickyform = function(edit_id, content, color) {
    var colors = ["yellow", "blue", "green","purple", "pink", "grey","red", "orange", "maroon", "gold"];
     var color_div = "<div class='color_container'>"+
-                        "<div id='preview_color' class='"+color+"'>Preview</div>"+
-                        "<div class='control-label col-sm-4'>color</div>"+
+                        "<div id='preview_color' class='"+color+"'>{% trans "Preview" %}</div>"+
+                        "<div class='control-label col-sm-4'>{% trans "color" %}</div>"+
                         "<div class='control-label col-sm-8 color_values'>";
     for (var i = 0; i < colors.length; i++) { 
        color_div += "<div class='color "+colors[i]+"' name='"+colors[i]+"' ></div>";
@@ -381,7 +381,7 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
            TTS.forms.FileUploader();
         },
         buttons: [{
-            label: 'Update',
+            label: '{% trans "Update" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-student");

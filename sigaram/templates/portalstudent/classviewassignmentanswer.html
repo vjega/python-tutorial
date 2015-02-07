@@ -215,8 +215,8 @@ TTS.forms.renderassignedresourceinfo = function(data){
     TTS.forms.studentid = data[0].studentid;
     $("#assignedid").val(data[0].id);
     $("#resource-title").html(data[0].resourcetitle);
-    $("#assigned-date").html(data[0].createddate);
-    $("#answerd-date").html(data[0].answereddate);
+    $("#assigned-date").html(TTS.utils.dateConv(data[0].createddate));
+    $("#answerd-date").html(TTS.utils.dateConv(data[0].answereddate));
     $("#student-name").html(data[0].firstname+" "+data[0].lastname);
     $("#student-answer").html(data[0].answertext);
     $("#original-text").html(data[0].originaltext);
@@ -347,7 +347,7 @@ TTS.forms.renderanswereditinginfo = function(data, isapproved){
 TTS.forms.editanswerlist = function(spanid){
     var assignedid = $("#assignedid").val();
     BootstrapDialog.show({
-        title: 'Choose/Add Correction',
+        title: '{% trans "Choose Add Correction" %}',
         message: $($('#editanswerlist').render()),
         onshown: function(dialogRef){
             $.ajax({
@@ -359,14 +359,14 @@ TTS.forms.editanswerlist = function(spanid){
             });
         },
         buttons:  [{
-                        label: 'Add more corrections',
+                        label: '{% trans "Add more corrections" %}',
                         cssClass: 'btn-primary',
                         action: function(dialogItself){
                             $("#correction").show();
                         }
                    },
                    {
-                        label: 'Save corrections',
+                        label: '{% trans "Save corrections" %}',
                         cssClass: 'btn-primary',
                         action: function(dialogItself){
                             var modtext = $("#correction").val();

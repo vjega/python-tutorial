@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-06 17:34+0000\n"
+"POT-Creation-Date: 2015-02-07 08:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1071,6 +1071,7 @@ msgstr "வேலை"
 #: templates/portalstudent/stickynotes.html:17
 #: templates/portalstudent/stickynoteslist.html:8
 #: templates/portalstudent/stickynoteslist.html:18
+#: templates/portalstudent/stickynoteslist.html:82
 #: templates/portalteacher/base.html:190
 #: templates/portalteacher/stickynotes.html:8
 #: templates/portalteacher/stickynotes.html:17
@@ -1346,6 +1347,10 @@ msgstr "பட்டியல்"
 msgid "Add"
 msgstr "சேர்க்க"
 
+#: templates/portaladmin/adminlist.html:115
+msgid "Add Administrator"
+msgstr "புதிய நிர்வாகி சேர்க்கவும்"
+
 #: templates/portaladmin/base.html:106 templates/portaladmin/index.html:7
 #: templates/portalstudent/base.html:104 templates/portalteacher/base.html:111
 #: templates/portalteacher/index.html:7
@@ -1578,6 +1583,11 @@ msgstr "கருத்துகள்"
 msgid "Add Announcement"
 msgstr "புதிய அறிவிப்பு"
 
+#: templates/portaladmin/bulletinboard.html:14
+#: templates/portalteacher/bulletinboard.html:14
+msgid "Select Any Users"
+msgstr "பயனர் தேர்ந்தெடு"
+
 #: templates/portaladmin/bulletinboard.html:44
 #: templates/portaladmin/bulletinboardlist.html:17
 #: templates/portalteacher/bulletinboard.html:44
@@ -1798,6 +1808,24 @@ msgstr "பதில்"
 msgid "Status"
 msgstr "புள்ளி விவரம்"
 
+#: templates/portaladmin/classviewassignmentanswer.html:354
+#: templates/portalstudent/classviewassignmentanswer.html:350
+#: templates/portalteacher/classviewassignmentanswer.html:349
+msgid "Choose Add Correction"
+msgstr "திருத்தம் சேர்"
+
+#: templates/portaladmin/classviewassignmentanswer.html:366
+#: templates/portalstudent/classviewassignmentanswer.html:362
+#: templates/portalteacher/classviewassignmentanswer.html:361
+msgid "Add more corrections"
+msgstr "மேலும் திருத்தங்களை சேர்க்கவும்"
+
+#: templates/portaladmin/classviewassignmentanswer.html:373
+#: templates/portalstudent/classviewassignmentanswer.html:369
+#: templates/portalteacher/classviewassignmentanswer.html:368
+msgid "Save corrections"
+msgstr "திருத்தங்களை சேமிக்கவும்"
+
 #: templates/portaladmin/classviewassignmentanswer.html:621
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:619
 #: templates/portalstudent/classviewassignmentanswer.html:620
@@ -1908,6 +1936,14 @@ msgstr "மாணவர்"
 msgid "Add Student Resources"
 msgstr "புதிய வளம்"
 
+#: templates/portaladmin/studentslist.html:123
+msgid "Add Student"
+msgstr "புதிய மாணவர் சேர்க்கவும்"
+
+#: templates/portaladmin/studentslist.html:182
+msgid "Edit Student"
+msgstr "மாணவர் திருத்தம்"
+
 #: templates/portaladmin/studentslist.html:231
 #: templates/portaladmin/teacherslist.html:213
 #: templates/portalteacher/statisticsstudentslist.html:168
@@ -1937,10 +1973,8 @@ msgid "Add Teacher"
 msgstr "புதிய ஆசிரியர்"
 
 #: templates/portaladmin/teacherslist.html:150
-#, fuzzy
-#| msgid "Student"
-msgid "Edit Student"
-msgstr "மாணவர்"
+msgid "Edit Teacher"
+msgstr "ஆசிரியர் திருத்தம்"
 
 #: templates/portaladmin/viewbulletinboard.html:72
 #: templates/portaladmin/viewmyresourcelistwork.html:63
@@ -1958,6 +1992,7 @@ msgstr "மாணவர்"
 #: templates/portalteacher/billviewassignmentanswer.html:42
 #: templates/portalteacher/extraslist.html:94
 #: templates/portalteacher/thread.html:117
+#: templates/portalteacher/viewassignresource.html:103
 #: templates/portalteacher/viewassignwrittenwork.html:102
 #: templates/portalteacher/viewbulletinboard.html:74
 #: templates/portalteacher/viewmindmapassignedstudentlist.html:103
@@ -1981,13 +2016,11 @@ msgstr "கருத்துகள் இல்லை"
 
 #: templates/portaladmin/viewstudentres.html:60
 msgid "Thumpnail upload"
-msgstr ""
+msgstr "சிறுபடத்தின் பதிவேற்ற"
 
 #: templates/portaladmin/viewstudentres.html:67
-#, fuzzy
-#| msgid "Resources"
 msgid "Resource upload"
-msgstr "வளங்கள்"
+msgstr "வளங்கள் பதிவேற்ற"
 
 #: templates/portaladmin/viewstudentres.html:196
 msgid "Picture Conversation"
@@ -2122,6 +2155,29 @@ msgstr "வகுப்பறை"
 msgid "Dashboard"
 msgstr "முகப்பு"
 
+#: templates/portalstudent/stickynotes.html:247
+#: templates/portalstudent/stickynotes.html:355
+#: templates/portalteacher/stickynotes.html:244
+#: templates/portalteacher/stickynotes.html:353
+msgid "Preview"
+msgstr "முன்னோட்டம்"
+
+#: templates/portalstudent/stickynotes.html:248
+#: templates/portalteacher/stickynotes.html:245
+#: templates/portalteacher/stickynotes.html:354
+msgid "Color"
+msgstr "வண்ணம்"
+
+#: templates/portalstudent/stickynotes.html:356
+#, fuzzy
+#| msgid "Color"
+msgid "color"
+msgstr "வண்ணம்"
+
+#: templates/portalstudent/stickynotes.html:384
+msgid "Update"
+msgstr "மாற்று"
+
 #: templates/portalstudent/studentviewassessments.html:7
 msgid "Practicals"
 msgstr "செய்முறை"
@@ -2213,21 +2269,9 @@ msgstr "குறிப்பு"
 msgid "About me"
 msgstr "என்னைப்பற்றி"
 
-#: templates/portalteacher/bulletinboard.html:14
-msgid "Select Any Users"
-msgstr "பயனர் தேர்ந்தெடு"
-
-#: templates/portalteacher/classviewassignmentanswer.html:349
-msgid "Choose Add Correction"
-msgstr "திருத்தம் சேர்"
-
-#: templates/portalteacher/classviewassignmentanswer.html:361
-msgid "Add more corrections"
-msgstr "மேலும் திருத்தங்களை சேர்க்கவும்"
-
-#: templates/portalteacher/classviewassignmentanswer.html:368
-msgid "Save corrections"
-msgstr "திருத்தங்களை சேமிக்கவும்"
+#: templates/portalteacher/calendar.html:50
+msgid "Add Event"
+msgstr "நிகழ்வு சேர்க்க"
 
 #: templates/portalteacher/myprofile.html:8
 msgid "About Me"
@@ -2245,16 +2289,12 @@ msgstr ""
 msgid "Go back to list"
 msgstr "பட்டியலிட திரும்பிப் போ"
 
-#: templates/portalteacher/stickynotes.html:244
-msgid "Preview"
-msgstr "முன்னோட்டம்"
-
-#: templates/portalteacher/stickynotes.html:245
-msgid "Color"
-msgstr "வண்ணம்"
-
 #: templates/portalteacher/stickynotes.html:304
 msgid "Add Sticky note"
+msgstr "கருத்து இணை"
+
+#: templates/portalteacher/stickynotes.html:368
+msgid "Edit Sticky note"
 msgstr "கருத்து இணை"
 
 #: templates/portalteacher/stickynotes.html:456
@@ -2322,14 +2362,10 @@ msgid "Middle"
 msgstr ""
 
 #: templates/portalteacher/writtenwork.html:141
-#, fuzzy
-#| msgid "Animation"
 msgid "Action"
 msgstr "பட உரையாடல்"
 
 #: templates/portalteacher/writtenwork.html:191
-#, fuzzy
-#| msgid "Writing board"
 msgid "Writing job"
 msgstr "எழுத்து பலகை"
 
