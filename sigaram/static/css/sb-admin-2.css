@@ -492,7 +492,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', end
 
 .note-editable{
     background-color: #fff!important;
-    height:100%;
+    min-height:80px;
 }
 
 #notification-container {

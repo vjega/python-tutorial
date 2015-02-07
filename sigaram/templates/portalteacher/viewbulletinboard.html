@@ -19,14 +19,21 @@
             <div class="table-responsive">
             <table class="table table-striped table-bordered table-hover"
                      id="admin-main-tbl">
-                <div>
-                    <h3>{% trans "Title" %}:</h3>
+                <div class="col-lg-2 title">
+                    {% trans "Title" %}:
                 </div>
-                <div id="resource-title"></div>
-                <div>
-                    <h3>{% trans "Announcer" %}:</h3>
+                <div id="resource-title" class="col-lg-10 tbody"></div>
+                
+                <div class="col-lg-2 title">
+                    {% trans "Announcer" %}:
                 </div>
-                <div id="resource-announcer"></div>
+                <div id="" class="col-lg-10 tbody">pooja</div><br>
+                
+                <div class="col-lg-2 title">
+                    {% trans "Answer" %}:
+                </div>
+                <div id="resource-announcer" class="col-lg-10 tbody"></div><br>
+                
                 <div id="resource-date"></div>
                 <br />
                 <div id="view-resource">
@@ -108,8 +115,12 @@ $(document).ready(function(){
 </script>
 
 <style>
-h3, .h3{
+.title{
     font-size:20px;
+    font-weight: bold;
+}
+.tbody{
+    margin-top: 5px;
 }
 </style>
 {% endblock scriptcontent %}
