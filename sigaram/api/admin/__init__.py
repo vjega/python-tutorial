@@ -10,7 +10,7 @@ def create_login(group):
                                             email=admindata.get('emailid'), 
                                             password=admindata.get('password'),
                                             first_name=admindata.get('firstname'),
-                                            last_name=admindata.get('lastname'))
+                                            last_name='') #admindata.get('lastname'))
             g = Group.objects.get(name=group) 
             g.user_set.add(user)
             return f(obj, request)
