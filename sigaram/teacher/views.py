@@ -667,3 +667,8 @@ def viewassessmentqa(request):
 @switchlanguage
 def billboardviewassignwrittenworkanswer(request):
     return render(request, 'portalteacher/billboardviewassignwrittenworkanswer.html')
+
+@login_required
+@switchlanguage
+def viewstudentresource(request):
+    return render(request, 'portalteacher/viewstudentresource.html')
