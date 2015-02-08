@@ -106,7 +106,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
         teacher.classid = teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
         teacher.imageurl = teacherdata.get('imageurl')
-       # teacher.imageurl = #studentdata.get('imageurl')
+        #teacher.imageurl = #studentdata.get('imageurl')
         teacher.isdelete = 0
         teacher.createdby = request.user.id
         teacher.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
