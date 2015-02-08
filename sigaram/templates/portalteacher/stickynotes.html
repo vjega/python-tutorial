@@ -45,6 +45,10 @@
 <link rel="stylesheet" href="{%static "css/color.css" %}">
 <link rel="stylesheet" href="{%static "ajaxuploader/css/fileuploader.css" %}">
 <style>
+.imgwidth{
+    max-width: 550px !important;
+}
+
     #addrec:hover, .tts-delete:hover{
         cursor: pointer;
     }
@@ -596,9 +600,11 @@ TTS.forms.getfiletype = function (filename,id){
     var type;
     switch (file_extention) {
         case 'jpg':
+        case 'bmp':
         case 'jpeg':
         case 'png':
-            type = "<div class='modelbox_center' name='"+id+"'>Filename : "+name+" <br /><br /><img src='/static/"+filename+"' /></div>";
+        case 'gif':
+            type = "<div class='modelbox_center' name='"+id+"'>Filename : "+name+" <br /><br /><img src='/static/"+filename+"' class='imgwidth'/></div>";
             break;
         case 'mp3':
         case 'wav':
