@@ -147,7 +147,7 @@
                 t.DT_RowId = "vmm_"+data[i].id;
                 t.slno=++count_new;
                 t.title=data[i].title;
-                t.date=data[i].createddate;
+                t.date=TTS.utils.dateConv(data[i].createddate);
                 dataset_new.push(t);
             }
             if (data[i].issaved && !data[i].isanswered) {
@@ -155,7 +155,7 @@
                 t.DT_RowId = "vmm_"+data[i].id;
                 t.slno=++count_saved;
                 t.title=data[i].title;
-                t.date=data[i].createddate;
+                t.date=data[i].TTS.utils.dateConv(createddate);
                 dataset_saved.push(t);
             }
             if (data[i].isanswered) {
@@ -164,7 +164,7 @@
                 t.DT_RowId = "vma_"+data[i].id;
                 t.slno=++count_answered;
                 t.title=data[i].title;
-                t.date=data[i].createddate;
+                t.date=data[i].TTS.utils.dateConv(createddate);
                 dataset_answered.push(t);
             }
         }

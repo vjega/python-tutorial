@@ -100,6 +100,9 @@
 <style>
     .writtenworklist tbody tr:hover{
         cursor: pointer;
+    }
+    .table-responsive{
+        padding: 10px;
     }    
 </style>
 {% endblock morecss %}
@@ -151,7 +154,7 @@
                 t.DT_RowId = "vww_"+data[i].id;
                 t.slno=++count_new;
                 t.title=data[i].writtenworktitle;
-                t.date=data[i].createddate;
+                t.date=TTS.utils.dateConv(data[i].createddate);
                 t.type='Image';
                 dataset_new.push(t);
             }
@@ -160,7 +163,7 @@
                 t.DT_RowId = "vww_"+data[i].id;
                 t.slno=++count_saved;
                 t.title=data[i].writtenworktitle;
-                t.date=data[i].answereddate;
+                t.date=TTS.utils.dateConv(data[i].answereddate);
                 t.type='Image';
                 dataset_saved.push(t);
             }
@@ -169,7 +172,7 @@
                 t.DT_RowId = "vwa_"+data[i].writtenworkid+"_"+data[i].studentid;
                 t.slno=++count_answered;
                 t.title=data[i].writtenworktitle;
-                t.date=data[i].answereddate;
+                t.date=TTS.utils.dateConv(data[i].answereddate);
                 t.type='Image';
                 dataset_answered.push(t);
             }
