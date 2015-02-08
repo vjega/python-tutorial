@@ -613,3 +613,6 @@ ul.forum li {
 .qq-upload-file, .qq-upload-size {
         color: #D80000;
 }
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus{
+    z-index:0 !important;
+}

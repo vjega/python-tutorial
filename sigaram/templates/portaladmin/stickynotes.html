@@ -595,9 +595,11 @@ TTS.forms.getfiletype = function (filename,id){
     var name = filename.split('/').pop();
     var type;
     switch (file_extention) {
+        case 'bmp':
         case 'jpg':
         case 'jpeg':
         case 'png':
+        case 'gif':
             type = "<div class='modelbox_center' name='"+id+"'>Filename : "+name+" <br /><br /><img src='/static/"+filename+"' /></div>";
             break;
         case 'mp3':
