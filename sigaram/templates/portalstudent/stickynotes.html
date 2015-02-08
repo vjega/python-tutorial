@@ -45,6 +45,10 @@
 <link rel="stylesheet" href="{%static "css/color.css" %}">
 <link rel="stylesheet" href="{%static "ajaxuploader/css/fileuploader.css" %}">
 <style>
+.imgwidth{
+    max-width: 550px !important;
+}
+
     #addrec:hover, .tts-delete:hover{
         cursor: pointer;
     }
@@ -480,7 +484,7 @@ TTS.forms.addstickycomment = function(form, data) {
 
 TTS.forms.showstickycommentform = function(stickyid) {
     BootstrapDialog.show({
-        title: 'Add Sticky Comment',
+        title: '{% trans "Add Sticky Comment" %}',
         message: $($('#stickycomment-form').render()),
         buttons: [{
             label: '{% trans "Save" %}',
@@ -509,7 +513,7 @@ TTS.forms.renderstickynotes = function(data){
     for(var i in data){
         sticky_html += "<div id='sticky_note_"+data[i].id+"' class='sticky_note "+data[i].color+"'>";
         sticky_html += "<div class='sticky_header "+data[i].color+"_header'>";
-        sticky_html += "<span class='pull-right deleterec'  name='"+data[i].id+"'><i class='fa fa-trash'></i></span>&nbsp;";
+        sticky_html += "<span class='pull-right deleterec'  name='"+data[i].id+"'></span>&nbsp;";
         sticky_html += "<span class='pull-right editrec'  name='"+data[i].id+"'><i class='fa fa-pencil'></i></span> &nbsp;";
         if(data[i].attachment != ''){
             sticky_html += '<span class="open_model_window pull-right cliprec" dir="'+data[i].attachment+'" name="'+data[i].id+'"><i class="fa fa-paper-clip"></i></span> &nbsp;';
@@ -594,9 +598,11 @@ TTS.forms.getfiletype = function (filename,id){
     var type;
     switch (file_extention) {
         case 'jpg':
+        case 'bmp':
         case 'jpeg':
         case 'png':
-            type = "<div class='modelbox_center' name='"+id+"'>Filename : "+name+" <br /><br /><img src='/static/"+filename+"' /></div>";
+        case 'gif':
+            type = "<div class='modelbox_center' name='"+id+"'>Filename : "+name+" <br /><br /><img src='/static/"+filename+"' class='imgwidth'/></div>";
             break;
         case 'mp3':
         case 'wav':
