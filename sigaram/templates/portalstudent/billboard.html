@@ -112,7 +112,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderbillboard(data);
-        TTS.utils.ajaxloaderstop();
+        TTS.utils.ajaxloaderstop(); 
         $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
     });
     $('#admin-main-tbl').on('click', 'tbody tr', function(){
