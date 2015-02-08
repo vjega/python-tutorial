@@ -267,8 +267,13 @@ window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
 
  TTS.forms.addrichmindmap = function(){
+<<<<<<< HEAD
     var data = {
       mapdata : richmindmap.document.serialize()
+=======
+     var data = {
+        "mapdata" : "hi test msg"
+>>>>>>> 900df4b1764bf213a7c22d71273327b5ea0ea2e1
     }
     $.ajax({
         headers : {
@@ -295,6 +300,7 @@ TTS.forms = TTS.forms || {};
 }
 
 $(document).ready(function(){
+<<<<<<< HEAD
   TTS.forms.renderrichmindmap()
   $(".float-panel").hide()
   
@@ -302,6 +308,16 @@ $(document).ready(function(){
     TTS.forms.addrichmindmap()
   });
 
+=======
+ $("body").live("click","#save_mindmap",function(){
+    $(".float-panel").hide()
+    //richmindmap.document.serialize()
+    //console.log(richmindmap.document.serialize());
+    //var data = {}
+    //data['mapdata'] = "my first value";
+    TTS.forms.addrichmindmap(); 
+ });
+>>>>>>> 900df4b1764bf213a7c22d71273327b5ea0ea2e1
 });
  </script>
  <script src="{% static "js/tts.utils.js" %}"></script>
