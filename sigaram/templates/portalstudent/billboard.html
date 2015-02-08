@@ -106,11 +106,13 @@ TTS.forms.renderbillboard = function(data){
 };
 
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/admin/billboardresource/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderbillboard(data);
+        TTS.utils.ajaxloaderstop();
         $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
     });
     $('#admin-main-tbl').on('click', 'tbody tr', function(){
