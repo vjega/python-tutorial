@@ -2115,6 +2115,13 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
                 SET isclassroom = 1
             WHERE assignwrittenworkid = '%s' ''' % (classroomdata.get('assignedid'))
 
+        if classroomdata.get('studentid'):
+            sql = '''
+            UPDATE assignwrittenworkinfo
+                SET isclassroom = 1
+            WHERE writtenworkid = '%s' 
+            AND studentid='%s'
+            ''' % (classroomdata.get('assignedid'),str(classroomdata.get('studentid')))
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -3046,8 +3053,7 @@ class studentwrittenworkViewSet(viewsets.ModelViewSet):
         WHERE awi.studentid = '%s'
         %s
         ORDER BY wwi.createddate DESC
-        ''' % (str(request.user.username),fieldcond)
-        print sql;
+        ''' % (str(request.GET.get('studentid')),fieldcond)
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
