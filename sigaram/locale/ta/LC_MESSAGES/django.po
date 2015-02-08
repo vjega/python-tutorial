@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-07 14:22+0000\n"
+"POT-Creation-Date: 2015-02-07 15:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1566,7 +1566,7 @@ msgstr "முடித்த தேதி"
 #: templates/portalteacher/viewassignmentanswer.html:107
 #: templates/portalteacher/viewassignmindmapanswer.html:57
 #: templates/portalteacher/viewassignwrittenworkanswer.html:107
-#: templates/portalteacher/viewbulletinboard.html:33
+#: templates/portalteacher/viewbulletinboard.html:31
 msgid "Answer"
 msgstr "பதில்"
 
@@ -1627,7 +1627,7 @@ msgstr "தேர்ந்தெடு"
 #: templates/portalstudent/viewbulletinboard.html:27
 #: templates/portalteacher/billviewassignmentanswer.html:142
 #: templates/portalteacher/bulletinboardlist.html:143
-#: templates/portalteacher/viewbulletinboard.html:28
+#: templates/portalteacher/viewbulletinboard.html:27
 msgid "Announcer"
 msgstr "அறிவித்தவர்"
 
@@ -2018,7 +2018,7 @@ msgstr "ஆசிரியர் திருத்தம்"
 #: templates/portalteacher/thread.html:117
 #: templates/portalteacher/viewassignresource.html:103
 #: templates/portalteacher/viewassignwrittenwork.html:102
-#: templates/portalteacher/viewbulletinboard.html:81
+#: templates/portalteacher/viewbulletinboard.html:82
 #: templates/portalteacher/viewmindmapassignedstudentlist.html:103
 #: templates/portalteacher/viewmyresourcelistwork.html:63
 #: templates/portalteacher/viewresourcelist.html:31
@@ -2027,7 +2027,7 @@ msgid "View"
 msgstr "காண்க"
 
 #: templates/portaladmin/viewbulletinboard.html:74
-#: templates/portalteacher/viewbulletinboard.html:83
+#: templates/portalteacher/viewbulletinboard.html:84
 msgid "No Attachement"
 msgstr "இணைப்பு இல்லை"
 
@@ -2368,6 +2368,10 @@ msgstr ""
 #: templates/portalteacher/viewassignwrittenwork.html:70
 msgid "Middle"
 msgstr ""
+
+#: templates/portalteacher/viewbulletinboard.html:35
+msgid "Announce Date"
+msgstr "அறிவிப்பு தேதி"
 
 #: templates/portalteacher/viewpost.html:33
 msgid "Thread reply"

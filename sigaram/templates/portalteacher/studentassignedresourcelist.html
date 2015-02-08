@@ -35,7 +35,7 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
-    #addrec:hover, #admin-main-tbl tbody tr:hover{
+    #addrec:hover, .tts-view:hover{
         cursor: pointer;
     }
 </style>
@@ -51,28 +51,15 @@
 
 {% block scriptcontent %}
 <script>
-function getUrlParameter(sParam)
-{
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++) 
-    {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam) 
-        {
-            return sParameterName[1];
-        }
-    }
-}
-
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-TTS.studentid=getUrlParameter('studentid');
+TTS.studentid=TTS.utils.getUrlParameter('studentid');
 TTS.forms.renderstudentwork = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"   
+              "data" : "slno",
+              "bSortable":false 
             },
             { "title": "{% trans "Title" %}",
               "data" : "title" 
@@ -85,7 +72,8 @@ TTS.forms.renderstudentwork = function(data){
             }, 
             { "title": "{% trans "Note" %}",
               "class": "text-center",
-              "data" : "note"   
+              "data" : "note",
+              "bSortable":false   
             }, 
         ];
     
@@ -94,13 +82,13 @@ TTS.forms.renderstudentwork = function(data){
     var count = 0
     
     for(var i in data){
-        var t = [];
+        var t = {};
         t.DT_RowId = data[i].resourceid;
         t.slno = ++count;
         t.title = data[i].resourcetitle;
         t.type = data[i].resourcetype;
         t.date = TTS.utils.datetimeConv(data[i].createddate);
-        t.note = "<i> Note</i>";
+        t.note = "<i class='flaticon-zoom38 tts-view' id="+data[i].resourceid+"></i>";
         dataset.push(t);
     }
     if (TTS.forms.table) {
@@ -115,30 +103,17 @@ TTS.forms.renderstudentwork = function(data){
         "columns":  headers
     });
 };
-/*$(document).ready(function(){
-    $.ajax({
-        "url":"/api/student/resourceinfo/?studentid="+TTS.studentid+"&format=json",
-        "type":"GET"
-    }).done(function(data){
-        TTS.forms.renderstudentwork(data);
-    });
-    $('#studentassigned-resource-tbl').on('click', 'tbody tr', function(){
-        var studentid = getUrlParameter('studentid');
-        alert(studentid);
-        window.location = 'viewstudentresource?resourceid='+this.id;
-    });
-});*/
 $(document).ready(function(){
     TTS.utils.ajaxloaderstart();
     $.ajax({
-        "url":"/api/admin/resourceinfo/?studentid=&studentloginid=&format=json",
+        "url":"/api/admin/resourceinfo/?studentid="+TTS.studentid+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstudentwork(data);
         TTS.utils.ajaxloaderstop();
+        $("table#studentassigned-resource-tbl thead tr th").removeClass('sorting_asc');
     });
-     $('#studentassigned-resource-tbl').on('click', 'tbody tr', function(){
-        var studentid = getUrlParameter('studentid');
+     $('#studentassigned-resource-tbl').on('click', '.tts-view', function(){
         window.location = 'viewstudentresource?resourceid='+this.id;
     });
 });

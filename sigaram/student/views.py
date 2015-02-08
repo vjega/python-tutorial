@@ -28,8 +28,7 @@ def home(request):
         "color": u"primary",
         "icon" : u"file-text-o",
         "link" : u"resourcetype",
-        "caption": _("Assignments"),
-        "stat": 25
+        "caption": _("Assignments")
         },
         # {
         # "color": u"green",
@@ -42,14 +41,12 @@ def home(request):
         "color": u"yellow",
         "icon" : u"pencil-square-o",
         "link" : u"studentnoteslist",
-        "caption": _("Notes"),
-        "stat": 125
+        "caption": _("Notes")
         },{
         "color": u"red",
         "icon" : u"pencil",
         "link" : u"studentwrittenwork",
-        "caption": _("Written Work"),
-        "stat": 125
+        "caption": _("Written Work")
         },
         # {
         # "color": u"green",
@@ -62,8 +59,7 @@ def home(request):
         "color": u"primary",
         "icon" : u"sitemap",
         "link" : u"studentviewmindmap",
-        "caption": _("Mindmap"),
-        "stat": 125
+        "caption": _("Mindmap")
         }]
 
 
@@ -227,19 +223,20 @@ def assignedresourcelist(request):
 @login_required
 @switchlanguage
 def studentprofile(request):
-    user = models.Studentinfo.objects.filter(username=request.user.username)[0]
+    #user = models.Studentinfo.objects.filter(username=request.user.username)[0]
+    user=request.GET.get('studentid');
     folders = [{
         "id"   :"1",
         # "caption": _("Assignments"),
         "name" :_("Assignments"),
-        "href" :"studentassignedresourcelist"
+        "href" :"studentassignedresourcelist?studentid=%s" % request.GET.get('studentid') 
         },{
         "id"   :"2",
         "name" :_("Written Work"),
-        "href" :"viewstudentwrittenworks"
+        "href" :"viewstudentwrittenworks?studentid=%s" % request.GET.get('studentid') 
         }]
     return render(request, 'portalstudent/studentprofile.html', 
-                  {"folders":folders, "user":user})
+                  {"folders":folders})
 
 @login_required
 @switchlanguage

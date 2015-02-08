@@ -59,7 +59,8 @@ class WrittenworkinfoSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Writtenworkinfo
         fields = ('writtenworkid',  'writtenworktitle','description',
                   'writtenimage','schoolid', 'classid','isassigned',
-                  'createdby','isdeleted','createddate')
+                  'createdby','isdeleted','createddate','publisheddate',
+                  'assigneddate','answertext','isclassroom')
 
 class ChapterinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -215,3 +216,10 @@ class PostinfoSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Postinfo
         fields = ('postid', 'topicid','forumid',
                   'postdetails', 'postedby','posteddate','parentid')
+        
+class RichmindmapSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Assignmindmapinfo
+        fields = ('mindmapid','studentid','assigntext','mapdata','assigneddate',
+                    'isdelete','assignedby','answertext','comment','answereddate',
+                    'assignedby','assigneddate','isanswered','issaved','isdelete')

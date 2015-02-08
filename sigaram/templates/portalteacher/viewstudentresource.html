@@ -1,4 +1,4 @@
-{% extends 'portalstudent/base.html' %}
+{% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -23,13 +23,7 @@
                     <h3>{% trans "Title" %}:</h3>
                 </div><br />
                 <div><h3 id="resource-title"></h3></div><br />
-                <div>
-                    <h3>{% trans "Announcer" %}:</h3>
-                </div><br />
-                <div><h3 id="resource-announcer"></h3></div>
-                <div id="resource-date"></div>
-                <br />
-                <div id="view-resource">
+                <div id="view-resource"><a href="#" id="view-resource">{% trans 'View' %}</a>
                 </div>
             </table>
         <!-- /.panel-body -->
@@ -67,24 +61,37 @@ TTS.forms = TTS.forms || {}
 
 
 TTS.forms.renderteacherresourceinfo = function(data){
-    $("#resource-title").html(data.messagetitle);
-    $("#resource-announcer").html(data.message);
-    $("#resource-date").html(data.posteddate);
-    $("#view-resource").html("<a target='_blank' href='../static/"+data.attachmenturl+"'' >{% trans 'View' %}</a>");
-    //console.log(data.resourcetype)
+    $("#resource-title").html(data.resourcetitle);
+    $("#view-resource").click(function(){
+        if (data.resourcetype == "video") {
+            //$("#view-resource").html("<a href='#' >View</a>");
+            window.open("/static/"+data.videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
+        } 
+        if (data.resourcetype == "audio") {
+            //$("#view-resource").html("<a href='#' onclick=\"openwindow('audio','"+data.audiourl+"');\" >View</a>"); 
+            window.open("/static/"+data.audiourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
+        }
+        if (data.resourcetype === "text") {
+            //$("#view-resource").html("<a href='#' onclick=\"openwindow('text','"+data.documenturl+"');\" >View</a>"); 
+            window.open("/static/"+data.documenturl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
+        }
+        if (data.resourcetype === "image") {
+            $("#view-resource").html("<a href='#' onclick=\"openwindow('image','"+data.imageurl+"');\" ></a>"); 
+        }
+    });
 
 };
 
-$(document).ready(function(){  
-    var id = TTS.utils.getUrlParameter('id');
+$(document).ready(function(){    
+    var resourceid =TTS.utils.getUrlParameter('resourceid');
     $.ajax({
-        "url":"/api/admin/bulletinboardlist/"+id+"/?format=json",
+        "url":"/api/admin/resourceinfo/"+resourceid+"/?format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacherresourceinfo(data);
     });
-    /*$("#view-resource").click(function(){
-    })*/
+    $("#view-resource").click(function(){
+    })
 });
 
 </script>

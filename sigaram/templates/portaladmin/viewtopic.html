@@ -182,12 +182,14 @@ TTS.forms.renderviewfourminfo = function(data){
 };
 
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/admin/topicinfo/?format=json",
         "type":"GET"
     }).done(function(data){
         if (data.length) {
             TTS.forms.renderviewfourminfo(data);
+            TTS.utils.ajaxloaderstop(); 
             $("table#viewforum-main-tbl thead tr th").removeClass('sorting_asc');
         } 
         

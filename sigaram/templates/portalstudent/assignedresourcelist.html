@@ -101,6 +101,9 @@
     .resourcelist tbody tr:hover{
         cursor: pointer;
     }    
+    .table-responsive{
+        padding: 10px;
+    }
 </style>
 {% endblock morecss %}
 
@@ -151,7 +154,7 @@
                 t.DT_RowId = "var_"+data[i].id;
                 t.slno=++count_new;
                 t.title=data[i].resourcetitle;
-                t.date=data[i].createddate;
+                t.date=TTS.utils.dateConv(data[i].createddate);
                 t.type=data[i].resourcetype;
                 dataset_new.push(t);
             }
@@ -160,7 +163,7 @@
                 t.DT_RowId = "var_"+data[i].id;
                 t.slno=++count_saved;
                 t.title=data[i].resourcetitle;
-                t.date=data[i].answereddate;
+                t.date=TTS.utils.dateConv(data[i].answereddate);
                 t.type=data[i].resourcetype;
                 dataset_saved.push(t);
             }
@@ -169,7 +172,7 @@
                 t.DT_RowId = "vaa_"+data[i].resourceid+"_"+data[i].studentid;
                 t.slno=++count_answered;
                 t.title=data[i].resourcetitle;
-                t.date=data[i].answereddate;
+                t.date=TTS.utils.dateConv(data[i].answereddate);
                 t.type=data[i].resourcetype;
                 dataset_answered.push(t);
             }

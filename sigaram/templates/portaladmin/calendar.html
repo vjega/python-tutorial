@@ -47,7 +47,7 @@ window.TTS = window.TTS || {}
 window.TTS.forms = window.TTS.forms || {}
 TTS.forms.showcalform = function(start, end, allDay) {
     BootstrapDialog.show({
-        title: 'Add Event',
+        title: '{% trans "Add Event" %}',
         message: $($('#cal-form').render()),
         onshown: function(){
             $('#id_title').val("New Event");

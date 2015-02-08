@@ -345,6 +345,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
 
         queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('-createddate')
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
+        print queryset;
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
@@ -429,7 +430,6 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
         %s
         ORDER BY wwi.createddate DESC
         ''' % (request.user.username,datecond)
-        print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -1321,7 +1321,6 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
         """% (fieldcond,joincond,wherecond)
-        # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -1387,9 +1386,28 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def retrieve(self, request, pk=None):
-        queryset = models.Bulletinboardinfo.objects.filter(pk=pk)[0]
-        serializer = adminserializers.BulletinboardlistinfoSerializer(queryset, many=False)
-        return Response(serializer.data)
+        sql = """
+        SELECT  bbi.bulletinboardid,
+                bbi.messagetitle,
+                bbi.message,
+                bbi.attachmenturl,
+                au.first_name as createdby,
+                DATE(bbi.posteddate ) AS posteddate
+        FROM bulletinboardinfo bbi
+        LEFT JOIN  auth_user au ON au.id = bbi.postedby
+        WHERE bulletinboardid=%s
+        GROUP BY bbi.bulletinboardid
+        ORDER by bbi.bulletinboardid DESC
+        """ %pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
+        return Response(result)
+
+        # queryset = models.Bulletinboardinfo.objects.filter(pk=pk)[0]
+        # serializer = adminserializers.BulletinboardlistinfoSerializer(queryset, many=False)
+        # return Response(serializer.data)
 
     def destroy(self, request, pk=None):
         sql = """
@@ -2097,6 +2115,13 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
                 SET isclassroom = 1
             WHERE assignwrittenworkid = '%s' ''' % (classroomdata.get('assignedid'))
 
+        if classroomdata.get('studentid'):
+            sql = '''
+            UPDATE assignwrittenworkinfo
+                SET isclassroom = 1
+            WHERE writtenworkid = '%s' 
+            AND studentid='%s'
+            ''' % (classroomdata.get('assignedid'),str(classroomdata.get('studentid')))
         cursor = connection.cursor()
         cursor.execute(sql)
 
@@ -2160,11 +2185,6 @@ class StudentWrittenWork(viewsets.ModelViewSet):
         return Response({'msg':True})
 
     def list(self, request):
-
-        datecond = ''
-        if request.GET.get('fdate') and request.GET.get('tdate'):
-            datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
-                request.GET.get('tdate'))
         sql = '''
         SELECT awwi.assignwrittenworkid AS id,
                awwi.isrecord,
@@ -2179,9 +2199,8 @@ class StudentWrittenWork(viewsets.ModelViewSet):
         FROM assignwrittenworkinfo awwi
         INNER JOIN writtenworkinfo wwi on wwi.writtenworkid = awwi.writtenworkid 
         WHERE awwi.studentid='%s'
-              %s
         GROUP BY wwi.writtenworkid, awwi.answereddate
-        ORDER BY awwi.assignwrittenworkid DESC''' % (request.user.username, datecond)
+        ORDER BY awwi.assignwrittenworkid DESC''' % (request.user.username)
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -2995,3 +3014,55 @@ class RubricImportViewSet(viewsets.ModelViewSet):
             rubricmatrix.save()
 
         return Response("msg")
+
+class RichmindmapViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Assignmindmapinfo.objects.all()
+    serializer_class = adminserializers.RichmindmapSerializer
+
+    def create(self, request):
+        assignmindmapinfo = models.Assignmindmapinfo()
+        assigndata =  json.loads(dict(request.DATA.keys()[0]))
+        assignmindmapinfo.mapdata = assigndata.get('mapdata')
+        assigndata.save()
+        return Response(request.DATA)
+
+class studentwrittenworkViewSet(viewsets.ModelViewSet):
+    queryset = models.Writtenworkinfo.objects.all()
+    serializer_class = adminserializers.WrittenworkinfoSerializer
+
+    def list(self, request):
+        fieldcond=""
+        if request.GET.get('writtenworkid'):
+            fieldcond="AND wwi.writtenworkid=%s"%request.GET.get('writtenworkid')
+        sql = '''
+        SELECT  wwi.writtenworkid,
+                wwi.writtenworktitle,
+                awi.answertext,
+                awi.isclassroom,
+                date(awi.assigneddate) AS assigneddate,
+                date(awi.publisheddate) AS publisheddate,
+                wwi.description,
+                au.first_name,
+                au.last_name,
+                date(awi.assigneddate) as assigneddate,
+                awi.studentid 
+        FROM writtenworkinfo wwi 
+        INNER JOIN assignwrittenworkinfo awi ON awi.writtenworkid = wwi.writtenworkid
+        INNER JOIN auth_user au ON au.username=awi.studentid 
+        WHERE awi.studentid = '%s'
+        %s
+        ORDER BY wwi.createddate DESC
+        ''' % (str(request.GET.get('studentid')),fieldcond)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+    def destroy(self, request, pk):
+        models.Writtenworkinfo.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')

@@ -10,11 +10,23 @@
 <link rel="stylesheet" href="{%static "mindmaps/src/css/Aristo/jquery-ui-1.8.7.custom.css" %}" />
 <link rel="stylesheet" href="{%static "mindmaps/src/css/minicolors/jquery.miniColors.css" %}">
 <style>
-
+/*
 .node-container.ui-draggable {
     background-color: #D3D3D3;
     border: 2px solid red;
     border-radius: 7px;
+}*/
+
+.save_mindmap {
+    float: left;
+    font-size: 2em;
+    height: 40px;
+    margin-right: -16px;
+    margin-top: 5px;
+    overflow: hidden;
+    padding-top: 3px;
+    text-align: center;
+    width: 120px;
 }
 </style>
 {% endblock morecss %}
@@ -84,6 +96,7 @@
 </script>
 
 <script id="template-save" type="text/x-jquery-tmpl">
+ 
 <div id="save-dialog" class="file-dialog" title="Save mind map">
   <h1><span class="highlight">New!</span> In the Cloud: Dropbox and more</h1>
   <p>Open, save and share your mind maps online in your favorite cloud storage. Supports Google Drive, Dropbox and more! Powered by <a href="http://www.filepicker.io" target="_blank">filepicker.io</a>.</p>
@@ -96,6 +109,7 @@
   <input type="checkbox" class="autosave" id="checkbox-autosave-localstorage">
   <label for="checkbox-autosave-localstorage">Save automatically every minute.</label>
   <div class="seperator"></div>
+
   <h1>To file</h1>
   <p>Save the mind map as a file on your computer.</p>
   <div id="button-save-hdd">Save</div>
@@ -123,7 +137,7 @@
 </div>
 </script>
 
-
+<!--
 <script id="template-inspector" type="text/x-jquery-tmpl">
 <div id="inspector">
   <div id="inspector-content">
@@ -176,6 +190,7 @@
   </div>
 </div>
 </script>
+-->
 
 <script id="template-export-map" type="text/x-jquery-tmpl">
 <div id="export-map-dialog" title="Export mind map">
@@ -198,17 +213,24 @@
       mind map menu</p>
   </div>
   <!-- DEBUG -->
+  <!-- 
   <div id="debug-warning">Running in DEBUG mode.</div>
+  -->
   <!-- /DEBUG -->
   <div id="container">
     <div id="topbar">
       <div id="toolbar">
+        <!--
         <div id="logo" class="logo-bg">
-          <!-- <span>mindmaps</span> -->
+          <span>mindmaps</span>
         </div>
-
+        -->
+        <div class="save_mindmap">
+        <input type ="button" id="save_mindmap" value ="Save" class="ui-button ui-widget ui-state-default menu-item ui-button-text-icon-primary ui-state-focus"/>
+        </div>
         <div class="buttons">
-          <span class="buttons-left"> </span> <span class="buttons-right">
+          <span class="buttons-left"> </span> 
+          <span class="buttons-right">
           </span>
         </div>
 
@@ -238,8 +260,39 @@
   <!-- DEBUG -->
   <!-- set debug flag for all scripts. Will be removed in production -->
   <!-- /DEBUG -->
-
 {% block morescript %}
+ <script>
+window.TTS = window.TTS || {};
+TTS.forms = TTS.forms || {};
+
+ TTS.forms.addrichmindmap = function(){
+     var data = {
+        "mapdata" : "hi test msg"
+    }
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'POST',
+        data: JSON.stringify(data),
+        url : '/api/admin/richmindmap/'
+    }).done(function( msg ) {
+        console.log(msg)
+    });
+}
+
+$(document).ready(function(){
+ $("body").live("click","#save_mindmap",function(){
+    $(".float-panel").hide()
+    //richmindmap.document.serialize()
+    //console.log(richmindmap.document.serialize());
+    //var data = {}
+    //data['mapdata'] = "my first value";
+    TTS.forms.addrichmindmap(); 
+ });
+});
+ </script>
+ <script src="{% static "js/tts.utils.js" %}"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
   <script src="http://api.filepicker.io/v0/filepicker.js"></script>
   <!-- JS:LIB:BEGIN -->
