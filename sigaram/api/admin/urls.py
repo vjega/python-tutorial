@@ -51,6 +51,7 @@ router.register(r'teacherassignedmindmap',  viewsets.TeacherAssignedmindmapViewS
 router.register(r'postinfo',    	        viewsets.PostinfoViewSet)
 router.register(r'topicinfo',    	        viewsets.TopicInfoViewSet)
 router.register(r'rubricimport',    	    viewsets.RubricImportViewSet)
+router.register(r'richmindmap',    	        viewsets.RichmindmapViewSet)
 router.register(r'studentwrittenworkinfo',      viewsets.studentwrittenworkViewSet)
 
 urlpatterns = [

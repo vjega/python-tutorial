@@ -1321,7 +1321,6 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         GROUP BY bbi.bulletinboardid
         ORDER by bbi.bulletinboardid DESC
         """% (fieldcond,joincond,wherecond)
-        # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -1387,9 +1386,28 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def retrieve(self, request, pk=None):
-        queryset = models.Bulletinboardinfo.objects.filter(pk=pk)[0]
-        serializer = adminserializers.BulletinboardlistinfoSerializer(queryset, many=False)
-        return Response(serializer.data)
+        sql = """
+        SELECT  bbi.bulletinboardid,
+                bbi.messagetitle,
+                bbi.message,
+                bbi.attachmenturl,
+                au.first_name as createdby,
+                DATE(bbi.posteddate ) AS posteddate
+        FROM bulletinboardinfo bbi
+        LEFT JOIN  auth_user au ON au.id = bbi.postedby
+        WHERE bulletinboardid=%s
+        GROUP BY bbi.bulletinboardid
+        ORDER by bbi.bulletinboardid DESC
+        """ %pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
+        return Response(result)
+
+        # queryset = models.Bulletinboardinfo.objects.filter(pk=pk)[0]
+        # serializer = adminserializers.BulletinboardlistinfoSerializer(queryset, many=False)
+        # return Response(serializer.data)
 
     def destroy(self, request, pk=None):
         sql = """
@@ -2995,6 +3013,18 @@ class RubricImportViewSet(viewsets.ModelViewSet):
             rubricmatrix.save()
 
         return Response("msg")
+
+class RichmindmapViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Assignmindmapinfo.objects.all()
+    serializer_class = adminserializers.RichmindmapSerializer
+
+    def create(self, request):
+        assignmindmapinfo = models.Assignmindmapinfo()
+        assigndata =  json.loads(request.DATA.keys()[0])
+        assignmindmapinfo.mapdata = assigndata.get('mapdata')
+        assigndata.save()
+        return Response(request.DATA)
 
 class studentwrittenworkViewSet(viewsets.ModelViewSet):
     queryset = models.Writtenworkinfo.objects.all()

@@ -114,7 +114,7 @@ TTS.forms = TTS.forms || {}
 
 TTS.forms.renderviewforum = function(data){
     $("#topic_header").html(data['topicname']);
-    $("#topic_header_posteddate").html(data['username'] +" On "+data['createddate']);
+    $("#topic_header_posteddate").html(data['username'] +" On "+TTS.utils.datetimeConv(data['createddate']));
     $("#topic_details").html(data['topicdetails']);
     var comments = TTS.forms.processcomment(data);
     $("#comments").html(comments);
@@ -130,7 +130,7 @@ TTS.forms.renderviewforum = function(data){
 TTS.forms.processcomment = function (obj) {
     c = "<ul class='forum'>";
     for (var i in obj['comments']) {
-        c += "<li><img src='{% static "img/blank_img.png" %}'> "+obj['comments'][i]['postdetails']+" <span class='user_details'> "+obj['comments'][i]['postedby']+" says on: "+obj['comments'][i]['posteddate']+"</span> &nbsp;&nbsp;<i class='fa fa-reply reply_comment' name='"+obj['comments'][i]['postid']+"'></i> <div id='new_div' style='display: none;'></div></li>";
+        c += "<li><img src='{% static "img/blank_img.png" %}'> "+obj['comments'][i]['postdetails']+" <span class='user_details'> "+obj['comments'][i]['postedby']+" says on: "+TTS.utils.datetimeConv(obj['comments'][i]['posteddate'])+"</span> &nbsp;&nbsp;<i class='fa fa-reply reply_comment' name='"+obj['comments'][i]['postid']+"'></i> <div id='new_div' style='display: none;'></div></li>";
         if (typeof (obj['comments'][i]['comments']) !== 'undefined' 
             && obj['comments'][i]['comments'].length ){
             c += TTS.forms.processcomment(obj['comments'][i]);

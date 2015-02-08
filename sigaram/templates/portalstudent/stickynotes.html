@@ -303,7 +303,7 @@ TTS.forms.addstickynote = function(form, data) {
 TTS.forms.showstickyform = function() {
     var colors = ["yellow", "blue", "green","purple", "pink", "grey","red", "orange", "maroon", "gold"];
     BootstrapDialog.show({
-        title: 'Add Sticky note',
+        title: '{% trans "Add Sticky note" %}',
         message: $($('#sticky-form').render() +  $("#sticky-text").text()), 
         onshown: function(){
             $('.summernote').summernote({
@@ -365,7 +365,7 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
    var colors = ["yellow", "blue", "green","purple", "pink", "grey","red", "orange", "maroon", "gold"];
     var color_div = "<div class='color_container'>"+
                         "<div id='preview_color' class='"+color+"'>{% trans "Preview" %}</div>"+
-                        "<div class='control-label col-sm-4'>{% trans "color" %}</div>"+
+                        "<div class='control-label col-sm-4'>{% trans "Color" %}</div>"+
                         "<div class='control-label col-sm-8 color_values'>";
     for (var i = 0; i < colors.length; i++) { 
        color_div += "<div class='color "+colors[i]+"' name='"+colors[i]+"' ></div>";
@@ -379,7 +379,7 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
     color_div +="</div>";
 
     BootstrapDialog.show({
-        title: 'Edit Sticky note',
+        title: '{% trans "Edit Sticky note" %}',
         message: $($('#sticky-form').render() + color_div),
         onshown: function(){
             $('.summernote').summernote({

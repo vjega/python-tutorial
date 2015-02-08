@@ -35,7 +35,7 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
-    #addrec:hover, .assignotes:hover{
+    #addrec:hover, .tts-view:hover{
         cursor: pointer;
     }
 </style>
@@ -57,7 +57,8 @@ TTS.forms.renderstudentwork = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"   
+              "data" : "slno",
+              "bSortable":false   
             },
             { "title": "{% trans "Title" %}",
               "data" : "title" 
@@ -70,7 +71,8 @@ TTS.forms.renderstudentwork = function(data){
             }, 
             { "title": "{% trans "Note" %}",
               "class": "text-center",
-              "data" : "note"   
+              "data" : "note",
+              "bSortable":false  
             }, 
         ];
     
@@ -85,7 +87,7 @@ TTS.forms.renderstudentwork = function(data){
         t.title = data[i].resourcetitle;
         t.type = data[i].resourcetype;
         t.date = TTS.utils.datetimeConv(data[i].createddate);
-        t.note = "<i class='assignotes'> Notes</i>";
+        t.note = "<i class='flaticon-zoom38 tts-view' id="+data[i].resourceid+"></i>";
         dataset.push(t);
     }
     if (TTS.forms.table) {
@@ -106,8 +108,9 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstudentwork(data);
+        $("table#studentassigned-resource-tbl thead tr th").removeClass('sorting_asc');
     });
-    $('#studentassigned-resource-tbl').on('click', 'tbody tr', function(){
+    $('#studentassigned-resource-tbl').on('click', '.tts-view', function(){
         window.location = 'viewstudentresource?resourceid='+this.id;
     });
 });
