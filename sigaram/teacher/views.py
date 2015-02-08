@@ -657,3 +657,8 @@ def addteachershare(request):
 @switchlanguage
 def calendar(request):
     return render(request, 'portalteacher/calendar.html', {"calendarform" : CalendarForm.CalendarForm()})
+
+@login_required
+@switchlanguage
+def viewstudentresource(request):
+    return render(request, 'portalteacher/viewstudentresource.html')
