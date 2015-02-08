@@ -227,19 +227,20 @@ def assignedresourcelist(request):
 @login_required
 @switchlanguage
 def studentprofile(request):
-    user = models.Studentinfo.objects.filter(username=request.user.username)[0]
+    #user = models.Studentinfo.objects.filter(username=request.user.username)[0]
+    user=request.GET.get('studentid');
     folders = [{
         "id"   :"1",
         # "caption": _("Assignments"),
         "name" :_("Assignments"),
-        "href" :"studentassignedresourcelist"
+        "href" :"studentassignedresourcelist?studentid=%s" % request.GET.get('studentid') 
         },{
         "id"   :"2",
         "name" :_("Written Work"),
-        "href" :"viewstudentwrittenworks"
+        "href" :"viewstudentwrittenworks?studentid=%s" % request.GET.get('studentid') 
         }]
     return render(request, 'portalstudent/studentprofile.html', 
-                  {"folders":folders, "user":user})
+                  {"folders":folders})
 
 @login_required
 @switchlanguage
