@@ -30,7 +30,7 @@
             <div class="reply_textarea">
                 <div class="form-group col-sm-12">
                     <div class="controls col-sm-12">
-                        <textarea id="thread_reply_textarea" placeholder="Thread reply" rows="3" id="detail_content" class="textinput textInput form-control"></textarea> 
+                        <textarea id="thread_reply_textarea" placeholder={% trans "Thread reply" %} rows="3" id="detail_content" class="textinput textInput form-control"></textarea> 
                     </div>
                 </div>
                 <div class="form-group col-sm-12">
@@ -114,7 +114,7 @@ TTS.forms = TTS.forms || {}
 
 TTS.forms.renderviewforum = function(data){
     $("#topic_header").html(data['topicname']);
-    $("#topic_header_posteddate").html(data['username'] +" On "+data['createddate']);
+    $("#topic_header_posteddate").html(data['username'] +" On "+TTS.utils.datetimeConv(data['createddate']));
     $("#topic_details").html(data['topicdetails']);
     var comments = TTS.forms.processcomment(data);
     $("#comments").html(comments);

@@ -112,7 +112,7 @@ TTS.forms.deladmin = function(id) {
 
 TTS.forms.showadminform = function() {
     BootstrapDialog.show({
-        title: 'Add Administrator',
+        title: '{% trans "Add Administrator" %}',
         message: $($('#admin-form').render()),
         onshown: function(){
             TTS.forms.upload();

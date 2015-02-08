@@ -492,7 +492,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', end
 
 .note-editable{
     background-color: #fff!important;
-    height:100%;
+    min-height:80px;
 }
 
 #notification-container {
@@ -610,7 +610,6 @@ ul.forum li {
 .panel-heading{
     font-weight: bold;
 }
- .qq-upload-file, .qq-upload-size {
-        color: #fff;
-        font-weight: bold;
+.qq-upload-file, .qq-upload-size {
+        color: #D80000;
 }

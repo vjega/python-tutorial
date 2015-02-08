@@ -12,7 +12,7 @@
 <div class="row">
     <span>
     <div class="form-group" class="col-sm-6">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Select School" %}
+        <label for="folder_name" class="col-sm-2 control-label heading">{% trans "Select School" %}
         </label>
         <div class="col-sm-5">
             <select name="school_name" class="form-control" id="school_name">
@@ -24,7 +24,7 @@
     </div>
     </span>
     <div class="form-group" class="col-sm-3">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Select Section" %}</label>
+        <label for="folder_name" class="col-sm-2 control-label heading">{% trans "Select Section" %}</label>
         <div class="col-sm-2">
             <select name="classid" class="form-control" id="classid">
                 {% for class in classes %}
@@ -120,7 +120,7 @@ TTS.forms.delstudent = function(id) {
 
 TTS.forms.showstudentform = function() {
     BootstrapDialog.show({
-        title: 'Add Student',
+        title: '{% trans "Add Student" %}',
         message: $($('#student-form').render()),
         onshown: function(){
             TTS.forms.upload();
@@ -179,7 +179,7 @@ TTS.forms.showstudentform = function() {
 
 TTS.forms.editstudent = function(id, data) {
     BootstrapDialog.show({
-        title: 'Edit Student',
+        title: '{% trans "Edit Student" %}',
         message: $($('#student-form').render()),
         onshown: function(){
             TTS.forms.upload();
