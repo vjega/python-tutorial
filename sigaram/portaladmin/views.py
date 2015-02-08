@@ -6,7 +6,8 @@ from django.http import HttpResponse
 from portaladmin import models
 from django.utils.safestring import mark_safe
 
-from portaladmin.forms import (AdminForm,
+from portaladmin.forms import (RubricsForm,
+                   AdminForm,
 			       TeacherResourceForm,
                    TeacherForm,
                    StudentForm,
@@ -612,3 +613,10 @@ def richmindmap(request):
 @switchlanguage
 def activitystatistics(request):
     return render(request, 'portaladmin/activitystatistics.html') 
+
+@login_required
+@switchlanguage
+def rubric_view(request):
+    rubricid =  request.GET.get("rubricid")
+    return render(request, 'portaladmin/rubric_view.html' ,{
+                            "form" : RubricsForm.RubricsForm() })

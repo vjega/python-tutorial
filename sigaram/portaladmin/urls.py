@@ -104,6 +104,7 @@ urlpatterns = patterns('portaladmin.views',
                                                         name="sticky_notes_uploader"),
     url(r'^activitystatistics$', 'activitystatistics', 
                                                          name="activitystatistics"), 
-    url(r'^richmindmap$', 'richmindmap', name="richmindmap")
+    url(r'^richmindmap$', 'richmindmap', name="richmindmap"),
+    url(r'^rubric_view$', 'rubric_view', name="rubric_view")
     #(r'^api/', include(v1_api.urls)),
 )
