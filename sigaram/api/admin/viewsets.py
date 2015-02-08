@@ -3152,9 +3152,9 @@ class RichmindmapViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         assignmindmapinfo = models.Assignmindmapinfo()
-        postinfodata =  json.loads(request.DATA.keys()[0])
-        assignmindmapinfo.mapdata       = summer_decode(unicode(assigndata.get('mapdata')))
-        postinfo.save()
+        assigndata =  json.loads(request.DATA.keys()[0])
+        assignmindmapinfo.mapdata = assigndata.get('mapdata')
+        assigndata.save()
         return Response(request.DATA)
 
 class studentwrittenworkViewSet(viewsets.ModelViewSet):

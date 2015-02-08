@@ -59,7 +59,7 @@ TTS.forms.renderstudentwork = function(data){
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
               "data" : "slno",
-              "bSortable":false  
+              "bSortable":false 
             },
             { "title": "{% trans "Title" %}",
               "data" : "title" 
@@ -103,19 +103,6 @@ TTS.forms.renderstudentwork = function(data){
         "columns":  headers
     });
 };
-/*$(document).ready(function(){
-    $.ajax({
-        "url":"/api/student/resourceinfo/?studentid="+TTS.studentid+"&format=json",
-        "type":"GET"
-    }).done(function(data){
-        TTS.forms.renderstudentwork(data);
-    });
-    $('#studentassigned-resource-tbl').on('click', 'tbody tr', function(){
-        var studentid = getUrlParameter('studentid');
-        alert(studentid);
-        window.location = 'viewstudentresource?resourceid='+this.id;
-    });
-});*/
 $(document).ready(function(){
     TTS.utils.ajaxloaderstart();
     $.ajax({

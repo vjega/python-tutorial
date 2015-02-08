@@ -49,7 +49,6 @@
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
 <script src="{% static "js/tts.utils.js" %}"></script>
-
 {% endblock morescript %}
 
 
@@ -84,7 +83,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
 };
 
 $(document).ready(function(){    
-    var resourceid = TTS.utils.getUrlParameter('resourceid');
+    var resourceid =TTS.utils.getUrlParameter('resourceid');
     $.ajax({
         "url":"/api/admin/resourceinfo/"+resourceid+"/?format=json",
         "type":"GET"
