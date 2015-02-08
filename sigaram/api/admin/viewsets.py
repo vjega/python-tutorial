@@ -2178,11 +2178,6 @@ class StudentWrittenWork(viewsets.ModelViewSet):
         return Response({'msg':True})
 
     def list(self, request):
-
-        datecond = ''
-        if request.GET.get('fdate') and request.GET.get('tdate'):
-            datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
-                request.GET.get('tdate'))
         sql = '''
         SELECT awwi.assignwrittenworkid AS id,
                awwi.isrecord,
@@ -2197,9 +2192,8 @@ class StudentWrittenWork(viewsets.ModelViewSet):
         FROM assignwrittenworkinfo awwi
         INNER JOIN writtenworkinfo wwi on wwi.writtenworkid = awwi.writtenworkid 
         WHERE awwi.studentid='%s'
-              %s
         GROUP BY wwi.writtenworkid, awwi.answereddate
-        ORDER BY awwi.assignwrittenworkid DESC''' % (request.user.username, datecond)
+        ORDER BY awwi.assignwrittenworkid DESC''' % (request.user.username)
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
