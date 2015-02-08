@@ -2995,3 +2995,15 @@ class RubricImportViewSet(viewsets.ModelViewSet):
             rubricmatrix.save()
 
         return Response("msg")
+
+class RichmindmapViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Assignmindmapinfo.objects.all()
+    serializer_class = adminserializers.RichmindmapSerializer
+
+    def create(self, request):
+        assignmindmapinfo = models.Assignmindmapinfo()
+        postinfodata =  json.loads(request.DATA.keys()[0])
+        assignmindmapinfo.mapdata       = summer_decode(unicode(assigndata.get('mapdata')))
+        postinfo.save()
+        return Response(request.DATA)
