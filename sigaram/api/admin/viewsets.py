@@ -345,7 +345,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
 
         queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('-createddate')
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
-        print queryset;
+        #print queryset;
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
@@ -918,7 +918,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
               %s
         GROUP BY ari.resourceid, ari.answereddate
         ORDER BY ari.assignedid DESC''' % (request.user.username, datecond)
-        print sql;
+        #print sql;
         cursor = connection.cursor()
         
         #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
@@ -1322,7 +1322,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         ORDER by bbi.bulletinboardid DESC
         """% (fieldcond,joincond,wherecond)
         cursor = connection.cursor()
-        print sql;
+        #print sql;
         cursor.execute(sql)
         desc = cursor.description
         result =  [
