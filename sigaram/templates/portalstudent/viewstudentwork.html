@@ -115,11 +115,11 @@ $(document).ready(function(){
         TTS.forms.renderstudentwritteninfo(data);
     });
     $("body").on("click","a#sendclassroom", function(event){
-        var assignedid = $("#assignedid").val();
+        var assignedid = TTS.utils.getUrlParameter('writtenworkid');
         var crdata = {
             assignedid   : assignedid,
             studentid    : studentid,
-            assignedtype : 'ar'
+            assignedtype : 'aw'
         }
         $.ajax({
             headers : {

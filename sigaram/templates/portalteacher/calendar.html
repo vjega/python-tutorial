@@ -51,10 +51,10 @@ TTS.forms.showcalform = function(start, end, allDay) {
         message: $($('#cal-form').render()),
         onshown: function(){
             $('#id_title').val("New Event");
-            $('#id_start').val(start.format('DD-MM-YYYY HH:mm'));
-            $('#id_end').val(end.format('DD-MM-YYYY HH:mm'));      
+            $('#id_start').val(start.format('YYYY-MM-DD HH:mm'));
+            $('#id_end').val(end.format('YYYY-MM-DD HH:mm'));      
             $('#id_start,#id_end').datetimepicker({
-                format: 'DD-MM-YYYY HH:mm',
+                format: 'YYYY-MM-DD HH:mm',
             });
             /*$('#id_start').val(start.format('YYYY-MM-DD hh:mm'));
             $('#id_end').val(end.format('YYYY-MM-DD hh:mm'));      

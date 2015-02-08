@@ -28,8 +28,7 @@ def home(request):
         "color": u"primary",
         "icon" : u"file-text-o",
         "link" : u"resourcetype",
-        "caption": _("Assignments"),
-        "stat": 25
+        "caption": _("Assignments")
         },
         # {
         # "color": u"green",
@@ -42,14 +41,12 @@ def home(request):
         "color": u"yellow",
         "icon" : u"pencil-square-o",
         "link" : u"studentnoteslist",
-        "caption": _("Notes"),
-        "stat": 125
+        "caption": _("Notes")
         },{
         "color": u"red",
         "icon" : u"pencil",
         "link" : u"studentwrittenwork",
-        "caption": _("Written Work"),
-        "stat": 125
+        "caption": _("Written Work")
         },
         # {
         # "color": u"green",
@@ -62,8 +59,7 @@ def home(request):
         "color": u"primary",
         "icon" : u"sitemap",
         "link" : u"studentviewmindmap",
-        "caption": _("Mindmap"),
-        "stat": 125
+        "caption": _("Mindmap")
         }]
 
 

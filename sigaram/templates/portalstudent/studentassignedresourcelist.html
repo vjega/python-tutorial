@@ -103,11 +103,13 @@ TTS.forms.renderstudentwork = function(data){
     });
 };
 $(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/admin/resourceinfo/?studentid=&studentloginid=&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstudentwork(data);
+        TTS.utils.ajaxloaderstop();
         $("table#studentassigned-resource-tbl thead tr th").removeClass('sorting_asc');
     });
     $('#studentassigned-resource-tbl').on('click', '.tts-view', function(){
