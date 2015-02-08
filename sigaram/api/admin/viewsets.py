@@ -1297,7 +1297,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         wherecond = ""
         if l == 'Admin' or l == 'Teacher' :
             fieldcond="au.first_name AS postedby"
-            joincond="INNER JOIN auth_user au ON au.username = bmi.userid"
+            joincond="INNER JOIN auth_user au ON au.id = bbi.postedby"
             wherecond = "bmi.userid = '%s'"%request.user.username
         else:
             fieldcond="'' AS postedby"
@@ -1322,6 +1322,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         ORDER by bbi.bulletinboardid DESC
         """% (fieldcond,joincond,wherecond)
         cursor = connection.cursor()
+        print sql;
         cursor.execute(sql)
         desc = cursor.description
         result =  [
