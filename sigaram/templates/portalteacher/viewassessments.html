@@ -205,6 +205,7 @@ TTS.forms.renderassessmentinfo = function(data){
                       "data" : "slno"
                     },
                     { "title": "{% trans "Title" %}", "data" : "title"},
+                    { "title": "{% trans "Type" %}", "data" : "type"},
                     { "title": "{% trans "Date" %}", "data" : "date"},
                     { "title": "{% trans "Action" %}", "data" : "action","class": "text-center"}, 
                 ];
@@ -215,6 +216,7 @@ TTS.forms.renderassessmentinfo = function(data){
         t.DT_RowId  = data[i].id;
         t.slno      = ++count;
         t.title     = data[i].title;
+        t.type      = data[i].type;
         t.date      = data[i].createddate;
         t.action    = "<i class='fa fa-trash fa-lg tts-delete'></i>";
         dataset.push(t);

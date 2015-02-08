@@ -656,8 +656,12 @@ def addteachershare(request):
 def calendar(request):
     return render(request, 'portalteacher/calendar.html', {"calendarform" : CalendarForm.CalendarForm()})
 
-
 @login_required
 @switchlanguage
 def viewassessmentqa(request):
     return render(request, 'portalteacher/viewassessmentqa.html')  
+
+@login_required
+@switchlanguage
+def billboardviewassignwrittenworkanswer(request):
+    return render(request, 'portalteacher/billboardviewassignwrittenworkanswer.html')

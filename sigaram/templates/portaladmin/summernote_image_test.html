@@ -69,7 +69,7 @@ TTS.forms.addstickynote = function(data) {
 }
 
 $(document).ready(function(){
-    $('.summernote').summernote()
+    $('.summernote').summernote({height:"80px"})
     $('#save').click(function(){
         data = {};
         data['summernotedata'] = $("#title").code();
@@ -95,6 +95,9 @@ function sendFile(file, editor, welEditable) {
     console.log(data);
     $.ajax({
         data: data,
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
         type: "POST",
         url: "",
         cache: false,

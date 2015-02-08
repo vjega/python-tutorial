@@ -200,8 +200,8 @@ class AudiouploadSerializer(serializers.HyperlinkedModelSerializer):
 class AdminresourceSerializer(serializers.HyperlinkedModelSerializer):
       class Meta:
         model = models.AdminResources
-        fields = ('resource_folder_id','resourcetype', 'resourcetitle','resourcedescription','fileurl','isdeleted',
-                  'createddate')
+        fields = ('resource_folder_id','resourcetype', 'resourcetitle',
+                    'resourcedescription','fileurl','isdeleted','createddate')
 
 class AssignmindmapinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -219,5 +219,19 @@ class PostinfoSerializer(serializers.HyperlinkedModelSerializer):
 class AssessmentinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Assessmentinfo
-        fields = ('id', 'title','instruction','schoolid','classid',
-                  'createddate', 'createdby','enddate','isdeleted')
+        fields = ('id','title','instruction','schoolid','classid',
+                  'createddate', 'createdby','enddate','isdeleted','type')
+
+class BillboardratinginfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Billboardratinginfo
+        fields = ('billboardratingid', 'billboardid', 'studentid', 'rating',
+                  'ratedby', 'rateddate')
+
+class BillboardcommentinfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Billboardcommentinfo
+        fields = ('billboardcommentid', 'billboardid', 'studentid', 'comment',
+                  'commentedby', 'commenteddate')        
+
+

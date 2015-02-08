@@ -1595,7 +1595,8 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
         sql = '''
         SELECT * FROM 
         ((
-        SELECT  bbi.resourceid as assignedid,
+        SELECT bbi.billboardid as id,
+            bbi.resourceid as assignedid,
             bbi.resourcetype as resourcetype,
             bbi.studentid as studentid,
             ri.resourceid as resourceid,
@@ -1610,13 +1611,14 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
         )
         UNION ALL
         (
-        SELECT  bbi.resourceid as assignedid,
-                bbi.resourcetype as resourcetype,
-                bbi.studentid as studentid,
-                wwi.writtenworkid as resourceid,
-                wwi.writtenworktitle as title,
-                concat(au.first_name,' ',au.last_name) as firstname,
-                date(bbi.posteddate) as posteddate
+        SELECT bbi.billboardid as id,  
+            bbi.resourceid as assignedid,
+            bbi.resourcetype as resourcetype,
+            bbi.studentid as studentid,
+            wwi.writtenworkid as resourceid,
+            wwi.writtenworktitle as title,
+            concat(au.first_name,' ',au.last_name) as firstname,
+            date(bbi.posteddate) as posteddate
         FROM billboardinfo bbi
         INNER JOIN assignwrittenworkinfo awwi ON awwi.assignwrittenworkid=bbi.resourceid
         INNER JOIN writtenworkinfo wwi ON wwi.writtenworkid=awwi.writtenworkid
@@ -1787,7 +1789,7 @@ class ExtraslistViewSet(viewsets.ModelViewSet):
                 li.firstname,
                 date(el.createddate) as createddate 
         FROM extraslist el
-        INNER JOIN logininfo li ON li.loginid=el.createdby  
+        INNER JOIN logininfo li ON li.loginid=el.createdby
         WHERE li.isdelete=0 
         -- AND el.extratype = '%s' 
         AND el.classid=%s 
@@ -2957,14 +2959,89 @@ class AssessmentInfoViewSet(viewsets.ModelViewSet):
         assessment.save()
         return Response(request.DATA)
 
-    # def update(self, request, pk=None):
-    #     return Response('"msg":"update"')
-
     def destroy(self, request, pk=None):
         models.Assessmentinfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
-    # def retrieve(self, request, pk=None):
-    #     queryset = models.Classinfo.objects.filter(pk=pk)[0]
-    #     serializer = adminserializers.AdminclasslistSerializer(queryset, many=False)
-    #     return Response(serializer.data)
+class BillboardRatingViewSet(viewsets.ModelViewSet):
+    queryset = models.Billboardratinginfo.objects.all()
+    serializer_class = adminserializers.BillboardratinginfoSerializer
+
+    def create(self, request):
+        billboardrating = models.Billboardratinginfo()
+        cdata =  json.loads(request.DATA.keys()[0])
+        studentid                   = cdata.get('studentid');
+        rating                      = cdata.get('rating');
+        billboardid                 = cdata.get('billboardid');
+        billboardrating.billboardid = billboardid
+        billboardrating.rating      = rating
+        billboardrating.studentid   = str(studentid)
+        billboardrating.ratedby     = str(request.user.username)
+        billboardrating.rateddate   = time.strftime('%Y-%m-%d %H:%M:%S')
+        billboardrating.save()
+        return Response(request.DATA)
+
+    def list(self, request):
+        billboardid = request.GET.get('billboardid')
+
+        data = {}
+
+        sql = """
+        SELECT avg(rating) as rating
+        FROM  billboardratinginfo
+        WHERE  billboardid = '%s' 
+        """ % (billboardid)
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        data['avgrating'] =  cursor.fetchone()[0]
+
+        sql = """
+        SELECT count(*) as rating
+        FROM  billboardratinginfo
+        WHERE  ratedby = '%s' 
+        """ % (str(request.user.username))
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        data['israted'] =  cursor.fetchone()[0]
+
+        return Response(data)
+
+class BillboardCommentViewSet(viewsets.ModelViewSet):
+    queryset = models.Billboardcommentinfo.objects.all()
+    serializer_class = adminserializers.BillboardcommentinfoSerializer
+
+    def create(self, request):
+        billboardcomment = models.Billboardcommentinfo()
+        cdata =  json.loads(request.DATA.keys()[0])
+        studentid                       = cdata.get('studentid');
+        comment                         = cdata.get('comment');
+        billboardid                     = cdata.get('billboardid');
+        billboardcomment.billboardid    = billboardid
+        billboardcomment.comment        = summer_decode(unicode(comment))
+        billboardcomment.studentid      = str(studentid)
+        billboardcomment.commentedby    = str(request.user.username)
+        billboardcomment.commenteddate  = time.strftime('%Y-%m-%d %H:%M:%S')
+        billboardcomment.save()
+        return Response(request.DATA)
+
+    def list(self, request):
+        billboardid = request.GET.get('billboardid')
+
+        sql = """
+        SELECT bbci.*,
+        concat(au.first_name,' ',au.last_name) as name 
+        FROM billboardcommentinfo as bbci
+        INNER JOIN auth_user au ON au.username=bbci.commentedby
+        WHERE billboardid = '%s' 
+        """ % (billboardid)
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+        return Response(result)

@@ -324,7 +324,7 @@ class Billboardratinginfo(models.Model):
     billboardid = models.BigIntegerField()
     studentid = models.CharField(max_length=500)
     rating = models.BigIntegerField()
-    ratedby = models.BigIntegerField()
+    ratedby = models.CharField(max_length=500)
     rateddate = models.DateTimeField()
 
     class Meta:
@@ -1165,3 +1165,15 @@ class Assessmentinfo(models.Model):
     class Meta:
         managed = False
         db_table= 'assessmentinfo'
+
+class Billboardcommentinfo(models.Model):
+    billboardcommentid  = models.BigIntegerField(primary_key=True)
+    billboardid         = models.BigIntegerField()
+    studentid           = models.CharField(max_length=500)
+    comment             = models.CharField(max_length=5000)
+    commentedby         = models.CharField(max_length=500)
+    commenteddate       = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'billboardcommentinfo'

@@ -52,6 +52,8 @@ router.register(r'postinfo',    	        viewsets.PostinfoViewSet)
 router.register(r'topicinfo',    	        viewsets.TopicInfoViewSet)
 router.register(r'rubricimport',    	    viewsets.RubricImportViewSet)
 router.register(r'assessmentinfo',    	    viewsets.AssessmentInfoViewSet)
+router.register(r'billboardrating',    	    viewsets.BillboardRatingViewSet)
+router.register(r'billboardcomment',    	viewsets.BillboardCommentViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

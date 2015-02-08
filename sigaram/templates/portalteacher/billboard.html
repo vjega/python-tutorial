@@ -45,12 +45,12 @@
 {% endblock morecss %}
 
 {% block morescript %}
-<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
-<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
-<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "ajaxuploader/js/fileuploader.js" %}"></script>
+<script src="{% static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{% static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
-<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "bower_components/summernote/dist/summernote.min.js" %}"></script>
 <script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
@@ -83,7 +83,7 @@ TTS.forms.renderbillboard = function(data){
     var count = 0
     for(var i in data){
         var t = {};
-        t.DT_RowId = data[i].resourcetype+"_"+data[i].resourceid+"_"+data[i].studentid;
+        t.DT_RowId = data[i].resourcetype+"_"+data[i].resourceid+"_"+data[i].studentid+"_"+data[i].id;
         t.slno = ++count;
         t.title = data[i].title;
         if(data[i].resourcetype == 'ar'){
@@ -109,14 +109,15 @@ $(document).ready(function(){
         "url":"/api/admin/billboardresource/?format=json",
         "type":"GET"
     }).done(function(data){
+        console.log(data);
         TTS.forms.renderbillboard(data);
     });
     $('#admin-main-tbl').on('click', 'tbody tr', function(){
         var x = this.id.split('_');
         if(x[0] == 'ar'){
-            window.location = 'classviewassignmentanswer?resourceid='+x[1]+'&studentid='+x[2];
+            window.location = 'billboardviewassignmentanswer?resourceid='+x[1]+'&studentid='+x[2]+'&billboardid='+x[3];
         }else if(x[0] == 'aw'){
-            window.location = 'classviewassignwrittenworkanswer?writtenworkid='+x[1]+'&studentid='+x[2];
+            window.location = 'billboardviewassignwrittenworkanswer?writtenworkid='+x[1]+'&studentid='+x[2]+'&billboardid='+x[3];
         }else{
             return false;
         }
