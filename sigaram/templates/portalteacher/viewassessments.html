@@ -88,19 +88,15 @@
     #addrec:hover, #admin-main-tbl tbody tr:hover{
         cursor: pointer;
     }
-<<<<<<< HEAD
     #tabpanel{
         padding:10px;
     }
     .tab-content{
         margin-top:10px;
     }
-
-=======
     .dataTables_wrapper{
         padding: 10px;
     }
->>>>>>> 2993a221e3f1740b29bc6c65337d1bb8b0cea775
 </style>
 {% endblock morecss %}
 
@@ -170,26 +166,22 @@ TTS.forms.editschool = function() {
         title: '{% trans "Exercises" %}',
         onshown: function(dialogRef){
             $('.summernote').summernote({
-<<<<<<< HEAD
-                height: 50,
+                height: 50
+                /*toolbar: [
+                    ['edit',['undo','redo']],
+                    ['style', ['style']], // no style button
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    //['insert', ['picture', 'link']], // no insert buttons
+                    //['table', ['table']], // no table button
+                    //['help', ['help']] //no help button
+                ]*/
             });
             $('#tilldate').datetimepicker({
                 pickTime: false
             });
-=======
-          toolbar: [
-            ['edit',['undo','redo']],
-            ['style', ['style']], // no style button
-            ['style', ['bold', 'italic', 'underline', 'clear']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            //['insert', ['picture', 'link']], // no insert buttons
-            //['table', ['table']], // no table button
-            //['help', ['help']] //no help button
-          ]
-    });
->>>>>>> 2993a221e3f1740b29bc6c65337d1bb8b0cea775
         },
         message: $($('#editschool').render()),
         buttons: [{
@@ -223,22 +215,12 @@ TTS.forms.renderassessmentinfo = function(data){
     var headers = [
                     { "title": "{% trans "Sl No." %}",
                       "class": "text-center",
-<<<<<<< HEAD
                       "data" : "slno"
                     },
                     { "title": "{% trans "Title" %}", "data" : "title"},
                     { "title": "{% trans "Type" %}", "data" : "type"},
                     { "title": "{% trans "Date" %}", "data" : "date"},
-                    { "title": "{% trans "Action" %}", "data" : "action","class": "text-center"}, 
-=======
-                      "bSortable":false  
-                    },
-                    { "title": "{% trans "Title" %}"},
-                    { "title": "{% trans "Date" %}" },
-                    { "title": "{% trans "Check" %}" },
-                    { "title": "{% trans "Delete" %}",
-                      "bSortable":false  }, 
->>>>>>> 2993a221e3f1740b29bc6c65337d1bb8b0cea775
+                    { "title": "{% trans "Action" %}", "data" : "action","class": "text-center"}
                 ];
     var dataset = [];
     var count = 0
@@ -282,14 +264,9 @@ $(document).ready(function(){
         "url":"/api/admin/assessmentinfo/?format=json",
         "type":"GET"
     }).done(function(data){
-<<<<<<< HEAD
-        console.log(data);
         TTS.forms.renderassessmentinfo(data);
-=======
-        //console.log(data);
-        TTS.forms.renderteacherresourceinfo(data);
+        //TTS.forms.renderteacherresourceinfo(data);
         $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
->>>>>>> 2993a221e3f1740b29bc6c65337d1bb8b0cea775
         TTS.utils.ajaxloaderstop();
     });
 

@@ -783,12 +783,12 @@ class Pagedetails(models.Model):
 
 class PeerRubricsReview(models.Model):
     slno = models.BigIntegerField(primary_key=True)
-    resourceid = models.IntegerField()
-    studentid = models.IntegerField()
-    evaluatedby = models.IntegerField()
-    row_no = models.IntegerField()
-    row_mark = models.IntegerField()
-    max_mark = models.IntegerField()
+    resourceid  = models.IntegerField()
+    studentid   = models.CharField(max_length=500)
+    evaluatedby = models.CharField(max_length=500)
+    row_no      = models.IntegerField()
+    row_mark    = models.IntegerField()
+    max_mark    = models.IntegerField()
 
     class Meta:
         managed = False

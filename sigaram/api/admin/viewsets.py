@@ -2602,49 +2602,77 @@ class EditAnswerWrittenworkViewSet(viewsets.ModelViewSet):
 
 class PeerRubricsReviewViewSet(viewsets.ModelViewSet):
 
-    queryset = models.RubricsHeader.objects.all().order_by('-slno')
-    serializer_class = adminserializers.AdminrubricsSerializer
+    queryset = models.PeerRubricsReview.objects.all()
+    serializer_class = adminserializers.PeerRubricsReviewSerializer
 
     def create(self, request):
-        adminrubrics = models.RubricsHeader()
-        rubricmatrix = models.RubricMatrix()
-        rubricsdata =  json.loads(request.DATA.keys()[0])
+        prr = models.PeerRubricsReview()
+        prrdata =  json.loads(request.DATA.keys()[0])
 
-        rubbodydata = rubricsdata.get('mtx_body')
-        rubheaderdata = rubricsdata.get('mtx_head')
-        
-        adminrubrics.title = rubricsdata.get('ttl')
-        adminrubrics.description = rubricsdata.get('desc')
-        adminrubrics.instruction = rubricsdata.get('instn')
-        adminrubrics.teacher = request.user.username
-        adminrubrics.status = 0
-        adminrubrics.ts = time.strftime('%Y-%m-%d %H:%M:%S')
-        adminrubrics.save()
+        prrdataarr = prrdata.get('ansarr')
 
-        refno = adminrubrics.slno
-
-        for idx, bd in enumerate(rubbodydata):
-            rubricmatrix.refno = refno
-            rubricmatrix.datatype = 'B'
-            rubricmatrix.jdata = bd
-            rubricmatrix.disp_order = idx+1
-            rubricmatrix.save()
-
-        for idy, hd in enumerate(rubheaderdata):
-            rubricmatrix.refno = refno
-            rubricmatrix.datatype = 'H'
-            rubricmatrix.jdata = hd
-            rubricmatrix.disp_order = idy
-            rubricmatrix.save()
+        for idx, prrd in enumerate(prrdataarr):
+            prr.resourceid  = prrdata.get('resourceid')
+            prr.studentid   = prrdata.get('studentid')
+            prr.evaluatedby = str(request.user.username)
+            prr.row_no      = idx
+            prr.row_mark    = prrd
+            prr.max_mark    = prrdata.get('maxmark')
+            prr.save()
 
         return Response(request.DATA);
 
-    def update(self, request, pk=None):
-        return Response('"msg":"update"')
+    def list(self, request):
+        resourceid  = request.GET.get('resourceid')
+        studentid   = request.GET.get('studentid')
+        rubricid    = request.GET.get('rubricid')
+        result = {}
+        sql = '''
+        SELECT  temp.resourceid, 
+                temp.studentid, 
+                row_no, 
+                rowmark, 
+                avgmark, 
+                rm.jdata
+        FROM (
+            SELECT  resourceid, 
+                    studentid, 
+                    row_no, 
+                    round(avg(row_mark),1) AS rowmark, 
+                    round(avg(max_mark)) AS avgmark
+            FROM peer_rubrics_review
+            WHERE resourceid = '%s'
+            AND studentid = '%s'
+            GROUP BY resourceid, studentid, row_no
+        ) AS temp
+        LEFT JOIN assignresourceinfo ari ON ari.resourceid = temp.resourceid 
+            AND ari.studentid = temp.studentid
+        RIGHT JOIN rubric_matrix rm ON rm.disp_order = temp.row_no 
+            AND ari.rubric_id = rm.refno
+        WHERE refno = '%s'
+            AND rm.datatype = 'B' ''' % (resourceid, str(studentid), rubricid)
 
-    def destroy(self, request, pk=None):
-        models.RubricsHeader.objects.get(pk=pk).delete()
-        return Response('"msg":"delete"')
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result['prrlist'] = [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+
+        sql =  '''
+            SELECT rubric_n_mark
+            FROM  assignresourceinfo
+            WHERE resourceid = '%s'
+            AND studentid = '%s'
+            ''' % (resourceid, str(studentid))
+    
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        data['rnmark'] =  cursor.fetchone()
+
+        return Response(result)
+
 
 class AssignmindmapinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Assignmindmapinfo.objects.all()

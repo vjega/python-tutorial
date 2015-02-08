@@ -235,10 +235,15 @@ class BillboardcommentinfoSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('billboardcommentid', 'billboardid', 'studentid', 'comment',
                   'commentedby', 'commenteddate')        
 
-        
 class RichmindmapSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Assignmindmapinfo
         fields = ('mindmapid','studentid','assigntext','mapdata','assigneddate',
                     'isdelete','assignedby','answertext','comment','answereddate',
                     'assignedby','assigneddate','isanswered','issaved','isdelete')
+
+class PeerRubricsReviewSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.PeerRubricsReview
+        fields = ('slno','resourceid','studentid','evaluatedby',
+                  'row_no','row_mark','max_mark')
