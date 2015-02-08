@@ -265,13 +265,16 @@
 window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
 
- TTS.forms.addrichmindmap = function(data){
+ TTS.forms.addrichmindmap = function(){
+     var data = {
+        "mapdata" : "hi test msg"
+    }
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'POST',
-        data: data,
+        data: JSON.stringify(data),
         url : '/api/admin/richmindmap/'
     }).done(function( msg ) {
         console.log(msg)
@@ -281,11 +284,11 @@ TTS.forms = TTS.forms || {};
 $(document).ready(function(){
  $("body").live("click","#save_mindmap",function(){
     $(".float-panel").hide()
-    richmindmap.document.serialize()
-    console.log(richmindmap.document.serialize());
+    //richmindmap.document.serialize()
+    //console.log(richmindmap.document.serialize());
     //var data = {}
     //data['mapdata'] = "my first value";
-    //TTS.forms.addrichmindmap(JSON.stringify(data)); 
+    TTS.forms.addrichmindmap(); 
  });
 });
  </script>
