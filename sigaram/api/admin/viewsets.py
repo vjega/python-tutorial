@@ -99,7 +99,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
         teacher = models.Teacherinfo()
         teacherdata =  json.loads(request.DATA.keys()[0])
         teacher.username = teacherdata.get('username')
-        teacher.lastname = teacherdata.get('lastname')
+        teacher.lastname = '' #teacherdata.get('lastname')
         teacher.password = teacherdata.get('password')
         teacher.firstname = teacherdata.get('firstname')
         teacher.schoolid = teacherdata.get('schoolid')
