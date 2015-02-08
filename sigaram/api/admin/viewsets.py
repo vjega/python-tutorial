@@ -3147,6 +3147,16 @@ class BillboardCommentViewSet(viewsets.ModelViewSet):
         WHERE billboardid = '%s' 
         """ % (billboardid)
 
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result = [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+
+        return Response(result)
+
 class RichmindmapViewSet(viewsets.ModelViewSet):
 
     queryset = models.Assignmindmapinfo.objects.all()
