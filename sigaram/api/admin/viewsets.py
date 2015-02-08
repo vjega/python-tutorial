@@ -3023,8 +3023,14 @@ class RichmindmapViewSet(viewsets.ModelViewSet):
         assignmindmapinfo = models.Assignmindmapinfo()
         assigndata =  json.loads(request.DATA.keys()[0])
         assignmindmapinfo.mapdata = assigndata.get('mapdata')
-        assigndata.save()
-        return Response(request.DATA)
+        assignmindmapinfo.mindmapid = 0
+        assignmindmapinfo.isanswered = 0
+        assignmindmapinfo.issaved = 0
+        assignmindmapinfo.isdelete = 0
+        assignmindmapinfo.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        assignmindmapinfo.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        assignmindmapinfo.save()
+        return Response('"msg":"created"')
 
 class studentwrittenworkViewSet(viewsets.ModelViewSet):
     queryset = models.Writtenworkinfo.objects.all()

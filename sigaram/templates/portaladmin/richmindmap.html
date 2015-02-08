@@ -28,6 +28,11 @@
     text-align: center;
     width: 120px;
 }
+
+.float-panel {
+    # left: 1269px !important;
+}
+
 </style>
 {% endblock morecss %}
 {% block scriptcontent %}
@@ -137,7 +142,6 @@
 </div>
 </script>
 
-<!--
 <script id="template-inspector" type="text/x-jquery-tmpl">
 <div id="inspector">
   <div id="inspector-content">
@@ -190,7 +194,6 @@
   </div>
 </div>
 </script>
--->
 
 <script id="template-export-map" type="text/x-jquery-tmpl">
 <div id="export-map-dialog" title="Export mind map">
@@ -199,11 +202,6 @@
   <div id="export-preview"></div>
 </div>
 </script>
-
-  <script type="text/javascript">
-    var mindmaps = mindmaps || {};
-    mindmaps.DEBUG = true;
-  </script>
 
 {% endblock scriptcontent %}
 
@@ -262,31 +260,48 @@
   <!-- /DEBUG -->
 {% block morescript %}
  <script>
+var mindmaps = mindmaps || {};
+mindmaps.DEBUG = true;
+
 window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
 
- TTS.forms.addrichmindmap = function(data){
+ TTS.forms.addrichmindmap = function(){
+    var data = {
+      mapdata : richmindmap.document.serialize()
+    }
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'POST',
-        data: data,
+        data: JSON.stringify(data),
         url : '/api/admin/richmindmap/'
     }).done(function( msg ) {
         console.log(msg)
     });
 }
 
+ TTS.forms.renderrichmindmap = function(){
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'GET',
+        url : '/api/admin/richmindmap/1'
+    }).done(function( msg ) {
+        console.log(msg)
+    });
+}
+
 $(document).ready(function(){
- $("body").live("click","#save_mindmap",function(){
-    $(".float-panel").hide()
-    richmindmap.document.serialize()
-    console.log(richmindmap.document.serialize());
-    //var data = {}
-    //data['mapdata'] = "my first value";
-    //TTS.forms.addrichmindmap(JSON.stringify(data)); 
- });
+  TTS.forms.renderrichmindmap()
+  $(".float-panel").hide()
+  
+  $("#save_mindmap").click(function(){
+    TTS.forms.addrichmindmap()
+  });
+
 });
  </script>
  <script src="{% static "js/tts.utils.js" %}"></script>
@@ -335,7 +350,7 @@ $(document).ready(function(){
   <script src="{%static "mindmaps/src/js/MainViewController.js" %}"></script>
   <script src="{%static "mindmaps/src/js/Storage.js" %}"></script>
   <script src="{%static "mindmaps/src/js/Event.js" %}"></script>
-  <script src="{%static "mindmaps/src/js/Notification.js" %}"></script>
+  <!-- script src="{%static "mindmaps/src/js/Notification.js" %}"></script -->
   <script src="{%static "mindmaps/src/js/StaticCanvas.js" %}"></script>
   <script src="{%static "mindmaps/src/js/PrintController.js" %}"></script>
   <script src="{%static "mindmaps/src/js/ExportMap.js" %}"></script>
@@ -343,21 +358,3 @@ $(document).ready(function(){
   <script src="{%static "mindmaps/src/js/FilePicker.js" %}"></script>
   <!-- JS:LIB:END -->
 {% endblock morescript %}
-
-  <!-- PRODUCTION
-<script type="text/javascript">
-  var _gaq = _gaq || [];
-  _gaq.push([ '_setAccount', 'UA-23624804-1' ]);
-  _gaq.push([ '_trackPageview' ]);
-  (function() {
-    var ga = document.createElement('script');
-    ga.type = 'text/javascript';
-    ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl'
-        : 'http://www')
-        + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(ga, s);
-  })();
-</script>
-/PRODUCTION -->
