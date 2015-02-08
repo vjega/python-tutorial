@@ -155,7 +155,7 @@
                         </a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="statistics-activities">{% trans "Activities" %} {% trans "Statistics" %}</a>
+                                <a href="statistics-activities">{% trans "Login" %} {% trans "Statistics" %}</a>
                             </li>
                             <li>
                                 <a href="statistics-assignment">{% trans "Homework" %} {% trans "Statistics" %}</a>
@@ -192,16 +192,23 @@
                     </li>-->
                      <li>
                         <a class="active" href="rubrics">
-                            <i class="fa fa-building fa-fw"></i>{% trans "Rubrics" %}
+                            <i class="fa fa-cube fa-fw"></i> {% trans "Rubrics" %}
                         </a>
                     </li>
+                    
+                    <li>
+                        <a class="active" href="richmindmap">
+                            <i class="fa fa-building fa-fw"></i>{% trans "Richminmap" %}
+                        </a>
+                    </li>
+                    
                 </ul>
             </div>
             <!-- /.sidebar-collapse -->
         </div>
         <!-- /.navbar-static-side -->
 
-        <div id="page-wrapper" class="" style="background:none;">
+        <div id="page-wrapper" style="background:none;">
             {% block topcontent %}{% endblock %}
             {% block botcontent %}{% endblock %}
             <!-- /.row -->
@@ -227,6 +234,8 @@
     <!-- script src="js/plugins/morris/morris.min.js"></script -->
     <!-- script src="js/plugins/morris/morris-data.js"></script -->
 
+    <!-- jquery validation -->
+    <script src="{%static "bower_components/jquery-validation/dist/jquery.validate.min.js" %}"></script>
     <script src="{%static "js/sb-admin-2.js" %}"></script>
     {% block scriptcontent %}{% endblock %} 
 </body>

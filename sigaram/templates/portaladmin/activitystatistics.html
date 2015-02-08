@@ -1,10 +1,10 @@
-{% extends 'portalteacher/base.html' %}
+{% extends 'portaladmin/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Submission" %}</h2>
+        <h2 class="page-header">{% trans "Statistics" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-lg-7" id='tilldate'>
                             <div class='input-group'>
-                                <input type='text' id='enddate' class="form-control" data-date-format="DD-MM-YYYY"/>
+                                <input type='text' class="form-control" data-date-format="YYYY-MM-DD"/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -71,12 +71,12 @@
 <style>
     .resourcelist tbody tr:hover{
         cursor: pointer;
-    }
-    .table-responsive{
-        padding: 10px;
     }    
     #wrapper{
         padding-top:60px;
+    }
+    .table-responsive{
+        padding: 10px;
     }
 </style>
 {% endblock morecss %}
@@ -111,25 +111,21 @@
                   "data" :"slno",
                   "bSortable":false
                 },
-                { "title": "{% trans "Title" %}",
-                  "data" :"title"
+                { "title": "{% trans "Works" %}",
+                  "data" :"works"
                 },
                 { "title": "{% trans "Date" %}",
                   "data" :"date"
-                },
-                { "title": "{% trans "Type" %}" ,
-                  "data" :"type"
                 },
             ];
         var dataset = [];
         var count = 0
         for(var i in data){
-            var t = [];
+            var t = {};
             t.DT_RowId = data[i].resourceid;
             t.slno=++count;
-            t.title=data[i].resourcetitle;
-            t.date=TTS.utils.dateConv(data[i].createddate);
-            t.type=data[i].resourcetype;
+            t.works=data[i].resourcetitle;
+            t.date=data[i].createddate;
             dataset.push(t);
         }
         if (TTS.forms.table) {
@@ -156,36 +152,11 @@ $(document).ready(function(){
         $("table#resource-list thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
-    $('.resourcelist').on('click','tbody tr',function(e){
-        e.stopPropagation();
-        window.location = 'viewassignresource?resourceid='+this.id;
-    });
-    /*$('#fromdatepicker').datetimepicker({
-        pickTime: true
-    });
-    $('#todatepicker').datetimepicker({
-        pickTime: true
-    });
-    $("#fromdatepicker").on("dp.change",function (e) {
-       $('#todatepicker').data("DateTimePicker").setMinDate(e.date);
-    });
-    $("#todatepicker").on("dp.change",function (e) {
-       $('#fromdatepicker').data("DateTimePicker").setMaxDate(e.date);
-    });*/
-
     $('#date-search').click(function(){
-<<<<<<< HEAD
-        //alert($("#fromdatepicker input").val());
-        var fromdate = $("#fromdate").val();
-        var todate = $("#todatepicker").val();
-        console.log(fromdate);
-        console.log(todate);
-=======
         var fdate = $("#startdate").val();
         var tdate = $("#enddate").val();
         var fromdate=fdate.split('-').reverse().join('-');
         var todate=tdate.split('-').reverse().join('-');
->>>>>>> 2993a221e3f1740b29bc6c65337d1bb8b0cea775
         $.ajax({
             "url":"/api/admin/teacherassignedresource/?fdate="+fromdate+"&tdate="+todate+"&format=json",
             "type":"GET"

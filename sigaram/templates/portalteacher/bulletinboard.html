@@ -1,4 +1,4 @@
-{% extends 'portaladmin/base.html' %}
+{% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% load crispy_forms_tags %}
@@ -10,8 +10,8 @@
     <!-- /.col-lg-12 -->
 </div>
 <div class="row">
-    <div>    
-        <label>{% trans "Select Any Users" %}</label>
+    <div class="col-lg-12">   
+        <label class="heading">{% trans "Select Any Users" %}</label>
         <span>
             <select id="category">recentactivities
                 <option value="admin">Administrator</option>
@@ -20,9 +20,10 @@
             </select>
         </span>
     </div>
-
-</div>
+</div><br />
 <div class="row" id="schooldetails">
+    <div class="col-lg-1">
+    </div>
     <div class="col-lg-2">
         <span >
             <select name="school_name" class="form-control" id="school_name">
@@ -34,9 +35,8 @@
             </select>
         <span>
     </div>
-
 </div>
-
+<br />
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-default">
@@ -55,20 +55,20 @@
 </div>
 {% endblock topcontent %}
 {% block botcontent %}
-<div class="row">
+<div class="row col-lg-12">
     <div id="file-uploader">File Uploader Comes Here...</div> 
     <input type="hidden" id="uploadurl">
-    <div class="form-group col-sm-2 heading" >
+    <div class="form-group row heading" >
         <label for="folder_name" class="col-sm-2 control-label">{% trans "Title" %}</label>
-    </div><br />
+    </div>
     <div class="form-group">
         <textarea id="title" class="summernote"></textarea>
     </div>
 </div>
-<div class="row">
-    <div class="form-group col-sm-2 heading">
+<div class="row col-lg-12">
+    <div class="form-group row heading">
         <label for="folder_name" class="col-sm-2 control-label">{% trans "Announcment" %}</label>
-    </div><br />
+    </div>
     <div class="form-group">
         <textarea id="announcement" class="summernote"></textarea>
     </div>
@@ -97,9 +97,6 @@
     }
     #bulletinboard{
         display:none;
-    }
-    .heading{
-        color:white;
     }
 </style>
 {% endblock morecss %}
@@ -238,7 +235,19 @@ TTS.forms.renderadminschool = function(data){
 };    
 
 $(document).ready(function(){
-    $('.summernote').summernote();
+    $('.summernote').summernote({
+          toolbar: [
+            ['edit',['undo','redo']],
+            ['style', ['style']], // no style button
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            //['insert', ['picture', 'link']], // no insert buttons
+            //['table', ['table']], // no table button
+            //['help', ['help']] //no help button
+          ]
+    });
     $('#schooldetails').hide();
     $.ajax({
         "url":"/api/admin/admin/?format=json",
@@ -305,5 +314,5 @@ $(document).ready(function(){
     });
     
 });
-</script>
+</script><br><br>
 {% endblock scriptcontent %}

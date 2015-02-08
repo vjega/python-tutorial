@@ -5,7 +5,7 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Sticky Note List" %}</h2>
+        <h2 class="page-header">{% trans "Sticky notes" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
@@ -15,7 +15,7 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans "Sticky" %} {% trans "List" %} 
+            {% trans "Sticky notes" %} 
             </span>
              <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
         </div>
@@ -79,7 +79,7 @@ TTS.forms.addadmin = function(form, data) {
 
 TTS.forms.showadminform = function() {
     BootstrapDialog.show({
-        title: 'Add Sticky List',
+        title: '{% trans "Sticky notes" %}',
         message: $($('#stickylist-form').render()),
         onshown: function(){
         },
@@ -88,6 +88,19 @@ TTS.forms.showadminform = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-sticky-info");
+                $("#add-sticky-info").validate({
+                    rules: {
+                        title: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        title: "Title is required",
+                    }
+                });
+                if(!$("#add-sticky-info").valid()){
+                  return false;  
+                }
                 //console.log(data);
                 TTS.forms.addadmin(dialogItself, data); 
             }
@@ -104,7 +117,8 @@ TTS.forms.renderteacher = function(data){
     
     var headers = [
             { "title": "{% trans "Sl No." %}",
-              "class": "text-center"  
+              "class": "text-center" ,
+              "bSortable":false   
             },
             { "title": "{% trans "Title" %}",
               "class": "sticky_title"
@@ -120,7 +134,7 @@ TTS.forms.renderteacher = function(data){
         t.DT_RowId = data[i].id;
         t.push(++count);
         t.push(data[i].title);
-        t.push(data[i].createddate);
+        t.push(TTS.utils.datetimeConv(data[i].createddate));
         dataset.push(t);
     }
     if (TTS.forms.table) {
@@ -146,6 +160,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacher(data);
+        $("table#sticky-list-tbl thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
     $('#sticky-list-tbl').on('click', 'tbody tr', function(){

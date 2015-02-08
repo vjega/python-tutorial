@@ -82,7 +82,19 @@ TTS.forms.addstudentresource = function() {
         title: 'Student Resources',
         onshown: function(dialogRef){
             updateChapter();
-            $('.summernote').summernote();
+            $('.summernote').summernote({
+          toolbar: [
+            ['edit',['undo','redo']],
+            ['style', ['style']], // no style button
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            //['insert', ['picture', 'link']], // no insert buttons
+            //['table', ['table']], // no table button
+            //['help', ['help']] //no help button
+          ]
+    });
         },
         message: $($('#studentresource-form').render()),
         buttons: [{
@@ -117,7 +129,8 @@ TTS.forms.renderteacherresourceinfo = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data":"slno"  
+              "data":"slno" ,
+              "bSortable":false 
             },
             { "title": "{% trans "Title" %}",
               "data" :"title"
@@ -126,7 +139,8 @@ TTS.forms.renderteacherresourceinfo = function(data){
               "data" :"date"
             },
             { "title": "{% trans "Assignment" %}",
-              "data":"assignment"
+              "data":"assignment",
+              "bSortable":false
             }, 
         ];
     var dataset = [];
@@ -142,7 +156,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
             temp = "#";
         } 
         t.title ="<a href='"+temp+"' id='"+data[i].resourceid+"' ><p class='col-sm-3 pull-left'><img src='/static/"+data[i].thumbnailurl+"'></p> " + data[i].resourcetitle +"</a>";
-        t.date= data[i].createddate;
+        t.date= TTS.utils.datetimeConv(data[i].createddate);
         t.assignment="<a href='javascript:void(0)' class='assignment' id='"+data[i].resourceid+"' ><i class='fa fa-share fa-2x'></i></a>";
         dataset.push(t);
     }
@@ -176,6 +190,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacherresourceinfo(data);
+        $("table#studetresource-main-tbl thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
     /*$('#studetresource-main-tbl').on('click', 'tbody tr',function(e){

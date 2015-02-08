@@ -21,7 +21,7 @@
                         </div>    
                         <div class="col-lg-7" id='fromdate'>
                             <div class='input-group'>
-                                <input type='text' class="form-control" data-date-format="YYYY-MM-DD"/>
+                                <input type='text' id='startdate' class="form-control" data-date-format="DD-MM-YYYY"/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-lg-7" id='tilldate'>
                             <div class='input-group'>
-                                <input type='text' class="form-control" data-date-format="YYYY-MM-DD"/>
+                               <input type='text' id='enddate' class="form-control" data-date-format="DD-MM-YYYY"/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -44,7 +44,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="btn btn-primary" type="button">{% trans "Search" %}</button>
+                <button class="btn btn-primary" id="date-search" type="button">{% trans "Search" %}</button>
                 <span id="addrec">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <i class="fa fa-plus-square fa-lg"></i></span>
             </div>
@@ -99,6 +99,9 @@ $('#fromdate,#tilldate').datetimepicker({
     i.ww-delete{
         color: red;
     }
+    .table-responsive{
+        padding: 10px;
+    }
 </style>
 {% endblock morecss %}
 
@@ -126,7 +129,8 @@ TTS.forms.writtenworklist = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center" ,
-              "data" :"slno"
+              "data" :"slno",
+              "bSortable":false
             },
             { "title": "{% trans "Title" %}",
               "data" :"title"
@@ -151,7 +155,7 @@ TTS.forms.writtenworklist = function(data){
             t.DT_RowId  = "var_"+data[i].writtenworkid;
             t.slno      = ++count_new;
             t.title     = data[i].writtenworktitle;
-            t.date      = data[i].createddate;
+            t.date      =TTS.utils.dateConv(data[i].createddate);
             t.action    = "<i class='fa fa-close fa-lg ww-delete'></i>"
             dataset_new.push(t);
         }
@@ -165,22 +169,40 @@ TTS.forms.writtenworklist = function(data){
             dataset_saved.push(t);
         }
     }
-
-    $('#writtenwork-list-new').dataTable({"language" : TTS.utils.datatable_ta,
-        "data":     dataset_new,
-        "columns":  headers
-    });
-    $('#writtenwork-list-saved').dataTable({"language" : TTS.utils.datatable_ta,
+     if (TTS.forms.table) {
+            TTS.forms.table.fnClearTable();
+            TTS.forms.table.fnAddData(
+                dataset_new
+            );
+    }else{
+        TTS.forms.table =    $('#writtenwork-list-new').dataTable({"language" : TTS.utils.datatable_ta,
+            "data":     dataset_new,
+            "columns":  headers
+        });
+    }
+    /*$('#writtenwork-list-saved').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset_saved,
         "columns":  headers
-    });
+    });*/
 };
 
 TTS.forms.addwrittenwork = function() {
     BootstrapDialog.show({
-        title: 'Writing job',
+        title: '{% trans "Writing job" %}',
         onshown: function(dialogRef){
-            $('.summernote').summernote();
+            $('.summernote').summernote({
+          toolbar: [
+            ['edit',['undo','redo']],
+            ['style', ['style']], // no style button
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            //['insert', ['picture', 'link']], // no insert buttons
+            //['table', ['table']], // no table button
+            //['help', ['help']] //no help button
+          ]
+    });
         },
         message: $($('#addwrittenwork').render()),
         buttons: [{
@@ -231,8 +253,8 @@ $(document).ready(function(){
         "url":"/api/admin/writtenworkinfo/?format=json",
         "type":"GET"
     }).done(function(data){
-        //console.log(data);
         TTS.forms.writtenworklist(data);
+        $("table#writtenwork-list-new thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
 
@@ -256,6 +278,27 @@ $(document).ready(function(){
         delid = $(this).parent().parent().prop("id");
         delid = delid.replace("var_", ""); 
         TTS.forms.delwrittenwork(delid);
+    });
+
+    $('#date-search').click(function(){
+        var fdate = $("#startdate").val();
+        var tdate = $("#enddate").val();
+        var fromdate=fdate.split('-').reverse().join('-');
+        var todate=tdate.split('-').reverse().join('-');
+        $.ajax({
+            "url":"/api/admin/writtenworkinfo/?fdate="+fromdate+"&tdate="+todate+"&format=json",
+            "type":"GET"
+        }).done(function(data){
+            if (data.length) {
+                TTS.forms.writtenworklist(data);
+                $("table#resource-list thead tr th").removeClass('sorting_asc');
+            } else {
+                TTS.forms.table.fnClearTable();
+                $("table#resource-list thead tr th").removeClass('sorting_asc');
+            }
+            TTS.utils.ajaxloaderstop();
+           
+        });
     });
 
 });

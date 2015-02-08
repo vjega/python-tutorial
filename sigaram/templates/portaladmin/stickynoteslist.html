@@ -102,6 +102,19 @@ TTS.forms.showadminform = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-sticky-info");
+                $("#add-sticky-info").validate({
+                    rules: {
+                        title: {
+                            required: true
+                        }
+                    },
+                    messages: {
+                        title: "Title is required",
+                    }
+                });
+                if(!$("#add-sticky-info").valid()){
+                  return false;  
+                }
                 //console.log(data);
                 TTS.forms.addadmin(dialogItself, data); 
             }
@@ -144,7 +157,7 @@ TTS.forms.renderteacher = function(data){
         t.DT_RowId = data[i].id;
         t.slno=++count;
         t.title=data[i].title;
-        t.date=data[i].createddate;
+        t.date=TTS.utils.datetimeConv(data[i].createddate);
         t.del = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);
     }

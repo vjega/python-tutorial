@@ -1,4 +1,4 @@
-{% extends 'portaladmin/base.html' %}
+{% extends 'portalstudent/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 
@@ -54,7 +54,7 @@
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
-
+<script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
 
@@ -75,22 +75,8 @@ TTS.forms.renderteacherresourceinfo = function(data){
 
 };
 
-function getUrlParameter(sParam)
-{
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++) 
-    {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam) 
-        {
-            return sParameterName[1];
-        }
-    }
-}
-
 $(document).ready(function(){  
-    var id = getUrlParameter('id');
+    var id = TTS.utils.getUrlParameter('id');
     $.ajax({
         "url":"/api/admin/bulletinboardlist/"+id+"/?format=json",
         "type":"GET"

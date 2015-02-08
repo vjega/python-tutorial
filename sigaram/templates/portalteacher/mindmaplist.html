@@ -78,7 +78,8 @@ TTS.forms.renderadmin = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false  
             },
             
             { "title": "{% trans "Title" %}",
@@ -86,11 +87,13 @@ TTS.forms.renderadmin = function(data){
             }, 
             { "title": "{% trans "Edit" %}",
               "class": "text-center",
-              "data" : "edi"
+              "data" : "edi",
+              "bSortable":false
             }, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center",
-              "data" : "del"
+              "data" : "del",
+              "bSortable":false
 
             }, 
         ];
@@ -119,6 +122,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderadmin(data);
+        $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
     });
     $('#admin-main-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();

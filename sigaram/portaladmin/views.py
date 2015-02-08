@@ -61,6 +61,9 @@ writtenwork_uploader = AjaxFileUploader(UPLOAD_DIR='static/writtenwork')
 
 rubric_uploader = AjaxFileUploader(UPLOAD_DIR='static/rubric')
 
+sticky_notes_uploader = AjaxFileUploader(UPLOAD_DIR='static/stickynotes', 
+                                      DIMENSIONS=(250, 250))
+
 def layoutdemo(request):
     return render(request, 'portaladmin/layoutdemo.html')
 
@@ -598,4 +601,14 @@ def viewpost(request):
 @login_required
 @switchlanguage
 def newtopic(request):
-    return render(request, 'portaladmin/newtopic.html')  
+    return render(request, 'portaladmin/newtopic.html')
+    
+@login_required
+@switchlanguage
+def richmindmap(request):
+    return render(request, 'portaladmin/richmindmap.html')  
+
+@login_required
+@switchlanguage
+def activitystatistics(request):
+    return render(request, 'portaladmin/activitystatistics.html') 

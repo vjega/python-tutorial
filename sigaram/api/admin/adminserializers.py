@@ -59,7 +59,8 @@ class WrittenworkinfoSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Writtenworkinfo
         fields = ('writtenworkid',  'writtenworktitle','description',
                   'writtenimage','schoolid', 'classid','isassigned',
-                  'createdby','isdeleted','createddate')
+                  'createdby','isdeleted','createddate','publisheddate',
+                  'assigneddate','answertext','isclassroom')
 
 class ChapterinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -120,7 +121,7 @@ class MindmapSerializer(serializers.HyperlinkedModelSerializer):
 class StickynotesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.stickynotes
-        fields = ('id','stickytext','color','name')
+        fields = ('id','stickytext','attachment','color','name')
         
 class StickyCommentsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -234,4 +235,10 @@ class BillboardcommentinfoSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('billboardcommentid', 'billboardid', 'studentid', 'comment',
                   'commentedby', 'commenteddate')        
 
-
+        
+class RichmindmapSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Assignmindmapinfo
+        fields = ('mindmapid','studentid','assigntext','mapdata','assigneddate',
+                    'isdelete','assignedby','answertext','comment','answereddate',
+                    'assignedby','assigneddate','isanswered','issaved','isdelete')

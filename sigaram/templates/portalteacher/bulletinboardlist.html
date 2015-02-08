@@ -87,7 +87,19 @@ TTS.forms.showexamform = function() {
         message: $($('#announcement-form').render()),
         onshown: function(){
             TTS.forms.upload();
-            $('.summernote').summernote();
+            $('.summernote').summernote({
+          toolbar: [
+            ['edit',['undo','redo']],
+            ['style', ['style']], // no style button
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            //['insert', ['picture', 'link']], // no insert buttons
+            //['table', ['table']], // no table button
+            //['help', ['help']] //no help button
+          ]
+    });
         },
         buttons: [{
             label: '{% trans "Save" %}',
@@ -133,7 +145,8 @@ TTS.forms.renderannouncement = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false   
             },
             { "title": "{% trans "Title" %}",
               "data" : "title",
@@ -144,7 +157,8 @@ TTS.forms.renderannouncement = function(data){
             },
             { "title": "{% trans "Delete" %}",
               "class": "text-center",
-              "data" : "delete"
+              "data" : "delete",
+              "bSortable":false 
             },  
         ];
     var dataset = [];
@@ -155,7 +169,9 @@ TTS.forms.renderannouncement = function(data){
         t.DT_RowId = data[i].bulletinboardid;
         t.slno = ++count;
         t.title = data[i].messagetitle;
-        t.declared = data[i].messagetitle + " "+data[i].postedby+"<br />"+data[i].posteddate;
+        t.declared = data[i].messagetitle + " "+data[i].postedby+"<br />"+
+                     TTS.utils.dateConv(data[i].posteddate);
+                     
         t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
@@ -187,6 +203,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderannouncement(data);
+        $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         window.location = 'bulletinboard';

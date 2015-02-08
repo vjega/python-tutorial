@@ -59,6 +59,21 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
+TTS.forms.saveschool = function(dialogItself){
+    var data = TTS.utils.serilaizeJson("#add-school");
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'POST',
+        data: data,
+        url : '/api/admin/adminschool/'
+    }).done(function( msg ) {
+        dialogItself.close();
+        location.reload();
+        //dialogItself.close();
+    });
+};
 TTS.forms.addschool = function() {
     BootstrapDialog.show({
         title: '{% trans "Add School" %}',
@@ -67,19 +82,24 @@ TTS.forms.addschool = function() {
             label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-school");
-                $.ajax({
-                    headers : {
-                        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                $("#add-school").validate({
+                    rules: {
+                        schoolname: {
+                            required: true
+                        },
+                        shortname: {
+                            required: true
+                        }
                     },
-                    type:'POST',
-                    data: data,
-                    url : '/api/admin/adminschool/'
-                }).done(function( msg ) {
-                    dialogItself.close();
-                    location.reload();
-                    //dialogItself.close();
+                    messages: {
+                        schoolname: "School Name is required",
+                        shortname: "Short Name is required"
+                    }
                 });
+                if(!$("#add-school").valid()){
+                  return false;  
+                }
+                TTS.forms.saveschool(dialogItself);
             }
             },{
             label: '{% trans "Close" %}',
@@ -143,7 +163,8 @@ TTS.forms.renderadminschool = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center" ,
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false     
             },
             { "title": "{% trans "Name" %}" ,
               "data" : "schoolname",
@@ -154,11 +175,13 @@ TTS.forms.renderadminschool = function(data){
             }, 
             { "title": "{% trans "Edit" %}",
               "class": "text-center",
-              "data" : "edit" 
+              "data" : "edit",
+              "bSortable":false    
             }, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center" ,
-              "data" : "delete" 
+              "data" : "delete",
+              "bSortable":false    
             }, 
         ];
     var dataset = [];
@@ -189,8 +212,10 @@ $(document).ready(function(){
         TTS.utils.ajaxloaderstop();
         if (data.length) {
             TTS.forms.renderadminschool(data);
+            $("table#adminschool-main-tbl thead tr th").removeClass('sorting_asc');
         } else {
             TTS.forms.table.fnClearTable();
+            $("table#adminschool-main-tbl thead tr th").removeClass('sorting_asc');
         }
     });
     $('#adminschool-main-tbl').on('click', 'tbody tr .schoolname', function(){

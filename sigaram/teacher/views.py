@@ -50,13 +50,15 @@ def home(request):
         "link" : u"assignedresourcelist",
         "caption": _("Assignment"),
         "stat": 25
-        },{
+        },
+        {
         "color": u"green",
         "icon" : u"pencil-square-o",
         "link" : u"writtenwork",
         "caption":_("Written Work"),
         "stat": 125
-        },{
+        },
+        {
         "color": u"red",
         "icon" : u"pencil",
         "link" : u"viewassessments",
@@ -280,7 +282,7 @@ def studentresourcelist(request):
 @login_required
 @switchlanguage
 def assignchapter(request):
-    schools = models.Schoolinfo.objects.all()
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/assignchapter.html', 
                     {'assignchapter':assignchapter,'schools':schools,
@@ -289,7 +291,7 @@ def assignchapter(request):
 @login_required
 @switchlanguage
 def assignresource(request):
-    schools = models.Schoolinfo.objects.all()
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/assignresource.html', 
                     {'assignresource':assignresource,'schools':schools,
@@ -510,7 +512,7 @@ def studentprofile(request):
     folders = [{
         "id"   :"1",
         "name" :_("Assignments"),
-        "href" :"studentassignedresourcelist"
+        "href" :"studentassignedresourcelist?studentid=%s" % request.GET.get('studentid')
         },{
         "id"   :"2",
         "name" :_("Written Work"),

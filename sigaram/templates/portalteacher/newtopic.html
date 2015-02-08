@@ -1,4 +1,4 @@
-{% extends 'portalteacher/base.html' %}
+ {% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% load crispy_forms_tags %}
@@ -12,9 +12,9 @@
 
 {% endblock topcontent %}
 {% block botcontent %}
-<div class="row">
+<div class="row col-lg-12">
     <div class="form-group" class="col-sm-2">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Title" %}</label>
+        <label for="folder_name" class="col-sm-2 control-label heading">{% trans "Title" %}</label>
     </div>
     <div align="center" id="headermsg"></div><br />
 
@@ -22,9 +22,9 @@
         <textarea id="title" class="summernote"></textarea>
     </div>
 </div><br />
-<div class="row">
+<div class="row col-lg-12">
     <div class="form-group" class="col-sm-2">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Notes" %}</label>
+        <label for="folder_name" class="col-sm-2 control-label heading">{% trans "Notes" %}</label>
     </div><br />
     <div class="form-group">
         <textarea id="notes" class="summernote"></textarea>
@@ -119,7 +119,19 @@ TTS.forms.topicinfodetails = function(){
 }
 
 $(document).ready(function(){
-    $('.summernote').summernote();
+    $('.summernote').summernote({
+          toolbar: [
+            ['edit',['undo','redo']],
+            ['style', ['style']], // no style button
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            //['insert', ['picture', 'link']], // no insert buttons
+            //['table', ['table']], // no table button
+            //['help', ['help']] //no help button
+          ]
+    });
     var dataname  = TTS.utils.getUrlParameter("forumname");
     $("#headermsg").html(dataname);
 

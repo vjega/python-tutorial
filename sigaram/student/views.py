@@ -30,13 +30,15 @@ def home(request):
         "link" : u"resourcetype",
         "caption": _("Assignments"),
         "stat": 25
-        }, {
-        "color": u"green",
-        "icon" : u"book",
-        "link" : u"workspace",
-        "caption": _("My works"),
-        "stat": 64
-        }, {
+        },
+        # {
+        # "color": u"green",
+        # "icon" : u"book",
+        # "link" : u"workspace",
+        # "caption": _("My works"),
+        # "stat": 64
+        # },
+        {
         "color": u"yellow",
         "icon" : u"pencil-square-o",
         "link" : u"studentnoteslist",
@@ -49,13 +51,13 @@ def home(request):
         "caption": _("Written Work"),
         "stat": 125
         },
-        {
-        "color": u"green",
-        "icon" : u"desktop",
-        "link" : u"studentviewassessments",
-        "caption": _("Practicals"),
-        "stat": 125
-        },
+        # {
+        # "color": u"green",
+        # "icon" : u"desktop",
+        # "link" : u"studentviewassessments",
+        # "caption": _("Practicals"),
+        # "stat": 125
+        # },
         {
         "color": u"primary",
         "icon" : u"sitemap",
@@ -225,19 +227,20 @@ def assignedresourcelist(request):
 @login_required
 @switchlanguage
 def studentprofile(request):
-    user = models.Studentinfo.objects.filter(username=request.user.username)[0]
+    #user = models.Studentinfo.objects.filter(username=request.user.username)[0]
+    user=request.GET.get('studentid');
     folders = [{
         "id"   :"1",
         # "caption": _("Assignments"),
         "name" :_("Assignments"),
-        "href" :"studentassignedresourcelist"
+        "href" :"studentassignedresourcelist?studentid=%s" % request.GET.get('studentid') 
         },{
         "id"   :"2",
         "name" :_("Written Work"),
-        "href" :"viewstudentwrittenworks"
+        "href" :"viewstudentwrittenworks?studentid=%s" % request.GET.get('studentid') 
         }]
     return render(request, 'portalstudent/studentprofile.html', 
-                  {"folders":folders, "user":user})
+                  {"folders":folders})
 
 @login_required
 @switchlanguage

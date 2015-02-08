@@ -66,14 +66,15 @@ TTS.forms.renderchapterinfo = function(data){
     var headers = [
             { "title": "&nbsp;",
               "class": "text-center",
-              "data":"icon"  
+              "data":"icon" ,
+              "bSortable":false  
             },
             { "title": "{% trans "Title" %}",
                "data" :"title"
             },
-            /*{ "title": "{% trans "Assignment" %}",
-              "data" :"assignment"
-            },*/
+            { "title": "{% trans "Count" %}",
+              "data" :"chaptercount"
+            },
             
         ];
     var dataset = [];
@@ -83,6 +84,7 @@ TTS.forms.renderchapterinfo = function(data){
         t.DT_RowId = data[i].chapterid;
         t.icon="<i class='fa fa-book fa-2x'></i>";
         t.title=data[i].chaptername;
+        t.chaptercount = data[i].rescount;
         /*t.assignment="<a href='javascript:void(0)' class='assignment' id='"+data[i].teacherresourceid+"' ><i class='fa fa-share fa-2x'></i></a>";*/
         dataset.push(t);
     }
@@ -100,6 +102,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderchapterinfo(data);
+        $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
     $('#admin-main-tbl').on('click', 'tbody tr',function(e){

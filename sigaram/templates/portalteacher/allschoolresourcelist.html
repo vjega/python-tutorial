@@ -5,14 +5,14 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Teachers" %} {% trans "Share" %}</h2>
+        <h2 class="page-header">{% trans "Teachers" %}{% trans "Share" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
 <div class="row">
     <div class="col-lg-12">
         <div class="form-group" class="col-sm-2">
-            <label for="folder_name" class="col-sm-2 control-label">{% trans "Schools" %}</label>
+            <label for="folder_name" class="col-sm-2 control-label heading">{% trans "Schools" %}</label>
             <div class="col-sm-4">
                 <select name="school_name" class="form-control" id="school_name">
                     {% for school in schools%}
@@ -31,7 +31,7 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% trans "Teachers" %} {% trans "Share" %}
+           <strong> {% trans "Teachers" %} {% trans "Share" %}</strong>
             <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
         </div>
         <!-- /.panel-heading -->
@@ -146,7 +146,19 @@ TTS.forms.showteacherresource = function() {
         message: $($('#teacherresource-form').render()),
         onshown: function(){
             TTS.forms.upload();
-            $('.summernote').summernote();
+            $('.summernote').summernote({
+          toolbar: [
+            ['edit',['undo','redo']],
+            ['style', ['style']], // no style button
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            //['insert', ['picture', 'link']], // no insert buttons
+            //['table', ['table']], // no table button
+            //['help', ['help']] //no help button
+          ]
+    });
         },
         buttons: [{
             label: '{% trans "Save" %}',
@@ -182,7 +194,8 @@ TTS.forms.renderteacher = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"
+              "data" : "slno",
+              "bSortable":false
             },
             { "title": "{% trans "Heading" %}",
               "data" : "resourcetitle"  
@@ -192,11 +205,13 @@ TTS.forms.renderteacher = function(data){
             },
             { "title": "{% trans "View" %}",
               "class": "text-center",
-              "data" : "view"  
+              "data" : "view",
+              "bSortable":false 
             }, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center",
-              "data" : "delete"  
+              "data" : "delete",
+              "bSortable":false 
             }, 
            
         ];
@@ -207,7 +222,7 @@ TTS.forms.renderteacher = function(data){
         t.DT_RowId = data[i].teacherresourceid;
         t.slno = ++count;
         t.resourcetitle = data[i].resourcetitle;
-        t.date = data[i].createddate;
+        t.date = TTS.utils.datetimeConv(data[i].createddate);
         t.view="<i class='flaticon-zoom38 tts-view' id="+data[i].teacherresourceid+"></i>";
         t.delete = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);
@@ -233,6 +248,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderteacher(data);
+        $("table#teacherlist-main-tbl thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
     $("#school_name").change(function(){    
@@ -242,8 +258,10 @@ $(document).ready(function(){
         }).done(function(data){
             if(data.length){
                 TTS.forms.renderteacher(data);
+                $("table#teacherlist-main-tbl thead tr th").removeClass('sorting_asc');
             }else{
                 TTS.forms.table.fnClearTable();
+                $("table#teacherlist-main-tbl thead tr th").removeClass('sorting_asc');
             }
         });
     })

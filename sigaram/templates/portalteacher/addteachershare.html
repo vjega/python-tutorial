@@ -1,4 +1,4 @@
-{% extends 'portaladmin/base.html' %}
+{% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% load crispy_forms_tags %}
@@ -11,7 +11,7 @@
 </div>
 <div class="row">
     <div >    
-        <label class="col-lg-2">{% trans "Type" %}</label>
+        <label class="col-lg-2 heading">{% trans "Type" %}</label>
         <span>
             <select id="category" class="col-lg-3"  >
                 <option value="text">Text</option>
@@ -24,7 +24,7 @@
 </div><br />
 <div class="row" id="schooldetails">
     <div>
-        <label class="col-lg-2">{% trans "Select School" %}</label>
+        <label class="col-lg-2 heading">{% trans "Select School" %}</label>
         <span >
             <select class="col-lg-3" name="school_name" class="form-control" id="school_name">
                 {% for school in schools%}
@@ -42,8 +42,8 @@
     <div id="file-uploader">File Uploader Comes Here...</div> 
     <input type="hidden" id="uploadurl">
     <div class="form-group" class="col-sm-2">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Title" %}</label>
-    </div><br />
+        <label for="folder_name" class="col-sm-2 control-label heading">{% trans "Title" %}</label>
+    </div><br /><br />
     <div class="form-group">
         <textarea id="title" class="summernote"></textarea>
     </div>
@@ -123,7 +123,19 @@ TTS.forms.teacherresource = function(){
 }
 
 $(document).ready(function(){
-    $('.summernote').summernote();
+    $('.summernote').summernote({
+          toolbar: [
+            ['edit',['undo','redo']],
+            ['style', ['style']], // no style button
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            //['insert', ['picture', 'link']], // no insert buttons
+            //['table', ['table']], // no table button
+            //['help', ['help']] //no help button
+          ]
+    });
     var uploader = new qq.FileUploader({
         action: "/admin/student-teacherres-upload",
         element: $('#file-uploader')[0],

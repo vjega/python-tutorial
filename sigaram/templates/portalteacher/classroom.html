@@ -63,7 +63,8 @@ TTS.forms.renderannouncement = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false  
             },
             { "title": "{% trans "Title" %}",
               "data" : "title"
@@ -79,7 +80,8 @@ TTS.forms.renderannouncement = function(data){
             },  
             { "title": "{% trans "Delete" %}",
               "class": "text-center",
-              "data" : "del"
+              "data" : "del",
+              "bSortable":false
             }, 
         ];
     var dataset = [];
@@ -97,7 +99,7 @@ TTS.forms.renderannouncement = function(data){
             t.type = '{% trans "Written Work" %}';
         }
         t.student = data[i].firstname;
-        t.date = data[i].posteddate;
+        t.date = TTS.utils.dateConv(data[i].posteddate);
         t.del = "<i class='fa fa-trash fa-lg tts-delete' id='"+data[i].id+"'></i>";
         dataset.push(t);
     }
@@ -127,6 +129,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderannouncement(data);
+        $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
     });
     $('#admin-main-tbl').on('click', 'tbody tr', function(){
         var x = this.id.split('_');

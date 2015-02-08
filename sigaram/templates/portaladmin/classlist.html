@@ -77,6 +77,21 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
+TTS.forms.saveclass = function(dialogItself){
+    var data = TTS.utils.serilaizeJson("#add-classlist");
+        $.ajax({
+            headers : {
+              'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+            },
+            type:'POST',
+            data: data,
+            url : '/api/admin/classlist/'
+        }).done(function( msg ) {
+            dialogItself.close();
+            location.reload();
+            //dialogItself.close();
+        });
+    };
 TTS.forms.addclassroom = function() {
     BootstrapDialog.show({
         title: '{% trans "Add Classroom" %}',
@@ -84,26 +99,43 @@ TTS.forms.addclassroom = function() {
             //console.log('hi');
             $("#id_classname").html($("#school_name").html());
             $("#id_classid").html(("1"));
-            //$('.summernote').summernote();
+            //$('.summernote').summernote({
+          toolbar: [
+            ['edit',['undo','redo']],
+            ['style', ['style']], // no style button
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            //['insert', ['picture', 'link']], // no insert buttons
+            //['table', ['table']], // no table button
+            //['help', ['help']] //no help button
+          ]
+    });
         },
         message: $($('#classlist-form').render()),
         buttons: [{
             label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-classlist");
-                $.ajax({
-                    headers : {
-                      'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                $("#add-classlist").validate({
+                    rules: {
+                        classname: {
+                            required: true
+                        },
+                        shortname: {
+                            required: true
+                        }
                     },
-                    type:'POST',
-                    data: data,
-                    url : '/api/admin/classlist/'
-                }).done(function( msg ) {
-                    dialogItself.close();
-                    location.reload();
-                    //dialogItself.close();
+                    messages: {
+                        classname: "Class Name is required",
+                        shortname: "Short Name is required"
+                    }
                 });
+                if(!$("#add-classlist").valid()){
+                  return false;  
+                }
+            TTS.forms.saveclass(dialogItself);
             }
             },{
             label: '{% trans "Close" %}',
@@ -118,7 +150,8 @@ TTS.forms.renderclassroom = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center" ,
-              "data" : "slno"  
+              "data" : "slno",
+              "bSortable":false  
             },
             { "title": "{% trans "Class" %}" ,
               "data" : "classname"
@@ -128,7 +161,8 @@ TTS.forms.renderclassroom = function(data){
             }, 
             { "title": "{% trans "Delete" %}",
               "class": "text-center" ,
-              "data" : "delete" 
+              "data" : "delete",
+              "bSortable":false 
             }, 
         ];
     var dataset = [];
@@ -155,6 +189,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderclassroom(data);
+        $("table#classlist-main-tbl thead tr th").removeClass('sorting_asc');
     });
     $('#classlist-main-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();

@@ -16,14 +16,14 @@
         <div class="panel-heading">
         </div><br />
         <!-- /.panel-heading -->
-        <div class="gentable" id ="admin-newtopic">
+        <div class="gentable col-lg-12" id ="admin-newtopic">
          <input type ="text" class="form-control" value="{{user.id}}"name="admin_id" id="admin_id" style='display:none;'>
           <!-- div id="file-uploader">File Uploader Comes Here...</div --> 
             {% crispy form %}
         </div>
         <div class="text-center">
             <div>&nbsp;</div>
-            <button class="btn btn-primary" id="addrec">Save</button>
+            <button class="btn btn-primary" id="addrec">{% trans "Save" %}</button>
         </div>
 
         <!-- /.panel-body -->

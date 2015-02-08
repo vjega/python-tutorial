@@ -112,7 +112,7 @@ TTS.forms.deladmin = function(id) {
 
 TTS.forms.showadminform = function() {
     BootstrapDialog.show({
-        title: 'Add Administrator',
+        title: '{% trans "Add Administrator" %}',
         message: $($('#admin-form').render()),
         onshown: function(){
             TTS.forms.upload();
@@ -123,6 +123,41 @@ TTS.forms.showadminform = function() {
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-admin");
                 //console.log(data);
+                $("#add-admin").validate({
+                    rules: {
+                        username: {
+                            required: true
+                        },
+                        password: {
+                            required: true,
+                        },
+                        firstname: {
+                            required: true
+                        },
+                        lastname: {
+                            required: true
+                        },
+                        emailid: {
+                            required: true,
+                            email: true
+                        }
+                    },
+                    messages: {
+                        username: "User Name is required",
+                        password: {
+                            required: "Please provide a password",
+                        },
+                        firstname: "First Name is required",
+                        lastname: "Last Name is required",
+                        emailid: {
+                                required: "Email id is required",
+                                email: "Please enter a valid email address"
+                        },
+                    }
+                });
+                if(!$("#add-admin").valid()){
+                  return false;  
+                }
                 TTS.forms.addadmin(dialogItself, data); 
             }
             },{

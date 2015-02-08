@@ -70,9 +70,9 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
             ]
         return Response(result)
 
-class WrittenworkinfoViewSet(viewsets.ModelViewSet):
-    queryset = models.Writtenworkinfo.objects.all()
-    serializer_class = studentserializers.WrittenworkinfoSerializer
+# class WrittenworkinfoViewSet(viewsets.ModelViewSet):
+#     queryset = models.Writtenworkinfo.objects.all()
+#     serializer_class = studentserializers.WrittenworkinfoSerializer
 
 class Studentworkspaceinfo(viewsets.ModelViewSet):
 

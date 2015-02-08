@@ -1086,6 +1086,7 @@ class Mindmap(models.Model):
 class stickynotes(models.Model):
     stickylistid = models.BigIntegerField()
     stickytext = models.CharField(max_length=200)
+    attachment = models.CharField(max_length=200)
     name  = models.TextField()
     color = models.TextField()
     xyz = models.IntegerField()
