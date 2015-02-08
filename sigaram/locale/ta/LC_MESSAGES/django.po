@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-08 18:30+0000\n"
+"POT-Creation-Date: 2015-02-08 18:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -315,11 +315,17 @@ msgstr "புகைப்படம்"
 #: teacher/forms/AnnouncementForm.py:19
 #: templates/portaladmin/bulletinboardlist.html:8
 #: templates/portaladmin/index.html:106
+#: templates/portaladmin/viewbulletinboard.html:8
+#: templates/portaladmin/viewbulletinboard.html:36
 #: templates/portalstudent/bulletinboardlist.html:8
 #: templates/portalstudent/bulletinboardlist.html:17
 #: templates/portalstudent/index.html:79
+#: templates/portalstudent/viewbulletinboard.html:8
+#: templates/portalstudent/viewbulletinboard.html:36
 #: templates/portalteacher/bulletinboardlist.html:8
 #: templates/portalteacher/index.html:108
+#: templates/portalteacher/viewbulletinboard.html:8
+#: templates/portalteacher/viewbulletinboard.html:36
 msgid "Announcement"
 msgstr "அறிவிப்பு"
 
@@ -1570,7 +1576,6 @@ msgstr "முடித்த தேதி"
 #: templates/portalteacher/viewassignmentanswer.html:107
 #: templates/portalteacher/viewassignmindmapanswer.html:57
 #: templates/portalteacher/viewassignwrittenworkanswer.html:107
-#: templates/portalteacher/viewbulletinboard.html:31
 msgid "Answer"
 msgstr "பதில்"
 
@@ -2025,7 +2030,13 @@ msgstr "புதிய ஆசிரியர்"
 msgid "Edit Teacher"
 msgstr "ஆசிரியர் திருத்தம்"
 
-#: templates/portaladmin/viewbulletinboard.html:72
+#: templates/portaladmin/viewbulletinboard.html:31
+#: templates/portalstudent/viewbulletinboard.html:31
+#: templates/portalteacher/viewbulletinboard.html:31
+msgid "Announce Date"
+msgstr "அறிவிப்பு தேதி"
+
+#: templates/portaladmin/viewbulletinboard.html:86
 #: templates/portaladmin/viewmyresourcelistwork.html:63
 #: templates/portaladmin/viewstudentresourcelist.html:34
 #: templates/portaladmin/viewstudentwork.html:26
@@ -2034,7 +2045,7 @@ msgstr "ஆசிரியர் திருத்தம்"
 #: templates/portalstudent/billviewassignmentanswer.html:39
 #: templates/portalstudent/studentviewwork.html:26
 #: templates/portalstudent/viewassignwrittenwork.html:163
-#: templates/portalstudent/viewbulletinboard.html:73
+#: templates/portalstudent/viewbulletinboard.html:86
 #: templates/portalstudent/viewstudentresource.html:26
 #: templates/portalteacher/allschoolresourcelist.html:206
 #: templates/portalteacher/assignmindmap.html:447
@@ -2043,7 +2054,7 @@ msgstr "ஆசிரியர் திருத்தம்"
 #: templates/portalteacher/thread.html:129
 #: templates/portalteacher/viewassignresource.html:103
 #: templates/portalteacher/viewassignwrittenwork.html:102
-#: templates/portalteacher/viewbulletinboard.html:84
+#: templates/portalteacher/viewbulletinboard.html:86
 #: templates/portalteacher/viewmindmapassignedstudentlist.html:103
 #: templates/portalteacher/viewmyresourcelistwork.html:63
 #: templates/portalteacher/viewresourcelist.html:31
@@ -2052,8 +2063,9 @@ msgstr "ஆசிரியர் திருத்தம்"
 msgid "View"
 msgstr "காண்க"
 
-#: templates/portaladmin/viewbulletinboard.html:74
-#: templates/portalteacher/viewbulletinboard.html:86
+#: templates/portaladmin/viewbulletinboard.html:88
+#: templates/portalstudent/viewbulletinboard.html:88
+#: templates/portalteacher/viewbulletinboard.html:88
 msgid "No Attachement"
 msgstr "இணைப்பு இல்லை"
 
@@ -2320,6 +2332,10 @@ msgstr "குறிப்பு"
 msgid "About me"
 msgstr "என்னைப்பற்றி"
 
+#: templates/portalteacher/calendar.html:53
+msgid "New Event"
+msgstr "புதிய நிகழ்வு"
+
 #: templates/portalteacher/myprofile.html:8
 msgid "About Me"
 msgstr "என்னைப்பற்றி"
@@ -2403,10 +2419,6 @@ msgstr ""
 #: templates/portalteacher/viewassignwrittenwork.html:70
 msgid "Middle"
 msgstr ""
-
-#: templates/portalteacher/viewbulletinboard.html:35
-msgid "Announce Date"
-msgstr "அறிவிப்பு தேதி"
 
 #: templates/portalteacher/writtenwork.html:141
 msgid "Action"
