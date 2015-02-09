@@ -18,11 +18,9 @@
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover" 
-                    id="admin-main-tbl">
-                </table>
-            </div>
+            <table class="table table-striped table-bordered table-hover" 
+                id="admin-main-tbl">
+            </table>
             <!-- /.table-responsive -->
         </div>
         <!-- /.panel-body -->
@@ -97,7 +95,7 @@ TTS.forms.renderchapterinfo = function(data){
         var t = {};
         t.DT_RowId = data[i].chapterid;
         t.icon="<i class='fa fa-book fa-2x'></i>";
-        t.title=data[i].chaptername;
+        t.title=data[i].chaptername+" ("+data[i].rescount+")";
         t.assignment="<a href='javascript:void(0)' class='assignment' id='"+data[i].teacherresourceid+"' ><i class='fa fa-share fa-2x'></i></a>";
         dataset.push(t);
     }
