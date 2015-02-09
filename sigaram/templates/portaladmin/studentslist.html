@@ -124,6 +124,14 @@ TTS.forms.showstudentform = function() {
         message: $($('#student-form').render()),
         onshown: function(){
             TTS.forms.upload();
+            $.ajax({
+                "url":"/api/admin/adminschool/?format=json",
+                'type':'GET'
+            }).done(function(data){
+                $.each(data, function(idx,val){
+                    $("#id_schoolid").append('<option value="'+val['schoolid']+'">'+val['schoolname']+'</option>');
+                });
+            });
         },
         buttons: [{
             label: '{% trans "Save" %}',
@@ -142,10 +150,9 @@ TTS.forms.showstudentform = function() {
                             required: true
                         },
                         password: {
-                            required: true,
+                            required: true
                         },
                         emailid: {
-                            required: true,
                             email: true
                         }
                     },
@@ -153,11 +160,8 @@ TTS.forms.showstudentform = function() {
                         firstname: "First Name is required",
                         lastname: "Last Name is required",
                         username: "User Name is required",
-                        password: {
-                            required: "Please provide a password",
-                        },
+                        password: "password is required",
                         emailid: {
-                                required: "Email id is required",
                                 email: "Please enter a valid email address"
                         },
                     }

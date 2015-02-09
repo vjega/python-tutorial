@@ -174,11 +174,17 @@ TTS.forms.renderviewfourminfo = function(data){
         t.del = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);
     }
-    $('#viewforum-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
-        "data":     dataset,
-        "columns":  headers
-    });
-
+    if(TTS.forms.table){
+        TTS.forms.table.fnClearTable();
+        TTS.forms.table.fnAddData(
+            dataset
+        );
+    }else{
+        TTS.forms.table = $('#viewforum-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
+            "data":     dataset,
+            "columns":  headers
+        });
+    }
 };
 
 $(document).ready(function(){
@@ -187,12 +193,9 @@ $(document).ready(function(){
         "url":"/api/admin/topicinfo/?format=json",
         "type":"GET"
     }).done(function(data){
-        if (data.length) {
-            TTS.forms.renderviewfourminfo(data);
-            TTS.utils.ajaxloaderstop(); 
-            $("table#viewforum-main-tbl thead tr th").removeClass('sorting_asc');
-        } 
-        
+        TTS.forms.renderviewfourminfo(data);
+        TTS.utils.ajaxloaderstop(); 
+        $("table#viewforum-main-tbl thead tr th").removeClass('sorting_asc');        
     });
     var dataname = TTS.utils.getUrlParameter("forumname");
     $("#headermsg").html(dataname);
