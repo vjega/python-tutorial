@@ -7,7 +7,7 @@ class TeacherForm(forms.Form):
     schoolid = forms.ChoiceField(
         label = _("Select School"),
         required = True,
-        choices  = [(opt.schoolid,opt.schoolname) for opt in models.Schoolinfo.objects.all().order_by('schoolname')],
+        choices  = [('','Select School')],
     )
     classid = forms.ChoiceField(
         label = _("Class"),

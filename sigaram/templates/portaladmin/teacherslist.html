@@ -97,6 +97,14 @@ TTS.forms.showteacherform = function() {
         message: $($('#teacher-form').render()),
         onshown: function(){
             TTS.forms.upload();
+            $.ajax({
+                "url":"/api/admin/adminschool/?format=json",
+                'type':'GET'
+            }).done(function(data){
+                $.each(data, function(idx,val){
+                    $("#id_schoolid").append('<option value="'+val['schoolid']+'">'+val['schoolname']+'</option>');
+                });
+            });
         },
         buttons: [{
             label: '{% trans "Save" %}',
@@ -257,7 +265,6 @@ TTS.forms.renderteacher = function(data){
 };
 
 TTS.forms.upload = function(elm) {
-    console.log(elm);
     var uploader = new qq.FileUploader({
         action: "/admin/teacher-img-upload",
         element: $('#file-uploader')[0],
