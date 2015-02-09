@@ -44,15 +44,15 @@
         color: red;
         cursor: pointer;
     }
-    table#rubrics-table thead tr th,
-    table#rubrics-table tfoot tr td{
+    table thead tr th,
+    table tfoot tr td{
         text-align: center;
         height: 45px;
         background-color: #337ab7;
         color: #ffffff;
         font-weight: bold;
     }
-    table#rubrics-table tbody tr td:nth-child(1) { 
+    table tbody tr td:nth-child(1) { 
         background-color: #d3d3d3;
         font-weight: bold;
     }
@@ -78,7 +78,7 @@
 <div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-body">
-            <!-- <div class="row">
+            <div class="row">
                 <div class="col-lg-12">
                     <label class="col-lg-2">{% trans "Title" %}</label>
                     <div class="col-lg-10" id="resource-title"></div>
@@ -146,16 +146,18 @@
                     </div>
                     <input type="hidden" id="max-mark">
                 </div>
-            </div> -->                    
+            </div>                    
 
             <div class="row">
                 <div class="col-lg-12">
                     <label class="col-lg-12">{% trans "Rubrics" %} {% trans "Evaluation" %}</label>
                 </div>
             </div>
-
-            <div class="col-lg-12" id="rubrics-evaluation"></div>
-
+            <div class="bs-docs-grid">
+                <div class="row show-grid col-lg-12">
+                    <div class="col-lg-12" id="rubrics-evaluation"></div>
+                </div>
+            </div>
         </div>
         <!-- /.panel-body -->
     </div>
@@ -212,10 +214,10 @@ TTS.forms.renderassignedresourceinfo = function(data){
         });
 
         $.ajax({
-            "url":"/api/admin/peerrubricsreview/?resourceid="+resourceid+"&studentid="+studentid+"&studentid="+studentid,
+            "url":"/api/admin/peerrubricsreview/?resourceid="+data[0].resourceid+"&studentid="+data[0].studentid+"&rubricid="+data[0].rubric_id,
             "type":"GET"
         }).done(function(data){
-            console.log(data);
+            //console.log(data);
             //return false;
             TTS.forms.renderavgpeerrubricmark(data);
         });
@@ -417,35 +419,6 @@ TTS.forms.editanswer = function() {
         title: 'Edit Text',
         onshown: function(dialogRef){
             //updateChapter();
-<<<<<<< HEAD
-            $('.summernote').summernote({
-                  toolbar: [
-                    ['edit',['undo','redo']],
-                    ['style', ['style']], // no style button
-                    ['style', ['bold', 'italic', 'underline', 'clear']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['height', ['height']],
-                    //['insert', ['picture', 'link']], // no insert buttons
-                    //['table', ['table']], // no table button
-                    //['help', ['help']] //no help button
-                  ]
-            });
-=======
-    //         $('.summernote').summernote({
-    //       toolbar: [
-    //         ['edit',['undo','redo']],
-    //         ['style', ['style']], // no style button
-    //         ['style', ['bold', 'italic', 'underline', 'clear']],
-    //         ['color', ['color']],
-    //         ['para', ['ul', 'ol', 'paragraph']],
-    //         ['height', ['height']],
-    //         //['insert', ['picture', 'link']], // no insert buttons
-    //         //['table', ['table']], // no table button
-    //         //['help', ['help']] //no help button
-    //       ]
-    // });
->>>>>>> a9e14e6e0772c6c85bdc7f76d9f3f90c78f898fd
         },
         message: html,
         buttons: [{
@@ -562,39 +535,58 @@ TTS.forms.ressave = function(){
 
 TTS.forms.renderavgpeerrubricmark = function(data){
 
-    if (data.length) {
+    if (data['prrlist'].length) {
         var tableHTML = '';
-        tableHTML += "<table class='table table-striped table-bordered table-hover' >";
-        tableHTML += "<tr>";
-        tableHTML += "<th>Head</th>";
-        tableHTML += "<th>Peer Marks(Avg.)</th>";
-        tableHTML += "<th>Teacher Marks</th>";
-        tableHTML += "</tr>";
-        var trow_mark   = 0;
+        /*var trow_mark   = 0;
         var tt_mark     = 0;
         var tct_mark    = 0;
-        var tmax_t_mark = 0;
-        $.each(data, function(idx, val){
-            //alert(val['studentid']);
+        var tmax_t_mark = 0;*/
+        var avgmarktotal    = 0;
+        var teachermarktotal= 0;
+        var rnmarkarr = data['rnmark'].toString().split(',');
+        //var mxmarkarr = rnmarkarr.slice(0, -1);
+        var mxmarkarr = rnmarkarr.pop();
+
+
+        tableHTML += "<table class='table table-striped table-bordered table-hover' >";
+        
+        tableHTML += "<thead>";
+        tableHTML += "<tr>";
+        tableHTML += "<th>{% trans 'Title' %}</th>";
+        tableHTML += "<th>{% trans 'Peer' %} {% trans 'Marks' %} ({% trans 'Average' %})</th>";
+        tableHTML += "<th>{% trans 'Teacher' %} {% trans 'Marks' %}</th>";
+        tableHTML += "</tr>";
+        tableHTML += "</thead>";
+        
+        tableHTML += "<tbody>";
+
+        $.each(data['prrlist'], function(idx, val){
             var head = val['jdata'].split("~~");
-            alert(head[0]);
             tableHTML += "<tr>";
             tableHTML += "<td>"+head[0]+"</td>";
-            tableHTML += "<td>"+val['rowmark']/val['avgmark']+"</td>";
-            tableHTML += "<td>{$mrk[$key]}/{$max_t_mark}</td>";
+            tableHTML += "<td class='text-right'>"+(val['rowmark']/val['avgmark']).toFixed(2)+"</td>";
+            tableHTML += "<td class='text-right'>"+(rnmarkarr[idx]/mxmarkarr).toFixed(2)+"</td>";
             tableHTML += "</tr>";
             /*trow_mark   += val['rowmark'];
             tt_mark     += val['avgmark'];
-            tct_mark    += mrk[$key];
-            tmax_t_mark += max_t_mark;*/
+            tct_mark    += rnmarkarr[idx];
+            tmax_t_mark += mxmarkarr;*/
+            avgmarktotal    += val['rowmark']/val['avgmark'];
+            teachermarktotal+= rnmarkarr[idx]/mxmarkarr;
         });
-        tableHTML += "</table>";
-        /*
-        $table .= "<tr><td style='border:1px solid grey;border-collapse:collapse;' align='center'>Total</td>
-                       <td style='border:1px solid grey;border-collapse:collapse;' align='right'>".number_format($trow_mark,1)."/{$tt_mark}</td>
-                       <td align='right'>{$tct_mark}/{$tmax_t_mark}</td>
-                  </tr>";
-        $table .= "</table>";*/
+
+        tableHTML += "</tbody>";
+
+        tableHTML += "<tfoot>";
+        tableHTML += "<tr>";
+        tableHTML += "<td>{% trans 'Total' %}</td>";
+        tableHTML += "<td class='text-right'>"+avgmarktotal.toFixed(2)+"</td>";
+        tableHTML += "<td class='text-right'>"+teachermarktotal.toFixed(2)+"</td>";
+        tableHTML += "</tr>";
+        tableHTML += "</tfoot>";
+
+        tableHTML += "</table>";        
+
     } else {
         tableHTML = "<div style='background-color:#ffa500;'>Not Evaluated</div>";
     }

@@ -1680,7 +1680,11 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
             ri.resourceid as resourceid,
             ri.resourcetitle as title,
             concat(au.first_name,' ',au.last_name) as firstname,
-            date(bbi.posteddate) as posteddate
+            date(bbi.posteddate) as posteddate,
+            (SELECT count(*) 
+                FROM billboardratinginfo 
+                WHERE billboardid=bbi.billboardid) 
+            AS rating
         FROM billboardinfo bbi
         INNER JOIN assignresourceinfo ari ON ari.assignedid=bbi.resourceid
         INNER JOIN resourceinfo ri ON ri.resourceid=ari.resourceid
@@ -1696,7 +1700,11 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
             wwi.writtenworkid as resourceid,
             wwi.writtenworktitle as title,
             concat(au.first_name,' ',au.last_name) as firstname,
-            date(bbi.posteddate) as posteddate
+            date(bbi.posteddate) as posteddate,
+            (SELECT count(*) 
+                FROM billboardratinginfo 
+                WHERE billboardid=bbi.billboardid)
+            AS rating
         FROM billboardinfo bbi
         INNER JOIN assignwrittenworkinfo awwi ON awwi.assignwrittenworkid=bbi.resourceid
         INNER JOIN writtenworkinfo wwi ON wwi.writtenworkid=awwi.writtenworkid
@@ -2622,7 +2630,7 @@ class PeerRubricsReviewViewSet(viewsets.ModelViewSet):
             prr.max_mark    = prrdata.get('maxmark')
             prr.save()
 
-        return Response(request.DATA);
+        return Response('created');
 
     def list(self, request):
         resourceid  = request.GET.get('resourceid')
@@ -2671,7 +2679,7 @@ class PeerRubricsReviewViewSet(viewsets.ModelViewSet):
     
         cursor = connection.cursor()
         cursor.execute(sql)
-        data['rnmark'] =  cursor.fetchone()
+        result['rnmark'] =  cursor.fetchone()
 
         return Response(result)
 
