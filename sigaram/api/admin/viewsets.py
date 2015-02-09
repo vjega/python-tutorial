@@ -2660,8 +2660,8 @@ class PeerRubricsReviewViewSet(viewsets.ModelViewSet):
         RIGHT JOIN rubric_matrix rm ON rm.disp_order = temp.row_no 
             AND ari.rubric_id = rm.refno
         WHERE refno = '%s'
-            AND rm.datatype = 'B' ''' % (resourceid, str(studentid), rubricid)
-
+            AND rm.datatype = 'B' 
+        ''' % (resourceid, str(studentid), rubricid)
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
