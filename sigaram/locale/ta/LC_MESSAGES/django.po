@@ -862,8 +862,6 @@ msgid "Lesson Plans"
 msgstr "பாடக் குறிப்பு"
 
 #: portaladmin/views.py:540
-#, fuzzy
-#| msgid "Teachers Resources"
 msgid "Schools resources"
 msgstr "வளங்கள்"
 
@@ -2095,14 +2093,10 @@ msgid "Picture Conversation"
 msgstr ""
 
 #: templates/portaladmin/viewstudentres.html:198
-#, fuzzy
-#| msgid "Notice Board"
 msgid "Doodle Board"
 msgstr "அறிவிப்புப்பலகை"
 
 #: templates/portaladmin/viewstudentres.html:200
-#, fuzzy
-#| msgid "Composition"
 msgid "Picture Composition"
 msgstr "கட்டுரை"
 
@@ -2120,8 +2114,6 @@ msgstr "தலைப்பு"
 #: templates/portaladmin/viewtopic.html:145
 #: templates/portalstudent/viewtopic.html:146
 #: templates/portalteacher/viewtopic.html:144
-#, fuzzy
-#| msgid "Topics"
 msgid "Topic details"
 msgstr "தலைப்பு"
 
@@ -2185,8 +2177,6 @@ msgstr "புதிய"
 #: templates/portalstudent/assignedresourcelist.html:61
 #: templates/portalstudent/studentviewmindmap.html:61
 #: templates/portalstudent/studentwrittenwork.html:61
-#, fuzzy
-#| msgid "Save"
 msgid "Saved"
 msgstr "சேமி"
 
@@ -2349,14 +2339,10 @@ msgid "Excel Import"
 msgstr ""
 
 #: templates/portalteacher/rubric_edit.html:40
-#, fuzzy
-#| msgid "Creator"
 msgid "Create"
 msgstr "உண்டாக்கியவர்"
 
 #: templates/portalteacher/rubric_edit.html:50
-#, fuzzy
-#| msgid "Submission"
 msgid "Submit"
 msgstr "ஒப்படைப்பு"
 
@@ -2428,8 +2414,6 @@ msgstr "பட உரையாடல்"
 msgid "Writing job"
 msgstr "எழுத்து பலகை"
 
-#, fuzzy
-#~| msgid "Color"
 #~ msgid "color"
 #~ msgstr "வண்ணம்"
 
@@ -2469,13 +2453,9 @@ msgstr "எழுத்து பலகை"
 #~ msgid "Views"
 #~ msgstr "காண்க"
 
-#, fuzzy
-#~| msgid "First Name"
 #~ msgid "File Name"
 #~ msgstr "குறும் பெயர்"
 
-#, fuzzy
-#~| msgid "My works"
 #~ msgid "Add My Works"
 #~ msgstr "எனது வேலை"
 
