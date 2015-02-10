@@ -542,7 +542,7 @@ TTS.forms.renderstickynotes = function(data){
         if (com.length) {
             sticky_html += "<div class='show_comment_icon'>";
             sticky_html += "<div class='show_comments' src='"+com.length+"' name='"+data[i].id+"'><i class='fa fa-caret-right'></i> &nbsp;&nbsp;</div>";
-            sticky_html += "<div id='comment'>Comment ("+com.length+")</div>";
+            sticky_html += "<div id='comment'>{% trans "Comment" %} ("+com.length+")</div>";
             sticky_html += "</div>";
             sticky_html += "<div class='slidingDiv' id='slidingDiv_"+data[i].id+"'>";
             for (i in com){
