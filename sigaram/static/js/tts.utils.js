@@ -99,7 +99,10 @@ TTS.utils.datetimeConvDate = function(dtstring){
 };
 
 TTS.utils.summer_encode = function (str) {
-    return str.replace(/:/g, "~")
+    str = str.replace("/&nbsp;/g","");
+    console.log(str);
+    return str.replace(/&/g, "*")
+              .replace(/:/g, "~")
               .replace(/=/g, '#')
               .replace(/;/g, '^');
 }

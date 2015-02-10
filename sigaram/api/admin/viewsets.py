@@ -24,7 +24,7 @@ def loginname_to_userid(usertype, username):
         return m.studentid
 
 def summer_decode(str):
-    return str.replace('~',':').replace('#','=').replace('^',';')
+    return str.replace('~',':').replace('#','=').replace('^',';').replace('*','&')
 
 class AdmininfoViewSet(viewsets.ModelViewSet):
     queryset = models.Admininfo.objects.filter(isdelete=0).order_by('-createddate')
