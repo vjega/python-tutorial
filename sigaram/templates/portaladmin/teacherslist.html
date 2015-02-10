@@ -172,7 +172,6 @@ TTS.forms.editteacher = function(id, data) {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-teacher");
-                alert(data)
                 $.ajax({
                     headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')

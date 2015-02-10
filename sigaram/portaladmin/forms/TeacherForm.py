@@ -20,12 +20,12 @@ class TeacherForm(forms.Form):
         required = True,
         widget = forms.TextInput({ "placeholder": _("Name")})
     )
-    # lastname = forms.CharField(
-    #     label = _("Last Name"),
-    #     max_length = 100,
-    #     required = True,
-    #     widget = forms.TextInput({ "placeholder": _("last Name")})
-    # )
+    lastname = forms.CharField(
+        label = _("Last Name"),
+        max_length = 100,
+        required = True,
+        widget = forms.TextInput({ "placeholder": _("last Name")})
+    )
     username = forms.CharField(
         label = _("User Name"),
         max_length = 100,
