@@ -421,7 +421,7 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
                wwi.writtenworkid,
                wwi.writtenImage,
                wwi.writtenworktitle,
-               date(wwi.createddate) as createddate,
+               wwi.createddate as createddate,
                awwi.studentid,
                wwi.isassigned,
                awwi.issaved
