@@ -165,6 +165,8 @@ TTS.forms.editteacher = function(id, data) {
                 $.each(data, function(idx,val){
                     $("#id_schoolid").append('<option value="'+val['schoolid']+'">'+val['schoolname']+'</option>');
                 });
+                var sid = $("#school_name").val();
+                $('#id_schoolid option[value='+sid+']').attr('selected','selected');
             });
         },
         buttons: [{
@@ -172,7 +174,6 @@ TTS.forms.editteacher = function(id, data) {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-teacher");
-                alert(data)
                 $.ajax({
                     headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')

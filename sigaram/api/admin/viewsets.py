@@ -114,6 +114,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
+        print request.GET.get('schoolid');
         teacher = models.Teacherinfo.objects.get(pk=pk)
         teacherdata =  json.loads(request.DATA.keys()[0])
         teacher.username = teacherdata.get('username')
