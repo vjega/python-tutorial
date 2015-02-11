@@ -128,7 +128,7 @@
             t.DT_RowId = data[i].resourceid;
             t.slno=++count;
             t.title=data[i].resourcetitle;
-            t.date=TTS.utils.dateConv(data[i].createddate);
+            t.date=TTS.utils.datetimeConvDate(data[i].createddate);
             t.type=data[i].resourcetype;
             dataset.push(t);
         }

@@ -429,6 +429,7 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
         INNER JOIN writtenworkinfo wwi on wwi.writtenworkid = awwi.writtenworkid 
         WHERE wwi.createdby = '%s'
         %s
+        GROUP BY awwi.writtenworkid
         ORDER BY wwi.createddate DESC
         ''' % (request.user.username,datecond)
         cursor = connection.cursor()
@@ -948,6 +949,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
                resourcetype,
                thumbnailurl,
                ari.answertext,
+               ari.assigntext,
                ari.studentid,
                ari.isanswered,
                ari.issaved,
@@ -975,6 +977,16 @@ class StudentAssignResource(viewsets.ModelViewSet):
        # print resource, students
         for r in resource:
             for s in students:
+                
+                sql = """
+                DELETE FROM assignresourceinfo 
+                WHERE studentid='%s'
+                AND resourceid='%s'
+                """ % (str(s),int(r))
+
+                cursor = connection.cursor()
+                cursor.execute(sql)
+
                 ar = models.Assignresourceinfo()
                 ar.resourceid = int(r)
                 ar.studentid = str(s)
@@ -1038,9 +1050,8 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
               AND ari.assignedby='%s'
               AND ari.IsDelete=0 
               %s
-        GROUP BY resourceid 
+        GROUP BY resourceid
         ORDER BY assigneddate DESC''' % (request.user.username, datecond)
-        print sql;
 
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
@@ -1092,9 +1103,19 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         #print resource, students
         for r in resource:
             for s in students:
+
+                sql = """
+                DELETE FROM assignresourceinfo 
+                WHERE studentid='%s'
+                AND resourceid='%s'
+                """ % (str(s),int(r))
+
+                cursor = connection.cursor()
+                cursor.execute(sql)
+
                 ar = models.Assignresourceinfo()
                 ar.resourceid = int(r)
-                ar.studentid = int(s)
+                ar.studentid = str(s)
                 ar.assigntext = unicode(assigntext)
                 ar.isanswered = 0
                 ar.issaved = 0
