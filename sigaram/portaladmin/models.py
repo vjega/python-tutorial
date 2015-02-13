@@ -22,10 +22,10 @@ def dictfetchall(cursor):
 
 class Activitylog(models.Model):
     activityid = models.BigIntegerField(primary_key=True)
-    loginid = models.BigIntegerField()
+    loginid = models.CharField(max_length=100)
     pagename = models.CharField(max_length=1000)
     operation = models.CharField(max_length=500)
-    usertype = models.IntegerField()
+    usertype = models.CharField(max_length=100)
     stringsentence = models.CharField(max_length=2000)
     updateddate = models.DateTimeField()
 
@@ -37,11 +37,12 @@ class Activitylog(models.Model):
     def recentactivities():
         sql = """SELECT DISTINCT operation,
                     stringsentence,
-                    updateddate 
+                    updateddate,
+                    concat(au.first_name,' ',au.last_name) as name
             FROM activitylog al
-            INNER JOIN logininfo li ON li.loginid = al.loginid 
+            INNER JOIN auth_user au ON au.username = al.loginid 
             -- WHERE al.loginid = {$loginid} 
-            ORDER by activityid DESC 
+            ORDER by updateddate DESC 
             LIMIT 5""";
         cursor = connection.cursor()
         cursor.execute(sql)

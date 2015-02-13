@@ -26,6 +26,16 @@ def loginname_to_userid(usertype, username):
 def summer_decode(str):
     return str.replace('~',':').replace('#','=').replace('^',';').replace('*','&')
 
+def add_activitylog(request, data):
+    activitylog = models.Activitylog()
+    activitylog.loginid         = request.user.username
+    activitylog.pagename        = request.user.groups.values_list('name',flat=True)[0].lower()+"/"+data['pagename']
+    activitylog.operation       = data['operation']
+    activitylog.usertype        = request.user.groups.values_list('name',flat=True)[0]
+    activitylog.stringsentence  = data['stringsentence']
+    activitylog.updateddate     = time.strftime('%Y-%m-%d %H:%M:%S')
+    activitylog.save()
+
 class AdmininfoViewSet(viewsets.ModelViewSet):
     queryset = models.Admininfo.objects.filter(isdelete=0).order_by('-createddate')
     serializer_class = adminserializers.AdminInfoSerializer
@@ -1313,6 +1323,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
     serializer_class = adminserializers.BulletinboardlistinfoSerializer
 
     def list(self, request):
+
         l =  request.user.groups.values_list('name',flat=True)[0]
         fieldcond=""
         joincond=""
@@ -1406,6 +1417,13 @@ class Bulletinboardlist(viewsets.ModelViewSet):
                 bmi.classid = 0
                 bmi.userid = rl
             bmi.save()
+        
+        aldata = {}
+        aldata['pagename']       = 'bulletinboard'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'New Announcement created'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
 
     def retrieve(self, request, pk=None):
@@ -1857,11 +1875,6 @@ class RubricsViewSet(viewsets.ModelViewSet):
         adminrubrics.ts = time.strftime('%Y-%m-%d %H:%M:%S')
         adminrubrics.save()
 
-        # activity = models.Activitylog()
-        # activity.loginid=request.GET.username
-        # activity.pagename=viewassignmentanswer
-        # activity.operation=insert
-        # activity.stringsentence=insert
         return Response(request.DATA)
 
     def update(self, request, pk=None):
