@@ -41,9 +41,6 @@ def checkaccess(utype):
         return inner
     return outer
 
-
-
-
 admin_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/admins', 
                                       DIMENSIONS=(250, 250))
 teacher_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/teachers', 
