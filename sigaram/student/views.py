@@ -417,3 +417,7 @@ def newtopic(request):
 def viewpost(request):
     return render(request, 'portalstudent/viewpost.html')
 
+@login_required
+@switchlanguage
+def billboardviewassignwrittenworkanswer(request):
+    return render(request, 'portalstudent/billboardviewassignwrittenworkanswer.html')

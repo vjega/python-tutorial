@@ -84,7 +84,7 @@ TTS.forms.renderbillboard = function(data){
     var count = 0
     for(var i in data){
         var t = {};
-        t.DT_RowId = data[i].resourcetype+"_"+data[i].resourceid+"_"+data[i].studentid;
+        t.DT_RowId = data[i].resourcetype+"_"+data[i].resourceid+"_"+data[i].studentid+"_"+data[i].id;
         t.slno = ++count;
         t.title = data[i].title;
         if(data[i].resourcetype == 'ar'){
@@ -115,16 +115,16 @@ $(document).ready(function(){
         TTS.utils.ajaxloaderstop(); 
         $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
     });
+    
     $('#admin-main-tbl').on('click', 'tbody tr', function(){
         var x = this.id.split('_');
         if(x[0] == 'ar'){
-            window.location = 'classviewassignmentanswer?resourceid='+x[1]+'&studentid='+x[2];
+            window.location = 'billboardviewassignmentanswer?resourceid='+x[1]+'&studentid='+x[2]+'&billboardid='+x[3];
         }else if(x[0] == 'aw'){
-            window.location = 'classviewassignwrittenworkanswer?writtenworkid='+x[1]+'&studentid='+x[2];
+            window.location = 'billboardviewassignwrittenworkanswer?writtenworkid='+x[1]+'&studentid='+x[2]+'&billboardid='+x[3];
         }else{
             return false;
-        }
-        
+        }        
     });
 });
 

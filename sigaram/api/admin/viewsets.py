@@ -3370,3 +3370,30 @@ class studentwrittenworkViewSet(viewsets.ModelViewSet):
     def destroy(self, request, pk):
         models.Writtenworkinfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
+
+class AssessmentQAInfoViewSet(viewsets.ModelViewSet):
+    queryset = models.Assessmentinfo.objects.all()
+    serializer_class = adminserializers.AssessmentinfoSerializer
+    def list(self, request):
+        queryset = models.Assessmentinfo.objects.filter(createdby=str(request.user.username)).order_by('-createddate')
+        serializer = adminserializers.AssessmentinfoSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        assessment = models.Assessmentinfo()
+        cdata =  json.loads(request.DATA.keys()[0])
+        assessment.title        = cdata.get('title')
+        assessment.instruction  = cdata.get('instruction')
+        assessment.schoolid     = request.session.get('schoolid')
+        assessment.classid      = request.session.get('classid')
+        assessment.type         = cdata.get('type')
+        assessment.enddate      = time.strftime('%Y-%m-%d %H:%M:%S')
+        assessment.createdby    = request.user.username
+        assessment.createddate  = time.strftime('%Y-%m-%d %H:%M:%S')
+        assessment.isdeleted    = 0
+        assessment.save()
+        return Response(request.DATA)
+
+    def destroy(self, request, pk=None):
+        models.Assessmentinfo.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
