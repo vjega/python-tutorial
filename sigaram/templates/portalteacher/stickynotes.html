@@ -39,24 +39,28 @@
 {% endblock botcontent%}
 
 {% block morecss %}
-<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
-<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "css/plugins/dataTables.bootstrap.css" %}" >
+<link rel="stylesheet" href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <link rel="stylesheet" href="{%static "css/color.css" %}">
 <link rel="stylesheet" href="{%static "ajaxuploader/css/fileuploader.css" %}">
 <style>
+.martop{
+    margin-top:-12px;
+}
 .imgwidth{
     max-width: 550px !important;
 }
 
-    #addrec:hover, .tts-delete:hover{
-        cursor: pointer;
-    }
+#addrec:hover, .tts-delete:hover{
+    cursor: pointer;
+}
+
 .sticky_note{
     float: left;
     position: relative;
     height: auto;
-    width: 220px;
+    width: auto;
     margin: 10px;
     padding: 8px;
     box-shadow: 1px 1px 1px 1px #d3d3d3;
@@ -67,9 +71,20 @@
     z-index: 0;
 }
 
+.with_out_attachement{
+    max-width: 200px;
+    max-height: 200px;
+    min-width: 200px;
+    min-height: 200px;
+}
+
+.sticky_content{
+    min-width: 200px;
+}
+
 .sticky_header{
     height: 18px;
-    width: 200px;
+    width: auto;
     margin-bottom: 10px;
     cursor: pointer;
 }
@@ -78,7 +93,7 @@
     border-top: 1px solid gray;
     bottom: -3px;
     position: relative;
-    width: 200px;
+    width: auto;
 }
 
 .table-bordered {
@@ -179,8 +194,8 @@
 .comments{
     float:left;
     width:100%;
-    border-top: 1px solid grey;
-    border-bottom: 1px solid grey;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
 }
 
 .comment_details {
@@ -189,8 +204,9 @@
     font-style: italic;
     height: 23px;
     overflow: hidden;
-    width: 200px;
-}/*
+    width: auto;
+}
+/*
 .comment_by{
     float: left;
     width:50%;
@@ -242,7 +258,6 @@
 <script id="stickycomment-form" type="text/x-jsrender">
     {% crispy Cform %}
 </script>
-
 <script id="sticky-text" type="text/sticky">
 <div class='color_container'>
     <div id='preview_color' class='yellow'>{% trans "Preview" %}</div>
@@ -278,7 +293,6 @@ TTS.forms.addstickynote = function(form, data) {
     });
 }
 
-
 TTS.forms.FileUploader = function() {
     var uploader = new qq.FileUploader({
         action: "/admin/sticky_notes_upload",
@@ -301,7 +315,6 @@ TTS.forms.FileUploader = function() {
         },
     });
 }
-
 TTS.forms.showstickyform = function() {
     var colors = ["yellow", "blue", "green","purple", "pink", "grey","red", "orange", "maroon", "gold"];
     BootstrapDialog.show({
@@ -381,7 +394,7 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
     color_div +="</div>";
 
     BootstrapDialog.show({
-        title: '{% trans "Edit Sticky note" %}',
+        title: 'Edit Sticky note',
         message: $($('#sticky-form').render() + color_div),
         onshown: function(){
             $('.summernote').summernote({
@@ -481,7 +494,7 @@ TTS.forms.addstickycomment = function(form, data) {
 
 TTS.forms.showstickycommentform = function(stickyid) {
     BootstrapDialog.show({
-        title: '{% trans "Add Sticky Comment" %}',
+        title: 'Add Sticky Comment',
         message: $($('#stickycomment-form').render()),
         buttons: [{
             label: '{% trans "Save" %}',
@@ -513,11 +526,22 @@ TTS.forms.renderstickynotes = function(data){
         sticky_html += "<div class='sticky_header "+data[i].color+"_header'>";
         sticky_html += "<span class='pull-right deleterec'  name='"+data[i].id+"'><i class='fa fa-trash'></i></span>&nbsp;";
         sticky_html += "<span class='pull-right editrec'  name='"+data[i].id+"'><i class='fa fa-pencil'></i></span> &nbsp;";
+        /*
         if(data[i].attachment != ''){
             sticky_html += '<span class="open_model_window pull-right cliprec" dir="'+data[i].attachment+'" name="'+data[i].id+'"><i class="fa fa-paper-clip"></i></span> &nbsp;';
-        }
+        }*/
         sticky_html += "</div>";
-        sticky_html += "<div  name='"+data[i].color+"' src='"+data[i].id+"' class='sticky_content'>"+data[i].stickytext+"</div>";
+        var div_sticky_html = "";
+        var attach_class = "with_out_attachement";
+        if(data[i].attachment != ''){
+            attach_class = "";
+            var id = data[i].id
+            var path = data[i].attachment
+            html_cont = TTS.forms.getfiletype(path,id);
+            div_sticky_html += "<div class='attachements'>"+html_cont+"</div>";
+        }
+        sticky_html += "<div  name='"+data[i].color+"' src='"+data[i].id+"' class='sticky_content "+attach_class+"'>"+data[i].stickytext+"</div>";
+        sticky_html += div_sticky_html;
         sticky_html += "<div  class='sticky_footer'>";
         sticky_html += "<span class='pull-right sticky_comment' id='sticky_comment_"+data[i].id+"' name='"+data[i].id+"'><i class='fa fa-comment'></i></span>";
         var com = []
@@ -534,12 +558,12 @@ TTS.forms.renderstickynotes = function(data){
         if (data[i].createddate !==  null) {
             comdate = data[i].createddate.split("~");
         }
-        
+
         var comid = []
         if (data[i].commetid !==  null) {
             comid = data[i].commetid.split("~");
         }
-
+        
         if (com.length) {
             sticky_html += "<div class='show_comment_icon'>";
             sticky_html += "<div class='show_comments' src='"+com.length+"' name='"+data[i].id+"'><i class='fa fa-caret-right'></i> &nbsp;&nbsp;</div>";
@@ -547,8 +571,8 @@ TTS.forms.renderstickynotes = function(data){
             sticky_html += "</div>";
             sticky_html += "<div class='slidingDiv' id='slidingDiv_"+data[i].id+"'>";
             for (i in com){
-                sticky_html += "<div>";
-                sticky_html += "<div class='comment_details'>"+comby[i]+" &nbsp;&nbsp "+comdate[i]+"</div>";
+                sticky_html += "<div class='martop'><br><br>";
+                sticky_html += "<div class='comment_details'>"+comby[i]+" &nbsp;&nbsp "+ moment(comdate[i],"YYYY-MM-DD h:mm:ss").fromNow()+"</div>";
                 //sticky_html += "<div class='comment_by'>"+comby[i]+"</div>";
                 //sticky_html += "<div class='comment_date'>"+comdate[i]+"</div>";
                 //sticky_html += "</div>";
@@ -557,7 +581,7 @@ TTS.forms.renderstickynotes = function(data){
             }
             sticky_html += "</div>";
         } else {
-            sticky_html += "<div id='comment'>{% trans "No comment" %}</div>";
+            sticky_html += "<div id='comment'>{% trans "Comment" %} (0)</div>";
         }
         sticky_html += "</div>";
         sticky_html += "</div>";
@@ -571,7 +595,8 @@ $(document).ready(function(){
   
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.showstickyform();
-        TTS.utils.ajaxloaderstop();
+        //TTS.utils.ajaxloaderstop();
+        //window.location="addstickynote?id="+TTS.utils.getUrlParameter("id");
     });
 
     TTS.utils.ajaxloaderstart();
@@ -580,7 +605,7 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstickynotes(data);
-        TTS.utils.ajaxloaderstop();
+        //TTS.utils.ajaxloaderstop();
     });
 
     $.ajax({
@@ -599,18 +624,18 @@ TTS.forms.getfiletype = function (filename,id){
     var name = filename.split('/').pop();
     var type;
     switch (file_extention) {
-        case 'jpg':
         case 'bmp':
+        case 'jpg':
         case 'jpeg':
         case 'png':
         case 'gif':
-            type = "<div class='modelbox_center' name='"+id+"'>Filename : "+name+" <br /><br /><img src='/static/"+filename+"' class='imgwidth'/></div>";
+            type = "<div class='modelbox_center' name='"+id+"'><img src='/static/"+filename+"' class='imgwidth'/></div>";
             break;
         case 'mp3':
         case 'wav':
         case 'wma':
         case 'm4a':
-            type = "<div class='modelbox_center' name='"+id+"'>Filename : "+name+" <br /><br /><audio controls><source src='/static/"+filename+"' type='audio/ogg'></audio> </div>";
+            type = "<div class='modelbox_center' name='"+id+"'><audio controls><source src='/static/"+filename+"' type='audio/ogg'></audio> </div>";
             break;
         case 'avi':
         case '3gp':
@@ -618,14 +643,13 @@ TTS.forms.getfiletype = function (filename,id){
         case 'mpg':
         case 'swf':
         case 'wmv':
-            type = "<div class='modelbox_center' name='"+id+"'>Filename : "+name+" <br /><br /><video width='320' height='240' controls><source src='/static/"+filename+"' type='video/mp4'></video></div>";
+            type = "<div class='modelbox_center' name='"+id+"'><video width='320' height='240' controls><source src='/static/"+filename+"' type='video/mp4'></video></div>";
             break;
         default:
             type = "<div class='modelbox_center'> <h4> Unkown file format <b>."+file_extention+"</b></h4></div>";
     }
     return type;
 }
-
 function load_onclick_events (){
     $(".sticky_header").parent().draggable({handle: '.sticky_header'});
     
@@ -701,7 +725,6 @@ function load_onclick_events (){
         }]
         });
     })
-
 }
 
 </script>
