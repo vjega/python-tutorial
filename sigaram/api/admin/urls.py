@@ -56,6 +56,7 @@ router.register(r'billboardrating',    	    viewsets.BillboardRatingViewSet)
 router.register(r'billboardcomment',    	viewsets.BillboardCommentViewSet)
 router.register(r'richmindmap',    	        viewsets.RichmindmapViewSet)
 router.register(r'studentwrittenworkinfo',  viewsets.studentwrittenworkViewSet)
+router.register(r'assessmentqainfo',    	viewsets.AssessmentQAInfoViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

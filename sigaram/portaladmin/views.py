@@ -621,3 +621,8 @@ def rubric_view(request):
     rubricid =  request.GET.get("rubricid")
     return render(request, 'portaladmin/rubric_view.html' ,{
                             "form" : RubricsForm.RubricsForm() })
+
+@login_required
+@switchlanguage
+def billboardviewassignwrittenworkanswer(request):
+    return render(request, 'portaladmin/billboardviewassignwrittenworkanswer.html')
