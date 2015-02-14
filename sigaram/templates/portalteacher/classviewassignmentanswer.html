@@ -537,6 +537,11 @@ TTS.forms.renderavgpeerrubricmark = function(data){
 
     if (data['prrlist'].length) {
         var tableHTML = '';
+        var avgttl = '';
+        var teacherttl = '';
+        var avg = '';
+        var teacher = '';
+        var head = '';
         /*var trow_mark   = 0;
         var tt_mark     = 0;
         var tct_mark    = 0;
@@ -561,11 +566,24 @@ TTS.forms.renderavgpeerrubricmark = function(data){
         tableHTML += "<tbody>";
 
         $.each(data['prrlist'], function(idx, val){
-            var head = val['jdata'].split("~~");
+            head = val['jdata'].split("~~");
+
+            if(isNaN((val['rowmark']/val['avgmark']).toFixed(2))){
+                avg = "Not Evaluated";
+            }else{
+                avg = (val['rowmark']/val['avgmark']).toFixed(2);
+            }
+            
+            if(isNaN((rnmarkarr[idx]/mxmarkarr).toFixed(2))){
+                teacher = "Not Evaluated";
+            }else{
+                teacher = (rnmarkarr[idx]/mxmarkarr).toFixed(2);
+            }
+
             tableHTML += "<tr>";
             tableHTML += "<td>"+head[0]+"</td>";
-            tableHTML += "<td class='text-right'>"+(val['rowmark']/val['avgmark']).toFixed(2)+"</td>";
-            tableHTML += "<td class='text-right'>"+(rnmarkarr[idx]/mxmarkarr).toFixed(2)+"</td>";
+            tableHTML += "<td class='text-right'>"+ avg +"</td>";
+            tableHTML += "<td class='text-right'>"+ teacher +"</td>";
             tableHTML += "</tr>";
             /*trow_mark   += val['rowmark'];
             tt_mark     += val['avgmark'];
@@ -575,13 +593,25 @@ TTS.forms.renderavgpeerrubricmark = function(data){
             teachermarktotal+= rnmarkarr[idx]/mxmarkarr;
         });
 
+        if(isNaN(avgmarktotal.toFixed(2))){
+            avgttl = "Not Evaluated";
+        }else{
+            avgttl = avgmarktotal.toFixed(2);
+        }
+        
+        if(isNaN(teachermarktotal.toFixed(2))){
+            teacherttl = "Not Evaluated";
+        }else{
+            teacherttl = teachermarktotal.toFixed(2);
+        }
+
         tableHTML += "</tbody>";
 
         tableHTML += "<tfoot>";
         tableHTML += "<tr>";
         tableHTML += "<td>{% trans 'Total' %}</td>";
-        tableHTML += "<td class='text-right'>"+avgmarktotal.toFixed(2)+"</td>";
-        tableHTML += "<td class='text-right'>"+teachermarktotal.toFixed(2)+"</td>";
+        tableHTML += "<td class='text-right'>" + avgttl + "</td>";
+        tableHTML += "<td class='text-right'>" + teacherttl + "</td>";
         tableHTML += "</tr>";
         tableHTML += "</tfoot>";
 
