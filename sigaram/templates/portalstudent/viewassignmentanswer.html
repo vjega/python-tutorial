@@ -540,7 +540,7 @@ TTS.forms.settotalmarks = function() {
 $(document).ready(function(){
     var resourceid = TTS.utils.getUrlParameter('resourceid');
     var studentid = TTS.utils.getUrlParameter('studentid');
-    var assignedid = TTS.utils.getUrlParameter('resourceid');
+    var assignedid = $("#assignedid").val();
 
     $.ajax({
         "url":"/api/admin/assignedresourcestudents/"+resourceid+"/?studentid="+studentid+"&format=json",
@@ -562,7 +562,7 @@ $(document).ready(function(){
     });
 
     $("body").on("click","a#sendclassroom", function(event){
-        var assignedid = TTS.utils.getUrlParameter('resourceid');
+        var assignedid = $("#assignedid").val();
         var crdata = {
             assignedid   : assignedid,
             studentid    : studentid,

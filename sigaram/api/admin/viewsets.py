@@ -2255,16 +2255,9 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
                 SET isclassroom = 1
             WHERE assignwrittenworkid = '%s' ''' % (classroomdata.get('assignedid'))
 
-        if classroomdata.get('studentid'):
-            sql = '''
-            UPDATE assignwrittenworkinfo
-                SET isclassroom = 1
-            WHERE writtenworkid = '%s' 
-            AND studentid='%s'
-            ''' % (classroomdata.get('assignedid'),str(classroomdata.get('studentid')))
         cursor = connection.cursor()
         cursor.execute(sql)
-        print sql;
+
         aldata = {}
         aldata['pagename']       = 'viewassignmentanswer'
         aldata['operation']      = 'insert'
