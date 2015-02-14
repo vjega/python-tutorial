@@ -2257,7 +2257,7 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
 
         cursor = connection.cursor()
         cursor.execute(sql)
-
+        
         aldata = {}
         aldata['pagename']       = 'viewassignmentanswer'
         aldata['operation']      = 'insert'
