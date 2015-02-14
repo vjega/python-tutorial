@@ -41,9 +41,6 @@ def checkaccess(utype):
         return inner
     return outer
 
-
-
-
 admin_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/admins', 
                                       DIMENSIONS=(250, 250))
 teacher_img_uploader = AjaxFileUploader(UPLOAD_DIR='static/teachers', 
@@ -76,23 +73,21 @@ def home(request):
         "icon" : u"flaticon-school43",
         "link" : u"schoollist",
         "caption": _("Schools"),
-        "stat": 25
         }, {
         "color": u"green",
         "icon" : u"flaticon-books24",
         "link" : u"teacherresourcelist",
         "caption": u"{0} {1}".format(_("Teachers"),_("Resources")),
-        "stat": 64
         }, {
         "color": u"red",
         "icon" : u"flaticon-education32",
         "link" : u"studentresourcetype",
         "caption": u"{0} {1}".format(_("Student"), _("Resources")),
-        "stat": 125
         }]
 
     recent_acitivity_head = [_("Sl No."),
-                             _("Assignments"),
+                             _("Activity"),
+                             _("Announcer"),
                              _("Date")]
     admin_folders = models.AdminFolders.folders(request)
     announcement_body = models.Bulletinboardinfo.announcement(request)
@@ -620,3 +615,8 @@ def rubric_view(request):
     rubricid =  request.GET.get("rubricid")
     return render(request, 'portaladmin/rubric_view.html' ,{
                             "form" : RubricsForm.RubricsForm() })
+
+@login_required
+@switchlanguage
+def billboardviewassignwrittenworkanswer(request):
+    return render(request, 'portaladmin/billboardviewassignwrittenworkanswer.html')

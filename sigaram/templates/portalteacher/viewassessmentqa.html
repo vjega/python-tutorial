@@ -117,7 +117,7 @@
 {% block scriptcontent %}
 <script id="editschool" type="text/x-jsrender">
 <form id="newfolderfrm" class="form-horizontal" role="form">
-    <div class="form-group" class="col-sm-8">
+    <div class="form-group">
         <label for="folder_name" class="col-sm-7 control-label" id ="resource-heade">
             {% trans "Question " %}
         </label>
@@ -126,32 +126,54 @@
         <textarea class="summernote" id="question" name="question"></textarea>
     </div>
     <br />
-    <div class="form-group" class="col-sm-12">
-        <label for="folder_name" class="col-sm-2 control-label">
-            {% trans "Answer Option" %}
+    <div class="form-group">
+        <label for="folder_name" class="col-sm-3 control-label">
+            {% trans "Answer" %}
         </label>
-        <div class="col-lg-6" id="tilldate">
-            <div class="input-group">
-                <input type="text" class="form-control" name="enddate" id="enddate">
-                <span class="input-group-addon">
-                    Remove
-                </span>
-            </div>
+        <div class="col-lg-9">
+            <input type="text" class="form-control" name="answer" id="answer">
         </div>
     </div> 
-    <div class="form-group" class="col-sm-12">
-        <label for="folder_name" class="col-sm-2 control-label">
-            {% trans "Answer Option" %}
-        </label>
-        <div class="col-lg-6" id="tilldate">
-            <div class="input-group">
-                <input type="text" class="form-control" name="enddate" id="enddate">
-                <span class="input-group-addon">
-                    Remove
-                </span>
+    <div id="add-answer-option" style="display:none">
+        <div class="form-group">
+            <label for="folder_name" class="col-sm-3 control-label">
+                {% trans "Answer" %} {% trans "Option" %}
+            </label>
+            <div class="col-lg-9">
+                <div class="input-group">
+                <input type="text" class="form-control answeroption" name="answeroption" >
+                <span class="input-group-addon aoremove">Remove</span>
+                </div>
             </div>
         </div>
-    </div>   
+    </div>
+    <div class="form-group">
+        <label for="folder_name" class="col-sm-3 control-label">
+            {% trans "Answer" %} {% trans "Option" %}
+        </label>
+        <div class="col-lg-9">
+            <input type="text" class="form-control answeroption" name="answeroption" >
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="folder_name" class="col-sm-3 control-label">
+            {% trans "Answer" %} {% trans "Option" %}
+        </label>
+        <div class="col-lg-9">
+            <input type="text" class="form-control answeroption" name="answeroption" >
+        </div>
+    </div>            
+    <div id="more-answer-option"></div>
+    <div class="form-group">
+        <div class="col-sm-3">
+            <label for="folder_name" class="col-sm-3 control-label">&nbsp;</lable>
+        </div>
+        <div class="col-sm-9">
+            <button id="add-answer" class="btn btn-primary">
+                {% trans "Add more answer" %}
+            </button>   
+        </div>
+    </div>
 </form>
 </script>
 <script>
@@ -171,16 +193,29 @@ TTS.forms.editschool = function() {
             label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#newfolderfrm");
+                var data = $.parseJSON(TTS.utils.serilaizeJson("#newfolderfrm"));
+                var answeroption = $(".answeroption").map(function(idx) {
+                    if(idx > 0){
+                        return $(this).val();
+                    }
+                }).get().join(",");
+                data['answeroption'] = answeroption;
+                data = JSON.stringify(data);
                 console.log(data);
+                return false;
+
+
+
                 $.ajax({
                     headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
                     },  
                     type: 'POST',
                     data: data,
-                    url : '/api/admin/assessmentinfo/'
+                    url : '/api/admin/assessmentqainfo/'
                 }).done(function( msg ) {
+                    console.log(msg);
+                    return false;
                     dialogItself.close();
                     window.location.reload();
                 });
@@ -245,7 +280,7 @@ $(document).ready(function(){
         "url":"/api/admin/assessmentinfo/?format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
+        //console.log(data);
         TTS.forms.renderassessmentinfo(data);
         TTS.utils.ajaxloaderstop();
     });
@@ -268,10 +303,15 @@ $(document).ready(function(){
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.editschool();
     });
-
+    $("body").on("click","#add-answer",function(){
+        $("#more-answer-option").appendTo($("#add-answer-option").html());
+        return false;
+    });
+    $("body").on("click",".aoremove",function(){
+        $(this).parent().parent().parent().remove();
+    });
 });
 
 </script>
-
 
 {% endblock scriptcontent %}

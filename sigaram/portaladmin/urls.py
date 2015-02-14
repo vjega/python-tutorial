@@ -105,6 +105,8 @@ urlpatterns = patterns('portaladmin.views',
     url(r'^activitystatistics$', 'activitystatistics', 
                                                          name="activitystatistics"), 
     url(r'^richmindmap$', 'richmindmap', name="richmindmap"),
-    url(r'^rubric_view$', 'rubric_view', name="rubric_view")
+    url(r'^rubric_view$', 'rubric_view', name="rubric_view"),
+    url(r'^billboardviewassignwrittenworkanswer$',   'billboardviewassignwrittenworkanswer',  
+                                                name='billboardviewassignwrittenworkanswer')   
     #(r'^api/', include(v1_api.urls)),
 )

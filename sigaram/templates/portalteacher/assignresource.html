@@ -408,7 +408,7 @@ TTS.forms.ressave = function(){
     data.resource = 0;
     data.students = [];
     data.rubricid = 0;
-    data.assigntext = $(".summernote").code();
+    data.assigntext = TTS.utils.summer_encode($(".summernote").code());
     if(getUrlParameter('resourceid')){
         data.resource = getUrlParameter('resourceid');
     }

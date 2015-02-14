@@ -36,6 +36,7 @@
                 <div>
                     <h3>{% trans "Note" %}:</h3>
                 </div><br />
+                <div id="resource-note"></div><br />
                 <!--div class="form-group"> 
                     <label>{% trans "Answer" %} {% trans "Type" %}</label>
                     <select id="answer-type" name="answer-type">
@@ -158,6 +159,7 @@ TTS.forms.renderassignedresourceinfo = function(data){
     //console.log(data); 
     $(".summernote").code(data.answertext);
     $("#resource-title").html(data.resourcetitle);
+    $("#resource-note").html(data.assigntext);
     $("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.videourl+"');\" >View</a>");
     if(data.isrecord && data.answerurl){
         $("#show-recorder").prop('checked',true);

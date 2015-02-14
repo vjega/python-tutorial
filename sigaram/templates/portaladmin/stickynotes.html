@@ -45,6 +45,9 @@
 <link rel="stylesheet" href="{%static "css/color.css" %}">
 <link rel="stylesheet" href="{%static "ajaxuploader/css/fileuploader.css" %}">
 <style>
+.martop{
+    margin-top:-12px;
+}
 .imgwidth{
     max-width: 550px !important;
 }
@@ -57,7 +60,7 @@
     float: left;
     position: relative;
     height: auto;
-    width: 220px;
+    width: auto;
     margin: 10px;
     padding: 8px;
     box-shadow: 1px 1px 1px 1px #d3d3d3;
@@ -68,9 +71,20 @@
     z-index: 0;
 }
 
+.with_out_attachement{
+    max-width: 200px;
+    max-height: 200px;
+    min-width: 200px;
+    min-height: 200px;
+}
+
+.sticky_content{
+    min-width: 200px;
+}
+
 .sticky_header{
     height: 18px;
-    width: 200px;
+    width: auto;
     margin-bottom: 10px;
     cursor: pointer;
 }
@@ -79,7 +93,7 @@
     border-top: 1px solid gray;
     bottom: -3px;
     position: relative;
-    width: 200px;
+    width: auto;
 }
 
 .table-bordered {
@@ -180,8 +194,8 @@
 .comments{
     float:left;
     width:100%;
-    border-top: 1px solid grey;
-    border-bottom: 1px solid grey;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
 }
 
 .comment_details {
@@ -190,7 +204,7 @@
     font-style: italic;
     height: 23px;
     overflow: hidden;
-    width: 200px;
+    width: auto;
 }
 /*
 .comment_by{
@@ -512,11 +526,22 @@ TTS.forms.renderstickynotes = function(data){
         sticky_html += "<div class='sticky_header "+data[i].color+"_header'>";
         sticky_html += "<span class='pull-right deleterec'  name='"+data[i].id+"'><i class='fa fa-trash'></i></span>&nbsp;";
         sticky_html += "<span class='pull-right editrec'  name='"+data[i].id+"'><i class='fa fa-pencil'></i></span> &nbsp;";
+        /*
         if(data[i].attachment != ''){
             sticky_html += '<span class="open_model_window pull-right cliprec" dir="'+data[i].attachment+'" name="'+data[i].id+'"><i class="fa fa-paper-clip"></i></span> &nbsp;';
-        }
+        }*/
         sticky_html += "</div>";
-        sticky_html += "<div  name='"+data[i].color+"' src='"+data[i].id+"' class='sticky_content'>"+data[i].stickytext+"</div>";
+        var div_sticky_html = "";
+        var attach_class = "with_out_attachement";
+        if(data[i].attachment != ''){
+            attach_class = "";
+            var id = data[i].id
+            var path = data[i].attachment
+            html_cont = TTS.forms.getfiletype(path,id);
+            div_sticky_html += "<div class='attachements'>"+html_cont+"</div>";
+        }
+        sticky_html += "<div  name='"+data[i].color+"' src='"+data[i].id+"' class='sticky_content "+attach_class+"'>"+data[i].stickytext+"</div>";
+        sticky_html += div_sticky_html;
         sticky_html += "<div  class='sticky_footer'>";
         sticky_html += "<span class='pull-right sticky_comment' id='sticky_comment_"+data[i].id+"' name='"+data[i].id+"'><i class='fa fa-comment'></i></span>";
         var com = []
@@ -546,8 +571,8 @@ TTS.forms.renderstickynotes = function(data){
             sticky_html += "</div>";
             sticky_html += "<div class='slidingDiv' id='slidingDiv_"+data[i].id+"'>";
             for (i in com){
-                sticky_html += "<div>";
-                sticky_html += "<div class='comment_details'>"+comby[i]+" &nbsp;&nbsp "+comdate[i]+"</div>";
+                sticky_html += "<div class='martop'><br><br>";
+                sticky_html += "<div class='comment_details'>"+comby[i]+" &nbsp;&nbsp "+ moment(comdate[i],"YYYY-MM-DD h:mm:ss").fromNow()+"</div>";
                 //sticky_html += "<div class='comment_by'>"+comby[i]+"</div>";
                 //sticky_html += "<div class='comment_date'>"+comdate[i]+"</div>";
                 //sticky_html += "</div>";
@@ -556,7 +581,7 @@ TTS.forms.renderstickynotes = function(data){
             }
             sticky_html += "</div>";
         } else {
-            sticky_html += "<div id='comment'>No comment</div>";
+            sticky_html += "<div id='comment'>{% trans "Comment" %} (0)</div>";
         }
         sticky_html += "</div>";
         sticky_html += "</div>";
@@ -604,13 +629,13 @@ TTS.forms.getfiletype = function (filename,id){
         case 'jpeg':
         case 'png':
         case 'gif':
-            type = "<div class='modelbox_center' name='"+id+"'>Filename : "+name+" <br /><br /><img src='/static/"+filename+"' class='imgwidth'/></div>";
+            type = "<div class='modelbox_center' name='"+id+"'><img src='/static/"+filename+"' class='imgwidth'/></div>";
             break;
         case 'mp3':
         case 'wav':
         case 'wma':
         case 'm4a':
-            type = "<div class='modelbox_center' name='"+id+"'>Filename : "+name+" <br /><br /><audio controls><source src='/static/"+filename+"' type='audio/ogg'></audio> </div>";
+            type = "<div class='modelbox_center' name='"+id+"'><audio controls><source src='/static/"+filename+"' type='audio/ogg'></audio> </div>";
             break;
         case 'avi':
         case '3gp':
@@ -618,7 +643,7 @@ TTS.forms.getfiletype = function (filename,id){
         case 'mpg':
         case 'swf':
         case 'wmv':
-            type = "<div class='modelbox_center' name='"+id+"'>Filename : "+name+" <br /><br /><video width='320' height='240' controls><source src='/static/"+filename+"' type='video/mp4'></video></div>";
+            type = "<div class='modelbox_center' name='"+id+"'><video width='320' height='240' controls><source src='/static/"+filename+"' type='video/mp4'></video></div>";
             break;
         default:
             type = "<div class='modelbox_center'> <h4> Unkown file format <b>."+file_extention+"</b></h4></div>";

@@ -110,7 +110,7 @@ $(document).ready(function(){
         "url":"/api/admin/classinfo/?format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
+        //console.log(data);
         TTS.forms.renderannouncement(data);
         $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
     });

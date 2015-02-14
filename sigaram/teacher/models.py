@@ -52,14 +52,16 @@ class Activitylog(models.Model):
 
     @staticmethod
     def recentactivities():
-        sql = """SELECT operation,
-                    stringsentence,
-                    updateddate 
-            FROM activitylog al
-            INNER JOIN logininfo li ON li.loginid = al.loginid 
-            -- WHERE al.loginid = {$loginid} 
-            ORDER by activityid DESC 
-            LIMIT 5""";
+        sql = """
+        SELECT  DISTINCT operation,
+                stringsentence,
+                updateddate,
+                CONCAT(au.first_name,' ',au.last_name) as name
+        FROM activitylog al
+        INNER JOIN auth_user au ON au.username = al.loginid 
+        -- WHERE al.loginid = {$loginid} 
+        ORDER by updateddate DESC 
+        LIMIT 5""";
         cursor = connection.cursor()
         cursor.execute(sql)
         return dictfetchall(cursor)

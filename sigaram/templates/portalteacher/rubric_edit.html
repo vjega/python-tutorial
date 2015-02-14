@@ -392,7 +392,6 @@ TTS.forms.ressave = function(){
             mtx_body    :bodydata,
             mtx_head    :headerdata
         };
-        console.log(data);
         if(field_validation()){
             $.ajax({
                 headers : {
@@ -402,7 +401,7 @@ TTS.forms.ressave = function(){
                 type:"POST",
                 data: JSON.stringify(data)
             }).done(function(data){
-                console.log(data);
+                //console.log(data);
                 alert("Rubrics Saved Successfully");
                 window.location = "rubrics";
             });
