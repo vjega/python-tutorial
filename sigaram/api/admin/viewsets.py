@@ -53,6 +53,13 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
         admin.createdby = request.user.id
         admin.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         admin.save()
+
+        aldata = {}
+        aldata['pagename']       = 'adminlist'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'New Admin Created'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
 
     def update(self, request, pk=None):
@@ -121,10 +128,17 @@ class TeacherViewSet(viewsets.ModelViewSet):
         teacher.createdby = request.user.id
         teacher.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         teacher.save()
+
+        aldata = {}
+        aldata['pagename']       = 'teacherslist'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'New Teacher Created'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        print request.GET.get('schoolid');
+        #print request.GET.get('schoolid');
         teacher = models.Teacherinfo.objects.get(pk=pk)
         teacherdata =  json.loads(request.DATA.keys()[0])
         teacher.username = teacherdata.get('username')
@@ -191,6 +205,13 @@ class studentViewSet(viewsets.ModelViewSet):
         student.createdby = request.user.id
         student.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         student.save()
+        
+        aldata = {}
+        aldata['pagename']       = 'studentlist'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'New Student Created'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
 
     def update(self, request, pk=None):
@@ -317,6 +338,13 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         teacherresource.isdeleted = 0
         teacherresource.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         teacherresource.save()
+
+        aldata = {}
+        aldata['pagename']       = 'viewteacherres'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'New Tacher Resource Created'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
 
     def update(self, request, pk=None):
@@ -407,6 +435,13 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         ri.isdeleted = 0
         ri.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         ri.save()
+
+        aldata = {}
+        aldata['pagename']       = 'viewstudentres'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'New Student Resource Created'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
 
     def destroy(self, request, pk=None):
@@ -612,6 +647,13 @@ class AdminschoolViewSet(viewsets.ModelViewSet):
         adminschools.createdby = request.user.id
         adminschools.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         adminschools.save()
+
+        aldata = {}
+        aldata['pagename']       = 'Schoollist'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'New School Created'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
 
     def update(self, request, pk=None):
@@ -833,6 +875,13 @@ class MindmapViewSet(viewsets.ModelViewSet):
         mm.createdby = request.user.id
         mm.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         mm.save()
+
+        aldata = {}
+        aldata['pagename']       = 'mindmapedit'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'New Mindmap Created'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
 
     def update(self, request, pk=None):
@@ -1421,7 +1470,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         aldata = {}
         aldata['pagename']       = 'bulletinboard'
         aldata['operation']      = 'insert'
-        aldata['stringsentence'] = 'New Announcement created'
+        aldata['stringsentence'] = 'New Announcement Created'
         add_activitylog(request, aldata)
 
         return Response(request.DATA)
@@ -1525,7 +1574,13 @@ class BillboardViewSet(viewsets.ModelViewSet):
         billboard.lastvoteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         billboard.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         billboard.save()
-        return Response(request.DATA)
+
+        # aldata = {}
+        # aldata['pagename']       = 'bulletinboard'
+        # aldata['operation']      = 'insert'
+        # aldata['stringsentence'] = 'New Announcement created'
+        # add_activitylog(request, aldata)
+        # return Response(request.DATA)
 
     def update(self, request, pk=None):
         return Response('"msg":"update"')
@@ -1705,6 +1760,12 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
             
         cursor = connection.cursor()
         cursor.execute(sql)        
+
+        aldata = {}
+        aldata['pagename']       = 'viewassignmentanswer'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'Send To NoticeBoard'
+        add_activitylog(request, aldata)
 
         return Response('saved')
 
@@ -1946,6 +2007,13 @@ class StickyinfoViewSet(viewsets.ModelViewSet):
         stickylist.createdby = request.user.id
         stickylist.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         stickylist.save()
+
+        aldata = {}
+        aldata['pagename']       = 'sticky-notes-list'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'New stickynotes Created'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
 
 class AuthuserViewSet(viewsets.ModelViewSet):
@@ -2999,6 +3067,13 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         topics.lastposteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         topics.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         topics.save()
+
+        aldata = {}
+        aldata['pagename']       = 'newtopic'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'New Forum Created'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
 
     def update(self, request, pk=None):

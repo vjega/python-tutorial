@@ -75,6 +75,7 @@ def home(request):
 
     recent_acitivity_head = [_("Sl No."),
                              _("Activities"),
+                             _("Announcer"),
                              _("Date")]
     admin_folders = models.AdminFolders.folders(request)
     announcement_body = models.Bulletinboardinfo.announcement(request)
