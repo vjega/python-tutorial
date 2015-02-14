@@ -753,6 +753,12 @@ class AdminrubricsViewSet(viewsets.ModelViewSet):
             rubricmatrix.disp_order = idy
             rubricmatrix.save()
 
+        aldata = {}
+        aldata['pagename']       = 'rubric_edit'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'New Rubrics Created'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA);
 
     def update(self, request, pk=None):
@@ -838,6 +844,13 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.createdby       = request.user.id
         cal.createddate     = time.strftime('%Y-%m-%d %H:%M:%S')
         cal.save()
+
+        aldata = {}
+        aldata['pagename']       = 'Calendar'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'New Event Created'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
 
     def update(self, request, pk=None):
@@ -948,6 +961,12 @@ class StudentAssignResource(viewsets.ModelViewSet):
             ar.usertype     = int(usertype)
 
             ar.save()
+
+        aldata = {}
+        aldata['pagename']       = 'viewassignresource'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'Answered For Resource'
+        add_activitylog(request, aldata)
 
         return Response({'msg':True})
 
@@ -1064,6 +1083,13 @@ class StudentAssignResource(viewsets.ModelViewSet):
                 ar.old_edit = 0
                 ar.save()   
         
+
+        aldata = {}
+        aldata['pagename']       = 'assignchapter'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'New Resource Assigned to students'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
 
 
@@ -1764,7 +1790,7 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
         aldata = {}
         aldata['pagename']       = 'viewassignmentanswer'
         aldata['operation']      = 'insert'
-        aldata['stringsentence'] = 'Send To NoticeBoard'
+        aldata['stringsentence'] = 'Resource Sent To NoticeBoard'
         add_activitylog(request, aldata)
 
         return Response('saved')
@@ -2238,6 +2264,12 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
             ''' % (classroomdata.get('assignedid'),str(classroomdata.get('studentid')))
         cursor = connection.cursor()
         cursor.execute(sql)
+        print sql;
+        aldata = {}
+        aldata['pagename']       = 'viewassignmentanswer'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'Resource Sent To Classroom'
+        add_activitylog(request, aldata)
 
         return Response(request.DATA)
 
@@ -3161,6 +3193,12 @@ class RubricImportViewSet(viewsets.ModelViewSet):
             rubricmatrix.jdata      = unicode(bodydata)
             rubricmatrix.disp_order = bdr
             rubricmatrix.save()
+
+        aldata = {}
+        aldata['pagename']       = 'rubric_edit'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'Rubrics Imported'
+        add_activitylog(request, aldata)
 
         return Response("msg")
 
