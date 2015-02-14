@@ -2436,6 +2436,12 @@ class StudentAssignWrittenWork(viewsets.ModelViewSet):
         
         awwi.save()
 
+        aldata = {}
+        aldata['pagename']       = 'viewassignwrittenwork'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'Answered For Writtenwork'
+        add_activitylog(request, aldata)
+
         # assignedid  = pk;
         
         # spanid      = data.get('spanid');
@@ -2554,7 +2560,7 @@ class StudentAssignWrittenWork(viewsets.ModelViewSet):
                 ar.rubric_id = int(rubricid)
                 ar.old_edit = 0
                 ar.save()   
-        
+
         return Response(request.DATA)
 
 

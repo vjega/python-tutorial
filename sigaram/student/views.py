@@ -65,6 +65,7 @@ def home(request):
 
     recent_acitivity_head = [_("Sl No."),
                              _("Assignments"),
+                             _("Announcer"),
                              _("Date")]
     admin_folders = pmodels.AdminFolders.folders(request)
     recent_activity_body = models.Activitylog.recentactivities()
