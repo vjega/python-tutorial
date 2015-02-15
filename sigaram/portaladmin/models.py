@@ -43,7 +43,7 @@ class Activitylog(models.Model):
             INNER JOIN auth_user au ON au.username = al.loginid 
             -- WHERE al.loginid = {$loginid} 
             ORDER by updateddate DESC 
-            LIMIT 5""";
+            LIMIT 100""";
         cursor = connection.cursor()
         cursor.execute(sql)
         return dictfetchall(cursor)
@@ -1179,3 +1179,14 @@ class Billboardcommentinfo(models.Model):
     class Meta:
         managed = False
         db_table = 'billboardcommentinfo'
+
+class AssessmentQAInfo(models.Model):
+    id          = models.AutoField(primary_key=True)
+    assessmentid= models.BigIntegerField()
+    question    = models.TextField()
+    answer      = models.CharField(max_length=500)
+    answeroption= models.TextField()
+
+    class Meta:
+        managed = False
+        db_table= 'assessmentqa'

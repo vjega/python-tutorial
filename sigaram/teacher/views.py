@@ -673,3 +673,10 @@ def billboardviewassignwrittenworkanswer(request):
 @switchlanguage
 def viewstudentresource(request):
     return render(request, 'portalteacher/viewstudentresource.html')
+
+@login_required
+@switchlanguage
+def assignassessment(request):
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portalteacher/assignassessment.html',{'schools':schools,'classes':classes})

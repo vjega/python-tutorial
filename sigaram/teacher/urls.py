@@ -110,4 +110,7 @@ urlpatterns = patterns('teacher.views',
                                                         name='billboardviewassignwrittenworkanswer'),
     url(r'^viewstudentresource$',           'viewstudentresource',  
                                                         name='viewstudentresource'),
+    url(r'^assignassessment$',           'assignassessment',  
+                                                        name='assignassessment'),
+    
 )

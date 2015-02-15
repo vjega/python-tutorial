@@ -3370,27 +3370,42 @@ class studentwrittenworkViewSet(viewsets.ModelViewSet):
         models.Writtenworkinfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
-class AssessmentQAInfoViewSet(viewsets.ModelViewSet):
-    queryset = models.Assessmentinfo.objects.all()
-    serializer_class = adminserializers.AssessmentinfoSerializer
+
+class MyProfileViewSet(viewsets.ModelViewSet):
+    queryset = models.Auth_user.objects.all()
+    serializer_class = adminserializers.Auth_userSerializer
     def list(self, request):
-        queryset = models.Assessmentinfo.objects.filter(createdby=str(request.user.username)).order_by('-createddate')
-        serializer = adminserializers.AssessmentinfoSerializer(queryset, many=True)
+        print request.user.id       
+        queryset = models.Auth_user.objects.filter(id=request.user.id)
+
+        serializer = adminserializers.Auth_userSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+    def update(self, request, pk=None):
+        teacher = models.Auth_user.objects.get(pk=pk)
+        teacher.password = teacherdata.get('password')
+        teacher.save()
+        return Response(request.DATA)
+
+class AssessmentQAInfoViewSet(viewsets.ModelViewSet):
+    queryset = models.AssessmentQAInfo.objects.all()
+    serializer_class = adminserializers.AssessmentQAInfoSerializer
+
+    def list(self, request):
+        assessmentid = request.GET.get('assessmentid')
+        queryset = models.AssessmentQAInfo.objects.filter(assessmentid=assessmentid).order_by('-id')
+        serializer = adminserializers.AssessmentQAInfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def create(self, request):
-        assessment = models.Assessmentinfo()
-        cdata =  json.loads(request.DATA.keys()[0])
-        assessment.title        = cdata.get('title')
-        assessment.instruction  = cdata.get('instruction')
-        assessment.schoolid     = request.session.get('schoolid')
-        assessment.classid      = request.session.get('classid')
-        assessment.type         = cdata.get('type')
-        assessment.enddate      = time.strftime('%Y-%m-%d %H:%M:%S')
-        assessment.createdby    = request.user.username
-        assessment.createddate  = time.strftime('%Y-%m-%d %H:%M:%S')
-        assessment.isdeleted    = 0
-        assessment.save()
+        assessmentqa = models.AssessmentQAInfo()
+        aqadata =  json.loads(request.DATA.keys()[0])
+        assessmentqa.assessmentid = aqadata.get('assessmentid')
+        assessmentqa.question     = aqadata.get('question')
+        assessmentqa.answer       = aqadata.get('answer')
+        assessmentqa.answeroption = aqadata.get('answeroption')        
+        assessmentqa.save()
         return Response(request.DATA)
 
     def destroy(self, request, pk=None):
