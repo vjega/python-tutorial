@@ -3370,6 +3370,24 @@ class studentwrittenworkViewSet(viewsets.ModelViewSet):
         models.Writtenworkinfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
+
+class MyProfileViewSet(viewsets.ModelViewSet):
+    queryset = models.Auth_user.objects.all()
+    serializer_class = adminserializers.Auth_userSerializer
+    def list(self, request):
+        print request.user.id       
+        queryset = models.Auth_user.objects.filter(id=request.user.id)
+
+        serializer = adminserializers.Auth_userSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+    def update(self, request, pk=None):
+        teacher = models.Auth_user.objects.get(pk=pk)
+        teacher.password = teacherdata.get('password')
+        teacher.save()
+        return Response(request.DATA)
+
 class AssessmentQAInfoViewSet(viewsets.ModelViewSet):
     queryset = models.AssessmentQAInfo.objects.all()
     serializer_class = adminserializers.AssessmentQAInfoSerializer

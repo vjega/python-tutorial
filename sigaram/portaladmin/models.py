@@ -43,7 +43,7 @@ class Activitylog(models.Model):
             INNER JOIN auth_user au ON au.username = al.loginid 
             -- WHERE al.loginid = {$loginid} 
             ORDER by updateddate DESC 
-            LIMIT 5""";
+            LIMIT 100""";
         cursor = connection.cursor()
         cursor.execute(sql)
         return dictfetchall(cursor)
