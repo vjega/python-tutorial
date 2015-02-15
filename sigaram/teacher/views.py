@@ -673,3 +673,8 @@ def billboardviewassignwrittenworkanswer(request):
 @switchlanguage
 def viewstudentresource(request):
     return render(request, 'portalteacher/viewstudentresource.html')
+
+@login_required
+@switchlanguage
+def assignassessment(request):
+    return render(request, 'portalteacher/assignassessment.html')

@@ -127,19 +127,19 @@
     </div>
     <br />
     <div class="form-group">
-        <label for="folder_name" class="col-sm-3 control-label">
+        <label for="folder_name" class="col-sm-2 control-label" style="text-align:center">
             {% trans "Answer" %}
         </label>
-        <div class="col-lg-9">
-            <input type="text" class="form-control" name="answer" id="answer">
-        </div>
+        <label for="folder_name" class="col-sm-10 control-label">
+            {% trans "Options" %}
+        </label>
     </div>
     <div id="add-answer-option" style="display:none">
         <div class="form-group">
-            <label for="folder_name" class="col-sm-3 control-label">
-                {% trans "Answer" %} {% trans "Option" %}
-            </label>
-            <div class="col-lg-9">
+            <div class="col-lg-2">
+                <input type="radio" class="form-control answer" name="answer">
+            </div>
+            <div class="col-lg-10">
                 <div class="input-group">
                     <input type="text" class="form-control answeroption" name="answeroption">
                     <span class="input-group-addon aoremove">Remove</span>
@@ -148,27 +148,25 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="folder_name" class="col-sm-3 control-label">
-            {% trans "Answer" %} {% trans "Option" %}
-        </label>
-        <div class="col-lg-9">
+        <div class="col-lg-2">
+            <input type="radio" class="form-control answer" name="answer">
+        </div>
+        <div class="col-lg-10">
             <input type="text" class="form-control answeroption" name="answeroption" >
         </div>
     </div>
     <div class="form-group">
-        <label for="folder_name" class="col-sm-3 control-label">
-            {% trans "Answer" %} {% trans "Option" %}
-        </label>
-        <div class="col-lg-9">
+        <div class="col-lg-2">
+            <input type="radio" class="form-control answer" name="answer">
+        </div>
+        <div class="col-lg-10">
             <input type="text" class="form-control answeroption" name="answeroption" >
         </div>
     </div>            
     <div id="more-answer-option"></div>
     <div class="form-group">
-        <div class="col-sm-3">
-            <label for="folder_name" class="col-sm-3 control-label">&nbsp;</lable>
-        </div>
-        <div class="col-sm-9">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10">
             <button id="add-answer" class="btn btn-primary">
                 {% trans "Add more answer" %}
             </button>   
@@ -194,16 +192,17 @@ TTS.forms.editschool = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
 
-                var data = $.parseJSON(TTS.utils.serilaizeJson("#newfolderfrm"));
-
+                var data    = $.parseJSON(TTS.utils.serilaizeJson("#newfolderfrm"));
+                var answer  = ''; 
                 var answeroption = $(".answeroption").map(function(idx) {
                     if(idx > 0){
                         return $(this).val();
                     }
                 }).get().join(",");
-
+                answer = $('input[name=answer]:checked').parent().next().children().val(); 
                 data['answeroption'] = answeroption;
                 data['assessmentid'] = TTS.utils.getUrlParameter('id');
+                data['answer']       = answer;
 
                 $.ajax({
                     headers : {
