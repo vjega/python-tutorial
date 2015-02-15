@@ -220,10 +220,10 @@ TTS.forms.renderassessmentinfo = function(data){
                     { "title": "{% trans "Title" %}", "data" : "title"},
                     { "title": "{% trans "Type" %}", "data" : "type"},
                     { "title": "{% trans "Date" %}", "data" : "date"},
-                    { "title": "{% trans "Action" %}", "data" : "action","class": "text-center"}
+                    { "title": "{% trans "Delete" %}", "data" : "action","class": "text-center"}
                 ];
     var dataset = [];
-    var count = 0
+    var count   = 0;
     for(var i in data){
         var t = [];
         t.DT_RowId  = data[i].id;

@@ -157,5 +157,3 @@ class Workspaceinfo(models.Model):
         cursor = connection.cursor()
         cursor.execute(sql)
         return dictfetchall(cursor)
-
-
