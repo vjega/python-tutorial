@@ -79,8 +79,7 @@ def home(request):
                              _("Date")]
     admin_folders = models.AdminFolders.folders(request)
     announcement_body = models.Bulletinboardinfo.announcement(request)
-    #recent_activity_body = models.Activitylog.recentactivities()
-    recent_activity_body = []
+    recent_activity_body = models.Activitylog.recentactivities()
     recent_activities = {'head':recent_acitivity_head,
                          'body':recent_activity_body}
     announcement = {'body':announcement_body}

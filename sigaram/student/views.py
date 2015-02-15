@@ -68,8 +68,7 @@ def home(request):
                              _("Announcer"),
                              _("Date")]
     admin_folders = pmodels.AdminFolders.folders(request)
-    #recent_activity_body = models.Activitylog.recentactivities()
-    recent_activity_body = []
+    recent_activity_body = models.Activitylog.recentactivities()
     recent_activities = {'head':recent_acitivity_head,
                          'body':recent_activity_body}
     announcement = pmodels.Bulletinboardinfo.announcement(request)
