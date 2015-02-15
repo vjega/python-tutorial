@@ -3396,3 +3396,35 @@ class AssessmentQAInfoViewSet(viewsets.ModelViewSet):
     def destroy(self, request, pk=None):
         models.Assessmentinfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
+
+class ActivitylogInfoViewSet(viewsets.ModelViewSet):
+    queryset = models.Activitylog.objects.all()
+    serializer_class = adminserializers.ActivityloginfoSerializer
+
+    def list(self, request):
+        datecond = ''
+        if request.GET.get('fdate') and request.GET.get('tdate'):
+            datecond = "AND (wwi.createddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+                request.GET.get('tdate'))
+        sql = '''
+        SELECT  loginid,
+                pagename,
+                operation,
+                usertype,
+                stringsentence,
+                updateddate
+        FROM activitylog 
+        WHERE loginid = '%s'
+        %s
+        ORDER BY updateddate DESC
+        ''' % (request.user.username,datecond)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+        print serializer.data
+        return Response(serializer.data)

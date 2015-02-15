@@ -27,9 +27,9 @@ class PostinfoSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('postid',  'topicid','forumid',
                   'postdetails','postedby','posteddate')
 
-class ActivitylogSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = models.Activitylog
-        fields = ('activityid',  'loginid','pagename',
-                  'operation','usertype','stringsentence','updateddate')
+# class ActivitylogSerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model = models.Activitylog
+#         fields = ('activityid',  'loginid','pagename',
+#                   'operation','usertype','stringsentence','updateddate')
         
