@@ -133,7 +133,7 @@
         <div class="col-lg-9">
             <input type="text" class="form-control" name="answer" id="answer">
         </div>
-    </div> 
+    </div>
     <div id="add-answer-option" style="display:none">
         <div class="form-group">
             <label for="folder_name" class="col-sm-3 control-label">
@@ -141,8 +141,8 @@
             </label>
             <div class="col-lg-9">
                 <div class="input-group">
-                <input type="text" class="form-control answeroption" name="answeroption" >
-                <span class="input-group-addon aoremove">Remove</span>
+                    <input type="text" class="form-control answeroption" name="answeroption">
+                    <span class="input-group-addon aoremove">Remove</span>
                 </div>
             </div>
         </div>
@@ -193,29 +193,27 @@ TTS.forms.editschool = function() {
             label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
+
                 var data = $.parseJSON(TTS.utils.serilaizeJson("#newfolderfrm"));
+
                 var answeroption = $(".answeroption").map(function(idx) {
                     if(idx > 0){
                         return $(this).val();
                     }
                 }).get().join(",");
+
                 data['answeroption'] = answeroption;
-                data = JSON.stringify(data);
-                console.log(data);
-                return false;
-
-
+                data['assessmentid'] = TTS.utils.getUrlParameter('id');
 
                 $.ajax({
                     headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
                     },  
                     type: 'POST',
-                    data: data,
+                    data: JSON.stringify(data),
                     url : '/api/admin/assessmentqainfo/'
                 }).done(function( msg ) {
-                    console.log(msg);
-                    return false;
+                    alert("Question and Answers created successfully");
                     dialogItself.close();
                     window.location.reload();
                 });
@@ -235,9 +233,9 @@ TTS.forms.renderassessmentinfo = function(data){
                       "class": "text-center",
                       "data" : "slno"
                     },
-                    { "title": "{% trans "Title" %}", "data" : "title"},
-                    { "title": "{% trans "Date" %}", "data" : "date"},
-                    { "title": "{% trans "Action" %}", "data" : "action","class": "text-center"}, 
+                    { "title": "{% trans "Question" %}", "data" : "question"},
+                    { "title": "{% trans "Answer" %}", "data" : "answer"},
+                    { "title": "{% trans "Delete" %}", "data" : "action","class": "text-center"},
                 ];
     var dataset = [];
     var count = 0
@@ -245,8 +243,8 @@ TTS.forms.renderassessmentinfo = function(data){
         var t = [];
         t.DT_RowId  = data[i].id;
         t.slno      = ++count;
-        t.title     = data[i].title;
-        t.date      = data[i].createddate;
+        t.question  = data[i].question;
+        t.answer    = data[i].answer;
         t.action    = "<i class='fa fa-trash fa-lg tts-delete'></i>";
         dataset.push(t);
     }
@@ -275,9 +273,9 @@ TTS.forms.delassessment = function(id) {
 
 $(document).ready(function(){
     TTS.utils.ajaxloaderstart();
-
+    var assessmentid = TTS.utils.getUrlParameter('id');
     $.ajax({
-        "url":"/api/admin/assessmentinfo/?format=json",
+        "url":"/api/admin/assessmentqainfo/?assessmentid="+assessmentid+"&format=json",
         "type":"GET"
     }).done(function(data){
         //console.log(data);
@@ -304,7 +302,7 @@ $(document).ready(function(){
         TTS.forms.editschool();
     });
     $("body").on("click","#add-answer",function(){
-        $("#more-answer-option").appendTo($("#add-answer-option").html());
+        $("#more-answer-option").append($("#add-answer-option").html());
         return false;
     });
     $("body").on("click",".aoremove",function(){

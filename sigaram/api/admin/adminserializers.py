@@ -247,3 +247,8 @@ class PeerRubricsReviewSerializer(serializers.HyperlinkedModelSerializer):
         model = models.PeerRubricsReview
         fields = ('slno','resourceid','studentid','evaluatedby',
                   'row_no','row_mark','max_mark')
+
+class AssessmentQAInfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.AssessmentQAInfo
+        fields = ('id','assessmentid','question','answer','answeroption')
