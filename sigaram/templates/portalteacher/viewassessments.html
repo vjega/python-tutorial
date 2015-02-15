@@ -220,10 +220,13 @@ TTS.forms.renderassessmentinfo = function(data){
                     { "title": "{% trans "Title" %}", "data" : "title"},
                     { "title": "{% trans "Type" %}", "data" : "type"},
                     { "title": "{% trans "Date" %}", "data" : "date"},
-                    { "title": "{% trans "Action" %}", "data" : "action","class": "text-center"}
+                    { "title": "{% trans "Assignment" %}", "data" :"assignment",
+                                "bSortable":false, "class": "text-center" },
+                    { "title": "{% trans "Delete" %}", "data" : "action",
+                                "class": "text-center"}
                 ];
     var dataset = [];
-    var count = 0
+    var count   = 0;
     for(var i in data){
         var t = [];
         t.DT_RowId  = data[i].id;
@@ -231,6 +234,7 @@ TTS.forms.renderassessmentinfo = function(data){
         t.title     = data[i].title;
         t.type      = data[i].type;
         t.date      = data[i].createddate;
+        t.assignment="<a href='javascript:void(0)' class='assignment' id='"+data[i].teacherresourceid+"' ><i class='fa fa-share fa-2x'></i></a>";
         t.action    = "<i class='fa fa-trash fa-lg tts-delete'></i>";
         dataset.push(t);
     }
@@ -289,6 +293,11 @@ $(document).ready(function(){
         TTS.forms.editschool();
     });
 
+    $('#admin-main-tbl').on('click', '.assignment',function(e){
+        e.stopPropagation();
+        var assessmentid = $(this).parent().parent().prop("id");
+        window.location = 'assignassessment?assessmentid='+assessmentid;
+    });
 });
 
 </script>

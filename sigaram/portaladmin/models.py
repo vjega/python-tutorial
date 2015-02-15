@@ -1179,3 +1179,14 @@ class Billboardcommentinfo(models.Model):
     class Meta:
         managed = False
         db_table = 'billboardcommentinfo'
+
+class AssessmentQAInfo(models.Model):
+    id          = models.AutoField(primary_key=True)
+    assessmentid= models.BigIntegerField()
+    question    = models.TextField()
+    answer      = models.CharField(max_length=500)
+    answeroption= models.TextField()
+
+    class Meta:
+        managed = False
+        db_table= 'assessmentqa'

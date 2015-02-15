@@ -140,6 +140,9 @@ TTS.forms.showstudentform = function() {
                 var data = TTS.utils.serilaizeJson("#add-student");
                 $("#add-student").validate({
                     rules: {
+                        schoolid: {
+                            required: true
+                        },
                         firstname: {
                             required: true
                         },
@@ -154,6 +157,7 @@ TTS.forms.showstudentform = function() {
                         }
                     },
                     messages: {
+                        schoolid: "Select the School Name",
                         firstname: "First Name is required",
                         username: "User Name is required",
                         password: "password is required",

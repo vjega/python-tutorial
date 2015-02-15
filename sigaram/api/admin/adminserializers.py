@@ -252,3 +252,8 @@ class ActivityloginfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Activitylog
         fields = ('activityid', 'loginid', 'operation', 'pagename', 'stringsentence', 'updateddate', 'usertype')
+
+class AssessmentQAInfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.AssessmentQAInfo
+        fields = ('id','assessmentid','question','answer','answeroption')

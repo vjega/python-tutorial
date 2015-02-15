@@ -17,8 +17,7 @@
         </div><br />
         <!-- /.panel-heading -->
         <div class="gentable col-lg-12" id ="admin-newtopic">
-         <input type ="text" class="form-control" value="{{user.id}}"name="admin_id" id="admin_id" style='display:none;'>
-          <!-- div id="file-uploader">File Uploader Comes Here...</div --> 
+         <input type ="text" id="teacherid" style="display:none;">
             {% crispy form %}
         </div>
         <div class="text-center">
@@ -35,11 +34,7 @@
 {% block morecss %}
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
-<style>
-    #addrec:hover, .tts-delete:hover{
-        cursor: pointer;
-    }
-</style>
+
 {% endblock morecss %}
 
 {% block morescript %}
@@ -109,26 +104,20 @@ $(document).ready(function(){
    
    $.ajax({
         //"url":"/api/admin/logininfo/"+$("#admin_id").val()+"/?format=json",
-        "url":"/api/admin/teacher/"+$("#admin_id").val()+"/?format=json",
+        "url":"/api/admin/myprofile/",
         "type":"GET"
     }).done(function(data){
-        $("#id_username").val(data.username); 
-        $("#id_firstname").val(data.firstname);
-        $("#id_emailid").val(data.emailid);
-        $("#id_password").val(data.password);
-        $("#admin_photo").val(data.imageurl);
+        console.log(data);
+        $("#id_firstname").val(data[0].first_name+ " " +data[0].last_name);
+        $("#teacherid").val(data[0].id);
         
     });
 
     $("#mybtn").click(function(){
         var data = {
-            'username' : $("#admin_username").val(),
-            'firstname'    : $("#admin_fname").val(),
-            'password' : $("#input").val(),
-            'emailid'    : $("#email").val(),
-            'imageurl'    : $("#admin_photo").val(),
+            'password' : $("#input").val()
         }       
-        var url="/api/admin/teacher/?username="+$("#admin_username").val()+"&format=json";
+        var url="/api/admin/myprofile/"+$("#teacherid").val()+"/";
         $.ajax({
             headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -143,7 +132,7 @@ $(document).ready(function(){
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.showadminform();
     });
-    
+    $("#id_firstname").prop("readonly",true);
 });
 
 </script>
