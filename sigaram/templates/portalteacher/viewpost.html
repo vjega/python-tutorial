@@ -69,16 +69,40 @@
         display:none;
     }
 
-    .reply_comment, .show_hide_comments{
+    .reply_comment{
+       cursor:pointer;
+       color: #2d5ec0;
+    }
+
+    .show_hide_comments{
        cursor:pointer;
     }
     .user_details{
-        color: gray;
-        font-style: italic;
+        color: #2d5ec0;
+        font-weight: bold;
+        text-transform: capitalize;
     }
 
     .comments_cont.panel-body {
         display: none;
+    }
+
+    .sep_reply{
+        border-bottom: 1px solid #f3f3f3;
+        padding-bottom: 7px;
+        cursor:pointer;
+    }
+
+    .sep_reply:hover{
+        background-color: #EDF0F7;
+    }
+
+    .user_time{
+        color: #a1a1a1;
+    }
+
+    .comment_content {
+        margin-left: 30px;
     }
 
 </style>
@@ -96,10 +120,10 @@
 <script id="render-textarea" type="text/forum">
     <div class="comment_text_area form-group panel-body">
         <div class="form-group row">
-            <textarea class="comment_reply_textarea textinput form-control" placeholder=
-                                                            {% trans "Reply" %} rows="2"></textarea> 
+            <textarea class="comment_reply_textarea textinput form-control" placeholder="Reply..."
+            rows="2"></textarea> 
         </div>
-        <button class="save_comment_reply btn btn-primary center-block pull-right">{% trans "Save" %}</button>
+        <button class="save_comment_reply btn btn-primary center-block pull-right">Save</button>
     </div>
 </script>
 
@@ -114,14 +138,12 @@ TTS.forms = TTS.forms || {}
 
 TTS.forms.renderviewforum = function(data){
     $("#topic_header").html(data['topicname']);
-    $("#topic_header_posteddate").html(data['username'] +" On "
-                                                        +TTS.utils.datetimeConv(data['createddate']));
+    $("#topic_header_posteddate").html(data['username'] +" On "+TTS.utils.datetimeConv(data['createddate']));
     $("#topic_details").html(data['topicdetails']);
     var comments = TTS.forms.processcomment(data);
     $("#comments").html(comments);
-     $("#comments").html(comments);
     if(data['comments'].length){
-        var html = "{% trans "Comments" %} ("+data['comments'].length+") &nbsp;&nbsp;<span><i class='show_hide_comments fa fa-caret-right'></i></span>";
+        var html = "<div class='show_hide_comments '>{% trans "Comments" %} ("+data['comments'].length+") &nbsp;&nbsp;<span><i class='fa fa-caret-right'></i></span></div>";
         $(".comment_container").html(html);
     }else{
         var html = "{% trans "No comment" %}"
@@ -132,7 +154,7 @@ TTS.forms.renderviewforum = function(data){
 TTS.forms.processcomment = function (obj) {
     c = "<ul class='forum'>";
     for (var i in obj['comments']) {
-        c += "<li><img src='{% static "img/blank_img.png" %}'> "+obj['comments'][i]['postdetails']+" <span class='user_details'> "+obj['comments'][i]['postedby']+" says on: "+TTS.utils.datetimeConv(obj['comments'][i]['posteddate'])+"</span> &nbsp;&nbsp;<i class='fa fa-reply reply_comment' name='"+obj['comments'][i]['postid']+"'></i> <div id='new_div' style='display: none;'></div></li>";
+        c += "<li class='sep_reply'><img src='{% static "img/blank_img.png" %}'> &nbsp;<span class='user_details'> "+obj['comments'][i]['postedby']+"</span><span class='user_time'> "+moment(obj['comments'][i]['posteddate'],"YYYY-MM-DD h:mm:ss").fromNow()+"</span> &nbsp;&nbsp;<i class='fa fa-reply reply_comment' name='"+obj['comments'][i]['postid']+"'> Reply</i> <div class='comment_content'>"+obj['comments'][i]['postdetails']+" </div><div id='new_div' style='display: none;'></div></li>";
         if (typeof (obj['comments'][i]['comments']) !== 'undefined' 
             && obj['comments'][i]['comments'].length ){
             c += TTS.forms.processcomment(obj['comments'][i]);
@@ -179,6 +201,7 @@ $("body").on("click", ".save_comment_reply", function(){
 
 $("#main_thread_reply").click(function (){
     $(".reply_textarea").toggle("slow");
+    // setTimeout(function(){ $("#thread_reply_textarea").focus(); }, 300);
 });
 
 $("#save_main_thread_reply").click(function (){
@@ -201,9 +224,10 @@ $("#save_main_thread_reply").click(function (){
 });
 
 $("body").on("click",".show_hide_comments", function(){
-    $(this).toggleClass('fa fa-caret-right fa fa-caret-down','slow');
+    $(this).find('span>i').toggleClass('fa fa-caret-right fa fa-caret-down','slow');
     $(".comments_cont").toggle("slow")
 });
+
 </script>
 
 {% endblock scriptcontent %}
