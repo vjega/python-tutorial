@@ -413,17 +413,18 @@ TTS.forms.ressave = function(){
     }*/
     
     var data = {};
-    data.resource = [];
     data.students = [];
-    data.rubricid = 0;
+    //data.rubricid = 0;
     data.assigntext = TTS.utils.summer_encode($(".summernote").code());
 
-    if($("#set_rubric_id").val()){
+    /*if($("#set_rubric_id").val()){
         data.rubricid = $("#set_rubric_id").val();
     }
+
     $(".checkresourceid:checked").each(function(){
         data.resource.push($(this).prop("id"));
-    });
+    });*/
+
     $("#sltStudentList>option").each(function(){
         data.students.push($(this).val());
     })
@@ -431,7 +432,7 @@ TTS.forms.ressave = function(){
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
-        url:"/api/admin/studentassignresource/",
+        url:"/api/admin/studentassignassessment/",
         type:"POST",
         data: JSON.stringify(data)
     }).done(function(data){
@@ -443,10 +444,12 @@ TTS.forms.ressave = function(){
     });
 }
 $(document).ready(function(){
+    
     var classid   = TTS.utils.getUrlParameter('classid');
     var section   = TTS.utils.getUrlParameter('section');
     var chapterid = TTS.utils.getUrlParameter('chapterid');
     var categoryid = TTS.utils.getUrlParameter('categoryid');
+
     $.ajax({
         "url":"/api/admin/resourceinfo/?classid="+classid+"&section="+section+"&chapterid="+chapterid+"&categoryid="+categoryid+"&format=json",
         "type":"GET"

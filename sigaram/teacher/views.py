@@ -677,4 +677,6 @@ def viewstudentresource(request):
 @login_required
 @switchlanguage
 def assignassessment(request):
-    return render(request, 'portalteacher/assignassessment.html')
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portalteacher/assignassessment.html',{'schools':schools,'classes':classes})
