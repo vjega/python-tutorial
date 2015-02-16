@@ -3419,7 +3419,7 @@ class ActivitylogInfoViewSet(viewsets.ModelViewSet):
     def list(self, request):
         datecond = ''
         if request.GET.get('fdate') and request.GET.get('tdate'):
-            datecond = "AND (wwi.createddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+            datecond = "AND (updateddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
                 request.GET.get('tdate'))
         sql = '''
         SELECT  loginid,
