@@ -58,6 +58,7 @@ router.register(r'richmindmap',    	        viewsets.RichmindmapViewSet)
 router.register(r'studentwrittenworkinfo',  viewsets.studentwrittenworkViewSet)
 router.register(r'myprofile',               viewsets.MyProfileViewSet)
 router.register(r'assessmentqainfo',    	viewsets.AssessmentQAInfoViewSet)
+router.register(r'activityloginfo',    		viewsets.ActivitylogInfoViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
