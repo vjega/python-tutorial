@@ -3441,5 +3441,3 @@ class ActivitylogInfoViewSet(viewsets.ModelViewSet):
                 for row in cursor.fetchall()
             ]
         return Response(result)
-        print serializer.data
-        return Response(serializer.data)
