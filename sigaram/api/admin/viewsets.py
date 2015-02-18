@@ -1123,7 +1123,7 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         SELECT assignedid AS id,
                ri.resourceid,
                resourcetitle,
-               date(ari.assigneddate) as createddate,
+               ari.assigneddate as createddate,
                resourcetype,
                thumbnailurl,
                ari.studentid,
@@ -1135,7 +1135,7 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
               AND ari.assignedby='%s'
               AND ari.IsDelete=0 
               %s
-        GROUP BY resourceid
+        GROUP BY resourceid, ari.assigneddate
         ORDER BY assigneddate DESC''' % (request.user.username, datecond)
 
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)

@@ -74,6 +74,37 @@ TTS.utils.ajaxloaderstop =  function (sParam) {
     $("#top-notification").css('visibility','hidden');
 }
 
+TTS.utils.datetime_to_timestamp =  function (datetime){
+    dateParts = datetime.split(' ');
+    timeParts = dateParts[1].split(':'); 
+    date = '';
+    dateParts = dateParts[0].split('-');
+    date = new Date(dateParts[2], parseInt(dateParts[1], 10) - 1, dateParts[0], timeParts[0], timeParts[1], timeParts[2]);
+    //console.log(date.getTime()); //1379426880000
+    //console.log(date); //Tue Sep 17 2013 10:08:00 GMT-0400
+    return date.getTime();
+}
+
+function addZero(i) {
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
+}
+
+TTS.utils.timestamp_to_datetime =  function (timestamp) {
+    var d = new Date(timestamp);
+    var x = addZero(d.getDate());
+    var y = addZero(d.getMonth() + 1);
+    var z = addZero(d.getYear() + 1900);
+    var h = addZero(d.getHours());
+    var m = addZero(d.getMinutes());
+    var s = addZero(d.getSeconds());
+    var datetime = x+"-"+y+"-"+z+" "+h+":"+m+":"+s;
+    return datetime;
+}
+
+
 TTS.utils.dateConv =  function (str) {
         date = new Date(str);
         return date.getDate()+
