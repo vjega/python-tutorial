@@ -148,7 +148,6 @@ $(document).ready(function(){
         "url":"/api/admin/activityloginfo/?studentid="+studentid+"&format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data)
         TTS.forms.assignedstudentresource(data);
         $("table#resource-list thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
