@@ -393,7 +393,7 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
     color_div +="</div>";
 
     BootstrapDialog.show({
-        title: 'Edit Sticky note',
+        title: '{% trans "Edit Sticky note" %}',
         message: $($('#sticky-form').render() + color_div),
         onshown: function(){
             $('.summernote').summernote({
