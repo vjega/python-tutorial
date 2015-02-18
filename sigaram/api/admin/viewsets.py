@@ -3432,7 +3432,7 @@ class ActivitylogInfoViewSet(viewsets.ModelViewSet):
         WHERE loginid = '%s'
         %s
         ORDER BY updateddate DESC
-        ''' % (request.user.username,datecond)
+        ''' % (request.GET.get('studentid'),datecond)
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
