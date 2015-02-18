@@ -174,26 +174,26 @@ class PostinfoViewSet(viewsets.ModelViewSet):
         return Response('"msg":"delete"')
 
 
-class ActivitylogViewSet(viewsets.ModelViewSet):
+# class ActivitylogViewSet(viewsets.ModelViewSet):
 
-    queryset = models.Activitylog.objects.all()
-    serializer_class = forumserializers.ActivitylogSerializer
+#     queryset = models.Activitylog.objects.all()
+#     serializer_class = forumserializers.ActivitylogSerializer
 
-    def create(self, request):
-        activitylog = models.Activitylog()
-        activitylogdata =  json.loads(request.DATA.keys()[0])
-        activitylog.activityid = activitylogdata.get('activityid')
-        activitylog.loginid = activitylogdata.get('loginid')
-        activitylog.pagename = activitylogdata.get('pagename')
-        activitylog.operation = activitylogdata.get('operation',0)
-        activitylog.usertype = activitylogdata.get('usertype',0)
-        activitylog.stringsentence = activitylogdata.get('stringsentence',0)
-        activitylog.updateddate = time.strftime('%Y-%m-%d %H:%M:%S')
-        activitylog.save()
-        return Response(request.DATA)
+#     def create(self, request):
+#         activitylog = models.Activitylog()
+#         activitylogdata =  json.loads(request.DATA.keys()[0])
+#         activitylog.activityid = activitylogdata.get('activityid')
+#         activitylog.loginid = activitylogdata.get('loginid')
+#         activitylog.pagename = activitylogdata.get('pagename')
+#         activitylog.operation = activitylogdata.get('operation',0)
+#         activitylog.usertype = activitylogdata.get('usertype',0)
+#         activitylog.stringsentence = activitylogdata.get('stringsentence',0)
+#         activitylog.updateddate = time.strftime('%Y-%m-%d %H:%M:%S')
+#         activitylog.save()
+#         return Response(request.DATA)
 
-    def update(self, request, pk=None):
-        return Response('"msg":"update"')
+#     def update(self, request, pk=None):
+#         return Response('"msg":"update"')
 
-    def destroy(self, request, pk=None):
-        return Response('"msg":"delete"')
+#     def destroy(self, request, pk=None):
+#         return Response('"msg":"delete"')

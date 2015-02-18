@@ -34,16 +34,22 @@ class Activitylog(models.Model):
         db_table = 'activitylog'
 
     @staticmethod
-    def recentactivities():
-        sql = """SELECT DISTINCT operation,
-                    stringsentence,
-                    updateddate,
-                    concat(au.first_name,' ',au.last_name) as name
-            FROM activitylog al
-            INNER JOIN auth_user au ON au.username = al.loginid 
-            -- WHERE al.loginid = {$loginid} 
-            ORDER by updateddate DESC 
-            LIMIT 100""";
+    def recentactivities(request):
+        fieldcond=""
+        l =  request.user.groups.values_list('name',flat=True)[0]
+        if l == 'Teacher' :
+            fieldcond="WHERE al.loginid='%s'"%request.user.username
+        sql = """
+        SELECT DISTINCT operation,
+                stringsentence,
+                updateddate,
+                concat(au.first_name,' ',au.last_name) as name
+        FROM activitylog al
+        INNER JOIN auth_user au ON au.username = al.loginid 
+        %s
+        ORDER by updateddate DESC 
+        LIMIT 100
+        """%fieldcond
         cursor = connection.cursor()
         cursor.execute(sql)
         return dictfetchall(cursor)

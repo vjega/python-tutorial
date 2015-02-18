@@ -15,9 +15,8 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             {% trans "Sticky notes" %} {% trans "List" %}
-            <span id="add" class="add">({% trans "Add" %})</span>
              <span id="addrec"><i class="fa fa-plus-square fa-lg"></i></span>
-        </div>
+        </div><br />
         <div class="col-lg-12">
             <label>{% trans "Title" %}:</label>
             <span id="resource-title"></span>
@@ -394,7 +393,7 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
     color_div +="</div>";
 
     BootstrapDialog.show({
-        title: 'Edit Sticky note',
+        title: '{% trans "Edit Sticky note" %}',
         message: $($('#sticky-form').render() + color_div),
         onshown: function(){
             $('.summernote').summernote({
