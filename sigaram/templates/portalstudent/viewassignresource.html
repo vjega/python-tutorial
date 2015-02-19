@@ -49,10 +49,10 @@
                 </div>
                 <div class="form-group">
                     <input id="show-recorder" type="radio" class="isaudio" value="audio" name="isaudio"> 
-                    <label for="show-recorder">Audio</label> 
+                    <label for="show-recorder">{% trans "Audio" %}</label> 
                     <input id="hide-recorder" type="radio" value="text" 
                                         name="isaudio" class="isaudio" checked="checked">
-                    <label for="hide-recorder">Text</label> 
+                    <label for="hide-recorder">{% trans "Text" %}</label> 
                 </div> <br />
                 <div id="audio-player"></div>
                 <section class="recorder-container">
@@ -160,7 +160,9 @@ TTS.forms.renderassignedresourceinfo = function(data){
     $(".summernote").code(data.answertext);
     $("#resource-title").html(data.resourcetitle);
     $("#resource-note").html(data.assigntext);
+
     $("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.videourl+"');\" >{% trans 'View' %}</a>");
+
     if(data.isrecord && data.answerurl){
         $("#show-recorder").prop('checked',true);
         $("#audio-player").html('<audio src="/static/audio/'+data.answerurl+'" controls=""></audio><br />');    

@@ -65,7 +65,7 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 TTS.forms.addstudentnotes = function() {
     BootstrapDialog.show({
-        title: 'New Notes',
+        title: '{% trans "New" %} {% trans "Notes" %}',
         onshown: function(dialogRef){
             $('.summernote').summernote({
           toolbar: [

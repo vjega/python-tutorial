@@ -97,7 +97,20 @@ def studentresourcetype(request):
         },{
         "id": "p6",
         "name" :"P6"
-        }]
+        },{
+        "id": "s1",
+        "name" :"S1"
+        },{
+        "id": "s2",
+        "name" :"S2"
+        },{
+        "id": "s3",
+        "name" :"S3"
+        },{
+        "id": "s4",
+        "name" :"S4"
+        }
+    ]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
                            #'body':studentresourcetype_body}

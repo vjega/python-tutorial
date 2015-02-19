@@ -413,11 +413,11 @@ def subjectlist(request):
 def studentprofile(request):
     folders = [{
         "id"   : "1",
-        "name" :u"Assessment",
+        "name" :_("Assignments"),
         "href" :u"studentassignedresourcelist"
         },{
         "id"   : "2",
-        "name" :u"Writing job",
+        "name" :_("Written Work"),
         "href" :u"viewstudentwrittenworks?studentid=%s" % request.GET.get('studentid') 
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
