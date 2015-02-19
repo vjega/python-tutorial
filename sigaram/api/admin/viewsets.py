@@ -1050,9 +1050,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
         resource = data.get('resource');
         rubricid = data.get('rubricid');
         assigntext = summer_decode(data.get('assigntext'));
-       # print resource
-        #print students
-       # print resource, students
+
         for r in resource:
             for s in students:
                 
@@ -1347,9 +1345,14 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
     serializer_class = adminserializers.MindmapSerializer
 
     def retrieve(self, request, pk=None):
+
         studentcond = ''
+        datetimecond = ''
         if request.GET.get('studentid'):
             studentcond = "AND ari.studentid = '" + request.GET.get('studentid') + "'"
+
+        if request.GET.get('datetime'):
+            datetimecond = "AND ari.assigneddate = " + request.GET.get('datetime') + ""
 
         sql = '''
         SELECT assignedid AS id,
@@ -1379,10 +1382,10 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
         WHERE isdeleted=0
               AND ari.resourceid=%s
               AND ari.IsDelete=0 
-              /*AND ri.categoryid=0*/
+              %s
               %s
         GROUP BY ari.studentid
-        ORDER BY assigneddate DESC''' % (pk, studentcond)
+        ORDER BY assigneddate DESC''' % (pk, studentcond, datetimecond)
 
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -2644,14 +2647,17 @@ class EditAnswerResourceViewSet(viewsets.ModelViewSet):
         SELECT previoustext
         FROM editingtext 
         WHERE spanid = '%s'
-            AND isapproved = 1 ''' % (str(spanid))
+            AND isapproved = 1 ''' % (unicode(spanid))
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
         if result:
             previoustext = result[0];
-
+        print "answertext --> " + answertext
+        print "previoustext --> " + previoustext
+        print "edittext --> " + edittext
         approvedanswertext = answertext.replace(previoustext,edittext)
+        print "approvedanswertext --> " + approvedanswertext
 
         #updating approved answer text
         sql = '''
@@ -2661,11 +2667,13 @@ class EditAnswerResourceViewSet(viewsets.ModelViewSet):
         cursor = connection.cursor()
         cursor.execute(sql)
 
+        print sql
+
         #resetting the previous one if set
         sql = '''
         UPDATE editingtext
             SET isapproved = 0
-        WHERE spanid = '%s' ''' % (spanid)
+        WHERE spanid = '%s' ''' % (unicode(spanid))
         cursor = connection.cursor()
         cursor.execute(sql)
 

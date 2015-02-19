@@ -124,8 +124,11 @@
         var dataset = [];
         var count = 0
         for(var i in data){
+
+            var cdts = TTS.utils.datetime_to_timestamp(TTS.utils.datetimeConv(data[i].createddate));
+
             var t = [];
-            t.DT_RowId = data[i].resourceid;
+            t.DT_RowId = data[i].resourceid+"_"+cdts;
             t.slno=++count;
             t.title=data[i].resourcetitle;
             t.date=TTS.utils.datetimeConv(data[i].createddate);
@@ -162,7 +165,8 @@ $(document).ready(function(){
     });
     $('.resourcelist').on('click','tbody tr',function(e){
         e.stopPropagation();
-        window.location = 'viewassignresource?resourceid='+this.id;
+        var x = this.id.split("_");
+        window.location = 'viewassignresource?resourceid='+x[0]+'&dt='+x[1];
     });
     /*$('#fromdatepicker').datetimepicker({
         pickTime: true

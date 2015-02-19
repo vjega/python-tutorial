@@ -266,7 +266,7 @@ TTS.forms.renderrubrictableinfo = function(rubtable, rubdata){
    
     tableHTML += "<table id='rubrics-table' class='table table-striped table-bordered table-hover'>";
     tableHTML += "<thead><tr><th>&nbsp;</th>";
-    $("#max-mark").val(th.length);
+    $("#max-mark").val(maxVal);
     $(th).each(function(k,v){
         tableHTML += "<th>"+v+"</th>";
     });

@@ -93,15 +93,15 @@ function addZero(i) {
 }
 
 TTS.utils.timestamp_to_datetime =  function (timestamp) {
-    var d = new Date(timestamp);
+    var d = new Date(parseInt(timestamp));
     var x = addZero(d.getDate());
     var y = addZero(d.getMonth() + 1);
     var z = addZero(d.getYear() + 1900);
     var h = addZero(d.getHours());
     var m = addZero(d.getMinutes());
     var s = addZero(d.getSeconds());
-    var datetime = x+"-"+y+"-"+z+" "+h+":"+m+":"+s;
-    return datetime;
+    var datetime = z+"-"+y+"-"+x+" "+h+":"+m+":"+s;
+        return datetime;
 }
 
 

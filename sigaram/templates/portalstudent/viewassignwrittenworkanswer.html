@@ -217,8 +217,8 @@ TTS.forms.renderassignedwrittenworkinfo = function(data){
     TTS.forms.studentid = data[0].studentid;
     $("#assignedid").val(data[0].id);
     $("#writtenwork-title").html(data[0].writtenworktitle);
-    $("#assigned-date").html(data[0].createddate);
-    $("#answerd-date").html(data[0].answereddate);
+    $("#assigned-date").html(TTS.utils.dateConv(data[0].createddate));
+    $("#answerd-date").html(TTS.utils.dateConv(data[0].answereddate));
     $("#student-name").html(data[0].firstname+" "+data[0].lastname);
     $("#student-answer").html(data[0].answertext);    
     $("#original-text").html(data[0].originaltext);
@@ -267,7 +267,7 @@ TTS.forms.renderrubrictableinfo = function(rubtable, rubdata){
    
     tableHTML += "<table id='rubrics-table' class='table table-striped table-bordered table-hover'>";
     tableHTML += "<thead><tr><th>&nbsp;</th>";
-    $("#max-mark").val(th.length);
+    $("#max-mark").val(maxVal);
     $(th).each(function(k,v){
         tableHTML += "<th>"+v+"</th>";
     });
