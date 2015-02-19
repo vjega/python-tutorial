@@ -128,7 +128,7 @@
             t.DT_RowId = data[i].resourceid;
             t.slno=++count;
             t.title=data[i].resourcetitle;
-            t.date=TTS.utils.datetimeConvDate(data[i].createddate);
+            t.date=TTS.utils.datetimeConv(data[i].createddate);
             t.type=data[i].resourcetype;
             dataset.push(t);
         }
@@ -146,6 +146,10 @@
 };
 
 $(document).ready(function(){
+
+    //datetime_to_timestamp("18-02-2015 16:50:33");
+    //timestamp_to_datetime(1424258433000);
+
     TTS.utils.ajaxloaderstart();
 
     $.ajax({
