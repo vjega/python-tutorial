@@ -123,7 +123,7 @@
             <textarea class="comment_reply_textarea textinput form-control" placeholder="Reply..."
             rows="2"></textarea> 
         </div>
-        <button class="save_comment_reply btn btn-primary center-block pull-right">Save</button>
+        <button class="save_comment_reply btn btn-primary center-block pull-right">{% trans "Save" %}</button>
     </div>
 </script>
 
@@ -154,7 +154,7 @@ TTS.forms.renderviewforum = function(data){
 TTS.forms.processcomment = function (obj) {
     c = "<ul class='forum'>";
     for (var i in obj['comments']) {
-        c += "<li class='sep_reply'><img src='{% static "img/blank_img.png" %}'> &nbsp;<span class='user_details'> "+obj['comments'][i]['postedby']+"</span><span class='user_time'> "+moment(obj['comments'][i]['posteddate'],"YYYY-MM-DD h:mm:ss").fromNow()+"</span> &nbsp;&nbsp;<i class='fa fa-reply reply_comment' name='"+obj['comments'][i]['postid']+"'> Reply</i> <div class='comment_content'>"+obj['comments'][i]['postdetails']+" </div><div id='new_div' style='display: none;'></div></li>";
+        c += "<li class='sep_reply'><img src='{% static "img/blank_img.png" %}'> &nbsp;<span class='user_details'> "+obj['comments'][i]['postedby']+"</span><span class='user_time'> "+moment(obj['comments'][i]['posteddate'],"YYYY-MM-DD h:mm:ss").fromNow()+"</span> &nbsp;&nbsp;<i class='fa fa-reply reply_comment' name='"+obj['comments'][i]['postid']+"'> {% trans "Reply" %}</i> <div class='comment_content'>"+obj['comments'][i]['postdetails']+" </div><div id='new_div' style='display: none;'></div></li>";
         if (typeof (obj['comments'][i]['comments']) !== 'undefined' 
             && obj['comments'][i]['comments'].length ){
             c += TTS.forms.processcomment(obj['comments'][i]);
