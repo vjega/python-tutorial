@@ -135,9 +135,9 @@
                 { "title": "{% trans "Date" %}",
                   "data" :"date"
                 },
-                { "title": "{% trans "Type" %}" ,
+                /*{ "title": "{% trans "Type" %}" ,
                   "data" :"type"
-                },
+                },*/
             ];
 
 
@@ -155,7 +155,7 @@
                 t.slno=++count_new;
                 t.title=data[i].writtenworktitle;
                 t.date=TTS.utils.datetimeConvDate(data[i].createddate);
-                t.type='Image';
+                //t.type='Image';
                 dataset_new.push(t);
             }
             if (data[i].issaved && !data[i].isanswered) {
@@ -164,7 +164,7 @@
                 t.slno=++count_saved;
                 t.title=data[i].writtenworktitle;
                 t.date=TTS.utils.datetimeConvDate(data[i].answereddate);
-                t.type='Image';
+                //t.type='Image';
                 dataset_saved.push(t);
             }
             if (data[i].isanswered) {
@@ -173,7 +173,7 @@
                 t.slno=++count_answered;
                 t.title=data[i].writtenworktitle;
                 t.date=TTS.utils.datetimeConvDate(data[i].answereddate);
-                t.type='Image';
+                //t.type='Image';
                 dataset_answered.push(t);
             }
         }

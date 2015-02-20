@@ -384,7 +384,7 @@ TTS.forms.rubricinfo = function(data){
 
 TTS.forms.rubricslist = function() {
     BootstrapDialog.show({  
-        title: 'Rubrics List',
+        title: '{% trans "Rubrics List" %}',
         message: $($('#rubricslist').render()),
         onshown: function(dialogRef){
             $.ajax({
