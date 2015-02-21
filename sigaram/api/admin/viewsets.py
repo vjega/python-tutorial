@@ -3338,7 +3338,6 @@ class AssessmentInfoViewSet(viewsets.ModelViewSet):
         assessment.schoolid     = request.session.get('schoolid')
         assessment.classid      = request.session.get('classid')
         assessment.type         = cdata.get('type')
-        assessment.enddate      = time.strftime('%Y-%m-%d %H:%M:%S')
         assessment.createdby    = request.user.username
         assessment.createddate  = time.strftime('%Y-%m-%d %H:%M:%S')
         assessment.isdeleted    = 0
@@ -3537,59 +3536,6 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
     queryset = models.Assignresourceinfo.objects.all()
     serializer_class = adminserializers.MindmapSerializer
 
-    def update(self, request, pk=None):
-        data = {k:v[0] for k, v in dict(request.DATA).items()}
-        
-        ari = models.Assignresourceinfo.objects.get(pk=pk)
-        
-        ari.answertext = summer_decode(unicode(data.get('answertext')))
-
-        if data.get('originaltext'):
-            ari.originaltext = summer_decode(unicode(data.get('originaltext')))
-
-        if data.get('answerurl'):
-            ari.answerurl = unicode(data.get('answerurl'))
-            ari.isrecord = 1
-
-        if data.get('isanswered'):
-            ari.isanswered = data.get('isanswered')
-            ari.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
-
-        if data.get('issaved'):
-            ari.issaved = data.get('issaved')
-        
-        ari.save()
-        if data.get('spanid'):
-            assignedid  = pk;
-            spanid      = summer_decode(data.get('spanid'));
-            fulltext    = summer_decode(data.get('fulltext'));
-            orig        = summer_decode(data.get('orig'));
-            modified    = summer_decode(data.get('modified'));
-            usertype    = data.get('type');
-            answertext  = summer_decode(data.get('answertext'));
-
-            ar = models.Editingtext()
-            ar.editid       = int(assignedid)
-            ar.spanid       = unicode(spanid)
-            ar.previoustext = unicode(orig)
-            ar.edittext     = unicode(modified)
-            ar.typeofresource = 0
-            ar.isapproved   = 0
-            ar.isrejected   = 0
-            ar.editedby     = request.user.username
-            ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
-            ar.usertype     = int(usertype)
-
-            ar.save()
-
-        aldata = {}
-        aldata['pagename']       = 'viewassignresource'
-        aldata['operation']      = 'Insert'
-        aldata['stringsentence'] = 'Answered For Resource'
-        add_activitylog(request, aldata)
-
-        return Response({'msg':True})
-
     def list(self, request):
 
         datecond = ''
@@ -3659,9 +3605,9 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
 
     def create(self, request):
         data = json.loads(dict(request.DATA).keys()[0]);
-        students = data.get('students');
-        resource = data.get('resource');
-        rubricid = data.get('rubricid');
+        students    = data.get('students');
+        assessment  = data.get('assessment');
+        rubricid    = data.get('rubricid');
         assigntext = summer_decode(data.get('assigntext'));
 
         for r in resource:
@@ -3702,6 +3648,60 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
         add_activitylog(request, aldata)
 
         return Response(request.DATA)        
+
+    def update(self, request, pk=None):
+
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        
+        ari = models.Assignresourceinfo.objects.get(pk=pk)
+        
+        ari.answertext = summer_decode(unicode(data.get('answertext')))
+
+        if data.get('originaltext'):
+            ari.originaltext = summer_decode(unicode(data.get('originaltext')))
+
+        if data.get('answerurl'):
+            ari.answerurl = unicode(data.get('answerurl'))
+            ari.isrecord = 1
+
+        if data.get('isanswered'):
+            ari.isanswered = data.get('isanswered')
+            ari.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
+
+        if data.get('issaved'):
+            ari.issaved = data.get('issaved')
+        
+        ari.save()
+        if data.get('spanid'):
+            assignedid  = pk;
+            spanid      = summer_decode(data.get('spanid'));
+            fulltext    = summer_decode(data.get('fulltext'));
+            orig        = summer_decode(data.get('orig'));
+            modified    = summer_decode(data.get('modified'));
+            usertype    = data.get('type');
+            answertext  = summer_decode(data.get('answertext'));
+
+            ar = models.Editingtext()
+            ar.editid       = int(assignedid)
+            ar.spanid       = unicode(spanid)
+            ar.previoustext = unicode(orig)
+            ar.edittext     = unicode(modified)
+            ar.typeofresource = 0
+            ar.isapproved   = 0
+            ar.isrejected   = 0
+            ar.editedby     = request.user.username
+            ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
+            ar.usertype     = int(usertype)
+
+            ar.save()
+
+        aldata = {}
+        aldata['pagename']       = 'viewassignresource'
+        aldata['operation']      = 'Insert'
+        aldata['stringsentence'] = 'Answered For Resource'
+        add_activitylog(request, aldata)
+
+        return Response({'msg':True})
 
 class ActivitylogInfoViewSet(viewsets.ModelViewSet):
     queryset = models.Activitylog.objects.all()
