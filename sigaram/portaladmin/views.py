@@ -636,3 +636,14 @@ def statisticsassignment(request):
 @switchlanguage
 def activityassignment(request):
     return render(request, 'portaladmin/activityassignment.html') 
+
+@login_required
+@switchlanguage
+def statisticsassessment(request):
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    return render(request, 'portaladmin/statisticsassessment.html', {'schools':schools})
+
+@login_required
+@switchlanguage
+def activityassessment(request):
+    return render(request, 'portaladmin/activityassessment.html') 

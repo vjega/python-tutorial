@@ -3574,28 +3574,29 @@ class ActivityassignmentInfoViewSet(viewsets.ModelViewSet):
         return Response(result)
 
 class ActivityassessmentInfoViewSet(viewsets.ModelViewSet):
-    queryset = models.Assignresourceinfo.objects.all()
+    queryset = models.Assessmentlist.objects.all()
     serializer_class = adminserializers.ActivityassignmentinfoSerializer
 
     def list(self, request):
         datecond = ''
         if request.GET.get('fdate') and request.GET.get('tdate'):
-            datecond = "AND (ari.assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+            datecond = "WHERE (aai.assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
                 request.GET.get('tdate'))
         sql = '''
-        select  al.assessmenttitle,
+        SELECT  al.assessmenttitle,
                 floor(avg(aa.rating)) as rating,
                 date(aai .assigneddate) as assigneddate,
                 date(aa.answereddate) as answereddate  
-        from assessmentlist al
-        inner join assignassessmentinfo aai on aai.assessmentid = al.assessmentid 
-        inner join assessmentanswers aa on aa.assessmentid = al.assessmentid 
-        where aai .assigneddate between '2011-01-01' and '2015-01-01'  
-        group by al.assessmentid 
-        order by al.assessmentid 
-        ''' % (request.GET.get('studentid'),datecond)
+        FROM assessmentlist al
+        INNER JOIN assignassessmentinfo aai on aai.assessmentid = al.assessmentid 
+        INNER JOIN assessmentanswers aa on aa.assessmentid = al.assessmentid 
+        %s
+        GROUP BY al.assessmentid 
+        ORDER BY al.assessmentid 
+        ''' % (datecond)
         cursor = connection.cursor()
         cursor.execute(sql)
+        print sql;
         desc = cursor.description
         result =  [
                 dict(zip([col[0] for col in desc], row))
