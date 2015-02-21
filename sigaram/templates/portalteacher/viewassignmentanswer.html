@@ -247,6 +247,7 @@ TTS.forms.renderassignedresourceinfo = function(data){
     $("#student-name").html(data[0].firstname+" "+data[0].lastname);
     $("#student-answer").html(data[0].answertext);
     $("#original-text").html(data[0].originaltext);
+    TTS.forms.rating(data[0].rating);
     if(data[0].answerurl){
         $("#audio-player").html('<audio src="../static/audio/'+data[0].answerurl+'" controls=""></audio><br />');
     }
@@ -371,35 +372,37 @@ TTS.forms.renderanswereditinginfo = function(data, isapproved){
     }
 };
 
-TTS.forms.rating = function(data){
-    if(data.israted){
+TTS.forms.rating = function(rating){
+    if(rating){
         $("#rating-input").parent().parent().remove();        
-    }
-    var rating = Math.round(data.avgrating*100)/100;
-    var ratingwidth = ((rating/5)*100+"%");
-    var cn = '';
-    $("#avgrating-input").prev().css("width", ratingwidth);
-    $("#rating-input").val(rating);
-    if (rating <= 1) {
-        cn = 'label label-danger';
-        rv = rating + ' Star';
-    } else if (rating <= 2) {
-        cn = 'label label-warning';
-        rv = rating + ' Stars';
-    } else if (rating <= 3) {
-        cn = 'label label-info';
-        rv = rating + ' Stars';
-    } else if (rating <= 4) {
-        cn = 'label label-primary';
-        rv = rating + ' Stars';
-    } else if (rating <= 5) {
-        cn = 'label label-success';
-        rv = rating + ' Stars';
+        var ratingwidth = ((rating)*100+"%");
+        var cn = '';
+        var rv = '';
+        $("#avgrating-input").prev().css("width", ratingwidth);
+        $("#rating-input").val(rating);
+        if (rating <= 1) {
+            cn = 'label label-danger';
+            rv = rating + ' Star';
+        } else if (rating <= 2) {
+            cn = 'label label-warning';
+            rv = rating + ' Stars';
+        } else if (rating <= 3) {
+            cn = 'label label-info';
+            rv = rating + ' Stars';
+        } else if (rating <= 4) {
+            cn = 'label label-primary';
+            rv = rating + ' Stars';
+        } else if (rating <= 5) {
+            cn = 'label label-success';
+            rv = rating + ' Stars';
+        }else{
+            cn = '';
+            rv = 'Your not rated';
+        }
+        $("#avgrating-input").parent().next().children().addClass(cn).html(rv);
     }else{
-        cn = '';
-        rv = 'Your not rated';
+        $("#avgrating-input").parent().parent().remove();        
     }
-    $("#avgrating-input").parent().next().children().addClass(cn).html(rv);
 
 };
 
@@ -631,6 +634,7 @@ TTS.forms.ressave = function(){
 }
 
 $(document).ready(function(){
+
     var resourceid = TTS.utils.getUrlParameter('resourceid');
     var studentid = TTS.utils.getUrlParameter('studentid');
 
@@ -638,17 +642,23 @@ $(document).ready(function(){
         "url":"/api/admin/assignedresourcestudents/"+resourceid+"/?studentid="+studentid+"&format=json",
         "type":"GET"
     }).done(function(data){
-        //console.log(data);
         TTS.forms.renderassignedresourceinfo(data);
     });
 
-    $.ajax({
-       "url":"/api/admin/assignmentanswerrating/?assignid="+assignid,
-       "type":"GET"
-    }).done(function(data){
-        if(data){
-            TTS.forms.rating(data);
-        }
+    $('#rating-input').on('rating.change', function() {
+        var rating      = $('#rating-input').val();
+        var assignedid  = $("#assignedid").val();
+        $.ajax({
+            headers : {
+                'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+            },
+            type:'PUT',
+            url : '/api/admin/assignmentanswerrating/'+assignedid+'/?rating='+rating
+        }).done(function(msg) {
+            console.log(msg);
+            return false;
+            location.reload();
+        });
     });
     
     $("#student-answer,#student-answer p").on("mouseup", function(event){
