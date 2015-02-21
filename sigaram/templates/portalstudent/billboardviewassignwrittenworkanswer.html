@@ -605,9 +605,7 @@ TTS.forms.commentsave = function(){
 }
 
 TTS.forms.rating = function(data){
-    if(data.israted){
-        $("#rating-input").parent().parent().remove();        
-    }
+    
     var rating = Math.round(data.avgrating*100)/100;
     var ratingwidth = ((rating/5)*100+"%");
     var cn = '';
