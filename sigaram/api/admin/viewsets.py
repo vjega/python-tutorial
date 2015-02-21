@@ -1609,12 +1609,16 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         WHERE bulletinboardid=%s
         """ %pk
         #print sql;
+        aldata = {}
+        aldata['pagename']       = 'bulletinboard'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Announcement'
+        add_activitylog(request, aldata)
+
+
         cursor = connection.cursor()
         cursor.execute(sql)
 
-        aldata['pagename']       = 'bulletinboard'
-        aldata['operation']      = 'Delete'
-        aldata['stringsentence'] = 'Dleted a Announcement'
         return Response('"msg":"delete"')
 
 class BillboardViewSet(viewsets.ModelViewSet):

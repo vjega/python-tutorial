@@ -647,3 +647,8 @@ def statisticsassessment(request):
 @switchlanguage
 def activityassessment(request):
     return render(request, 'portaladmin/activityassessment.html') 
+
+@login_required
+@switchlanguage
+def billboardviewassignmentanswer(request):
+    return render(request, 'portaladmin/billboardviewassignresourceanswer.html') 
