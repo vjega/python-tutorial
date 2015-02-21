@@ -56,7 +56,7 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'adminlist'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Admin Created'
         add_activitylog(request, aldata)
 
@@ -68,6 +68,13 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
     @delete_login('Admin')
     def destroy(self, request, pk):
         models.Admininfo.objects.get(pk=pk).delete()
+
+        aldata = {}
+        aldata['pagename']       = 'adminlist'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Admin'
+        add_activitylog(request, aldata)
+        
         return Response('"msg":"delete"')
 
 class AdminFoldersViewSet(viewsets.ModelViewSet):
@@ -84,10 +91,24 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
         adminfolder.added_date = time.strftime('%Y-%m-%d %H:%M:%S')
         adminfolder.userid = request.user.username
         adminfolder.save()
+        
+        aldata = {}
+        aldata['pagename']       = 'adminlist'
+        aldata['operation']      = 'Insert'
+        aldata['stringsentence'] = 'New Folder Created'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
 
     def destroy(self, request, pk):
         models.AdminFolders.objects.get(pk=pk).delete()
+        
+        aldata = {}
+        aldata['pagename']       = 'adminlist'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Folder'
+        add_activitylog(request, aldata)
+
         return Response('"msg":"delete"')
 
 class TeacherViewSet(viewsets.ModelViewSet):
@@ -131,7 +152,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'teacherslist'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Teacher Created'
         add_activitylog(request, aldata)
 
@@ -150,6 +171,12 @@ class TeacherViewSet(viewsets.ModelViewSet):
         teacher.classid = teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
         teacher.save()
+
+        aldata = {}
+        aldata['pagename']       = 'teacherslist'
+        aldata['operation']      = 'Update'
+        aldata['stringsentence'] = 'Updated a Teacher'
+
         return Response(request.DATA)
 
     def partial_update(self, request, pk=None):
@@ -161,6 +188,12 @@ class TeacherViewSet(viewsets.ModelViewSet):
         teacher = models.Teacherinfo.objects.get(pk=pk)
         teacher.isdelete = 1
         teacher.save()
+
+        aldata = {}
+        aldata['pagename']       = 'teacherslist'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Teacher'
+
         return Response('"msg":"delete"')
 
 
@@ -208,7 +241,7 @@ class studentViewSet(viewsets.ModelViewSet):
         
         aldata = {}
         aldata['pagename']       = 'studentlist'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Student Created'
         add_activitylog(request, aldata)
 
@@ -225,6 +258,13 @@ class studentViewSet(viewsets.ModelViewSet):
         student.emailid = studentdata.get('emailid')
         student.imageurl = studentdata.get('imageurl')
         student.save()
+
+        aldata = {}
+        aldata['pagename']       = 'studentlist'
+        aldata['operation']      = 'Update'
+        aldata['stringsentence'] = 'Updated a Student'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
 
     @delete_login('Student')
@@ -232,6 +272,13 @@ class studentViewSet(viewsets.ModelViewSet):
         student = models.Studentinfo.objects.get(pk=pk)
         student.isdelete = 1
         student.save()
+        
+        aldata = {}
+        aldata['pagename']       = 'studentlist'
+        aldata['operation']      = 'Update'
+        aldata['stringsentence'] = 'Deleted a Student'
+        add_activitylog(request, aldata)
+
         return Response('"msg":"delete"')
 
 class TeacherResourcesViewSet(viewsets.ModelViewSet):
@@ -341,7 +388,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'viewteacherres'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Tacher Resource Created'
         add_activitylog(request, aldata)
 
@@ -354,6 +401,13 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         allschool = models.Teacherresourceinfo.objects.get(pk=pk)
         allschool.isdeleted = 1
         allschool.save()
+
+        aldata = {}
+        aldata['pagename']       = 'viewteacherres'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Resource'
+        add_activitylog(request, aldata)
+
         return Response('"msg":"delete"')
 
     def retrieve(self, request, pk=None):
@@ -438,7 +492,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'viewstudentres'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Student Resource Created'
         add_activitylog(request, aldata)
 
@@ -448,6 +502,13 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         studentres = models.Resourceinfo.objects.get(pk=pk)
         studentres.isdeleted = 1
         studentres.save()
+
+        aldata = {}
+        aldata['pagename']       = 'viewstudentres'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Resource'
+        add_activitylog(request, aldata)
+
         return Response('"msg":"delete"')
 
 class WrittenworkinfoViewSet(viewsets.ModelViewSet):
@@ -650,7 +711,7 @@ class AdminschoolViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'Schoollist'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New School Created'
         add_activitylog(request, aldata)
 
@@ -665,11 +726,27 @@ class AdminschoolViewSet(viewsets.ModelViewSet):
         adminschools.createdby = request.user.id
         adminschools.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         adminschools.save()
+
+        aldata = {}
+        aldata['pagename']       = 'Schoollist'
+        aldata['operation']      = 'Update'
+        aldata['stringsentence'] = 'Updated a sSchool'
+        add_activitylog(request, aldata)
+
+
         return Response(request.DATA)
 
 
     def destroy(self, request, pk=None):
         models.Schoolinfo.objects.get(pk=pk).delete()
+
+        aldata = {}
+        aldata['pagename']       = 'Schoollist'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a School'
+        add_activitylog(request, aldata)
+
+
         return Response('"msg":"delete"')
 
 class AdminclasslistViewSet(viewsets.ModelViewSet):
@@ -755,7 +832,7 @@ class AdminrubricsViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'rubric_edit'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Rubrics Created'
         add_activitylog(request, aldata)
 
@@ -766,6 +843,12 @@ class AdminrubricsViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         models.RubricsHeader.objects.get(pk=pk).delete()
+        aldata = {}
+        aldata['pagename']       = 'rubric_edit'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Delete a Rubrics'
+        add_activitylog(request, aldata)
+
         return Response('"msg":"delete"')
 
 class AssignresourceinfoViewSet(viewsets.ModelViewSet):
@@ -847,7 +930,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'Calendar'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Event Created'
         add_activitylog(request, aldata)
 
@@ -870,9 +953,22 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.createdby       = request.user.id
         cal.createddate     = time.strftime('%Y-%m-%d %H:%M:%S')
         cal.save()
+
+        aldata = {}
+        aldata['pagename']       = 'Calendar'
+        aldata['operation']      = 'Update'
+        aldata['stringsentence'] = 'Updated a Event'
+        add_activitylog(request, aldata)
+
+
         return Response(request.DATA)
     def destroy(self, request, pk):
         models.Calendardetails.objects.get(pk=pk).delete()
+        aldata = {}
+        aldata['pagename']       = 'Calendar'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Event'
+        add_activitylog(request, aldata)
         return Response('"msg":"delete"')
 
 class MindmapViewSet(viewsets.ModelViewSet):
@@ -891,7 +987,7 @@ class MindmapViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'mindmapedit'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Mindmap Created'
         add_activitylog(request, aldata)
 
@@ -906,10 +1002,22 @@ class MindmapViewSet(viewsets.ModelViewSet):
         mm.createdby = request.user.id
         mm.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         mm.save()
+
+        aldata = {}
+        aldata['pagename']       = 'mindmapedit'
+        aldata['operation']      = 'Update'
+        aldata['stringsentence'] = 'Updated a Mindmap'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
         
     def destroy(self, request, pk):
         models.Mindmap.objects.get(pk=pk).delete()
+        aldata = {}
+        aldata['pagename']       = 'mindmapedit'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Mindmap'
+        add_activitylog(request, aldata)
         return Response('"msg":"delete"')
 
 
@@ -964,7 +1072,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'viewassignresource'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'Answered For Resource'
         add_activitylog(request, aldata)
 
@@ -1084,7 +1192,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'assignchapter'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Resource Assigned to students'
         add_activitylog(request, aldata)
 
@@ -1493,7 +1601,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         
         aldata = {}
         aldata['pagename']       = 'bulletinboard'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Announcement Created'
         add_activitylog(request, aldata)
 
@@ -1537,6 +1645,10 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         #print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
+
+        aldata['pagename']       = 'bulletinboard'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Dleted a Announcement'
         return Response('"msg":"delete"')
 
 class BillboardViewSet(viewsets.ModelViewSet):
@@ -1601,7 +1713,7 @@ class BillboardViewSet(viewsets.ModelViewSet):
 
         # aldata = {}
         # aldata['pagename']       = 'bulletinboard'
-        # aldata['operation']      = 'insert'
+        # aldata['operation']      = 'Insert'
         # aldata['stringsentence'] = 'New Announcement created'
         # add_activitylog(request, aldata)
         # return Response(request.DATA)
@@ -1787,7 +1899,7 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'viewassignmentanswer'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'Resource Sent To NoticeBoard'
         add_activitylog(request, aldata)
 
@@ -2034,7 +2146,7 @@ class StickyinfoViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'sticky-notes-list'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New stickynotes Created'
         add_activitylog(request, aldata)
 
@@ -2258,7 +2370,7 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
         
         aldata = {}
         aldata['pagename']       = 'viewassignmentanswer'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'Resource Sent To Classroom'
         add_activitylog(request, aldata)
 
@@ -2436,7 +2548,7 @@ class StudentAssignWrittenWork(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'viewassignwrittenwork'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'Answered For Writtenwork'
         add_activitylog(request, aldata)
 
@@ -2661,8 +2773,6 @@ class EditAnswerResourceViewSet(viewsets.ModelViewSet):
            WHERE assignedid = '%s' ''' % (approvedanswertext.replace("'", '"'), assignedid)
         cursor = connection.cursor()
         cursor.execute(sql)
-
-        print sql
 
         #resetting the previous one if set
         sql = '''
@@ -3104,7 +3214,7 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'newtopic'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Forum Created'
         add_activitylog(request, aldata)
 
@@ -3121,6 +3231,14 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         """ %pk
         cursor = connection.cursor()
         cursor.execute(sql)
+
+        aldata = {}
+        aldata['pagename']       = 'newtopic'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Forum'
+        add_activitylog(request, aldata)
+
+
         return Response('"msg":"delete"')
 
 class PostinfoViewSet(viewsets.ModelViewSet):
@@ -3198,7 +3316,7 @@ class RubricImportViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'rubric_edit'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'Rubrics Imported'
         add_activitylog(request, aldata)
 
@@ -3466,7 +3584,7 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'viewassignresource'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'Answered For Resource'
         add_activitylog(request, aldata)
 
@@ -3649,26 +3767,26 @@ class ActivityassignmentInfoViewSet(viewsets.ModelViewSet):
         return Response(result)
 
 class ActivityassessmentInfoViewSet(viewsets.ModelViewSet):
-    queryset = models.Assignresourceinfo.objects.all()
+    queryset = models.Assessmentlist.objects.all()
     serializer_class = adminserializers.ActivityassignmentinfoSerializer
 
     def list(self, request):
         datecond = ''
         if request.GET.get('fdate') and request.GET.get('tdate'):
-            datecond = "AND (ari.assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+            datecond = "WHERE (aai.assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
                 request.GET.get('tdate'))
         sql = '''
-        select  al.assessmenttitle,
+        SELECT  al.assessmenttitle,
                 floor(avg(aa.rating)) as rating,
                 date(aai .assigneddate) as assigneddate,
                 date(aa.answereddate) as answereddate  
-        from assessmentlist al
-        inner join assignassessmentinfo aai on aai.assessmentid = al.assessmentid 
-        inner join assessmentanswers aa on aa.assessmentid = al.assessmentid 
-        where aai .assigneddate between '2011-01-01' and '2015-01-01'  
-        group by al.assessmentid 
-        order by al.assessmentid 
-        ''' % (request.GET.get('studentid'),datecond)
+        FROM assessmentlist al
+        INNER JOIN assignassessmentinfo aai on aai.assessmentid = al.assessmentid 
+        INNER JOIN assessmentanswers aa on aa.assessmentid = al.assessmentid 
+        %s
+        GROUP BY al.assessmentid 
+        ORDER BY al.assessmentid 
+        ''' % (datecond)
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
