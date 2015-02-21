@@ -273,3 +273,12 @@ class ActivityassignmentinfoSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('assessmentid','assessmenttype','worktype','assessmenttitle','assessmentdescription',
                     'totalquestions','totalmarks','enddate','isshared','ispublished','isdeleted',
                     'createdby','createddate')
+
+class StudentassignedresourceInfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Assignresourceinfo
+        fields = ('resourceid','studentid','assigntext','isanswered','assigneddate',
+                    'isdelete','assignedby','issaved','originaltext','answertext','answerurl',
+                    'isrecord','replyformat','isbillboard','isclassroom','answereddate',
+                    'assignedby','assigneddate','isdelete','rubric_id','rubric_marks',
+                    'rubric_n_mark','old_edit')

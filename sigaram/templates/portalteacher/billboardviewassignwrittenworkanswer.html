@@ -389,69 +389,69 @@ TTS.forms.editanswerlist = function(spanid){
             });
         },
         buttons:  [{
-                        label: 'Add more corrections',
-                        cssClass: 'btn-primary',
-                        action: function(dialogItself){
-                            $("#correction").show();
-                        }
-                   },
-                   {
-                        label: 'Save corrections',
-                        cssClass: 'btn-primary',
-                        action: function(dialogItself){
-                            var modtext = $("#correction").val();
-                            if(modtext==""){
-                                dialogItself.close();
-                                alert("nothing to save");
-                                return false;
-                            }
+            label: 'Add more corrections',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                $("#correction").show();
+            }
+        },
+        {
+            label: 'Save corrections',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                var modtext = $("#correction").val();
+                if(modtext==""){
+                    dialogItself.close();
+                    alert("nothing to save");
+                    return false;
+                }
 
-                            var uid         = $("#spanid").val();
-                            var assignedid  = $("#assignedid").val();
-                            var origtext    = $("#student-answer").html();
-                            var modified    = modtext;
-                            var type        = 2;
-                            var prevtext    = $("#prev-text").val();
-                            //var answertext  = TTS.forms.marktext(fulltext,origtext,uid,type);
-                            
-                            var data = {
-                                assignedid  : assignedid,
-                                spanid      : uid,
-                                orig        : origtext,
-                                modified    : modified,
-                                type        : type,
-                                prevtext    : prevtext
-                            }
+                var uid         = $("#spanid").val();
+                var assignedid  = $("#assignedid").val();
+                var origtext    = $("#student-answer").html();
+                var modified    = modtext;
+                var type        = 2;
+                var prevtext    = $("#prev-text").val();
+                //var answertext  = TTS.forms.marktext(fulltext,origtext,uid,type);
+                
+                var data = {
+                    assignedid  : assignedid,
+                    spanid      : uid,
+                    orig        : origtext,
+                    modified    : modified,
+                    type        : type,
+                    prevtext    : prevtext
+                }
 
-                            $.ajax({
-                                headers : {
-                                      'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
-                                },
-                                type:'POST',
-                                data: data,
-                                url : '/api/admin/editanswer/'
-                            }).done(function(msg) {
-                                $("#correction").hide();
-                                $.ajax({
-                                    "url":"/api/admin/editanswer/?assignedid="+assignedid+"&spanid="+uid+"&format=json",
-                                    "type":"GET"
-                                }).done(function(data){
-                                    TTS.forms.renderanswereditinginfo(data,'isapproved');
-                                    return false;
-                                });
-                                return false;
-                            });
+                $.ajax({
+                    headers : {
+                          'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                    },
+                    type:'POST',
+                    data: data,
+                    url : '/api/admin/editanswer/'
+                }).done(function(msg) {
+                    $("#correction").hide();
+                    $.ajax({
+                        "url":"/api/admin/editanswer/?assignedid="+assignedid+"&spanid="+uid+"&format=json",
+                        "type":"GET"
+                    }).done(function(data){
+                        TTS.forms.renderanswereditinginfo(data,'isapproved');
+                        return false;
+                    });
+                    return false;
+                });
 
-                        }
-                   },
-                   {
-                        label: '{% trans "Close" %}',
-                        cssClass: 'btn-primary',
-                        action: function(dialogItself){
-                            dialogItself.close();
-                            location.reload();
-                        }
-                   }]
+            }
+        },
+       {
+            label: '{% trans "Close" %}',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                dialogItself.close();
+                location.reload();
+            }
+       }]
     });
 };
 
@@ -605,6 +605,7 @@ TTS.forms.commentsave = function(){
 }
 
 TTS.forms.rating = function(data){
+    console.log(data.israted);
     if(data.israted){
         $("#rating-input").parent().parent().remove();        
     }
@@ -685,7 +686,7 @@ $(document).ready(function(){
        "url":"/api/admin/assignedwrittenworkstudents/"+writtenwork+"/?studentid="+studentid+"&format=json",
        "type":"GET"
     }).done(function(data){
-       TTS.forms.renderassignedwrittenworkinfo(data);
+        TTS.forms.renderassignedwrittenworkinfo(data);
     });
     
     $.ajax({
@@ -701,7 +702,6 @@ $(document).ready(function(){
        "url":"/api/admin/billboardcomment/?billboardid="+billboardid,
        "type":"GET"
     }).done(function(data){
-        console.log(data);
         if(data){
             TTS.forms.commentlist(data);
         }

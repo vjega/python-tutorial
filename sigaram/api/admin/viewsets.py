@@ -1643,12 +1643,16 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         WHERE bulletinboardid=%s
         """ %pk
         #print sql;
+        aldata = {}
+        aldata['pagename']       = 'bulletinboard'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Announcement'
+        add_activitylog(request, aldata)
+
+
         cursor = connection.cursor()
         cursor.execute(sql)
 
-        aldata['pagename']       = 'bulletinboard'
-        aldata['operation']      = 'Delete'
-        aldata['stringsentence'] = 'Dleted a Announcement'
         return Response('"msg":"delete"')
 
 class BillboardViewSet(viewsets.ModelViewSet):
@@ -2717,6 +2721,7 @@ class AssignedWrittenworkStudents(viewsets.ModelViewSet):
 
         cursor = connection.cursor()
         cursor.execute(sql)
+        print sql;
         desc = cursor.description
         result =  [
                 dict(zip([col[0] for col in desc], row))
@@ -3348,6 +3353,48 @@ class AssessmentInfoViewSet(viewsets.ModelViewSet):
         models.Assessmentinfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
+class AssignmentRatingViewSet(viewsets.ModelViewSet):
+    queryset = models.Assignmentratinginfo.objects.all()
+    serializer_class = adminserializers.AssignmentratinginfoSerializer
+
+    def update(self, request):
+        sql = '''
+        UPDATE assignwrittenworkinfo
+            SET isbillboard = 1
+        WHERE assignwrittenworkid = '%s' ''' % (assignid)
+                    
+        cursor = connection.cursor()
+        cursor.execute(sql)
+
+    def list(self, request):
+        billboardid = request.GET.get('billboardid')
+
+        data = {}
+
+        sql = """
+        SELECT avg(rating) as rating
+        FROM  billboardratinginfo
+        WHERE  billboardid = '%s' 
+        """ % (billboardid)
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        data['avgrating'] =  cursor.fetchone()[0]
+
+        sql = """
+        SELECT count(*) as rating
+        FROM  billboardratinginfo
+        WHERE  ratedby = '%s' 
+        AND billboardid = '%s' 
+        """ % (str(request.user.username),billboardid)
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        data['israted'] =  cursor.fetchone()[0]
+
+        return Response(data)
+
+
 class BillboardRatingViewSet(viewsets.ModelViewSet):
     queryset = models.Billboardratinginfo.objects.all()
     serializer_class = adminserializers.BillboardratinginfoSerializer
@@ -3385,7 +3432,8 @@ class BillboardRatingViewSet(viewsets.ModelViewSet):
         SELECT count(*) as rating
         FROM  billboardratinginfo
         WHERE  ratedby = '%s' 
-        """ % (str(request.user.username))
+        AND billboardid = '%s' 
+        """ % (str(request.user.username),billboardid)
 
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -3787,6 +3835,56 @@ class ActivityassessmentInfoViewSet(viewsets.ModelViewSet):
         GROUP BY al.assessmentid 
         ORDER BY al.assessmentid 
         ''' % (datecond)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+class StudentassignedresourceInfoViewSet(viewsets.ModelViewSet):
+    queryset = models.Assignresourceinfo.objects.all()
+    #serializer_class = adminserializers.StudentassignedresourceInfoSerializer
+
+    def retrieve(self, request, pk=None):
+        studentcond = ''
+        if request.GET.get('studentid'):
+            studentcond = "AND ari.studentid = '" + request.GET.get('studentid') + "'"
+
+        sql = '''
+        SELECT 
+                ari.assignedid AS id,
+                ari.isrecord,
+                ari.answerurl,
+                ri.resourceid,
+                ri.resourcetitle,
+                ri.resourcedescription,
+                date(assigneddate) as createddate,
+                date(answereddate) as answereddate,
+                ari.studentid,
+                ari.isanswered,
+                ari.issaved,
+                ari.rubric_id,
+                ari.rubric_marks,
+                ari.answertext,
+                ari.rubric_n_mark,
+                ari.assignedby,
+                au.first_name as firstname,
+                au.last_name as lastname,
+                ari.originaltext,
+                ari.isbillboard,
+                ari.isclassroom
+        FROM assignresourceinfo ari
+        INNER JOIN resourceinfo ri on ri.resourceid = ari.resourceid 
+        INNER JOIN auth_user au on au.username = ari.studentid 
+        WHERE ari.resourceid=%s
+        %s
+        GROUP BY ari.studentid
+        ORDER BY assigneddate DESC
+        ''' % (pk, studentcond)
+
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description

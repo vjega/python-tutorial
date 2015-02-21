@@ -1,4 +1,4 @@
-{% extends 'portalteacher/base.html' %}
+{% extends 'portaladmin/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
@@ -236,7 +236,7 @@ TTS.forms = TTS.forms || {}
 
 TTS.forms.renderassignedwrittenworkinfo = function(data){
     $("#assignedid").val(data[0].id);
-    $("#writtenwork-title").html(data[0].writtenworktitle);
+    $("#writtenwork-title").html(data[0].resourcetitle);
     $("#assigned-date").html(TTS.utils.dateConv(data[0].createddate));
     $("#answerd-date").html(TTS.utils.dateConv(data[0].answereddate));
     $("#student-name").html(data[0].firstname+" "+data[0].lastname);
@@ -676,13 +676,13 @@ TTS.forms.commentlist = function(data){
 
 $(document).ready(function(){
     
-    var writtenwork = TTS.utils.getUrlParameter('writtenworkid');
+    var writtenwork = TTS.utils.getUrlParameter('resourceid');
     var studentid   = TTS.utils.getUrlParameter('studentid');
     var billboardid = TTS.utils.getUrlParameter('billboardid');
     var assignedid  = $("#assignedid").val();
 
     $.ajax({
-       "url":"/api/admin/assignedwrittenworkstudents/"+writtenwork+"/?studentid="+studentid+"&format=json",
+       "url":"/api/admin/studentassignedresource/"+writtenwork+"/?studentid="+studentid+"&format=json",
        "type":"GET"
     }).done(function(data){
        TTS.forms.renderassignedwrittenworkinfo(data);
