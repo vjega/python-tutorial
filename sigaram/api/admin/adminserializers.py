@@ -221,7 +221,7 @@ class AssessmentinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Assessmentinfo
         fields = ('id','title','instruction','schoolid','classid',
-                  'createddate', 'createdby','enddate','isdeleted','type')
+                  'createddate', 'createdby','isdeleted','type')
 
 class BillboardratinginfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

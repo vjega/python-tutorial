@@ -222,15 +222,16 @@ class Assessmentlist(models.Model):
 
 
 class Assignassessmentinfo(models.Model):
-    mappingid = models.BigIntegerField(primary_key=True)
-    assessmentid = models.BigIntegerField()
-    studentid = models.CharField(max_length=500)
-    enddate = models.DateTimeField()
-    isanswered = models.IntegerField()
-    isbillboard = models.IntegerField()
-    isclassroom = models.IntegerField()
-    assignedby = models.BigIntegerField()
-    assigneddate = models.DateTimeField()
+    assignid        = models.AutoField(primary_key=True)
+    assessmentid    = models.BigIntegerField()
+    studentid       = models.CharField(max_length=500)
+    enddate         = models.DateTimeField()
+    isanswered      = models.IntegerField()
+    issaved         = models.IntegerField()
+    isbillboard     = models.IntegerField()
+    isclassroom     = models.IntegerField()
+    assignedby      = models.CharField(max_length=500)
+    assigneddate    = models.DateTimeField()
 
     class Meta:
         managed = False
@@ -1165,7 +1166,6 @@ class Assessmentinfo(models.Model):
     type        = models.CharField(max_length=500)
     classid     = models.BigIntegerField()
     schoolid    = models.BigIntegerField()
-    enddate     = models.DateTimeField()
     createdby   = models.CharField(max_length=500)
     createddate = models.DateTimeField()
     isdeleted   = models.IntegerField()
