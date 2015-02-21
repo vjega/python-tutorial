@@ -701,7 +701,6 @@ $(document).ready(function(){
        "url":"/api/admin/billboardcomment/?billboardid="+billboardid,
        "type":"GET"
     }).done(function(data){
-        console.log(data);
         if(data){
             TTS.forms.commentlist(data);
         }
