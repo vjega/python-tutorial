@@ -108,7 +108,9 @@ $(document).ready(function(){
         "type":"GET"
     }).done(function(data){
         console.log(data);
-        $("#id_firstname").val(data[0].first_name+ " " +data[0].last_name);
+        $("#id_firstname").val(data[0].first_name);
+        $("#id_lastname").val(data[0].last_name);
+        $("#id_emailid").val(data[0].email);
         $("#teacherid").val(data[0].id);
         
     });
@@ -132,7 +134,7 @@ $(document).ready(function(){
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.showadminform();
     });
-    $("#id_firstname").prop("readonly",true);
+    //$("#id_firstname").prop("readonly",true);
 });
 
 </script>
