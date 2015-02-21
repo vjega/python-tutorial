@@ -148,7 +148,6 @@
 
 $(document).ready(function(){
     var studentid=TTS.utils.getUrlParameter('studentid');
-    alert(studentid)
     TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/admin/activityassessment/?studentid="+studentid+"&format=json",
