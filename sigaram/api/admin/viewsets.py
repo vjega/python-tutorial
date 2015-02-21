@@ -3355,8 +3355,8 @@ class AssessmentInfoViewSet(viewsets.ModelViewSet):
         return Response('"msg":"delete"')
 
 class AssignmentRatingViewSet(viewsets.ModelViewSet):
-    queryset = models.Assignmentratinginfo.objects.all()
-    serializer_class = adminserializers.AssignmentratinginfoSerializer
+    queryset = models.Assignresourceinfo.objects.all()
+    serializer_class = adminserializers.AssignresourceinfoSerializer
 
     def update(self, request):
         sql = '''
