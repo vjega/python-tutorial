@@ -11,8 +11,19 @@
 {% endblock topcontent %}
 {% block morecss %}
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap-star-rating/css/star-rating.css" %}" rel="stylesheet"/>
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <style>
+    #comment-list_wrapper{
+        padding:20px;
+    }
+    .glyphicon{
+        display: none;
+    }
+    .star-rating{
+        float: left;
+        padding-right: 30px;
+    }
     #addrec:hover, #admin-main-tbl tbody tr:hover, #view-answer:hover{
         cursor: pointer;
     }
@@ -67,6 +78,7 @@
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/bootstrap-star-rating/js/star-rating.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <!-- script-->
 <script type="text/javascript" src="{% static "bower_components/local-audio-recorder-master/demo/swfobject.js" %}"></script>
@@ -158,6 +170,22 @@
 
                             </div>
                             <input type="hidden" id="max-mark">
+                        </div>
+                    </div>                    
+
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="col-lg-2">{% trans "Evaluation" %}</label>
+                        </div>
+                    </div>
+
+                    <div class="bs-docs-grid">
+                        <div class="row show-grid col-lg-12">
+                            <div class="col-lg-12" id="evaluation">
+                                <input id="rating-input" type="number" class="rating pull-left" min=0 max=5 step=1 data-size="sm">
+                                <input id="avgrating-input" type="number" class="rating pull-left" min=0 max=5 step=1 data-size="sm">
+                            </div>
                         </div>
                     </div>                    
 
@@ -341,6 +369,38 @@ TTS.forms.renderanswereditinginfo = function(data, isapproved){
             "columns":  headers
         });        
     }
+};
+
+TTS.forms.rating = function(data){
+    if(data.israted){
+        $("#rating-input").parent().parent().remove();        
+    }
+    var rating = Math.round(data.avgrating*100)/100;
+    var ratingwidth = ((rating/5)*100+"%");
+    var cn = '';
+    $("#avgrating-input").prev().css("width", ratingwidth);
+    $("#rating-input").val(rating);
+    if (rating <= 1) {
+        cn = 'label label-danger';
+        rv = rating + ' Star';
+    } else if (rating <= 2) {
+        cn = 'label label-warning';
+        rv = rating + ' Stars';
+    } else if (rating <= 3) {
+        cn = 'label label-info';
+        rv = rating + ' Stars';
+    } else if (rating <= 4) {
+        cn = 'label label-primary';
+        rv = rating + ' Stars';
+    } else if (rating <= 5) {
+        cn = 'label label-success';
+        rv = rating + ' Stars';
+    }else{
+        cn = '';
+        rv = 'Your not rated';
+    }
+    $("#avgrating-input").parent().next().children().addClass(cn).html(rv);
+
 };
 
 TTS.forms.editanswerlist = function(spanid){
@@ -637,7 +697,9 @@ $(document).ready(function(){
         $(this).parent().parent().parent().next().toggle('slow');
     });
 });
-
+$('#avgrating-input').rating({
+        readonly: true
+});
 </script>
 
 {% endblock scriptcontent %}
