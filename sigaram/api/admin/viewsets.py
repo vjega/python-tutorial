@@ -68,6 +68,13 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
     @delete_login('Admin')
     def destroy(self, request, pk):
         models.Admininfo.objects.get(pk=pk).delete()
+
+        aldata = {}
+        aldata['pagename']       = 'adminlist'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Admin'
+        add_activitylog(request, aldata)
+        
         return Response('"msg":"delete"')
 
 class AdminFoldersViewSet(viewsets.ModelViewSet):
@@ -84,10 +91,24 @@ class AdminFoldersViewSet(viewsets.ModelViewSet):
         adminfolder.added_date = time.strftime('%Y-%m-%d %H:%M:%S')
         adminfolder.userid = request.user.username
         adminfolder.save()
+        
+        aldata = {}
+        aldata['pagename']       = 'adminlist'
+        aldata['operation']      = 'Insert'
+        aldata['stringsentence'] = 'New Folder Created'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
 
     def destroy(self, request, pk):
         models.AdminFolders.objects.get(pk=pk).delete()
+        
+        aldata = {}
+        aldata['pagename']       = 'adminlist'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Folder'
+        add_activitylog(request, aldata)
+
         return Response('"msg":"delete"')
 
 class TeacherViewSet(viewsets.ModelViewSet):
@@ -932,9 +953,22 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.createdby       = request.user.id
         cal.createddate     = time.strftime('%Y-%m-%d %H:%M:%S')
         cal.save()
+
+        aldata = {}
+        aldata['pagename']       = 'Calendar'
+        aldata['operation']      = 'Update'
+        aldata['stringsentence'] = 'Updated a Event'
+        add_activitylog(request, aldata)
+
+
         return Response(request.DATA)
     def destroy(self, request, pk):
         models.Calendardetails.objects.get(pk=pk).delete()
+        aldata = {}
+        aldata['pagename']       = 'Calendar'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Event'
+        add_activitylog(request, aldata)
         return Response('"msg":"delete"')
 
 class MindmapViewSet(viewsets.ModelViewSet):
@@ -2740,8 +2774,6 @@ class EditAnswerResourceViewSet(viewsets.ModelViewSet):
         cursor = connection.cursor()
         cursor.execute(sql)
 
-        print sql
-
         #resetting the previous one if set
         sql = '''
         UPDATE editingtext
@@ -3199,6 +3231,14 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
         """ %pk
         cursor = connection.cursor()
         cursor.execute(sql)
+
+        aldata = {}
+        aldata['pagename']       = 'newtopic'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Forum'
+        add_activitylog(request, aldata)
+
+
         return Response('"msg":"delete"')
 
 class PostinfoViewSet(viewsets.ModelViewSet):
@@ -3674,7 +3714,6 @@ class ActivityassessmentInfoViewSet(viewsets.ModelViewSet):
         ''' % (datecond)
         cursor = connection.cursor()
         cursor.execute(sql)
-        print sql;
         desc = cursor.description
         result =  [
                 dict(zip([col[0] for col in desc], row))
