@@ -620,3 +620,19 @@ def rubric_view(request):
 @switchlanguage
 def billboardviewassignwrittenworkanswer(request):
     return render(request, 'portaladmin/billboardviewassignwrittenworkanswer.html')
+
+@login_required
+@switchlanguage
+def assignmentstatistics(request):
+    return render(request, 'portaladmin/assignmentstatistics.html')
+
+@login_required
+@switchlanguage
+def statisticsassignment(request):
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    return render(request, 'portaladmin/statisticsassignment.html', {'schools':schools})
+
+@login_required
+@switchlanguage
+def activityassignment(request):
+    return render(request, 'portaladmin/activityassignment.html') 

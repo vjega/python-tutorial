@@ -69,9 +69,6 @@
 
 <!--link rel="stylesheet" href="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/master/build/css/bootstrap-datetimepicker.min.css"-->
 <style>
-    .resourcelist tbody tr:hover{
-        cursor: pointer;
-    }    
     #wrapper{
         padding-top:60px;
     }
@@ -111,11 +108,17 @@
                   "data" :"slno",
                   "bSortable":false
                 },
-                { "title": "{% trans "Works" %}",
-                  "data" :"works"
+                { "title": "{% trans "Title" %}",
+                  "data" :"title"
                 },
-                { "title": "{% trans "Date" %}",
-                  "data" :"date"
+                { "title": "{% trans "Assigned" %} {% trans "Date" %}",
+                  "data" :"assigndate"
+                },
+                { "title": "{% trans "Answerd" %} {% trans "Date" %}",
+                  "data" :"answerdate"
+                },
+                { "title": "{% trans "Rating" %}",
+                  "data" :"rating"
                 },
             ];
         var dataset = [];
@@ -124,8 +127,14 @@
             var t = {};
             t.DT_RowId = data[i].loginid;
             t.slno=++count;
-            t.works=data[i].stringsentence;
-            t.date=TTS.utils.datetimeConvDate(data[i].updateddate);
+            t.title=data[i].resourcetitle;
+            t.assigndate=TTS.utils.dateConv(data[i].assigneddate);
+            t.answerdate=TTS.utils.dateConv(data[i].answereddate);
+            if (data[i].rating == '0.0000'){
+                t.rating="{% trans "No Rating" %}"                
+            }else {
+                t.rating=data[i].rating;
+            }
             dataset.push(t);
         }
         if (TTS.forms.table) {
@@ -145,7 +154,7 @@ $(document).ready(function(){
     var studentid=TTS.utils.getUrlParameter('studentid');
     TTS.utils.ajaxloaderstart();
     $.ajax({
-        "url":"/api/admin/activityloginfo/?studentid="+studentid+"&format=json",
+        "url":"/api/admin/activityassignment/?studentid="+studentid+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.assignedstudentresource(data);
@@ -159,7 +168,7 @@ $(document).ready(function(){
         var fromdate=fdate.split('-').reverse().join('-');
         var todate=tdate.split('-').reverse().join('-');
         $.ajax({
-            "url":"/api/admin/activityloginfo/?fdate="+fromdate+"&tdate="+todate+"&studentid="+studentid+"&format=json",
+            "url":"/api/admin/activityassignment/?fdate="+fromdate+"&tdate="+todate+"&studentid="+studentid+"&format=json",
             "type":"GET"
         }).done(function(data){
             if (data.length) {
