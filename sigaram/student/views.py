@@ -435,3 +435,8 @@ def viewpost(request):
 @switchlanguage
 def billboardviewassignwrittenworkanswer(request):
     return render(request, 'portalstudent/billboardviewassignwrittenworkanswer.html')
+
+@login_required
+@switchlanguage
+def billboardviewassignmentanswer(request):
+    return render(request, 'portalstudent/billboardviewassignresourceanswer.html') 

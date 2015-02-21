@@ -76,5 +76,6 @@ urlpatterns = patterns('student.views',
     url(r'^newtopic$',                  'newtopic',         name='newtopic'),
     url(r'^billboardviewassignwrittenworkanswer$',   'billboardviewassignwrittenworkanswer',  
                                             name='billboardviewassignwrittenworkanswer')
-
+    url(r'^billboardviewassignmentanswer$', 'billboardviewassignmentanswer', 
+                                                         name="billboardviewassignmentanswer"), 
 )
