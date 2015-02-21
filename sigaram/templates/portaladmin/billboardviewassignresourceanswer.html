@@ -236,9 +236,9 @@ TTS.forms = TTS.forms || {}
 
 TTS.forms.renderassignedwrittenworkinfo = function(data){
     $("#assignedid").val(data[0].id);
-    $("#writtenwork-title").html(data[0].writtenworktitle);
-    $("#assigned-date").html(data[0].createddate);
-    $("#answerd-date").html(data[0].answereddate);
+    $("#writtenwork-title").html(data[0].resourcetitle);
+    $("#assigned-date").html(TTS.utils.dateConv(data[0].createddate));
+    $("#answerd-date").html(TTS.utils.dateConv(data[0].answereddate));
     $("#student-name").html(data[0].firstname+" "+data[0].lastname);
     $("#student-answer").html(data[0].answertext);    
     $("#original-text").html(data[0].originaltext);
@@ -676,13 +676,13 @@ TTS.forms.commentlist = function(data){
 
 $(document).ready(function(){
     
-    var writtenwork = TTS.utils.getUrlParameter('writtenworkid');
+    var writtenwork = TTS.utils.getUrlParameter('resourceid');
     var studentid   = TTS.utils.getUrlParameter('studentid');
     var billboardid = TTS.utils.getUrlParameter('billboardid');
     var assignedid  = $("#assignedid").val();
 
     $.ajax({
-       "url":"/api/admin/assignedwrittenworkstudents/"+writtenwork+"/?studentid="+studentid+"&format=json",
+       "url":"/api/admin/studentassignedresource/"+writtenwork+"/?studentid="+studentid+"&format=json",
        "type":"GET"
     }).done(function(data){
        TTS.forms.renderassignedwrittenworkinfo(data);
@@ -701,7 +701,6 @@ $(document).ready(function(){
        "url":"/api/admin/billboardcomment/?billboardid="+billboardid,
        "type":"GET"
     }).done(function(data){
-        console.log(data);
         if(data){
             TTS.forms.commentlist(data);
         }

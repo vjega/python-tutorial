@@ -2721,6 +2721,7 @@ class AssignedWrittenworkStudents(viewsets.ModelViewSet):
 
         cursor = connection.cursor()
         cursor.execute(sql)
+        print sql;
         desc = cursor.description
         result =  [
                 dict(zip([col[0] for col in desc], row))
@@ -3834,6 +3835,56 @@ class ActivityassessmentInfoViewSet(viewsets.ModelViewSet):
         GROUP BY al.assessmentid 
         ORDER BY al.assessmentid 
         ''' % (datecond)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+class StudentassignedresourceInfoViewSet(viewsets.ModelViewSet):
+    queryset = models.Assignresourceinfo.objects.all()
+    #serializer_class = adminserializers.StudentassignedresourceInfoSerializer
+
+    def retrieve(self, request, pk=None):
+        studentcond = ''
+        if request.GET.get('studentid'):
+            studentcond = "AND ari.studentid = '" + request.GET.get('studentid') + "'"
+
+        sql = '''
+        SELECT 
+                ari.assignedid AS id,
+                ari.isrecord,
+                ari.answerurl,
+                ri.resourceid,
+                ri.resourcetitle,
+                ri.resourcedescription,
+                date(assigneddate) as createddate,
+                date(answereddate) as answereddate,
+                ari.studentid,
+                ari.isanswered,
+                ari.issaved,
+                ari.rubric_id,
+                ari.rubric_marks,
+                ari.answertext,
+                ari.rubric_n_mark,
+                ari.assignedby,
+                au.first_name as firstname,
+                au.last_name as lastname,
+                ari.originaltext,
+                ari.isbillboard,
+                ari.isclassroom
+        FROM assignresourceinfo ari
+        INNER JOIN resourceinfo ri on ri.resourceid = ari.resourceid 
+        INNER JOIN auth_user au on au.username = ari.studentid 
+        WHERE ari.resourceid=%s
+        %s
+        GROUP BY ari.studentid
+        ORDER BY assigneddate DESC
+        ''' % (pk, studentcond)
+
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description

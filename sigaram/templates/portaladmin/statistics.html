@@ -118,12 +118,8 @@ $(document).ready(function(){
         "url":url,
         "type":"GET"
     }).done(function(data) {
-        if (data.length) {
-            TTS.forms.renderstatistics(data);
-            TTS.utils.ajaxloaderstop();
-        } else {
-            TTS.forms.table.fnClearTable();
-        }
+        TTS.forms.renderstatistics(data);
+        TTS.utils.ajaxloaderstop();
     });
 
     $("#school_name").change(function(){

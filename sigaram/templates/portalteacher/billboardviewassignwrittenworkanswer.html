@@ -686,7 +686,7 @@ $(document).ready(function(){
        "url":"/api/admin/assignedwrittenworkstudents/"+writtenwork+"/?studentid="+studentid+"&format=json",
        "type":"GET"
     }).done(function(data){
-       TTS.forms.renderassignedwrittenworkinfo(data);
+        TTS.forms.renderassignedwrittenworkinfo(data);
     });
     
     $.ajax({
@@ -702,7 +702,6 @@ $(document).ready(function(){
        "url":"/api/admin/billboardcomment/?billboardid="+billboardid,
        "type":"GET"
     }).done(function(data){
-        console.log(data);
         if(data){
             TTS.forms.commentlist(data);
         }
