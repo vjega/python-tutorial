@@ -11,8 +11,19 @@
 {% endblock topcontent %}
 {% block morecss %}
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap-star-rating/css/star-rating.css" %}" rel="stylesheet"/>
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <style>
+    #comment-list_wrapper{
+        padding:20px;
+    }
+    .glyphicon{
+        display: none;
+    }
+    .star-rating{
+        float: left;
+        padding-right: 30px;
+    }
     #addrec:hover, #admin-main-tbl tbody tr:hover, #view-answer:hover{
         cursor: pointer;
     }
@@ -67,6 +78,7 @@
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/bootstrap-star-rating/js/star-rating.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <!-- script-->
 <script type="text/javascript" src="{% static "bower_components/local-audio-recorder-master/demo/swfobject.js" %}"></script>
@@ -158,6 +170,21 @@
 
                             </div>
                             <input type="hidden" id="max-mark">
+                        </div>
+                    </div>                    
+
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="col-lg-2">{% trans "Evaluation" %}</label>
+                        </div>
+                    </div>
+
+                    <div class="bs-docs-grid">
+                        <div class="row show-grid col-lg-12">
+                            <div class="col-lg-12" id="evaluation">
+                                <input id="rating-input" type="number" class="rating pull-left" min=0 max=5 step=1 data-size="sm">
+                            </div>
                         </div>
                     </div>                    
 

@@ -3510,6 +3510,81 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
         #result = cursor.fetchall()
         #print return [
         
+    def retrieve(self, request, pk=None):
+        sql = '''
+        SELECT assignedid AS id,
+               ri.resourceid,
+               ari.isrecord,
+               ari.answerurl,
+               ri.videourl,
+               resourcetitle,
+               date(assigneddate) as createddate,
+               resourcetype,
+               thumbnailurl,
+               ari.answertext,
+               ari.assigntext,
+               ari.studentid,
+               ari.isanswered,
+               ari.issaved,
+               ari.rubric_id,
+               ari.rubric_marks,
+               ari.rubric_n_mark
+        FROM assignresourceinfo ari
+        INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
+        WHERE assignedid = %s
+        ''' % pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
+        #print result
+        return Response(result)
+
+    def create(self, request):
+        data = json.loads(dict(request.DATA).keys()[0]);
+        students = data.get('students');
+        resource = data.get('resource');
+        rubricid = data.get('rubricid');
+        assigntext = summer_decode(data.get('assigntext'));
+
+        for r in resource:
+            for s in students:
+                
+                sql = """
+                DELETE FROM assignresourceinfo 
+                WHERE studentid='%s'
+                AND resourceid='%s'
+                """ % (str(s),int(r))
+
+                cursor = connection.cursor()
+                cursor.execute(sql)
+
+                ar = models.Assignresourceinfo()
+                ar.resourceid = int(r)
+                ar.studentid = str(s)
+                ar.assigntext = unicode(assigntext)
+                ar.isanswered = 0
+                ar.issaved = 0
+                ar.isrecord = 0
+                ar.answerrating = 0
+                ar.isbillboard = 0
+                ar.isclassroom = 0
+                ar.answereddate = '1910-01-01'
+                ar.assignedby = request.user.username
+                ar.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+                ar.isdelete = 0
+                ar.rubric_id = int(rubricid)
+                ar.old_edit = 0
+                ar.save()   
+        
+
+        aldata = {}
+        aldata['pagename']       = 'assignchapter'
+        aldata['operation']      = 'insert'
+        aldata['stringsentence'] = 'New Resource Assigned to students'
+        add_activitylog(request, aldata)
+
+        return Response(request.DATA)        
+
 class ActivitylogInfoViewSet(viewsets.ModelViewSet):
     queryset = models.Activitylog.objects.all()
     serializer_class = adminserializers.ActivityloginfoSerializer
