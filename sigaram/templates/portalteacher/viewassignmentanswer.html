@@ -641,6 +641,15 @@ $(document).ready(function(){
         //console.log(data);
         TTS.forms.renderassignedresourceinfo(data);
     });
+
+    $.ajax({
+       "url":"/api/admin/assignmentanswerrating/?assignid="+assignid,
+       "type":"GET"
+    }).done(function(data){
+        if(data){
+            TTS.forms.rating(data);
+        }
+    });
     
     $("#student-answer,#student-answer p").on("mouseup", function(event){
         //event.stopPropagation();

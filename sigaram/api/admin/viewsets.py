@@ -3353,6 +3353,48 @@ class AssessmentInfoViewSet(viewsets.ModelViewSet):
         models.Assessmentinfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
+class AssignmentRatingViewSet(viewsets.ModelViewSet):
+    queryset = models.Assignmentratinginfo.objects.all()
+    serializer_class = adminserializers.AssignmentratinginfoSerializer
+
+    def update(self, request):
+        sql = '''
+        UPDATE assignwrittenworkinfo
+            SET isbillboard = 1
+        WHERE assignwrittenworkid = '%s' ''' % (assignid)
+                    
+        cursor = connection.cursor()
+        cursor.execute(sql)
+
+    def list(self, request):
+        billboardid = request.GET.get('billboardid')
+
+        data = {}
+
+        sql = """
+        SELECT avg(rating) as rating
+        FROM  billboardratinginfo
+        WHERE  billboardid = '%s' 
+        """ % (billboardid)
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        data['avgrating'] =  cursor.fetchone()[0]
+
+        sql = """
+        SELECT count(*) as rating
+        FROM  billboardratinginfo
+        WHERE  ratedby = '%s' 
+        AND billboardid = '%s' 
+        """ % (str(request.user.username),billboardid)
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        data['israted'] =  cursor.fetchone()[0]
+
+        return Response(data)
+
+
 class BillboardRatingViewSet(viewsets.ModelViewSet):
     queryset = models.Billboardratinginfo.objects.all()
     serializer_class = adminserializers.BillboardratinginfoSerializer
@@ -3390,7 +3432,8 @@ class BillboardRatingViewSet(viewsets.ModelViewSet):
         SELECT count(*) as rating
         FROM  billboardratinginfo
         WHERE  ratedby = '%s' 
-        """ % (str(request.user.username))
+        AND billboardid = '%s' 
+        """ % (str(request.user.username),billboardid)
 
         cursor = connection.cursor()
         cursor.execute(sql)
