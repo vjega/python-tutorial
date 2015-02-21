@@ -24,7 +24,7 @@ class TeacherForm(forms.Form):
         label = _("Last Name"),
         max_length = 100,
         required = True,
-        widget = forms.TextInput({ "placeholder": _("last Name")})
+        widget = forms.TextInput({ "placeholder": "%s %s"%(_("Last"),_("Name"))})
     )
     username = forms.CharField(
         label = _("User Name"),
