@@ -680,3 +680,8 @@ def assignassessment(request):
     schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/assignassessment.html',{'schools':schools,'classes':classes})
+
+@login_required
+@switchlanguage
+def billboardviewassignmentanswer(request):
+    return render(request, 'portalteacher/billboardviewassignresourceanswer.html') 
