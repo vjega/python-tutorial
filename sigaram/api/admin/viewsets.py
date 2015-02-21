@@ -56,7 +56,7 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'adminlist'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Admin Created'
         add_activitylog(request, aldata)
 
@@ -131,7 +131,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'teacherslist'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Teacher Created'
         add_activitylog(request, aldata)
 
@@ -150,6 +150,12 @@ class TeacherViewSet(viewsets.ModelViewSet):
         teacher.classid = teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
         teacher.save()
+
+        aldata = {}
+        aldata['pagename']       = 'teacherslist'
+        aldata['operation']      = 'Update'
+        aldata['stringsentence'] = 'Updated a Teacher'
+
         return Response(request.DATA)
 
     def partial_update(self, request, pk=None):
@@ -161,6 +167,12 @@ class TeacherViewSet(viewsets.ModelViewSet):
         teacher = models.Teacherinfo.objects.get(pk=pk)
         teacher.isdelete = 1
         teacher.save()
+
+        aldata = {}
+        aldata['pagename']       = 'teacherslist'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Teacher'
+
         return Response('"msg":"delete"')
 
 
@@ -208,7 +220,7 @@ class studentViewSet(viewsets.ModelViewSet):
         
         aldata = {}
         aldata['pagename']       = 'studentlist'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Student Created'
         add_activitylog(request, aldata)
 
@@ -225,6 +237,13 @@ class studentViewSet(viewsets.ModelViewSet):
         student.emailid = studentdata.get('emailid')
         student.imageurl = studentdata.get('imageurl')
         student.save()
+
+        aldata = {}
+        aldata['pagename']       = 'studentlist'
+        aldata['operation']      = 'Update'
+        aldata['stringsentence'] = 'Updated a Student'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
 
     @delete_login('Student')
@@ -232,6 +251,13 @@ class studentViewSet(viewsets.ModelViewSet):
         student = models.Studentinfo.objects.get(pk=pk)
         student.isdelete = 1
         student.save()
+        
+        aldata = {}
+        aldata['pagename']       = 'studentlist'
+        aldata['operation']      = 'Update'
+        aldata['stringsentence'] = 'Deleted a Student'
+        add_activitylog(request, aldata)
+
         return Response('"msg":"delete"')
 
 class TeacherResourcesViewSet(viewsets.ModelViewSet):
@@ -341,7 +367,7 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'viewteacherres'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Tacher Resource Created'
         add_activitylog(request, aldata)
 
@@ -354,6 +380,13 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         allschool = models.Teacherresourceinfo.objects.get(pk=pk)
         allschool.isdeleted = 1
         allschool.save()
+
+        aldata = {}
+        aldata['pagename']       = 'viewteacherres'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Resource'
+        add_activitylog(request, aldata)
+
         return Response('"msg":"delete"')
 
     def retrieve(self, request, pk=None):
@@ -438,7 +471,7 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'viewstudentres'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Student Resource Created'
         add_activitylog(request, aldata)
 
@@ -448,6 +481,13 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         studentres = models.Resourceinfo.objects.get(pk=pk)
         studentres.isdeleted = 1
         studentres.save()
+
+        aldata = {}
+        aldata['pagename']       = 'viewstudentres'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Resource'
+        add_activitylog(request, aldata)
+
         return Response('"msg":"delete"')
 
 class WrittenworkinfoViewSet(viewsets.ModelViewSet):
@@ -650,7 +690,7 @@ class AdminschoolViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'Schoollist'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New School Created'
         add_activitylog(request, aldata)
 
@@ -665,11 +705,27 @@ class AdminschoolViewSet(viewsets.ModelViewSet):
         adminschools.createdby = request.user.id
         adminschools.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         adminschools.save()
+
+        aldata = {}
+        aldata['pagename']       = 'Schoollist'
+        aldata['operation']      = 'Update'
+        aldata['stringsentence'] = 'Updated a sSchool'
+        add_activitylog(request, aldata)
+
+
         return Response(request.DATA)
 
 
     def destroy(self, request, pk=None):
         models.Schoolinfo.objects.get(pk=pk).delete()
+
+        aldata = {}
+        aldata['pagename']       = 'Schoollist'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a School'
+        add_activitylog(request, aldata)
+
+
         return Response('"msg":"delete"')
 
 class AdminclasslistViewSet(viewsets.ModelViewSet):
@@ -755,7 +811,7 @@ class AdminrubricsViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'rubric_edit'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Rubrics Created'
         add_activitylog(request, aldata)
 
@@ -766,6 +822,12 @@ class AdminrubricsViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         models.RubricsHeader.objects.get(pk=pk).delete()
+        aldata = {}
+        aldata['pagename']       = 'rubric_edit'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Delete a Rubrics'
+        add_activitylog(request, aldata)
+
         return Response('"msg":"delete"')
 
 class AssignresourceinfoViewSet(viewsets.ModelViewSet):
@@ -847,7 +909,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'Calendar'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Event Created'
         add_activitylog(request, aldata)
 
@@ -891,7 +953,7 @@ class MindmapViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'mindmapedit'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Mindmap Created'
         add_activitylog(request, aldata)
 
@@ -906,10 +968,22 @@ class MindmapViewSet(viewsets.ModelViewSet):
         mm.createdby = request.user.id
         mm.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         mm.save()
+
+        aldata = {}
+        aldata['pagename']       = 'mindmapedit'
+        aldata['operation']      = 'Update'
+        aldata['stringsentence'] = 'Updated a Mindmap'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
         
     def destroy(self, request, pk):
         models.Mindmap.objects.get(pk=pk).delete()
+        aldata = {}
+        aldata['pagename']       = 'mindmapedit'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Mindmap'
+        add_activitylog(request, aldata)
         return Response('"msg":"delete"')
 
 
@@ -964,7 +1038,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'viewassignresource'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'Answered For Resource'
         add_activitylog(request, aldata)
 
@@ -1084,7 +1158,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'assignchapter'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Resource Assigned to students'
         add_activitylog(request, aldata)
 
@@ -1493,7 +1567,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         
         aldata = {}
         aldata['pagename']       = 'bulletinboard'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Announcement Created'
         add_activitylog(request, aldata)
 
@@ -1537,6 +1611,10 @@ class Bulletinboardlist(viewsets.ModelViewSet):
         #print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
+
+        aldata['pagename']       = 'bulletinboard'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Dleted a Announcement'
         return Response('"msg":"delete"')
 
 class BillboardViewSet(viewsets.ModelViewSet):
@@ -1601,7 +1679,7 @@ class BillboardViewSet(viewsets.ModelViewSet):
 
         # aldata = {}
         # aldata['pagename']       = 'bulletinboard'
-        # aldata['operation']      = 'insert'
+        # aldata['operation']      = 'Insert'
         # aldata['stringsentence'] = 'New Announcement created'
         # add_activitylog(request, aldata)
         # return Response(request.DATA)
@@ -1787,7 +1865,7 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'viewassignmentanswer'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'Resource Sent To NoticeBoard'
         add_activitylog(request, aldata)
 
@@ -2034,7 +2112,7 @@ class StickyinfoViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'sticky-notes-list'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New stickynotes Created'
         add_activitylog(request, aldata)
 
@@ -2258,7 +2336,7 @@ class ClassinfoViewSet(viewsets.ModelViewSet):
         
         aldata = {}
         aldata['pagename']       = 'viewassignmentanswer'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'Resource Sent To Classroom'
         add_activitylog(request, aldata)
 
@@ -2436,7 +2514,7 @@ class StudentAssignWrittenWork(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'viewassignwrittenwork'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'Answered For Writtenwork'
         add_activitylog(request, aldata)
 
@@ -3104,7 +3182,7 @@ class TopicInfoViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'newtopic'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'New Forum Created'
         add_activitylog(request, aldata)
 
@@ -3198,7 +3276,7 @@ class RubricImportViewSet(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'rubric_edit'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'Rubrics Imported'
         add_activitylog(request, aldata)
 
@@ -3466,7 +3544,7 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
 
         aldata = {}
         aldata['pagename']       = 'viewassignresource'
-        aldata['operation']      = 'insert'
+        aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'Answered For Resource'
         add_activitylog(request, aldata)
 
