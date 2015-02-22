@@ -403,21 +403,11 @@ def rubrics(request):
 @login_required
 @switchlanguage
 def statistics(request):
-    folders = [{
-        "id": "1",
-        "name" :_("Login statistics"),
-        "href" :"statisticsstudentslist"
-        },{
-        "id": "2",
-        "name" :_("Assignment statistics"),
-        "href" :"statisticsstudentslist"
-        },{
-        "id": "3",
-        "name" :_("Exercises Statistics"),
-        "href" :"statisticsstudentslist"
-        }]
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/statistics.html', 
-                  {"folders":folders,'statistics':statistics})
+                                     {'schools':schools, 'classes':classes} )
+
 
 @login_required
 @switchlanguage
@@ -425,8 +415,7 @@ def statisticsstudentslist(request):
     schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/statisticsstudentslist.html', 
-                                        {'schools':schools, 'classes':classes, 
-                                        "form" : StudentForm.StudentForm()} )
+                                        {'schools':schools, 'classes':classes} )
 
 @login_required
 @switchlanguage
@@ -685,3 +674,15 @@ def assignassessment(request):
 @switchlanguage
 def billboardviewassignmentanswer(request):
     return render(request, 'portalteacher/billboardviewassignresourceanswer.html') 
+
+@login_required
+@switchlanguage
+def assignmentstatistics(request):
+    return render(request, 'portalteacher/assignmentstatistics.html') 
+
+@login_required
+@switchlanguage
+def statisticsexcercise(request):
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    classes = models.Classinfo.objects.all()
+    return render(request, 'portalteacher/statisticsexcercise.html',{'schools':schools,'classes':classes})
