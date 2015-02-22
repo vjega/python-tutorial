@@ -48,13 +48,13 @@ def home(request):
         "link" : u"studentwrittenwork",
         "caption": _("Written Work")
         },
-        # {
-        # "color": u"green",
-        # "icon" : u"desktop",
-        # "link" : u"studentviewassessments",
-        # "caption": _("Practicals"),
-        # "stat": 125
-        # },
+        {
+        "color": u"green",
+        "icon" : u"pencil",
+        "link" : u"viewassessments",
+        "caption": _("Exercises"),
+        "stat": 125
+        },
         {
         "color": u"primary",
         "icon" : u"sitemap",
@@ -435,3 +435,8 @@ def viewpost(request):
 @switchlanguage
 def billboardviewassignwrittenworkanswer(request):
     return render(request, 'portalstudent/billboardviewassignwrittenworkanswer.html')
+
+@login_required
+@switchlanguage
+def billboardviewassignmentanswer(request):
+    return render(request, 'portalstudent/billboardviewassignresourceanswer.html') 
