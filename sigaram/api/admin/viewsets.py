@@ -3331,6 +3331,7 @@ class RubricImportViewSet(viewsets.ModelViewSet):
 class AssessmentInfoViewSet(viewsets.ModelViewSet):
     queryset = models.Assessmentinfo.objects.all()
     serializer_class = adminserializers.AssessmentinfoSerializer
+
     def list(self, request):
         queryset = models.Assessmentinfo.objects.filter(createdby=str(request.user.username)).order_by('-createddate')
         serializer = adminserializers.AssessmentinfoSerializer(queryset, many=True)
@@ -3559,8 +3560,8 @@ class AssessmentQAInfoViewSet(viewsets.ModelViewSet):
         return Response('"msg":"delete"')
 
 class StudentAssignAssessment(viewsets.ModelViewSet):
-    queryset = models.Assignresourceinfo.objects.all()
-    serializer_class = adminserializers.MindmapSerializer
+    queryset = models.Assignassessmentinfo.objects.all()
+    serializer_class = adminserializers.AssignassessmentinfoSerializer
 
     def list(self, request):
 
@@ -3570,35 +3571,27 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
                 request.GET.get('tdate'))
         sql = '''
         SELECT assignedid AS id,
-               ari.isrecord,
-               ari.answerurl,
-               ri.resourceid,
-               resourcetitle,
+               ai.id as assessmentid,
+               ai.title,
                date(assigneddate) as createddate,
-               date(answereddate) as answereddate,
-               resourcetype,
-               thumbnailurl,
-               ari.studentid,
-               ari.isanswered,
-               ari.issaved
-        FROM assignresourceinfo ari
-        INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
-        WHERE isdeleted=0
-              AND ari.studentid='%s'
-              AND ari.IsDelete=0
-              /*AND ri.categoryid=0*/
+               aai.studentid,
+               aai.isanswered,
+               aai.issaved
+        FROM assignassessmentinfo aai
+        INNER JOIN assessmentinfo ai on ai.id = aai.assessmentid 
+        WHERE aai.assignedby='%s'
               %s
-        GROUP BY ari.resourceid, ari.answereddate
-        ORDER BY ari.assignedid DESC''' % (request.user.username, datecond)
-        #print sql;
+        GROUP BY aai.assessmentid, aai.assigneddate
+        ORDER BY aai.assignedid DESC''' % (request.user.username, datecond)
+        print sql;
         cursor = connection.cursor()
-        
-        #cursor.execute(sql, loginname_to_userid('Student', request.user.username))
         cursor.execute(sql)
-        #cursor.execute(sql, "3680")
-        #print dir(cursor)
-        #result = cursor.fetchall()
-        #print return [
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
         
     def retrieve(self, request, pk=None):
         sql = '''
@@ -3632,45 +3625,37 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
     def create(self, request):
         data = json.loads(dict(request.DATA).keys()[0]);
         students    = data.get('students');
-        assessment  = data.get('assessment');
-        rubricid    = data.get('rubricid');
-        assigntext = summer_decode(data.get('assigntext'));
+        assessmentid= data.get('assessmentid');
+        enddate     = data.get('enddate');
+        note        = summer_decode(data.get('note'));
 
-        for r in resource:
-            for s in students:
-                
-                sql = """
-                DELETE FROM assignresourceinfo 
-                WHERE studentid='%s'
-                AND resourceid='%s'
-                """ % (str(s),int(r))
+        for s in students:
+            sql = """
+            DELETE FROM assignassessmentinfo 
+            WHERE assessmentid='%s'
+            AND studentid='%s'
+            """ % (int(assessmentid),str(s))
 
-                cursor = connection.cursor()
-                cursor.execute(sql)
+            cursor = connection.cursor()
+            cursor.execute(sql)
 
-                ar = models.Assignresourceinfo()
-                ar.resourceid = int(r)
-                ar.studentid = str(s)
-                ar.assigntext = unicode(assigntext)
-                ar.isanswered = 0
-                ar.issaved = 0
-                ar.isrecord = 0
-                ar.answerrating = 0
-                ar.isbillboard = 0
-                ar.isclassroom = 0
-                ar.answereddate = '1910-01-01'
-                ar.assignedby = request.user.username
-                ar.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
-                ar.isdelete = 0
-                ar.rubric_id = int(rubricid)
-                ar.old_edit = 0
-                ar.save()   
-        
+            ar = models.Assignassessmentinfo()
+            ar.studentid    = str(s)
+            ar.assessmentid = int(assessmentid)
+            ar.note         = str(note)
+            ar.isanswered   = 0
+            ar.issaved      = 0
+            ar.isbillboard  = 0
+            ar.isclassroom  = 0
+            ar.enddate      = enddate
+            ar.assignedby   = str(request.user.username)
+            ar.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+            ar.save()   
 
         aldata = {}
-        aldata['pagename']       = 'assignchapter'
+        aldata['pagename']       = 'assignassessment'
         aldata['operation']      = 'insert'
-        aldata['stringsentence'] = 'New Resource Assigned to students'
+        aldata['stringsentence'] = 'New assessment assigned to students'
         add_activitylog(request, aldata)
 
         return Response(request.DATA)        
