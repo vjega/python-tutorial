@@ -1,0 +1,322 @@
+{% extends 'portalstudent/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block topcontent %}
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Assignments" %}</h2>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+{% endblock topcontent %}
+
+{% block morescript %}
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+<script type="text/javascript" src="{%static "FlashWavRecorder/html/js/swfobject.js"%}"></script>
+<script type="text/javascript" src="{%static "FlashWavRecorder/html/js/recorder.js"%}"></script>
+<script type="text/javascript" src="{%static "js/audiorecorder.js"%}"></script>
+{% endblock morescript %}
+
+{% block botcontent %}
+<div class="col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover"
+                     id="admin-main-tbl">
+                <div>
+                    <h3>{% trans "Title" %}:</h3>
+                </div><br />
+                <div id="resource-title"></div><br />
+                <div id="view-resource"></div><br />
+                <div>
+                    <h3>{% trans "Note" %}:</h3>
+                </div><br />
+                <div class="form-group"> 
+                    <h3>{% trans "Answer" %}</h3>
+                </div> 
+
+                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                  <!-- Indicators -->
+                  <ol class="carousel-indicators">
+                    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                  </ol>
+
+                  <!-- Wrapper for slides -->
+                  <div class="carousel-inner" role="listbox">
+                    <div class="item active">
+                      <div class="question">
+                            slkdfjklasdjlkfjs slkdjfklajsldkjfasdf asldjflkajsdkljfa askldjfklajsdjflajs?
+                        </div>
+                        <div class="answer">
+                            slkdfjklasdjlkfjs slkdjfklajsldkjfasdf asldjflkajsdkljfa askldjfklajsdjflajs asdlkfakdsjflka jsdklfjalksdjfk ljasdlk jfalksjdfalsdjlk fjaksdj flasdjf
+                        </div>
+                      <div class="carousel-caption">
+                      </div>
+                    </div>
+                    <div class="item">
+                      <img src="..." alt="...">
+                      <div class="carousel-caption">
+                            <div class="question">
+                            slkdfjklasdjlkfjs slkdjfklajsldkjfasdf asldjflkajsdkljfa askldjfklajsdjflajs?
+                        </div>
+                        <div class="answer">
+                            slkdfjklasdjlkfjs slkdjfklajsldkjfasdf asldjflkajsdkljfa askldjfklajsdjflajs asdlkfakdsjflka jsdklfjalksdjfk ljasdlk jfalksjdfalsdjlk fjaksdj flasdjf
+                        </div>
+                      </div>
+                    </div>
+                    ...
+                  </div>
+
+                  <!-- Controls -->
+                  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success btn-lg" id="res-save">{% trans 'Save' %}</button>
+                    <button class="btn btn-success btn-lg" id="res-send">{% trans 'Send' %}</button>
+                </div>    
+                <div class="bs-docs-grid">
+                    <div class="row show-grid col-lg-12">
+                        <div class="col-lg-12" id="rubrics-vote"></div>
+                        <input type="hidden" id="max-mark">
+                    </div>
+                </div>                    
+                
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+<!-- /.col-lg-12 -->
+{% endblock botcontent%}
+
+{% block morecss %}
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<link type="text/css" rel="stylesheet" href="{%static "FlashWavRecorder/html/basic/basic.css"%}">
+<style>
+    #addrec:hover, #admin-main-tbl tbody tr:hover{
+        cursor: pointer;
+    }
+    .note-editable{
+        height: 80px;
+    }
+    section.recorder-container{
+        display: none;
+    }
+    table#rubrics-table thead tr th,
+    table#rubrics-table tfoot tr td{
+        text-align: center;
+        height: 45px;
+        background-color: #337ab7;
+        color: #ffffff;
+        font-weight: bold;
+    }
+    table#rubrics-table tbody tr td:nth-child(1) { 
+        background-color: #d3d3d3;
+        font-weight: bold;
+    }    
+    input#ttls{
+        color:#000;
+    } 
+</style>
+{% endblock morecss %}
+
+
+{% block scriptcontent %}
+
+<script>
+
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}   
+
+
+TTS.forms.renderassignedresourceinfo = function(data){
+    //console.log(data); 
+    $(".summernote").code(data.answertext);
+    $("#resource-title").html(data.resourcetitle);
+    $("#resource-note").html(data.assigntext);
+
+    $("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.videourl+"');\" >{% trans 'View' %}</a>");
+
+    if(data.isrecord && data.answerurl){
+        $("#show-recorder").prop('checked',true);
+        $("#audio-player").html('<audio src="/static/audio/'+data.answerurl+'" controls=""></audio><br />');    
+    }else{
+        $("#show-recorder").prop('checked',false);
+    }
+
+    if(data.rubric_id){
+        $.ajax({
+            "url":"/api/admin/rubrics/"+data.rubric_id,
+            "type":"GET"
+        }).done(function(rubricdata){
+            TTS.forms.renderrubrictableinfo(rubricdata, data);
+        });
+    }
+
+};
+
+TTS.forms.settotalmarks = function() {
+    var x=0;
+    $('.totals').each(function(){x += parseInt($(this).val()) || 0;});
+    $('#ttls').val(x);
+};
+
+TTS.forms.renderrubrictableinfo = function(rubtable, rubdata){
+    console.log(rubdata);
+    var rubricid = rubdata.rubric_marks;
+    var rubricmark = rubdata.rubric_n_mark.split(",");
+    var tableHTML = '';
+    var thdata = rubtable.rmh[0];
+    var th = thdata.split('~~');
+    var tddataobj = rubtable.rmb;
+    var td = '';
+    var answercheck = '';
+    var rubchecks = {};
+    var thnumber = [];
+    var maxVal = '';
+    $.each(th, function(idx, value){
+        thnumber[idx] = value.match(/\d+/)[0];
+    });
+    maxVal = Math.max.apply(Math,thnumber);
+   
+    tableHTML += "<table id='rubrics-table' class='table table-striped table-bordered table-hover'>";
+    tableHTML += "<thead><tr><th>&nbsp;</th>";
+    $("#max-mark").val(maxVal);
+    $(th).each(function(k,v){
+        tableHTML += "<th>"+v+"</th>";
+    });
+
+    tableHTML += "<th>{% trans 'Total' %}</th></tr></thead>";
+    tableHTML += "<tbody>";
+    $(tddataobj).each(function(x,tddata){
+        td = tddata[0].split('~~');
+        tableHTML += "<tr>";
+        $(td).each(function(i,j){
+            if(i > 0){
+                answercheck="<input class='chkrub mark-"+x+"' id='m"+x+"-"+i+"' name='mark-"+x+"'  disabled='disabled' type='radio'>";
+            }else{
+                answercheck="";
+            }
+            tableHTML += "<td>"+answercheck+" "+j+"</td>";
+        });
+        tableHTML += "<td><input class='totals' id='tmark-"+x+"' style='width:30px;text-align:center' readonly type='text' value=''> / "+maxVal+"</td>";
+        tableHTML += "</tr>";
+    });
+    tableHTML += "</tbody><tfoot><tr><td style='text-align:center' colspan="+(th.length+1)+"><strong>{% trans 'Total' %}</strong></td><td><input id='ttls' style='width:30px;text-align:center' readonly type='text' value=''> / "+maxVal*(tddataobj.length)+"</td></tr></tfoot>";
+    tableHTML += "</table>";
+    $("#rubrics-vote").html(tableHTML);
+    rubricid = rubricid.split('~');
+    $.each(rubricid, function(idx, value){
+        $("#"+value).prop("checked", true);
+        $("#tmark-"+idx).val(rubricmark[idx])
+    })
+    TTS.forms.settotalmarks();
+}
+
+
+function openwindow(videourl) {
+    window.open("../static/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
+}
+TTS.forms.ressave = function(savesend){
+    var data = {};
+    var assignedid = TTS.utils.getUrlParameter('assignedid');
+    data.originaltext = $(".summernote").code();
+    data.answertext = $(".summernote").code();
+    data.answertype = $(".isaudio:checked").val();
+
+    if($("#filenamecreated").val()){
+        data.answerurl = $("#filenamecreated").val();
+    }else{
+        data.answerurl = '';
+    }
+
+    if(data.answertype == 'audio')
+        data.isrecord = 1;
+    else
+        data.isrecord = 0;
+
+    if(savesend == 'save')
+        data.issaved = 1;
+    else
+        data.issaved = 0;
+
+    if(savesend == 'send')
+        data.isanswered = 1;
+    else
+        data.isanswered = 0;
+
+    data.type = 1;
+
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        url:"/api/admin/studentassignresource/"+assignedid+"/",
+        type:"PUT",
+        data: data
+    }).done(function(data){
+        if(data.msg)
+            window.location = 'assignedresourcelist';
+    }).error(function(err, msg){
+        alert("I didnt save the data");
+    });
+}
+$(document).ready(function(){
+    $('.summernote').summernote({
+          toolbar: [
+            ['edit',['undo','redo']],
+            ['style', ['style']], // no style button
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            //['insert', ['picture', 'link']], // no insert buttons
+            //['table', ['table']], // no table button
+            //['help', ['help']] //no help button
+          ]
+    });
+    $('#recorder-wrap').hide();
+    $('#show-recorder').on("click",function(){
+        $('section.recorder-container').show();
+        $('#audio-player').show();
+    });
+    $('#hide-recorder').on("click",function(){
+        $('section.recorder-container').hide();
+        $('#audio-player').hide();
+    });
+
+    var assignedid = TTS.utils.getUrlParameter('assignedid');
+
+    $("#res-save").click(function(){
+        TTS.forms.ressave('save');
+    });
+    $("#res-send").click(function(){
+        TTS.forms.ressave('send');
+    });
+    $.ajax({
+        "url":"/api/admin/studentassignresource/"+assignedid+"/?format=json",
+        "type":"GET"
+    }).done(function(data){
+        TTS.forms.renderassignedresourceinfo(data);
+    });
+
+});
+</script>
+{% endblock scriptcontent %}

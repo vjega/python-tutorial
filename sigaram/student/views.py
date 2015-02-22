@@ -51,7 +51,7 @@ def home(request):
         {
         "color": u"green",
         "icon" : u"pencil",
-        "link" : u"viewassessments",
+        "link" : u"assignedassessmentlist",
         "caption": _("Exercises"),
         "stat": 125
         },
@@ -440,3 +440,13 @@ def billboardviewassignwrittenworkanswer(request):
 @switchlanguage
 def billboardviewassignmentanswer(request):
     return render(request, 'portalstudent/billboardviewassignresourceanswer.html') 
+
+@login_required
+@switchlanguage
+def assignedassessmentlist(request):
+    return render(request, 'portalstudent/assignedassessmentlist.html')
+
+@login_required
+@switchlanguage
+def viewassignassessment(request):
+    return render(request, 'portalstudent/viewassignassessment.html')

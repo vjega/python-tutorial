@@ -3856,3 +3856,165 @@ class StudentassignedresourceInfoViewSet(viewsets.ModelViewSet):
                 for row in cursor.fetchall()
             ]
         return Response(result)
+
+class studentAssessmentInfo(viewsets.ModelViewSet):
+    queryset = models.Assignassessmentinfo.objects.all()
+    serializer_class = adminserializers.AssignassessmentinfoSerializer
+
+    def update(self, request, pk=None):
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        
+        ari = models.Assignresourceinfo.objects.get(pk=pk)
+        
+        ari.answertext = summer_decode(unicode(data.get('answertext')))
+
+        if data.get('originaltext'):
+            ari.originaltext = summer_decode(unicode(data.get('originaltext')))
+
+        if data.get('answerurl'):
+            ari.answerurl = unicode(data.get('answerurl'))
+            ari.isrecord = 1
+
+        if data.get('isanswered'):
+            ari.isanswered = data.get('isanswered')
+            ari.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
+
+        if data.get('issaved'):
+            ari.issaved = data.get('issaved')
+        
+        ari.save()
+        if data.get('spanid'):
+            assignedid  = pk;
+            spanid      = summer_decode(data.get('spanid'));
+            fulltext    = summer_decode(data.get('fulltext'));
+            orig        = summer_decode(data.get('orig'));
+            modified    = summer_decode(data.get('modified'));
+            usertype    = data.get('type');
+            answertext  = summer_decode(data.get('answertext'));
+
+            ar = models.Editingtext()
+            ar.editid       = int(assignedid)
+            ar.spanid       = unicode(spanid)
+            ar.previoustext = unicode(orig)
+            ar.edittext     = unicode(modified)
+            ar.typeofresource = 0
+            ar.isapproved   = 0
+            ar.isrejected   = 0
+            ar.editedby     = request.user.username
+            ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
+            ar.usertype     = int(usertype)
+
+            ar.save()
+
+        aldata = {}
+        aldata['pagename']       = 'viewassignresource'
+        aldata['operation']      = 'Insert'
+        aldata['stringsentence'] = 'Answered For Resource'
+        add_activitylog(request, aldata)
+
+        return Response({'msg':True})
+
+    def list(self, request):
+
+        datecond = ''
+        if request.GET.get('fdate') and request.GET.get('tdate'):
+            datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+                request.GET.get('tdate'))
+        sql = '''
+        SELECT assignedid AS id,
+               ai.id as assessmentid,
+               ai.title,
+               ai.type,
+               date(assigneddate) as createddate,
+               aai.studentid,
+               aai.isanswered,
+               aai.issaved
+        FROM assignassessmentinfo aai
+        INNER JOIN assessmentinfo ai on ai.id = aai.assessmentid 
+        WHERE aai.studentid='%s'
+              %s
+        GROUP BY aai.assessmentid, aai.assigneddate
+        ORDER BY aai.assignedid DESC''' % (request.user.username, datecond)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+    def retrieve(self, request, pk=None):
+        sql = '''
+        SELECT assignedid AS id,
+               ri.resourceid,
+               ari.isrecord,
+               ari.answerurl,
+               ri.videourl,
+               resourcetitle,
+               date(assigneddate) as createddate,
+               resourcetype,
+               thumbnailurl,
+               ari.answertext,
+               ari.assigntext,
+               ari.studentid,
+               ari.isanswered,
+               ari.issaved,
+               ari.rubric_id,
+               ari.rubric_marks,
+               ari.rubric_n_mark
+        FROM assignresourceinfo ari
+        INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
+        WHERE assignedid = %s
+        ''' % pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
+        #print result
+        return Response(result)
+
+    def create(self, request):
+        data = json.loads(dict(request.DATA).keys()[0]);
+        students = data.get('students');
+        resource = data.get('resource');
+        rubricid = data.get('rubricid');
+        assigntext = summer_decode(data.get('assigntext'));
+
+        for r in resource:
+            for s in students:
+                
+                sql = """
+                DELETE FROM assignresourceinfo 
+                WHERE studentid='%s'
+                AND resourceid='%s'
+                """ % (str(s),int(r))
+
+                cursor = connection.cursor()
+                cursor.execute(sql)
+
+                ar = models.Assignresourceinfo()
+                ar.resourceid = int(r)
+                ar.studentid = str(s)
+                ar.assigntext = unicode(assigntext)
+                ar.isanswered = 0
+                ar.issaved = 0
+                ar.isrecord = 0
+                ar.answerrating = 0
+                ar.isbillboard = 0
+                ar.isclassroom = 0
+                ar.answereddate = '1910-01-01'
+                ar.assignedby = request.user.username
+                ar.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+                ar.isdelete = 0
+                ar.rubric_id = int(rubricid)
+                ar.old_edit = 0
+                ar.save()   
+        
+
+        aldata = {}
+        aldata['pagename']       = 'assignchapter'
+        aldata['operation']      = 'Insert'
+        aldata['stringsentence'] = 'New Resource Assigned to students'
+        add_activitylog(request, aldata)
+
+        return Response(request.DATA)
