@@ -428,10 +428,11 @@ TTS.forms.ressave = function(){
         alert("Select atleast one resource");
     }*/
     
-    var data        = {};
-    data.students   = [];
-    data.enddate    = $("#enddate").val();
-    data.note       = TTS.utils.summer_encode($(".summernote").code());
+    var data          = {};
+    data.students     = [];
+    data.enddate      = $("#enddate").val();
+    data.note         = TTS.utils.summer_encode($(".summernote").code());
+    data.assessmentid = TTS.utils.getUrlParameter('assessmentid');
 
     /*if($("#set_rubric_id").val()){
         data.rubricid = $("#set_rubric_id").val();
@@ -443,7 +444,8 @@ TTS.forms.ressave = function(){
 
     $("#sltStudentList>option").each(function(){
         data.students.push($(this).val());
-    })
+    });
+
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -452,7 +454,7 @@ TTS.forms.ressave = function(){
         type:"POST",
         data: JSON.stringify(data)
     }).done(function(data){
-        //console.log(data); return false;
+        console.log(data); return false;
         alert("Chapters assigned Successfully");
         location.reload();
     }).error(function(err, msg){
@@ -465,7 +467,6 @@ $(document).ready(function(){
     var section   = TTS.utils.getUrlParameter('section');
     var chapterid = TTS.utils.getUrlParameter('chapterid');
     var categoryid = TTS.utils.getUrlParameter('categoryid');
-
 
     $.ajax({
         "url":"/api/admin/adminschool/?format=json",

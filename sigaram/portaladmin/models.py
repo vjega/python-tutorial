@@ -222,8 +222,9 @@ class Assessmentlist(models.Model):
 
 
 class Assignassessmentinfo(models.Model):
-    assignid        = models.AutoField(primary_key=True)
+    assignedid      = models.AutoField(primary_key=True)
     assessmentid    = models.BigIntegerField()
+    note            = models.TextField()
     studentid       = models.CharField(max_length=500)
     enddate         = models.DateTimeField()
     isanswered      = models.IntegerField()

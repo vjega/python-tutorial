@@ -18,12 +18,28 @@
             <button class="btn btn-primary pull-right" id="addrec"><i class="fa fa-plus-square fa-lg"></i></button>
         </div>
         <!-- /.panel-heading -->
-            <div role="tabpanel" id="tabpanel">
-
-                  <table class="table table-striped table-bordered table-hover" id="admin-main-tbl">
-
-                  </table>
+        <div role="tabpanel" id="tabpanel">
+            <div role="tabpanel">
+              <!-- Nav tabs -->
+                <ul role="tablist" class="nav nav-tabs">
+                    <li class="active" role="presentation">
+                        <a data-toggle="tab" role="tab" aria-controls="new" href="#new" aria-expanded="true">{%trans "New" %}</a>
+                    </li>
+                    <li role="presentation" class="">
+                        <a data-toggle="tab" role="tab" aria-controls="completed" href="#completed" aria-expanded="false">{%trans "Completed" %}</a>
+                    </li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div id="new" class="tab-pane active" role="tabpanel">
+                        <table class="table table-striped table-bordered table-hover" id="new-assessments-tbl"></table>
+                    </div>
+                    <div id="completed" class="tab-pane" role="tabpanel">
+                        <table class="table table-striped table-bordered table-hover" id="shared-assessments-tbl"></table>
+                    </div>
+                </div>                    
             </div>
+        </div>
         <!-- /.panel-body -->
     </div>
     <!-- /.panel -->
@@ -35,7 +51,9 @@
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <style>
-    #addrec:hover, #admin-main-tbl tbody tr:hover{
+    #addrec:hover, 
+    #new-assessments-tbl tbody tr:hover, 
+    #shared-assessments-tbl tbody tr:hover{
         cursor: pointer;
     }
     #tabpanel{
@@ -124,7 +142,7 @@ TTS.forms.editschool = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#newfolderfrm");
-                console.log(data);
+                
                 $.ajax({
                     headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -168,18 +186,53 @@ TTS.forms.renderassessmentinfo = function(data){
         t.slno      = ++count;
         t.title     = data[i].title;
         t.type      = data[i].type;
-        t.date      = data[i].createddate;
-        t.assignment="<a href='javascript:void(0)' class='assignment' id='"+data[i].teacherresourceid+"' ><i class='fa fa-share fa-2x'></i></a>";
+        t.date      = TTS.utils.datetimeConv(data[i].createddate);
+        t.assignment= "<a href='javascript:void(0)' class='assignment' id='"+data[i].teacherresourceid+"' ><i class='fa fa-share fa-2x'></i></a>";
         t.action    = "<i class='fa fa-trash fa-lg tts-delete'></i>";
         dataset.push(t);
     }
 
-    $('#admin-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
+    $('#new-assessments-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });
 
 };
+
+TTS.forms.renderassignassessmentinfo = function(data){
+
+    var headers = [
+                    { "title": "{% trans "Sl No." %}",
+                      "class": "text-center",
+                      "data" : "slno"
+                    },
+                    { "title": "{% trans "Title" %}", "data" : "title"},
+                    { "title": "{% trans "Date" %}", "data" : "date"},
+                    { "title": "{% trans "Check" %}", "data" :"check",
+                                "bSortable":false, "class": "text-center" },
+                    { "title": "{% trans "Delete" %}", "data" : "action",
+                                "class": "text-center"}
+                ];
+    var dataset = [];
+    var count   = 0;
+    for(var i in data){
+        var t = [];
+        t.DT_RowId  = data[i].id;
+        t.slno      = ++count;
+        t.title     = data[i].title;
+        t.date      = TTS.utils.dateConv(data[i].createddate);
+        t.check     = "<a href='#'>{% trans 'Check' %}</a>";
+        t.action    = "<i class='fa fa-trash fa-lg tts-delete'></i>";
+        dataset.push(t);
+    }
+
+    $('#shared-assessments-tbl').dataTable({"language" : TTS.utils.datatable_ta,
+        "data":     dataset,
+        "columns":  headers
+    });
+
+};
+
 
 TTS.forms.delassessment = function(id) {
     $.ajax({
@@ -205,14 +258,23 @@ $(document).ready(function(){
     }).done(function(data){
         TTS.forms.renderassessmentinfo(data);
         //TTS.forms.renderteacherresourceinfo(data);
-        $("table#admin-main-tbl thead tr th").removeClass('sorting_asc');
+        $("table#new-assessments-tbl thead tr th").removeClass('sorting_asc');
+        TTS.utils.ajaxloaderstop();
+    });
+
+    $.ajax({
+        "url":"/api/admin/studentassignassessment/?format=json",
+        "type":"GET"
+    }).done(function(data){
+        TTS.forms.renderassignassessmentinfo(data);
+        $("table#shared-assessments-tbl thead tr th").removeClass('sorting_asc');
         TTS.utils.ajaxloaderstop();
     });
 
     $('body').on('click', 'tr', function(){
         window.location = 'viewassessmentqa?id='+this.id;
     });
-    $('#admin-main-tbl tbody tr').on('click', '.tts-edit', function(e){
+    $('#new-assessments-tbl tbody tr').on('click', '.tts-edit', function(e){
         e.stopPropagation();
         TTS.forms.editschool();
     });
@@ -228,7 +290,7 @@ $(document).ready(function(){
         TTS.forms.editschool();
     });
 
-    $('#admin-main-tbl').on('click', '.assignment',function(e){
+    $('#new-assessments-tbl').on('click', '.assignment',function(e){
         e.stopPropagation();
         var assessmentid = $(this).parent().parent().prop("id");
         window.location = 'assignassessment?assessmentid='+assessmentid;
