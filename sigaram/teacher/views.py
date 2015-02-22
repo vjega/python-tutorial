@@ -422,7 +422,7 @@ def statistics(request):
 @login_required
 @switchlanguage
 def statisticsstudentslist(request):
-    schools = models.Schoolinfo.objects.all()
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/statisticsstudentslist.html', 
                                         {'schools':schools, 'classes':classes, 

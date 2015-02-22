@@ -155,11 +155,24 @@
                             </li>
                         </ul>
                     </li>
-                    <!-- <li>
-                        <a class="active" href="statistics">
-                            <i class="fa fa-bar-chart fa-fw"></i>{% trans "Statistics" %}
+                    <li>
+                        <a class="active" href="#">
+                            <i class="fa fa-bar-chart-o fa-fw"></i>{% trans "Statistics" %}
+                            <span class="fa arrow"></span>
                         </a>
-                    </li>-->
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="statistics-activities">{% trans "Login" %} {% trans "Statistics" %}</a>
+                            </li>
+                            <li>
+                                <a href="statisticsstudentslist">{% trans "Assignment" %} {% trans "Statistics" %}</a>
+                            </li>
+                            <li>
+                                <a href="statistics-assessment">{% trans "Exercises" %} {% trans "Statistics" %}</a>
+                            </li>
+                        </ul>
+                    </li>
+                    
                     <li>
                         <a class="active" href="classroom">
                             <i class="fa fa-building fa-fw"></i>{% trans "Classrooms" %}
