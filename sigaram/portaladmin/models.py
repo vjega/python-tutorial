@@ -39,6 +39,8 @@ class Activitylog(models.Model):
         l =  request.user.groups.values_list('name',flat=True)[0]
         if l == 'Teacher' :
             fieldcond="WHERE al.loginid='%s'"%request.user.username
+        elif l == 'Student':
+            fieldcond="WHERE al.loginid='%s'"%request.user.username
         sql = """
         SELECT DISTINCT operation,
                 stringsentence,
