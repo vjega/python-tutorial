@@ -53,7 +53,6 @@ def home(request):
         "icon" : u"pencil",
         "link" : u"assignedassessmentlist",
         "caption": _("Exercises"),
-        "stat": 125
         },
         {
         "color": u"primary",

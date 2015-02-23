@@ -266,7 +266,8 @@ TTS.forms = TTS.forms || {};
         data: JSON.stringify(data),
         url : '/api/admin/richmindmap/'
     }).done(function( msg ) {
-        console.log(msg)
+        // console.log(msg)
+        console.log("Save Completed...")
     });
 }
 
@@ -283,22 +284,31 @@ TTS.forms = TTS.forms || {};
 }
 
 $(document).ready(function(){
-  TTS.forms.renderrichmindmap()
+  // TTS.forms.renderrichmindmap()
   $(".float-panel").hide()
   
+  /*
   $("#save_mindmap").click(function(){
     TTS.forms.addrichmindmap()
   });
+*/
 
- $("body").live("click","#save_mindmap",function(){
-    $(".float-panel").hide()
+ $("body").live("click","#button-SAVE_DOCUMENT_COMMAND",function(){
+    console.log(richmindmap.document.serialize());
+    // console.log("Deepak test");
+    //$(".float-panel").hide()
     //richmindmap.document.serialize()
-    //console.log(richmindmap.document.serialize());
     //var data = {}
     //data['mapdata'] = "my first value";
     TTS.forms.addrichmindmap(); 
  });
-
+/*
+  $("#button-SAVE_DOCUMENT_COMMAND").click(function(){
+    console.log("hai deepak")
+    console.log(richmindmap.document.serialize())
+    //TTS.forms.addrichmindmap()
+  });
+*/
 });
  </script>
  <script src="{% static "js/tts.utils.js" %}"></script>
