@@ -1193,6 +1193,7 @@ class AssessmentQAInfo(models.Model):
     question    = models.TextField()
     answer      = models.CharField(max_length=500)
     answeroption= models.TextField()
+    actualmark  = models.BigIntegerField()
 
     class Meta:
         managed = False

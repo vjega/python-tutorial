@@ -3549,9 +3549,10 @@ class AssessmentQAInfoViewSet(viewsets.ModelViewSet):
         assessmentqa = models.AssessmentQAInfo()
         aqadata =  json.loads(request.DATA.keys()[0])
         assessmentqa.assessmentid = aqadata.get('assessmentid')
-        assessmentqa.question     = aqadata.get('question')
+        assessmentqa.question     = summer_decode(aqadata.get('question'))
         assessmentqa.answer       = aqadata.get('answer')
-        assessmentqa.answeroption = aqadata.get('answeroption')        
+        assessmentqa.answeroption = aqadata.get('answeroption')
+        assessmentqa.actualmark   = aqadata.get('actualmark')
         assessmentqa.save()
         return Response(request.DATA)
 
