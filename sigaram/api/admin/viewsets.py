@@ -278,8 +278,20 @@ class studentViewSet(viewsets.ModelViewSet):
         aldata['operation']      = 'Update'
         aldata['stringsentence'] = 'Deleted a Student'
         add_activitylog(request, aldata)
-
         return Response('"msg":"delete"')
+
+    def retrieve(self, request, pk=None):
+        sql = '''
+        SELECT  studentid,
+                CONCAT(firstname,' ',lastname) AS name
+        FROM studentinfo
+        WHERE  username = '%s'
+        ''' % pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
+        return Response(result)
+
 
 class TeacherResourcesViewSet(viewsets.ModelViewSet):
     queryset = models.TeacherResources.objects.all()
@@ -3769,7 +3781,7 @@ class ActivityassignmentInfoViewSet(viewsets.ModelViewSet):
         SELECT  ri.resourceid,
                 ri.resourcetitle, 
                 date(ari.assigneddate) as assigneddate, 
-                avg( ari.answerrating ) as rating,
+                cast(ari.answerrating as decimal(10,2)) AS rating,
                 date(ari.answereddate) answereddate  
         FROM assignresourceinfo ari
         INNER JOIN resourceinfo ri ON ri.resourceid = ari.resourceid 
