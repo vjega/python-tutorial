@@ -178,7 +178,20 @@
         <div class="col-lg-10">
             <input type="text" class="form-control answeroption" name="answeroption" >
         </div>
-    </div>            
+    </div>
+    <div class="form-group">
+        <div class="col-lg-2">
+            <label>{% trans "Mark" %}:</label>
+        </div>
+        <div class="col-lg-10">
+            <select id="actualmark" name="actualmark">
+                <option value="">Select Mark</option>
+                {% for i in "xxxxxxxxxx" %}
+                    <option value="{{forloop.counter}}">{{forloop.counter}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
     <!-- div id="more-answer-option"></div>
     <div class="form-group">
         <div class="col-sm-2"></div>
@@ -215,7 +228,9 @@ TTS.forms.editschool = function() {
                     }
                 }).get().join(",");
                 answer = $('input[name=answer]:checked').parent().next().children().val(); 
+                data['question']     = TTS.utils.summer_encode(data['question']);
                 data['answeroption'] = answeroption;
+                data['actualmark']   = $("#actualmark").val();
                 data['assessmentid'] = TTS.utils.getUrlParameter('id');
                 data['answer']       = answer;
 
