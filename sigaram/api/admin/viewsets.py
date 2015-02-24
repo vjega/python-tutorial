@@ -1319,6 +1319,16 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         
         return Response(request.DATA)
 
+    def destroy(self, request, pk):
+        sql = '''
+            UPDATE assignresourceinfo
+                SET isDelete = 1
+            WHERE resourceid = '%s' ''' % (pk)
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        return Response('"msg":"delete"')
+
 class StickynotesResource(viewsets.ModelViewSet):
     queryset = models.stickynotes.objects.all()
     serializer_class = adminserializers.StickynotesSerializer
