@@ -1333,10 +1333,11 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
 
     def destroy(self, request, pk):
         sql = '''
-            UPDATE assignresourceinfo
-                SET isDelete = 1
-            WHERE resourceid = '%s' ''' % (pk)
-
+        UPDATE assignresourceinfo
+        SET isDelete = 1
+        WHERE resourceid = '%s'
+        AND assigneddate='%s' 
+        ''' % (pk,request.GET.get('createddate'))
         cursor = connection.cursor()
         cursor.execute(sql)
         return Response('"msg":"delete"')

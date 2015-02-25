@@ -152,12 +152,13 @@
 
 TTS.forms.delassignresource = function(id) {
     var resourceid = id.split("_");
+    var datetime = TTS.utils.timestamp_to_datetime(resourceid[1]);
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'DELETE',
-        url : '/api/admin/teacherassignedresource/'+resourceid[0]
+        url : '/api/admin/teacherassignedresource/'+resourceid[0]+'/?createddate='+datetime
     }).done(function( msg ) {
         location.reload();
     }).error(function(msg){
