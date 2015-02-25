@@ -271,7 +271,7 @@ $(document).ready(function(){
         TTS.utils.ajaxloaderstop();
     });
 
-    $('body').on('click', 'tr', function(){
+    $('body').on('click', 'tbody tr', function(){
         window.location = 'viewassessmentqa?id='+this.id;
     });
     $('#new-assessments-tbl tbody tr').on('click', '.tts-edit', function(e){

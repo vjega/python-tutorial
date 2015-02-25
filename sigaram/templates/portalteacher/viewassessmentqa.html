@@ -223,9 +223,7 @@ TTS.forms.editschool = function() {
                 var data    = $.parseJSON(TTS.utils.serilaizeJson("#newfolderfrm"));
                 var answer  = ''; 
                 var answeroption = $(".answeroption").map(function(idx) {
-                    if(idx > 0){
-                        return $(this).val();
-                    }
+                    return $(this).val();
                 }).get().join(",");
                 answer = $('input[name=answer]:checked').parent().next().children().val(); 
                 data['question']     = TTS.utils.summer_encode(data['question']);
@@ -233,7 +231,6 @@ TTS.forms.editschool = function() {
                 data['actualmark']   = $("#actualmark").val();
                 data['assessmentid'] = TTS.utils.getUrlParameter('id');
                 data['answer']       = answer;
-
                 $.ajax({
                     headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -291,7 +288,7 @@ TTS.forms.delassessment = function(id) {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'DELETE',
-        url : '/api/admin/assessmentinfo/'+id
+        url : '/api/admin/assessmentqainfo/'+id
     }).done(function(msg) {
         window.location.reload();
     }).error(function(msg){

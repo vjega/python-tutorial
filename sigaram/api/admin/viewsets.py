@@ -3340,6 +3340,7 @@ class AssessmentInfoViewSet(viewsets.ModelViewSet):
     def create(self, request):
         assessment = models.Assessmentinfo()
         cdata =  json.loads(request.DATA.keys()[0])
+        print cdata
         assessment.title        = cdata.get('title')
         assessment.instruction  = cdata.get('instruction')
         assessment.schoolid     = request.session.get('schoolid')
@@ -3557,7 +3558,7 @@ class AssessmentQAInfoViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def destroy(self, request, pk=None):
-        models.Assessmentinfo.objects.get(pk=pk).delete()
+        models.AssessmentQAInfo.objects.get(pk=pk).delete()
         return Response('"msg":"delete"')
 
 class StudentAssignAssessment(viewsets.ModelViewSet):
@@ -3946,32 +3947,37 @@ class studentAssessmentInfo(viewsets.ModelViewSet):
         return Response(result)
 
     def retrieve(self, request, pk=None):
+        
         sql = '''
         SELECT assignedid AS id,
-               ri.resourceid,
-               ari.isrecord,
-               ari.answerurl,
-               ri.videourl,
-               resourcetitle,
+               ai.id as assessmentid,
+               ai.title,
+               ai.type,
+               ai.instruction,
+               aai.note,
+               aqa.question,
+               aqa.answeroption,
+               aqa.actualmark,
                date(assigneddate) as createddate,
-               resourcetype,
-               thumbnailurl,
-               ari.answertext,
-               ari.assigntext,
-               ari.studentid,
-               ari.isanswered,
-               ari.issaved,
-               ari.rubric_id,
-               ari.rubric_marks,
-               ari.rubric_n_mark
-        FROM assignresourceinfo ari
-        INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
-        WHERE assignedid = %s
-        ''' % pk
+               aai.studentid,
+               aai.isanswered,
+               aai.issaved
+        FROM assignassessmentinfo aai
+        INNER JOIN assessmentinfo ai on ai.id = aai.assessmentid 
+        INNER JOIN assessmentqa aqa on aqa.assessmentid = aai.assessmentid 
+        WHERE aai.studentid='%s' AND aai.assignedid='%s'
+        GROUP BY aqa.id, aai.assigneddate
+        ORDER BY aai.assignedid DESC''' % (request.user.username, pk)
         cursor = connection.cursor()
         cursor.execute(sql)
-        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
-        #print result
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        cursor = connection.cursor()
+        cursor.execute(sql)
+
         return Response(result)
 
     def create(self, request):
