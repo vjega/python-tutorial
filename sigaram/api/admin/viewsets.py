@@ -552,6 +552,7 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
         ''' % (request.user.username,datecond)
         cursor = connection.cursor()
         cursor.execute(sql)
+        print sql;
         desc = cursor.description
         result =  [
                 dict(zip([col[0] for col in desc], row))
