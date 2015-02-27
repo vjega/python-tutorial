@@ -124,33 +124,16 @@ TTS.forms.ressave = function(savesend){
         data.answerurl = '';
     }
 
-    if(data.answertype == 'audio')
-        data.isrecord = 1;
-    else
-        data.isrecord = 0;
-
-    if(savesend == 'save')
-        data.issaved = 1;
-    else
-        data.issaved = 0;
-
-    if(savesend == 'send')
-        data.isanswered = 1;
-    else
-        data.isanswered = 0;
-
-    data.type = 1;
-
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
-        url:"/api/admin/studentassignresource/"+assignedid+"/",
+        url:"/api/admin/studentassessmentinfo/"+assignedid+"/",
         type:"PUT",
         data: data
     }).done(function(data){
         if(data.msg)
-            window.location = 'assignedresourcelist';
+            window.location = 'viewassignassessment';
     }).error(function(err, msg){
         alert("I didnt save the data");
     });

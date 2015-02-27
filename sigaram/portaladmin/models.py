@@ -231,8 +231,6 @@ class Assignassessmentinfo(models.Model):
     enddate         = models.DateTimeField()
     isanswered      = models.IntegerField()
     issaved         = models.IntegerField()
-    isbillboard     = models.IntegerField()
-    isclassroom     = models.IntegerField()
     assignedby      = models.CharField(max_length=500)
     assigneddate    = models.DateTimeField()
 
