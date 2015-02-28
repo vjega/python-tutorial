@@ -3975,6 +3975,7 @@ class studentAssessmentInfo(viewsets.ModelViewSet):
         sql = '''
         SELECT assignedid AS id,
                ai.id as assessmentid,
+               aqa.id as assessmentqaid,
                ai.title,
                ai.type,
                ai.instruction,

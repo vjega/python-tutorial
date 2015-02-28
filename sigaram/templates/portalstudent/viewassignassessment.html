@@ -101,9 +101,9 @@ TTS.forms.renderassignedassessmentinfo = function(data){
     var qaHTML = '';
     qaHTML += "<div class='row'>";
     $.each(data,function(idx,qtn){
-        qaHTML += "<div class='col-lg-12'><strong>"+(idx+1)+". "+qtn['question']+"</strong></div><div style='margin-bottom:10px;' class='col-lg-12'>";
+        qaHTML += "<div class='col-lg-12 question' id='"+qtn['assessmentqaid']+"'><strong>"+(idx+1)+". "+qtn['question']+"</strong></div><div style='margin-bottom:10px;' class='col-lg-12'>";
         $.each(qtn['answeroption'].split(","),function(idy,ans){
-            qaHTML += "<div class='col-lg-6'><input type='radio' name='answer_"+idx+"' value='"+ans+"'> "+ans+"</div>";
+            qaHTML += "<div class='col-lg-6'><input type='radio' name='answer_"+qtn['assessmentqaid']+"' value='"+ans+"'> "+ans+"</div>";
         });
         qaHTML += "</div>";
     });
@@ -114,15 +114,26 @@ TTS.forms.renderassignedassessmentinfo = function(data){
 TTS.forms.ressave = function(savesend){
     var data = {};
     var assignedid = TTS.utils.getUrlParameter('assignedid');
-    data.originaltext = $(".summernote").code();
-    data.answertext = $(".summernote").code();
-    data.answertype = $(".isaudio:checked").val();
+    $('.question').each(function() {
+        var name = $("#id").attr("name");
+        alert(id)
+        console.log($(this).prop("id"));
+        //console.log($(this).next().children().find('input').val());
+    });
+    
+    return false;
 
-    if($("#filenamecreated").val()){
-        data.answerurl = $("#filenamecreated").val();
-    }else{
-        data.answerurl = '';
-    }
+    if(savesend == 'save')
+        data.issaved = 1;
+    else
+        data.issaved = 0;
+
+    if(savesend == 'send')
+        data.isanswered = 1;
+    else
+        data.isanswered = 0;
+
+    //console.log(data);
 
     $.ajax({
         headers : {
@@ -174,7 +185,6 @@ $(document).ready(function(){
         "url":"/api/admin/studentassessmentinfo/"+assignedid+"/",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
         TTS.forms.renderassignedassessmentinfo(data);
     });
 
