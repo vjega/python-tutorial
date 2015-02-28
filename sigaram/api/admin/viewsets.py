@@ -3544,20 +3544,28 @@ class studentwrittenworkViewSet(viewsets.ModelViewSet):
 
 
 class MyProfileViewSet(viewsets.ModelViewSet):
-    queryset = models.Auth_user.objects.all()
-    serializer_class = adminserializers.Auth_userSerializer
+    queryset = models.Teacherinfo.objects.all()
+    serializer_class = adminserializers.TeacherinfoSerializer
     def list(self, request):
-        print request.user.id       
-        queryset = models.Auth_user.objects.filter(id=request.user.id)
-
-        serializer = adminserializers.Auth_userSerializer(queryset, many=True)
+        queryset = models.Teacherinfo.objects.filter(username=request.user.username)
+        #print queryset;
+        serializer = adminserializers.TeacherinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
 
     def update(self, request, pk=None):
-        teacher = models.Auth_user.objects.get(pk=pk)
-        teacher.password = teacherdata.get('password')
+        teacher = models.Teacherinfo.objects.get(pk=pk)
+        teacherdata =  json.loads(request.DATA.keys()[0])
+        teacher.firstname = teacherdata.get('firstname')
+        # teacher.lastname = teacherdata.get('lastname')
+        # teacher.password = teacherdata.get('password')
+        # teacher.firstname = teacherdata.get('firstname')
+        # teacher.schoolid = teacherdata.get('schoolid')
+        # teacher.imageurl = teacherdata.get('imageurl')
+        # teacher.classid = teacherdata.get('classid')
+        # teacher.emailid = teacherdata.get('emailid')
         teacher.save()
+
         return Response(request.DATA)
 
 class AssessmentQAInfoViewSet(viewsets.ModelViewSet):

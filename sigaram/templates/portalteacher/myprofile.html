@@ -51,88 +51,34 @@
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 
-TTS.forms.showadminform = function() {
-    BootstrapDialog.show({
-        title: 'Add Administrator',
-        message: $($('#admin-form').render()),
-        onshown: function(){
-            TTS.forms.upload();
-        },
-        buttons: [{
-            label: '{% trans "Save" %}',
-            cssClass: 'btn-primary',
-            action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-admin");
-                //console.log(data);
-                TTS.forms.addadmin(dialogItself, data); 
-            }
-            },{
-            label: '{% trans "Close" %}',
-            action: function(dlg){
-                dlg.close();
-            }
-        }]
-    });
-};
-
-TTS.forms.upload = function(elm) {
-    console.log(elm);
-    var uploader = new qq.FileUploader({
-        action: "/admin/admin-img-upload",
-        element: $('#file-uploader')[0],
-        multiple: false,
-        onComplete: function(id, fileName, responseJSON) {
-            if(responseJSON.success) {
-                $("#id_image").val(responseJSON.path.replace('static/', ''));
-            } else {
-                alert("upload failed!");
-            }
-        },
-        onAllComplete: function(uploads) {
-            // the maps look like this: {file: FileObject, response: JSONServerResponse}
-        },
-        params: {
-            'csrf_token': '{{ csrf_token }}',
-            'csrf_name': 'csrfmiddlewaretoken',
-            'csrf_xname': 'X-CSRFToken',
-        },
-    });
-};
-
 $(document).ready(function(){
-    //var upload =  TTS.forms.upload();
-   
-   $.ajax({
-        //"url":"/api/admin/logininfo/"+$("#admin_id").val()+"/?format=json",
+    $.ajax({
         "url":"/api/admin/myprofile/",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
-        $("#id_firstname").val(data[0].first_name);
-        $("#id_lastname").val(data[0].last_name);
-        $("#id_emailid").val(data[0].email);
-        $("#teacherid").val(data[0].id);
-        
+        $("#id_firstname").val(data[0].firstname);
+        $("#id_lastname").val(data[0].lastname);
+        $("#id_emailid").val(data[0].emailid);
+        $("#id_password").val(data[0].password);
+        $("#teacherid").val(data[0].username);
     });
 
-    $("#mybtn").click(function(){
+    $("#addrec").click(function(){
         var data = {
-            'password' : $("#input").val()
+            'firstname' : $("#id_firstname").val(),
+            'lastname' : $("#id_lastname").val(),
+            'emailid' : $("#id_emailid").val(),
+            'password' : $("#id_password").val()
         }       
-        var url="/api/admin/myprofile/"+$("#teacherid").val()+"/";
         $.ajax({
             headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
             },
              type:'PUT',
             data: JSON.stringify(data),
-            url:url
+            url:"/api/admin/myprofile/"
         }).done(function(data){
-            TTS.forms.upload();
         }); 
-    });
-    $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.showadminform();
     });
     //$("#id_firstname").prop("readonly",true);
 });
