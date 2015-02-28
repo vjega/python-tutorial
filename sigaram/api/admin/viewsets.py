@@ -3552,21 +3552,21 @@ class MyProfileViewSet(viewsets.ModelViewSet):
         serializer = adminserializers.TeacherinfoSerializer(queryset, many=True)
         return Response(serializer.data)
 
-
     def update(self, request, pk=None):
-        teacher = models.Teacherinfo.objects.get(pk=pk)
+        teacher = models.Teacherinfo.objects.get(username=pk)
         teacherdata =  json.loads(request.DATA.keys()[0])
         teacher.firstname = teacherdata.get('firstname')
-        # teacher.lastname = teacherdata.get('lastname')
-        # teacher.password = teacherdata.get('password')
-        # teacher.firstname = teacherdata.get('firstname')
-        # teacher.schoolid = teacherdata.get('schoolid')
-        # teacher.imageurl = teacherdata.get('imageurl')
-        # teacher.classid = teacherdata.get('classid')
-        # teacher.emailid = teacherdata.get('emailid')
+        teacher.lastname = teacherdata.get('lastname','')
+        teacher.password = teacherdata.get('password')
+        teacher.emailid = teacherdata.get('emailid')
+        teacher.imageurl = teacherdata.get('imageurl','')
         teacher.save()
 
-        return Response(request.DATA)
+        request.user.set_password(teacherdata.get('password'))
+        request.user.full_name =teacherdata.get('firstname')
+        request.user.save() 
+        
+        return Response('"msg":"updated"')
 
 class AssessmentQAInfoViewSet(viewsets.ModelViewSet):
     queryset = models.AssessmentQAInfo.objects.all()
