@@ -375,7 +375,7 @@ TTS.forms.renderanswereditinginfo = function(data, isapproved){
 TTS.forms.rating = function(rating){
     if(rating){
         $("#rating-input").parent().parent().remove();        
-        var ratingwidth = ((rating)*100+"%");
+        var ratingwidth = ((rating/5)*100+"%");
         var cn = '';
         var rv = '';
         $("#avgrating-input").prev().css("width", ratingwidth);
@@ -655,8 +655,6 @@ $(document).ready(function(){
             type:'PUT',
             url : '/api/admin/assignmentanswerrating/'+assignedid+'/?rating='+rating
         }).done(function(msg) {
-            console.log(msg);
-            return false;
             location.reload();
         });
     });
