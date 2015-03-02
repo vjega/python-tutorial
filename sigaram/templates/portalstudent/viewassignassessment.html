@@ -21,6 +21,7 @@
 {% endblock morescript %}
 
 {% block botcontent %}
+<input type="hidden" name="issaved" id="issaved">
 <div class="root">
     <div class="panel panel-default">
         <div class="panel-body">
@@ -91,10 +92,10 @@
 <script>
 
 window.TTS = window.TTS || {}
-TTS.forms = TTS.forms || {}   
-
+TTS.forms = TTS.forms || {}
 
 TTS.forms.renderassignedassessmentinfo = function(data){
+    $("#issaved").val(data[0].issaved);
     $("#title").html(data[0].title);
     $("#instruction").html(data[0].instruction);
     $("#note").html(data[0].note);
@@ -112,16 +113,22 @@ TTS.forms.renderassignedassessmentinfo = function(data){
 };
 
 TTS.forms.ressave = function(savesend){
+
     var data = {};
-    var assignedid = TTS.utils.getUrlParameter('assignedid');
-    $('.question').each(function() {
-        var name = $("#id").attr("name");
-        alert(id)
-        console.log($(this).prop("id"));
-        //console.log($(this).next().children().find('input').val());
+    var aqaidanswer = {};
+    var aqaid = '';
+    var answer = '';
+    assignedid = TTS.utils.getUrlParameter('assignedid');
+
+    $('.question').each(function(id,y) {
+        aqaid  = $(this).prop("id");
+        answer = $(this).next().children().find('input:checked').val();
+        aqaidanswer[aqaid] = answer;
     });
-    
-    return false;
+
+    data.aqaidanswer = aqaidanswer;
+
+    data.alreadysaved = $("#issaved").val();
 
     if(savesend == 'save')
         data.issaved = 1;
@@ -132,8 +139,9 @@ TTS.forms.ressave = function(savesend){
         data.isanswered = 1;
     else
         data.isanswered = 0;
-
-    //console.log(data);
+    
+    console.log(data);
+    
 
     $.ajax({
         headers : {
@@ -141,13 +149,13 @@ TTS.forms.ressave = function(savesend){
         },
         url:"/api/admin/studentassessmentinfo/"+assignedid+"/",
         type:"PUT",
-        data: data
+        data:JSON.stringify(data)
     }).done(function(data){
         if(data.msg)
-            window.location = 'viewassignassessment';
+            window.location = 'assignedassessmentlist';
     }).error(function(err, msg){
         alert("I didnt save the data");
-    });
+    }); 
 }
 $(document).ready(function(){
     $('.summernote').summernote({
