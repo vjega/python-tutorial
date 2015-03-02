@@ -3618,7 +3618,6 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
               %s
         GROUP BY aai.assessmentid, aai.assigneddate
         ORDER BY aai.assignedid DESC''' % (request.user.username, datecond)
-        print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
