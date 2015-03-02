@@ -281,17 +281,17 @@ class studentViewSet(viewsets.ModelViewSet):
         add_activitylog(request, aldata)
         return Response('"msg":"delete"')
 
-    # def retrieve(self, request, pk=None):
-    #     sql = '''
-    #     SELECT  studentid,
-    #             CONCAT(firstname,' ',lastname) AS name
-    #     FROM studentinfo
-    #     WHERE  username = '%s'
-    #     ''' % pk
-    #     cursor = connection.cursor()
-    #     cursor.execute(sql)
-    #     result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
-    #     return Response(result)
+    def retrieve(self, request, pk=None):
+        sql = '''
+        SELECT  studentid,
+                CONCAT(firstname,' ',lastname) AS name
+        FROM studentinfo
+        WHERE  username = '%s'
+        ''' % pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
+        return Response(result)
 
 
 class TeacherResourcesViewSet(viewsets.ModelViewSet):
@@ -4058,3 +4058,34 @@ class studentAssessmentInfo(viewsets.ModelViewSet):
         add_activitylog(request, aldata)
 
         return Response(request.DATA)
+
+class AssessmentstatisticsInfo(viewsets.ModelViewSet):
+    queryset = models.Assignassessmentinfo.objects.all()
+    serializer_class = adminserializers.AssignassessmentinfoSerializer
+
+    def list(self, request):
+        datecond = ''
+        if request.GET.get('fdate') and request.GET.get('tdate'):
+            datecond = "AND (ai.createddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+                request.GET.get('tdate'))
+
+        sql = '''
+        SELECT  aai.assessmentid,
+                ai.title,
+                aai.assigneddate,
+                aai.answereddate,
+                aai.totalmarks,
+                aai.totalactualmarks
+        FROM assignassessmentinfo aai
+        INNER JOIN assessmentinfo ai ON ai.id=aai.assessmentid
+        WHERE aai.studentid='%s'
+        %s
+        ''' %(request.GET.get('studentid'), datecond)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
