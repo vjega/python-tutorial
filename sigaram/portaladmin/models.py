@@ -1198,3 +1198,13 @@ class AssessmentQAInfo(models.Model):
     class Meta:
         managed = False
         db_table= 'assessmentqa'
+
+class AssignAssessmentQAInfo(models.Model):
+    id              = models.AutoField(primary_key=True)
+    assessmentqaid  = models.BigIntegerField()
+    answer          = models.CharField(max_length=500)
+    assessmentid    = models.BigIntegerField()
+
+    class Meta:
+        managed = False
+        db_table= 'assignassessmentqainfo'
