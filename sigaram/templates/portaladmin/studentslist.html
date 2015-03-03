@@ -181,7 +181,7 @@ TTS.forms.showstudentform = function() {
 };
 
 
-TTS.forms.editstudent = function(id, data) {
+TTS.forms.editstudent = function(id, data, username) {
     BootstrapDialog.show({
         title: '{% trans "Edit Student" %}',
         message: $($('#student-form').render()),
@@ -190,6 +190,7 @@ TTS.forms.editstudent = function(id, data) {
             $("#add-student").find("input,select").each(function(){
                 $(this).val(data[this['name']]);
             });
+            $('#id_username').prop('readonly', true);
             $.ajax({
                 "url":"/api/admin/adminschool/?format=json",
                 'type':'GET'
@@ -212,7 +213,7 @@ TTS.forms.editstudent = function(id, data) {
                     },
                     type:'PUT',
                     data: data,
-                    url : '/api/admin/student/'+id
+                    url : '/api/admin/student/'+id+'/?username='+username
                 }).done(function( msg ) {
                     dialogItself.close();
                     location.reload();
@@ -276,7 +277,7 @@ TTS.forms.renderstudentlist = function(data){
         t.name = data[i].firstname + " "+data[i].lastname;
         //t.username = data[i].username;
         t.emailid = data[i].emailid;
-        t.edit = "<i class='tts-edit fa fa-pencil fa-lg'></i>";
+        t.edit = "<i class='tts-edit fa fa-pencil fa-lg' id='"+data[i].username+"'></i>";
         t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
@@ -366,11 +367,12 @@ $(document).ready(function(){
     $('#student-main-tbl').on('click', '.tts-edit', function(e){
         e.stopPropagation();
         var id = $(this).parent().parent().prop('id');
+        var username = $(this).prop('id');
         $.ajax({
             url: '/api/admin/student/'+id,
             type: 'GET'
         }).done(function(data){
-            TTS.forms.editstudent(id,data);
+            TTS.forms.editstudent(id,data,username);
         })
     });
     $('#student-main-tbl').on('click', '.tts-delete', function(e){

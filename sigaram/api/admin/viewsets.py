@@ -248,6 +248,7 @@ class studentViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
+        print dir(request)
         student = models.Studentinfo.objects.get(pk=pk)
         studentdata =  json.loads(request.DATA.keys()[0])
         student.username = studentdata.get('username')
@@ -260,6 +261,20 @@ class studentViewSet(viewsets.ModelViewSet):
         student.imageurl = studentdata.get('imageurl')
         student.save()
 
+        authuser = models.Auth_user.objects.get(username=studentdata.get('username'))
+        authuserdata =  json.loads(request.DATA.keys()[0])
+        authuser.password = authuserdata.get('password')
+        authuser.first_name = authuserdata.get('firstname')
+        authuser.emailid = authuserdata.get('emailid')
+        authuser.save()
+
+        # auth = models.Auth_user.objects.get()
+        # authdata =  json.loads(request.DATA.keys()[0])
+        # auth.last_name = authdata.get('lastname')
+        # auth.password = authdata.get('password')
+        # auth.first_name = authdata.get('firstname')
+        # auth.save() 
+       
         aldata = {}
         aldata['pagename']       = 'studentlist'
         aldata['operation']      = 'Update'
@@ -276,7 +291,7 @@ class studentViewSet(viewsets.ModelViewSet):
         
         aldata = {}
         aldata['pagename']       = 'studentlist'
-        aldata['operation']      = 'Update'
+        aldata['operation']      = 'Delete'
         aldata['stringsentence'] = 'Deleted a Student'
         add_activitylog(request, aldata)
         return Response('"msg":"delete"')
