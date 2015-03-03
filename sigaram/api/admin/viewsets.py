@@ -281,17 +281,17 @@ class studentViewSet(viewsets.ModelViewSet):
         add_activitylog(request, aldata)
         return Response('"msg":"delete"')
 
-    def retrieve(self, request, pk=None):
-        sql = '''
-        SELECT  studentid,
-                CONCAT(firstname,' ',lastname) AS name
-        FROM studentinfo
-        WHERE  username = '%s'
-        ''' % pk
-        cursor = connection.cursor()
-        cursor.execute(sql)
-        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
-        return Response(result)
+    # def retrieve(self, request, pk=None):
+    #     sql = '''
+    #     SELECT  studentid,
+    #             CONCAT(firstname,' ',lastname) AS name
+    #     FROM studentinfo
+    #     WHERE  username = '%s'
+    #     ''' % pk
+    #     cursor = connection.cursor()
+    #     cursor.execute(sql)
+    #     result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
+    #     return Response(result)
 
 
 class TeacherResourcesViewSet(viewsets.ModelViewSet):
