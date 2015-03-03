@@ -289,17 +289,6 @@ class studentViewSet(viewsets.ModelViewSet):
         add_activitylog(request, aldata)
         return Response('"msg":"delete"')
 
-    # def retrieve(self, request, pk=None):
-    #     sql = '''
-    #     SELECT  studentid,
-    #             CONCAT(firstname,' ',lastname) AS name
-    #     FROM studentinfo
-    #     WHERE  username = '%s'
-    #     ''' % pk
-    #     cursor = connection.cursor()
-    #     cursor.execute(sql)
-    #     result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
-    #     return Response(result)
 
 
 class TeacherResourcesViewSet(viewsets.ModelViewSet):
@@ -4089,4 +4078,20 @@ class AssessmentstatisticsInfo(viewsets.ModelViewSet):
                 dict(zip([col[0] for col in desc], row))
                 for row in cursor.fetchall()
             ]
+        return Response(result)
+
+class StatisticsstudentInfo(viewsets.ModelViewSet):
+    queryset = models.Studentinfo.objects.filter(isdelete=0)
+    serializer_class = adminserializers.StudentinfoSerializer
+    
+    def retrieve(self, request, pk=None):
+        sql = '''
+        SELECT  studentid,
+                CONCAT(firstname,' ',lastname) AS name
+        FROM studentinfo
+        WHERE  username = '%s'
+        ''' % pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
         return Response(result)
