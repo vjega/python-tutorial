@@ -3891,83 +3891,41 @@ class StudentassignedresourceInfoViewSet(viewsets.ModelViewSet):
             ]
         return Response(result)
 
-class studentAssessmentInfo(viewsets.ModelViewSet):
+class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
     queryset = models.Assignassessmentinfo.objects.all()
     serializer_class = adminserializers.AssignassessmentinfoSerializer
 
     def update(self, request, pk=None):
         data = {k:v[0] for k, v in dict(request.DATA).items()}
-
         aai = models.Assignassessmentinfo.objects.get(pk=pk)
         aaidata =  json.loads(request.DATA.keys()[0])
-
+        
         if aaidata.get('issaved'):
             aai.issaved = aaidata.get('issaved')
         if aaidata.get('isanswerd'):
-            aai.isanswerd = aaidata.get('issaved')
+            aai.isanswerd    = aaidata.get('issaved')
+        aai.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
         aai.save()
 
         if aaidata.get('alreadysaved'):
-            for k, v in dict(aaidata.get('aqaidanswer')).items():
-                aaid = models.AssignAssessmentQAInfo()
-                aaid.assessmentqaid = int(k)
-                aaid.assessmentid   = int(pk)
-                aaid.answer         = str(v)
-                aaid.save()
+            models.AssignAssessmentQAInfo.objects.get(assignassessmentid=pk).delete()
 
-        else:
-            for k, v in dict(aaidata.get('aqaidanswer')).items():
-                aaid = models.AssignAssessmentQAInfo.objects.get(pk=pk)
-                aaid.assessmentqaid = int(k)
-                aaid.assessmentid   = int(pk)
-                aaid.answer         = str(v)
-                aaid.save()
+        for k, v in dict(aaidata.get('aqaidanswer')).items():
+            aaid = models.AssignAssessmentQAInfo()
+            aaid.assessmentqaid     = int(k)
+            aaid.assessmentid       = int(pk)
+            aaid.assignassessmentid = int(pk)
+            aaid.answer             = str(v)
+            aaied.save()
+
         
-        # ari.answertext = summer_decode(unicode(data.get('answertext')))
+            
 
-        # if data.get('originaltext'):
-        #     ari.originaltext = summer_decode(unicode(data.get('originaltext')))
-
-        # if data.get('answerurl'):
-        #     ari.answerurl = unicode(data.get('answerurl'))
-        #     ari.isrecord = 1
-
-        # if data.get('isanswered'):
-        #     ari.isanswered = data.get('isanswered')
-        #     ari.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
-
-        # if data.get('issaved'):
-        #     ari.issaved = data.get('issaved')
-        
-        # ari.save()
-        # if data.get('spanid'):
-        #     assignedid  = pk;
-        #     spanid      = summer_decode(data.get('spanid'));
-        #     fulltext    = summer_decode(data.get('fulltext'));
-        #     orig        = summer_decode(data.get('orig'));
-        #     modified    = summer_decode(data.get('modified'));
-        #     usertype    = data.get('type');
-        #     answertext  = summer_decode(data.get('answertext'));
-
-        #     ar = models.Editingtext()
-        #     ar.editid       = int(assignedid)
-        #     ar.spanid       = unicode(spanid)
-        #     ar.previoustext = unicode(orig)
-        #     ar.edittext     = unicode(modified)
-        #     ar.typeofresource = 0
-        #     ar.isapproved   = 0
-        #     ar.isrejected   = 0
-        #     ar.editedby     = request.user.username
-        #     ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
-        #     ar.usertype     = int(usertype)
-
-        #     ar.save()
-
-        # aldata = {}
-        # aldata['pagename']       = 'viewassignresource'
-        # aldata['operation']      = 'Insert'
-        # aldata['stringsentence'] = 'Answered For Resource'
-        # add_activitylog(request, aldata)
+        aldata = {}
+        aldata['pagename']       = 'viewassignassessment'
+        aldata['operation']      = 'Insert'
+        aldata['stringsentence'] = 'Answered For Assessment'
+        add_activitylog(request, aldata)
 
         return Response({'msg':True})
 
@@ -3982,7 +3940,8 @@ class studentAssessmentInfo(viewsets.ModelViewSet):
                ai.id as assessmentid,
                ai.title,
                ai.type,
-               date(assigneddate) as createddate,
+               ai.createddate,
+               aai.assigneddate,
                aai.studentid,
                aai.isanswered,
                aai.issaved
@@ -4014,7 +3973,7 @@ class studentAssessmentInfo(viewsets.ModelViewSet):
                aqa.question,
                aqa.answeroption,
                aqa.actualmark,
-               date(assigneddate) as createddate,
+               assigneddate as createddate,
                aai.studentid,
                aai.isanswered,
                aai.issaved

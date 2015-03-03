@@ -121,6 +121,7 @@ TTS.utils.datetimeConv = function(dtstring){
 
 TTS.utils.datetimeConvDate = function(dtstring){
     //2015-02-05T13:34:26Z
+    alert(dtstring);
     var t = dtstring.split('T');
     var d = t[0].split('-')
     return d[2] +'-'+ d[1] +'-'+d[0]; 
