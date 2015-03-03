@@ -3578,9 +3578,9 @@ class MyProfileViewSet(viewsets.ModelViewSet):
         teacher.imageurl = teacherdata.get('imageurl','')
         teacher.save()
 
-        request.user.set_password(teacherdata.get('password'))
-        request.user.full_name =teacherdata.get('firstname')
-        request.user.save() 
+        # request.user.set_password(teacherdata.get('password'))
+        # request.user.full_name =teacherdata.get('firstname')
+        # request.user.save() 
         
         return Response('"msg":"updated"')
 
