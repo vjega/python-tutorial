@@ -101,11 +101,17 @@ TTS.forms.renderassignedassessmentinfo = function(data){
     $("#instruction").html(data[0].instruction);
     $("#note").html(data[0].note);
     var qaHTML = '';
+    var savedanswer = '';
     qaHTML += "<div class='row'>";
     $.each(data,function(idx,qtn){
         qaHTML += "<div class='col-lg-12 question' id='"+qtn['assessmentqaid']+"'><strong>"+(idx+1)+". "+qtn['question']+"</strong></div><div style='margin-bottom:10px;' class='col-lg-12'>";
         $.each(qtn['answeroption'].split(","),function(idy,ans){
-            qaHTML += "<div class='col-lg-6'><input type='radio' name='answer_"+qtn['assessmentqaid']+"' value='"+ans+"'> "+ans+"</div>";
+            if(qtn['answer'] == ans){
+                savedanswer = "checked='checked'";
+            }else{
+                savedanswer = "";
+            }  
+            qaHTML += "<div class='col-lg-6'><input "+savedanswer+" type='radio' name='answer_"+qtn['assessmentqaid']+"' value='"+ans+"'> "+ans+"</div>";
         });
         qaHTML += "</div>";
     });

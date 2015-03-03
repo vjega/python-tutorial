@@ -3917,13 +3917,21 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
         
         if aaidata.get('issaved'):
             aai.issaved = aaidata.get('issaved')
-        if aaidata.get('isanswerd'):
-            aai.isanswerd    = aaidata.get('issaved')
+
+        if aaidata.get('isanswered'):
+            aai.isanswered = aaidata.get('isanswered')
+
         aai.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
         aai.save()
 
         if aaidata.get('alreadysaved'):
-            models.AssignAssessmentQAInfo.objects.get(assignassessmentid=pk).delete()
+            sql = """
+                DELETE FROM assignassessmentqainfo 
+                WHERE assessmentid='%s'
+                """ % (int(pk))
+
+            cursor = connection.cursor()
+            cursor.execute(sql)
 
         for k, v in dict(aaidata.get('aqaidanswer')).items():
             aaid = models.AssignAssessmentQAInfo()
@@ -3931,54 +3939,7 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
             aaid.assessmentid       = int(pk)
             aaid.assignassessmentid = int(pk)
             aaid.answer             = str(v)
-            aaied.save()
-
-        aldata = {}
-        aldata['pagename']       = 'viewassignassessment'
-        aldata['operation']      = 'Insert'
-        aldata['stringsentence'] = 'Answered For Assessment'
-        
-        ari = models.Assignresourceinfo.objects.get(pk=pk)
-        
-        ari.answertext = summer_decode(unicode(data.get('answertext')))
-
-        if data.get('originaltext'):
-            ari.originaltext = summer_decode(unicode(data.get('originaltext')))
-
-        if data.get('answerurl'):
-            ari.answerurl = unicode(data.get('answerurl'))
-            ari.isrecord = 1
-
-        if data.get('isanswered'):
-            ari.isanswered = data.get('isanswered')
-            ari.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
-
-        if data.get('issaved'):
-            ari.issaved = data.get('issaved')
-        
-        ari.save()
-        if data.get('spanid'):
-            assignedid  = pk;
-            spanid      = summer_decode(data.get('spanid'));
-            fulltext    = summer_decode(data.get('fulltext'));
-            orig        = summer_decode(data.get('orig'));
-            modified    = summer_decode(data.get('modified'));
-            usertype    = data.get('type');
-            answertext  = summer_decode(data.get('answertext'));
-
-            ar = models.Editingtext()
-            ar.editid       = int(assignedid)
-            ar.spanid       = unicode(spanid)
-            ar.previoustext = unicode(orig)
-            ar.edittext     = unicode(modified)
-            ar.typeofresource = 0
-            ar.isapproved   = 0
-            ar.isrejected   = 0
-            ar.editedby     = request.user.username
-            ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
-            ar.usertype     = int(usertype)
-
-            ar.save()
+            aaid.save()
 
         aldata = {}
         aldata['pagename']       = 'viewassignresource'
@@ -4001,6 +3962,7 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
                ai.type,
                ai.createddate,
                aai.assigneddate,
+               aai.answereddate,
                aai.studentid,
                aai.isanswered,
                aai.issaved
@@ -4026,6 +3988,7 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
                ai.id as assessmentid,
                aqa.id as assessmentqaid,
                ai.title,
+               aaqai.answer,
                ai.type,
                ai.instruction,
                aai.note,
@@ -4039,9 +4002,13 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
         FROM assignassessmentinfo aai
         INNER JOIN assessmentinfo ai on ai.id = aai.assessmentid 
         INNER JOIN assessmentqa aqa on aqa.assessmentid = aai.assessmentid 
+        INNER JOIN assignassessmentqainfo aaqai on aaqai.assessmentqaid = aqa.id
         WHERE aai.studentid='%s' AND aai.assignedid='%s'
         GROUP BY aqa.id, aai.assigneddate
         ORDER BY aai.assignedid DESC''' % (request.user.username, pk)
+
+        print sql
+
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description

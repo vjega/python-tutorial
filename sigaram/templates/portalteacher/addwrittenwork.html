@@ -92,8 +92,10 @@
             </div>
             <div align="center" class="panel-footer">
                 <!--button class="btn btn-success btn-sm" id="save"><i class="fa fa-floppy-o fa-lg"></i> {% trans "Save" %}</button-->
-                <button class="btn btn-success btn-sm" id="res-send"><i class="fa fa-share fa-lg"></i> {% trans "Send" %}</button>
-                
+                <button class="btn btn-success btn-sm" id="res-send">
+                    <i class="fa fa-share fa-lg"></i> 
+                    {% trans "Send" %}
+                </button>
             </div>
             <!-- /.panel-body -->
         </div>
@@ -249,9 +251,8 @@ TTS.forms.assessmentassigninglist = function() {
                             $("#sltStudentList").append('<option value="'+id+'">'+name+'</option>'); 
                         }   
                     });
-
+                    
                 }
-
             }
             },{
             label: '{% trans "Close" %}',
