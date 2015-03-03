@@ -255,6 +255,7 @@ class studentViewSet(viewsets.ModelViewSet):
         student.password = studentdata.get('password')
         student.firstname = studentdata.get('firstname')
         student.schoolid = studentdata.get('schoolid')
+        student.classid = studentdata.get('classid')
         student.emailid = studentdata.get('emailid')
         student.imageurl = studentdata.get('imageurl')
         student.save()
@@ -3617,7 +3618,6 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
               %s
         GROUP BY aai.assessmentid, aai.assigneddate
         ORDER BY aai.assignedid DESC''' % (request.user.username, datecond)
-        print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -3918,13 +3918,57 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
             aaid.answer             = str(v)
             aaied.save()
 
-        
-            
-
         aldata = {}
         aldata['pagename']       = 'viewassignassessment'
         aldata['operation']      = 'Insert'
         aldata['stringsentence'] = 'Answered For Assessment'
+        
+        ari = models.Assignresourceinfo.objects.get(pk=pk)
+        
+        ari.answertext = summer_decode(unicode(data.get('answertext')))
+
+        if data.get('originaltext'):
+            ari.originaltext = summer_decode(unicode(data.get('originaltext')))
+
+        if data.get('answerurl'):
+            ari.answerurl = unicode(data.get('answerurl'))
+            ari.isrecord = 1
+
+        if data.get('isanswered'):
+            ari.isanswered = data.get('isanswered')
+            ari.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
+
+        if data.get('issaved'):
+            ari.issaved = data.get('issaved')
+        
+        ari.save()
+        if data.get('spanid'):
+            assignedid  = pk;
+            spanid      = summer_decode(data.get('spanid'));
+            fulltext    = summer_decode(data.get('fulltext'));
+            orig        = summer_decode(data.get('orig'));
+            modified    = summer_decode(data.get('modified'));
+            usertype    = data.get('type');
+            answertext  = summer_decode(data.get('answertext'));
+
+            ar = models.Editingtext()
+            ar.editid       = int(assignedid)
+            ar.spanid       = unicode(spanid)
+            ar.previoustext = unicode(orig)
+            ar.edittext     = unicode(modified)
+            ar.typeofresource = 0
+            ar.isapproved   = 0
+            ar.isrejected   = 0
+            ar.editedby     = request.user.username
+            ar.editeddate   = time.strftime('%Y-%m-%d %H:%M:%S')
+            ar.usertype     = int(usertype)
+
+            ar.save()
+
+        aldata = {}
+        aldata['pagename']       = 'viewassignresource'
+        aldata['operation']      = 'Insert'
+        aldata['stringsentence'] = 'Answered For Resource'
         add_activitylog(request, aldata)
 
         return Response({'msg':True})
@@ -4040,3 +4084,34 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
         add_activitylog(request, aldata)
 
         return Response(request.DATA)
+
+class AssessmentstatisticsInfo(viewsets.ModelViewSet):
+    queryset = models.Assignassessmentinfo.objects.all()
+    serializer_class = adminserializers.AssignassessmentinfoSerializer
+
+    def list(self, request):
+        datecond = ''
+        if request.GET.get('fdate') and request.GET.get('tdate'):
+            datecond = "AND (ai.createddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+                request.GET.get('tdate'))
+
+        sql = '''
+        SELECT  aai.assessmentid,
+                ai.title,
+                aai.assigneddate,
+                aai.answereddate,
+                aai.totalmarks,
+                aai.totalactualmarks
+        FROM assignassessmentinfo aai
+        INNER JOIN assessmentinfo ai ON ai.id=aai.assessmentid
+        WHERE aai.studentid='%s'
+        %s
+        ''' %(request.GET.get('studentid'), datecond)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)

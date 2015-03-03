@@ -117,5 +117,7 @@ urlpatterns = patterns('teacher.views',
     url(r'^assignmentstatistics$', 'assignmentstatistics', 
                                                          name="assignmentstatistics"),
     url(r'^statistics-activities$',     'statistics',   name='statistics'),
-    url(r'^statistics-excercise$',     'statisticsexcercise',   name='statisticsexcercise'),
+    url(r'^statistics-excercise$',      'statisticsexcercise',   name='statisticsexcercise'),
+    url(r'^assessmentstatistics$',      'assessmentstatistics',     
+                                                        name="assessmentstatistics"),
 )

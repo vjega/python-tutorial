@@ -64,7 +64,7 @@ router.register(r'activityassignment',    	viewsets.ActivityassignmentInfoViewSe
 router.register(r'studentassignedresource', viewsets.StudentassignedresourceInfoViewSet)
 router.register(r'assignmentanswerrating',  viewsets.AssignmentRatingViewSet)
 router.register(r'activityassessment', 		viewsets.ActivityassessmentInfoViewSet)
-router.register(r'studentassessmentinfo', 	viewsets.studentAssessmentInfoViewSet)
+router.register(r'assessmentstatistics', 	viewsets.AssessmentstatisticsInfo)
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))

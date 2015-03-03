@@ -686,3 +686,8 @@ def statisticsexcercise(request):
     schools = models.Schoolinfo.objects.all().order_by('schoolname')
     classes = models.Classinfo.objects.all()
     return render(request, 'portalteacher/statisticsexcercise.html',{'schools':schools,'classes':classes})
+
+@login_required
+@switchlanguage
+def assessmentstatistics(request):
+    return render(request, 'portalteacher/assessmentstatistics.html')
