@@ -175,7 +175,7 @@
                 t.DT_RowId = "vaa_"+data[i].resourceid+"_"+data[i].studentid;
                 t.slno=++count_answered;
                 t.title=data[i].title;
-                t.date=data[i].answereddate;
+                t.date=TTS.utils.datetimeConv(data[i].answereddate);
                 t.type=data[i].type;
                 dataset_answered.push(t);
             }
