@@ -261,20 +261,13 @@ class studentViewSet(viewsets.ModelViewSet):
         student.imageurl = studentdata.get('imageurl')
         student.save()
 
-        authuser = models.Auth_user.objects.get(username=studentdata.get('username'))
-        authuserdata =  json.loads(request.DATA.keys()[0])
-        authuser.password = authuserdata.get('password')
-        authuser.first_name = authuserdata.get('firstname')
-        authuser.emailid = authuserdata.get('emailid')
-        authuser.save()
+        # authuser = models.Auth_user.objects.get(username=studentdata.get('username'))
+        # authuserdata =  json.loads(request.DATA.keys()[0])
+        # authuser.password = User.set_password(authuserdata.get('password'))
+        # authuser.first_name = authuserdata.get('firstname')
+        # authuser.emailid = authuserdata.get('emailid')
+        # authuser.save()
 
-        # auth = models.Auth_user.objects.get()
-        # authdata =  json.loads(request.DATA.keys()[0])
-        # auth.last_name = authdata.get('lastname')
-        # auth.password = authdata.get('password')
-        # auth.first_name = authdata.get('firstname')
-        # auth.save() 
-       
         aldata = {}
         aldata['pagename']       = 'studentlist'
         aldata['operation']      = 'Update'
@@ -3578,9 +3571,9 @@ class MyProfileViewSet(viewsets.ModelViewSet):
         teacher.imageurl = teacherdata.get('imageurl','')
         teacher.save()
 
-        # request.user.set_password(teacherdata.get('password'))
-        # request.user.full_name =teacherdata.get('firstname')
-        # request.user.save() 
+        request.user.set_password(teacherdata.get('password'))
+        request.user.full_name =teacherdata.get('firstname')
+        request.user.save() 
         
         return Response('"msg":"updated"')
 
