@@ -192,7 +192,7 @@ TTS.forms.editstudent = function(id, data) {
             });
             $.ajax({
                 "url":"/api/admin/adminschool/?format=json",
-                'type':'PUT'
+                'type':'GET'
             }).done(function(data){
                 $.each(data, function(idx,val){
                     $("#id_schoolid").append('<option value="'+val['schoolid']+'">'+val['schoolname']+'</option>');
