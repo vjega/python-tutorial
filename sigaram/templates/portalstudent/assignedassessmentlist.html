@@ -147,6 +147,9 @@
         var count_new = 0
         var count_saved = 0
         var count_answered = 0
+
+        console.log(data);
+
         for(var i in data){
            
             if (!data[i].issaved && !data[i].isanswered) {
@@ -154,7 +157,7 @@
                 t.DT_RowId = "var_"+data[i].id;
                 t.slno=++count_new;
                 t.title=data[i].title;
-                t.date=TTS.utils.datetimeConvDate(data[i].createddate);
+                t.date=TTS.utils.datetimeConv(data[i].createddate);
                 t.type=data[i].type;
                 dataset_new.push(t);
             }
@@ -163,7 +166,7 @@
                 t.DT_RowId = "var_"+data[i].id;
                 t.slno=++count_saved;
                 t.title=data[i].title;
-                t.date=TTS.utils.datetimeConvDate(data[i].answereddate);
+                t.date=TTS.utils.datetimeConv(data[i].createddate);
                 t.type=data[i].type;
                 dataset_saved.push(t);
             }
@@ -172,7 +175,7 @@
                 t.DT_RowId = "vaa_"+data[i].resourceid+"_"+data[i].studentid;
                 t.slno=++count_answered;
                 t.title=data[i].title;
-                t.date=TTS.utils.datetimeConvDate(data[i].answereddate);
+                t.date=data[i].answereddate;
                 t.type=data[i].type;
                 dataset_answered.push(t);
             }

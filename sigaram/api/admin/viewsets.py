@@ -3891,12 +3891,37 @@ class StudentassignedresourceInfoViewSet(viewsets.ModelViewSet):
             ]
         return Response(result)
 
-class studentAssessmentInfo(viewsets.ModelViewSet):
+class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
     queryset = models.Assignassessmentinfo.objects.all()
     serializer_class = adminserializers.AssignassessmentinfoSerializer
 
     def update(self, request, pk=None):
         data = {k:v[0] for k, v in dict(request.DATA).items()}
+        aai = models.Assignassessmentinfo.objects.get(pk=pk)
+        aaidata =  json.loads(request.DATA.keys()[0])
+        
+        if aaidata.get('issaved'):
+            aai.issaved = aaidata.get('issaved')
+        if aaidata.get('isanswerd'):
+            aai.isanswerd    = aaidata.get('issaved')
+        aai.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        aai.save()
+
+        if aaidata.get('alreadysaved'):
+            models.AssignAssessmentQAInfo.objects.get(assignassessmentid=pk).delete()
+
+        for k, v in dict(aaidata.get('aqaidanswer')).items():
+            aaid = models.AssignAssessmentQAInfo()
+            aaid.assessmentqaid     = int(k)
+            aaid.assessmentid       = int(pk)
+            aaid.assignassessmentid = int(pk)
+            aaid.answer             = str(v)
+            aaied.save()
+
+        aldata = {}
+        aldata['pagename']       = 'viewassignassessment'
+        aldata['operation']      = 'Insert'
+        aldata['stringsentence'] = 'Answered For Assessment'
         
         ari = models.Assignresourceinfo.objects.get(pk=pk)
         
@@ -3959,7 +3984,8 @@ class studentAssessmentInfo(viewsets.ModelViewSet):
                ai.id as assessmentid,
                ai.title,
                ai.type,
-               date(assigneddate) as createddate,
+               ai.createddate,
+               aai.assigneddate,
                aai.studentid,
                aai.isanswered,
                aai.issaved
@@ -3991,7 +4017,7 @@ class studentAssessmentInfo(viewsets.ModelViewSet):
                aqa.question,
                aqa.answeroption,
                aqa.actualmark,
-               date(assigneddate) as createddate,
+               assigneddate as createddate,
                aai.studentid,
                aai.isanswered,
                aai.issaved

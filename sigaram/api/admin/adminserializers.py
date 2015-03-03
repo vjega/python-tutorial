@@ -287,5 +287,5 @@ class AssignassessmentinfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Assignassessmentinfo
         fields = ('assignedid', 'assessmentid', 'studentid', 'enddate', 'isanswered',
-                  'issaved', 'assignedby', 'assigneddate',
-                  'note')
+                  'issaved', 'assignedby', 'assigneddate', 'note', 'answereddate', 
+                  'totalmarks', 'totalactualmarks')

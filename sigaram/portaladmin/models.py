@@ -233,6 +233,9 @@ class Assignassessmentinfo(models.Model):
     issaved         = models.IntegerField()
     assignedby      = models.CharField(max_length=500)
     assigneddate    = models.DateTimeField()
+    answereddate    = models.DateTimeField()
+    totalmarks      = models.BigIntegerField()
+    totalactualmarks= models.BigIntegerField()
 
     class Meta:
         managed = False
@@ -1200,10 +1203,11 @@ class AssessmentQAInfo(models.Model):
         db_table= 'assessmentqa'
 
 class AssignAssessmentQAInfo(models.Model):
-    id              = models.AutoField(primary_key=True)
-    assessmentqaid  = models.BigIntegerField()
-    answer          = models.CharField(max_length=500)
-    assessmentid    = models.BigIntegerField()
+    id                  = models.AutoField(primary_key=True)
+    assessmentqaid      = models.BigIntegerField()
+    answer              = models.CharField(max_length=500)
+    assessmentid        = models.BigIntegerField()
+    assignassessmentid  = models.BigIntegerField()
 
     class Meta:
         managed = False
