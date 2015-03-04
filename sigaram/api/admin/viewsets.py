@@ -259,6 +259,7 @@ class studentViewSet(viewsets.ModelViewSet):
         student.classid = studentdata.get('classid')
         student.emailid = studentdata.get('emailid')
         student.imageurl = studentdata.get('imageurl')
+        student.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         student.save()
 
         # authuser = models.Auth_user.objects.get(username=studentdata.get('username'))
