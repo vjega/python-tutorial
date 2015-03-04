@@ -153,7 +153,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
         var t = {};
         t.slno= ++count;
         t.DT_RowId = data[i].resourceid;
-        var temp = data[i].imageurl || data[i].audiourl || data[i].videourl;
+        var temp = data[i].documenturl || data[i].imageurl || data[i].audiourl || data[i].videourl;
         if (temp) {
             temp = "/static/"+temp;
         } else {

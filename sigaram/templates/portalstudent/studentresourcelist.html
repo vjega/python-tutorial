@@ -127,7 +127,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
     for(var i in data){
         var t = [];
         t.push(++count);
-        var temp = data[i].imageurl || data[i].audiourl || data[i].videourl;
+        var temp = data[i].documenturl || data[i].imageurl || data[i].audiourl || data[i].videourl;
         if (temp) {
             temp = "/static/"+temp;
         } else {
