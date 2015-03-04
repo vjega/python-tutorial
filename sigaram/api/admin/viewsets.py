@@ -261,20 +261,13 @@ class studentViewSet(viewsets.ModelViewSet):
         student.imageurl = studentdata.get('imageurl')
         student.save()
 
-        authuser = models.Auth_user.objects.get(username=studentdata.get('username'))
-        authuserdata =  json.loads(request.DATA.keys()[0])
-        authuser.password = authuserdata.get('password')
-        authuser.first_name = authuserdata.get('firstname')
-        authuser.emailid = authuserdata.get('emailid')
-        authuser.save()
+        # authuser = models.Auth_user.objects.get(username=studentdata.get('username'))
+        # authuserdata =  json.loads(request.DATA.keys()[0])
+        # authuser.password = User.set_password(authuserdata.get('password'))
+        # authuser.first_name = authuserdata.get('firstname')
+        # authuser.emailid = authuserdata.get('emailid')
+        # authuser.save()
 
-        # auth = models.Auth_user.objects.get()
-        # authdata =  json.loads(request.DATA.keys()[0])
-        # auth.last_name = authdata.get('lastname')
-        # auth.password = authdata.get('password')
-        # auth.first_name = authdata.get('firstname')
-        # auth.save() 
-       
         aldata = {}
         aldata['pagename']       = 'studentlist'
         aldata['operation']      = 'Update'
@@ -296,17 +289,6 @@ class studentViewSet(viewsets.ModelViewSet):
         add_activitylog(request, aldata)
         return Response('"msg":"delete"')
 
-    # def retrieve(self, request, pk=None):
-    #     sql = '''
-    #     SELECT  studentid,
-    #             CONCAT(firstname,' ',lastname) AS name
-    #     FROM studentinfo
-    #     WHERE  username = '%s'
-    #     ''' % pk
-    #     cursor = connection.cursor()
-    #     cursor.execute(sql)
-    #     result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
-    #     return Response(result)
 
 
 class TeacherResourcesViewSet(viewsets.ModelViewSet):
@@ -4096,4 +4078,20 @@ class AssessmentstatisticsInfo(viewsets.ModelViewSet):
                 dict(zip([col[0] for col in desc], row))
                 for row in cursor.fetchall()
             ]
+        return Response(result)
+
+class StatisticsstudentInfo(viewsets.ModelViewSet):
+    queryset = models.Studentinfo.objects.filter(isdelete=0)
+    serializer_class = adminserializers.StudentinfoSerializer
+    
+    def retrieve(self, request, pk=None):
+        sql = '''
+        SELECT  studentid,
+                CONCAT(firstname,' ',lastname) AS name
+        FROM studentinfo
+        WHERE  username = '%s'
+        ''' % pk
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
         return Response(result)
