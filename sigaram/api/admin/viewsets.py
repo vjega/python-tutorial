@@ -3687,7 +3687,7 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
             ar.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
             ar.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
             ar.totalmarks      = 0
-            totalactualmarks= 0
+            ar.totalactualmarks= 0
             ar.save()   
 
         aldata = {}
