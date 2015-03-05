@@ -206,22 +206,29 @@ TTS.forms.renderassignassessmentinfo = function(data){
                       "class": "text-center",
                       "data" : "slno"
                     },
-                    { "title": "{% trans "Title" %}", "data" : "title"},
-                    { "title": "{% trans "Date" %}", "data" : "date"},
-                    { "title": "{% trans "Check" %}", "data" :"check",
-                                "bSortable":false, "class": "text-center" },
-                    { "title": "{% trans "Delete" %}", "data" : "action",
-                                "class": "text-center"}
+                    { "title": "{% trans "Title" %}", 
+                      "data" : "title"},
+                    { "title": "{% trans "Date" %}", 
+                      "data" : "date"
+                    },
+                    { "title": "{% trans "Check" %}",
+                      "data" :"check",
+                      "bSortable":false, "class": "text-center" 
+                    },
+                    { "title": "{% trans "Delete" %}",
+                      "data" : "action",
+                      "class": "text-center"
+                    }
                 ];
     var dataset = [];
     var count   = 0;
     for(var i in data){
         var t = [];
-        t.DT_RowId  = data[i].id;
+        t.DT_RowId  = data[i].assessmentid;
         t.slno      = ++count;
         t.title     = data[i].title;
         t.date      = TTS.utils.dateConv(data[i].createddate);
-        t.check     = "<a href='#'>{% trans 'Check' %}</a>";
+        t.check     = "<i class='tts-view' id="+data[i].id+">{% trans 'Check' %}</i>";
         t.action    = "<i class='fa fa-trash fa-lg tts-delete'></i>";
         dataset.push(t);
     }
@@ -271,7 +278,7 @@ $(document).ready(function(){
         TTS.utils.ajaxloaderstop();
     });
 
-    $('body').on('click', 'tbody tr', function(){
+    $('#new-assessments-tbl').on('click', 'tbody tr', function(){
         window.location = 'viewassessmentqa?id='+this.id;
     });
     $('#new-assessments-tbl tbody tr').on('click', '.tts-edit', function(e){
@@ -288,6 +295,9 @@ $(document).ready(function(){
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.editschool();
+    });
+    $('#shared-assessments-tbl').on('click', 'tbody tr', function(){
+        window.location = 'viewassessmentinfo?id='+this.id;
     });
 
     $('#new-assessments-tbl').on('click', '.assignment',function(e){

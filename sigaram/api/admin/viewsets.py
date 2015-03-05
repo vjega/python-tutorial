@@ -3615,6 +3615,8 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
               %s
         GROUP BY aai.assessmentid, aai.assigneddate
         ORDER BY aai.assignedid DESC''' % (request.user.username, datecond)
+
+
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -3649,6 +3651,7 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
         ''' % pk
         cursor = connection.cursor()
         cursor.execute(sql)
+        print sql
         result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
         #print result
         return Response(result)
@@ -3683,7 +3686,7 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
             ar.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
             ar.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
             ar.totalmarks      = 0
-            ar.totalactualmarks= 0
+            totalactualmarks= 0
             ar.save()   
 
         aldata = {}
@@ -3987,7 +3990,7 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
         FROM assignassessmentinfo aai
         INNER JOIN assessmentinfo ai on ai.id = aai.assessmentid 
         INNER JOIN assessmentqa aqa on aqa.assessmentid = aai.assessmentid 
-        INNER JOIN assignassessmentqainfo aaqai on aaqai.assessmentqaid = aqa.id
+        LEFT JOIN assignassessmentqainfo aaqai on aaqai.assessmentqaid = aqa.id
         WHERE aai.studentid='%s' AND aai.assignedid='%s'
         GROUP BY aqa.id, aai.assigneddate
         ORDER BY aai.assignedid DESC''' % (request.user.username, pk)
@@ -4097,4 +4100,74 @@ class StatisticsstudentInfo(viewsets.ModelViewSet):
         cursor = connection.cursor()
         cursor.execute(sql)
         result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
+        return Response(result)
+
+class ViewassignassessmentInfo(viewsets.ModelViewSet):
+    queryset = models.Assignassessmentinfo.objects.all()
+    serializer_class = adminserializers.AssignassessmentinfoSerializer
+    
+    def list(self, request):
+        sql = '''
+        SELECT  aai.assessmentid,
+                aai.studentid,
+                aai.enddate,
+                aai.assignedby,
+                aai.note,
+                aai.answereddate,
+                aai.totalmarks,
+                aai.totalactualmarks,
+        aai.isanswered,
+        aai.issaved,
+        au.first_name AS firstname,
+        au.last_name AS lastname
+        FROM assignassessmentinfo aai
+        INNER JOIN auth_user au ON au.username=aai.studentid 
+        WHERE assessmentid=%s
+        ''' %request.GET.get('assessmentid')
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+    def retrieve(self, request, pk=None):
+        studentid=""
+        if request.GET.get('studentid'):
+            studentid="AND aai.studentid='%s'" % request.GET.get('studentid')
+        sql='''
+        SELECT assignedid AS id,
+               ai.id as assessmentid,
+               aqa.id as assessmentqaid,
+               ai.title,
+               aaqai.answer,
+               ai.type,
+               ai.instruction,
+               aai.note,
+               aqa.question,
+               aqa.answeroption,
+               aqa.actualmark,
+               assigneddate as createddate,
+               aai.studentid,
+               aai.isanswered,
+               aai.issaved
+        FROM assignassessmentinfo aai
+        INNER JOIN assessmentinfo ai on ai.id = aai.assessmentid 
+        INNER JOIN assessmentqa aqa on aqa.assessmentid = aai.assessmentid 
+        LEFT JOIN assignassessmentqainfo aaqai on aaqai.assessmentqaid = aqa.id
+        WHERE aai.assessmentid='%s'
+        %s
+        GROUP BY aqa.id, aai.assigneddate
+        ORDER BY aai.assignedid DESC
+        '''%(pk, studentid)
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
         return Response(result)

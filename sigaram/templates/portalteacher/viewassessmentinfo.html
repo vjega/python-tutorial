@@ -1,0 +1,172 @@
+{% extends 'portalteacher/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block topcontent %}
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Assignment" %}</h2>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+{% endblock topcontent %}
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<style>
+    #addrec:hover, #admin-main-tbl tbody tr:hover, #view-answer:hover{
+        cursor: pointer;
+    }
+    .text_area{
+        width:70%;
+        height:50px;
+    }
+    .str-example{
+        font-size: 16px;   
+    }
+    .cred{
+        color: red;
+    }
+    .cgreen{
+        color: green;
+    }
+    .cyellow{
+        color: yellow;
+    }
+</style>
+{% endblock morecss %}
+
+{% block morescript %}
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+
+<!-- script-->
+<script type="text/javascript" src="{% static "bower_components/local-audio-recorder-master/demo/swfobject.js" %}"></script>
+{% endblock morescript %}
+
+{% block botcontent %}
+<div class="col-lg-12">
+    <div class="panel panel-default">
+               <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover"
+                     id="admin-main-tbl">
+                <div>
+                    <h3>{% trans "Title" %}:</h3>
+                </div><br />
+                <div id="resource-title"></div><br />
+                <div id="view-resource"></div>
+                </table>
+            </div>
+            <!-- <div class="row">
+                <div class="col-lg-12 str-example">
+                    <div class="col-lg-6"></div>
+                    <div class="col-lg-2"><i class="fa fa-star fa-lg cred"></i></div>
+                    <div class="col-lg-2"><i class="fa fa-star fa-lg cgreen"></i></div>
+                    <div class="col-lg-2"><i class="fa fa-star fa-lg cyellow"></i></div>
+                </div>
+            </div> -->
+            <!-- /.table-responsive -->
+             <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-hover" 
+                        id="studentlist">
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+<!-- /.col-lg-12 -->
+{% endblock botcontent%}
+
+
+{% block scriptcontent %}
+
+<script>
+
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}   
+
+
+TTS.forms.renderassignedresourceinfo = function(data){
+    $("#resource-title").html(data.title);
+    $("#view-resource").html("<a href='#' onclick=\"TTS.forms.openwindow('"+data.videourl+"');\" >{% trans 'View' %}</a>");
+};
+
+TTS.forms.openwindow = function(videourl) {
+    window.open("../static/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
+};
+
+$(document).ready(function(){
+    var assessmentid = TTS.utils.getUrlParameter('id');
+    $.ajax({
+        "url":"/api/admin/viewassignassessment/"+assessmentid+"/",
+        "type":"GET"
+    }).done(function(data){
+        //console.log(data);
+        TTS.forms.renderassignedresourceinfo(data);
+    });
+    $.ajax({
+        "url":"/api/admin/viewassignassessment/?assessmentid="+assessmentid+"&format=json",
+        "type":"GET"
+    }).done(function(data){
+        TTS.forms.renderstudentlist(data);
+    });
+    $("#studentlist").on("click", ".cgreen", function(){
+        var studentid = $(this).parent().parent().prop("id");
+        window.location = 'viewassessmentanswer?assessmentid='+assessmentid+'&studentid='+studentid;
+    });
+});
+
+
+TTS.forms.renderstudentlist = function(data){
+    var headers = [
+            { "title": "{% trans "Sl No." %}",
+              "class": "text-center",
+              "data" : "slno"  
+            },
+            { "title": "{% trans "Name" %}",
+              "data" : "name"  
+            },
+            { "title": "{% trans "Note" %}",
+              "class": "text-center",
+              "data" : "note"  
+            },
+        ];
+    var dataset = [];
+    
+    var count = 0;
+    for(var i in data){
+        var t = [];
+        t.DT_RowId = data[i].studentid;
+        t.slno = ++count;
+        t.name = data[i].firstname + " "+data[i].lastname;
+        if (!data[i].issaved && !data[i].isanswered) 
+            t.note = "<i class=\"fa fa-star fa-lg cred\"></i>" ;
+        if (data[i].issaved && !data[i].isanswered) 
+            t.note = "<i class=\"fa fa-star fa-lg cyellow\"></i>" ;
+        if (data[i].isanswered) 
+            t.note = "<i id=\"view-answer\" class=\"fa fa-star fa-lg cgreen\"></i>" ;
+        
+        dataset.push(t);
+    }
+
+    TTS.forms.table = $('#studentlist').dataTable({"language" : TTS.utils.datatable_ta,
+        "data":     dataset,
+        "columns":  headers
+    });
+}
+
+</script>
+
+{% endblock scriptcontent %}

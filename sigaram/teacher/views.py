@@ -691,3 +691,13 @@ def statisticsexcercise(request):
 @switchlanguage
 def assessmentstatistics(request):
     return render(request, 'portalteacher/assessmentstatistics.html')
+
+@login_required
+@switchlanguage
+def viewassessmentanswer(request):
+    return render(request, 'portalteacher/viewassessmentanswer.html')
+
+@login_required
+@switchlanguage
+def viewassessmentinfo(request):
+    return render(request, 'portalteacher/viewassessmentinfo.html')
