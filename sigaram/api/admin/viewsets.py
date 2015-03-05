@@ -3675,19 +3675,19 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
             cursor.execute(sql)
 
             ar = models.Assignassessmentinfo()
-            ar.studentid    = str(s)
-            ar.assessmentid = int(assessmentid)
-            ar.note         = str(note)
-            ar.isanswered   = 0
-            ar.issaved      = 0
-            ar.isbillboard  = 0
-            ar.isclassroom  = 0
-            ar.enddate      = enddate
-            ar.assignedby   = str(request.user.username)
-            ar.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
-            ar.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
-            ar.totalmarks      = 0
-            totalactualmarks= 0
+            ar.studentid     = str(s)
+            ar.assessmentid  = int(assessmentid)
+            ar.note          = str(note)
+            ar.isanswered    = 0
+            ar.issaved       = 0
+            ar.isbillboard   = 0
+            ar.isclassroom   = 0
+            ar.enddate       = enddate
+            ar.assignedby    = str(request.user.username)
+            ar.assigneddate  = time.strftime('%Y-%m-%d %H:%M:%S')
+            ar.answereddate  = time.strftime('%Y-%m-%d %H:%M:%S')
+            ar.totalmarks    = 0
+            totalactualmarks = 0
             ar.save()   
 
         aldata = {}

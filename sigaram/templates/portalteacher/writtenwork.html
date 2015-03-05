@@ -118,6 +118,7 @@ $('#fromdate,#tilldate').datetimepicker({
 {% block scriptcontent %}
 
 <script>
+
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 
@@ -154,7 +155,7 @@ TTS.forms.writtenworklist = function(data){
             t.DT_RowId  = "var_"+data[i].writtenworkid;
             t.slno      = ++count_new;
             t.title     = data[i].writtenworktitle;
-            t.date      = TTS.utils.datetimeConvDate(data[i].createddate);
+            t.date      = TTS.utils.datetimeConv(data[i].createddate);
             t.del    = "<i class='fa fa-trash fa-lg ww-delete'></i>"
             dataset_new.push(t);
         }
@@ -163,7 +164,7 @@ TTS.forms.writtenworklist = function(data){
             t.DT_RowId  = "var_"+data[i].writtenworkid;
             t.slno      = ++count_saved;
             t.title     = data[i].writtenworktitle;
-            t.date      = TTS.utils.datetimeConvDate(data[i].answereddate);
+            t.date      = TTS.utils.datetimeConv(data[i].answereddate);
             t.del    = "<i class='fa fa-trash fa-lg ww-delete'></i>"
             dataset_saved.push(t);
         }
@@ -246,7 +247,6 @@ TTS.forms.delwrittenwork = function(id) {
 
 
 $(document).ready(function(){
-
     TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":"/api/admin/writtenworkinfo/?format=json",
