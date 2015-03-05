@@ -39,11 +39,6 @@
             </div>
             <div id="note"></div><br />
             <div id="question-answer"></div><br />
-            <div class="form-group">
-                <button class="btn btn-success btn-lg" id="res-save">{% trans 'Save' %}</button>
-                <button class="btn btn-success btn-lg" id="res-send">{% trans 'Send' %}</button>
-            </div>    
-
         </div>
         <!-- /.panel-body -->
     </div>
@@ -111,7 +106,7 @@ TTS.forms.renderassignedassessmentinfo = function(data){
             }else{
                 savedanswer = "";
             }  
-            qaHTML += "<div class='col-lg-6'><input "+savedanswer+" type='radio' name='answer_"+qtn['assessmentqaid']+"' value='"+ans+"'> "+ans+"</div>";
+            qaHTML += "<div class='col-lg-6'><input disabled "+savedanswer+" type='radio' name='answer_"+qtn['assessmentqaid']+"' value='"+ans+"'> "+ans+"</div>";
         });
         qaHTML += "</div>";
     });

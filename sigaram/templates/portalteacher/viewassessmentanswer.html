@@ -111,7 +111,7 @@ TTS.forms.renderassignedassessmentinfo = function(data){
             }else{
                 savedanswer = "";
             }  
-            qaHTML += "<div class='col-lg-6'><input "+savedanswer+" type='radio' name='answer_"+qtn['assessmentqaid']+"' value='"+ans+"'> "+ans+"</div>";
+            qaHTML += "<div class='col-lg-6'><input disabled "+savedanswer+" type='radio' name='answer_"+qtn['assessmentqaid']+"' value='"+ans+"'> "+ans+"</div>";
         });
         qaHTML += "</div>";
     });
