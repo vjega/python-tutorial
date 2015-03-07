@@ -138,7 +138,7 @@ TTS.forms.renderstudentnotes = function(data){
         var t = [];
         t.slno = ++count;
         t.title = data[i].notestitle;
-        t.date = TTS.utils.datetimeConv(data[i].createddate);
+        t.date = TTS.utils.datetimeConvDate(data[i].createddate);
         t.notes = data[i].notes;
         t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);

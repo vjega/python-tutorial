@@ -131,8 +131,8 @@ TTS.forms.assignedstudentresource = function(data){
         t.DT_RowId = data[i].studentid;
         t.slno=++count;
         t.title=data[i].title;
-        t.assigndate=TTS.utils.datetimeConv(data[i].assigneddate);
-        t.answerdate=TTS.utils.dateConv(data[i].answereddate);
+        t.assigndate=TTS.utils.datetimeConvDate(data[i].assigneddate);
+        t.answerdate=TTS.utils.datetimeConvDate(data[i].answereddate);
         t.rating=data[i].totalmarks+'/'+data[i].totalactualmarks;
         dataset.push(t);
     }

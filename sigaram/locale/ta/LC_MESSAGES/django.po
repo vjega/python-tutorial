@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-22 10:30+0000\n"
+"POT-Creation-Date: 2015-03-07 03:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,7 +46,7 @@ msgstr ""
 #: templates/portaladmin/myresourcelist.html:150
 #: templates/portaladmin/newtopic.html:17
 #: templates/portaladmin/rubrics.html:71
-#: templates/portaladmin/stickynotes.html:21
+#: templates/portaladmin/stickynotes.html:24
 #: templates/portaladmin/stickynoteslist.html:138
 #: templates/portaladmin/studentassignedresourcelist.html:62
 #: templates/portaladmin/studentresourcelist.html:162
@@ -61,6 +61,7 @@ msgstr ""
 #: templates/portaladmin/viewstudentwork.html:23
 #: templates/portaladmin/viewteacherres.html:90
 #: templates/portaladmin/viewteacherresource.html:23
+#: templates/portalstudent/assignedassessmentlist.html:132
 #: templates/portalstudent/assignedresourcelist.html:132
 #: templates/portalstudent/billboard.html:69
 #: templates/portalstudent/billboardviewassignresourceanswer.html:100
@@ -72,7 +73,7 @@ msgstr ""
 #: templates/portalstudent/classviewassignmentanswer.html:558
 #: templates/portalstudent/classviewassignwrittenworkanswer.html:90
 #: templates/portalstudent/newtopic.html:17
-#: templates/portalstudent/stickynotes.html:21
+#: templates/portalstudent/stickynotes.html:24
 #: templates/portalstudent/stickynoteslist.html:123
 #: templates/portalstudent/studentassignedresourcelist.html:63
 #: templates/portalstudent/studentnoteslist.html:118
@@ -81,6 +82,8 @@ msgstr ""
 #: templates/portalstudent/studentviewmindmap.html:128
 #: templates/portalstudent/studentviewwork.html:23
 #: templates/portalstudent/studentwrittenwork.html:132
+#: templates/portalstudent/viewassessmentanswer.html:30
+#: templates/portalstudent/viewassignassessment.html:30
 #: templates/portalstudent/viewassignmentanswer.html:91
 #: templates/portalstudent/viewassignmindmap.html:35
 #: templates/portalstudent/viewassignmindmapanswer.html:35
@@ -96,14 +99,16 @@ msgstr ""
 #: templates/portalstudent/worklistinfo.html:118
 #: templates/portalteacher/addteachershare.html:45
 #: templates/portalteacher/addwrittenwork.html:49
-#: templates/portalteacher/addwrittenwork.html:362
-#: templates/portalteacher/assignassessment.html:376
-#: templates/portalteacher/assignassessment.html:405
+#: templates/portalteacher/addwrittenwork.html:363
+#: templates/portalteacher/assessmentstatistics.html:114
+#: templates/portalteacher/assignassessment.html:374
+#: templates/portalteacher/assignassessment.html:403
 #: templates/portalteacher/assignchapter.html:377
 #: templates/portalteacher/assignchapter.html:406
+#: templates/portalteacher/assignedassessmentlist.html:132
 #: templates/portalteacher/assignedmindmaplist.html:111
 #: templates/portalteacher/assignedresourcelist.html:114
-#: templates/portalteacher/assignmentstatistics.html:111
+#: templates/portalteacher/assignmentstatistics.html:114
 #: templates/portalteacher/assignmindmap.html:336
 #: templates/portalteacher/assignresource.html:332
 #: templates/portalteacher/billboard.html:64
@@ -125,15 +130,17 @@ msgstr ""
 #: templates/portalteacher/resource_units.html:70
 #: templates/portalteacher/resourcelist.html:121
 #: templates/portalteacher/rubrics.html:71
-#: templates/portalteacher/stickynotes.html:21
+#: templates/portalteacher/stickynotes.html:24
 #: templates/portalteacher/stickynoteslist.html:141
 #: templates/portalteacher/studentassignedresourcelist.html:64
 #: templates/portalteacher/studentmindmaplist.html:85
 #: templates/portalteacher/studentresourcelist.html:139
 #: templates/portalteacher/studentresourceunits.html:83
+#: templates/portalteacher/viewassessmentanswer.html:30
+#: templates/portalteacher/viewassessmentinfo.html:60
 #: templates/portalteacher/viewassessments.html:100
-#: templates/portalteacher/viewassessments.html:173
-#: templates/portalteacher/viewassessments.html:209
+#: templates/portalteacher/viewassessments.html:172
+#: templates/portalteacher/viewassessments.html:208
 #: templates/portalteacher/viewassignmentanswer.html:102
 #: templates/portalteacher/viewassignmindmapanswer.html:34
 #: templates/portalteacher/viewassignresource.html:60
@@ -148,7 +155,7 @@ msgstr ""
 #: templates/portalteacher/viewresourcelist.html:22
 #: templates/portalteacher/viewstudentresource.html:23
 #: templates/portalteacher/viewteacherresource.html:23
-#: templates/portalteacher/writtenwork.html:135
+#: templates/portalteacher/writtenwork.html:133
 msgid "Title"
 msgstr "தலைப்பு"
 
@@ -163,444 +170,6 @@ msgstr "தலைப்பு"
 #: templates/portalteacher/assignresource.html:48
 msgid "Heading"
 msgstr "தலைப்பு"
-
-#: portaladmin/forms/AdminForm.py:7 portaladmin/forms/AdminForm.py:10
-#: portaladmin/forms/ChapterInfoForm.py:10 portaladmin/forms/StudentForm.py:31
-#: portaladmin/forms/StudentForm.py:34 portaladmin/forms/TeacherForm.py:30
-#: portaladmin/forms/TeacherForm.py:33 portaladmin/views.py:306
-#: portaladmin/views.py:344 teacher/forms/StudentForm.py:31
-#: teacher/forms/StudentForm.py:34 templates/portalteacher/adminlist.html:66
-#: templates/portalteacher/adminlist.html:69
-msgid "User Name"
-msgstr "பயனர் பெயர்"
-
-#: portaladmin/forms/AdminForm.py:13 portaladmin/forms/AdminForm.py:16
-#: portaladmin/forms/ChapterInfoForm.py:13
-#: portaladmin/forms/ChapterInfoForm.py:16 portaladmin/forms/StudentForm.py:37
-#: portaladmin/forms/StudentForm.py:40 portaladmin/forms/TeacherForm.py:36
-#: portaladmin/forms/TeacherForm.py:39 teacher/forms/MyprofileForm.py:27
-#: teacher/forms/MyprofileForm.py:30 teacher/forms/StudentForm.py:37
-#: teacher/forms/StudentForm.py:40 templates/portalteacher/adminlist.html:73
-#: templates/portalteacher/adminlist.html:76
-#: templates/portalteacher/students.html:66
-msgid "Password"
-msgstr "மறைச்சொல்"
-
-#: portaladmin/forms/AdminForm.py:19 portaladmin/forms/AdminForm.py:22
-#: portaladmin/forms/ChapterInfoForm.py:19
-#: portaladmin/forms/ChapterInfoForm.py:22 portaladmin/forms/StudentForm.py:22
-#: templates/portaladmin/billboardviewassignresourceanswer.html:132
-#: templates/portaladmin/billboardviewassignwrittenworkanswer.html:132
-#: templates/portaladmin/classviewassignmentanswer.html:122
-#: templates/portaladmin/classviewassignwrittenworkanswer.html:122
-#: templates/portalstudent/billboardviewassignresourceanswer.html:132
-#: templates/portalstudent/billboardviewassignwrittenworkanswer.html:132
-#: templates/portalstudent/classviewassignmentanswer.html:113
-#: templates/portalstudent/classviewassignwrittenworkanswer.html:122
-#: templates/portalstudent/viewassignmentanswer.html:123
-#: templates/portalstudent/viewassignwrittenworkanswer.html:123
-#: templates/portalteacher/billboardviewassignresourceanswer.html:132
-#: templates/portalteacher/billboardviewassignwrittenworkanswer.html:132
-#: templates/portalteacher/classviewassignmentanswer.html:113
-#: templates/portalteacher/classviewassignwrittenworkanswer.html:122
-#: templates/portalteacher/viewassignmentanswer.html:134
-#: templates/portalteacher/viewassignwrittenworkanswer.html:122
-msgid "First"
-msgstr "முதல்"
-
-#: portaladmin/forms/AdminForm.py:19 portaladmin/forms/AdminForm.py:22
-#: portaladmin/forms/AdminForm.py:25 portaladmin/forms/AdminForm.py:28
-#: portaladmin/forms/ChapterInfoForm.py:19
-#: portaladmin/forms/ChapterInfoForm.py:22
-#: portaladmin/forms/ChapterInfoForm.py:28 portaladmin/forms/StudentForm.py:19
-#: portaladmin/forms/StudentForm.py:22 portaladmin/forms/StudentForm.py:25
-#: portaladmin/forms/StudentForm.py:28 portaladmin/forms/TeacherForm.py:18
-#: portaladmin/forms/TeacherForm.py:21 portaladmin/forms/TeacherForm.py:27
-#: portaladmin/views.py:276 portaladmin/views.py:305 portaladmin/views.py:343
-#: teacher/forms/MyprofileForm.py:12 teacher/forms/MyprofileForm.py:18
-#: teacher/forms/StudentForm.py:19 teacher/forms/StudentForm.py:25
-#: templates/portaladmin/adminlist.html:178
-#: templates/portaladmin/billboardviewassignresourceanswer.html:343
-#: templates/portaladmin/billboardviewassignwrittenworkanswer.html:343
-#: templates/portaladmin/bulletinboard.html:161
-#: templates/portaladmin/bulletinboard.html:194
-#: templates/portaladmin/bulletinboard.html:219
-#: templates/portaladmin/classviewassignmentanswer.html:317
-#: templates/portaladmin/classviewassignwrittenworkanswer.html:321
-#: templates/portaladmin/index.html:162 templates/portaladmin/index.html:164
-#: templates/portaladmin/schoollist.html:169
-#: templates/portaladmin/statistics.html:74
-#: templates/portaladmin/statisticsassessment.html:74
-#: templates/portaladmin/statisticsassignment.html:74
-#: templates/portaladmin/studentslist.html:241
-#: templates/portaladmin/teacherslist.html:227
-#: templates/portalstudent/billboardviewassignresourceanswer.html:343
-#: templates/portalstudent/billboardviewassignwrittenworkanswer.html:343
-#: templates/portalstudent/classviewassignmentanswer.html:291
-#: templates/portalstudent/classviewassignwrittenworkanswer.html:322
-#: templates/portalstudent/studentslist.html:67
-#: templates/portalstudent/topics.html:124
-#: templates/portalstudent/viewassignmentanswer.html:314
-#: templates/portalstudent/viewassignwrittenworkanswer.html:314
-#: templates/portalteacher/addwrittenwork.html:192
-#: templates/portalteacher/addwrittenwork.html:296
-#: templates/portalteacher/adminlist.html:59
-#: templates/portalteacher/adminlist.html:135
-#: templates/portalteacher/assignassessment.html:251
-#: templates/portalteacher/assignassessment.html:350
-#: templates/portalteacher/assignchapter.html:252
-#: templates/portalteacher/assignchapter.html:351
-#: templates/portalteacher/assignmindmap.html:215
-#: templates/portalteacher/assignmindmap.html:385
-#: templates/portalteacher/assignresource.html:211
-#: templates/portalteacher/assignresource.html:381
-#: templates/portalteacher/billboardviewassignresourceanswer.html:343
-#: templates/portalteacher/billboardviewassignwrittenworkanswer.html:343
-#: templates/portalteacher/bulletinboard.html:161
-#: templates/portalteacher/bulletinboard.html:194
-#: templates/portalteacher/bulletinboard.html:219
-#: templates/portalteacher/classviewassignmentanswer.html:291
-#: templates/portalteacher/classviewassignwrittenworkanswer.html:321
-#: templates/portalteacher/index.html:165
-#: templates/portalteacher/index.html:167
-#: templates/portalteacher/statisticsstudentslist.html:165
-#: templates/portalteacher/students.html:50
-#: templates/portalteacher/studentslist.html:96
-#: templates/portalteacher/teacherslist.html:81
-#: templates/portalteacher/thread.html:128
-#: templates/portalteacher/threadview.html:71
-#: templates/portalteacher/threadview.html:74
-#: templates/portalteacher/viewassignmentanswer.html:341
-#: templates/portalteacher/viewassignresource.html:141
-#: templates/portalteacher/viewassignwrittenwork.html:115
-#: templates/portalteacher/viewassignwrittenworkanswer.html:321
-#: templates/portalteacher/viewmindmapassignedstudentlist.html:138
-msgid "Name"
-msgstr "பெயர்"
-
-#: portaladmin/forms/AdminForm.py:25 portaladmin/forms/StudentForm.py:25
-msgid "last"
-msgstr "கடைசி"
-
-#: portaladmin/forms/AdminForm.py:28 portaladmin/forms/ChapterInfoForm.py:28
-#: portaladmin/forms/StudentForm.py:28 portaladmin/forms/TeacherForm.py:27
-#: teacher/forms/MyprofileForm.py:18
-msgid "Last"
-msgstr "கடைசி"
-
-#: portaladmin/forms/AdminForm.py:31 portaladmin/forms/AdminForm.py:34
-#: portaladmin/forms/AdminForm.py:40 portaladmin/forms/AnnouncementForm.py:11
-#: portaladmin/forms/ChapterInfoForm.py:31
-#: portaladmin/forms/ChapterInfoForm.py:34
-#: portaladmin/forms/MyresourcelistForm.py:17
-#: portaladmin/forms/StudentForm.py:43 portaladmin/forms/StudentForm.py:46
-#: portaladmin/forms/StudentForm.py:52
-#: portaladmin/forms/StudentresourceListForm.py:17
-#: portaladmin/forms/StudentresourceListForm.py:23
-#: portaladmin/forms/TeacherForm.py:42 portaladmin/forms/TeacherForm.py:45
-#: portaladmin/forms/TeacherForm.py:51
-#: portaladmin/forms/TeacherResourceForm.py:16 portaladmin/views.py:307
-#: portaladmin/views.py:345 teacher/forms/AnnouncementForm.py:11
-#: teacher/forms/MyprofileForm.py:21 teacher/forms/MyprofileForm.py:24
-#: teacher/forms/MyprofileForm.py:36 teacher/forms/MyresourcelistForm.py:17
-#: teacher/forms/StudentForm.py:43 teacher/forms/StudentForm.py:46
-#: teacher/forms/StudentForm.py:52 teacher/forms/TeacherResourceForm.py:16
-#: templates/portaladmin/adminlist.html:181
-#: templates/portaladmin/statistics.html:78
-#: templates/portaladmin/statisticsassessment.html:78
-#: templates/portaladmin/statisticsassignment.html:78
-#: templates/portaladmin/studentslist.html:249
-#: templates/portaladmin/teacherslist.html:233
-#: templates/portalstudent/studentslist.html:70
-#: templates/portalteacher/adminlist.html:80
-#: templates/portalteacher/adminlist.html:83
-#: templates/portalteacher/adminlist.html:136
-#: templates/portalteacher/statisticsstudentslist.html:172
-#: templates/portalteacher/studentslist.html:99
-#: templates/portalteacher/teacherslist.html:82
-msgid "Email Id"
-msgstr "மின்னஞ்சல்"
-
-#: portaladmin/forms/AdminForm.py:37 portaladmin/forms/AnnouncementForm.py:8
-#: portaladmin/forms/ChapterInfoForm.py:37
-#: portaladmin/forms/MyresourcelistForm.py:14
-#: portaladmin/forms/StudentForm.py:49
-#: portaladmin/forms/StudentresourceListForm.py:14
-#: portaladmin/forms/StudentresourceListForm.py:20
-#: portaladmin/forms/TeacherForm.py:48 portaladmin/views.py:304
-#: portaladmin/views.py:342 teacher/forms/AnnouncementForm.py:8
-#: teacher/forms/MyprofileForm.py:33 teacher/forms/MyresourcelistForm.py:14
-#: teacher/forms/StudentForm.py:49 templates/portaladmin/adminlist.html:173
-#: templates/portaladmin/statistics.html:70
-#: templates/portaladmin/statisticsassessment.html:70
-#: templates/portaladmin/statisticsassignment.html:70
-#: templates/portaladmin/studentslist.html:237
-#: templates/portaladmin/teacherslist.html:223
-#: templates/portalstudent/studentslist.html:63
-#: templates/portalteacher/adminlist.html:87
-#: templates/portalteacher/adminlist.html:132
-#: templates/portalteacher/statisticsstudentslist.html:161
-#: templates/portalteacher/students.html:82
-#: templates/portalteacher/studentslist.html:92
-#: templates/portalteacher/teacherslist.html:78
-msgid "Photo"
-msgstr "புகைப்படம்"
-
-#: portaladmin/forms/AnnouncementForm.py:19
-#: teacher/forms/AnnouncementForm.py:19
-#: templates/portaladmin/bulletinboardlist.html:8
-#: templates/portaladmin/index.html:107
-#: templates/portaladmin/viewbulletinboard.html:8
-#: templates/portaladmin/viewbulletinboard.html:36
-#: templates/portalstudent/bulletinboardlist.html:8
-#: templates/portalstudent/bulletinboardlist.html:17
-#: templates/portalstudent/index.html:80
-#: templates/portalstudent/viewbulletinboard.html:8
-#: templates/portalstudent/viewbulletinboard.html:36
-#: templates/portalteacher/bulletinboardlist.html:8
-#: templates/portalteacher/index.html:106
-#: templates/portalteacher/viewbulletinboard.html:8
-#: templates/portalteacher/viewbulletinboard.html:36
-msgid "Announcement"
-msgstr "அறிவிப்பு"
-
-#: portaladmin/forms/CalendarForm.py:7 portaladmin/forms/CalendarForm.py:10
-#: teacher/forms/CalendarForm.py:7 teacher/forms/CalendarForm.py:10
-msgid "Event Title"
-msgstr "தலைப்பு"
-
-#: portaladmin/forms/CalendarForm.py:13 portaladmin/forms/CalendarForm.py:16
-#: teacher/forms/CalendarForm.py:13 teacher/forms/CalendarForm.py:16
-msgid "Start Time"
-msgstr "ஆரம்ப தேதி"
-
-#: portaladmin/forms/CalendarForm.py:19 portaladmin/forms/CalendarForm.py:22
-#: teacher/forms/CalendarForm.py:19 teacher/forms/CalendarForm.py:22
-msgid "End Time"
-msgstr "முடிவு தேதி"
-
-#: portaladmin/forms/CalendarForm.py:25 teacher/forms/CalendarForm.py:25
-msgid "All Day Events"
-msgstr "முழு நாள் நிகழ்வு"
-
-#: portaladmin/forms/ChapterInfoForm.py:7 portaladmin/forms/ClassListForm.py:7
-#: portaladmin/forms/ClassListForm.py:10
-msgid "Class Name"
-msgstr "பயனர் பெயர்"
-
-#: portaladmin/forms/ChapterInfoForm.py:25 portaladmin/forms/TeacherForm.py:24
-#: teacher/forms/MyprofileForm.py:15
-msgid "Last Name"
-msgstr "பயனர் பெயர்"
-
-#: portaladmin/forms/ClassListForm.py:13 portaladmin/forms/ClassListForm.py:16
-#: portaladmin/forms/SchoolListForm.py:13
-#: portaladmin/forms/SchoolListForm.py:16 portaladmin/views.py:277
-#: templates/portaladmin/subjectlist.html:69
-#: templates/portaladmin/subjectlist.html:72
-msgid "Short Name"
-msgstr "குறும் பெயர்"
-
-#: portaladmin/forms/MyresourcelistForm.py:8
-#: portaladmin/forms/StudentresourceListForm.py:8
-#: teacher/forms/MyresourcelistForm.py:8
-#: teacher/forms/TeacherResourceForm.py:8
-#: templates/portaladmin/billboard.html:72
-#: templates/portaladmin/classroom.html:72
-#: templates/portaladmin/myresourcelist.html:157
-#: templates/portaladmin/studentassignedresourcelist.html:65
-#: templates/portaladmin/studentresourcelist.html:168
-#: templates/portaladmin/subjectlist.html:266
-#: templates/portaladmin/teacherresourcelist.html:98
-#: templates/portaladmin/viewstudentres.html:14
-#: templates/portaladmin/viewteacherres.html:14
-#: templates/portalstudent/assignedresourcelist.html:138
-#: templates/portalstudent/billboard.html:72
-#: templates/portalstudent/classroom.html:72
-#: templates/portalstudent/studentassignedresourcelist.html:66
-#: templates/portalstudent/studentwrittenwork.html:138
-#: templates/portalstudent/viewassignresource.html:41
-#: templates/portalstudent/viewassignresource.html:48
-#: templates/portalstudent/viewassignwrittenwork.html:41
-#: templates/portalstudent/viewassignwrittenwork.html:48
-#: templates/portalstudent/worklistinfo.html:121
-#: templates/portalteacher/addteachershare.html:14
-#: templates/portalteacher/assignedresourcelist.html:120
-#: templates/portalteacher/assignmindmap.html:56
-#: templates/portalteacher/assignresource.html:53
-#: templates/portalteacher/billboard.html:67
-#: templates/portalteacher/classroom.html:72
-#: templates/portalteacher/extraslist.html:88
-#: templates/portalteacher/myresourcelist.html:157
-#: templates/portalteacher/studentassignedresourcelist.html:67
-#: templates/portalteacher/viewassessments.html:174
-msgid "Type"
-msgstr "வகை"
-
-#: portaladmin/forms/MyresourcelistForm.py:25
-#: teacher/forms/MyresourcelistForm.py:25
-#: templates/portaladmin/subjectlist.html:76
-#: templates/portaladmin/subjectlist.html:79
-#: templates/portaladmin/viewstudentresourcelist.html:29
-#: templates/portalteacher/viewresourcelist.html:26
-msgid "Description"
-msgstr "விளக்கமாக"
-
-#: portaladmin/forms/RubricsForm.py:14 portaladmin/forms/RubricsForm.py:16
-#: teacher/forms/RubricsForm.py:14 teacher/forms/RubricsForm.py:16
-#: templates/portaladmin/rubrics.html:72
-#: templates/portalstudent/worklistinfo.html:127
-#: templates/portalteacher/rubrics.html:72
-msgid "Detail"
-msgstr "விவரங்கள்"
-
-#: portaladmin/forms/RubricsForm.py:19 teacher/forms/RubricsForm.py:19
-msgid "Instructions"
-msgstr "செயல்முறை"
-
-#: portaladmin/forms/SchoolListForm.py:7
-#: portaladmin/forms/SchoolListForm.py:10
-#: templates/portaladmin/subjectlist.html:62
-#: templates/portaladmin/subjectlist.html:65
-msgid "School Name"
-msgstr "பள்ளியின் பெயர்"
-
-#: portaladmin/forms/StickyCommentForm.py:7
-#: student/forms/StickyCommentForm.py:7 teacher/forms/StickyCommentForm.py:7
-#: templates/portaladmin/billboardviewassignresourceanswer.html:191
-#: templates/portaladmin/billboardviewassignresourceanswer.html:647
-#: templates/portaladmin/billboardviewassignwrittenworkanswer.html:191
-#: templates/portaladmin/billboardviewassignwrittenworkanswer.html:647
-#: templates/portaladmin/billcomprehensionanswerrating.html:116
-#: templates/portaladmin/billviewassignmentanswer.html:174
-#: templates/portaladmin/stickynotes.html:569
-#: templates/portaladmin/stickynotes.html:583
-#: templates/portaladmin/viewpost.html:26
-#: templates/portalstudent/billboardviewassignresourceanswer.html:191
-#: templates/portalstudent/billboardviewassignresourceanswer.html:647
-#: templates/portalstudent/billboardviewassignwrittenworkanswer.html:191
-#: templates/portalstudent/billboardviewassignwrittenworkanswer.html:645
-#: templates/portalstudent/billviewassignmentanswer.html:123
-#: templates/portalstudent/stickynotes.html:569
-#: templates/portalstudent/stickynotes.html:583
-#: templates/portalstudent/viewassignmindmapanswer.html:64
-#: templates/portalstudent/viewpost.html:26
-#: templates/portalteacher/billboardviewassignresourceanswer.html:191
-#: templates/portalteacher/billboardviewassignresourceanswer.html:647
-#: templates/portalteacher/billboardviewassignwrittenworkanswer.html:191
-#: templates/portalteacher/billboardviewassignwrittenworkanswer.html:648
-#: templates/portalteacher/billviewassignmentanswer.html:137
-#: templates/portalteacher/stickynotes.html:569
-#: templates/portalteacher/stickynotes.html:583
-#: templates/portalteacher/viewassignmindmapanswer.html:63
-#: templates/portalteacher/viewpost.html:26
-msgid "Comment"
-msgstr "கருத்து"
-
-#: portaladmin/forms/StickyForm.py:7 portaladmin/forms/TopicsForm.py:8
-#: student/forms/StickyForm.py:7 student/forms/TopicsForm.py:8
-#: teacher/forms/ForumForm.py:8 teacher/forms/StickyForm.py:7
-#: teacher/forms/ThreadForm.py:13 templates/portaladmin/addstickynote.html:16
-#: templates/portaladmin/summernote_image_test.html:16
-msgid "Text of the note"
-msgstr ""
-
-#: portaladmin/forms/StudentForm.py:9 portaladmin/forms/TeacherForm.py:8
-#: portaladmin/forms/TeacherResourceForm.py:24 teacher/forms/StudentForm.py:9
-#: teacher/forms/TeacherResourceForm.py:19
-#: templates/portaladmin/classlist.html:14
-#: templates/portaladmin/statistics.html:13
-#: templates/portaladmin/statisticsassessment.html:13
-#: templates/portaladmin/statisticsassignment.html:13
-#: templates/portaladmin/studentslist.html:15
-#: templates/portaladmin/teacherslist.html:14
-#: templates/portaladmin/viewteacherres.html:27
-#: templates/portalteacher/addteachershare.html:27
-#: templates/portalteacher/statisticsstudentslist.html:14
-#: templates/portalteacher/students.html:25
-msgid "Select School"
-msgstr "பள்ளி"
-
-#: portaladmin/forms/StudentForm.py:14
-#: portaladmin/forms/StudentresourceListForm.py:31
-#: portaladmin/forms/TeacherForm.py:13 templates/portaladmin/classlist.html:8
-#: templates/portaladmin/classlist.html:31
-#: templates/portaladmin/classlist.html:156
-#: templates/portaladmin/teacherresourcelist.html:92
-#: templates/portaladmin/viewstudentres.html:26
-#: templates/portaladmin/viewteacherres.html:41
-#: templates/portalteacher/studentslist.html:24
-msgid "Class"
-msgstr "வகுப்பு"
-
-#: portaladmin/forms/StudentresourceListForm.py:26
-#: portaladmin/forms/TeacherResourceForm.py:29 teacher/forms/StudentForm.py:14
-#: templates/portaladmin/subjectlist.html:106
-msgid "Select Class"
-msgstr "வகுப்பை தேர்வு செய்"
-
-#: portaladmin/forms/StudentresourceListForm.py:36
-#: templates/portaladmin/viewstudentres.html:42
-msgid "Component"
-msgstr "கூறு"
-
-#: portaladmin/forms/StudentresourceListForm.py:41
-msgid "Lessons "
-msgstr "பாடம்"
-
-#: portaladmin/forms/StudentresourceListForm.py:50
-#: templates/portaladmin/studentassignedresourcelist.html:71
-#: templates/portalstudent/studentassignedresourcelist.html:72
-#: templates/portalstudent/viewassignmindmap.html:52
-#: templates/portalstudent/viewassignmindmapanswer.html:52
-#: templates/portalstudent/viewassignresource.html:37
-#: templates/portalstudent/viewassignwrittenwork.html:37
-#: templates/portalstudent/viewstudentwrittenworks.html:70
-#: templates/portalteacher/addwrittenwork.html:55
-#: templates/portalteacher/assignassessment.html:49
-#: templates/portalteacher/assignchapter.html:49
-#: templates/portalteacher/studentassignedresourcelist.html:73
-#: templates/portalteacher/viewassignmindmapanswer.html:51
-#: templates/portalteacher/viewassignresource.html:144
-#: templates/portalteacher/viewassignwrittenwork.html:118
-#: templates/portalteacher/viewmindmapassignedstudentlist.html:141
-msgid "Note"
-msgstr "குறிப்பு"
-
-#: portaladmin/forms/TeacherResourceForm.py:8
-#: student/forms/StudentWorkForm.py:7
-#: templates/portalteacher/viewassessments.html:88
-msgid "Category"
-msgstr "பகுப்பு"
-
-#: portaladmin/forms/TeacherResourceForm.py:13
-#: teacher/forms/TeacherResourceForm.py:13
-#: templates/portaladmin/subjectlist.html:97
-#: templates/portaladmin/subjectlist.html:100
-#: templates/portalteacher/students.html:84
-msgid "Choose File"
-msgstr "கோப்பு தேர்வு"
-
-#: portaladmin/forms/TeacherResourceForm.py:34
-#: templates/portaladmin/studentslist.html:27
-#: templates/portaladmin/subjectlist.html:116
-#: templates/portaladmin/viewstudentres.html:34
-#: templates/portaladmin/viewteacherres.html:55
-#: templates/portalteacher/statisticsstudentslist.html:26
-msgid "Select Section"
-msgstr "பிரிவு"
-
-#: portaladmin/forms/TeacherResourceForm.py:39
-#: teacher/forms/TeacherResourceForm.py:24
-#: templates/portaladmin/viewteacherres.html:66
-msgid "Select Folder"
-msgstr "புதிய கோப்பு"
-
-#: portaladmin/forms/TeacherResourceForm.py:44
-#: templates/portaladmin/viewstudentres.html:50
-#: templates/portaladmin/viewteacherres.html:77
-msgid "Chapter"
-msgstr "அத்தியாயம்"
 
 #: portaladmin/views.py:75 templates/portaladmin/schoollist.html:8
 #: templates/portaladmin/schoollist.html:17
@@ -694,8 +263,11 @@ msgstr "வளங்கள்"
 #: templates/portalstudent/studentresourceunits.html:17
 #: templates/portalstudent/viewassignmentanswer.html:101
 #: templates/portalstudent/viewassignwrittenworkanswer.html:101
+#: templates/portalteacher/activitystatistics.html:51
+#: templates/portalteacher/assessmentstatistics.html:55
 #: templates/portalteacher/assignassessment.html:7
 #: templates/portalteacher/assignchapter.html:7
+#: templates/portalteacher/assignmentstatistics.html:55
 #: templates/portalteacher/billboard.html:70
 #: templates/portalteacher/billboardviewassignresourceanswer.html:110
 #: templates/portalteacher/billboardviewassignwrittenworkanswer.html:110
@@ -710,7 +282,7 @@ msgid "Student"
 msgstr "மாணவர்"
 
 #: portaladmin/views.py:88 portaladmin/views.py:303 portaladmin/views.py:341
-#: student/views.py:66 teacher/views.py:76
+#: student/views.py:65 teacher/views.py:76
 #: templates/portaladmin/activityassessment.html:106
 #: templates/portaladmin/activityassignment.html:106
 #: templates/portaladmin/activitystatistics.html:109
@@ -734,14 +306,15 @@ msgstr "மாணவர்"
 #: templates/portaladmin/stickynoteslist.html:133
 #: templates/portaladmin/studentassignedresourcelist.html:58
 #: templates/portaladmin/studentresourcelist.html:157
-#: templates/portaladmin/studentslist.html:232
+#: templates/portaladmin/studentslist.html:233
 #: templates/portaladmin/subjectlist.html:261
 #: templates/portaladmin/teacherresourcelist.html:84
-#: templates/portaladmin/teacherslist.html:218
+#: templates/portaladmin/teacherslist.html:219
 #: templates/portaladmin/viewtopic.html:136
 #: templates/portalforum/forum.html:75 templates/portalforum/index.html:121
 #: templates/portalforum/viewpost.html:186
 #: templates/portalforum/viewtopic.html:125
+#: templates/portalstudent/assignedassessmentlist.html:127
 #: templates/portalstudent/assignedresourcelist.html:127
 #: templates/portalstudent/billboard.html:64
 #: templates/portalstudent/billboardviewassignresourceanswer.html:642
@@ -763,9 +336,11 @@ msgstr "மாணவர்"
 #: templates/portalteacher/activitystatistics.html:102
 #: templates/portalteacher/adminlist.html:129
 #: templates/portalteacher/allschoolresourcelist.html:195
+#: templates/portalteacher/assessmentstatistics.html:109
+#: templates/portalteacher/assignedassessmentlist.html:127
 #: templates/portalteacher/assignedmindmaplist.html:106
 #: templates/portalteacher/assignedresourcelist.html:109
-#: templates/portalteacher/assignmentstatistics.html:106
+#: templates/portalteacher/assignmentstatistics.html:109
 #: templates/portalteacher/billboard.html:59
 #: templates/portalteacher/billboardviewassignresourceanswer.html:642
 #: templates/portalteacher/billboardviewassignwrittenworkanswer.html:643
@@ -779,6 +354,8 @@ msgstr "மாணவர்"
 #: templates/portalteacher/myresourcelist.html:146
 #: templates/portalteacher/resourcelist.html:116
 #: templates/portalteacher/rubrics.html:66
+#: templates/portalteacher/statistics.html:157
+#: templates/portalteacher/statisticsexcercise.html:157
 #: templates/portalteacher/statisticsstudentslist.html:157
 #: templates/portalteacher/stickynoteslist.html:136
 #: templates/portalteacher/studentassignedresourcelist.html:59
@@ -786,14 +363,15 @@ msgstr "மாணவர்"
 #: templates/portalteacher/studentslist.html:87
 #: templates/portalteacher/teacherslist.html:74
 #: templates/portalteacher/thread.html:125
-#: templates/portalteacher/viewassessmentqa.html:246
-#: templates/portalteacher/viewassessments.html:169
-#: templates/portalteacher/viewassessments.html:205
+#: templates/portalteacher/viewassessmentinfo.html:134
+#: templates/portalteacher/viewassessmentqa.html:268
+#: templates/portalteacher/viewassessments.html:168
+#: templates/portalteacher/viewassessments.html:204
 #: templates/portalteacher/viewassignresource.html:137
 #: templates/portalteacher/viewassignwrittenwork.html:111
 #: templates/portalteacher/viewmindmapassignedstudentlist.html:134
 #: templates/portalteacher/viewtopic.html:135
-#: templates/portalteacher/writtenwork.html:130
+#: templates/portalteacher/writtenwork.html:128
 msgid "Sl No."
 msgstr "எண்"
 
@@ -802,7 +380,7 @@ msgstr "எண்"
 msgid "Activity"
 msgstr "நடவடிக்கைகள்"
 
-#: portaladmin/views.py:90 student/views.py:68 teacher/views.py:78
+#: portaladmin/views.py:90 student/views.py:67 teacher/views.py:78
 #: templates/portaladmin/billboardviewassignresourceanswer.html:651
 #: templates/portaladmin/billboardviewassignwrittenworkanswer.html:651
 #: templates/portaladmin/bulletinboardlist.html:154
@@ -820,7 +398,7 @@ msgstr "நடவடிக்கைகள்"
 msgid "Announcer"
 msgstr "அறிவித்தவர்"
 
-#: portaladmin/views.py:91 student/views.py:69 teacher/views.py:79
+#: portaladmin/views.py:91 student/views.py:68 teacher/views.py:79
 #: templates/portaladmin/activityassessment.html:114
 #: templates/portaladmin/activityassessment.html:117
 #: templates/portaladmin/activityassignment.html:114
@@ -846,6 +424,7 @@ msgstr "அறிவித்தவர்"
 #: templates/portaladmin/studentresourcelist.html:165
 #: templates/portaladmin/subjectlist.html:265
 #: templates/portaladmin/teacherresourcelist.html:95
+#: templates/portalstudent/assignedassessmentlist.html:135
 #: templates/portalstudent/assignedresourcelist.html:135
 #: templates/portalstudent/billboard.html:78
 #: templates/portalstudent/billboardviewassignresourceanswer.html:104
@@ -876,10 +455,13 @@ msgstr "அறிவித்தவர்"
 #: templates/portalstudent/worklistinfo.html:124
 #: templates/portalteacher/activitystatistics.html:105
 #: templates/portalteacher/allschoolresourcelist.html:203
+#: templates/portalteacher/assessmentstatistics.html:117
+#: templates/portalteacher/assessmentstatistics.html:120
+#: templates/portalteacher/assignedassessmentlist.html:135
 #: templates/portalteacher/assignedmindmaplist.html:114
 #: templates/portalteacher/assignedresourcelist.html:117
-#: templates/portalteacher/assignmentstatistics.html:114
 #: templates/portalteacher/assignmentstatistics.html:117
+#: templates/portalteacher/assignmentstatistics.html:120
 #: templates/portalteacher/billboard.html:73
 #: templates/portalteacher/billboardviewassignresourceanswer.html:104
 #: templates/portalteacher/billboardviewassignresourceanswer.html:106
@@ -900,17 +482,17 @@ msgstr "அறிவித்தவர்"
 #: templates/portalteacher/stickynoteslist.html:145
 #: templates/portalteacher/studentassignedresourcelist.html:70
 #: templates/portalteacher/studentresourcelist.html:142
-#: templates/portalteacher/viewassessments.html:175
+#: templates/portalteacher/viewassessments.html:174
 #: templates/portalteacher/viewassessments.html:210
 #: templates/portalteacher/viewassignmentanswer.html:106
 #: templates/portalteacher/viewassignmentanswer.html:108
 #: templates/portalteacher/viewassignwrittenworkanswer.html:94
 #: templates/portalteacher/viewassignwrittenworkanswer.html:96
-#: templates/portalteacher/writtenwork.html:138
+#: templates/portalteacher/writtenwork.html:136
 msgid "Date"
 msgstr "தேதி"
 
-#: portaladmin/views.py:194 student/views.py:126 student/views.py:162
+#: portaladmin/views.py:194 student/views.py:125 student/views.py:161
 #: teacher/views.py:202 templates/portaladmin/viewstudentres.html:194
 msgid "Reading"
 msgstr "வாசிப்பு"
@@ -919,22 +501,109 @@ msgstr "வாசிப்பு"
 msgid "Image dialog"
 msgstr "பட உரையாடல்"
 
-#: portaladmin/views.py:204 student/views.py:136 student/views.py:172
+#: portaladmin/views.py:204 student/views.py:135 student/views.py:171
 #: teacher/views.py:212
 msgid "Writing board"
 msgstr "எழுத்து பலகை"
 
-#: portaladmin/views.py:209 student/views.py:140 student/views.py:177
+#: portaladmin/views.py:209 student/views.py:139 student/views.py:176
 #: teacher/views.py:216 templates/portalteacher/extraslist.html:7
 msgid "Composition"
 msgstr "கட்டுரை"
 
+#: portaladmin/views.py:276 portaladmin/views.py:305 portaladmin/views.py:343
+#: portaladmin/forms/AdminForm.py:19 portaladmin/forms/AdminForm.py:22
+#: portaladmin/forms/AdminForm.py:25 portaladmin/forms/AdminForm.py:28
+#: portaladmin/forms/ChapterInfoForm.py:19
+#: portaladmin/forms/ChapterInfoForm.py:22
+#: portaladmin/forms/ChapterInfoForm.py:28 portaladmin/forms/StudentForm.py:19
+#: portaladmin/forms/StudentForm.py:22 portaladmin/forms/StudentForm.py:25
+#: portaladmin/forms/StudentForm.py:28 portaladmin/forms/TeacherForm.py:18
+#: portaladmin/forms/TeacherForm.py:21 portaladmin/forms/TeacherForm.py:27
+#: teacher/forms/MyprofileForm.py:12 teacher/forms/MyprofileForm.py:18
+#: teacher/forms/StudentForm.py:19 teacher/forms/StudentForm.py:25
+#: templates/portaladmin/adminlist.html:178
+#: templates/portaladmin/billboardviewassignresourceanswer.html:343
+#: templates/portaladmin/billboardviewassignwrittenworkanswer.html:343
+#: templates/portaladmin/bulletinboard.html:161
+#: templates/portaladmin/bulletinboard.html:194
+#: templates/portaladmin/bulletinboard.html:219
+#: templates/portaladmin/classviewassignmentanswer.html:317
+#: templates/portaladmin/classviewassignwrittenworkanswer.html:321
+#: templates/portaladmin/index.html:162 templates/portaladmin/index.html:164
+#: templates/portaladmin/schoollist.html:169
+#: templates/portaladmin/statistics.html:74
+#: templates/portaladmin/statisticsassessment.html:74
+#: templates/portaladmin/statisticsassignment.html:74
+#: templates/portaladmin/studentslist.html:242
+#: templates/portaladmin/teacherslist.html:228
+#: templates/portalstudent/billboardviewassignresourceanswer.html:343
+#: templates/portalstudent/billboardviewassignwrittenworkanswer.html:343
+#: templates/portalstudent/classviewassignmentanswer.html:291
+#: templates/portalstudent/classviewassignwrittenworkanswer.html:322
+#: templates/portalstudent/studentslist.html:67
+#: templates/portalstudent/topics.html:124
+#: templates/portalstudent/viewassignmentanswer.html:314
+#: templates/portalstudent/viewassignwrittenworkanswer.html:314
+#: templates/portalteacher/activitystatistics.html:51
+#: templates/portalteacher/addwrittenwork.html:194
+#: templates/portalteacher/addwrittenwork.html:297
+#: templates/portalteacher/adminlist.html:59
+#: templates/portalteacher/adminlist.html:135
+#: templates/portalteacher/assessmentstatistics.html:55
+#: templates/portalteacher/assignassessment.html:249
+#: templates/portalteacher/assignassessment.html:348
+#: templates/portalteacher/assignchapter.html:252
+#: templates/portalteacher/assignchapter.html:351
+#: templates/portalteacher/assignmentstatistics.html:55
+#: templates/portalteacher/assignmindmap.html:215
+#: templates/portalteacher/assignmindmap.html:385
+#: templates/portalteacher/assignresource.html:211
+#: templates/portalteacher/assignresource.html:381
+#: templates/portalteacher/billboardviewassignresourceanswer.html:343
+#: templates/portalteacher/billboardviewassignwrittenworkanswer.html:343
+#: templates/portalteacher/bulletinboard.html:161
+#: templates/portalteacher/bulletinboard.html:194
+#: templates/portalteacher/bulletinboard.html:219
+#: templates/portalteacher/classviewassignmentanswer.html:291
+#: templates/portalteacher/classviewassignwrittenworkanswer.html:321
+#: templates/portalteacher/index.html:165
+#: templates/portalteacher/index.html:167
+#: templates/portalteacher/statistics.html:165
+#: templates/portalteacher/statisticsexcercise.html:165
+#: templates/portalteacher/statisticsstudentslist.html:165
+#: templates/portalteacher/students.html:50
+#: templates/portalteacher/studentslist.html:96
+#: templates/portalteacher/teacherslist.html:81
+#: templates/portalteacher/thread.html:128
+#: templates/portalteacher/threadview.html:71
+#: templates/portalteacher/threadview.html:74
+#: templates/portalteacher/viewassessmentinfo.html:138
+#: templates/portalteacher/viewassignmentanswer.html:341
+#: templates/portalteacher/viewassignresource.html:141
+#: templates/portalteacher/viewassignwrittenwork.html:115
+#: templates/portalteacher/viewassignwrittenworkanswer.html:321
+#: templates/portalteacher/viewmindmapassignedstudentlist.html:138
+msgid "Name"
+msgstr "பெயர்"
+
+#: portaladmin/views.py:277 portaladmin/forms/ClassListForm.py:13
+#: portaladmin/forms/ClassListForm.py:16
+#: portaladmin/forms/SchoolListForm.py:13
+#: portaladmin/forms/SchoolListForm.py:16
+#: templates/portaladmin/subjectlist.html:69
+#: templates/portaladmin/subjectlist.html:72
+msgid "Short Name"
+msgstr "குறும் பெயர்"
+
 #: portaladmin/views.py:278 portaladmin/views.py:308 portaladmin/views.py:346
 #: templates/portaladmin/mindmaplist.html:88
 #: templates/portaladmin/schoollist.html:176
-#: templates/portaladmin/studentslist.html:252
-#: templates/portaladmin/teacherslist.html:236
+#: templates/portaladmin/studentslist.html:253
+#: templates/portaladmin/teacherslist.html:237
 #: templates/portalteacher/mindmaplist.html:88
+#: templates/portalteacher/statistics.html:175
+#: templates/portalteacher/statisticsexcercise.html:175
 #: templates/portalteacher/statisticsstudentslist.html:175
 msgid "Edit"
 msgstr "மாற்று"
@@ -952,33 +621,110 @@ msgstr "மாற்று"
 #: templates/portaladmin/schoollist.html:181
 #: templates/portaladmin/stickynoteslist.html:145
 #: templates/portaladmin/studentresourcelist.html:171
-#: templates/portaladmin/studentslist.html:258
+#: templates/portaladmin/studentslist.html:259
 #: templates/portaladmin/subjectlist.html:267
 #: templates/portaladmin/teacherresourcelist.html:102
-#: templates/portaladmin/teacherslist.html:242
+#: templates/portaladmin/teacherslist.html:243
 #: templates/portaladmin/viewtopic.html:156
 #: templates/portalforum/forum.html:93 templates/portalforum/viewpost.html:208
 #: templates/portalstudent/bulletinboardlist.html:152
 #: templates/portalstudent/studentnoteslist.html:128
 #: templates/portalstudent/worklistinfo.html:131
 #: templates/portalteacher/allschoolresourcelist.html:211
+#: templates/portalteacher/assignedresourcelist.html:120
 #: templates/portalteacher/bulletinboardlist.html:158
 #: templates/portalteacher/calendar.html:144
 #: templates/portalteacher/classroom.html:81
 #: templates/portalteacher/mindmaplist.html:93
 #: templates/portalteacher/myresourcelist.html:161
 #: templates/portalteacher/rubrics.html:75
+#: templates/portalteacher/statistics.html:180
+#: templates/portalteacher/statisticsexcercise.html:180
 #: templates/portalteacher/statisticsstudentslist.html:180
 #: templates/portalteacher/stickynoteslist.html:148
-#: templates/portalteacher/viewassessmentqa.html:252
-#: templates/portalteacher/viewassessments.html:178
-#: templates/portalteacher/viewassessments.html:213
+#: templates/portalteacher/viewassessmentqa.html:274
+#: templates/portalteacher/viewassessments.html:177
+#: templates/portalteacher/viewassessments.html:217
 #: templates/portalteacher/viewtopic.html:154
+#: templates/portalteacher/writtenwork.html:139
 msgid "Delete"
 msgstr "நீக்கு"
 
-#: portaladmin/views.py:416 student/views.py:31 student/views.py:67
-#: student/views.py:245 teacher/views.py:515
+#: portaladmin/views.py:304 portaladmin/views.py:342
+#: portaladmin/forms/AdminForm.py:37 portaladmin/forms/AnnouncementForm.py:8
+#: portaladmin/forms/ChapterInfoForm.py:37
+#: portaladmin/forms/MyresourcelistForm.py:14
+#: portaladmin/forms/StudentForm.py:49
+#: portaladmin/forms/StudentresourceListForm.py:14
+#: portaladmin/forms/StudentresourceListForm.py:20
+#: portaladmin/forms/TeacherForm.py:48 teacher/forms/AnnouncementForm.py:8
+#: teacher/forms/MyprofileForm.py:33 teacher/forms/MyresourcelistForm.py:14
+#: teacher/forms/StudentForm.py:49 templates/portaladmin/adminlist.html:173
+#: templates/portaladmin/statistics.html:70
+#: templates/portaladmin/statisticsassessment.html:70
+#: templates/portaladmin/statisticsassignment.html:70
+#: templates/portaladmin/studentslist.html:238
+#: templates/portaladmin/teacherslist.html:224
+#: templates/portalstudent/studentslist.html:63
+#: templates/portalteacher/adminlist.html:87
+#: templates/portalteacher/adminlist.html:132
+#: templates/portalteacher/statistics.html:161
+#: templates/portalteacher/statisticsexcercise.html:161
+#: templates/portalteacher/statisticsstudentslist.html:161
+#: templates/portalteacher/students.html:82
+#: templates/portalteacher/studentslist.html:92
+#: templates/portalteacher/teacherslist.html:78
+msgid "Photo"
+msgstr "புகைப்படம்"
+
+#: portaladmin/views.py:306 portaladmin/views.py:344
+#: portaladmin/forms/AdminForm.py:7 portaladmin/forms/AdminForm.py:10
+#: portaladmin/forms/ChapterInfoForm.py:10 portaladmin/forms/StudentForm.py:31
+#: portaladmin/forms/StudentForm.py:34 portaladmin/forms/TeacherForm.py:30
+#: portaladmin/forms/TeacherForm.py:33 teacher/forms/StudentForm.py:31
+#: teacher/forms/StudentForm.py:34 templates/portalteacher/adminlist.html:66
+#: templates/portalteacher/adminlist.html:69
+msgid "User Name"
+msgstr "பயனர் பெயர்"
+
+#: portaladmin/views.py:307 portaladmin/views.py:345
+#: portaladmin/forms/AdminForm.py:31 portaladmin/forms/AdminForm.py:34
+#: portaladmin/forms/AdminForm.py:40 portaladmin/forms/AnnouncementForm.py:11
+#: portaladmin/forms/ChapterInfoForm.py:31
+#: portaladmin/forms/ChapterInfoForm.py:34
+#: portaladmin/forms/MyresourcelistForm.py:17
+#: portaladmin/forms/StudentForm.py:43 portaladmin/forms/StudentForm.py:46
+#: portaladmin/forms/StudentForm.py:52
+#: portaladmin/forms/StudentresourceListForm.py:17
+#: portaladmin/forms/StudentresourceListForm.py:23
+#: portaladmin/forms/TeacherForm.py:42 portaladmin/forms/TeacherForm.py:45
+#: portaladmin/forms/TeacherForm.py:51
+#: portaladmin/forms/TeacherResourceForm.py:16
+#: teacher/forms/AnnouncementForm.py:11 teacher/forms/MyprofileForm.py:21
+#: teacher/forms/MyprofileForm.py:24 teacher/forms/MyprofileForm.py:36
+#: teacher/forms/MyresourcelistForm.py:17 teacher/forms/StudentForm.py:43
+#: teacher/forms/StudentForm.py:46 teacher/forms/StudentForm.py:52
+#: teacher/forms/TeacherResourceForm.py:16
+#: templates/portaladmin/adminlist.html:181
+#: templates/portaladmin/statistics.html:78
+#: templates/portaladmin/statisticsassessment.html:78
+#: templates/portaladmin/statisticsassignment.html:78
+#: templates/portaladmin/studentslist.html:250
+#: templates/portaladmin/teacherslist.html:234
+#: templates/portalstudent/studentslist.html:70
+#: templates/portalteacher/adminlist.html:80
+#: templates/portalteacher/adminlist.html:83
+#: templates/portalteacher/adminlist.html:136
+#: templates/portalteacher/statistics.html:172
+#: templates/portalteacher/statisticsexcercise.html:172
+#: templates/portalteacher/statisticsstudentslist.html:172
+#: templates/portalteacher/studentslist.html:99
+#: templates/portalteacher/teacherslist.html:82
+msgid "Email Id"
+msgstr "மின்னஞ்சல்"
+
+#: portaladmin/views.py:416 student/views.py:31 student/views.py:66
+#: student/views.py:244 teacher/views.py:504
 #: templates/portaladmin/classviewassignmentanswer.html:7
 #: templates/portalstudent/assignedresourcelist.html:7
 #: templates/portalstudent/viewassignmentanswer.html:7
@@ -986,8 +732,8 @@ msgstr "நீக்கு"
 msgid "Assignments"
 msgstr "ஒப்படைப்புகள்"
 
-#: portaladmin/views.py:420 student/views.py:49 student/views.py:249
-#: teacher/views.py:58 teacher/views.py:519
+#: portaladmin/views.py:420 student/views.py:49 student/views.py:248
+#: teacher/views.py:58 teacher/views.py:508
 #: templates/portaladmin/billboard.html:99
 #: templates/portaladmin/classroom.html:99
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:7
@@ -1013,8 +759,312 @@ msgstr "பாடக் குறிப்பு"
 msgid "Schools resources"
 msgstr "வளங்கள்"
 
-#: student/forms/StudentNotesForm.py:12 student/forms/StudentWorkForm.py:13
-#: student/views.py:44 templates/portaladmin/newtopic.html:27
+#: portaladmin/forms/AdminForm.py:13 portaladmin/forms/AdminForm.py:16
+#: portaladmin/forms/ChapterInfoForm.py:13
+#: portaladmin/forms/ChapterInfoForm.py:16 portaladmin/forms/StudentForm.py:37
+#: portaladmin/forms/StudentForm.py:40 portaladmin/forms/TeacherForm.py:36
+#: portaladmin/forms/TeacherForm.py:39 teacher/forms/MyprofileForm.py:27
+#: teacher/forms/MyprofileForm.py:30 teacher/forms/StudentForm.py:37
+#: teacher/forms/StudentForm.py:40 templates/portalteacher/adminlist.html:73
+#: templates/portalteacher/adminlist.html:76
+#: templates/portalteacher/students.html:66
+msgid "Password"
+msgstr "மறைச்சொல்"
+
+#: portaladmin/forms/AdminForm.py:19 portaladmin/forms/AdminForm.py:22
+#: portaladmin/forms/ChapterInfoForm.py:19
+#: portaladmin/forms/ChapterInfoForm.py:22 portaladmin/forms/StudentForm.py:22
+#: templates/portaladmin/billboardviewassignresourceanswer.html:132
+#: templates/portaladmin/billboardviewassignwrittenworkanswer.html:132
+#: templates/portaladmin/classviewassignmentanswer.html:122
+#: templates/portaladmin/classviewassignwrittenworkanswer.html:122
+#: templates/portalstudent/billboardviewassignresourceanswer.html:132
+#: templates/portalstudent/billboardviewassignwrittenworkanswer.html:132
+#: templates/portalstudent/classviewassignmentanswer.html:113
+#: templates/portalstudent/classviewassignwrittenworkanswer.html:122
+#: templates/portalstudent/viewassignmentanswer.html:123
+#: templates/portalstudent/viewassignwrittenworkanswer.html:123
+#: templates/portalteacher/billboardviewassignresourceanswer.html:132
+#: templates/portalteacher/billboardviewassignwrittenworkanswer.html:132
+#: templates/portalteacher/classviewassignmentanswer.html:113
+#: templates/portalteacher/classviewassignwrittenworkanswer.html:122
+#: templates/portalteacher/viewassignmentanswer.html:134
+#: templates/portalteacher/viewassignwrittenworkanswer.html:122
+msgid "First"
+msgstr "முதல்"
+
+#: portaladmin/forms/AdminForm.py:25 portaladmin/forms/StudentForm.py:25
+msgid "last"
+msgstr "கடைசி"
+
+#: portaladmin/forms/AdminForm.py:28 portaladmin/forms/ChapterInfoForm.py:28
+#: portaladmin/forms/StudentForm.py:28 portaladmin/forms/TeacherForm.py:27
+#: teacher/forms/MyprofileForm.py:18
+msgid "Last"
+msgstr "கடைசி"
+
+#: portaladmin/forms/AnnouncementForm.py:19
+#: teacher/forms/AnnouncementForm.py:19
+#: templates/portaladmin/bulletinboardlist.html:8
+#: templates/portaladmin/index.html:107
+#: templates/portaladmin/viewbulletinboard.html:8
+#: templates/portaladmin/viewbulletinboard.html:36
+#: templates/portalstudent/bulletinboardlist.html:8
+#: templates/portalstudent/bulletinboardlist.html:17
+#: templates/portalstudent/index.html:80
+#: templates/portalstudent/viewbulletinboard.html:8
+#: templates/portalstudent/viewbulletinboard.html:36
+#: templates/portalteacher/bulletinboardlist.html:8
+#: templates/portalteacher/index.html:106
+#: templates/portalteacher/viewbulletinboard.html:8
+#: templates/portalteacher/viewbulletinboard.html:36
+msgid "Announcement"
+msgstr "அறிவிப்பு"
+
+#: portaladmin/forms/CalendarForm.py:7 portaladmin/forms/CalendarForm.py:10
+#: teacher/forms/CalendarForm.py:7 teacher/forms/CalendarForm.py:10
+msgid "Event Title"
+msgstr "தலைப்பு"
+
+#: portaladmin/forms/CalendarForm.py:13 portaladmin/forms/CalendarForm.py:16
+#: teacher/forms/CalendarForm.py:13 teacher/forms/CalendarForm.py:16
+msgid "Start Time"
+msgstr "ஆரம்ப தேதி"
+
+#: portaladmin/forms/CalendarForm.py:19 portaladmin/forms/CalendarForm.py:22
+#: teacher/forms/CalendarForm.py:19 teacher/forms/CalendarForm.py:22
+msgid "End Time"
+msgstr "முடிவு தேதி"
+
+#: portaladmin/forms/CalendarForm.py:25 teacher/forms/CalendarForm.py:25
+msgid "All Day Events"
+msgstr "முழு நாள் நிகழ்வு"
+
+#: portaladmin/forms/ChapterInfoForm.py:7 portaladmin/forms/ClassListForm.py:7
+#: portaladmin/forms/ClassListForm.py:10
+msgid "Class Name"
+msgstr "பயனர் பெயர்"
+
+#: portaladmin/forms/ChapterInfoForm.py:25 portaladmin/forms/TeacherForm.py:24
+#: teacher/forms/MyprofileForm.py:15
+msgid "Last Name"
+msgstr "பயனர் பெயர்"
+
+#: portaladmin/forms/MyresourcelistForm.py:8
+#: portaladmin/forms/StudentresourceListForm.py:8
+#: teacher/forms/MyresourcelistForm.py:8
+#: teacher/forms/TeacherResourceForm.py:8
+#: templates/portaladmin/billboard.html:72
+#: templates/portaladmin/classroom.html:72
+#: templates/portaladmin/myresourcelist.html:157
+#: templates/portaladmin/studentassignedresourcelist.html:65
+#: templates/portaladmin/studentresourcelist.html:168
+#: templates/portaladmin/subjectlist.html:266
+#: templates/portaladmin/teacherresourcelist.html:98
+#: templates/portaladmin/viewstudentres.html:14
+#: templates/portaladmin/viewteacherres.html:14
+#: templates/portalstudent/assignedassessmentlist.html:138
+#: templates/portalstudent/assignedresourcelist.html:138
+#: templates/portalstudent/billboard.html:72
+#: templates/portalstudent/classroom.html:72
+#: templates/portalstudent/studentassignedresourcelist.html:66
+#: templates/portalstudent/studentwrittenwork.html:138
+#: templates/portalstudent/viewassignresource.html:41
+#: templates/portalstudent/viewassignresource.html:48
+#: templates/portalstudent/viewassignwrittenwork.html:41
+#: templates/portalstudent/viewassignwrittenwork.html:48
+#: templates/portalstudent/worklistinfo.html:121
+#: templates/portalteacher/addteachershare.html:14
+#: templates/portalteacher/assignedassessmentlist.html:138
+#: templates/portalteacher/assignmindmap.html:56
+#: templates/portalteacher/assignresource.html:53
+#: templates/portalteacher/billboard.html:67
+#: templates/portalteacher/classroom.html:72
+#: templates/portalteacher/extraslist.html:88
+#: templates/portalteacher/myresourcelist.html:157
+#: templates/portalteacher/studentassignedresourcelist.html:67
+#: templates/portalteacher/viewassessments.html:173
+msgid "Type"
+msgstr "வகை"
+
+#: portaladmin/forms/MyresourcelistForm.py:25
+#: teacher/forms/MyresourcelistForm.py:25
+#: templates/portaladmin/subjectlist.html:76
+#: templates/portaladmin/subjectlist.html:79
+#: templates/portaladmin/viewstudentresourcelist.html:29
+#: templates/portalteacher/viewresourcelist.html:26
+msgid "Description"
+msgstr "விளக்கமாக"
+
+#: portaladmin/forms/RubricsForm.py:14 portaladmin/forms/RubricsForm.py:16
+#: teacher/forms/RubricsForm.py:14 teacher/forms/RubricsForm.py:16
+#: templates/portaladmin/rubrics.html:72
+#: templates/portalstudent/worklistinfo.html:127
+#: templates/portalteacher/rubrics.html:72
+msgid "Detail"
+msgstr "விவரங்கள்"
+
+#: portaladmin/forms/RubricsForm.py:19 teacher/forms/RubricsForm.py:19
+#: templates/portalstudent/viewassessmentanswer.html:34
+#: templates/portalstudent/viewassignassessment.html:34
+#: templates/portalteacher/viewassessmentanswer.html:34
+msgid "Instructions"
+msgstr "செயல்முறை"
+
+#: portaladmin/forms/SchoolListForm.py:7
+#: portaladmin/forms/SchoolListForm.py:10
+#: templates/portaladmin/subjectlist.html:62
+#: templates/portaladmin/subjectlist.html:65
+msgid "School Name"
+msgstr "பள்ளியின் பெயர்"
+
+#: portaladmin/forms/StickyCommentForm.py:7
+#: student/forms/StickyCommentForm.py:7 teacher/forms/StickyCommentForm.py:7
+#: templates/portaladmin/billboardviewassignresourceanswer.html:191
+#: templates/portaladmin/billboardviewassignresourceanswer.html:647
+#: templates/portaladmin/billboardviewassignwrittenworkanswer.html:191
+#: templates/portaladmin/billboardviewassignwrittenworkanswer.html:647
+#: templates/portaladmin/billcomprehensionanswerrating.html:116
+#: templates/portaladmin/billviewassignmentanswer.html:174
+#: templates/portaladmin/stickynotes.html:585
+#: templates/portaladmin/stickynotes.html:599
+#: templates/portaladmin/viewpost.html:26
+#: templates/portalstudent/billboardviewassignresourceanswer.html:191
+#: templates/portalstudent/billboardviewassignresourceanswer.html:647
+#: templates/portalstudent/billboardviewassignwrittenworkanswer.html:191
+#: templates/portalstudent/billboardviewassignwrittenworkanswer.html:645
+#: templates/portalstudent/billviewassignmentanswer.html:123
+#: templates/portalstudent/stickynotes.html:585
+#: templates/portalstudent/stickynotes.html:599
+#: templates/portalstudent/viewassignmindmapanswer.html:64
+#: templates/portalstudent/viewpost.html:26
+#: templates/portalteacher/billboardviewassignresourceanswer.html:191
+#: templates/portalteacher/billboardviewassignresourceanswer.html:647
+#: templates/portalteacher/billboardviewassignwrittenworkanswer.html:191
+#: templates/portalteacher/billboardviewassignwrittenworkanswer.html:648
+#: templates/portalteacher/billviewassignmentanswer.html:137
+#: templates/portalteacher/stickynotes.html:585
+#: templates/portalteacher/stickynotes.html:599
+#: templates/portalteacher/viewassignmindmapanswer.html:63
+#: templates/portalteacher/viewpost.html:26
+msgid "Comment"
+msgstr "கருத்து"
+
+#: portaladmin/forms/StickyForm.py:7 portaladmin/forms/TopicsForm.py:8
+#: student/forms/StickyForm.py:7 student/forms/TopicsForm.py:8
+#: teacher/forms/ForumForm.py:8 teacher/forms/StickyForm.py:7
+#: teacher/forms/ThreadForm.py:13 templates/portaladmin/addstickynote.html:16
+#: templates/portaladmin/summernote_image_test.html:16
+msgid "Text of the note"
+msgstr ""
+
+#: portaladmin/forms/StudentForm.py:9 portaladmin/forms/TeacherForm.py:8
+#: portaladmin/forms/TeacherResourceForm.py:24 teacher/forms/StudentForm.py:9
+#: teacher/forms/TeacherResourceForm.py:19
+#: templates/portaladmin/classlist.html:14
+#: templates/portaladmin/statistics.html:13
+#: templates/portaladmin/statisticsassessment.html:13
+#: templates/portaladmin/statisticsassignment.html:13
+#: templates/portaladmin/studentslist.html:15
+#: templates/portaladmin/teacherslist.html:14
+#: templates/portaladmin/viewteacherres.html:27
+#: templates/portalteacher/addteachershare.html:27
+#: templates/portalteacher/statistics.html:14
+#: templates/portalteacher/statisticsexcercise.html:14
+#: templates/portalteacher/statisticsstudentslist.html:14
+#: templates/portalteacher/students.html:25
+msgid "Select School"
+msgstr "பள்ளி"
+
+#: portaladmin/forms/StudentForm.py:14
+#: portaladmin/forms/StudentresourceListForm.py:31
+#: portaladmin/forms/TeacherForm.py:13 templates/portaladmin/classlist.html:8
+#: templates/portaladmin/classlist.html:31
+#: templates/portaladmin/classlist.html:156
+#: templates/portaladmin/teacherresourcelist.html:92
+#: templates/portaladmin/viewstudentres.html:26
+#: templates/portaladmin/viewteacherres.html:41
+#: templates/portalteacher/studentslist.html:24
+msgid "Class"
+msgstr "வகுப்பு"
+
+#: portaladmin/forms/StudentresourceListForm.py:26
+#: portaladmin/forms/TeacherResourceForm.py:29 teacher/forms/StudentForm.py:14
+#: templates/portaladmin/subjectlist.html:106
+msgid "Select Class"
+msgstr "வகுப்பை தேர்வு செய்"
+
+#: portaladmin/forms/StudentresourceListForm.py:36
+#: templates/portaladmin/viewstudentres.html:42
+msgid "Component"
+msgstr "கூறு"
+
+#: portaladmin/forms/StudentresourceListForm.py:41
+msgid "Lessons "
+msgstr "பாடம்"
+
+#: portaladmin/forms/StudentresourceListForm.py:50
+#: templates/portaladmin/studentassignedresourcelist.html:71
+#: templates/portalstudent/studentassignedresourcelist.html:72
+#: templates/portalstudent/viewassessmentanswer.html:38
+#: templates/portalstudent/viewassignassessment.html:38
+#: templates/portalstudent/viewassignmindmap.html:52
+#: templates/portalstudent/viewassignmindmapanswer.html:52
+#: templates/portalstudent/viewassignresource.html:37
+#: templates/portalstudent/viewassignwrittenwork.html:37
+#: templates/portalstudent/viewstudentwrittenworks.html:70
+#: templates/portalteacher/addwrittenwork.html:55
+#: templates/portalteacher/assignassessment.html:51
+#: templates/portalteacher/assignchapter.html:49
+#: templates/portalteacher/studentassignedresourcelist.html:73
+#: templates/portalteacher/viewassessmentanswer.html:38
+#: templates/portalteacher/viewassessmentinfo.html:141
+#: templates/portalteacher/viewassignmindmapanswer.html:51
+#: templates/portalteacher/viewassignresource.html:144
+#: templates/portalteacher/viewassignwrittenwork.html:118
+#: templates/portalteacher/viewmindmapassignedstudentlist.html:141
+msgid "Note"
+msgstr "குறிப்பு"
+
+#: portaladmin/forms/TeacherResourceForm.py:8
+#: student/forms/StudentWorkForm.py:7
+#: templates/portalteacher/viewassessments.html:88
+msgid "Category"
+msgstr "பகுப்பு"
+
+#: portaladmin/forms/TeacherResourceForm.py:13
+#: teacher/forms/TeacherResourceForm.py:13
+#: templates/portaladmin/subjectlist.html:97
+#: templates/portaladmin/subjectlist.html:100
+#: templates/portalteacher/students.html:84
+msgid "Choose File"
+msgstr "கோப்பு தேர்வு"
+
+#: portaladmin/forms/TeacherResourceForm.py:34
+#: templates/portaladmin/studentslist.html:27
+#: templates/portaladmin/subjectlist.html:116
+#: templates/portaladmin/viewstudentres.html:34
+#: templates/portaladmin/viewteacherres.html:55
+#: templates/portalteacher/statistics.html:26
+#: templates/portalteacher/statisticsexcercise.html:26
+#: templates/portalteacher/statisticsstudentslist.html:26
+msgid "Select Section"
+msgstr "பிரிவு"
+
+#: portaladmin/forms/TeacherResourceForm.py:39
+#: teacher/forms/TeacherResourceForm.py:24
+#: templates/portaladmin/viewteacherres.html:66
+msgid "Select Folder"
+msgstr "புதிய கோப்பு"
+
+#: portaladmin/forms/TeacherResourceForm.py:44
+#: templates/portaladmin/viewstudentres.html:50
+#: templates/portaladmin/viewteacherres.html:77
+msgid "Chapter"
+msgstr "அத்தியாயம்"
+
+#: student/views.py:44 student/forms/StudentNotesForm.py:12
+#: student/forms/StudentWorkForm.py:13 templates/portaladmin/newtopic.html:27
 #: templates/portaladmin/viewstudentres.html:82
 #: templates/portalstudent/newtopic.html:27
 #: templates/portalstudent/studentnoteslist.html:8
@@ -1027,17 +1077,24 @@ msgid "Notes"
 msgstr "குறிப்புகள்"
 
 #: student/views.py:55 teacher/views.py:65
+#: templates/portalstudent/assignedassessmentlist.html:7
+#: templates/portalstudent/viewassessmentanswer.html:7
+#: templates/portalstudent/viewassignassessment.html:7
+#: templates/portalteacher/assessmentstatistics.html:7
+#: templates/portalteacher/assignedassessmentlist.html:7
 #: templates/portalteacher/base.html:171
+#: templates/portalteacher/statisticsexcercise.html:7
+#: templates/portalteacher/viewassessmentanswer.html:7
 #: templates/portalteacher/viewassessmentqa.html:8
 #: templates/portalteacher/viewassessmentqa.html:48
-#: templates/portalteacher/viewassessmentqa.html:199
+#: templates/portalteacher/viewassessmentqa.html:212
 #: templates/portalteacher/viewassessments.html:8
 #: templates/portalteacher/viewassessments.html:17
 #: templates/portalteacher/viewassessments.html:122
 msgid "Exercises"
 msgstr "பயிற்சி"
 
-#: student/views.py:62 teacher/views.py:72 teacher/views.py:221
+#: student/views.py:61 teacher/views.py:72 teacher/views.py:221
 #: templates/portaladmin/base.html:175
 #: templates/portalstudent/studentviewmindmap.html:7
 #: templates/portalstudent/viewassignmindmap.html:7
@@ -1058,51 +1115,39 @@ msgstr "பயிற்சி"
 msgid "Mindmap"
 msgstr "மன வரைபடம்"
 
-#: student/views.py:131 student/views.py:167 teacher/views.py:207
+#: student/views.py:130 student/views.py:166 teacher/views.py:207
 msgid "Animation"
 msgstr "பட உரையாடல்"
 
-#: student/views.py:200
+#: student/views.py:199
 msgid "Character"
 msgstr ""
 
-#: student/views.py:205
+#: student/views.py:204
 msgid "Photography"
 msgstr "புகைப்படம்"
 
-#: student/views.py:210
+#: student/views.py:209
 msgid "Lyrics"
 msgstr ""
 
-#: student/views.py:215 student/views.py:286
+#: student/views.py:214 student/views.py:285
 msgid "Video"
 msgstr "ஒலிஒழிப்படம்"
 
-#: student/views.py:280 templates/portalstudent/viewassignresource.html:55
+#: student/views.py:279 templates/portalstudent/viewassignresource.html:55
 #: templates/portalstudent/viewassignwrittenwork.html:55
 msgid "Text"
 msgstr "எழுத்து"
 
-#: student/views.py:282
+#: student/views.py:281
 msgid "Image"
 msgstr "புகைப்படம்"
 
-#: student/views.py:284 templates/portalstudent/viewassignresource.html:52
+#: student/views.py:283 templates/portalstudent/viewassignresource.html:52
 #: templates/portalstudent/viewassignwrittenwork.html:52
 msgid "Audio"
 msgstr "ஒலி"
-
-#: teacher/forms/MyprofileForm.py:9 teacher/forms/StudentForm.py:22
-msgid "First Name"
-msgstr "குறும் பெயர்"
-
-#: teacher/forms/NewtopicForm.py:13
-msgid "Content"
-msgstr ""
-
-#: teacher/forms/StudentForm.py:28
-msgid "last Name"
-msgstr "பயனர் பெயர்"
 
 #: teacher/views.py:51 templates/portaladmin/billboard.html:96
 #: templates/portaladmin/classroom.html:96
@@ -1117,7 +1162,8 @@ msgstr "பயனர் பெயர்"
 #: templates/portalteacher/studentmindmaplist.html:88
 #: templates/portalteacher/studentresourcelist.html:145
 #: templates/portalteacher/studentresourceunits.html:86
-#: templates/portalteacher/viewassessments.html:176
+#: templates/portalteacher/viewassessmentinfo.html:7
+#: templates/portalteacher/viewassessments.html:175
 #: templates/portalteacher/viewassignmentanswer.html:7
 #: templates/portalteacher/viewassignresource.html:7
 #: templates/portalteacher/writtenwork.html:58
@@ -1148,17 +1194,23 @@ msgstr "ஒளிபடகாட்சி"
 msgid "Teacher Share"
 msgstr "ஆசிரியர் பகிர்வு"
 
-#: teacher/views.py:408
-msgid "Login statistics"
-msgstr "புள்ளி விவரம்"
+#: teacher/forms/MyprofileForm.py:9 teacher/forms/StudentForm.py:22
+msgid "First Name"
+msgstr "குறும் பெயர்"
 
-#: teacher/views.py:412
-msgid "Assignment statistics"
-msgstr "புள்ளி விவரம்"
+#: teacher/forms/NewtopicForm.py:13
+msgid "Content"
+msgstr ""
 
-#: teacher/views.py:416
-msgid "Exercises Statistics"
-msgstr "புள்ளி விவரம்"
+#: teacher/forms/StudentForm.py:28
+msgid "last Name"
+msgstr "பயனர் பெயர்"
+
+#: templates/portaladmin/activityassessment.html:7
+#: templates/portaladmin/base.html:164
+#: templates/portaladmin/statisticsassessment.html:7
+msgid "Test"
+msgstr "தேர்வு"
 
 #: templates/portaladmin/activityassessment.html:7
 #: templates/portaladmin/activityassignment.html:7
@@ -1171,10 +1223,13 @@ msgstr "புள்ளி விவரம்"
 #: templates/portaladmin/statisticsassessment.html:30
 #: templates/portaladmin/statisticsassignment.html:7
 #: templates/portaladmin/statisticsassignment.html:30
+#: templates/portalteacher/activitystatistics.html:7
+#: templates/portalteacher/assessmentstatistics.html:7
 #: templates/portalteacher/assignmentstatistics.html:7
 #: templates/portalteacher/base.html:160 templates/portalteacher/base.html:165
 #: templates/portalteacher/base.html:168 templates/portalteacher/base.html:171
 #: templates/portalteacher/statistics.html:7
+#: templates/portalteacher/statisticsexcercise.html:7
 #: templates/portalteacher/statisticsstudentslist.html:7
 msgid "Statistics"
 msgstr "புள்ளி விவரம்"
@@ -1182,11 +1237,14 @@ msgstr "புள்ளி விவரம்"
 #: templates/portaladmin/activityassessment.html:20
 #: templates/portaladmin/activityassignment.html:20
 #: templates/portaladmin/activitystatistics.html:20
+#: templates/portalstudent/assignedassessmentlist.html:20
 #: templates/portalstudent/assignedresourcelist.html:20
 #: templates/portalstudent/studentviewassessments.html:19
 #: templates/portalstudent/studentviewmindmap.html:20
 #: templates/portalstudent/studentwrittenwork.html:20
-#: templates/portalteacher/activitystatistics.html:22
+#: templates/portalteacher/activitystatistics.html:20
+#: templates/portalteacher/assessmentstatistics.html:20
+#: templates/portalteacher/assignedassessmentlist.html:20
 #: templates/portalteacher/assignedmindmaplist.html:20
 #: templates/portalteacher/assignedresourcelist.html:20
 #: templates/portalteacher/assignmentstatistics.html:20
@@ -1198,11 +1256,15 @@ msgstr "தொடங்கும் தேதி"
 #: templates/portaladmin/activityassessment.html:35
 #: templates/portaladmin/activityassignment.html:35
 #: templates/portaladmin/activitystatistics.html:35
+#: templates/portalstudent/assignedassessmentlist.html:35
 #: templates/portalstudent/assignedresourcelist.html:35
 #: templates/portalstudent/studentviewassessments.html:34
 #: templates/portalstudent/studentviewmindmap.html:35
 #: templates/portalstudent/studentwrittenwork.html:35
-#: templates/portalteacher/activitystatistics.html:37
+#: templates/portalteacher/activitystatistics.html:35
+#: templates/portalteacher/assessmentstatistics.html:35
+#: templates/portalteacher/assignassessment.html:60
+#: templates/portalteacher/assignedassessmentlist.html:35
 #: templates/portalteacher/assignedmindmaplist.html:35
 #: templates/portalteacher/assignedresourcelist.html:35
 #: templates/portalteacher/assignmentstatistics.html:35
@@ -1214,11 +1276,14 @@ msgstr "முடியும் தேதி"
 #: templates/portaladmin/activityassessment.html:49
 #: templates/portaladmin/activityassignment.html:49
 #: templates/portaladmin/activitystatistics.html:49
+#: templates/portalstudent/assignedassessmentlist.html:49
 #: templates/portalstudent/assignedresourcelist.html:49
 #: templates/portalstudent/studentviewassessments.html:46
 #: templates/portalstudent/studentviewmindmap.html:49
 #: templates/portalstudent/studentwrittenwork.html:49
-#: templates/portalteacher/activitystatistics.html:49
+#: templates/portalteacher/activitystatistics.html:47
+#: templates/portalteacher/assessmentstatistics.html:49
+#: templates/portalteacher/assignedassessmentlist.html:49
 #: templates/portalteacher/assignedmindmaplist.html:49
 #: templates/portalteacher/assignedresourcelist.html:49
 #: templates/portalteacher/assignmentstatistics.html:49
@@ -1240,7 +1305,8 @@ msgstr "தேடு"
 #: templates/portalstudent/viewassignmentanswer.html:95
 #: templates/portalstudent/viewassignwrittenworkanswer.html:95
 #: templates/portalstudent/viewstudentwork.html:33
-#: templates/portalteacher/assignmentstatistics.html:114
+#: templates/portalteacher/assessmentstatistics.html:117
+#: templates/portalteacher/assignmentstatistics.html:117
 #: templates/portalteacher/billboardviewassignresourceanswer.html:104
 #: templates/portalteacher/billboardviewassignwrittenworkanswer.html:104
 #: templates/portalteacher/classviewassignmentanswer.html:85
@@ -1263,7 +1329,8 @@ msgstr "ஒப்படைத்த"
 #: templates/portalstudent/viewassignmentanswer.html:97
 #: templates/portalstudent/viewassignwrittenworkanswer.html:97
 #: templates/portalstudent/viewstudentwork.html:35
-#: templates/portalteacher/assignmentstatistics.html:117
+#: templates/portalteacher/assessmentstatistics.html:120
+#: templates/portalteacher/assignmentstatistics.html:120
 #: templates/portalteacher/billboardviewassignresourceanswer.html:106
 #: templates/portalteacher/billboardviewassignwrittenworkanswer.html:106
 #: templates/portalteacher/classviewassignmentanswer.html:87
@@ -1275,15 +1342,30 @@ msgstr "முடித்த"
 
 #: templates/portaladmin/activityassessment.html:120
 #: templates/portaladmin/activityassignment.html:120
-#: templates/portalteacher/assignmentstatistics.html:120
+#: templates/portalteacher/assessmentstatistics.html:123
+#: templates/portalteacher/assignmentstatistics.html:123
 #: templates/portalteacher/billboard.html:76
 msgid "Rating"
 msgstr "மதிப்பீடு"
 
+#: templates/portaladmin/activityassignment.html:7
+#: templates/portaladmin/base.html:161
+#: templates/portaladmin/statisticsassignment.html:7
+msgid "Homework"
+msgstr "வீட்டு பாடம்"
+
 #: templates/portaladmin/activityassignment.html:134
-#: templates/portalteacher/assignmentstatistics.html:134
+#: templates/portalteacher/assignmentstatistics.html:137
 msgid "No Rating"
 msgstr "மதிப்பிட வில்லை"
+
+#: templates/portaladmin/activitystatistics.html:7
+#: templates/portaladmin/base.html:158 templates/portaladmin/statistics.html:7
+#: templates/portalteacher/activitystatistics.html:7
+#: templates/portalteacher/base.html:165
+#: templates/portalteacher/statistics.html:7
+msgid "Login"
+msgstr "புகுபதிகை"
 
 #: templates/portaladmin/activitystatistics.html:114
 msgid "Works"
@@ -1336,19 +1418,19 @@ msgstr "எண்ணக்குவியல்"
 #: templates/portaladmin/newtopic.html:36
 #: templates/portaladmin/schoollist.html:82
 #: templates/portaladmin/schoollist.html:123
-#: templates/portaladmin/stickynotes.html:349
-#: templates/portaladmin/stickynotes.html:422
-#: templates/portaladmin/stickynotes.html:499
+#: templates/portaladmin/stickynotes.html:365
+#: templates/portaladmin/stickynotes.html:438
+#: templates/portaladmin/stickynotes.html:515
 #: templates/portaladmin/stickynoteslist.html:101
 #: templates/portaladmin/studentprofile.html:86
 #: templates/portaladmin/studentresourcelist.html:140
 #: templates/portaladmin/studentslist.html:137
-#: templates/portaladmin/studentslist.html:205
+#: templates/portaladmin/studentslist.html:206
 #: templates/portaladmin/subjectlist.html:178
 #: templates/portaladmin/subjectlist.html:235
 #: templates/portaladmin/summernote_image_test.html:25
 #: templates/portaladmin/teacherslist.html:110
-#: templates/portaladmin/teacherslist.html:177
+#: templates/portaladmin/teacherslist.html:178
 #: templates/portaladmin/viewpost.html:40
 #: templates/portaladmin/viewstudentres.html:91
 #: templates/portaladmin/viewteacherres.html:99
@@ -1368,13 +1450,14 @@ msgstr "எண்ணக்குவியல்"
 #: templates/portalstudent/classviewassignwrittenworkanswer.html:466
 #: templates/portalstudent/index.html:157
 #: templates/portalstudent/newtopic.html:36
-#: templates/portalstudent/stickynotes.html:349
-#: templates/portalstudent/stickynotes.html:422
-#: templates/portalstudent/stickynotes.html:499
+#: templates/portalstudent/stickynotes.html:365
+#: templates/portalstudent/stickynotes.html:438
+#: templates/portalstudent/stickynotes.html:515
 #: templates/portalstudent/stickynoteslist.html:87
 #: templates/portalstudent/studentnoteslist.html:86
 #: templates/portalstudent/studentresourcelist.html:90
 #: templates/portalstudent/topics.html:101
+#: templates/portalstudent/viewassignassessment.html:43
 #: templates/portalstudent/viewassignmentanswer.html:458
 #: templates/portalstudent/viewassignmindmap.html:64
 #: templates/portalstudent/viewassignresource.html:96
@@ -1402,20 +1485,22 @@ msgstr "எண்ணக்குவியல்"
 #: templates/portalteacher/forum.html:120
 #: templates/portalteacher/index.html:215
 #: templates/portalteacher/mindmap.html:7
-#: templates/portalteacher/myprofile.html:25
-#: templates/portalteacher/myprofile.html:62
+#: templates/portalteacher/myprofile.html:26
 #: templates/portalteacher/myresourcelist.html:129
 #: templates/portalteacher/newtopic.html:36
 #: templates/portalteacher/resourcelist.html:87
+#: templates/portalteacher/statistics.html:107
+#: templates/portalteacher/statisticsexcercise.html:107
 #: templates/portalteacher/statisticsstudentslist.html:107
-#: templates/portalteacher/stickynotes.html:349
-#: templates/portalteacher/stickynotes.html:422
-#: templates/portalteacher/stickynotes.html:499
+#: templates/portalteacher/stickynotes.html:365
+#: templates/portalteacher/stickynotes.html:438
+#: templates/portalteacher/stickynotes.html:515
 #: templates/portalteacher/stickynoteslist.html:104
 #: templates/portalteacher/studentresourcelist.html:105
 #: templates/portalteacher/thread.html:102
-#: templates/portalteacher/viewassessmentqa.html:207
-#: templates/portalteacher/viewassessments.html:141
+#: templates/portalteacher/viewassessmentanswer.html:43
+#: templates/portalteacher/viewassessmentqa.html:230
+#: templates/portalteacher/viewassessments.html:140
 #: templates/portalteacher/viewassignmentanswer.html:320
 #: templates/portalteacher/viewassignmentanswer.html:519
 #: templates/portalteacher/viewassignwrittenworkanswer.html:291
@@ -1435,7 +1520,7 @@ msgstr "சேமி"
 #: templates/portaladmin/viewteacherres.html:102
 #: templates/portalstudent/newtopic.html:39
 #: templates/portalteacher/addteachershare.html:57
-#: templates/portalteacher/assignassessment.html:240
+#: templates/portalteacher/assignassessment.html:238
 #: templates/portalteacher/assignchapter.html:241
 #: templates/portalteacher/assignresource.html:317
 #: templates/portalteacher/bulletinboard.html:82
@@ -1464,19 +1549,19 @@ msgstr "தவிர்"
 #: templates/portaladmin/myresourcelist.html:136
 #: templates/portaladmin/schoollist.html:105
 #: templates/portaladmin/schoollist.html:140
-#: templates/portaladmin/stickynotes.html:361
-#: templates/portaladmin/stickynotes.html:443
-#: templates/portaladmin/stickynotes.html:509
-#: templates/portaladmin/stickynotes.html:720
+#: templates/portaladmin/stickynotes.html:377
+#: templates/portaladmin/stickynotes.html:459
+#: templates/portaladmin/stickynotes.html:525
+#: templates/portaladmin/stickynotes.html:757
 #: templates/portaladmin/stickynoteslist.html:122
 #: templates/portaladmin/studentprofile.html:103
 #: templates/portaladmin/studentresourcelist.html:147
 #: templates/portaladmin/studentslist.html:175
-#: templates/portaladmin/studentslist.html:222
+#: templates/portaladmin/studentslist.html:223
 #: templates/portaladmin/subjectlist.html:207
 #: templates/portaladmin/subjectlist.html:252
 #: templates/portaladmin/teacherslist.html:148
-#: templates/portaladmin/teacherslist.html:194
+#: templates/portaladmin/teacherslist.html:195
 #: templates/portaladmin/viewtopic.html:110
 #: templates/portalforum/index.html:111
 #: templates/portalforum/viewpost.html:142
@@ -1492,10 +1577,10 @@ msgstr "தவிர்"
 #: templates/portalstudent/classviewassignwrittenworkanswer.html:427
 #: templates/portalstudent/classviewassignwrittenworkanswer.html:509
 #: templates/portalstudent/index.html:171
-#: templates/portalstudent/stickynotes.html:361
-#: templates/portalstudent/stickynotes.html:443
-#: templates/portalstudent/stickynotes.html:509
-#: templates/portalstudent/stickynotes.html:720
+#: templates/portalstudent/stickynotes.html:377
+#: templates/portalstudent/stickynotes.html:459
+#: templates/portalstudent/stickynotes.html:525
+#: templates/portalstudent/stickynotes.html:758
 #: templates/portalstudent/stickynoteslist.html:108
 #: templates/portalstudent/studentnoteslist.html:104
 #: templates/portalstudent/studentresourcelist.html:109
@@ -1508,11 +1593,11 @@ msgstr "தவிர்"
 #: templates/portalstudent/viewassignwrittenworkanswer.html:501
 #: templates/portalstudent/viewtopic.html:127
 #: templates/portalstudent/worklistinfo.html:104
-#: templates/portalteacher/addwrittenwork.html:257
-#: templates/portalteacher/addwrittenwork.html:418
+#: templates/portalteacher/addwrittenwork.html:258
+#: templates/portalteacher/addwrittenwork.html:419
 #: templates/portalteacher/adminlist.html:120
 #: templates/portalteacher/allschoolresourcelist.html:171
-#: templates/portalteacher/assignassessment.html:317
+#: templates/portalteacher/assignassessment.html:315
 #: templates/portalteacher/assignchapter.html:318
 #: templates/portalteacher/assignmindmap.html:280
 #: templates/portalteacher/assignmindmap.html:321
@@ -1531,20 +1616,23 @@ msgstr "தவிர்"
 #: templates/portalteacher/forum.html:127
 #: templates/portalteacher/index.html:234
 #: templates/portalteacher/mindmap.html:160
-#: templates/portalteacher/myprofile.html:70
 #: templates/portalteacher/myresourcelist.html:136
 #: templates/portalteacher/resourcelist.html:107
+#: templates/portalteacher/statistics.html:114
+#: templates/portalteacher/statistics.html:147
+#: templates/portalteacher/statisticsexcercise.html:114
+#: templates/portalteacher/statisticsexcercise.html:147
 #: templates/portalteacher/statisticsstudentslist.html:114
 #: templates/portalteacher/statisticsstudentslist.html:147
-#: templates/portalteacher/stickynotes.html:361
-#: templates/portalteacher/stickynotes.html:443
-#: templates/portalteacher/stickynotes.html:509
-#: templates/portalteacher/stickynotes.html:720
+#: templates/portalteacher/stickynotes.html:377
+#: templates/portalteacher/stickynotes.html:459
+#: templates/portalteacher/stickynotes.html:525
+#: templates/portalteacher/stickynotes.html:758
 #: templates/portalteacher/stickynoteslist.html:125
 #: templates/portalteacher/studentresourcelist.html:125
 #: templates/portalteacher/thread.html:114
-#: templates/portalteacher/viewassessmentqa.html:236
-#: templates/portalteacher/viewassessments.html:159
+#: templates/portalteacher/viewassessmentqa.html:258
+#: templates/portalteacher/viewassessments.html:158
 #: templates/portalteacher/viewassignmentanswer.html:480
 #: templates/portalteacher/viewassignmentanswer.html:561
 #: templates/portalteacher/viewassignmindmapanswer.html:204
@@ -1572,13 +1660,15 @@ msgstr "நிர்வாகிகள்"
 #: templates/portaladmin/teacherslist.html:31
 #: templates/portalstudent/stickynotes.html:17
 #: templates/portalstudent/topics.html:18
-#: templates/portalteacher/addwrittenwork.html:192
+#: templates/portalteacher/addwrittenwork.html:194
 #: templates/portalteacher/adminlist.html:17
-#: templates/portalteacher/assignassessment.html:251
+#: templates/portalteacher/assignassessment.html:249
 #: templates/portalteacher/assignchapter.html:252
 #: templates/portalteacher/assignmindmap.html:215
 #: templates/portalteacher/assignresource.html:211
 #: templates/portalteacher/mindmaplist.html:16
+#: templates/portalteacher/statistics.html:42
+#: templates/portalteacher/statisticsexcercise.html:42
 #: templates/portalteacher/statisticsstudentslist.html:42
 #: templates/portalteacher/stickynotes.html:17
 #: templates/portalteacher/stickynoteslist.html:18
@@ -1661,6 +1751,8 @@ msgstr "கருத்துக்களம்"
 #: templates/portalteacher/base.html:140 templates/portalteacher/base.html:154
 #: templates/portalteacher/extras.html:7
 #: templates/portalteacher/extras.html:17
+#: templates/portalteacher/statistics.html:42
+#: templates/portalteacher/statisticsexcercise.html:42
 #: templates/portalteacher/statisticsstudentslist.html:42
 #: templates/portalteacher/studentmindmaplist.html:7
 #: templates/portalteacher/studentmindmaplist.html:17
@@ -1672,18 +1764,6 @@ msgstr "கருத்துக்களம்"
 #: templates/portalteacher/studentslist.html:40
 msgid "Students"
 msgstr "மாணவர்"
-
-#: templates/portaladmin/base.html:158 templates/portalteacher/base.html:165
-msgid "Login"
-msgstr "புகுபதிகை"
-
-#: templates/portaladmin/base.html:161
-msgid "Homework"
-msgstr "வீட்டு பாடம்"
-
-#: templates/portaladmin/base.html:164
-msgid "Test"
-msgstr "தேர்வு"
 
 #: templates/portaladmin/base.html:170 templates/portaladmin/classroom.html:7
 #: templates/portaladmin/classroom.html:16
@@ -1729,7 +1809,7 @@ msgstr "ரெக்கார்டர்"
 #: templates/portalstudent/viewassignwrittenworkanswer.html:167
 #: templates/portalteacher/addwrittenwork.html:62
 #: templates/portalteacher/assignassessment.html:74
-#: templates/portalteacher/assignassessment.html:209
+#: templates/portalteacher/assignassessment.html:207
 #: templates/portalteacher/assignchapter.html:58
 #: templates/portalteacher/assignchapter.html:210
 #: templates/portalteacher/assignmindmap.html:78
@@ -1788,7 +1868,7 @@ msgstr ""
 #: templates/portalteacher/classviewassignmentanswer.html:98
 #: templates/portalteacher/classviewassignwrittenworkanswer.html:107
 #: templates/portalteacher/viewassessmentqa.html:131
-#: templates/portalteacher/viewassessmentqa.html:251
+#: templates/portalteacher/viewassessmentqa.html:273
 #: templates/portalteacher/viewassignmentanswer.html:119
 #: templates/portalteacher/viewassignmindmapanswer.html:57
 #: templates/portalteacher/viewassignwrittenworkanswer.html:107
@@ -1856,7 +1936,7 @@ msgstr "பதிவு"
 #: templates/portalteacher/classviewassignwrittenworkanswer.html:634
 #: templates/portalteacher/viewassignmentanswer.html:138
 #: templates/portalteacher/viewassignmentanswer.html:160
-#: templates/portalteacher/viewassignmentanswer.html:714
+#: templates/portalteacher/viewassignmentanswer.html:712
 #: templates/portalteacher/viewassignwrittenworkanswer.html:126
 #: templates/portalteacher/viewassignwrittenworkanswer.html:148
 #: templates/portalteacher/viewassignwrittenworkanswer.html:633
@@ -1907,10 +1987,11 @@ msgstr "மதிப்பீடு"
 #: templates/portalstudent/billboardviewassignresourceanswer.html:200
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:200
 #: templates/portalstudent/billviewassignmentanswer.html:53
+#: templates/portalstudent/viewassignassessment.html:44
 #: templates/portalstudent/viewassignmindmap.html:65
 #: templates/portalstudent/viewassignresource.html:97
 #: templates/portalstudent/viewassignwrittenwork.html:97
-#: templates/portalteacher/addwrittenwork.html:95
+#: templates/portalteacher/addwrittenwork.html:97
 #: templates/portalteacher/assignassessment.html:107
 #: templates/portalteacher/assignchapter.html:108
 #: templates/portalteacher/assignmindmap.html:115
@@ -1918,6 +1999,7 @@ msgstr "மதிப்பீடு"
 #: templates/portalteacher/billboardviewassignresourceanswer.html:200
 #: templates/portalteacher/billboardviewassignwrittenworkanswer.html:200
 #: templates/portalteacher/billviewassignmentanswer.html:56
+#: templates/portalteacher/viewassessmentanswer.html:44
 #: templates/portalteacher/viewassignmindmapanswer.html:72
 msgid "Send"
 msgstr "அனுப்பு"
@@ -1949,7 +2031,7 @@ msgstr "அறிவிப்புப்பலகைக்குள் செ�
 #: templates/portalteacher/classviewassignwrittenworkanswer.html:230
 #: templates/portalteacher/viewassignwrittenworkanswer.html:230
 msgid "Writtenwork already Sent to Noticeboard"
-msgstr ""
+msgstr "அறிவிப்புப்பலகைக்குள் செலுத்தப்பட்டது"
 
 #: templates/portaladmin/billboardviewassignresourceanswer.html:295
 #: templates/portaladmin/billboardviewassignresourceanswer.html:311
@@ -2063,7 +2145,7 @@ msgstr "புள்ளி விவரம்"
 #: templates/portalteacher/billboardviewassignwrittenworkanswer.html:754
 #: templates/portalteacher/classviewassignmentanswer.html:682
 #: templates/portalteacher/classviewassignwrittenworkanswer.html:631
-#: templates/portalteacher/viewassignmentanswer.html:711
+#: templates/portalteacher/viewassignmentanswer.html:709
 #: templates/portalteacher/viewassignwrittenworkanswer.html:630
 msgid "Hide"
 msgstr "மறைத்துவை"
@@ -2080,7 +2162,7 @@ msgid "Sl.no"
 msgstr "வரிசை எண்"
 
 #: templates/portaladmin/billcomprehensionanswerrating.html:28
-#: templates/portalteacher/viewassessmentqa.html:250
+#: templates/portalteacher/viewassessmentqa.html:272
 msgid "Question"
 msgstr "விளக்கமாக"
 
@@ -2140,13 +2222,13 @@ msgstr "அறிவுப்புகள்"
 
 #: templates/portaladmin/bulletinboard.html:157
 #: templates/portaladmin/bulletinboard.html:215
-#: templates/portalteacher/addwrittenwork.html:111
-#: templates/portalteacher/addwrittenwork.html:291
-#: templates/portalteacher/addwrittenwork.html:357
+#: templates/portalteacher/addwrittenwork.html:113
+#: templates/portalteacher/addwrittenwork.html:292
+#: templates/portalteacher/addwrittenwork.html:358
 #: templates/portalteacher/assignassessment.html:123
-#: templates/portalteacher/assignassessment.html:345
-#: templates/portalteacher/assignassessment.html:371
-#: templates/portalteacher/assignassessment.html:401
+#: templates/portalteacher/assignassessment.html:343
+#: templates/portalteacher/assignassessment.html:369
+#: templates/portalteacher/assignassessment.html:399
 #: templates/portalteacher/assignchapter.html:124
 #: templates/portalteacher/assignchapter.html:346
 #: templates/portalteacher/assignchapter.html:372
@@ -2186,6 +2268,7 @@ msgstr "குறும் பெயர்"
 #: templates/portalstudent/viewassignmentanswer.html:351
 #: templates/portalstudent/viewassignwrittenworkanswer.html:351
 #: templates/portalteacher/classviewassignmentanswer.html:328
+#: templates/portalteacher/classviewassignwrittenworkanswer.html:358
 #: templates/portalteacher/viewassignmentanswer.html:412
 msgid "Choose Add Correction"
 msgstr "திருத்தம் சேர்"
@@ -2196,6 +2279,7 @@ msgstr "திருத்தம் சேர்"
 #: templates/portalstudent/viewassignmentanswer.html:363
 #: templates/portalstudent/viewassignwrittenworkanswer.html:363
 #: templates/portalteacher/classviewassignmentanswer.html:340
+#: templates/portalteacher/classviewassignwrittenworkanswer.html:370
 #: templates/portalteacher/viewassignmentanswer.html:424
 msgid "Add more corrections"
 msgstr "மேலும் திருத்தங்களை சேர்க்கவும்"
@@ -2206,6 +2290,7 @@ msgstr "மேலும் திருத்தங்களை சேர்க�
 #: templates/portalstudent/viewassignmentanswer.html:370
 #: templates/portalstudent/viewassignwrittenworkanswer.html:370
 #: templates/portalteacher/classviewassignmentanswer.html:347
+#: templates/portalteacher/classviewassignwrittenworkanswer.html:377
 #: templates/portalteacher/viewassignmentanswer.html:431
 msgid "Save corrections"
 msgstr "திருத்தங்களை சேமிக்கவும்"
@@ -2230,10 +2315,10 @@ msgstr "மன வரைவுகள்"
 
 #: templates/portaladmin/mindmaplist.html:17
 #: templates/portalteacher/addwrittenwork.html:79
-#: templates/portalteacher/addwrittenwork.html:204
+#: templates/portalteacher/addwrittenwork.html:206
 #: templates/portalteacher/assignassessment.html:91
-#: templates/portalteacher/assignassessment.html:234
-#: templates/portalteacher/assignassessment.html:263
+#: templates/portalteacher/assignassessment.html:232
+#: templates/portalteacher/assignassessment.html:261
 #: templates/portalteacher/assignchapter.html:92
 #: templates/portalteacher/assignchapter.html:235
 #: templates/portalteacher/assignchapter.html:264
@@ -2264,8 +2349,8 @@ msgstr "பட்டியலிட திரும்பிப் போ"
 #: templates/portaladmin/viewteacherres.html:8
 #: templates/portalstudent/classviewassignmentanswer.html:560
 #: templates/portalteacher/addteachershare.html:8
-#: templates/portalteacher/addwrittenwork.html:365
-#: templates/portalteacher/assignassessment.html:379
+#: templates/portalteacher/addwrittenwork.html:366
+#: templates/portalteacher/assignassessment.html:377
 #: templates/portalteacher/assignchapter.html:380
 #: templates/portalteacher/assignmindmap.html:339
 #: templates/portalteacher/assignresource.html:335
@@ -2287,33 +2372,33 @@ msgstr "புதிய பள்ளி"
 msgid "Edit School"
 msgstr "பள்ளி விவரம்"
 
-#: templates/portaladmin/stickynotes.html:262
-#: templates/portaladmin/stickynotes.html:381
-#: templates/portalstudent/stickynotes.html:262
-#: templates/portalstudent/stickynotes.html:381
-#: templates/portalteacher/stickynotes.html:262
-#: templates/portalteacher/stickynotes.html:381
+#: templates/portaladmin/stickynotes.html:278
+#: templates/portaladmin/stickynotes.html:397
+#: templates/portalstudent/stickynotes.html:278
+#: templates/portalstudent/stickynotes.html:397
+#: templates/portalteacher/stickynotes.html:278
+#: templates/portalteacher/stickynotes.html:397
 msgid "Preview"
 msgstr "முன்னோட்டம்"
 
-#: templates/portaladmin/stickynotes.html:263
-#: templates/portaladmin/stickynotes.html:382
-#: templates/portalstudent/stickynotes.html:263
-#: templates/portalstudent/stickynotes.html:382
-#: templates/portalteacher/stickynotes.html:263
-#: templates/portalteacher/stickynotes.html:382
+#: templates/portaladmin/stickynotes.html:279
+#: templates/portaladmin/stickynotes.html:398
+#: templates/portalstudent/stickynotes.html:279
+#: templates/portalstudent/stickynotes.html:398
+#: templates/portalteacher/stickynotes.html:279
+#: templates/portalteacher/stickynotes.html:398
 msgid "Color"
 msgstr "வண்ணம்"
 
-#: templates/portaladmin/stickynotes.html:320
-#: templates/portalstudent/stickynotes.html:320
-#: templates/portalteacher/stickynotes.html:320
+#: templates/portaladmin/stickynotes.html:336
+#: templates/portalstudent/stickynotes.html:336
+#: templates/portalteacher/stickynotes.html:336
 msgid "Add Sticky note"
 msgstr "கருத்து இணை"
 
-#: templates/portaladmin/stickynotes.html:396
-#: templates/portalstudent/stickynotes.html:396
-#: templates/portalteacher/stickynotes.html:396
+#: templates/portaladmin/stickynotes.html:412
+#: templates/portalstudent/stickynotes.html:412
+#: templates/portalteacher/stickynotes.html:412
 msgid "Edit Sticky note"
 msgstr "கருத்து இணை"
 
@@ -2346,8 +2431,10 @@ msgstr "புதிய மாணவர் சேர்க்கவும்"
 msgid "Edit Student"
 msgstr "மாணவர் திருத்தம்"
 
-#: templates/portaladmin/studentslist.html:245
-#: templates/portaladmin/teacherslist.html:230
+#: templates/portaladmin/studentslist.html:246
+#: templates/portaladmin/teacherslist.html:231
+#: templates/portalteacher/statistics.html:168
+#: templates/portalteacher/statisticsexcercise.html:168
 #: templates/portalteacher/statisticsstudentslist.html:168
 #: templates/portalteacher/students.html:58
 msgid "Username"
@@ -2401,6 +2488,7 @@ msgstr "அறிவிப்பு தேதி"
 #: templates/portalteacher/billviewassignmentanswer.html:42
 #: templates/portalteacher/extraslist.html:94
 #: templates/portalteacher/thread.html:129
+#: templates/portalteacher/viewassessmentinfo.html:103
 #: templates/portalteacher/viewassignresource.html:103
 #: templates/portalteacher/viewassignwrittenwork.html:102
 #: templates/portalteacher/viewbulletinboard.html:86
@@ -2451,10 +2539,12 @@ msgid "Picture Composition"
 msgstr "கட்டுரை"
 
 #: templates/portaladmin/viewstudentwrittenworks.html:19
+#: templates/portalstudent/assignedassessmentlist.html:60
 #: templates/portalstudent/assignedresourcelist.html:60
 #: templates/portalstudent/studentnoteslist.html:68
 #: templates/portalstudent/studentviewmindmap.html:60
 #: templates/portalstudent/studentwrittenwork.html:60
+#: templates/portalteacher/assignedassessmentlist.html:60
 #: templates/portalteacher/viewassessmentqa.html:55
 #: templates/portalteacher/viewassessments.html:26
 #: templates/portalteacher/viewstudentwrittenworks.html:20
@@ -2463,17 +2553,21 @@ msgid "New"
 msgstr "புதிய"
 
 #: templates/portaladmin/viewstudentwrittenworks.html:20
+#: templates/portalstudent/assignedassessmentlist.html:61
 #: templates/portalstudent/assignedresourcelist.html:61
 #: templates/portalstudent/studentviewmindmap.html:61
 #: templates/portalstudent/studentwrittenwork.html:61
+#: templates/portalteacher/assignedassessmentlist.html:61
 #: templates/portalteacher/viewstudentwrittenworks.html:22
 msgid "Saved"
 msgstr "சேமி"
 
 #: templates/portaladmin/viewstudentwrittenworks.html:21
+#: templates/portalstudent/assignedassessmentlist.html:62
 #: templates/portalstudent/assignedresourcelist.html:62
 #: templates/portalstudent/studentviewmindmap.html:62
 #: templates/portalstudent/studentwrittenwork.html:62
+#: templates/portalteacher/assignedassessmentlist.html:62
 #: templates/portalteacher/viewassessments.html:29
 #: templates/portalteacher/viewstudentwrittenworks.html:24
 msgid "Completed"
@@ -2546,7 +2640,6 @@ msgstr "பதில்"
 
 #: templates/portalstudent/classviewassignmentanswer.html:7
 #: templates/portalstudent/classviewassignwrittenworkanswer.html:7
-#: templates/portalteacher/activitystatistics.html:7
 #: templates/portalteacher/classviewassignmentanswer.html:7
 #: templates/portalteacher/classviewassignwrittenworkanswer.html:7
 msgid "Classroom"
@@ -2568,7 +2661,6 @@ msgstr ""
 #: templates/portalteacher/classviewassignmentanswer.html:559
 #: templates/portalteacher/classviewassignmentanswer.html:560
 #, fuzzy
-#| msgid "Mark"
 msgid "Marks"
 msgstr "மதிப்பெண்"
 
@@ -2658,21 +2750,14 @@ msgstr "சேர்"
 msgid "Remove"
 msgstr "நீக்கு"
 
-#: templates/portalteacher/addwrittenwork.html:387
+#: templates/portalteacher/addwrittenwork.html:388
 #, fuzzy
-#| msgid "Rubrics"
 msgid "Rubrics List"
 msgstr "த.நி.வி குறிப்பு"
 
 #: templates/portalteacher/adminlist.html:62
 msgid "Admin Name"
 msgstr "நிர்வாகியின் பெயர்"
-
-#: templates/portalteacher/assignassessment.html:58
-#, fuzzy
-#| msgid "Last Name"
-msgid "Last Date"
-msgstr "பயனர் பெயர்"
 
 #: templates/portalteacher/assignedresourcelist.html:7
 msgid "Submission"
@@ -2742,24 +2827,26 @@ msgstr "பகிர்வு"
 
 #: templates/portalteacher/viewassessmentqa.html:122
 #, fuzzy
-#| msgid "Question"
 msgid "Question "
 msgstr "விளக்கமாக"
 
 #: templates/portalteacher/viewassessmentqa.html:134
 #, fuzzy
-#| msgid "Action"
 msgid "Options"
 msgstr "பட உரையாடல்"
 
-#: templates/portalteacher/viewassessmentqa.html:187
+#: templates/portalteacher/viewassessmentqa.html:184
 #, fuzzy
-#| msgid "Add more corrections"
+msgid "Mark"
+msgstr "மதிப்பெண்"
+
+#: templates/portalteacher/viewassessmentqa.html:200
+#, fuzzy
 msgid "Add more answer"
 msgstr "மேலும் திருத்தங்களை சேர்க்கவும்"
 
-#: templates/portalteacher/viewassessments.html:211
-#: templates/portalteacher/viewassessments.html:224
+#: templates/portalteacher/viewassessments.html:213
+#: templates/portalteacher/viewassessments.html:230
 msgid "Check"
 msgstr ""
 
@@ -2783,13 +2870,26 @@ msgstr ""
 msgid "Middle"
 msgstr ""
 
-#: templates/portalteacher/writtenwork.html:141
-msgid "Action"
-msgstr "பட உரையாடல்"
-
 #: templates/portalteacher/writtenwork.html:191
 msgid "Writing job"
 msgstr "எழுத்து பலகை"
+
+#~ msgid "Login statistics"
+#~ msgstr "புள்ளி விவரம்"
+
+#~ msgid "Assignment statistics"
+#~ msgstr "புள்ளி விவரம்"
+
+#~ msgid "Exercises Statistics"
+#~ msgstr "புள்ளி விவரம்"
+
+#, fuzzy
+#~| msgid "Last Name"
+#~ msgid "Last Date"
+#~ msgstr "பயனர் பெயர்"
+
+#~ msgid "Action"
+#~ msgstr "பட உரையாடல்"
 
 #, fuzzy
 #~| msgid "First Name"
