@@ -133,7 +133,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
         t.DT_RowId = data[i].teacherresourceid;
         t.slno=++count;
         t.title=data[i].resourcetitle;
-        t.date=TTS.utils.datetimeConv(data[i].createddate);
+        t.date=TTS.utils.datetimeConvDate(data[i].createddate);
         dataset.push(t);
     }
 

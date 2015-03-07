@@ -131,8 +131,8 @@ TTS.forms.assignedstudentresource = function(data){
         t.DT_RowId = data[i].loginid;
         t.slno=++count;
         t.title=data[i].resourcetitle;
-        t.assigndate=TTS.utils.dateConv(data[i].assigneddate);
-        t.answerdate=TTS.utils.dateConv(data[i].answereddate);
+        t.assigndate=TTS.utils.datetimeConvDate(data[i].assigneddate);
+        t.answerdate=TTS.utils.datetimeConvDate(data[i].answereddate);
         if (data[i].rating == '0.00'){
             t.rating="{% trans "No Rating" %}"                
         }else {

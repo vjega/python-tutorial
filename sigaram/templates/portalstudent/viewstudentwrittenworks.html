@@ -83,7 +83,7 @@ TTS.forms.renderstudentwork = function(data){
         t.DT_RowId = data[i].writtenworkid;
         t.slno = ++count;
         t.title = data[i].writtenworktitle;
-        t.date = TTS.utils.dateConv(data[i].assigneddate);
+        t.date = TTS.utils.datetimeConvDate(data[i].assigneddate);
         t.note = "<i class='flaticon-zoom38 tts-view' id="+data[i].writtenworkid+"></i>";
         dataset.push(t);
     }

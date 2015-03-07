@@ -222,7 +222,7 @@ TTS.forms.renderteacher = function(data){
         t.DT_RowId = data[i].teacherresourceid;
         t.slno = ++count;
         t.resourcetitle = data[i].resourcetitle;
-        t.date = TTS.utils.datetimeConv(data[i].createddate);
+        t.date = TTS.utils.datetimeConvDate(data[i].createddate);
         t.view="<i class='flaticon-zoom38 tts-view' id="+data[i].teacherresourceid+"></i>";
         t.delete = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);

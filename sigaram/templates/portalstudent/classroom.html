@@ -94,7 +94,7 @@ TTS.forms.renderannouncement = function(data){
             t.type = '{% trans "Written Work" %}';
         }
         t.student = data[i].firstname;
-        t.date = TTS.utils.dateConv(data[i].posteddate);
+        t.date = TTS.utils.datetimeConvDate(data[i].posteddate);
         dataset.push(t);
     }
 
