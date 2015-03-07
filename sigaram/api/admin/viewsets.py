@@ -3948,14 +3948,14 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
             result =  cursor.fetchone()
             print sql
 
-            print result            
+            print result[0]            
 
             aaid = models.AssignAssessmentQAInfo()
             aaid.assessmentqaid     = int(k)
             aaid.assessmentid       = int(pk)
             aaid.assignassessmentid = int(pk)
             aaid.answer             = str(v)
-            aaid.obtainedmark       = result
+            aaid.obtainedmark       = result[0]
 
             aaid.save()
 
