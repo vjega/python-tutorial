@@ -113,7 +113,7 @@ TTS.forms.renderteacherresourceinfo = function(data){
         t.DT_RowId = data[i].teacherresourceid;
         t.resourcetitle = data[i].resourcetitle;
         t.levelname = data[i].levelname;
-        t.date = TTS.utils.datetimeConv(data[i].createddate);
+        t.date = TTS.utils.datetimeConvDate(data[i].createddate);
         t.resourcetype = data[i].resourcetype;
         t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);

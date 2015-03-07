@@ -186,7 +186,7 @@ TTS.forms.renderstudentresourceinfo = function(data){
             t.title = "<img src='http://placehold.it/100x100'>"+data[i].resourcetitle;
         }
         //t.title="<img src=../static/"+data[i].thumbnailurl+">"+data[i].resourcetitle;
-        t.date=TTS.utils.datetimeConv(data[i].createddate);
+        t.date=TTS.utils.datetimeConvDate(data[i].createddate);
         t.type=data[i].resourcetype;
         t.delete="<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
