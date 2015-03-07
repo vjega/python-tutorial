@@ -3958,7 +3958,7 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
             aaid.obtainedmark       = result[0]
 
             aaid.save()
-
+            
         aldata = {}
         aldata['pagename']       = 'viewassignresource'
         aldata['operation']      = 'Insert'
