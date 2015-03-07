@@ -3484,14 +3484,14 @@ class BillboardCommentViewSet(viewsets.ModelViewSet):
         return Response(result)
 
 class RichmindmapViewSet(viewsets.ModelViewSet):
-
     queryset = models.Assignmindmapinfo.objects.all()
     serializer_class = adminserializers.RichmindmapSerializer
 
     def create(self, request):
         assignmindmapinfo = models.Assignmindmapinfo()
-        assigndata =  json.loads(dict(request.DATA.keys()[0]))
+        assigndata =  json.loads(request.DATA.keys()[0])
         assignmindmapinfo.mapdata = assigndata.get('mapdata')
+        assignmindmapinfo.assigntext = assigndata.get('assigntext')
         assignmindmapinfo.mindmapid = 0
         assignmindmapinfo.isanswered = 0
         assignmindmapinfo.issaved = 0

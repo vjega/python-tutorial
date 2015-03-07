@@ -43,13 +43,13 @@ def home(request):
         "link" : u"studentnoteslist",
         "caption": _("Notes")
         },{
-        "color": u"red",
-        "icon" : u"pencil",
+        "color": u"green",
+        "icon" : u"pencil-square-o",
         "link" : u"studentwrittenwork",
         "caption": _("Written Work")
         },
         {
-        "color": u"green",
+        "color": u"red",
         "icon" : u"pencil",
         "link" : u"assignedassessmentlist",
         "caption": _("Exercises"),
