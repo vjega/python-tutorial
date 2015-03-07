@@ -248,7 +248,7 @@ class studentViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        print dir(request)
+        #print dir(request)
         student = models.Studentinfo.objects.get(pk=pk)
         studentdata =  json.loads(request.DATA.keys()[0])
         student.username = studentdata.get('username')
@@ -551,7 +551,7 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
         ''' % (request.user.username,datecond)
         cursor = connection.cursor()
         cursor.execute(sql)
-        print sql;
+        #print sql;
         desc = cursor.description
         result =  [
                 dict(zip([col[0] for col in desc], row))
@@ -2745,7 +2745,7 @@ class AssignedWrittenworkStudents(viewsets.ModelViewSet):
 
         cursor = connection.cursor()
         cursor.execute(sql)
-        print sql;
+        #print sql;
         desc = cursor.description
         result =  [
                 dict(zip([col[0] for col in desc], row))
@@ -2789,11 +2789,11 @@ class EditAnswerResourceViewSet(viewsets.ModelViewSet):
         result =  cursor.fetchone()
         if result:
             previoustext = result[0];
-        print "answertext --> " + answertext
-        print "previoustext --> " + previoustext
-        print "edittext --> " + edittext
+        # print "answertext --> " + answertext
+        # print "previoustext --> " + previoustext
+        # print "edittext --> " + edittext
         approvedanswertext = answertext.replace(previoustext,edittext)
-        print "approvedanswertext --> " + approvedanswertext
+        # print "approvedanswertext --> " + approvedanswertext
 
         #updating approved answer text
         sql = '''
@@ -3363,7 +3363,7 @@ class AssessmentInfoViewSet(viewsets.ModelViewSet):
     def create(self, request):
         assessment = models.Assessmentinfo()
         cdata =  json.loads(request.DATA.keys()[0])
-        print cdata
+        #print cdata
         assessment.title        = cdata.get('title')
         assessment.instruction  = cdata.get('instruction')
         assessment.schoolid     = request.session.get('schoolid')
@@ -3652,7 +3652,7 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
         ''' % pk
         cursor = connection.cursor()
         cursor.execute(sql)
-        print sql
+       # print sql
         result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
         #print result
         return Response(result)
@@ -3924,7 +3924,7 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
             aai.isanswered = aaidata.get('isanswered')
 
         aai.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
-        aai.save()
+        # aai.save()
 
         if aaidata.get('alreadysaved'):
             sql = """
@@ -3934,13 +3934,29 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
 
             cursor = connection.cursor()
             cursor.execute(sql)
-
+        sql=''
+        result=''
         for k, v in dict(aaidata.get('aqaidanswer')).items():
+            sql= '''
+            SELECT actualmark
+            FROM assessmentqa
+            WHERE id = '%s'
+            AND answer = '%s'           
+            '''%(int(k), str(v))
+            cursor = connection.cursor()
+            cursor.execute(sql)
+            result =  cursor.fetchone()
+            print sql
+
+            print result            
+
             aaid = models.AssignAssessmentQAInfo()
             aaid.assessmentqaid     = int(k)
             aaid.assessmentid       = int(pk)
             aaid.assignassessmentid = int(pk)
             aaid.answer             = str(v)
+            aaid.obtainedmark       = result
+
             aaid.save()
 
         aldata = {}
@@ -4009,7 +4025,7 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
         GROUP BY aqa.id, aai.assigneddate
         ORDER BY aai.assignedid DESC''' % (request.user.username, pk)
 
-        print sql
+        #print sql
 
         cursor = connection.cursor()
         cursor.execute(sql)

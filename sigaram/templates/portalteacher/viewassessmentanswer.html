@@ -132,7 +132,6 @@ TTS.forms.ressave = function(savesend){
         answer = $(this).next().children().find('input:checked').val();
         aqaidanswer[aqaid] = answer;
     });
-
     data.aqaidanswer = aqaidanswer;
 
     data.alreadysaved = $("#issaved").val();
@@ -147,9 +146,6 @@ TTS.forms.ressave = function(savesend){
     else
         data.isanswered = 0;
     
-    console.log(data);
-    
-
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')

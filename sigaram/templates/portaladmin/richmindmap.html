@@ -255,9 +255,11 @@ window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
 
  TTS.forms.addrichmindmap = function(){
+  var test = richmindmap.document.serialize()
     var data = {
-      mapdata : richmindmap.document.serialize()
+      mapdata : test 
     }
+    console.log(JSON.stringify(data))
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -294,7 +296,7 @@ $(document).ready(function(){
 */
 
  $("body").live("click","#button-SAVE_DOCUMENT_COMMAND",function(){
-    console.log(richmindmap.document.serialize());
+    // console.log(richmindmap.document.serialize());
     // console.log("Deepak test");
     //$(".float-panel").hide()
     //richmindmap.document.serialize()

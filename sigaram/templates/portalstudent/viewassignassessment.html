@@ -147,9 +147,6 @@ TTS.forms.ressave = function(savesend){
     else
         data.isanswered = 0;
     
-    console.log(data);
-    
-
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')

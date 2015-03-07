@@ -1208,7 +1208,8 @@ class AssignAssessmentQAInfo(models.Model):
     answer              = models.CharField(max_length=500)
     assessmentid        = models.BigIntegerField()
     assignassessmentid  = models.BigIntegerField()
-
+    obtainedmark        = models.IntegerField()
+    
     class Meta:
         managed = False
         db_table= 'assignassessmentqainfo'
