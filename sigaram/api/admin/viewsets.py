@@ -3946,17 +3946,14 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
             cursor = connection.cursor()
             cursor.execute(sql)
             result =  cursor.fetchone()
-            print sql
-
-            print result[0]            
-
+            
             aaid = models.AssignAssessmentQAInfo()
             aaid.assessmentqaid     = int(k)
             aaid.assessmentid       = int(pk)
             aaid.assignassessmentid = int(pk)
             aaid.answer             = str(v)
-            aaid.obtainedmark       = result[0]
-
+            if result[0]:
+                aaid.obtainedmark   = result[0]
             aaid.save()
 
         aldata = {}
