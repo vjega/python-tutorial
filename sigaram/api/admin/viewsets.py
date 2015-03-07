@@ -3484,14 +3484,14 @@ class BillboardCommentViewSet(viewsets.ModelViewSet):
         return Response(result)
 
 class RichmindmapViewSet(viewsets.ModelViewSet):
-
     queryset = models.Assignmindmapinfo.objects.all()
     serializer_class = adminserializers.RichmindmapSerializer
 
     def create(self, request):
         assignmindmapinfo = models.Assignmindmapinfo()
-        assigndata =  json.loads(dict(request.DATA.keys()[0]))
+        assigndata =  json.loads(request.DATA.keys()[0])
         assignmindmapinfo.mapdata = assigndata.get('mapdata')
+        assignmindmapinfo.assigntext = assigndata.get('assigntext')
         assignmindmapinfo.mindmapid = 0
         assignmindmapinfo.isanswered = 0
         assignmindmapinfo.issaved = 0
@@ -3924,7 +3924,7 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
             aai.isanswered = aaidata.get('isanswered')
 
         aai.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
-        # aai.save()
+        aai.save()
 
         if aaidata.get('alreadysaved'):
             sql = """
@@ -3938,25 +3938,24 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
         result=''
         for k, v in dict(aaidata.get('aqaidanswer')).items():
             sql= '''
-            SELECT actualmark
+            SELECT actualmark,
+                answer
             FROM assessmentqa
-            WHERE id = '%s'
-            AND answer = '%s'           
-            '''%(int(k), str(v))
+            WHERE id = '%s'           
+            '''%(int(k))
             cursor = connection.cursor()
             cursor.execute(sql)
             result =  cursor.fetchone()
-            print sql
-
-            print result[0]            
-
+           
             aaid = models.AssignAssessmentQAInfo()
             aaid.assessmentqaid     = int(k)
             aaid.assessmentid       = int(pk)
             aaid.assignassessmentid = int(pk)
             aaid.answer             = str(v)
-            aaid.obtainedmark       = result[0]
-
+            if result[1]==str(v):
+                aaid.obtainedmark   = int(result[0])
+            else:
+                aaid.obtainedmark   = 0
             aaid.save()
             
         aldata = {}

@@ -103,9 +103,11 @@
 <script id="template-save" type="text/x-jquery-tmpl">
  
 <div id="save-dialog" class="file-dialog" title="Save mind map">
+
    <h1>To file</h1>
-  <p>Save the mind map as a file on your computer.</p>
-  <div id="button-save-hdd">Save</div>
+   <p>Save the mind map as a file on your computer.</p>
+   <div id="button-save-hdd">Save</div>
+  
 </div>
 </script>
 
@@ -255,11 +257,10 @@ window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
 
  TTS.forms.addrichmindmap = function(){
-  var test = richmindmap.document.serialize()
     var data = {
-      mapdata : test 
+      mapdata : richmindmap.document.serialize(),
+      assigntext : 'Test Title'
     }
-    console.log(JSON.stringify(data))
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -268,8 +269,9 @@ TTS.forms = TTS.forms || {};
         data: JSON.stringify(data),
         url : '/api/admin/richmindmap/'
     }).done(function( msg ) {
-        // console.log(msg)
         console.log("Save Completed...")
+        // alert("Save Completed...");
+        // window.location.reload()
     });
 }
 
@@ -286,8 +288,8 @@ TTS.forms = TTS.forms || {};
 }
 
 $(document).ready(function(){
-  // TTS.forms.renderrichmindmap()
-  $(".float-panel").hide()
+  TTS.forms.renderrichmindmap()
+  // $(".float-panel").hide()
   
   /*
   $("#save_mindmap").click(function(){
