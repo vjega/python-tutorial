@@ -1437,6 +1437,7 @@ class StudentinfoViewSet(viewsets.ModelViewSet):
         studentinfo.emailid = rubricsdata.get('emailid')
         studentinfo.schoolid = rubricsdata.get('schoolid')
         studentinfo.classid = rubricsdata.get('classid')
+        studentinfo.section = rubricsdata.get('section')
         studentinfo.password = rubricsdata.get('password')
         studentinfo.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         studentinfo.save()

@@ -906,6 +906,7 @@ class Studentinfo(models.Model):
     imageurl = models.CharField(max_length=1000)
     schoolid = models.BigIntegerField()
     classid = models.BigIntegerField()
+    section = models.CharField(max_length=10)
     isdelete = models.IntegerField()
     createdby = models.BigIntegerField()
     createddate = models.DateTimeField()
