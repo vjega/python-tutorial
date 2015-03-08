@@ -206,10 +206,11 @@ class studentViewSet(viewsets.ModelViewSet):
     def list(self, request):
         schoolid =  request.GET.get('schoolid')
         classid  =  request.GET.get('classid')
+        section  =  request.GET.get('section')
         schoolids  =  request.GET.get('schoolids')
 
-        if schoolid and classid:
-            queryset = models.Studentinfo.objects.filter(schoolid=schoolid, classid=classid, isdelete=0).order_by('-createddate')
+        if schoolid and classid and section:
+            queryset = models.Studentinfo.objects.filter(schoolid=schoolid, classid=classid, section=section, isdelete=0).order_by('-createddate')
         elif schoolid:
             queryset = models.Studentinfo.objects.filter(schoolid=schoolid, isdelete=0).order_by('-createddate')
         elif schoolids:
