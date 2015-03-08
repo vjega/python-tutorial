@@ -22,6 +22,7 @@
 
 {% block botcontent %}
 <input type="hidden" name="issaved" id="issaved">
+<input type="hidden" name="assessmentid" id="assessmentid">
 
 <div class="root">
     <div class="panel panel-default">
@@ -97,6 +98,7 @@ TTS.forms = TTS.forms || {}
 
 TTS.forms.renderassignedassessmentinfo = function(data){
     $("#issaved").val(data[0].issaved);
+    $("#assessmentid").val(data[0].assessmentid);
     $("#title").html(data[0].title);
     $("#instruction").html(data[0].instruction);
     $("#note").html(data[0].note);
@@ -135,6 +137,7 @@ TTS.forms.ressave = function(savesend){
 
     data.aqaidanswer = aqaidanswer;
 
+    data.assessmentid = $("#assessmentid").val();
     data.alreadysaved = $("#issaved").val();
 
     if(savesend == 'save')

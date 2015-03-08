@@ -1439,6 +1439,7 @@ class StudentinfoViewSet(viewsets.ModelViewSet):
         studentinfo.emailid = rubricsdata.get('emailid')
         studentinfo.schoolid = rubricsdata.get('schoolid')
         studentinfo.classid = rubricsdata.get('classid')
+        studentinfo.section = rubricsdata.get('section')
         studentinfo.password = rubricsdata.get('password')
         studentinfo.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         studentinfo.save()
@@ -3951,7 +3952,7 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
            
             aaid = models.AssignAssessmentQAInfo()
             aaid.assessmentqaid     = int(k)
-            aaid.assessmentid       = int(pk)
+            aaid.assessmentid       = int(aaidata.get('assessmentid'))
             aaid.assignassessmentid = int(pk)
             aaid.answer             = str(v)
             if result[1]==str(v):
@@ -3959,7 +3960,24 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
             else:
                 aaid.obtainedmark   = 0
             aaid.save()
+
+        sql = '''
+        SELECT SUM(aaqi.obtainedmark) AS totalobtainedmark,
+            SUM(aqa.actualmark) AS totalactualmark 
+        FROM assessmentqa aqa
+        INNER JOIN assignassessmentqainfo aaqi ON aaqi.assessmentqaid=aqa.id
+        WHERE aaqi.assignassessmentid = '%s'
+        GROUP BY aaqi.assignassessmentid 
+        '''%(int(pk))
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result =  cursor.fetchone()
+        aai = models.Assignassessmentinfo.objects.get(pk=pk)
+        aai.totalmarks     = int(result[0])
+        aai.totalactualmarks       = int(result[1])
+        aai.save()
             
+
         aldata = {}
         aldata['pagename']       = 'viewassignresource'
         aldata['operation']      = 'Insert'
@@ -4183,7 +4201,9 @@ class ViewassignassessmentInfo(viewsets.ModelViewSet):
                assigneddate as createddate,
                aai.studentid,
                aai.isanswered,
-               aai.issaved
+               aai.issaved,
+               aai.totalmarks,
+               aai.totalactualmarks
         FROM assignassessmentinfo aai
         INNER JOIN assessmentinfo ai on ai.id = aai.assessmentid 
         INNER JOIN assessmentqa aqa on aqa.assessmentid = aai.assessmentid 

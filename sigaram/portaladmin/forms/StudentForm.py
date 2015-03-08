@@ -11,9 +11,14 @@ class StudentForm(forms.Form):
         choices  = [('','Select School')],
     )
     classid = forms.ChoiceField(
-        label = _("Class"),
+        label = _("Select Class"),
         required = True,
         choices  = [(opt.classid, opt.shortname) for opt in models.Classinfo.objects.all()],
+    )
+    section      = forms.ChoiceField(
+        label    = _("Select Section"),
+        required = True,
+        choices  = [('a', 'A'), ('b','B')]
     )
     firstname = forms.CharField(
         label = _("Name"),
