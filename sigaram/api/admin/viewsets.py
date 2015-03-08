@@ -142,6 +142,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
         teacher.firstname = teacherdata.get('firstname')
         teacher.schoolid = teacherdata.get('schoolid')
         teacher.classid = teacherdata.get('classid')
+        teacher.section = teacherdata.get('section')
         teacher.emailid = teacherdata.get('emailid')
         teacher.imageurl = teacherdata.get('imageurl')
         #teacher.imageurl = #studentdata.get('imageurl')
@@ -169,6 +170,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
         teacher.schoolid = teacherdata.get('schoolid')
         teacher.imageurl = teacherdata.get('imageurl')
         teacher.classid = teacherdata.get('classid')
+        teacher.section = teacherdata.get('section')
         teacher.emailid = teacherdata.get('emailid')
         teacher.save()
 

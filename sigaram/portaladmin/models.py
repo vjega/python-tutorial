@@ -979,6 +979,7 @@ class Teacherinfo(models.Model):
     imageurl = models.CharField(max_length=1000, null=True, blank=True)
     schoolid = models.BigIntegerField()
     classid = models.BigIntegerField()
+    section = models.CharField(max_length=10)
     isdelete = models.IntegerField()
     createdby = models.BigIntegerField()
     createddate = models.DateTimeField()

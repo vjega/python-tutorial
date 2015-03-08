@@ -14,6 +14,11 @@ class TeacherForm(forms.Form):
         required = True,
         choices  = [(opt.classid, opt.shortname) for opt in models.Classinfo.objects.all()],
     )
+    section      = forms.ChoiceField(
+        label    = _("Section"),
+        required = True,
+        choices  = [('a', 'A'), ('b','B')]
+    )
     firstname = forms.CharField(
         label = _("Name"),
         max_length = 100,
