@@ -119,39 +119,6 @@ TTS.forms.showstudentform = function() {
     });
 };
 
-
-TTS.forms.editstudent = function(id, data) {
-    BootstrapDialog.show({
-        title: 'Edit Student',
-        message: $($('#student-form').render()),
-        onshown: function(){
-            $("#add-student").find("input,select").each(function(){
-                $(this).val(data[this['name']]);
-            });
-        },
-        buttons: [{
-            label: 'Update',
-            cssClass: 'btn-primary',
-            action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#add-student");
-                $.ajax({
-                    type:'PUT',
-                    data: data,
-                    url : '/api/admin/student/'+id
-                }).done(function( msg ) {
-                    dialogItself.close();
-                    location.reload();
-                });
-            }
-            },{
-            label: '{% trans "Close" %}',
-            action: function(dialogItself){
-                dialogItself.close();
-            }
-        }]
-    });
-};
-
 TTS.forms.renderstudentlist = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
@@ -165,21 +132,8 @@ TTS.forms.renderstudentlist = function(data){
             { "title": "{% trans "Name" %}",
               "data" : "name"  
             },
-            { "title": "{% trans "Username" %}",
-              "data" : "username"  
-
-            }, 
             { "title": "{% trans "Email Id" %}",
               "data" : "emailid"  
-            }, 
-            { "title": "{% trans "Edit" %}",
-              "class": "text-center",
-              "data" : "edit"  
-
-            }, 
-            { "title": "{% trans "Delete" %}",
-              "class": "text-center",
-              "data" : "delete"  
             }, 
         ];
     var dataset = [];
@@ -195,10 +149,7 @@ TTS.forms.renderstudentlist = function(data){
             t.image = "<img src='http://placehold.it/100x100'>";
         }
         t.name = data[i].firstname + " "+data[i].lastname;
-        t.username = data[i].username;
         t.emailid = data[i].emailid;
-        t.edit = "<i class='tts-edit fa fa-pencil fa-lg'></i>";
-        t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
     }
     if (TTS.forms.table) {
@@ -281,26 +232,6 @@ $(document).ready(function(){
         //window.location = 'activitystatistics?studentid='+this.id;
         window.location = 'assignmentstatistics?studentid='+this.id;
     });
-    $('#student-main-tbl').on('click', '.tts-edit', function(e){
-        e.stopPropagation();
-        var id = $(this).parent().parent().prop('id');
-        $.ajax({
-            url: '/api/admin/student/'+id,
-            type: 'GET'
-        }).done(function(data){
-            TTS.forms.editstudent(id,data);
-        })
-    });
-    $('#student-main-tbl').on('click', '.tts-delete', function(e){
-        e.stopPropagation();
-        if (!window.confirm("Do you want to delete this record?")) {
-            return false;
-        }
-        //console.log($(this).parent().parent().parent().prop("id"))
-        TTS.forms.delteacher($(this).parent().parent().prop("id"));
-        window.location.reload();
-    
-    });    
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.showstudentform();
     });
