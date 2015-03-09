@@ -170,6 +170,7 @@ class TeacherViewSet(viewsets.ModelViewSet):
         teacher.imageurl = teacherdata.get('imageurl')
         teacher.classid = teacherdata.get('classid')
         teacher.emailid = teacherdata.get('emailid')
+        teacher.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         teacher.save()
 
         aldata = {}
