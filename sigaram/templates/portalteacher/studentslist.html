@@ -9,8 +9,8 @@
     <!-- /.col-lg-12 -->
 </div>
 <div class="row">
-    <div class="form-group" class="col-sm-3">
-        <label for="folder_name" class="col-sm-2 control-label heading">{% trans "Schools" %}
+    <div class="form-group" class="col-sm-6">
+        <label for="folder_name" class="col-sm-1 control-label heading">{% trans "Schools" %}
         </label>
         <div class="col-sm-4">
             <select name="school_name" class="form-control" id="school_name">
@@ -21,7 +21,7 @@
         </div>
     </div>
     <div class="form-group" class="col-sm-3" id="classdetails">
-        <label for="folder_name" class="col-sm-2 control-label heading">{% trans "Class" %}</label>
+        <label for="folder_name" class="col-sm-1 control-label heading">{% trans "Class" %}</label>
         <div class="col-sm-2">
             <select name="classid" class="form-control" id="classid">
                 {% for class in classes %}
@@ -30,6 +30,16 @@
             </select>
         </div>
     </div>
+    <div class="form-group" class="col-sm-3" id="classdetails">
+        <label for="folder_name" class="col-sm-1 control-label heading">{% trans "Select Section" %}</label>
+        <div class="col-sm-2">
+            <select name="section" class="form-control" id="section">
+                <option value="a">A</option>
+                <option value="b">B</option>
+            </select>
+        </div>
+    </div>
+    
 </div><br>
 
 {% endblock topcontent %}
@@ -134,7 +144,7 @@ TTS.forms.renderstudentlist = function(data){
 
 
 $(document).ready(function(){
-    var url = "/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json";
+    var url = "/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&section="+$("#section").val()+"&format=json";
     TTS.utils.ajaxloaderstart();
     $.ajax({
         "url":url,
@@ -148,7 +158,7 @@ $(document).ready(function(){
     $("#school_name").change(function(){
         TTS.utils.ajaxloaderstart();
         $.ajax({
-            "url":"/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json",
+            "url":"/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&section="+$("#section").val()+"&format=json",
             "type":"GET"
         }).done(function(data){
             if (data.length) {
@@ -165,7 +175,24 @@ $(document).ready(function(){
     $("#classid").change(function(){
         TTS.utils.ajaxloaderstart();
         $.ajax({
-            "url":"/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json",
+            "url":"/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&section="+$("#section").val()+"&format=json",
+            "type":"GET"
+        }).done(function(data){
+            if (data.length) {
+                TTS.forms.renderstudentlist(data);
+                $("table#student-main-tbl thead tr th").removeClass('sorting_asc');
+            } else {
+                TTS.forms.table.fnClearTable();
+                $("table#student-main-tbl thead tr th").removeClass('sorting_asc');
+            }
+            TTS.utils.ajaxloaderstop();
+        });
+    })
+
+    $("#section").change(function(){
+        TTS.utils.ajaxloaderstart();
+        $.ajax({
+            "url":"/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&section="+$("#section").val()+"&format=json",
             "type":"GET"
         }).done(function(data){
             if (data.length) {

@@ -206,13 +206,10 @@ TTS.forms.renderassignassessmentinfo = function(data){
                       "data" : "slno"
                     },
                     { "title": "{% trans "Title" %}", 
-                      "data" : "title"},
+                      "data" : "title"
+                    },
                     { "title": "{% trans "Date" %}", 
                       "data" : "date"
-                    },
-                    { "title": "{% trans "Check" %}",
-                      "data" :"check",
-                      "bSortable":false, "class": "text-center" 
                     },
                     { "title": "{% trans "Delete" %}",
                       "data" : "action",
@@ -227,7 +224,6 @@ TTS.forms.renderassignassessmentinfo = function(data){
         t.slno      = ++count;
         t.title     = data[i].title;
         t.date      = TTS.utils.datetimeConvDate(data[i].createddate);
-        t.check     = "<i class='tts-view' id="+data[i].id+">{% trans 'Check' %}</i>";
         t.action    = "<i class='fa fa-trash fa-lg tts-delete'></i>";
         dataset.push(t);
     }

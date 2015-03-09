@@ -56,11 +56,10 @@
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover"
                      id="admin-main-tbl">
-                <div>
-                    <h3>{% trans "Title" %}:</h3>
-                </div><br />
-                <div id="resource-title"></div><br />
-                <div id="view-resource"></div>
+                    <div>
+                        <h3>{% trans "Title" %}:</h3>
+                    </div><br />
+                    <div id="resource-title"></div><br />
                 </table>
             </div>
             <!-- <div class="row">
@@ -138,6 +137,9 @@ TTS.forms.renderstudentlist = function(data){
             { "title": "{% trans "Name" %}",
               "data" : "name"  
             },
+            { "title": "{% trans "Marks" %}",
+              "data" : "marks"  
+            },
             { "title": "{% trans "Note" %}",
               "class": "text-center",
               "data" : "note"  
@@ -151,6 +153,7 @@ TTS.forms.renderstudentlist = function(data){
         t.DT_RowId = data[i].studentid;
         t.slno = ++count;
         t.name = data[i].firstname + " "+data[i].lastname;
+        t.marks = data[i].totalactualmarks + " / "+data[i].totalmarks;
         if (!data[i].issaved && !data[i].isanswered) 
             t.note = "<i class=\"fa fa-star fa-lg cred\"></i>" ;
         if (data[i].issaved && !data[i].isanswered) 
