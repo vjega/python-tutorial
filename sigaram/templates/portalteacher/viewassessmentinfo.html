@@ -153,7 +153,7 @@ TTS.forms.renderstudentlist = function(data){
         t.DT_RowId = data[i].studentid;
         t.slno = ++count;
         t.name = data[i].firstname + " "+data[i].lastname;
-        t.marks = data[i].totalactualmarks + " / "+data[i].totalmarks;
+        t.marks = data[i].totalmarks + " / "+data[i].totalactualmarks;
         if (!data[i].issaved && !data[i].isanswered) 
             t.note = "<i class=\"fa fa-star fa-lg cred\"></i>" ;
         if (data[i].issaved && !data[i].isanswered) 
