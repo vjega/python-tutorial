@@ -33,7 +33,7 @@ mindmaps.MindMapModel = function(eventBus, commandRegistry, undoController) {
    * 
    * @param {mindmaps.Document} doc or pass null to close the document
    */
-  this.setDocument = function(doc) {
+  mindmaps.MindMapModel.rich_setDocument = function(doc) {
     this.document = doc;
     if (doc) {
       eventBus.publish(mindmaps.Event.DOCUMENT_OPENED, doc);
@@ -42,6 +42,14 @@ mindmaps.MindMapModel = function(eventBus, commandRegistry, undoController) {
     }
   };
 
+  this.setDocument = function(doc) {
+    this.document = doc;
+    if (doc) {
+      eventBus.publish(mindmaps.Event.DOCUMENT_OPENED, doc);
+    } else {
+      eventBus.publish(mindmaps.Event.DOCUMENT_CLOSED);
+    }
+  };
   /**
    * Gets the current mind map associated with the document.
    * 

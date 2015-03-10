@@ -3498,7 +3498,7 @@ class RichmindmapViewSet(viewsets.ModelViewSet):
         assignmindmapinfo = models.Assignmindmapinfo()
         assigndata =  json.loads(request.DATA.keys()[0])
         assignmindmapinfo.mapdata = assigndata.get('mapdata')
-        assignmindmapinfo.assigntext = assigndata.get('assigntext')
+        assignmindmapinfo.assigntext = assigndata.get('assigntext','')
         assignmindmapinfo.mindmapid = 0
         assignmindmapinfo.isanswered = 0
         assignmindmapinfo.issaved = 0
