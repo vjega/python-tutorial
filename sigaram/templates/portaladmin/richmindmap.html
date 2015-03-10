@@ -103,11 +103,16 @@
 <script id="template-save" type="text/x-jquery-tmpl">
  
 <div id="save-dialog" class="file-dialog" title="Save mind map">
-
-   <h1>To file</h1>
+   <!--
+   /*<h1>To file</h1>
    <p>Save the mind map as a file on your computer.</p>
-   <div id="button-save-hdd">Save</div>
-  
+   <div id="button-save-hdd">Save</div>*/
+   -->
+   <h1>Assign text Title</h1>
+   <input type="text" class="form-control" id="assigntext" />
+   <div>
+         <button type="button" id="save_mindmap" >Save</button> 
+    </div>
 </div>
 </script>
 
@@ -213,9 +218,11 @@
           <span>mindmaps</span>
         </div>
         -->
+        <!--
         <div class="save_mindmap">
         <input type ="button" id="save_mindmap" value ="Save" class="ui-button ui-widget ui-state-default menu-item ui-button-text-icon-primary ui-state-focus"/>
         </div>
+        -->
         <div class="buttons">
           <span class="buttons-left"> </span> 
           <span class="buttons-right">
@@ -259,7 +266,7 @@ TTS.forms = TTS.forms || {};
  TTS.forms.addrichmindmap = function(){
     var data = {
       mapdata : richmindmap.document.serialize(),
-      assigntext : 'Test Title'
+      assigntext : $("#assigntext").val()
     }
     $.ajax({
         headers : {
@@ -292,12 +299,13 @@ $(document).ready(function(){
   TTS.forms.renderrichmindmap()
   // $(".float-panel").hide()
   
+    $("#save_mindmap").click(function(){
+      TTS.forms.addrichmindmap()
+    });
+  
   /*
-  $("#save_mindmap").click(function(){
-    TTS.forms.addrichmindmap()
-  });
-*/
 
+<!--
  $("body").live("click","#button-SAVE_DOCUMENT_COMMAND",function(){
     // console.log(richmindmap.document.serialize());
     // console.log("Deepak test");
@@ -307,12 +315,14 @@ $(document).ready(function(){
     //data['mapdata'] = "my first value";
     TTS.forms.addrichmindmap(); 
  });
-/*
+
   $("#button-SAVE_DOCUMENT_COMMAND").click(function(){
     console.log("hai deepak")
     console.log(richmindmap.document.serialize())
     //TTS.forms.addrichmindmap()
   });
+-->
+
 */
 });
  </script>
