@@ -3371,8 +3371,8 @@ class AssessmentInfoViewSet(viewsets.ModelViewSet):
         assessment = models.Assessmentinfo()
         cdata =  json.loads(request.DATA.keys()[0])
         #print cdata
-        assessment.title        = cdata.get('title')
-        assessment.instruction  = cdata.get('instruction')
+        assessment.title        = summer_decode(cdata.get('title'))
+        assessment.instruction  = summer_decode(cdata.get('instruction'))
         assessment.schoolid     = request.session.get('schoolid')
         assessment.classid      = request.session.get('classid')
         assessment.type         = cdata.get('type')
