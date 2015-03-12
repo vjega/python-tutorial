@@ -1215,3 +1215,13 @@ class AssignAssessmentQAInfo(models.Model):
     class Meta:
         managed = False
         db_table= 'assignassessmentqainfo'
+
+class Mindmaplistinfo(models.Model):
+    title = models.CharField(max_length=250)
+    createdby = models.BigIntegerField()
+    isdeleted = models.IntegerField()
+    createddate = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'mindmapinfo'

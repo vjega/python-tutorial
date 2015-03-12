@@ -4226,3 +4226,25 @@ class ViewassignassessmentInfo(viewsets.ModelViewSet):
                 for row in cursor.fetchall()
             ]
         return Response(result)
+
+class MindmapinfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Mindmaplistinfo.objects.filter().order_by('-createddate')
+    serializer_class = adminserializers.MindmaplistSerializer
+
+    def create(self, request):
+        mindmaplist = models.Mindmaplistinfo()
+        mindmapdata =  json.loads(request.DATA.keys()[0])
+        mindmaplist.title = mindmapdata.get('title')
+        mindmaplist.isdeleted = 0
+        mindmaplist.createdby = request.user.id
+        mindmaplist.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        mindmaplist.save()
+
+        aldata = {}
+        aldata['pagename']       = 'mindmaplist'
+        aldata['operation']      = 'Insert'
+        aldata['stringsentence'] = 'New stickynotes Created'
+        add_activitylog(request, aldata)
+
+        return Response(request.DATA)
