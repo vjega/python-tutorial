@@ -188,8 +188,7 @@ $(document).ready(function(){
         $("table#mindmap-list-tbl thead tr th").removeClass('sorting_asc');
     });
     $('#mindmap-list-tbl').on('click', 'tbody tr', function(){
-        window.location = 'sticky-notes?id='+this.id;
-        console.log();
+        window.location = 'richmindmap?id='+this.id;
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.showadminform();
