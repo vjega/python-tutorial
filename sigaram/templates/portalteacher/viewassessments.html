@@ -100,16 +100,16 @@
             {% trans "Title" %}
         </label>
     </div>
-    <div>
-        <textarea class="summernote" id="title" name="title"></textarea>
+    <div class="form-group">
+        <textarea id="title" class="summernote"></textarea>
     </div>
     <div class="form-group" class="col-sm-8">
         <label for="folder_name" class="col-sm-7 control-label" id ="resource-heade">
             {% trans "Reference" %}
         </label>
     </div>
-    <div>
-        <textarea class="summernote" id="instruction" name="instruction"></textarea>
+    <div class="form-group">
+        <textarea id="instruction" class="summernote"></textarea>
     </div>
 </form>
 </script>
@@ -118,6 +118,9 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 
 TTS.forms.editschool = function() {
+    var data = {};
+    data.title = TTS.utils.summer_encode($("#title").code());
+    //data.instruction = TTS.utils.summer_encode($("#instruction").code());
     BootstrapDialog.show({
         title: '{% trans "Exercises" %}',
         onshown: function(dialogRef){
@@ -140,21 +143,20 @@ TTS.forms.editschool = function() {
             label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#newfolderfrm");
-                
+                alert(data);
                 $.ajax({
                     headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
                     },  
                     type: 'POST',
-                    data: data,
+                    data: JSON.stringify(data),
                     url : '/api/admin/assessmentinfo/'
                 }).done(function( msg ) {
                     dialogItself.close();
                     window.location.reload();
                 });
             }
-            },{
+        },{
             label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
