@@ -85,7 +85,7 @@
 <script id="editschool" type="text/x-jsrender">
 <form id="newfolderfrm" class="form-horizontal" role="form">
     <div class="form-group" class="col-sm-4">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Category" %}</label>
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Type" %}</label>
         <div class="col-sm-4">
            <select name="type" class="form-control" id="type">
                 <option value="Fill in the blank">Fill in the blank</option>
@@ -100,16 +100,16 @@
             {% trans "Title" %}
         </label>
     </div>
-    <div class="form-group">
-        <textarea id="title" class="summernote"></textarea>
+    <div>
+        <textarea class="summernote" id="title"></textarea>
     </div>
     <div class="form-group" class="col-sm-8">
         <label for="folder_name" class="col-sm-7 control-label" id ="resource-heade">
             {% trans "Reference" %}
         </label>
     </div>
-    <div class="form-group">
-        <textarea id="instruction" class="summernote"></textarea>
+    <div>
+        <textarea class="summernote" id="instruction"></textarea>
     </div>
 </form>
 </script>
@@ -118,9 +118,6 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 
 TTS.forms.editschool = function() {
-    var data = {};
-    data.title = TTS.utils.summer_encode($("#title").code());
-    //data.instruction = TTS.utils.summer_encode($("#instruction").code());
     BootstrapDialog.show({
         title: '{% trans "Exercises" %}',
         onshown: function(dialogRef){
@@ -143,7 +140,11 @@ TTS.forms.editschool = function() {
             label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
-                alert(data);
+                var data = {};
+                data.type = $("#type").val();
+                data.title = TTS.utils.summer_encode($("#title").code());
+                data.instruction = TTS.utils.summer_encode($("#instruction").code());
+                console.log(data)
                 $.ajax({
                     headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -156,7 +157,7 @@ TTS.forms.editschool = function() {
                     window.location.reload();
                 });
             }
-        },{
+            },{
             label: '{% trans "Close" %}',
             action: function(dialogItself){
                 dialogItself.close();
