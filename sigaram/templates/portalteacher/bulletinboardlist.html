@@ -180,6 +180,7 @@ TTS.forms.renderannouncement = function(data){
         "data":     dataset,
         "columns":  headers
     });
+    $("td.dataTables_empty").parent().hide();
 
 };
 TTS.forms.delannouncement = function(id) {

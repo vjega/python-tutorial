@@ -3370,13 +3370,16 @@ class AssessmentInfoViewSet(viewsets.ModelViewSet):
     def create(self, request):
         assessment = models.Assessmentinfo()
         cdata =  json.loads(request.DATA.keys()[0])
-        #print cdata
-        assessment.title        = cdata.get('title')
-        assessment.instruction  = cdata.get('instruction')
+
+        print cdata.get('title');
+        print cdata.get('instruction');
+
+        assessment.title        = summer_decode(cdata.get('title'))
+        assessment.instruction  = summer_decode(cdata.get('instruction'))
         assessment.schoolid     = request.session.get('schoolid')
         assessment.classid      = request.session.get('classid')
-        assessment.type         = cdata.get('type')
-        assessment.createdby    = request.user.username
+        assessment.type         = str(cdata.get('type'))
+        assessment.createdby    = str(request.user.username)
         assessment.createddate  = time.strftime('%Y-%m-%d %H:%M:%S')
         assessment.isdeleted    = 0
         assessment.save()
@@ -4226,3 +4229,25 @@ class ViewassignassessmentInfo(viewsets.ModelViewSet):
                 for row in cursor.fetchall()
             ]
         return Response(result)
+
+class MindmapinfoViewSet(viewsets.ModelViewSet):
+
+    queryset = models.Mindmaplistinfo.objects.filter().order_by('-createddate')
+    serializer_class = adminserializers.MindmaplistSerializer
+
+    def create(self, request):
+        mindmaplist = models.Mindmaplistinfo()
+        mindmapdata =  json.loads(request.DATA.keys()[0])
+        mindmaplist.title = mindmapdata.get('title')
+        mindmaplist.isdeleted = 0
+        mindmaplist.createdby = request.user.id
+        mindmaplist.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        mindmaplist.save()
+
+        aldata = {}
+        aldata['pagename']       = 'mindmaplist'
+        aldata['operation']      = 'Insert'
+        aldata['stringsentence'] = 'New stickynotes Created'
+        add_activitylog(request, aldata)
+
+        return Response(request.DATA)

@@ -22,7 +22,8 @@ from portaladmin.forms import (RubricsForm,
                    BillcomprehensionanswerratingForm,
                    StickyinfoForm,
                    MyresourcelistForm,
-                   TopicsForm
+                   TopicsForm,
+                   MindmaplistForm
                     )
 from ajaxuploader.views import AjaxFileUploader
 #from ajaxuploader.backends.easythumbnails import EasyThumbnailUploadBackend
@@ -652,3 +653,8 @@ def activityassessment(request):
 @switchlanguage
 def billboardviewassignmentanswer(request):
     return render(request, 'portaladmin/billboardviewassignresourceanswer.html') 
+
+@login_required
+@switchlanguage
+def mindmaplist(request):
+    return render(request, 'portaladmin/mindmaplist.html',{'form':MindmaplistForm.MindmaplistForm()})
