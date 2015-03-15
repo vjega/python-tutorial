@@ -465,7 +465,7 @@ $(document).ready(function(){
             });
         }else{
             $.ajax({
-                "url":"/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&format=json",
+                "url":"/api/admin/student/?schoolid="+$("#school_name").val()+"&classid="+$("#classid").val()+"&section="+$("#section").val()+"&format=json",
                 "type":"GET"
             }).done(function(data){
                 if (data.length) {
