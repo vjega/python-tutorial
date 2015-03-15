@@ -197,6 +197,7 @@ TTS.forms.renderassessmentinfo = function(data){
         "data":     dataset,
         "columns":  headers
     });
+    $("td.dataTables_empty").parent().hide();
 
 };
 
@@ -234,7 +235,8 @@ TTS.forms.renderassignassessmentinfo = function(data){
         "data":     dataset,
         "columns":  headers
     });
-
+    $("td.dataTables_empty").parent().hide();
+    
 };
 
 

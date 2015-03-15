@@ -172,7 +172,7 @@ TTS.forms.renderteacher = function(data){
         "data":     dataset,
         "columns":  headers
     });
-
+    $("td.dataTables_empty").parent().hide();
 };
 
 
@@ -187,7 +187,7 @@ $(document).ready(function(){
         TTS.utils.ajaxloaderstop();
         $("table#sticky-list-tbl thead tr th").removeClass('sorting_asc');
     });
-    $('#sticky-list-tbl').on('click', 'tbody tr', function(){
+    $('#sticky-list-tbl').on('click', 'tbody tr.odd,tbody tr.even', function(){
         window.location = 'sticky-notes?id='+this.id;
     });
     $("#page-wrapper").on("click", "#addrec", function(){
@@ -200,8 +200,8 @@ $(document).ready(function(){
         }
         TTS.forms.delsticky($(this).parent().parent().prop("id"));
     });
-    
+
 });
 
 </script>
-{% endblock scriptcontent %}
+{% endblock scriptcontent %}    
