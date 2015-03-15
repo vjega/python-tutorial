@@ -3370,13 +3370,16 @@ class AssessmentInfoViewSet(viewsets.ModelViewSet):
     def create(self, request):
         assessment = models.Assessmentinfo()
         cdata =  json.loads(request.DATA.keys()[0])
-        #print cdata
+
+        print cdata.get('title');
+        print cdata.get('instruction');
+
         assessment.title        = summer_decode(cdata.get('title'))
         assessment.instruction  = summer_decode(cdata.get('instruction'))
         assessment.schoolid     = request.session.get('schoolid')
         assessment.classid      = request.session.get('classid')
-        assessment.type         = cdata.get('type')
-        assessment.createdby    = request.user.username
+        assessment.type         = str(cdata.get('type'))
+        assessment.createdby    = str(request.user.username)
         assessment.createddate  = time.strftime('%Y-%m-%d %H:%M:%S')
         assessment.isdeleted    = 0
         assessment.save()
