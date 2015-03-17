@@ -1,4 +1,4 @@
-{% extends 'portaladmin/base.html' %}
+  {% extends 'portaladmin/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% load crispy_forms_tags %}
@@ -29,10 +29,9 @@
     width: 120px;
 }
 
-.float-panel {
-    # left: 1269px !important;
+.float-panel{
+  #left:76% !important;
 }
-
 </style>
 {% endblock morecss %}
 {% block scriptcontent %}
@@ -289,10 +288,10 @@ TTS.forms = TTS.forms || {};
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'GET',
-        url : '/api/admin/richmindmap/1'
+        url : '/api/admin/richmindmap/5'
     }).done(function( msg ) {
-        // console.log(msg)
-        test = msg
+        render_data = mindmaps.Document.fromJSON(msg.mapdata)
+        mindmaps.MindMapModel.rich_setDocument(render_data)
     });
 }
 
@@ -300,10 +299,10 @@ $(document).ready(function(){
   TTS.forms.renderrichmindmap()
   // $(".float-panel").hide()
   
-    $("#save_mindmap").click(function(){
+    $("#save_mindmap").live('click',function(){
       TTS.forms.addrichmindmap()
+      // view.hideOpenDialog();
     });
-  
   /*
 
 <!--

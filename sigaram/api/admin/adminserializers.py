@@ -289,3 +289,8 @@ class AssignassessmentinfoSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('assignedid', 'assessmentid', 'studentid', 'enddate', 'isanswered',
                   'issaved', 'assignedby', 'assigneddate', 'note', 'answereddate', 
                   'totalmarks', 'totalactualmarks')
+
+class MindmaplistSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Mindmaplistinfo
+        fields = ('id','title', 'createdby','isdeleted','createddate')

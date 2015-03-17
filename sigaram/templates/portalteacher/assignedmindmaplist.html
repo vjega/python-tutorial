@@ -75,6 +75,9 @@
     #wrapper{
         padding-top:60px;
     }  
+    .table-responsive{
+        padding: 10px;
+    }
 </style>
 {% endblock morecss %}
 
@@ -137,6 +140,7 @@
                 "columns":  headers
             });
         }
+        $("td.dataTables_empty").parent().hide();
 };
 
 $(document).ready(function(){

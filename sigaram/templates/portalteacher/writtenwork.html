@@ -180,6 +180,8 @@ TTS.forms.writtenworklist = function(data){
             "columns":  headers
         });
     }
+
+    $("td.dataTables_empty").parent().hide();
     /*$('#writtenwork-list-saved').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset_saved,
         "columns":  headers

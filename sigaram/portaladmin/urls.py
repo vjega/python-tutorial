@@ -116,6 +116,7 @@ urlpatterns = patterns('portaladmin.views',
                                                          name="activityassessment"), 
     url(r'^billboardviewassignmentanswer$', 'billboardviewassignmentanswer', 
                                                          name="billboardviewassignmentanswer"), 
+    url(r'^mindmaplist$',        'mindmaplist',     name='mindmaplist'),
    
     #(r'^api/', include(v1_api.urls)),
 )

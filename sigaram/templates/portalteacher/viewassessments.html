@@ -85,7 +85,7 @@
 <script id="editschool" type="text/x-jsrender">
 <form id="newfolderfrm" class="form-horizontal" role="form">
     <div class="form-group" class="col-sm-4">
-        <label for="folder_name" class="col-sm-2 control-label">{% trans "Category" %}</label>
+        <label for="folder_name" class="col-sm-2 control-label">{% trans "Type" %}</label>
         <div class="col-sm-4">
            <select name="type" class="form-control" id="type">
                 <option value="Fill in the blank">Fill in the blank</option>
@@ -101,7 +101,7 @@
         </label>
     </div>
     <div>
-        <textarea class="summernote" id="title" name="title"></textarea>
+        <textarea class="summernote" id="title"></textarea>
     </div>
     <div class="form-group" class="col-sm-8">
         <label for="folder_name" class="col-sm-7 control-label" id ="resource-heade">
@@ -109,7 +109,7 @@
         </label>
     </div>
     <div>
-        <textarea class="summernote" id="instruction" name="instruction"></textarea>
+        <textarea class="summernote" id="instruction"></textarea>
     </div>
 </form>
 </script>
@@ -140,14 +140,17 @@ TTS.forms.editschool = function() {
             label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
-                var data = TTS.utils.serilaizeJson("#newfolderfrm");
-                
+                var data = {};
+                data.type = $("#type").val();
+                data.title = TTS.utils.summer_encode($("#title").code());
+                data.instruction = TTS.utils.summer_encode($("#instruction").code());
+                console.log(data)
                 $.ajax({
                     headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
                     },  
                     type: 'POST',
-                    data: data,
+                    data: JSON.stringify(data),
                     url : '/api/admin/assessmentinfo/'
                 }).done(function( msg ) {
                     dialogItself.close();
@@ -195,6 +198,7 @@ TTS.forms.renderassessmentinfo = function(data){
         "data":     dataset,
         "columns":  headers
     });
+    $("td.dataTables_empty").parent().hide();
 
 };
 
@@ -232,7 +236,8 @@ TTS.forms.renderassignassessmentinfo = function(data){
         "data":     dataset,
         "columns":  headers
     });
-
+    $("td.dataTables_empty").parent().hide();
+    
 };
 
 
