@@ -701,3 +701,8 @@ def viewassessmentanswer(request):
 @switchlanguage
 def viewassessmentinfo(request):
     return render(request, 'portalteacher/viewassessmentinfo.html')
+
+@login_required
+@switchlanguage
+def viewopenendedqa(request):
+    return render(request, 'portalteacher/viewopenendedqa.html')  
