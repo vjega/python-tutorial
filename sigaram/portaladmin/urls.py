@@ -43,6 +43,10 @@ urlpatterns = patterns('portaladmin.views',
     url(r'^recorder$',                  'recorder',     name='recorder'),
     url(r'^studentassignedresourcelist$','studentassignedresourcelist',
                                                         name='studentassignedresourcelist'),
+    url(r'^studentassignedwrittenworklist$','studentassignedwrittenworklist',
+                                                        name='studentassignedwrittenworklist'),
+    url(r'^studentassignedassessmentlist$','studentassignedassessmentlist',
+                                                        name='studentassignedassessmentlist'),
     url(r'^viewstudentwork$',            'viewstudentwork',             
                                                         name='viewstudentwork'),
     url(r'^admin-img-upload$',          'admin_img_uploader',          
@@ -117,6 +121,11 @@ urlpatterns = patterns('portaladmin.views',
     url(r'^billboardviewassignmentanswer$', 'billboardviewassignmentanswer', 
                                                          name="billboardviewassignmentanswer"), 
     url(r'^mindmaplist$',        'mindmaplist',     name='mindmaplist'),
-   
+ 
+    url(r'^viewstudentwrittenwork$',            'viewstudentwrittenwork',             
+                                                        name='viewstudentwrittenwork'),
+    url(r'^viewstudentassessmentwork$',            'viewstudentassessmentwork',             
+                                                        name='viewstudentassessmentwork'),
+  
     #(r'^api/', include(v1_api.urls)),
 )

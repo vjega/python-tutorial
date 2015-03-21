@@ -432,6 +432,162 @@ class TeacherresourceinfoViewSet(viewsets.ModelViewSet):
         serializer = adminserializers.TeacherresourceinfoSerializer(queryset, many=False)
         return Response(serializer.data)
 
+
+class StudentWrittenWorkDetailViewSet(viewsets.ModelViewSet):
+    queryset = models.Writtenworkinfo.objects.all()
+    serializer_class = adminserializers.WrittenworkinfoSerializer
+    
+    def list(self, request):
+        classid   = request.GET.get('classid')
+        section   = request.GET.get('section')
+        chapterid = request.GET.get('chapterid')
+        categoryid = request.GET.get('categoryid')
+        writtenworkid = request.GET.get('writtenworkid')
+        studentid = request.GET.get('studentid')
+        kwarg = {}
+        kwarg['isdeleted'] = 0
+        wherecond = '';
+        if classid:
+            wherecond += " AND wwi.classid = "+classid
+        if section:
+            wherecond += " AND wwi.section = "+section
+        if chapterid:
+            wherecond += " AND wwi.chapterid = "+chapterid
+        if categoryid:
+            wherecond += " AND wwi.categoryid = "+categoryid
+        if writtenworkid:
+            wherecond += " AND wwi.writtenworkid = "+writtenworkid            
+        if studentid:
+            wherecond += " AND awwi.studentid = '"+studentid+"'"
+
+        # queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('-createddate')
+        # serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
+        #print queryset;
+
+        sql = '''
+        SELECT wwi.*,
+            awwi.studentid
+        FROM assignwrittenworkinfo awwi
+        INNER JOIN writtenworkinfo wwi on wwi.writtenworkid = awwi.assignwrittenworkid 
+        WHERE isdeleted=0
+              %s
+        GROUP BY wwi.writtenworkid, awwi.answereddate
+        ORDER BY awwi.assignwrittenworkid DESC''' % (wherecond)
+
+        print sql
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+        return Response(result)        
+
+
+class StudentAssessmentDetailViewSet(viewsets.ModelViewSet):
+    queryset = models.Writtenworkinfo.objects.all()
+    serializer_class = adminserializers.WrittenworkinfoSerializer
+    
+    def list(self, request):
+        classid   = request.GET.get('classid')
+        section   = request.GET.get('section')
+        chapterid = request.GET.get('chapterid')
+        categoryid = request.GET.get('categoryid')
+        assessmentid = request.GET.get('assessmentid')
+        studentid = request.GET.get('studentid')
+        kwarg = {}
+        kwarg['isdeleted'] = 0
+        wherecond = '';
+        if classid:
+            wherecond += " AND ai.classid = "+classid
+        if section:
+            wherecond += " AND ai.section = "+section
+        if chapterid:
+            wherecond += " AND ai.chapterid = "+chapterid
+        if categoryid:
+            wherecond += " AND ai.categoryid = "+categoryid
+        if assessmentid:
+            wherecond += " AND aai.assessmentid = "+assessmentid            
+        if studentid:
+            wherecond += " AND aai.studentid = '"+studentid+"'"
+
+        # queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('-createddate')
+        # serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
+        #print queryset;
+
+        sql = '''
+        SELECT ai.*,
+            aai.studentid
+        FROM assignassessmentinfo aai
+        INNER JOIN assessmentinfo ai on ai.id = aai.assessmentid 
+        WHERE isdeleted=0
+              %s
+        GROUP BY ai.id, aai.answereddate
+        ORDER BY aai.assessmentid DESC''' % (wherecond)
+
+        print sql
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+        return Response(result)                
+
+
+class ResourceStudentinfoViewSet(viewsets.ModelViewSet):
+    queryset = models.Resourceinfo.objects.all()
+    serializer_class = adminserializers.ResourceinfoSerializer
+    
+    def list(self, request):
+        classid   = request.GET.get('classid')
+        section   = request.GET.get('section')
+        chapterid = request.GET.get('chapterid')
+        categoryid = request.GET.get('categoryid')
+        resourceid = request.GET.get('resourceid')
+        studentid = request.GET.get('studentid')
+        kwarg = {}
+        kwarg['isdeleted'] = 0
+        wherecond = '';
+        if classid:
+            wherecond += " AND ri.classid = "+classid
+        if section:
+            wherecond += " AND ri.section = "+section
+        if chapterid:
+            wherecond += " AND ri.chapterid = "+chapterid
+        if categoryid:
+            wherecond += " AND ri.categoryid = "+categoryid
+        if studentid:
+            wherecond += " AND ari.studentid = '"+studentid+"'"
+
+        # queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('-createddate')
+        # serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
+        #print queryset;
+
+        sql = '''
+        SELECT ri.*,
+            ari.studentid
+        FROM assignresourceinfo ari
+        INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
+        WHERE isdeleted=0
+              AND ari.IsDelete=0
+              %s
+        GROUP BY ari.resourceid, ari.answereddate
+        ORDER BY ari.assignedid DESC''' % (wherecond)
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
+        return Response(result)        
+
 class ResourceinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Resourceinfo.objects.all()
     serializer_class = adminserializers.ResourceinfoSerializer
@@ -2745,7 +2901,7 @@ class AssignedWrittenworkStudents(viewsets.ModelViewSet):
         FROM assignwrittenworkinfo awwi
         INNER JOIN writtenworkinfo wwi on wwi.writtenworkid = awwi.writtenworkid 
         INNER JOIN auth_user au on au.username = awwi.studentid 
-        WHERE awwi.writtenworkid=%s
+        WHERE awwi.assignwrittenworkid=%s
               %s
         GROUP BY awwi.studentid
         ORDER BY assigneddate DESC''' % (pk, studentcond)
