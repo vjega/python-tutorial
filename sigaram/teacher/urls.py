@@ -125,5 +125,5 @@ urlpatterns = patterns('teacher.views',
     url(r'^viewassessmentinfo$',    'viewassessmentinfo',   name="viewassessmentinfo"),
     url(r'^viewopenendedqa$',       'viewopenendedqa',     
                                                         name='viewopenendedqa'),    
-
+    url(r'^viewassopenendedanswer$',    'viewassopenendedanswer',   name="viewassopenendedanswer"),
 )

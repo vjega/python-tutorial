@@ -22,14 +22,11 @@
 
 {% block botcontent %}
 <input type="hidden" name="issaved" id="issaved">
+<input type="hidden" name="assessmentid" id="assessmentid">
 
 <div class="root">
     <div class="panel panel-default">
         <div class="panel-body">
-            <i id="showprint" class="fa fa-print fa-lg pull-right"></i>
-            <i id="show" class="fa fa-expand fa-lg pull-right"></i>
-            <i id="hide" class="fa fa-compress fa-lg pull-right"></i>
-        
             <div>
                 <h4><strong>{% trans "Title" %}:</strong></h4>
             </div>
@@ -42,15 +39,12 @@
                 <h4><strong>{% trans "Note" %}:</strong></h4>
             </div>
             <div id="note"></div><br />
-            <div style="float:right">
-                <strong>
-                    <h5 style="float:left;">{% trans "Marks" %}:</h5>
-                    <div id="total-marks" style="float:left;margin-top:8px;"></div>
-                    <div style="float:left;margin-top:8px;">/</div>
-                    <div id="total-actual-marks" style="float:left;margin-top:8px;"></div><br />
-                </strong>
-            </div>
             <div id="question-answer"></div><br />
+            <div class="form-group">
+                <button class="btn btn-success btn-lg" id="res-save">{% trans 'Save' %}</button>
+                <button class="btn btn-success btn-lg" id="res-send">{% trans 'Send' %}</button>
+            </div>    
+
         </div>
         <!-- /.panel-body -->
     </div>
@@ -88,18 +82,8 @@
     input#ttls{
         color:#000;
     } 
-    #show{
-    font-size: 20px;
-    cursor: pointer; 
-    }
-    #showprint{
-        font-size: 20px;
-        cursor: pointer; 
-    }
-    #hide{
-        font-size: 20px;
-        cursor: pointer; 
-        display: none;
+    .page-header {
+        margin: 9px 0 !important;
     }
 </style>
 {% endblock morecss %}
@@ -114,23 +98,22 @@ TTS.forms = TTS.forms || {}
 
 TTS.forms.renderassignedassessmentinfo = function(data){
     $("#issaved").val(data[0].issaved);
+    $("#assessmentid").val(data[0].assessmentid);
     $("#title").html(data[0].title);
     $("#instruction").html(data[0].instruction);
     $("#note").html(data[0].note);
-    $("#total-marks").html(data[0].totalmarks);
-    $("#total-actual-marks").html(data[0].totalactualmarks);
     var qaHTML = '';
     var savedanswer = '';
     qaHTML += "<div class='row'>";
     $.each(data,function(idx,qtn){
         qaHTML += "<div class='col-lg-12 question' id='"+qtn['assessmentqaid']+"'><strong>"+(idx+1)+". "+qtn['question']+"</strong></div><div style='margin-bottom:10px;' class='col-lg-12'>";
         $.each(qtn['answeroption'].split(","),function(idy,ans){
-            if(qtn['answer'] == ans){
-                savedanswer = "checked='checked'";
+            if(qtn['answer']){
+                savedanswer = qtn['answer'];
             }else{
                 savedanswer = "";
-            }  
-            qaHTML += "<div class='col-lg-6'><input disabled "+savedanswer+" type='radio' name='answer_"+qtn['assessmentqaid']+"' value='"+ans+"'> "+ans+"</div>";
+            } 
+           qaHTML += "<br /><div class='col-lg-6'><textarea rows='2' class='answer' cols='110' name='answer_"+qtn['assessmentqaid']+"' >"+savedanswer+"</textarea></div>";
         });
         qaHTML += "</div>";
     });
@@ -139,20 +122,20 @@ TTS.forms.renderassignedassessmentinfo = function(data){
 };
 
 TTS.forms.ressave = function(savesend){
+
     var data = {};
     var aqaidanswer = {};
     var aqaid = '';
     var answer = '';
     assignedid = TTS.utils.getUrlParameter('assignedid');
 
-    $('.question').each(function(id,y) {
-        aqaid  = $(this).prop("id");
-        answer = $(this).next().children().find('input:checked').val();
-        aqaidanswer[aqaid] = answer;
+    $('.answer').each(function(id,y) {
+        aqaid  = $(this).parent().parent().prev().prop("id");
+        aqaidanswer[aqaid] = $(this).val();
     });
-
     data.aqaidanswer = aqaidanswer;
 
+    data.assessmentid = $("#assessmentid").val();
     data.alreadysaved = $("#issaved").val();
 
     if(savesend == 'save')
@@ -164,13 +147,13 @@ TTS.forms.ressave = function(savesend){
         data.isanswered = 1;
     else
         data.isanswered = 0;
-     
 
+    console.log(data)
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
-        url:"/api/admin/studentassessmentinfo/"+assignedid+"/",
+        url:"/api/admin/studentopenendedInfoViewSet/"+assignedid+"/",
         type:"PUT",
         data:JSON.stringify(data)
     }).done(function(data){
@@ -181,28 +164,6 @@ TTS.forms.ressave = function(savesend){
     }); 
 }
 $(document).ready(function(){
-    $("#show").click(function(){
-        $(".navbar-default").hide("medium");
-        $("#page-wrapper").css({"marginLeft":"0px","marginTop":"-100px"});
-        $("#hide").show();
-        $("#show").hide();
-    });
-
-    $("#showprint").click(function(){
-        $(".navbar-default").hide("medium");
-        $("#page-wrapper").css({"marginLeft":"0px","marginTop":"-100px"});
-        $("#hide").show();
-        $("#show").hide();
-        setTimeout(function(){ window.print();; }, 500);
-    });
-
-    $("#hide").click(function(){
-        $(".navbar-default").show("medium");
-        $("#page-wrapper").css({"marginLeft":"250px","marginTop":"0px"});
-        $("#hide").hide();
-        $("#show").show();
-    });
-
     $('.summernote').summernote({
           toolbar: [
             ['edit',['undo','redo']],
@@ -235,7 +196,7 @@ $(document).ready(function(){
     
     var assignedid = TTS.utils.getUrlParameter('assignedid');
     $.ajax({
-        "url":"/api/admin/studentassessmentinfo/"+assignedid+"/",
+        "url":"/api/admin/studentopenendedInfoViewSet/"+assignedid+"/",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderassignedassessmentinfo(data);

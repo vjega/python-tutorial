@@ -1,4 +1,4 @@
-{% extends 'portalstudent/base.html' %}
+{% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
@@ -29,7 +29,7 @@
             <i id="showprint" class="fa fa-print fa-lg pull-right"></i>
             <i id="show" class="fa fa-expand fa-lg pull-right"></i>
             <i id="hide" class="fa fa-compress fa-lg pull-right"></i>
-        
+
             <div>
                 <h4><strong>{% trans "Title" %}:</strong></h4>
             </div>
@@ -50,7 +50,13 @@
                     <div id="total-actual-marks" style="float:left;margin-top:8px;"></div><br />
                 </strong>
             </div>
+            
             <div id="question-answer"></div><br />
+            <!-- <div class="form-group">
+                <button class="btn btn-success btn-lg" id="res-save">{% trans 'Save' %}</button>
+                <button class="btn btn-success btn-lg" id="res-send">{% trans 'Send' %}</button>
+            </div>-->    
+            
         </div>
         <!-- /.panel-body -->
     </div>
@@ -100,8 +106,7 @@
         font-size: 20px;
         cursor: pointer; 
         display: none;
-    }
-</style>
+    }</style>
 {% endblock morecss %}
 
 
@@ -139,6 +144,7 @@ TTS.forms.renderassignedassessmentinfo = function(data){
 };
 
 TTS.forms.ressave = function(savesend){
+
     var data = {};
     var aqaidanswer = {};
     var aqaid = '';
@@ -150,7 +156,6 @@ TTS.forms.ressave = function(savesend){
         answer = $(this).next().children().find('input:checked').val();
         aqaidanswer[aqaid] = answer;
     });
-
     data.aqaidanswer = aqaidanswer;
 
     data.alreadysaved = $("#issaved").val();
@@ -164,8 +169,7 @@ TTS.forms.ressave = function(savesend){
         data.isanswered = 1;
     else
         data.isanswered = 0;
-     
-
+    
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -233,11 +237,13 @@ $(document).ready(function(){
         TTS.forms.ressave('send');
     });
     
-    var assignedid = TTS.utils.getUrlParameter('assignedid');
+    var assessmentid = TTS.utils.getUrlParameter('assessmentid');
+    var studentid = TTS.utils.getUrlParameter('studentid');
     $.ajax({
-        "url":"/api/admin/studentassessmentinfo/"+assignedid+"/",
+        "url":"/api/admin/viewassignassessment/"+assessmentid+"/?studentid="+studentid,
         "type":"GET"
     }).done(function(data){
+        //console.log(data)
         TTS.forms.renderassignedassessmentinfo(data);
     });
 });

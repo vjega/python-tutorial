@@ -415,11 +415,15 @@ def studentprofile(request):
     folders = [{
         "id"   : "1",
         "name" :_("Assignments"),
-        "href" :u"studentassignedresourcelist"
+        "href" :u"studentassignedresourcelist?studentid=%s" % request.GET.get('studentid')
         },{
         "id"   : "2",
         "name" :_("Written Work"),
-        "href" :u"viewstudentwrittenworks?studentid=%s" % request.GET.get('studentid') 
+        "href" :u"studentassignedwrittenworklist?studentid=%s" % request.GET.get('studentid') 
+        },{
+        "id"   : "3",
+        "name" :_("Assessments"),
+        "href" :u"studentassignedassessmentlist?studentid=%s" % request.GET.get('studentid') 
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
@@ -440,8 +444,40 @@ def studentassignedresourcelist(request):
 
 @login_required
 @switchlanguage
+def studentassignedwrittenworklist(request):
+    '''assigned_head = [_('Sl No.'),
+                         _('Title'),
+                         _('Type'),
+                         _('Date'),
+                         _('Note')]
+    studentslist = {'assigned_head':assigned_head}'''
+    return render(request, 'portaladmin/studentassignedwrittenworklist.html')
+
+@login_required
+@switchlanguage
+def studentassignedassessmentlist(request):
+    '''assigned_head = [_('Sl No.'),
+                         _('Title'),
+                         _('Type'),
+                         _('Date'),
+                         _('Note')]
+    studentslist = {'assigned_head':assigned_head}'''
+    return render(request, 'portaladmin/studentassignedassessmentlist.html')
+
+@login_required
+@switchlanguage
 def viewstudentwork(request):
     return render(request, 'portaladmin/viewstudentwork.html')
+
+@login_required
+@switchlanguage
+def viewstudentwrittenwork(request):
+    return render(request, 'portaladmin/viewstudentwrittenwork.html')
+
+@login_required
+@switchlanguage
+def viewstudentassessmentwork(request):
+    return render(request, 'portaladmin/viewstudentassessmentwork.html')
 
 @login_required
 @switchlanguage

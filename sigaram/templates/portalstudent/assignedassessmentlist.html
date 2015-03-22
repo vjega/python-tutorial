@@ -89,7 +89,7 @@
     </div>
     <!-- /.panel -->
 </div>
-                <!-- /.col-lg-12 -->
+ <!-- /.col-lg-12 -->
 {% endblock botcontent%}
 {% block morecss %}
 
@@ -147,14 +147,11 @@
         var count_new = 0
         var count_saved = 0
         var count_answered = 0
-
-        console.log(data);
-
         for(var i in data){
            
             if (!data[i].issaved && !data[i].isanswered) {
                 var t = [];
-                t.DT_RowId = "var_"+data[i].id;
+                t.DT_RowId = "var_"+data[i].id+"_"+data[i].type;
                 t.slno=++count_new;
                 t.title=data[i].title;
                 t.date=TTS.utils.datetimeConvDate(data[i].createddate);
@@ -163,7 +160,7 @@
             }
             if (data[i].issaved && !data[i].isanswered) {
                 var t = [];
-                t.DT_RowId = "var_"+data[i].id;
+                t.DT_RowId = "var_"+data[i].id+"_"+data[i].type;
                 t.slno=++count_saved;
                 t.title=data[i].title;
                 t.date=TTS.utils.datetimeConvDate(data[i].createddate);
@@ -172,7 +169,7 @@
             }
             if (data[i].isanswered) {
                 var t = [];
-                t.DT_RowId = "vaa_"+data[i].id;
+                t.DT_RowId = "vaa_"+data[i].id+"_"+data[i].type;
                 t.slno=++count_answered;
                 t.title=data[i].title;
                 t.date=TTS.utils.datetimeConvDate(data[i].answereddate);
@@ -213,13 +210,22 @@ $(document).ready(function(){
         TTS.utils.ajaxloaderstop();
     });
     $('.resourcelist').on('click','tbody tr',function(e){
-        var x = this.id;
-        x = x.split("_");
-        if(x[0] == 'var')
-            window.location = 'viewassignassessment?assignedid='+x[1];
+        var x = this.id.split("_");
+        if(x[0] == 'var') {
+            if(x[2] =='Open ended') {
+                window.location = 'viewassignopenended?assignedid='+x[1];
+            } else {
+                window.location = 'viewassignassessment?assignedid='+x[1];
+            }
+        }
         
-        if(x[0] == 'vaa')
-            window.location = 'viewassessmentanswer?assignedid='+x[1];
+        if(x[0] == 'vaa') {
+            if(x[2] =='Open ended') {
+                window.location = 'viewopenendedanswer?assignedid='+x[1];
+            }else {
+                window.location = 'viewassessmentanswer?assignedid='+x[1];
+            }
+        }
 
     });
     $('#date-search').click(function(){

@@ -1,4 +1,4 @@
-{% extends 'portalstudent/base.html' %}
+{% extends 'portalteacher/base.html' %}
 {% load staticfiles %}
 {% load i18n %}
 {% block topcontent %}
@@ -29,7 +29,7 @@
             <i id="showprint" class="fa fa-print fa-lg pull-right"></i>
             <i id="show" class="fa fa-expand fa-lg pull-right"></i>
             <i id="hide" class="fa fa-compress fa-lg pull-right"></i>
-        
+
             <div>
                 <h4><strong>{% trans "Title" %}:</strong></h4>
             </div>
@@ -50,7 +50,12 @@
                     <div id="total-actual-marks" style="float:left;margin-top:8px;"></div><br />
                 </strong>
             </div>
+            
             <div id="question-answer"></div><br />
+            <div class="form-group">
+                <button class="btn btn-success btn-lg" id="res-save">{% trans 'Save' %}</button>
+            </div>
+            
         </div>
         <!-- /.panel-body -->
     </div>
@@ -100,8 +105,7 @@
         font-size: 20px;
         cursor: pointer; 
         display: none;
-    }
-</style>
+    }</style>
 {% endblock morecss %}
 
 
@@ -122,60 +126,56 @@ TTS.forms.renderassignedassessmentinfo = function(data){
     var qaHTML = '';
     var savedanswer = '';
     qaHTML += "<div class='row'>";
+    console.log(data);
+
     $.each(data,function(idx,qtn){
-        qaHTML += "<div class='col-lg-12 question' id='"+qtn['assessmentqaid']+"'><strong>"+(idx+1)+". "+qtn['question']+"</strong></div><div style='margin-bottom:10px;' class='col-lg-12'>";
-        $.each(qtn['answeroption'].split(","),function(idy,ans){
-            if(qtn['answer'] == ans){
-                savedanswer = "checked='checked'";
+        qaHTML += "<div class='col-lg-9 question' id='"+qtn['assignqaid']+"'><strong>"+(idx+1)+". "+qtn['question']+"</strong></div><div class='col-lg-2'><select class='obtainmark'>";
+
+            $.each(new Array(qtn['actualmark']),function(n){
+                qaHTML += "<option value="+(n+1)+">"+(n+1)+"</option>";
+            });
+            
+            qaHTML += "</select></div><div style='margin-bottom:10px;' class='col-lg-12'>";
+            
+            if(qtn['answer']){
+                savedanswer = qtn['answer'];
             }else{
                 savedanswer = "";
             }  
-            qaHTML += "<div class='col-lg-6'><input disabled "+savedanswer+" type='radio' name='answer_"+qtn['assessmentqaid']+"' value='"+ans+"'> "+ans+"</div>";
-        });
+            qaHTML += "<div class='col-lg-6'>"+savedanswer+"</div>";
+        
         qaHTML += "</div>";
     });
     qaHTML += "</div>";
     $("#question-answer").html(qaHTML);
 };
 
-TTS.forms.ressave = function(savesend){
+TTS.forms.ressave = function(){
+
     var data = {};
-    var aqaidanswer = {};
     var aqaid = '';
-    var answer = '';
-    assignedid = TTS.utils.getUrlParameter('assignedid');
+    var obtainmark = {};
+    var options = '';
+
+    assessmentid = TTS.utils.getUrlParameter('assessmentid');
 
     $('.question').each(function(id,y) {
         aqaid  = $(this).prop("id");
-        answer = $(this).next().children().find('input:checked').val();
-        aqaidanswer[aqaid] = answer;
+        options = $(this).next().children('select');
+        obtainmark[aqaid] = options.find('option:selected').val();
     });
 
-    data.aqaidanswer = aqaidanswer;
-
-    data.alreadysaved = $("#issaved").val();
-
-    if(savesend == 'save')
-        data.issaved = 1;
-    else
-        data.issaved = 0;
-
-    if(savesend == 'send')
-        data.isanswered = 1;
-    else
-        data.isanswered = 0;
-     
+    data.obtainmark = obtainmark;
 
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
-        url:"/api/admin/studentassessmentinfo/"+assignedid+"/",
+        url:"/api/admin/teacherassessmentinfo/"+assessmentid+"/",
         type:"PUT",
         data:JSON.stringify(data)
     }).done(function(data){
-        if(data.msg)
-            window.location = 'assignedassessmentlist';
+        alert("Mark added successfully");            
     }).error(function(err, msg){
         alert("I didnt save the data");
     }); 
@@ -227,17 +227,16 @@ $(document).ready(function(){
     });
 
     $("#res-save").click(function(){
-        TTS.forms.ressave('save');
+        TTS.forms.ressave();
     });
-    $("#res-send").click(function(){
-        TTS.forms.ressave('send');
-    });
-    
-    var assignedid = TTS.utils.getUrlParameter('assignedid');
+   
+    var assessmentid = TTS.utils.getUrlParameter('assessmentid');
+    var studentid = TTS.utils.getUrlParameter('studentid');
     $.ajax({
-        "url":"/api/admin/studentassessmentinfo/"+assignedid+"/",
+        "url":"/api/admin/viewassignassessment/"+assessmentid+"/?studentid="+studentid,
         "type":"GET"
     }).done(function(data){
+        //console.log(data)
         TTS.forms.renderassignedassessmentinfo(data);
     });
 });
