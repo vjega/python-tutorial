@@ -4042,7 +4042,9 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
                assigneddate as createddate,
                aai.studentid,
                aai.isanswered,
-               aai.issaved
+               aai.issaved,
+               aai.totalmarks,
+               aai.totalactualmarks
         FROM assignassessmentinfo aai
         INNER JOIN assessmentinfo ai on ai.id = aai.assessmentid 
         INNER JOIN assessmentqa aqa on aqa.assessmentid = aai.assessmentid 
