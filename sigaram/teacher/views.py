@@ -699,5 +699,15 @@ def viewassessmentanswer(request):
 
 @login_required
 @switchlanguage
+def viewassopenendedanswer(request):
+    return render(request, 'portalteacher/viewassopenendedanswer.html')
+
+@login_required
+@switchlanguage
 def viewassessmentinfo(request):
     return render(request, 'portalteacher/viewassessmentinfo.html')
+
+@login_required
+@switchlanguage
+def viewopenendedqa(request):
+    return render(request, 'portalteacher/viewopenendedqa.html')  

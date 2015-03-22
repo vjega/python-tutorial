@@ -1,0 +1,302 @@
+{% extends 'portalteacher/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block topcontent %}
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Exercises" %}</h2>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+{% endblock topcontent %}
+{% block botcontent %}
+<div class="col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading" style="height:60px">
+            <!--div class="col-lg-5">    
+                <div class="form-group">
+                    <div class="col-lg-5">
+                        <label>{% trans "From Date" %}</label>
+                    </div>    
+                    <div class="col-lg-7" id="fromdate">
+                        <div class="input-group">
+                            <input type="text" class="form-control" data-date-format="YYYY-MM-DD">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">    
+                <div class="form-group">
+                    <div class="col-lg-5">
+                        <label>{% trans "To Date" %}</label>
+                    </div>
+                    <div class="col-lg-7" id="tilldate">
+                        <div class="input-group">
+                            <input type="text" class="form-control" data-date-format="YYYY-MM-DD">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary" type="button">{% trans "Search" %}</button-->
+            <h4 class="pull-left">{% trans "Exercises" %}</h4>
+            <button class="btn btn-primary pull-right" id="addrec"><i class="fa fa-plus-square fa-lg"></i></button>
+        </div>
+        <!-- /.panel-heading -->
+            <div role="tabpanel" id="tabpanel">
+                  <!-- Nav tabs -->
+                  <!--ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#new" aria-controls="new" role="tab" data-toggle="tab">{% trans "New" %}</a></li>
+                    <li role="presentation"><a href="#edited" aria-controls="edited" role="tab" data-toggle="tab">{% trans "Edited" %}</a></li>
+                    <li role="presentation"><a href="#shared" aria-controls="shared" role="tab" data-toggle="tab">{% trans "Shared" %}</a></li>
+                  </ul-->
+
+                  <!-- Tab panes -->
+                  <!--div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="new">
+                        <table class="table table-striped table-bordered table-hover" id="admin-main-tbl">
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="edited">
+                        <table class="table table-striped table-bordered table-hover" id="admin-main-tbl">
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="shared">
+                        <table class="table table-striped table-bordered table-hover" id="admin-main-tbl">
+                    </div>
+                  </div-->
+
+                  <table class="table table-striped table-bordered table-hover" id="admin-main-tbl">
+
+                  </table>
+            </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+                <!-- /.col-lg-12 -->
+{% endblock botcontent%}
+{% block morecss %}
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<style>
+    /*#addrec:hover, #admin-main-tbl tbody tr:hover{
+        cursor: pointer;
+    }*/ 
+    .tts-delete:hover{
+        cursor: pointer;
+    }
+    #tabpanel{
+        padding:10px;
+    }
+    .tab-content{
+        margin-top:10px;
+    }
+
+</style>
+{% endblock morecss %}
+
+
+{% block morescript %}
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}">
+
+</script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+
+{% endblock morescript %}
+
+{% block scriptcontent %}
+<script id="editschool" type="text/x-jsrender">
+<form id="newfolderfrm" class="form-horizontal" role="form">
+    <div class="form-group">
+        <label for="folder_name" class="col-sm-7 control-label" id ="resource-heade">
+            {% trans "Question " %}
+        </label>
+    </div>
+    <div>
+        <textarea class="summernote" id="question" name="question"></textarea>
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="folder_name" class="col-sm-7 control-label" id ="resource-ans">
+            {% trans "Answer" %}
+        </label>
+    </div>
+    <div>
+        <textarea class="summernote" id="answer" name="answer"></textarea>
+    </div>
+    <br />
+    <div class="form-group">
+        <div class="col-lg-2">
+            <label>{% trans "Mark" %}:</label>
+        </div>
+        <div class="col-lg-10">
+            <select id="actualmark" name="actualmark">
+                <option value="">Select Mark</option>
+                {% for i in "xxxxxxxxxx" %}
+                    <option value="{{forloop.counter}}">{{forloop.counter}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <!-- div id="more-answer-option"></div>
+    <div class="form-group">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10">
+            <button id="add-answer" class="btn btn-primary">
+                {% trans "Add more answer" %}
+            </button>   
+        </div>
+    </div -->
+</form>
+</script>
+<script>
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}
+
+TTS.forms.editschool = function() {
+    BootstrapDialog.show({
+        title: '{% trans "Exercises" %}',
+        onshown: function(dialogRef){
+            $('.summernote').summernote({
+                  toolbar: [
+                    ['edit',['undo','redo']],
+                    ['style', ['style']], // no style button
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    //['insert', ['picture', 'link']], // no insert buttons
+                    //['table', ['table']], // no table button
+                    //['help', ['help']] //no help button
+                  ]
+            });
+        },
+        message: $($('#editschool').render()),
+        buttons: [{
+            label: '{% trans "Save" %}',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+                var data    = $.parseJSON(TTS.utils.serilaizeJson("#newfolderfrm"));
+                var answer  = ''; 
+                data['question']     = TTS.utils.summer_encode(data['question']);
+                data['answer'] = TTS.utils.summer_encode(data['question']);
+                data['actualmark']   = $("#actualmark").val();
+                data['assessmentid'] = TTS.utils.getUrlParameter('id');
+                $.ajax({
+                    headers : {
+                        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                    },  
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    url : '/api/admin/assessmentqainfo/'
+                }).done(function( msg ) {
+                    alert("Question and Answers created successfully");
+                    dialogItself.close();
+                    window.location.reload();
+                });
+            }
+            },{
+            label: '{% trans "Close" %}',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
+        }]
+    });
+};
+
+TTS.forms.renderassessmentinfo = function(data){
+    var headers = [
+                    { "title": "{% trans "Sl No." %}",
+                      "class": "text-center",
+                      "data" : "slno"
+                    },
+                    { "title": "{% trans "Question" %}", "data" : "question"},
+                    { "title": "{% trans "Answer" %}", "data" : "answer"},
+                    { "title": "{% trans "Delete" %}", "data" : "action","class": "text-center"},
+                ];
+    var dataset = [];
+    var count = 0
+    for(var i in data){
+        var t = [];
+        t.DT_RowId  = data[i].id;
+        t.slno      = ++count;
+        t.question  = data[i].question;
+        t.answer    = data[i].answer;
+        t.action    = "<i class='fa fa-trash fa-lg tts-delete'></i>";
+        dataset.push(t);
+    }
+
+    $('#admin-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
+        "data":     dataset,
+        "columns":  headers
+    });
+
+};
+
+TTS.forms.delassessment = function(id) {
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'DELETE',
+        url : '/api/admin/assessmentqainfo/'+id
+    }).done(function(msg) {
+        window.location.reload();
+    }).error(function(msg){
+        alert("Record not deleted");
+    });
+};
+
+
+$(document).ready(function(){
+    TTS.utils.ajaxloaderstart();
+    var assessmentid = TTS.utils.getUrlParameter('id');
+    $.ajax({
+        "url":"/api/admin/assessmentqainfo/?assessmentid="+assessmentid+"&format=json",
+        "type":"GET"
+    }).done(function(data){
+        //console.log(data);
+        TTS.forms.renderassessmentinfo(data);
+        TTS.utils.ajaxloaderstop();
+    });
+
+    $('#admin-main-tbl tbody').on('click', 'tr', function(){
+        //window.location = 'teacherresourcelist?id='+this.id;
+    });
+    $('#admin-main-tbl tbody tr').on('click', '.tts-edit', function(e){
+        e.stopPropagation();
+        TTS.forms.editschool();
+    });
+    $('body').on('click', '.tts-delete', function(e){
+        e.stopPropagation();
+        if (!window.confirm("Do you want to delete this record?")) {
+            return false;
+        }
+        var delid = $(this).parent().parent().prop("id");
+        TTS.forms.delassessment(delid);
+    });
+    $("#page-wrapper").on("click", "#addrec", function(){
+        TTS.forms.editschool();
+    });
+    $("body").on("click","#add-answer",function(){
+        $("#more-answer-option").append($("#add-answer-option").html());
+        return false;
+    });
+    $("body").on("click",".aoremove",function(){
+        $(this).parent().parent().parent().remove();
+    });
+});
+
+</script>
+
+{% endblock scriptcontent %}

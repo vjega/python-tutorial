@@ -433,14 +433,14 @@ TTS.forms.ressave = function(){
     if (!$(".case:checked").length){
         alert("Select atleast one resource");
     }*/
-    
+    var ids=TTS.utils.getUrlParameter('assessmentid').split("_");
     var data          = {};
     var lastdate      = $("#enddate").val();
     var ldate=lastdate.split('-').reverse().join('-');
     data.students     = [];
     data.enddate      = ldate;
     data.note         = TTS.utils.summer_encode($(".summernote").code());
-    data.assessmentid = TTS.utils.getUrlParameter('assessmentid');
+    data.assessmentid = ids[0];
     /*if($("#set_rubric_id").val()){
         data.rubricid = $("#set_rubric_id").val();
     }

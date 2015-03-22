@@ -1,0 +1,206 @@
+{% extends 'portalstudent/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% block topcontent %}
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">{% trans "Exercises" %}</h2>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+{% endblock topcontent %}
+
+{% block morescript %}
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
+<script src="{% static "js/tts.utils.js" %}"></script>
+<script type="text/javascript" src="{%static "FlashWavRecorder/html/js/swfobject.js"%}"></script>
+<script type="text/javascript" src="{%static "FlashWavRecorder/html/js/recorder.js"%}"></script>
+<script type="text/javascript" src="{%static "js/audiorecorder.js"%}"></script>
+{% endblock morescript %}
+
+{% block botcontent %}
+<input type="hidden" name="issaved" id="issaved">
+<input type="hidden" name="assessmentid" id="assessmentid">
+
+<div class="root">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div>
+                <h4><strong>{% trans "Title" %}:</strong></h4>
+            </div>
+            <div id="title"></div>
+            <div>
+                <h4><strong>{% trans "Instructions" %}:</strong></h4>
+            </div>
+            <div id="instruction"></div>
+            <div>
+                <h4><strong>{% trans "Note" %}:</strong></h4>
+            </div>
+            <div id="note"></div><br />
+            <div id="question-answer"></div><br />
+            <div class="form-group">
+                <button class="btn btn-success btn-lg" id="res-save">{% trans 'Save' %}</button>
+                <button class="btn btn-success btn-lg" id="res-send">{% trans 'Send' %}</button>
+            </div>    
+
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+</div>
+<!-- /.col-lg-12 -->
+{% endblock botcontent%}
+
+{% block morecss %}
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
+<link type="text/css" rel="stylesheet" href="{%static "FlashWavRecorder/html/basic/basic.css"%}">
+<style>
+    #addrec:hover, #admin-main-tbl tbody tr:hover{
+        cursor: pointer;
+    }
+    .note-editable{
+        height: 80px;
+    }
+    section.recorder-container{
+        display: none;
+    }
+    table#rubrics-table thead tr th,
+    table#rubrics-table tfoot tr td{
+        text-align: center;
+        height: 45px;
+        background-color: #337ab7;
+        color: #ffffff;
+        font-weight: bold;
+    }
+    table#rubrics-table tbody tr td:nth-child(1) { 
+        background-color: #d3d3d3;
+        font-weight: bold;
+    }    
+    input#ttls{
+        color:#000;
+    } 
+    .page-header {
+        margin: 9px 0 !important;
+    }
+</style>
+{% endblock morecss %}
+
+
+{% block scriptcontent %}
+
+<script>
+
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}
+
+TTS.forms.renderassignedassessmentinfo = function(data){
+    $("#issaved").val(data[0].issaved);
+    $("#assessmentid").val(data[0].assessmentid);
+    $("#title").html(data[0].title);
+    $("#instruction").html(data[0].instruction);
+    $("#note").html(data[0].note);
+    var qaHTML = '';
+    var savedanswer = '';
+    qaHTML += "<div class='row'>";
+    $.each(data,function(idx,qtn){
+        qaHTML += "<div class='col-lg-12 question' id='"+qtn['assessmentqaid']+"'><strong>"+(idx+1)+". "+qtn['question']+"</strong></div><div style='margin-bottom:10px;' class='col-lg-12'>";
+        $.each(qtn['answeroption'].split(","),function(idy,ans){
+            if(qtn['answer']){
+                savedanswer = qtn['answer'];
+            }else{
+                savedanswer = "";
+            } 
+           qaHTML += "<br /><div class='col-lg-6'><textarea rows='2' class='answer' cols='110' name='answer_"+qtn['assessmentqaid']+"' >"+savedanswer+"</textarea></div>";
+        });
+        qaHTML += "</div>";
+    });
+    qaHTML += "</div>";
+    $("#question-answer").html(qaHTML);
+};
+
+TTS.forms.ressave = function(savesend){
+
+    var data = {};
+    var aqaidanswer = {};
+    var aqaid = '';
+    var answer = '';
+    assignedid = TTS.utils.getUrlParameter('assignedid');
+
+    $('.answer').each(function(id,y) {
+        aqaid  = $(this).parent().parent().prev().prop("id");
+        aqaidanswer[aqaid] = $(this).val();
+    });
+    data.aqaidanswer = aqaidanswer;
+
+    data.assessmentid = $("#assessmentid").val();
+    data.alreadysaved = $("#issaved").val();
+
+    if(savesend == 'save')
+        data.issaved = 1;
+    else
+        data.issaved = 0;
+
+    if(savesend == 'send')
+        data.isanswered = 1;
+    else
+        data.isanswered = 0;
+
+    console.log(data)
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        url:"/api/admin/studentopenendedInfoViewSet/"+assignedid+"/",
+        type:"PUT",
+        data:JSON.stringify(data)
+    }).done(function(data){
+        if(data.msg)
+            window.location = 'assignedassessmentlist';
+    }).error(function(err, msg){
+        alert("I didnt save the data");
+    }); 
+}
+$(document).ready(function(){
+    $('.summernote').summernote({
+          toolbar: [
+            ['edit',['undo','redo']],
+            ['style', ['style']], // no style button
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            //['insert', ['picture', 'link']], // no insert buttons
+            //['table', ['table']], // no table button
+            //['help', ['help']] //no help button
+          ]
+    });
+    $('#recorder-wrap').hide();
+    $('#show-recorder').on("click",function(){
+        $('section.recorder-container').show();
+        $('#audio-player').show();
+    });
+    $('#hide-recorder').on("click",function(){
+        $('section.recorder-container').hide();
+        $('#audio-player').hide();
+    });
+
+    $("#res-save").click(function(){
+        TTS.forms.ressave('save');
+    });
+    $("#res-send").click(function(){
+        TTS.forms.ressave('send');
+    });
+    
+    var assignedid = TTS.utils.getUrlParameter('assignedid');
+    $.ajax({
+        "url":"/api/admin/studentopenendedInfoViewSet/"+assignedid+"/",
+        "type":"GET"
+    }).done(function(data){
+        TTS.forms.renderassignedassessmentinfo(data);
+    });
+});
+</script>
+{% endblock scriptcontent %}

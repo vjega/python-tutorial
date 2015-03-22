@@ -12,6 +12,9 @@ router.register(r'student',      		  	viewsets.studentViewSet)
 router.register(r'teacherresources',      	viewsets.TeacherResourcesViewSet)
 router.register(r'teacherresourcesinfo',  	viewsets.TeacherresourceinfoViewSet)
 router.register(r'resourceinfo',          	viewsets.ResourceinfoViewSet)
+router.register(r'studentresourceinfo',     viewsets.ResourceStudentinfoViewSet)
+router.register(r'studentwrittenworkdetail',viewsets.StudentWrittenWorkDetailViewSet)
+router.register(r'studentassessmentdetail', viewsets.StudentAssessmentDetailViewSet)
 router.register(r'writtenworkinfo',       	viewsets.WrittenworkinfoViewSet)
 router.register(r'chapterinfo',           	viewsets.ChapterinfoViewSet)
 router.register(r'adminschool',        	  	viewsets.AdminschoolViewSet)
@@ -69,6 +72,8 @@ router.register(r'assessmentstatistics', 	viewsets.AssessmentstatisticsInfo)
 router.register(r'statisticsstudent', 		viewsets.StatisticsstudentInfo)
 router.register(r'viewassignassessment', 	viewsets.ViewassignassessmentInfo)
 router.register(r'mindmapinfo',         	viewsets.MindmapinfoViewSet)
+router.register(r'studentopenendedInfoViewSet', viewsets.studentopenendedInfoViewSet)
+router.register(r'teacherassessmentinfo', 	viewsets.teacherAssessmentInfoViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
