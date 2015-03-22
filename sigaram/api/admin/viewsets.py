@@ -3500,6 +3500,13 @@ class RichmindmapViewSet(viewsets.ModelViewSet):
     def create(self, request):
         assignmindmapinfo = models.Assignmindmapinfo()
         assigndata =  json.loads(request.DATA.keys()[0])
+        # if (assigndata.get('id')):
+        #     sql = """
+        #         DELETE FROM assignmindmapinfo 
+        #         WHERE assignedid='%s'
+        #         """ % (int(assigndata.get('id')))
+        #     cursor = connection.cursor()
+        #     cursor.execute(sql)
         assignmindmapinfo.mapdata = assigndata.get('mapdata')
         assignmindmapinfo.assigntext = assigndata.get('assigntext','')
         assignmindmapinfo.mindmapid = 0
@@ -3508,8 +3515,10 @@ class RichmindmapViewSet(viewsets.ModelViewSet):
         assignmindmapinfo.isdelete = 0
         assignmindmapinfo.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
         assignmindmapinfo.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+
         assignmindmapinfo.save()
         return Response('"msg":"created"')
+
 
 class studentwrittenworkViewSet(viewsets.ModelViewSet):
     queryset = models.Writtenworkinfo.objects.all()
@@ -4230,24 +4239,3 @@ class ViewassignassessmentInfo(viewsets.ModelViewSet):
             ]
         return Response(result)
 
-class MindmapinfoViewSet(viewsets.ModelViewSet):
-
-    queryset = models.Mindmaplistinfo.objects.filter().order_by('-createddate')
-    serializer_class = adminserializers.MindmaplistSerializer
-
-    def create(self, request):
-        mindmaplist = models.Mindmaplistinfo()
-        mindmapdata =  json.loads(request.DATA.keys()[0])
-        mindmaplist.title = mindmapdata.get('title')
-        mindmaplist.isdeleted = 0
-        mindmaplist.createdby = request.user.id
-        mindmaplist.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
-        mindmaplist.save()
-
-        aldata = {}
-        aldata['pagename']       = 'mindmaplist'
-        aldata['operation']      = 'Insert'
-        aldata['stringsentence'] = 'New stickynotes Created'
-        add_activitylog(request, aldata)
-
-        return Response(request.DATA)

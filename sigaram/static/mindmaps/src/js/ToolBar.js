@@ -282,15 +282,18 @@ mindmaps.ToolBarPresenter = function(eventBus, commandRegistry, view,
   // file menu
   var fileMenu = new mindmaps.ToolBarMenu("Mind map", "ui-icon-document");
   var fileCommands = [ mindmaps.NewDocumentCommand,
-      mindmaps.OpenDocumentCommand, mindmaps.SaveDocumentCommand,
-      mindmaps.ExportCommand, mindmaps.PrintCommand,
-      mindmaps.CloseDocumentCommand ];
+                       mindmaps.OpenDocumentCommand, 
+                       mindmaps.SaveDocumentCommand,
+                       // mindmaps.ExportCommand,
+                       // mindmaps.PrintCommand,
+                       mindmaps.CloseDocumentCommand 
+                      ];
   var fileButtons = commandsToButtons(fileCommands);
   fileMenu.add(fileButtons);
   view.addMenu(fileMenu);
 
   // help button
-  view.addButton(commandToButton(mindmaps.HelpCommand), view.alignRight);
+  // view.addButton(commandToButton(mindmaps.HelpCommand), view.alignRight);
 
   this.go = function() {
     view.init();

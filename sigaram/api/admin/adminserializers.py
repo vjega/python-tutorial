@@ -238,7 +238,7 @@ class BillboardcommentinfoSerializer(serializers.HyperlinkedModelSerializer):
 class RichmindmapSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Assignmindmapinfo
-        fields = ('mindmapid','studentid','assigntext','mapdata','assigneddate',
+        fields = ('assignedid','mindmapid','studentid','assigntext','mapdata','assigneddate',
                     'isdelete','assignedby','answertext','comment','answereddate',
                     'assignedby','assigneddate','isanswered','issaved','isdelete')
 
@@ -290,7 +290,3 @@ class AssignassessmentinfoSerializer(serializers.HyperlinkedModelSerializer):
                   'issaved', 'assignedby', 'assigneddate', 'note', 'answereddate', 
                   'totalmarks', 'totalactualmarks')
 
-class MindmaplistSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = models.Mindmaplistinfo
-        fields = ('id','title', 'createdby','isdeleted','createddate')

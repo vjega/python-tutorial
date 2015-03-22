@@ -29,9 +29,6 @@
     width: 120px;
 }
 
-.float-panel{
-  #left:76% !important;
-}
 </style>
 {% endblock morecss %}
 {% block scriptcontent %}
@@ -263,11 +260,15 @@ window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
 
  TTS.forms.addrichmindmap = function(){
+    var id_val ='';
+    if(TTS.utils.getUrlParameter('id'))
+      id_val = TTS.utils.getUrlParameter('id');
     var data = {
       mapdata : richmindmap.document.serialize(),
-      assigntext : $("#assigntext").val()
+      assigntext : $("#assigntext").val(),
+      id : id_val
     }
-    console.log(data);  
+    
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -276,19 +277,19 @@ TTS.forms = TTS.forms || {};
         data: JSON.stringify(data),
         url : '/api/admin/richmindmap/'
     }).done(function( msg ) {
-        console.log("Save Completed...")
+        // console.log("Save Completed...")
         // alert("Save Completed...");
-        // window.location.reload()
+        window.location = 'mindmaplist';
     });
 }
 
- TTS.forms.renderrichmindmap = function(){
+ TTS.forms.renderrichmindmap = function(id){
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'GET',
-        url : '/api/admin/richmindmap/5'
+        url : '/api/admin/richmindmap/'+id
     }).done(function( msg ) {
         render_data = mindmaps.Document.fromJSON(msg.mapdata)
         mindmaps.MindMapModel.rich_setDocument(render_data)
@@ -296,8 +297,9 @@ TTS.forms = TTS.forms || {};
 }
 
 $(document).ready(function(){
-  TTS.forms.renderrichmindmap()
-  // $(".float-panel").hide()
+  var get_id = TTS.utils.getUrlParameter("id")
+  TTS.forms.renderrichmindmap(get_id)
+   // $(".float-panel").hide()
   
     $("#save_mindmap").live('click',function(){
       TTS.forms.addrichmindmap()
@@ -305,7 +307,7 @@ $(document).ready(function(){
     });
   /*
 
-<!--
+
  $("body").live("click","#button-SAVE_DOCUMENT_COMMAND",function(){
     // console.log(richmindmap.document.serialize());
     // console.log("Deepak test");
@@ -315,7 +317,7 @@ $(document).ready(function(){
     //data['mapdata'] = "my first value";
     TTS.forms.addrichmindmap(); 
  });
-
+<!--
   $("#button-SAVE_DOCUMENT_COMMAND").click(function(){
     console.log("hai deepak")
     console.log(richmindmap.document.serialize())
