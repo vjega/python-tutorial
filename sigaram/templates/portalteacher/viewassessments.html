@@ -184,7 +184,7 @@ TTS.forms.renderassessmentinfo = function(data){
     var count   = 0;
     for(var i in data){
         var t = [];
-        t.DT_RowId  = data[i].id;
+        t.DT_RowId  = data[i].id+"_"+data[i].type;
         t.slno      = ++count;
         t.title     = data[i].title;
         t.type      = data[i].type;
@@ -279,7 +279,11 @@ $(document).ready(function(){
     });
 
     $('#new-assessments-tbl').on('click', 'tbody tr', function(){
-        window.location = 'viewassessmentqa?id='+this.id;
+        var ids = this.id.split("_");
+        if(ids[1] == 'Open ended')
+            window.location = 'viewopenendedqa?id='+ids[0];
+        else
+            window.location = 'viewassessmentqa?id='+ids[0];
     });
     $('#new-assessments-tbl tbody tr').on('click', '.tts-edit', function(e){
         e.stopPropagation();
@@ -310,4 +314,4 @@ $(document).ready(function(){
 </script>
 
 
-{% endblock scriptcontent %}
+{% endblock scriptcontent %}1

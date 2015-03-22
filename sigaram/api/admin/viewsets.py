@@ -3749,7 +3749,7 @@ class AssessmentQAInfoViewSet(viewsets.ModelViewSet):
         assessmentqa.assessmentid = aqadata.get('assessmentid')
         assessmentqa.question     = summer_decode(aqadata.get('question'))
         assessmentqa.answer       = aqadata.get('answer')
-        assessmentqa.answeroption = aqadata.get('answeroption')
+        assessmentqa.answeroption = aqadata.get('answeroption','')
         assessmentqa.actualmark   = aqadata.get('actualmark')
         assessmentqa.save()
         return Response(request.DATA)
@@ -4102,6 +4102,7 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
             cursor.execute(sql)
         sql=''
         result=''
+        print(aaidata.get('aqaidanswer'))
         for k, v in dict(aaidata.get('aqaidanswer')).items():
             sql= '''
             SELECT actualmark,
@@ -4328,21 +4329,23 @@ class ViewassignassessmentInfo(viewsets.ModelViewSet):
                 aai.answereddate,
                 aai.totalmarks,
                 aai.totalactualmarks,
-        aai.isanswered,
-        aai.issaved,
-        au.first_name AS firstname,
-        au.last_name AS lastname
+                aai.isanswered,
+                aai.issaved,
+                au.first_name AS firstname,
+                au.last_name AS lastname,
+                ai.type
         FROM assignassessmentinfo aai
+        INNER JOIN assessmentinfo ai ON aai.assessmentid = ai.id
         INNER JOIN auth_user au ON au.username=aai.studentid 
         WHERE assessmentid=%s
-        ''' %request.GET.get('assessmentid')
+        ''' % request.GET.get('assessmentid')
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
         result =  [
-                dict(zip([col[0] for col in desc], row))
-                for row in cursor.fetchall()
-            ]
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
         return Response(result)
 
     def retrieve(self, request, pk=None):
@@ -4351,6 +4354,7 @@ class ViewassignassessmentInfo(viewsets.ModelViewSet):
             studentid="AND aai.studentid='%s'" % request.GET.get('studentid')
         sql='''
         SELECT assignedid AS id,
+               aaqai.id AS assignqaid,
                ai.id as assessmentid,
                aqa.id as assessmentqaid,
                ai.title,
@@ -4407,3 +4411,173 @@ class MindmapinfoViewSet(viewsets.ModelViewSet):
         add_activitylog(request, aldata)
 
         return Response(request.DATA)
+
+class studentopenendedInfoViewSet(viewsets.ModelViewSet):
+    queryset = models.Assignassessmentinfo.objects.all()
+    serializer_class = adminserializers.AssignassessmentinfoSerializer
+
+    def update(self, request, pk=None):
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        aai = models.Assignassessmentinfo.objects.get(pk=pk)
+        aaidata =  json.loads(request.DATA.keys()[0])
+        
+        if aaidata.get('issaved'):
+            aai.issaved = aaidata.get('issaved')
+
+        if aaidata.get('isanswered'):
+            aai.isanswered = aaidata.get('isanswered')
+
+        aai.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        aai.save()
+
+        if aaidata.get('alreadysaved'):
+            sql = """
+                DELETE FROM assignassessmentqainfo 
+                WHERE assignassessmentid='%s'
+                """ % (int(pk))
+
+            cursor = connection.cursor()
+            cursor.execute(sql)
+        sql=''
+        result=''
+
+        for k, v in dict(aaidata.get('aqaidanswer')).items():
+            sql= '''
+            SELECT actualmark,
+                answer
+            FROM assessmentqa
+            WHERE id = '%s'           
+            '''%(int(k))
+            cursor = connection.cursor()
+            cursor.execute(sql)
+            result =  cursor.fetchone()
+           
+            aaid = models.AssignAssessmentQAInfo()
+            aaid.assessmentqaid     = int(k)
+            aaid.assessmentid       = int(aaidata.get('assessmentid'))
+            aaid.assignassessmentid = int(pk)
+            aaid.answer             = str(v)
+            if result[1] == str(v):
+                aaid.obtainedmark   = int(result[0])
+            else:
+                aaid.obtainedmark   = 0
+            aaid.save()
+
+        sql = '''
+        SELECT SUM(aaqi.obtainedmark) AS totalobtainedmark,
+            SUM(aqa.actualmark) AS totalactualmark 
+        FROM assessmentqa aqa
+        INNER JOIN assignassessmentqainfo aaqi ON aaqi.assessmentqaid=aqa.id
+        WHERE aaqi.assignassessmentid = '%s'
+        GROUP BY aaqi.assignassessmentid 
+        '''%(int(pk))
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result =  cursor.fetchone()
+        aai = models.Assignassessmentinfo.objects.get(pk=pk)
+        aai.totalmarks     = int(result[0])
+        aai.totalactualmarks       = int(result[1])
+        aai.save()
+            
+
+        aldata = {}
+        aldata['pagename']       = 'viewassignresource'
+        aldata['operation']      = 'Insert'
+        aldata['stringsentence'] = 'Answered For Resource'
+        add_activitylog(request, aldata)
+
+        return Response({'msg':True})
+
+    def list(self, request):
+
+        datecond = ''
+        if request.GET.get('fdate') and request.GET.get('tdate'):
+            datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+                request.GET.get('tdate'))
+        sql = '''
+        SELECT assignedid AS id,
+               ai.id as assessmentid,
+               ai.title,
+               ai.type,
+               ai.createddate,
+               aai.assigneddate,
+               aai.answereddate,
+               aai.studentid,
+               aai.isanswered,
+               aai.issaved
+        FROM assignassessmentinfo aai
+        INNER JOIN assessmentinfo ai on ai.id = aai.assessmentid 
+        WHERE aai.studentid='%s'
+              %s
+        GROUP BY aai.assessmentid, aai.assigneddate
+        ORDER BY aai.assignedid DESC''' % (request.user.username, datecond)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
+    def retrieve(self, request, pk=None):
+        
+        sql = '''
+        SELECT assignedid AS id,
+               ai.id as assessmentid,
+               aqa.id as assessmentqaid,
+               ai.title,
+               aaqai.answer,
+               ai.type,
+               ai.instruction,
+               aai.note,
+               aqa.question,
+               aqa.answeroption,
+               aqa.actualmark,
+               assigneddate as createddate,
+               aai.studentid,
+               aai.isanswered,
+               aai.issaved
+        FROM assignassessmentinfo aai
+        INNER JOIN assessmentinfo ai on ai.id = aai.assessmentid 
+        INNER JOIN assessmentqa aqa on aqa.assessmentid = aai.assessmentid 
+        LEFT JOIN assignassessmentqainfo aaqai on aaqai.assessmentqaid = aqa.id
+        WHERE aai.studentid='%s' AND aai.assignedid='%s'
+        GROUP BY aqa.id, aai.assigneddate
+        ORDER BY aai.assignedid DESC''' % (request.user.username, pk)
+
+        #print sql
+
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        cursor = connection.cursor()
+        cursor.execute(sql)
+
+        return Response(result)
+
+class teacherAssessmentInfoViewSet(viewsets.ModelViewSet):
+    queryset = models.AssignAssessmentQAInfo.objects.all()
+    serializer_class = adminserializers.AssignassessmentinfoSerializer
+
+    def update(self, request, pk=None):
+        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        # aai = models.Assignassessmentinfo.objects.get(pk=pk)
+        aaidata =  json.loads(request.DATA.keys()[0])
+
+        for k, v in dict(aaidata.get('obtainmark')).items():
+            aai = models.AssignAssessmentQAInfo.objects.get(pk=k)
+            aai.obtainedmark     = int(v)
+            aai.save()
+
+        aldata = {}
+        aldata['pagename']       = 'viewassopenendedanswer'
+        aldata['operation']      = 'Insert'
+        aldata['stringsentence'] = 'Answer mark addedd'
+        add_activitylog(request, aldata)
+
+        return Response({'msg':True})

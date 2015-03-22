@@ -454,3 +454,13 @@ def viewassignassessment(request):
 @switchlanguage
 def viewassessmentanswer(request):
     return render(request, 'portalstudent/viewassessmentanswer.html')
+
+@login_required
+@switchlanguage
+def viewassignopenended(request):
+    return render(request, 'portalstudent/viewassignopenended.html')
+
+@login_required
+@switchlanguage
+def viewopenendedanswer(request):
+    return render(request, 'portalstudent/viewopenendedanswer.html')
