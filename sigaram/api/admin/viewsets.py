@@ -253,7 +253,7 @@ class studentViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        #print dir(request)
+        print request;
         student = models.Studentinfo.objects.get(pk=pk)
         studentdata =  json.loads(request.DATA.keys()[0])
         student.username = studentdata.get('username')
