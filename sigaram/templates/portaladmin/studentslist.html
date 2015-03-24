@@ -277,7 +277,7 @@ TTS.forms.renderstudentlist = function(data){
     var count = 0
     for(var i in data){
         var t = {};
-        t.DT_RowId = data[i].username;
+        t.DT_RowId = data[i].studentid;
         t.slno = ++count;
        if (data[i].imageurl){
             t.image = "<img src='/static/"+data[i].imageurl+"' width='100' height='100'>";
