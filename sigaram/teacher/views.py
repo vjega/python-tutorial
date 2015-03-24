@@ -497,17 +497,22 @@ def bulletinboard(request):
 @login_required
 @switchlanguage
 def studentprofile(request):
-    # user = models.Studentinfo.objects.filter(username=request.user.username)[0]
-    user=request.GET.get('studentid');
     folders = [{
-        "id"   :"1",
+        "id"   : "1",
         "name" :_("Assignments"),
-        "href" :"studentassignedresourcelist?studentid=%s" % request.GET.get('studentid')
+        "href" :u"studentassignedresourcelist?studentid=%s" % request.GET.get('studentid')
         },{
-        "id"   :"2",
+        "id"   : "2",
         "name" :_("Written Work"),
-        "href" :"viewstudentwrittenworks?studentid=%s" % request.GET.get('studentid') 
+        "href" :u"studentassignedwrittenworklist?studentid=%s" % request.GET.get('studentid') 
+        },{
+        "id"   : "3",
+        "name" :_("Exercises"),
+        "href" :u"studentassignedassessmentlist?studentid=%s" % request.GET.get('studentid') 
         }]
+    #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
+    #studentresourcetype = {'head':studentresourcetype_head, 
+                           #'body':studentresourcetype_body}
     return render(request, 'portalteacher/studentprofile.html', 
                   {"folders":folders})
 
@@ -711,3 +716,40 @@ def viewassessmentinfo(request):
 @switchlanguage
 def viewopenendedqa(request):
     return render(request, 'portalteacher/viewopenendedqa.html')  
+
+@login_required
+@switchlanguage
+def viewstudentwork(request):
+    return render(request, 'portalteacher/viewstudentwork.html')
+
+@login_required
+@switchlanguage
+def studentassignedwrittenworklist(request):
+    '''assigned_head = [_('Sl No.'),
+                         _('Title'),
+                         _('Type'),
+                         _('Date'),
+                         _('Note')]
+    studentslist = {'assigned_head':assigned_head}'''
+    return render(request, 'portalteacher/studentassignedwrittenworklist.html')
+
+@login_required
+@switchlanguage
+def studentassignedassessmentlist(request):
+    '''assigned_head = [_('Sl No.'),
+                         _('Title'),
+                         _('Type'),
+                         _('Date'),
+                         _('Note')]
+    studentslist = {'assigned_head':assigned_head}'''
+    return render(request, 'portalteacher/studentassignedassessmentlist.html')
+
+@login_required
+@switchlanguage
+def viewstudentwrittenwork(request):
+    return render(request, 'portalteacher/viewstudentwrittenwork.html')
+
+@login_required
+@switchlanguage
+def viewstudentassessmentwork(request):
+    return render(request, 'portalteacher/viewstudentassessmentwork.html')

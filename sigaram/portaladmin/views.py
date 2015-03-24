@@ -422,7 +422,7 @@ def studentprofile(request):
         "href" :u"studentassignedwrittenworklist?studentid=%s" % request.GET.get('studentid') 
         },{
         "id"   : "3",
-        "name" :_("Assessments"),
+        "name" :_("Exercises"),
         "href" :u"studentassignedassessmentlist?studentid=%s" % request.GET.get('studentid') 
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()

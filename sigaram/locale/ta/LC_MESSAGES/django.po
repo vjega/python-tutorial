@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-14 16:32+0000\n"
+"POT-Creation-Date: 2015-03-23 17:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,17 +50,21 @@ msgstr ""
 #: templates/portaladmin/rubrics.html:71
 #: templates/portaladmin/stickynotes.html:24
 #: templates/portaladmin/stickynoteslist.html:138
-#: templates/portaladmin/studentassignedresourcelist.html:62
+#: templates/portaladmin/studentassignedassessmentlist.html:61
+#: templates/portaladmin/studentassignedresourcelist.html:61
+#: templates/portaladmin/studentassignedwrittenworklist.html:62
 #: templates/portaladmin/studentresourcelist.html:162
 #: templates/portaladmin/subjectlist.html:264
 #: templates/portaladmin/teacherresourcelist.html:89
 #: templates/portaladmin/viewbulletinboard.html:23
 #: templates/portaladmin/viewmyresourcelistwork.html:23
 #: templates/portaladmin/viewpost.html:17
+#: templates/portaladmin/viewstudentassessmentwork.html:34
 #: templates/portaladmin/viewstudentres.html:74
 #: templates/portaladmin/viewstudentresourcelist.html:7
 #: templates/portaladmin/viewstudentresourcelist.html:22
-#: templates/portaladmin/viewstudentwork.html:23
+#: templates/portaladmin/viewstudentwork.html:102
+#: templates/portaladmin/viewstudentwrittenwork.html:90
 #: templates/portaladmin/viewteacherres.html:90
 #: templates/portaladmin/viewteacherresource.html:23
 #: templates/portalstudent/assignedassessmentlist.html:132
@@ -89,10 +93,12 @@ msgstr ""
 #: templates/portalstudent/viewassignmentanswer.html:91
 #: templates/portalstudent/viewassignmindmap.html:35
 #: templates/portalstudent/viewassignmindmapanswer.html:35
+#: templates/portalstudent/viewassignopenended.html:31
 #: templates/portalstudent/viewassignresource.html:32
 #: templates/portalstudent/viewassignwrittenwork.html:32
 #: templates/portalstudent/viewassignwrittenworkanswer.html:91
 #: templates/portalstudent/viewbulletinboard.html:23
+#: templates/portalstudent/viewopenendedanswer.html:34
 #: templates/portalstudent/viewpost.html:17
 #: templates/portalstudent/viewstudentresource.html:23
 #: templates/portalstudent/viewstudentwork.html:7
@@ -101,14 +107,14 @@ msgstr ""
 #: templates/portalstudent/worklistinfo.html:118
 #: templates/portalteacher/addteachershare.html:45
 #: templates/portalteacher/addwrittenwork.html:49
-#: templates/portalteacher/addwrittenwork.html:363
+#: templates/portalteacher/addwrittenwork.html:371
 #: templates/portalteacher/assessmentstatistics.html:114
 #: templates/portalteacher/assignassessment.html:382
 #: templates/portalteacher/assignassessment.html:411
 #: templates/portalteacher/assignchapter.html:385
 #: templates/portalteacher/assignchapter.html:414
 #: templates/portalteacher/assignedassessmentlist.html:132
-#: templates/portalteacher/assignedmindmaplist.html:111
+#: templates/portalteacher/assignedmindmaplist.html:114
 #: templates/portalteacher/assignedresourcelist.html:114
 #: templates/portalteacher/assignmentstatistics.html:114
 #: templates/portalteacher/assignmindmap.html:336
@@ -139,15 +145,16 @@ msgstr ""
 #: templates/portalteacher/studentresourcelist.html:139
 #: templates/portalteacher/studentresourceunits.html:83
 #: templates/portalteacher/viewassessmentanswer.html:34
-#: templates/portalteacher/viewassessmentinfo.html:60
+#: templates/portalteacher/viewassessmentinfo.html:61
 #: templates/portalteacher/viewassessments.html:100
-#: templates/portalteacher/viewassessments.html:174
-#: templates/portalteacher/viewassessments.html:210
+#: templates/portalteacher/viewassessments.html:175
+#: templates/portalteacher/viewassessments.html:212
 #: templates/portalteacher/viewassignmentanswer.html:102
 #: templates/portalteacher/viewassignmindmapanswer.html:34
 #: templates/portalteacher/viewassignresource.html:60
 #: templates/portalteacher/viewassignwrittenwork.html:59
 #: templates/portalteacher/viewassignwrittenworkanswer.html:90
+#: templates/portalteacher/viewassopenendedanswer.html:34
 #: templates/portalteacher/viewbulletinboard.html:23
 #: templates/portalteacher/viewmindmap.html:14
 #: templates/portalteacher/viewmindmapassignedstudentlist.html:60
@@ -202,6 +209,8 @@ msgstr "மறைச்சொல்"
 #: templates/portaladmin/billboardviewassignwrittenworkanswer.html:132
 #: templates/portaladmin/classviewassignmentanswer.html:122
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:122
+#: templates/portaladmin/viewstudentwork.html:134
+#: templates/portaladmin/viewstudentwrittenwork.html:122
 #: templates/portalstudent/billboardviewassignresourceanswer.html:132
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:132
 #: templates/portalstudent/classviewassignmentanswer.html:113
@@ -243,6 +252,8 @@ msgstr "முதல்"
 #: templates/portaladmin/statisticsassignment.html:74
 #: templates/portaladmin/studentslist.html:252
 #: templates/portaladmin/teacherslist.html:228
+#: templates/portaladmin/viewstudentwork.html:341
+#: templates/portaladmin/viewstudentwrittenwork.html:321
 #: templates/portalstudent/billboardviewassignresourceanswer.html:343
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:343
 #: templates/portalstudent/classviewassignmentanswer.html:291
@@ -252,8 +263,8 @@ msgstr "முதல்"
 #: templates/portalstudent/viewassignmentanswer.html:314
 #: templates/portalstudent/viewassignwrittenworkanswer.html:314
 #: templates/portalteacher/activitystatistics.html:51
-#: templates/portalteacher/addwrittenwork.html:194
-#: templates/portalteacher/addwrittenwork.html:297
+#: templates/portalteacher/addwrittenwork.html:202
+#: templates/portalteacher/addwrittenwork.html:305
 #: templates/portalteacher/adminlist.html:59
 #: templates/portalteacher/adminlist.html:135
 #: templates/portalteacher/assessmentstatistics.html:55
@@ -284,7 +295,7 @@ msgstr "முதல்"
 #: templates/portalteacher/thread.html:128
 #: templates/portalteacher/threadview.html:71
 #: templates/portalteacher/threadview.html:74
-#: templates/portalteacher/viewassessmentinfo.html:137
+#: templates/portalteacher/viewassessmentinfo.html:143
 #: templates/portalteacher/viewassignmentanswer.html:341
 #: templates/portalteacher/viewassignresource.html:141
 #: templates/portalteacher/viewassignwrittenwork.html:115
@@ -427,7 +438,9 @@ msgstr "குறும் பெயர்"
 #: templates/portaladmin/billboard.html:72
 #: templates/portaladmin/classroom.html:72
 #: templates/portaladmin/myresourcelist.html:157
-#: templates/portaladmin/studentassignedresourcelist.html:65
+#: templates/portaladmin/studentassignedassessmentlist.html:64
+#: templates/portaladmin/studentassignedresourcelist.html:64
+#: templates/portaladmin/studentassignedwrittenworklist.html:65
 #: templates/portaladmin/studentresourcelist.html:168
 #: templates/portaladmin/subjectlist.html:266
 #: templates/portaladmin/teacherresourcelist.html:98
@@ -453,7 +466,8 @@ msgstr "குறும் பெயர்"
 #: templates/portalteacher/extraslist.html:88
 #: templates/portalteacher/myresourcelist.html:157
 #: templates/portalteacher/studentassignedresourcelist.html:67
-#: templates/portalteacher/viewassessments.html:175
+#: templates/portalteacher/viewassessments.html:88
+#: templates/portalteacher/viewassessments.html:176
 msgid "Type"
 msgstr "வகை"
 
@@ -475,9 +489,13 @@ msgid "Detail"
 msgstr "விவரங்கள்"
 
 #: portaladmin/forms/RubricsForm.py:19 teacher/forms/RubricsForm.py:19
+#: templates/portaladmin/viewstudentassessmentwork.html:38
 #: templates/portalstudent/viewassessmentanswer.html:38
 #: templates/portalstudent/viewassignassessment.html:35
+#: templates/portalstudent/viewassignopenended.html:35
+#: templates/portalstudent/viewopenendedanswer.html:38
 #: templates/portalteacher/viewassessmentanswer.html:38
+#: templates/portalteacher/viewassopenendedanswer.html:38
 msgid "Instructions"
 msgstr "செயல்முறை"
 
@@ -591,24 +609,30 @@ msgid "Lessons "
 msgstr "பாடம்"
 
 #: portaladmin/forms/StudentresourceListForm.py:50
-#: templates/portaladmin/studentassignedresourcelist.html:71
+#: templates/portaladmin/studentassignedassessmentlist.html:70
+#: templates/portaladmin/studentassignedresourcelist.html:70
+#: templates/portaladmin/studentassignedwrittenworklist.html:71
+#: templates/portaladmin/viewstudentassessmentwork.html:42
 #: templates/portalstudent/studentassignedresourcelist.html:72
 #: templates/portalstudent/viewassessmentanswer.html:42
 #: templates/portalstudent/viewassignassessment.html:39
 #: templates/portalstudent/viewassignmindmap.html:52
 #: templates/portalstudent/viewassignmindmapanswer.html:52
+#: templates/portalstudent/viewassignopenended.html:39
 #: templates/portalstudent/viewassignresource.html:37
 #: templates/portalstudent/viewassignwrittenwork.html:37
+#: templates/portalstudent/viewopenendedanswer.html:42
 #: templates/portalstudent/viewstudentwrittenworks.html:70
 #: templates/portalteacher/addwrittenwork.html:55
 #: templates/portalteacher/assignassessment.html:51
 #: templates/portalteacher/assignchapter.html:49
 #: templates/portalteacher/studentassignedresourcelist.html:73
 #: templates/portalteacher/viewassessmentanswer.html:42
-#: templates/portalteacher/viewassessmentinfo.html:143
+#: templates/portalteacher/viewassessmentinfo.html:149
 #: templates/portalteacher/viewassignmindmapanswer.html:51
 #: templates/portalteacher/viewassignresource.html:144
 #: templates/portalteacher/viewassignwrittenwork.html:118
+#: templates/portalteacher/viewassopenendedanswer.html:42
 #: templates/portalteacher/viewmindmapassignedstudentlist.html:141
 msgid "Note"
 msgstr "குறிப்பு"
@@ -621,7 +645,6 @@ msgstr "பட உரையாடல்"
 
 #: portaladmin/forms/TeacherResourceForm.py:8
 #: student/forms/StudentWorkForm.py:7
-#: templates/portalteacher/viewassessments.html:88
 msgid "Category"
 msgstr "பகுப்பு"
 
@@ -725,6 +748,8 @@ msgstr "வளங்கள்"
 #: templates/portaladmin/classviewassignmentanswer.html:100
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:100
 #: templates/portaladmin/viewstudentres.html:8
+#: templates/portaladmin/viewstudentwork.html:112
+#: templates/portaladmin/viewstudentwrittenwork.html:100
 #: templates/portalstudent/billboard.html:75
 #: templates/portalstudent/billboardviewassignresourceanswer.html:110
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:110
@@ -778,7 +803,9 @@ msgstr "மாணவர்"
 #: templates/portaladmin/statisticsassessment.html:66
 #: templates/portaladmin/statisticsassignment.html:66
 #: templates/portaladmin/stickynoteslist.html:133
-#: templates/portaladmin/studentassignedresourcelist.html:58
+#: templates/portaladmin/studentassignedassessmentlist.html:57
+#: templates/portaladmin/studentassignedresourcelist.html:57
+#: templates/portaladmin/studentassignedwrittenworklist.html:57
 #: templates/portaladmin/studentresourcelist.html:157
 #: templates/portaladmin/studentslist.html:243
 #: templates/portaladmin/subjectlist.html:261
@@ -812,7 +839,7 @@ msgstr "மாணவர்"
 #: templates/portalteacher/allschoolresourcelist.html:195
 #: templates/portalteacher/assessmentstatistics.html:109
 #: templates/portalteacher/assignedassessmentlist.html:127
-#: templates/portalteacher/assignedmindmaplist.html:106
+#: templates/portalteacher/assignedmindmaplist.html:109
 #: templates/portalteacher/assignedresourcelist.html:109
 #: templates/portalteacher/assignmentstatistics.html:109
 #: templates/portalteacher/billboard.html:59
@@ -837,13 +864,14 @@ msgstr "மாணவர்"
 #: templates/portalteacher/studentslist.html:97
 #: templates/portalteacher/teacherslist.html:74
 #: templates/portalteacher/thread.html:125
-#: templates/portalteacher/viewassessmentinfo.html:133
+#: templates/portalteacher/viewassessmentinfo.html:139
 #: templates/portalteacher/viewassessmentqa.html:268
-#: templates/portalteacher/viewassessments.html:170
-#: templates/portalteacher/viewassessments.html:206
+#: templates/portalteacher/viewassessments.html:171
+#: templates/portalteacher/viewassessments.html:208
 #: templates/portalteacher/viewassignresource.html:137
 #: templates/portalteacher/viewassignwrittenwork.html:111
 #: templates/portalteacher/viewmindmapassignedstudentlist.html:134
+#: templates/portalteacher/viewopenendedqa.html:219
 #: templates/portalteacher/viewtopic.html:135
 #: templates/portalteacher/writtenwork.html:128
 msgid "Sl No."
@@ -895,10 +923,16 @@ msgstr "அறிவித்தவர்"
 #: templates/portaladmin/mindmaplist.html:142
 #: templates/portaladmin/myresourcelist.html:154
 #: templates/portaladmin/stickynoteslist.html:142
-#: templates/portaladmin/studentassignedresourcelist.html:68
+#: templates/portaladmin/studentassignedassessmentlist.html:67
+#: templates/portaladmin/studentassignedresourcelist.html:67
+#: templates/portaladmin/studentassignedwrittenworklist.html:68
 #: templates/portaladmin/studentresourcelist.html:165
 #: templates/portaladmin/subjectlist.html:265
 #: templates/portaladmin/teacherresourcelist.html:95
+#: templates/portaladmin/viewstudentwork.html:106
+#: templates/portaladmin/viewstudentwork.html:108
+#: templates/portaladmin/viewstudentwrittenwork.html:94
+#: templates/portaladmin/viewstudentwrittenwork.html:96
 #: templates/portalstudent/assignedassessmentlist.html:135
 #: templates/portalstudent/assignedresourcelist.html:135
 #: templates/portalstudent/billboard.html:78
@@ -933,7 +967,7 @@ msgstr "அறிவித்தவர்"
 #: templates/portalteacher/assessmentstatistics.html:117
 #: templates/portalteacher/assessmentstatistics.html:120
 #: templates/portalteacher/assignedassessmentlist.html:135
-#: templates/portalteacher/assignedmindmaplist.html:114
+#: templates/portalteacher/assignedmindmaplist.html:117
 #: templates/portalteacher/assignedresourcelist.html:117
 #: templates/portalteacher/assignmentstatistics.html:117
 #: templates/portalteacher/assignmentstatistics.html:120
@@ -957,8 +991,8 @@ msgstr "அறிவித்தவர்"
 #: templates/portalteacher/stickynoteslist.html:145
 #: templates/portalteacher/studentassignedresourcelist.html:70
 #: templates/portalteacher/studentresourcelist.html:142
-#: templates/portalteacher/viewassessments.html:176
-#: templates/portalteacher/viewassessments.html:213
+#: templates/portalteacher/viewassessments.html:177
+#: templates/portalteacher/viewassessments.html:215
 #: templates/portalteacher/viewassignmentanswer.html:106
 #: templates/portalteacher/viewassignmentanswer.html:108
 #: templates/portalteacher/viewassignwrittenworkanswer.html:94
@@ -1026,8 +1060,9 @@ msgstr "மாற்று"
 #: templates/portalteacher/rubrics.html:75
 #: templates/portalteacher/stickynoteslist.html:148
 #: templates/portalteacher/viewassessmentqa.html:274
-#: templates/portalteacher/viewassessments.html:179
-#: templates/portalteacher/viewassessments.html:216
+#: templates/portalteacher/viewassessments.html:180
+#: templates/portalteacher/viewassessments.html:218
+#: templates/portalteacher/viewopenendedqa.html:225
 #: templates/portalteacher/viewtopic.html:154
 #: templates/portalteacher/writtenwork.html:139
 msgid "Delete"
@@ -1047,6 +1082,7 @@ msgstr "ஒப்படைப்புகள்"
 #: templates/portaladmin/billboard.html:99
 #: templates/portaladmin/classroom.html:99
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:7
+#: templates/portaladmin/viewstudentwrittenwork.html:7
 #: templates/portalstudent/billboard.html:94
 #: templates/portalstudent/classroom.html:94
 #: templates/portalstudent/studentwrittenwork.html:7
@@ -1061,11 +1097,15 @@ msgstr "ஒப்படைப்புகள்"
 msgid "Written Work"
 msgstr "எழுத்துவேலை"
 
-#: portaladmin/views.py:531 teacher/views.py:307
+#: portaladmin/views.py:425
+msgid "Assessments"
+msgstr "ஒப்படைப்புகள்"
+
+#: portaladmin/views.py:567 teacher/views.py:307
 msgid "Lesson Plans"
 msgstr "பாடக் குறிப்பு"
 
-#: portaladmin/views.py:536
+#: portaladmin/views.py:572
 msgid "Schools resources"
 msgstr "வளங்கள்"
 
@@ -1083,9 +1123,12 @@ msgid "Notes"
 msgstr "குறிப்புகள்"
 
 #: student/views.py:55 teacher/views.py:65
+#: templates/portaladmin/viewstudentassessmentwork.html:7
 #: templates/portalstudent/assignedassessmentlist.html:7
 #: templates/portalstudent/viewassessmentanswer.html:7
 #: templates/portalstudent/viewassignassessment.html:7
+#: templates/portalstudent/viewassignopenended.html:7
+#: templates/portalstudent/viewopenendedanswer.html:7
 #: templates/portalteacher/assessmentstatistics.html:7
 #: templates/portalteacher/assignedassessmentlist.html:7
 #: templates/portalteacher/base.html:171
@@ -1096,7 +1139,11 @@ msgstr "குறிப்புகள்"
 #: templates/portalteacher/viewassessmentqa.html:212
 #: templates/portalteacher/viewassessments.html:8
 #: templates/portalteacher/viewassessments.html:17
-#: templates/portalteacher/viewassessments.html:125
+#: templates/portalteacher/viewassessments.html:122
+#: templates/portalteacher/viewassopenendedanswer.html:7
+#: templates/portalteacher/viewopenendedqa.html:8
+#: templates/portalteacher/viewopenendedqa.html:48
+#: templates/portalteacher/viewopenendedqa.html:168
 msgid "Exercises"
 msgstr "பயிற்சி"
 
@@ -1172,6 +1219,7 @@ msgstr "பயனர் பெயர்"
 
 #: teacher/views.py:51 templates/portaladmin/billboard.html:96
 #: templates/portaladmin/classroom.html:96
+#: templates/portaladmin/viewstudentwork.html:7
 #: templates/portalstudent/billboard.html:91
 #: templates/portalstudent/classroom.html:91
 #: templates/portalteacher/assignmentstatistics.html:7
@@ -1184,7 +1232,7 @@ msgstr "பயனர் பெயர்"
 #: templates/portalteacher/studentresourcelist.html:145
 #: templates/portalteacher/studentresourceunits.html:86
 #: templates/portalteacher/viewassessmentinfo.html:7
-#: templates/portalteacher/viewassessments.html:177
+#: templates/portalteacher/viewassessments.html:178
 #: templates/portalteacher/viewassignmentanswer.html:7
 #: templates/portalteacher/viewassignresource.html:7
 #: templates/portalteacher/writtenwork.html:58
@@ -1258,6 +1306,7 @@ msgstr "புள்ளி விவரம்"
 #: templates/portalteacher/assignedresourcelist.html:20
 #: templates/portalteacher/assignmentstatistics.html:20
 #: templates/portalteacher/viewassessmentqa.html:20
+#: templates/portalteacher/viewopenendedqa.html:20
 #: templates/portalteacher/writtenwork.html:20
 msgid "From Date"
 msgstr "தொடங்கும் தேதி"
@@ -1278,6 +1327,7 @@ msgstr "தொடங்கும் தேதி"
 #: templates/portalteacher/assignedresourcelist.html:35
 #: templates/portalteacher/assignmentstatistics.html:35
 #: templates/portalteacher/viewassessmentqa.html:35
+#: templates/portalteacher/viewopenendedqa.html:35
 #: templates/portalteacher/writtenwork.html:35
 msgid "To Date"
 msgstr "முடியும் தேதி"
@@ -1297,6 +1347,7 @@ msgstr "முடியும் தேதி"
 #: templates/portalteacher/assignedresourcelist.html:49
 #: templates/portalteacher/assignmentstatistics.html:49
 #: templates/portalteacher/viewassessmentqa.html:47
+#: templates/portalteacher/viewopenendedqa.html:47
 #: templates/portalteacher/writtenwork.html:47
 msgid "Search"
 msgstr "தேடு"
@@ -1307,6 +1358,8 @@ msgstr "தேடு"
 #: templates/portaladmin/billboardviewassignwrittenworkanswer.html:104
 #: templates/portaladmin/classviewassignmentanswer.html:94
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:94
+#: templates/portaladmin/viewstudentwork.html:106
+#: templates/portaladmin/viewstudentwrittenwork.html:94
 #: templates/portalstudent/billboardviewassignresourceanswer.html:104
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:104
 #: templates/portalstudent/classviewassignmentanswer.html:85
@@ -1331,6 +1384,8 @@ msgstr "ஒப்படைத்த"
 #: templates/portaladmin/billboardviewassignwrittenworkanswer.html:106
 #: templates/portaladmin/classviewassignmentanswer.html:96
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:96
+#: templates/portaladmin/viewstudentwork.html:108
+#: templates/portaladmin/viewstudentwrittenwork.html:96
 #: templates/portalstudent/billboardviewassignresourceanswer.html:106
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:106
 #: templates/portalstudent/classviewassignmentanswer.html:87
@@ -1442,7 +1497,12 @@ msgstr "எண்ணக்குவியல்"
 #: templates/portaladmin/teacherslist.html:110
 #: templates/portaladmin/teacherslist.html:178
 #: templates/portaladmin/viewpost.html:40
+#: templates/portaladmin/viewstudentassessmentwork.html:56
 #: templates/portaladmin/viewstudentres.html:91
+#: templates/portaladmin/viewstudentwork.html:320
+#: templates/portaladmin/viewstudentwork.html:519
+#: templates/portaladmin/viewstudentwrittenwork.html:291
+#: templates/portaladmin/viewstudentwrittenwork.html:465
 #: templates/portaladmin/viewteacherres.html:99
 #: templates/portaladmin/viewtopic.html:100
 #: templates/portalforum/index.html:104
@@ -1470,6 +1530,7 @@ msgstr "எண்ணக்குவியல்"
 #: templates/portalstudent/viewassignassessment.html:44
 #: templates/portalstudent/viewassignmentanswer.html:458
 #: templates/portalstudent/viewassignmindmap.html:64
+#: templates/portalstudent/viewassignopenended.html:44
 #: templates/portalstudent/viewassignresource.html:96
 #: templates/portalstudent/viewassignwrittenwork.html:96
 #: templates/portalstudent/viewassignwrittenworkanswer.html:458
@@ -1510,15 +1571,17 @@ msgstr "எண்ணக்குவியல்"
 #: templates/portalteacher/thread.html:102
 #: templates/portalteacher/viewassessmentanswer.html:56
 #: templates/portalteacher/viewassessmentqa.html:230
-#: templates/portalteacher/viewassessments.html:143
+#: templates/portalteacher/viewassessments.html:140
 #: templates/portalteacher/viewassignmentanswer.html:320
 #: templates/portalteacher/viewassignmentanswer.html:519
 #: templates/portalteacher/viewassignwrittenworkanswer.html:291
 #: templates/portalteacher/viewassignwrittenworkanswer.html:465
+#: templates/portalteacher/viewassopenendedanswer.html:56
+#: templates/portalteacher/viewopenendedqa.html:186
 #: templates/portalteacher/viewpost.html:40
 #: templates/portalteacher/viewpost.html:126
 #: templates/portalteacher/viewtopic.html:99
-#: templates/portalteacher/writtenwork.html:209
+#: templates/portalteacher/writtenwork.html:211
 msgid "Save"
 msgstr "சேமி"
 
@@ -1573,6 +1636,10 @@ msgstr "தவிர்"
 #: templates/portaladmin/subjectlist.html:252
 #: templates/portaladmin/teacherslist.html:148
 #: templates/portaladmin/teacherslist.html:195
+#: templates/portaladmin/viewstudentwork.html:480
+#: templates/portaladmin/viewstudentwork.html:561
+#: templates/portaladmin/viewstudentwrittenwork.html:426
+#: templates/portaladmin/viewstudentwrittenwork.html:508
 #: templates/portaladmin/viewtopic.html:110
 #: templates/portalforum/index.html:111
 #: templates/portalforum/viewpost.html:142
@@ -1604,8 +1671,8 @@ msgstr "தவிர்"
 #: templates/portalstudent/viewassignwrittenworkanswer.html:501
 #: templates/portalstudent/viewtopic.html:127
 #: templates/portalstudent/worklistinfo.html:104
-#: templates/portalteacher/addwrittenwork.html:258
-#: templates/portalteacher/addwrittenwork.html:419
+#: templates/portalteacher/addwrittenwork.html:266
+#: templates/portalteacher/addwrittenwork.html:427
 #: templates/portalteacher/adminlist.html:120
 #: templates/portalteacher/allschoolresourcelist.html:171
 #: templates/portalteacher/assignassessment.html:323
@@ -1640,14 +1707,15 @@ msgstr "தவிர்"
 #: templates/portalteacher/studentresourcelist.html:125
 #: templates/portalteacher/thread.html:114
 #: templates/portalteacher/viewassessmentqa.html:258
-#: templates/portalteacher/viewassessments.html:160
+#: templates/portalteacher/viewassessments.html:161
 #: templates/portalteacher/viewassignmentanswer.html:480
 #: templates/portalteacher/viewassignmentanswer.html:561
 #: templates/portalteacher/viewassignmindmapanswer.html:204
 #: templates/portalteacher/viewassignwrittenworkanswer.html:426
 #: templates/portalteacher/viewassignwrittenworkanswer.html:508
+#: templates/portalteacher/viewopenendedqa.html:209
 #: templates/portalteacher/viewtopic.html:109
-#: templates/portalteacher/writtenwork.html:226
+#: templates/portalteacher/writtenwork.html:228
 msgid "Close"
 msgstr "தவிர்"
 
@@ -1669,7 +1737,7 @@ msgstr "நிர்வாகிகள்"
 #: templates/portaladmin/teacherslist.html:31
 #: templates/portalstudent/stickynotes.html:17
 #: templates/portalstudent/topics.html:18
-#: templates/portalteacher/addwrittenwork.html:194
+#: templates/portalteacher/addwrittenwork.html:202
 #: templates/portalteacher/adminlist.html:17
 #: templates/portalteacher/assignassessment.html:257
 #: templates/portalteacher/assignchapter.html:260
@@ -1806,6 +1874,10 @@ msgstr "ரெக்கார்டர்"
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:166
 #: templates/portaladmin/rubric_view.html:20
 #: templates/portaladmin/rubrics.html:7 templates/portaladmin/rubrics.html:17
+#: templates/portaladmin/viewstudentwork.html:156
+#: templates/portaladmin/viewstudentwork.html:194
+#: templates/portaladmin/viewstudentwrittenwork.html:144
+#: templates/portaladmin/viewstudentwrittenwork.html:166
 #: templates/portalstudent/billboardviewassignresourceanswer.html:154
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:154
 #: templates/portalstudent/classviewassignmentanswer.html:135
@@ -1844,7 +1916,7 @@ msgstr "ரெக்கார்டர்"
 msgid "Rubrics"
 msgstr "த.நி.வி குறிப்பு"
 
-#: templates/portaladmin/base.html:201
+#: templates/portaladmin/base.html:200
 msgid "Richminmap"
 msgstr "மனதில் வரைபடம்"
 
@@ -1853,6 +1925,8 @@ msgstr "மனதில் வரைபடம்"
 #: templates/portaladmin/billviewassignmentanswer.html:42
 #: templates/portaladmin/classviewassignmentanswer.html:107
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:107
+#: templates/portaladmin/viewstudentwork.html:119
+#: templates/portaladmin/viewstudentwrittenwork.html:107
 #: templates/portalstudent/billboardviewassignresourceanswer.html:117
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:117
 #: templates/portalstudent/billviewassignmentanswer.html:36
@@ -1881,6 +1955,8 @@ msgstr "மனதில் வரைபடம்"
 #: templates/portalteacher/viewassignmentanswer.html:119
 #: templates/portalteacher/viewassignmindmapanswer.html:57
 #: templates/portalteacher/viewassignwrittenworkanswer.html:107
+#: templates/portalteacher/viewopenendedqa.html:131
+#: templates/portalteacher/viewopenendedqa.html:224
 msgid "Answer"
 msgstr "பதில்"
 
@@ -1888,6 +1964,8 @@ msgstr "பதில்"
 #: templates/portaladmin/billboardviewassignwrittenworkanswer.html:132
 #: templates/portaladmin/classviewassignmentanswer.html:122
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:122
+#: templates/portaladmin/viewstudentwork.html:134
+#: templates/portaladmin/viewstudentwrittenwork.html:122
 #: templates/portalstudent/billboardviewassignresourceanswer.html:132
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:132
 #: templates/portalstudent/classviewassignmentanswer.html:113
@@ -1915,6 +1993,12 @@ msgstr "பதிவு"
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:126
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:148
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:634
+#: templates/portaladmin/viewstudentwork.html:138
+#: templates/portaladmin/viewstudentwork.html:160
+#: templates/portaladmin/viewstudentwork.html:712
+#: templates/portaladmin/viewstudentwrittenwork.html:126
+#: templates/portaladmin/viewstudentwrittenwork.html:148
+#: templates/portaladmin/viewstudentwrittenwork.html:633
 #: templates/portalstudent/billboardviewassignresourceanswer.html:136
 #: templates/portalstudent/billboardviewassignresourceanswer.html:158
 #: templates/portalstudent/billboardviewassignresourceanswer.html:756
@@ -1956,6 +2040,8 @@ msgstr "காண்க"
 #: templates/portaladmin/billboardviewassignwrittenworkanswer.html:154
 #: templates/portaladmin/classviewassignmentanswer.html:144
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:144
+#: templates/portaladmin/viewstudentwork.html:156
+#: templates/portaladmin/viewstudentwrittenwork.html:144
 #: templates/portalstudent/billboardviewassignresourceanswer.html:154
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:154
 #: templates/portalstudent/classviewassignmentanswer.html:135
@@ -1975,6 +2061,9 @@ msgstr "வாக்கு"
 #: templates/portaladmin/billboardviewassignwrittenworkanswer.html:176
 #: templates/portaladmin/classviewassignmentanswer.html:166
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:166
+#: templates/portaladmin/viewstudentwork.html:179
+#: templates/portaladmin/viewstudentwork.html:194
+#: templates/portaladmin/viewstudentwrittenwork.html:166
 #: templates/portalstudent/billboardviewassignresourceanswer.html:176
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:176
 #: templates/portalstudent/classviewassignmentanswer.html:151
@@ -1993,11 +2082,13 @@ msgstr "மதிப்பீடு"
 
 #: templates/portaladmin/billboardviewassignresourceanswer.html:200
 #: templates/portaladmin/billboardviewassignwrittenworkanswer.html:200
+#: templates/portaladmin/viewstudentassessmentwork.html:57
 #: templates/portalstudent/billboardviewassignresourceanswer.html:200
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:200
 #: templates/portalstudent/billviewassignmentanswer.html:53
 #: templates/portalstudent/viewassignassessment.html:45
 #: templates/portalstudent/viewassignmindmap.html:65
+#: templates/portalstudent/viewassignopenended.html:45
 #: templates/portalstudent/viewassignresource.html:97
 #: templates/portalstudent/viewassignwrittenwork.html:97
 #: templates/portalteacher/addwrittenwork.html:97
@@ -2016,6 +2107,8 @@ msgstr "அனுப்பு"
 #: templates/portaladmin/billboardviewassignresourceanswer.html:250
 #: templates/portaladmin/billboardviewassignwrittenworkanswer.html:250
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:228
+#: templates/portaladmin/viewstudentwork.html:256
+#: templates/portaladmin/viewstudentwrittenwork.html:228
 #: templates/portalstudent/billboardviewassignresourceanswer.html:250
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:250
 #: templates/portalstudent/classviewassignmentanswer.html:201
@@ -2032,6 +2125,7 @@ msgstr "அறிவிப்புப்பலகைக்குள் செ�
 #: templates/portaladmin/billboardviewassignresourceanswer.html:252
 #: templates/portaladmin/billboardviewassignwrittenworkanswer.html:252
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:230
+#: templates/portaladmin/viewstudentwrittenwork.html:230
 #: templates/portalstudent/billboardviewassignresourceanswer.html:252
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:252
 #: templates/portalstudent/classviewassignwrittenworkanswer.html:231
@@ -2052,6 +2146,10 @@ msgstr "அறிவிப்புப்பலகைக்குள் செ�
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:289
 #: templates/portaladmin/rubric_view.html:153
 #: templates/portaladmin/rubric_view.html:169
+#: templates/portaladmin/viewstudentwork.html:302
+#: templates/portaladmin/viewstudentwork.html:318
+#: templates/portaladmin/viewstudentwrittenwork.html:273
+#: templates/portaladmin/viewstudentwrittenwork.html:289
 #: templates/portalstudent/billboardviewassignresourceanswer.html:295
 #: templates/portalstudent/billboardviewassignresourceanswer.html:311
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:295
@@ -2091,6 +2189,8 @@ msgstr "மொத்தம்"
 #: templates/portaladmin/billboardviewassignwrittenworkanswer.html:313
 #: templates/portaladmin/classviewassignmentanswer.html:296
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:291
+#: templates/portaladmin/viewstudentwork.html:320
+#: templates/portaladmin/viewstudentwrittenwork.html:291
 #: templates/portalstudent/billboardviewassignresourceanswer.html:313
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:313
 #: templates/portalstudent/classviewassignwrittenworkanswer.html:292
@@ -2106,6 +2206,8 @@ msgstr "முடிவு"
 #: templates/portaladmin/billboardviewassignwrittenworkanswer.html:340
 #: templates/portaladmin/classviewassignmentanswer.html:314
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:318
+#: templates/portaladmin/viewstudentwork.html:338
+#: templates/portaladmin/viewstudentwrittenwork.html:318
 #: templates/portalstudent/billboardviewassignresourceanswer.html:340
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:340
 #: templates/portalstudent/classviewassignmentanswer.html:288
@@ -2125,6 +2227,8 @@ msgstr "பதில்"
 #: templates/portaladmin/billboardviewassignwrittenworkanswer.html:346
 #: templates/portaladmin/classviewassignmentanswer.html:320
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:324
+#: templates/portaladmin/viewstudentwork.html:344
+#: templates/portaladmin/viewstudentwrittenwork.html:324
 #: templates/portalstudent/billboardviewassignresourceanswer.html:346
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:346
 #: templates/portalstudent/classviewassignmentanswer.html:294
@@ -2144,6 +2248,8 @@ msgstr "புள்ளி விவரம்"
 #: templates/portaladmin/billboardviewassignwrittenworkanswer.html:380
 #: templates/portaladmin/classviewassignmentanswer.html:354
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:358
+#: templates/portaladmin/viewstudentwork.html:412
+#: templates/portaladmin/viewstudentwrittenwork.html:358
 #: templates/portalstudent/billboardviewassignresourceanswer.html:380
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:380
 #: templates/portalstudent/classviewassignmentanswer.html:328
@@ -2163,6 +2269,8 @@ msgstr "திருத்தம் சேர்"
 #: templates/portaladmin/billboardviewassignwrittenworkanswer.html:392
 #: templates/portaladmin/classviewassignmentanswer.html:366
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:370
+#: templates/portaladmin/viewstudentwork.html:424
+#: templates/portaladmin/viewstudentwrittenwork.html:370
 #: templates/portalstudent/billboardviewassignresourceanswer.html:392
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:392
 #: templates/portalstudent/classviewassignmentanswer.html:340
@@ -2182,6 +2290,8 @@ msgstr "மேலும் திருத்தங்களை சேர்க�
 #: templates/portaladmin/billboardviewassignwrittenworkanswer.html:399
 #: templates/portaladmin/classviewassignmentanswer.html:373
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:377
+#: templates/portaladmin/viewstudentwork.html:431
+#: templates/portaladmin/viewstudentwrittenwork.html:377
 #: templates/portalstudent/billboardviewassignresourceanswer.html:399
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:399
 #: templates/portalstudent/classviewassignmentanswer.html:347
@@ -2201,6 +2311,8 @@ msgstr "திருத்தங்களை சேமிக்கவும்"
 #: templates/portaladmin/billboardviewassignwrittenworkanswer.html:753
 #: templates/portaladmin/classviewassignmentanswer.html:633
 #: templates/portaladmin/classviewassignwrittenworkanswer.html:631
+#: templates/portaladmin/viewstudentwork.html:709
+#: templates/portaladmin/viewstudentwrittenwork.html:630
 #: templates/portalstudent/billboardviewassignresourceanswer.html:753
 #: templates/portalstudent/billboardviewassignwrittenworkanswer.html:752
 #: templates/portalstudent/classviewassignmentanswer.html:682
@@ -2229,6 +2341,7 @@ msgstr "வரிசை எண்"
 
 #: templates/portaladmin/billcomprehensionanswerrating.html:28
 #: templates/portalteacher/viewassessmentqa.html:272
+#: templates/portalteacher/viewopenendedqa.html:223
 msgid "Question"
 msgstr "விளக்கமாக"
 
@@ -2289,8 +2402,8 @@ msgstr "அறிவுப்புகள்"
 #: templates/portaladmin/bulletinboard.html:157
 #: templates/portaladmin/bulletinboard.html:215
 #: templates/portalteacher/addwrittenwork.html:113
-#: templates/portalteacher/addwrittenwork.html:292
-#: templates/portalteacher/addwrittenwork.html:358
+#: templates/portalteacher/addwrittenwork.html:300
+#: templates/portalteacher/addwrittenwork.html:366
 #: templates/portalteacher/assignassessment.html:123
 #: templates/portalteacher/assignassessment.html:351
 #: templates/portalteacher/assignassessment.html:377
@@ -2361,7 +2474,7 @@ msgstr "பட்டியலிட திரும்பிப் போ"
 #: templates/portaladmin/viewteacherres.html:8
 #: templates/portalstudent/classviewassignmentanswer.html:560
 #: templates/portalteacher/addteachershare.html:8
-#: templates/portalteacher/addwrittenwork.html:366
+#: templates/portalteacher/addwrittenwork.html:374
 #: templates/portalteacher/assignassessment.html:385
 #: templates/portalteacher/assignchapter.html:388
 #: templates/portalteacher/assignmindmap.html:339
@@ -2414,8 +2527,12 @@ msgstr "கருத்து இணை"
 msgid "Edit Sticky note"
 msgstr "கருத்து இணை"
 
+#: templates/portaladmin/studentassignedassessmentlist.html:7
+#: templates/portaladmin/studentassignedassessmentlist.html:15
 #: templates/portaladmin/studentassignedresourcelist.html:7
-#: templates/portaladmin/studentassignedresourcelist.html:16
+#: templates/portaladmin/studentassignedresourcelist.html:15
+#: templates/portaladmin/studentassignedwrittenworklist.html:7
+#: templates/portaladmin/studentassignedwrittenworklist.html:15
 #: templates/portalstudent/studentassignedresourcelist.html:7
 #: templates/portalstudent/studentassignedresourcelist.html:16
 #: templates/portalstudent/viewstudentwrittenworks.html:7
@@ -2483,7 +2600,6 @@ msgstr "அறிவிப்பு தேதி"
 #: templates/portaladmin/viewbulletinboard.html:86
 #: templates/portaladmin/viewmyresourcelistwork.html:63
 #: templates/portaladmin/viewstudentresourcelist.html:34
-#: templates/portaladmin/viewstudentwork.html:26
 #: templates/portaladmin/viewteacherresource.html:31
 #: templates/portalforum/viewpost.html:204
 #: templates/portalstudent/billviewassignmentanswer.html:39
@@ -2497,7 +2613,7 @@ msgstr "அறிவிப்பு தேதி"
 #: templates/portalteacher/billviewassignmentanswer.html:42
 #: templates/portalteacher/extraslist.html:94
 #: templates/portalteacher/thread.html:129
-#: templates/portalteacher/viewassessmentinfo.html:102
+#: templates/portalteacher/viewassessmentinfo.html:103
 #: templates/portalteacher/viewassignresource.html:103
 #: templates/portalteacher/viewassignwrittenwork.html:102
 #: templates/portalteacher/viewbulletinboard.html:86
@@ -2527,6 +2643,19 @@ msgstr "பதில்"
 msgid "No comment"
 msgstr "கருத்துகள் இல்லை"
 
+#: templates/portaladmin/viewstudentassessmentwork.html:47
+#: templates/portalstudent/classviewassignmentanswer.html:559
+#: templates/portalstudent/classviewassignmentanswer.html:560
+#: templates/portalstudent/viewassessmentanswer.html:47
+#: templates/portalteacher/classviewassignmentanswer.html:559
+#: templates/portalteacher/classviewassignmentanswer.html:560
+#: templates/portalteacher/viewassessmentanswer.html:47
+#: templates/portalteacher/viewassessmentinfo.html:146
+#: templates/portalteacher/viewassopenendedanswer.html:47
+#, fuzzy
+msgid "Marks"
+msgstr "மதிப்பெண்"
+
 #: templates/portaladmin/viewstudentres.html:60
 msgid "Thumpnail upload"
 msgstr "சிறுபடத்தின் பதிவேற்ற"
@@ -2547,6 +2676,13 @@ msgstr "அறிவிப்புப்பலகை"
 msgid "Picture Composition"
 msgstr "கட்டுரை"
 
+#: templates/portaladmin/viewstudentwork.html:258
+#: templates/portalstudent/classviewassignmentanswer.html:203
+#: templates/portalteacher/classviewassignmentanswer.html:203
+#: templates/portalteacher/viewassignmentanswer.html:258
+msgid "Resource already Sent to Noticeboard"
+msgstr "அறிவிப்புப்பலகைக்குள் செலுத்தப்பட்டது"
+
 #: templates/portaladmin/viewstudentwrittenworks.html:19
 #: templates/portalstudent/assignedassessmentlist.html:60
 #: templates/portalstudent/assignedresourcelist.html:60
@@ -2556,6 +2692,7 @@ msgstr "கட்டுரை"
 #: templates/portalteacher/assignedassessmentlist.html:60
 #: templates/portalteacher/viewassessmentqa.html:55
 #: templates/portalteacher/viewassessments.html:26
+#: templates/portalteacher/viewopenendedqa.html:55
 #: templates/portalteacher/viewstudentwrittenworks.html:20
 #: templates/portalteacher/writtenwork.html:57
 msgid "New"
@@ -2654,26 +2791,10 @@ msgstr "பதில்"
 msgid "Classroom"
 msgstr "வகுப்பறை"
 
-#: templates/portalstudent/classviewassignmentanswer.html:203
-#: templates/portalteacher/classviewassignmentanswer.html:203
-#: templates/portalteacher/viewassignmentanswer.html:258
-msgid "Resource already Sent to Noticeboard"
-msgstr "அறிவிப்புப்பலகைக்குள் செலுத்தப்பட்டது"
-
 #: templates/portalstudent/classviewassignmentanswer.html:559
 #: templates/portalteacher/classviewassignmentanswer.html:559
 msgid "Peer"
 msgstr ""
-
-#: templates/portalstudent/classviewassignmentanswer.html:559
-#: templates/portalstudent/classviewassignmentanswer.html:560
-#: templates/portalteacher/classviewassignmentanswer.html:559
-#: templates/portalteacher/classviewassignmentanswer.html:560
-#: templates/portalteacher/viewassessmentanswer.html:47
-#: templates/portalteacher/viewassessmentinfo.html:140
-#, fuzzy
-msgid "Marks"
-msgstr "மதிப்பெண்"
 
 #: templates/portalstudent/classviewassignmentanswer.html:559
 #: templates/portalteacher/classviewassignmentanswer.html:559
@@ -2754,7 +2875,7 @@ msgid "Connect"
 msgstr "சேர்"
 
 #: templates/portalteacher/addwrittenwork.html:79
-#: templates/portalteacher/addwrittenwork.html:206
+#: templates/portalteacher/addwrittenwork.html:214
 #: templates/portalteacher/assignassessment.html:91
 #: templates/portalteacher/assignassessment.html:240
 #: templates/portalteacher/assignassessment.html:269
@@ -2776,7 +2897,7 @@ msgstr "சேர்க்க"
 msgid "Remove"
 msgstr "நீக்கு"
 
-#: templates/portalteacher/addwrittenwork.html:388
+#: templates/portalteacher/addwrittenwork.html:396
 #, fuzzy
 msgid "Rubrics List"
 msgstr "த.நி.வி குறிப்பு"
@@ -2844,14 +2965,17 @@ msgid "Thread"
 msgstr ""
 
 #: templates/portalteacher/viewassessmentqa.html:56
+#: templates/portalteacher/viewopenendedqa.html:56
 msgid "Edited"
 msgstr "மாற்று"
 
 #: templates/portalteacher/viewassessmentqa.html:57
+#: templates/portalteacher/viewopenendedqa.html:57
 msgid "Shared"
 msgstr "பகிர்வு"
 
 #: templates/portalteacher/viewassessmentqa.html:122
+#: templates/portalteacher/viewopenendedqa.html:122
 #, fuzzy
 msgid "Question "
 msgstr "விளக்கமாக"
@@ -2862,11 +2986,13 @@ msgid "Options"
 msgstr "பட உரையாடல்"
 
 #: templates/portalteacher/viewassessmentqa.html:184
+#: templates/portalteacher/viewopenendedqa.html:140
 #, fuzzy
 msgid "Mark"
 msgstr "மதிப்பெண்"
 
 #: templates/portalteacher/viewassessmentqa.html:200
+#: templates/portalteacher/viewopenendedqa.html:156
 #, fuzzy
 msgid "Add more answer"
 msgstr "மேலும் திருத்தங்களை சேர்க்கவும்"
@@ -2891,7 +3017,7 @@ msgstr ""
 msgid "Middle"
 msgstr ""
 
-#: templates/portalteacher/writtenwork.html:191
+#: templates/portalteacher/writtenwork.html:193
 msgid "Writing job"
 msgstr "எழுத்து பலகை"
 

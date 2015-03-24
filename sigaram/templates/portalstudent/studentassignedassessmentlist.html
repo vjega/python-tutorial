@@ -74,14 +74,13 @@ TTS.forms.renderstudentwork = function(data){
         ];
     
     var dataset = [];
-    
+    console.log(data);
     var count = 0
-    
     for(var i in data){
         var t = [];
-        t.DT_RowId = data[i].resourceid+"_"+data[i].studentid;
+        t.DT_RowId = data[i].id+"_"+data[i].studentid;
         t.slno = ++count;
-        t.title = data[i].resourcetitle;
+        t.title = data[i].title;
         //t.type = data[i].resourcetype;
         t.date = TTS.utils.datetimeConvDate(data[i].createddate);
         //t.note = "<i> Note</i>";
@@ -103,7 +102,7 @@ $(document).ready(function(){
     var studentid = TTS.utils.getUrlParameter('studentid');
     TTS.utils.ajaxloaderstart();
     $.ajax({
-        "url":"/api/admin/studentresourceinfo/?studentid="+studentid+"&format=json",
+        "url":"/api/admin/studentassessmentdetail/?studentid="+studentid+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstudentwork(data);
@@ -111,7 +110,8 @@ $(document).ready(function(){
     });
     $('#admin-main-tbl').on('click', 'tbody tr', function(){
         var ids = this.id.split("_");
-        window.location = 'viewstudentwork?resourceid='+ids[0]+'&studentid='+ids[1];
+        window.location = 'viewstudentassessmentwork?assessmentid='+ids[0]+'&studentid='+
+                                                                                    ids[1];
     });
 });
 

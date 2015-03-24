@@ -6,7 +6,6 @@
     <div class="col-lg-12">
         <h2 class="page-header">{% trans "Student Work" %}</h2>
     </div>
-    <!-- /.col-lg-12 -->
 </div>
 {% endblock topcontent %}
 {% block botcontent %}
@@ -19,7 +18,7 @@
         <div class="panel-body">
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover"
-                     id="studentassigned-resource-tbl">
+                     id="admin-main-tbl">
                 </table>
             </div>
             <!-- /.table-responsive -->
@@ -28,14 +27,14 @@
     </div>
     <!-- /.panel -->
 </div>
-                <!-- /.col-lg-12 -->
+<!-- /.col-lg-12 -->
 {% endblock botcontent%}
 
 {% block morecss %}
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <style>
-    #addrec:hover, .tts-view:hover{
+    #addrec:hover, #admin-main-tbl tbody tr:hover{
         cursor: pointer;
     }
 </style>
@@ -53,28 +52,25 @@
 <script>
 window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
-TTS.studentid=TTS.utils.getUrlParameter('studentid');
 TTS.forms.renderstudentwork = function(data){
     var headers = [
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
-              "data" : "slno",
-              "bSortable":false 
+              "data" : "slno"   
             },
             { "title": "{% trans "Title" %}",
               "data" : "title" 
             },
-            { "title": "{% trans "Type" %}",
-              "data" : "type" 
-            }, 
+            // { "title": "{% trans "Type" %}",
+            //   "data" : "type" 
+            // }, 
             { "title": "{% trans "Date" %}",
               "data" : "date" 
             }, 
-            { "title": "{% trans "Note" %}",
-              "class": "text-center",
-              "data" : "note",
-              "bSortable":false   
-            }, 
+            // { "title": "{% trans "Note" %}",
+            //   "class": "text-center",
+            //   "data" : "note"   
+            // }, 
         ];
     
     var dataset = [];
@@ -82,13 +78,13 @@ TTS.forms.renderstudentwork = function(data){
     var count = 0
     
     for(var i in data){
-        var t = {};
-        t.DT_RowId = data[i].resourceid;
+        var t = [];
+        t.DT_RowId = data[i].resourceid+"_"+data[i].studentid;
         t.slno = ++count;
         t.title = data[i].resourcetitle;
-        t.type = data[i].resourcetype;
+        //t.type = data[i].resourcetype;
         t.date = TTS.utils.datetimeConvDate(data[i].createddate);
-        t.note = "<i class='flaticon-zoom38 tts-view' id="+data[i].resourceid+"></i>";
+        //t.note = "<i> Note</i>";
         dataset.push(t);
     }
     if (TTS.forms.table) {
@@ -98,24 +94,26 @@ TTS.forms.renderstudentwork = function(data){
         );
         return true;
     }
-    TTS.forms.table = $('#studentassigned-resource-tbl').dataTable({"language" : TTS.utils.datatable_ta,
+    TTS.forms.table = $('#admin-main-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
         "columns":  headers
     });
 };
 $(document).ready(function(){
+    var studentid = TTS.utils.getUrlParameter('studentid');
     TTS.utils.ajaxloaderstart();
     $.ajax({
-        "url":"/api/admin/resourceinfo/?studentid="+TTS.studentid+"&format=json",
+        "url":"/api/admin/studentresourceinfo/?studentid="+studentid+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderstudentwork(data);
         TTS.utils.ajaxloaderstop();
-        $("table#studentassigned-resource-tbl thead tr th").removeClass('sorting_asc');
     });
-     $('#studentassigned-resource-tbl').on('click', '.tts-view', function(){
-        window.location = 'viewstudentresource?resourceid='+this.id;
+    $('#admin-main-tbl').on('click', 'tbody tr', function(){
+        var ids = this.id.split("_");
+        window.location = 'viewstudentwork?resourceid='+ids[0]+'&studentid='+ids[1];
     });
 });
+
 </script>
 {% endblock scriptcontent %}
