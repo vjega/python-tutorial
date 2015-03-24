@@ -206,12 +206,14 @@ def studentresourcetype(request):
         "categoryid": "1",
         "name" :_("Animation"),
         "href" :"studentresourceunits"
-        },{
-        "id": "3",
-        "categoryid": "2",
-        "name" :_("Writing board"),
-        "href" :"studentresourceunits"
-        },{
+        },
+        #{
+        #"id": "3",
+        #"categoryid": "2",
+        #"name" :_("Writing board"),
+        #"href" :"studentresourceunits"
+        #},
+        {
         "id": "4",
         "name" :_("Composition"),
         "href" :"extras"

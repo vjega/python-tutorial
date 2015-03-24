@@ -129,12 +129,14 @@ def resourcetype(request):
         "categoryid": "1",
         "name" :_("Animation"),
         "href" :"assignedresourcelist"
-        },{
-        "id": "3",
-        "categoryid": "2",
-        "name" :_("Writing board"),
-        "href" :"assignedresourcelist"
-        },{
+        },
+        #{
+        #"id": "3",
+        #"categoryid": "2",
+        #"name" :_("Writing board"),
+        #"href" :"assignedresourcelist"
+        #},
+        {
         "id": "3",
         "name" :_("Composition"),
         "href" :"assignedresourcelist"
