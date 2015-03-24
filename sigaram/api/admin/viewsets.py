@@ -253,7 +253,7 @@ class studentViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        #print dir(request)
+        print request;
         student = models.Studentinfo.objects.get(pk=pk)
         studentdata =  json.loads(request.DATA.keys()[0])
         student.username = studentdata.get('username')
@@ -2901,7 +2901,7 @@ class AssignedWrittenworkStudents(viewsets.ModelViewSet):
         FROM assignwrittenworkinfo awwi
         INNER JOIN writtenworkinfo wwi on wwi.writtenworkid = awwi.writtenworkid 
         INNER JOIN auth_user au on au.username = awwi.studentid 
-        WHERE awwi.assignwrittenworkid=%s
+        WHERE awwi.writtenworkid=%s
               %s
         GROUP BY awwi.studentid
         ORDER BY assigneddate DESC''' % (pk, studentcond)
