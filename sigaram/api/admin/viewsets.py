@@ -3526,10 +3526,6 @@ class AssessmentInfoViewSet(viewsets.ModelViewSet):
     def create(self, request):
         assessment = models.Assessmentinfo()
         cdata =  json.loads(request.DATA.keys()[0])
-
-        print cdata.get('title');
-        print cdata.get('instruction');
-
         assessment.title        = summer_decode(cdata.get('title'))
         assessment.instruction  = summer_decode(cdata.get('instruction'))
         assessment.schoolid     = request.session.get('schoolid')
@@ -3543,6 +3539,12 @@ class AssessmentInfoViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         models.Assessmentinfo.objects.get(pk=pk).delete()
+        sql ='''
+        DELETE FROM assessmentqa
+        WHERE assessmentid=%s
+        '''%(pk)
+        cursor = connection.cursor()
+        cursor.execute(sql)
         return Response('"msg":"delete"')
 
 class AssignmentRatingViewSet(viewsets.ModelViewSet):
@@ -3772,7 +3774,6 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
     serializer_class = adminserializers.AssignassessmentinfoSerializer
 
     def list(self, request):
-
         datecond = ''
         if request.GET.get('fdate') and request.GET.get('tdate'):
             datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
@@ -3884,7 +3885,7 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
         aldata['stringsentence'] = 'New assessment assigned to students'
         add_activitylog(request, aldata)
 
-        return Response(request.DATA)        
+        return Response(request.DATA)            
 
     def update(self, request, pk=None):
 
@@ -3939,6 +3940,17 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
         add_activitylog(request, aldata)
 
         return Response({'msg':True})
+
+    def destroy(self, request, pk=None):
+        models.Assessmentinfo.objects.get(pk=pk).delete()
+        sql ='''
+        DELETE FROM assignassessmentinfo
+        WHERE assessmentid=%s
+        '''%(pk)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        return Response('"msg":"delete"')
+
 
 class ActivitylogInfoViewSet(viewsets.ModelViewSet):
     queryset = models.Activitylog.objects.all()
