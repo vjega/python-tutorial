@@ -1140,6 +1140,9 @@ class Stickyinfo(models.Model):
     createdby = models.BigIntegerField()
     isdeleted = models.IntegerField()
     createddate = models.DateTimeField()
+    schoolid = models.IntegerField()
+    classid = models.IntegerField()
+    section = models.CharField(max_length=100)
 
     class Meta:
         managed = False

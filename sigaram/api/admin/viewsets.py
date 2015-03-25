@@ -2327,11 +2327,15 @@ class StickyinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.StickyinfoSerializer
 
     def create(self, request):
+        print request.session.get('section')
         stickylist = models.Stickyinfo()
         stickydata =  json.loads(request.DATA.keys()[0])
         stickylist.title = stickydata.get('title')
         stickylist.isdeleted = 0
         stickylist.createdby = request.user.id
+        stickylist.schoolid     = request.session.get('schoolid')
+        stickylist.classid      = request.session.get('classid')
+        stickylist.section      = request.session.get('section')
         stickylist.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         stickylist.save()
 

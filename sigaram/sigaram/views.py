@@ -41,12 +41,14 @@ def user_landing(request):
         t = Teacherinfo.objects.filter(username=request.user.username)[0]
         request.session['schoolid'] = t.schoolid
         request.session['classid'] =  t.classid
+        request.session['section'] =  t.section
         return redirect('/teacher/home')
     elif group == 'Student':
         from portaladmin.models import Studentinfo
         t = Studentinfo.objects.filter(username=request.user.username)[0]
         request.session['schoolid'] = request.session['stu_schoolid'] = t.schoolid
         request.session['classid']  = request.session['stu_classid']  = t.classid
+        request.session['section']  = request.session['stu_section']  = t.section
         return redirect('/student/home')
 
     elif group == 'Admin':
