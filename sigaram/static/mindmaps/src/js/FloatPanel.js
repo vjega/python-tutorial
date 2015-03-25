@@ -214,7 +214,7 @@ mindmaps.FloatPanel = function(caption, $container, $content) {
    */
   this.setPosition = function(x, y) {
     this.$widget.offset({
-      left : x,
+      left : x+290,
       top : y
     });
   };

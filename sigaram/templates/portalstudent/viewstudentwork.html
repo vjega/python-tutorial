@@ -4,53 +4,212 @@
 {% block topcontent %}
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">{% trans "Title" %}</h2>
+        <h2 class="page-header">{% trans "Assignment" %}</h2>
     </div>
     <!-- /.col-lg-12 -->
 </div>
 {% endblock topcontent %}
+{% block morecss %}
+<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
+<link href="{%static "bower_components/bootstrap-star-rating/css/star-rating.css" %}" rel="stylesheet"/>
+<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
+<style>
+    #comment-list_wrapper{
+        padding:20px;
+    }
+    .glyphicon{
+        display: none;
+    }
+    .star-rating{
+        float: left;
+        padding-right: 30px;
+    }
+    #addrec:hover, #admin-main-tbl tbody tr:hover, #view-answer:hover{
+        cursor: pointer;
+    }
+    #assignment-answer .col-lg-12 {
+        margin: 5px 0;
+    }
+    #student-answer,
+    #original-text{
+        font-family: anjal inaimathi sch book,inaimathi sch book,monospace;
+        font-size: 15px;
+        font-weight: bold;
+    }
+    span.tc {
+        color: #40c040 !important;
+        cursor: pointer;
+        display: inline;
+    }
+    span.sc {
+        color: red !important;
+        cursor: pointer;
+        display: inline;
+    }
+    span.tc:hover, span.sc:hover {
+        background-color: yellow !important;
+    }
+    i.approved{
+        color: green;
+    }
+    i.rejected{
+        color: red;
+        cursor: pointer;
+    }
+    table#rubrics-table thead tr th,
+    table#rubrics-table tfoot tr td{
+        text-align: center;
+        height: 45px;
+        background-color: #337ab7;
+        color: #ffffff;
+        font-weight: bold;
+    }
+    table#rubrics-table tbody tr td:nth-child(1) { 
+        background-color: #d3d3d3;
+        font-weight: bold;
+    }
+    input#ttls{
+        color:#000;
+    }
+</style>
+{% endblock morecss %}
+
+{% block morescript %}
+<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
+<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
+<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
+<script src="{% static "bower_components/bootstrap-star-rating/js/star-rating.js" %}"></script>
+<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<!-- script-->
+<script type="text/javascript" src="{% static "bower_components/local-audio-recorder-master/demo/swfobject.js" %}"></script>
+<script src="{%static "js/tts.utils.js" %}"></script>
+{% endblock morescript %}
 
 {% block botcontent %}
-<div class="col-lg-12">
+<input type="hidden" value="" name="assignedid" id="assignedid">
+<div id='dialog'></div>
+<div class="row">
     <div class="panel panel-default">
                <!-- /.panel-heading -->
         <div class="panel-body">
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover"
-                     id="admin-main-tbl">
-               <div class="row">
-                    <div id="sendclassroomhtml" class="col-lg-12"></div>
-                </div><br />
-                <div class="row">
-                    <label class="col-lg-2">{% trans "Title" %}</label>
-                    <div class="col-lg-10" id="written-title"></div>
-                </div><br />
-                <div class="row">
-                    <label class="col-lg-2">{% trans "Notes" %}</label>
-                    <div class="col-lg-10" id="notes-title"></div>
-                </div><br />
-                <div class="row">
-                    <label class="col-lg-2">{% trans "Assigned" %} {% trans "Date" %}</label>
-                    <div class="col-lg-4" id="assigned-date"></div>
-                    <label class="col-lg-2">{% trans "Answerd" %} {% trans "Date" %} </label>
-                    <div class="col-sm-4" id="publish-date"></div>
-                </div><br />
-                <div class="row">
-                    <label class="col-lg-2">{% trans "Creator" %}</label>
-                    <div class="col-lg-10" id="creator-title"></div>
-                </div><br />
-                <div class="row">
-                    <label class="col-lg-2">{% trans "Answer" %}</label>
-                </div>  
-                <div>
-                    <div class="row show-grid">
-                        <div class="col-lg-12" id="student-answer">
+            <div class="table-responsive" id="assignment-answer">
+                <table class="table table-striped table-bordered table-hover" >
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="sendnoticeboardhtml" class="col-lg-12"></div>
+                        </div>
+                        <div class="col-lg-12">
+                            <label class="col-lg-2">{% trans "Title" %}</label>
+                            <div class="col-lg-10" id="resource-title"></div>
+                        </div>
+                        <div class="col-lg-12">
+                            <label class="col-lg-2">{% trans "Assigned" %} {% trans "Date" %} </label>
+                            <div class="col-sm-4" id="assigned-date"></div>
+                            <label class="col-lg-2">{% trans "Answerd" %} {% trans "Date" %} </label>
+                            <div class="col-sm-4" id="answerd-date"></div>
+                        </div>
+                        <div class="col-lg-12">
+                            <label class="col-lg-2">{% trans "Student" %} </label>
+                            <div class="col-lg-10" id="student-name"></div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="col-lg-10" id="audio-player"></div>
+                        </div>
+                        <div class="col-lg-12">
+                            <label class="col-lg-2">{% trans "Answer" %}</label>
+                        </div>    
+                    </div>
+   
+                    <div class="bs-docs-grid">
+                        <div class="row show-grid col-lg-12">
+                            <div class="col-lg-12" id="student-answer">
+                                
+                            </div>
+                        </div>
+                    </div>   
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="col-lg-2">
+                                {% trans "First" %} {% trans "Record" %}
+                            </label>
+                            <div class="col-lg-2">
+                                <a href="javascript:void(0)" class="showhide">
+                                    <span>{% trans "Show" %}</span>
+                                    <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    <div class="bs-docs-grid" style="display:none">
+                        <div class="row show-grid col-lg-12">
+                            <div class="col-lg-12" id="original-text">
+                                
+                            </div>
+                        </div>
+                    </div> 
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="col-lg-2">
+                                {% trans "Rubrics" %} {% trans "Vote" %}
+                            </label>
+                            <div class="col-lg-2">
+                                <a href="javascript:void(0)" class="showhide">
+                                    <span>{% trans "Show" %}</span>
+                                    <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </div>                            
+                        </div>
+                    </div>
+
+                    <div class="bs-docs-grid" style="display:none">
+                        <div class="row show-grid col-lg-12">
+                            <div class="col-lg-12" id="rubrics-vote">
+
+                            </div>
+                            <input type="hidden" id="max-mark">
+                        </div>
+                    </div>                    
+
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="col-lg-2">{% trans "Evaluation" %}</label>
+                        </div>
+                    </div>
+
+                    <div class="bs-docs-grid">
+                        <div class="row show-grid col-lg-12">
+                            <div class="col-lg-12" id="evaluation">
+                                <input id="rating-input" type="number" class="rating pull-left" min=0 max=5 step=1 data-size="sm">
+                                <input id="avgrating-input" type="number" class="rating pull-left" min=0 max=5 step=1 data-size="sm">
+                            </div>
+                        </div>
+                    </div>                    
+
+                    <!--div class="row">
+                        <div class="col-lg-12">
+                            <label class="col-lg-12">{% trans "Rubrics" %} {% trans "Evaluation" %}</label>
+                        </div>
+                    </div>
+
+                    <div class="bs-docs-grid">
+                        <div class="row show-grid col-lg-12">
+                            <div class="col-lg-12" id="rubrics-evaluation">
+                                Rubrics Evaluation
+                            </div>
+                        </div>
+                    </div-->                    
+                    
+
+                <!--div id="view-resource">
+                     <a href="javascript:void(0)" onclick="window.open('http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/studentresources/12771A-L3-RP5(HA).swf','wdwSearch','top=100,left=100,width=1024,height=768,scrollbars=1,menu=0');">View</a>
+                </div-->
+
                 </table>
             </div>
-            <!-- /.table-responsive -->
         </div>
         <!-- /.panel-body -->
     </div>
@@ -59,81 +218,505 @@
 <!-- /.col-lg-12 -->
 {% endblock botcontent%}
 
-{% block morecss %}
-<link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
-<link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
-<link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
-<style>
-    #addrec:hover, #admin-main-tbl tbody tr:hover{
-        cursor: pointer;
-    }
-    .text_area{
-        width:70%;
-        height:50px;
-    }
-</style>
-{% endblock morecss %}
-
-
-{% block morescript %}
-<script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
-<script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
-<script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
-<script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
-<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
-<script src="{% static "js/tts.utils.js" %}"></script>
-{% endblock morescript %}
 
 {% block scriptcontent %}
+<script id="editanswerlist" type="text/x-jsrender">
+    <textarea id="prev-text" style="display:none"></textarea>
+    <textarea id="correction" style="width:100%;height:60px;padding:5px;display:none"></textarea>
+    <input type="hidden" id="spanid" value="">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover" id="edit-answer-list">                    
+                </table>
+            </div>
+        </div>
+    </div>
+</script>
 
 <script>
-window.TTS = window.TTS || {}
-TTS.forms = TTS.forms || {} 
 
-TTS.forms.renderstudentwritteninfo = function(data){
-    $("#written-title").html(data[0].writtenworktitle);
-    $("#notes-title").html(data[0].description);
-    $("#assigned-date").html(TTS.utils.dateConv(data[0].assigneddate));
-    $("#publish-date").html(TTS.utils.dateConv(data[0].publisheddate));
-    $("#creator-title").html(data[0].first_name+" "+data[0].last_name);
+window.TTS = window.TTS || {}
+TTS.forms = TTS.forms || {}   
+
+TTS.forms.renderassignedresourceinfo = function(data){
+    $("#assignedid").val(data[0].id);
+    $("#resource-title").html(data[0].resourcetitle);
+    $("#assigned-date").html(TTS.utils.dateConv(data[0].createddate));
+    $("#answerd-date").html(TTS.utils.dateConv(data[0].answereddate));
+    $("#student-name").html(data[0].firstname+" "+data[0].lastname);
     $("#student-answer").html(data[0].answertext);
-    if(data[0].isclassroom == 0){
-        $('#sendclassroomhtml').html('<a href="javascript:void(0)" id="sendclassroom" >{% trans "Send to Classroom" %}</a>');
-    }else if(data[0].isclassroom == 1){
-        $('#sendclassroomhtml').html('{% trans "Resource already sent to classroom" %}');
+    $("#original-text").html(data[0].originaltext);
+    TTS.forms.rating(data[0].rating);
+    if(data[0].answerurl){
+        $("#audio-player").html('<audio src="../static/audio/'+data[0].answerurl+'" controls=""></audio><br />');
+    }
+    
+    if(data[0].isbillboard == 0){
+        $('#sendnoticeboardhtml').html('<a href="javascript:void(0)" id="sendnoticeboard" >{% trans "Send to Noticeboard" %}</a>');
+    }else if(data[0].isbillboard == 1){
+        $('#sendnoticeboardhtml').html('{% trans "Resource already Sent to Noticeboard" %}');
+    }
+
+    if(data[0].rubric_id){
+        $.ajax({
+            "url":"/api/admin/rubrics/"+data[0].rubric_id,
+            "type":"GET"
+        }).done(function(rubricdata){
+            TTS.forms.renderrubrictableinfo(rubricdata, data);
+        });
+    }
+
+    //$("#view-resource").html("<a href='#' onclick=\"TTS.forms.openwindow('"+data.videourl+"');\" >View</a>");
+};
+
+/*TTS.forms.openwindow = function(videourl) {
+    window.open("http://10tsigaram.com/dbinterface/playfillingvideo.php?questionurl=../dbinterface/"+videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
+};*/
+
+TTS.forms.renderrubrictableinfo = function(rubtable, rubdata){
+
+    var rubricid = rubdata[0].rubric_marks;
+    var rubricmark = rubdata[0].rubric_n_mark.split(",");
+    var tableHTML = '';
+    var thdata = rubtable.rmh[0];
+    var th = thdata.split('~~');
+    var tddataobj = rubtable.rmb;
+    var td = '';
+    var answercheck = '';
+    var rubchecks = {};
+    var thnumber = [];
+    var maxVal = '';
+    $.each(th, function(idx, value){
+        thnumber[idx] = value.match(/\d+/)[0];
+    });
+    maxVal = Math.max.apply(Math,thnumber);
+
+    tableHTML += "<table id='rubrics-table' class='table table-striped table-bordered table-hover'>";
+    tableHTML += "<thead><tr><th>&nbsp;</th>";
+    $("#max-mark").val(maxVal);
+    $(th).each(function(k,v){
+        tableHTML += "<th>"+v+"</th>";
+    });
+
+    tableHTML += "<th>{% trans 'Total' %}</th></tr></thead>";
+    tableHTML += "<tbody>";
+    $(tddataobj).each(function(x,tddata){
+        td = tddata[0].split('~~');
+        tableHTML += "<tr>";
+        $(td).each(function(i,j){
+            if(i > 0){
+                answercheck="<input onclick='TTS.forms.setmarks("+x+","+thnumber[(i-1)]+")' class='chkrub mark-"+x+"' id='m"+x+"-"+i+"' name='mark-"+x+"' type='radio'>";
+            }else{
+                answercheck="";
+            }
+            tableHTML += "<td>"+answercheck+" "+j+"</td>";
+        });
+        tableHTML += "<td><input class='totals' id='tmark-"+x+"' style='width:30px;text-align:center' readonly type='text' value=''> / "+maxVal+"</td>";
+        tableHTML += "</tr>";
+    });
+    tableHTML += "</tbody><tfoot><tr><td style='text-align:center' colspan="+(th.length+1)+"><strong>{% trans 'Total' %}</strong></td><td><input id='ttls' style='width:30px;text-align:center' readonly type='text' value=''> / "+maxVal*(tddataobj.length)+"</td></tr></tfoot>";
+    tableHTML += "</table>";
+    tableHTML += '<button class="btn btn-primary" id="save-rubric-marks">{% trans "Save" %} {% trans "Result" %}</button>';
+    $("#rubrics-vote").html(tableHTML);
+    rubricid = rubricid.split('~');
+    $.each(rubricid, function(idx, value){
+        $("#"+value).prop("checked", true);
+        $("#tmark-"+idx).val(rubricmark[idx])
+    })
+    TTS.forms.settotalmarks();
+}
+
+TTS.forms.renderanswereditinginfo = function(data, isapproved){
+    var spanid = data[0].spanid;
+    var x = data[0].previoustext;
+    var previoustext = x.replace(/<\/?[^>]+>/gi, '');
+    $("#correction").val(previoustext);
+    $("#prev-text").val(previoustext);
+    $("#spanid").val(spanid);
+    var headers = [
+            { "title": "{% trans "Answers" %}",
+              "data" : "edittext"
+            },
+            { "title": "{% trans "Name" %}",
+              "data" : "name"
+            },
+            { "title": "{% trans "Status" %}",
+              "data" : "isapproved"
+            },
+        ];
+    var dataset = [];
+    var count = 0
+    for(var i in data){
+        var t = [];
+        t.DT_RowId = data[i].editingid;
+        t.edittext = data[i].edittext;
+        t.name = data[i].name;
+        if(data[i].isapproved == 0)
+            t.isapproved = "<i class='fa fa-remove fa-lg rejected'></i>";
+        else
+            t.isapproved = "<i class='fa fa-check fa-lg approved'></i>";
+
+        dataset.push(t);
+    }
+    if(isapproved){
+        TTS.forms.asstable.fnClearTable();
+        TTS.forms.asstable.fnAddData(
+            dataset
+        );
+    }else{
+        TTS.forms.asstable = $('#edit-answer-list').dataTable({"language" : TTS.utils.datatable_ta,
+            "data":     dataset,
+            "columns":  headers
+        });        
+    }
+};
+
+TTS.forms.rating = function(rating){
+    if(rating){
+        $("#rating-input").parent().parent().remove();        
+        var ratingwidth = ((rating/5)*100+"%");
+        var cn = '';
+        var rv = '';
+        $("#avgrating-input").prev().css("width", ratingwidth);
+        $("#rating-input").val(rating);
+        if (rating <= 1) {
+            cn = 'label label-danger';
+            rv = rating + ' Star';
+        } else if (rating <= 2) {
+            cn = 'label label-warning';
+            rv = rating + ' Stars';
+        } else if (rating <= 3) {
+            cn = 'label label-info';
+            rv = rating + ' Stars';
+        } else if (rating <= 4) {
+            cn = 'label label-primary';
+            rv = rating + ' Stars';
+        } else if (rating <= 5) {
+            cn = 'label label-success';
+            rv = rating + ' Stars';
+        }else{
+            cn = '';
+            rv = 'Your not rated';
+        }
+        $("#avgrating-input").parent().next().children().addClass(cn).html(rv);
+    }else{
+        $("#avgrating-input").parent().parent().remove();        
     }
 
 };
 
-$(document).ready(function(){  
-    var studentid = TTS.utils.getUrlParameter('studentid');
-    var writtenworkid = TTS.utils.getUrlParameter('writtenworkid');
+TTS.forms.editanswerlist = function(spanid){
+    var assignedid = $("#assignedid").val();
+    BootstrapDialog.show({
+        title: '{% trans "Choose Add Correction" %}',
+        message: $($('#editanswerlist').render()),
+        onshown: function(dialogRef){
+            $.ajax({
+                "url":"/api/admin/editanswer/?assignedid="+assignedid+"&spanid="+spanid+"&format=json",
+                "type":"GET"
+            }).done(function(data){
+                //console.log(data);
+                TTS.forms.renderanswereditinginfo(data,'');
+            });
+        },
+        buttons:  [{
+                        label: '{% trans "Add more corrections" %}',
+                        cssClass: 'btn-primary',
+                        action: function(dialogItself){
+                            $("#correction").show();
+                        }
+                   },
+                   {
+                        label: '{% trans "Save corrections" %}',
+                        cssClass: 'btn-primary',
+                        action: function(dialogItself){
+                            var modtext = $("#correction").val();
+                            if(modtext==""){
+                                dialogItself.close();
+                                alert("nothing to save");
+                                return false;
+                            }
+
+                            var uid         = $("#spanid").val();
+                            var assignedid  = $("#assignedid").val();
+                            var origtext    = $("#student-answer").html();
+                            var prevtext    = $("#prev-text").val();
+                            var modified    = modtext;
+                            var type        = 2;
+                            //var answertext  = TTS.forms.marktext(fulltext,origtext,uid,type);
+                            
+                            var data = {
+                                assignedid  : assignedid,
+                                spanid      : uid,
+                                orig        : origtext,
+                                modified    : modified,
+                                type        : type,
+                                prevtext    : prevtext
+                            }
+
+                            $.ajax({
+                                headers : {
+                                    'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                                },
+                                type:'POST',
+                                data: data,
+                                url : '/api/admin/editanswer/'
+                            }).done(function(msg) {
+                                $("#correction").hide();
+                                $.ajax({
+                                    "url":"/api/admin/editanswer/?assignedid="+assignedid+"&spanid="+uid+"&format=json",
+                                    "type":"GET"
+                                }).done(function(data){
+                                    TTS.forms.renderanswereditinginfo(data,'isapproved');
+                                    return false;
+                                });
+                                return false;
+                            });
+
+                        }
+                   },
+                   {
+                        label: '{% trans "Close" %}',
+                        cssClass: 'btn-primary',
+                        action: function(dialogItself){
+                            dialogItself.close();
+                            location.reload();
+                        }
+                   }]
+    });
+};
+
+
+TTS.forms.editanswer = function() {
+    var x = TTS.utils.getSelectionHtml();
+    //console.log(x); return false;
+    if(x=="")
+        return false;
+    
+    var html = "<textarea id='edittext' style='width:100%;height:140px'>"+x.replace(/<\/?[^>]+>/gi, '')+"</textarea>";
+
+    BootstrapDialog.show({
+        title: 'Edit Text',
+        onshown: function(dialogRef){
+            //updateChapter();
+    //         $('.summernote').summernote({
+    //       toolbar: [
+    //         ['edit',['undo','redo']],
+    //         ['style', ['style']], // no style button
+    //         ['style', ['bold', 'italic', 'underline', 'clear']],
+    //         ['color', ['color']],
+    //         ['para', ['ul', 'ol', 'paragraph']],
+    //         ['height', ['height']],
+    //         //['insert', ['picture', 'link']], // no insert buttons
+    //         //['table', ['table']], // no table button
+    //         //['help', ['help']] //no help button
+    //       ]
+    // });
+        },
+        message: html,
+        buttons: [{
+            label: '{% trans "Save" %}',
+            cssClass: 'btn-primary',
+            action: function(dialogItself){
+
+                var modtext = $("#edittext").val();
+                if(modtext==""){
+                    dialogItself.close();
+                    alert("nothing to save");
+                    return false;
+                }
+
+                var uid         = TTS.utils.guid();
+                var assign_id   = $("#assignedid").val();
+                var fulltext    = $("#student-answer").html();
+                var origtext    = x;
+                var modified    = modtext;
+                var type        = 2;
+                var answertext  = TTS.forms.marktext(fulltext,origtext,uid,type);
+                
+                var data = {
+                    spanid      : uid,
+                    fulltext    : fulltext,
+                    orig        : origtext,
+                    modified    : modified,
+                    type        : type,
+                    answertext  : answertext
+                }
+
+                $.ajax({
+                    headers : {
+                        'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+                    },
+                    type:'PUT',
+                    data: data,
+                    url : '/api/admin/studentassignresource/'+assign_id
+                }).done(function(msg) {
+                    dialogItself.close();
+                    alert("Answer corrected successfully");
+                    location.reload();
+                });
+            }
+            },{
+            label: '{% trans "Close" %}',
+            action: function(dialogItself){
+                dialogItself.close();
+            }
+        }]
+    });
+};
+
+TTS.forms.marktext = function(original, marker, uid, usertype){
+    if(usertype == 1)
+        usertype = 'sc';
+
+    if(usertype == 2)
+        usertype = 'tc'
+
+    original = original.replace(/\r?\n|\r/g,"");
+    original = original.trim();
+    marker = marker.replace(/\r?\n|\r/g,"");
+    marker = marker.trim();
+    var res = original.replace(marker, "<span id='"+uid+"' class='"+usertype+"'>"+marker+"</span>"); 
+    return res;
+};
+
+TTS.forms.changeapproveicon = function(editingid){
+    $("table#edit-answer-list > tbody > tr > td > i").each(function(){
+        $(this).removeClass('fa-check approved').addClass('fa-remove rejected');
+    });
+    $("table#edit-answer-list > tbody > tr#"+editingid+" > td i")
+                                                .removeClass('fa-remove rejected')
+                                                .addClass('fa-check approved');
+};
+
+TTS.forms.setmarks = function(row, mark) {
+    $("#tmark-"+row).val(mark);
+    TTS.forms.settotalmarks();
+};
+TTS.forms.settotalmarks = function() {
+    var x=0;
+    $('.totals').each(function(){x += parseInt($(this).val()) || 0;});
+    $('#ttls').val(x);
+};
+
+
+TTS.forms.ressave = function(){
+    var data = {}
+    var ansarr=[];
+    var ans_n_arr = [];
+    $("input:checked.chkrub").each(function(){
+        ansarr.push($(this).attr("id"));
+    });
+    $("input.totals").each(function(){
+        ans_n_arr.push($(this).val());
+    });
+    ans_n_arr.push($("#max-mark").val());
+    var ans = ansarr.join("~");
+    var ans_n = ans_n_arr.join(",");
+    data['ans']          = ans;
+    data['ans_n']        = ans_n;
+    data['assignedtype'] = 'ar';
+    var assignedid = $("#assignedid").val();
+
     $.ajax({
-        "url":"/api/admin/studentwrittenworkinfo/?studentid="+studentid+"&writtenworkid="+writtenworkid+"&format=json",
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        url:"/api/admin/rubrics/"+assignedid,
+        type:"PUT",
+        data: JSON.stringify(data)
+    }).done(function(data){
+        alert("Rubric marks updated successfully");
+    }).error(function(err, msg){
+        alert("I didnt update the rubric marks");
+    });
+}
+
+$(document).ready(function(){
+
+    var resourceid = TTS.utils.getUrlParameter('resourceid');
+    var studentid = TTS.utils.getUrlParameter('studentid');
+
+    $.ajax({
+        "url":"/api/admin/assignedresourcestudents/"+resourceid+"/?studentid="+studentid+"&format=json",
         "type":"GET"
     }).done(function(data){
-        TTS.forms.renderstudentwritteninfo(data);
+        TTS.forms.renderassignedresourceinfo(data);
     });
-    $("body").on("click","a#sendclassroom", function(event){
-        var assignedid = TTS.utils.getUrlParameter('writtenworkid');
-        var crdata = {
-            assignedid   : assignedid,
-            studentid    : studentid,
-            assignedtype : 'aw'
-        }
+
+    $('#rating-input').on('rating.change', function() {
+        var rating      = $('#rating-input').val();
+        var assignedid  = $("#assignedid").val();
         $.ajax({
             headers : {
                 'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
-            },      
-            type: 'POST',
-            data: JSON.stringify(crdata),
-            url : '/api/admin/classinfo/'
+            },
+            type:'PUT',
+            url : '/api/admin/assignmentanswerrating/'+assignedid+'/?rating='+rating
         }).done(function(msg) {
-            if(msg = 'saved')
-                alert("Resource sent to classroom");
             location.reload();
         });
-    })
+    });
+    
+    $("#student-answer,#student-answer p").on("mouseup", function(event){
+        //event.stopPropagation();
+        TTS.forms.editanswer();
+    });
+
+    $("body").on("click","data", function(event){
+        event.stopPropagation();
+        var spanid = $(this).attr("id");
+        TTS.forms.editanswerlist(spanid);
+    });
+    $("body").on("click","a#sendnoticeboard", function(event){
+        var assignedid = $("#assignedid").val();
+        $.ajax({
+            headers : {
+                'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+            },
+            type:'POST',
+            url : '/api/admin/billboardresource/?assignedid='+assignedid+'&studentid='+studentid+'&assignedtype=ar'
+        }).done(function(msg) {
+            if(msg = 'saved')
+                alert("Resource sent to Noticeboard");
+
+            location.reload();
+        });
+    });
+    $("body").on("click","span.tc,span.sc", function(event){
+        event.stopPropagation();
+        var spanid = $(this).attr("id");
+        TTS.forms.editanswerlist(spanid);
+    });    
+    /*$("body").on("click","i.rejected", function(event){
+        var editingid = $(this).parent().parent().attr("id");
+        var assignedid = $("#assignedid").val();
+        $.ajax({
+            type:'GET',
+            url : '/api/admin/editanswerresource/'+editingid+'/?assignedid='+assignedid
+        }).done(function(msg) {
+            if(msg == 'approved')
+                TTS.forms.changeapproveicon(editingid);
+        });
+    });*/
+    $("body").on("click","#save-rubric-marks", function(event){
+        TTS.forms.ressave();
+    });
+    $(".showhide").click(function(){
+        if($(this).children().is(".fa-arrow-right")) {
+            $(this).find("i").removeClass('fa-arrow-right').addClass('fa-arrow-down');
+            $(this).find("span").text('{% trans "Hide" %}');
+        }else{
+            $(this).find("i").addClass('fa-arrow-right').removeClass('fa-arrow-down');
+            $(this).find("span").text('{% trans "Show" %}');
+        }
+        $(this).parent().parent().parent().next().toggle('slow');
+    });
+});
+$('#avgrating-input').rating({
+        readonly: true
 });
 </script>
+
 {% endblock scriptcontent %}

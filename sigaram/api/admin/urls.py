@@ -71,7 +71,6 @@ router.register(r'studentassessmentinfo', 	viewsets.studentAssessmentInfoViewSet
 router.register(r'assessmentstatistics', 	viewsets.AssessmentstatisticsInfo)
 router.register(r'statisticsstudent', 		viewsets.StatisticsstudentInfo)
 router.register(r'viewassignassessment', 	viewsets.ViewassignassessmentInfo)
-router.register(r'mindmapinfo',         	viewsets.MindmapinfoViewSet)
 router.register(r'studentopenendedInfoViewSet', viewsets.studentopenendedInfoViewSet)
 router.register(r'teacherassessmentinfo', 	viewsets.teacherAssessmentInfoViewSet)
 

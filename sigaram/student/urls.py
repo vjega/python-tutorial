@@ -85,5 +85,13 @@ urlpatterns = patterns('student.views',
 
     url(r'^viewassessmentanswer$',    'viewassessmentanswer',   name="viewassessmentanswer"),
     url(r'^viewassignopenended$',    'viewassignopenended',   name="viewassignopenended"),
-    url(r'^viewopenendedanswer$',    'viewopenendedanswer',   name="viewopenendedanswer")
+    url(r'^viewopenendedanswer$',    'viewopenendedanswer',   name="viewopenendedanswer"),
+    url(r'^studentassignedwrittenworklist$','studentassignedwrittenworklist',
+                                                        name='studentassignedwrittenworklist'),
+    url(r'^studentassignedassessmentlist$','studentassignedassessmentlist',
+                                                        name='studentassignedassessmentlist'),
+    url(r'^viewstudentwrittenwork$',            'viewstudentwrittenwork',             
+                                                        name='viewstudentwrittenwork'),
+    url(r'^viewstudentassessmentwork$',            'viewstudentassessmentwork',             
+                                                        name='viewstudentassessmentwork'),
 )

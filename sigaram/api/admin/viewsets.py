@@ -253,7 +253,7 @@ class studentViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        #print dir(request)
+        print request;
         student = models.Studentinfo.objects.get(pk=pk)
         studentdata =  json.loads(request.DATA.keys()[0])
         student.username = studentdata.get('username')
@@ -2327,11 +2327,15 @@ class StickyinfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.StickyinfoSerializer
 
     def create(self, request):
+        print request.session.get('section')
         stickylist = models.Stickyinfo()
         stickydata =  json.loads(request.DATA.keys()[0])
         stickylist.title = stickydata.get('title')
         stickylist.isdeleted = 0
         stickylist.createdby = request.user.id
+        stickylist.schoolid     = request.session.get('schoolid')
+        stickylist.classid      = request.session.get('classid')
+        stickylist.section      = request.session.get('section')
         stickylist.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         stickylist.save()
 
@@ -2901,7 +2905,7 @@ class AssignedWrittenworkStudents(viewsets.ModelViewSet):
         FROM assignwrittenworkinfo awwi
         INNER JOIN writtenworkinfo wwi on wwi.writtenworkid = awwi.writtenworkid 
         INNER JOIN auth_user au on au.username = awwi.studentid 
-        WHERE awwi.assignwrittenworkid=%s
+        WHERE awwi.writtenworkid=%s
               %s
         GROUP BY awwi.studentid
         ORDER BY assigneddate DESC''' % (pk, studentcond)
@@ -3526,10 +3530,6 @@ class AssessmentInfoViewSet(viewsets.ModelViewSet):
     def create(self, request):
         assessment = models.Assessmentinfo()
         cdata =  json.loads(request.DATA.keys()[0])
-
-        print cdata.get('title');
-        print cdata.get('instruction');
-
         assessment.title        = summer_decode(cdata.get('title'))
         assessment.instruction  = summer_decode(cdata.get('instruction'))
         assessment.schoolid     = request.session.get('schoolid')
@@ -3543,6 +3543,12 @@ class AssessmentInfoViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         models.Assessmentinfo.objects.get(pk=pk).delete()
+        sql ='''
+        DELETE FROM assessmentqa
+        WHERE assessmentid=%s
+        '''%(pk)
+        cursor = connection.cursor()
+        cursor.execute(sql)
         return Response('"msg":"delete"')
 
 class AssignmentRatingViewSet(viewsets.ModelViewSet):
@@ -3656,6 +3662,13 @@ class RichmindmapViewSet(viewsets.ModelViewSet):
     def create(self, request):
         assignmindmapinfo = models.Assignmindmapinfo()
         assigndata =  json.loads(request.DATA.keys()[0])
+        # if (assigndata.get('id')):
+        #     sql = """
+        #         DELETE FROM assignmindmapinfo 
+        #         WHERE assignedid='%s'
+        #         """ % (int(assigndata.get('id')))
+        #     cursor = connection.cursor()
+        #     cursor.execute(sql)
         assignmindmapinfo.mapdata = assigndata.get('mapdata')
         assignmindmapinfo.assigntext = assigndata.get('assigntext','')
         assignmindmapinfo.mindmapid = 0
@@ -3664,8 +3677,10 @@ class RichmindmapViewSet(viewsets.ModelViewSet):
         assignmindmapinfo.isdelete = 0
         assignmindmapinfo.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
         assignmindmapinfo.assigneddate = time.strftime('%Y-%m-%d %H:%M:%S')
+
         assignmindmapinfo.save()
         return Response('"msg":"created"')
+
 
 class studentwrittenworkViewSet(viewsets.ModelViewSet):
     queryset = models.Writtenworkinfo.objects.all()
@@ -3763,7 +3778,6 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
     serializer_class = adminserializers.AssignassessmentinfoSerializer
 
     def list(self, request):
-
         datecond = ''
         if request.GET.get('fdate') and request.GET.get('tdate'):
             datecond = "AND (assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
@@ -3875,7 +3889,7 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
         aldata['stringsentence'] = 'New assessment assigned to students'
         add_activitylog(request, aldata)
 
-        return Response(request.DATA)        
+        return Response(request.DATA)            
 
     def update(self, request, pk=None):
 
@@ -3930,6 +3944,17 @@ class StudentAssignAssessment(viewsets.ModelViewSet):
         add_activitylog(request, aldata)
 
         return Response({'msg':True})
+
+    def destroy(self, request, pk=None):
+        models.Assessmentinfo.objects.get(pk=pk).delete()
+        sql ='''
+        DELETE FROM assignassessmentinfo
+        WHERE assessmentid=%s
+        '''%(pk)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        return Response('"msg":"delete"')
+
 
 class ActivitylogInfoViewSet(viewsets.ModelViewSet):
     queryset = models.Activitylog.objects.all()
@@ -4199,7 +4224,9 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
                assigneddate as createddate,
                aai.studentid,
                aai.isanswered,
-               aai.issaved
+               aai.issaved,
+               aai.totalmarks,
+               aai.totalactualmarks
         FROM assignassessmentinfo aai
         INNER JOIN assessmentinfo ai on ai.id = aai.assessmentid 
         INNER JOIN assessmentqa aqa on aqa.assessmentid = aai.assessmentid 
@@ -4364,6 +4391,7 @@ class ViewassignassessmentInfo(viewsets.ModelViewSet):
                ai.instruction,
                aai.note,
                aqa.question,
+               aqa.answer as correctanswer,
                aqa.answeroption,
                aqa.actualmark,
                assigneddate as createddate,
@@ -4391,27 +4419,6 @@ class ViewassignassessmentInfo(viewsets.ModelViewSet):
             ]
         return Response(result)
 
-class MindmapinfoViewSet(viewsets.ModelViewSet):
-
-    queryset = models.Mindmaplistinfo.objects.filter().order_by('-createddate')
-    serializer_class = adminserializers.MindmaplistSerializer
-
-    def create(self, request):
-        mindmaplist = models.Mindmaplistinfo()
-        mindmapdata =  json.loads(request.DATA.keys()[0])
-        mindmaplist.title = mindmapdata.get('title')
-        mindmaplist.isdeleted = 0
-        mindmaplist.createdby = request.user.id
-        mindmaplist.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
-        mindmaplist.save()
-
-        aldata = {}
-        aldata['pagename']       = 'mindmaplist'
-        aldata['operation']      = 'Insert'
-        aldata['stringsentence'] = 'New stickynotes Created'
-        add_activitylog(request, aldata)
-
-        return Response(request.DATA)
 
 class studentopenendedInfoViewSet(viewsets.ModelViewSet):
     queryset = models.Assignassessmentinfo.objects.all()

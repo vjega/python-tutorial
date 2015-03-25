@@ -69,7 +69,7 @@ TTS.forms.addadmin = function(form, data) {
         },
         type:'POST',
         data: data,
-        url : '/api/admin/mindmapinfo/'
+        url : '/api/admin/richmindmap/'
     }).done(function( msg ) {
         form.close();
         location.reload();
@@ -83,7 +83,7 @@ TTS.forms.delsticky = function(id) {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'DELETE',
-        url : '/api/admin/mindmapinfo/'+id
+        url : '/api/admin/richmindmap/'+id
     }).done(function( msg ) {
         location.reload();
     }).error(function(msg){
@@ -154,10 +154,10 @@ TTS.forms.renderteacher = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.DT_RowId = data[i].id;
+        t.DT_RowId = data[i].assignedid;
         t.slno=++count;
-        t.title=data[i].title;
-        t.date=TTS.utils.datetimeConvDate(data[i].createddate);
+        t.title=data[i].assigntext;
+        t.date=data[i].assigneddate;
         t.del = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);
     }
@@ -179,7 +179,7 @@ TTS.forms.renderteacher = function(data){
 
 $(document).ready(function(){
     TTS.utils.ajaxloaderstart();
-    var url = "/api/admin/mindmapinfo/?format=json"
+    var url = "/api/admin/richmindmap/?format=json"
     $.ajax({
         "url":url,
         "type":"GET"
@@ -192,7 +192,7 @@ $(document).ready(function(){
         window.location = 'richmindmap?id='+this.id;
     });
     $("#page-wrapper").on("click", "#addrec", function(){
-        TTS.forms.showadminform();
+        window.location = 'richmindmap';
     });
     $('#mindmap-list-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();

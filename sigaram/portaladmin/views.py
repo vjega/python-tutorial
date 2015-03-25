@@ -199,12 +199,14 @@ def resourcetype(request):
         "categoryid": "1",
         "name" :_(u"Image dialog"),
         "href" :u"chapterlist"
-        },{
-        "id": "3",
-        "categoryid": "2",
-        "name" :_(u"Writing board"),
-        "href" :u"chapterlist"
-        },{
+        },
+       #{
+        #"id": "3",
+        #"categoryid": "2",
+        #"name" :_(u"Writing board"),
+        #"href" :u"chapterlist"
+        #},
+        {
         "id": "3",
         "categoryid": "3",
         "name" :_("Composition"),
@@ -422,7 +424,7 @@ def studentprofile(request):
         "href" :u"studentassignedwrittenworklist?studentid=%s" % request.GET.get('studentid') 
         },{
         "id"   : "3",
-        "name" :_("Assessments"),
+        "name" :_("Exercises"),
         "href" :u"studentassignedassessmentlist?studentid=%s" % request.GET.get('studentid') 
         }]
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()

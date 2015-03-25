@@ -2,8 +2,6 @@
 {% load staticfiles %}
 {% load i18n %}
 {% load crispy_forms_tags %}
-
-<title>mindmaps</title>
 {% block morecss %}
 <link rel="stylesheet" href="{%static "mindmaps/src/css/common.css" %}">
 <link rel="stylesheet" href="{%static "mindmaps/src/css/app.css" %}">
@@ -16,7 +14,24 @@
     border: 2px solid red;
     border-radius: 7px;
 }*/
-
+#container{
+  margin-top: 30px;
+}
+#show{
+    margin-top: 10px;
+    font-size: 20px;
+    cursor: pointer; 
+}
+#showprint{
+    font-size: 20px;
+    cursor: pointer; 
+}
+#hide{
+    margin-top: 10px;
+    font-size: 20px;
+    cursor: pointer; 
+    display: none;
+}
 .save_mindmap {
     float: left;
     font-size: 2em;
@@ -29,9 +44,6 @@
     width: 120px;
 }
 
-.float-panel{
-  #left:76% !important;
-}
 </style>
 {% endblock morecss %}
 {% block scriptcontent %}
@@ -225,6 +237,9 @@
         <div class="buttons">
           <span class="buttons-left"> </span> 
           <span class="buttons-right">
+            <!-- <i id="showprint" class="fa fa-print fa-lg pull-right"></i> -->
+            <i id="show" class="fa fa-expand fa-lg pull-right"></i>
+            <i id="hide" class="fa fa-compress fa-lg pull-right"></i>
           </span>
         </div>
 
@@ -263,11 +278,15 @@ window.TTS = window.TTS || {};
 TTS.forms = TTS.forms || {};
 
  TTS.forms.addrichmindmap = function(){
+    var id_val ='';
+    if(TTS.utils.getUrlParameter('id'))
+      id_val = TTS.utils.getUrlParameter('id');
     var data = {
       mapdata : richmindmap.document.serialize(),
-      assigntext : $("#assigntext").val()
+      assigntext : $("#assigntext").val(),
+      id : id_val
     }
-    console.log(data);  
+    
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -276,19 +295,19 @@ TTS.forms = TTS.forms || {};
         data: JSON.stringify(data),
         url : '/api/admin/richmindmap/'
     }).done(function( msg ) {
-        console.log("Save Completed...")
+        // console.log("Save Completed...")
         // alert("Save Completed...");
-        // window.location.reload()
+        window.location = 'mindmaplist';
     });
 }
 
- TTS.forms.renderrichmindmap = function(){
+ TTS.forms.renderrichmindmap = function(id){
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'GET',
-        url : '/api/admin/richmindmap/5'
+        url : '/api/admin/richmindmap/'+id
     }).done(function( msg ) {
         render_data = mindmaps.Document.fromJSON(msg.mapdata)
         mindmaps.MindMapModel.rich_setDocument(render_data)
@@ -296,8 +315,31 @@ TTS.forms = TTS.forms || {};
 }
 
 $(document).ready(function(){
-  TTS.forms.renderrichmindmap()
-  // $(".float-panel").hide()
+  $("#show").click(function(){
+        $(".navbar-default").hide("medium");
+        $("#page-wrapper").css({"marginLeft":"0px","marginTop":"-100px"});
+        $("#hide").show();
+        $("#show").hide();
+    });
+
+    $("#showprint").click(function(){
+        $(".navbar-default").hide("medium");
+        $("#page-wrapper").css({"marginLeft":"0px","marginTop":"-100px"});
+        $("#hide").show();
+        $("#show").hide();
+        setTimeout(function(){ window.print();; }, 500);
+    });
+
+    $("#hide").click(function(){
+        $(".navbar-default").show("medium");
+        $("#page-wrapper").css({"marginLeft":"250px","marginTop":"0px"});
+        $("#hide").hide();
+        $("#show").show();
+    });
+
+  var get_id = TTS.utils.getUrlParameter("id")
+  TTS.forms.renderrichmindmap(get_id)
+   // $(".float-panel").hide()
   
     $("#save_mindmap").live('click',function(){
       TTS.forms.addrichmindmap()
@@ -305,7 +347,7 @@ $(document).ready(function(){
     });
   /*
 
-<!--
+
  $("body").live("click","#button-SAVE_DOCUMENT_COMMAND",function(){
     // console.log(richmindmap.document.serialize());
     // console.log("Deepak test");
@@ -315,7 +357,7 @@ $(document).ready(function(){
     //data['mapdata'] = "my first value";
     TTS.forms.addrichmindmap(); 
  });
-
+<!--
   $("#button-SAVE_DOCUMENT_COMMAND").click(function(){
     console.log("hai deepak")
     console.log(richmindmap.document.serialize())

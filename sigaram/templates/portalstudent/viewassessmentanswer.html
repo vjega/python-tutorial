@@ -42,6 +42,14 @@
                 <h4><strong>{% trans "Note" %}:</strong></h4>
             </div>
             <div id="note"></div><br />
+            <div style="float:right">
+                <strong>
+                    <h5 style="float:left;">{% trans "Marks" %}:</h5>
+                    <div id="total-marks" style="float:left;margin-top:8px;"></div>
+                    <div style="float:left;margin-top:8px;">/</div>
+                    <div id="total-actual-marks" style="float:left;margin-top:8px;"></div><br />
+                </strong>
+            </div>
             <div id="question-answer"></div><br />
         </div>
         <!-- /.panel-body -->
@@ -109,6 +117,8 @@ TTS.forms.renderassignedassessmentinfo = function(data){
     $("#title").html(data[0].title);
     $("#instruction").html(data[0].instruction);
     $("#note").html(data[0].note);
+    $("#total-marks").html(data[0].totalmarks);
+    $("#total-actual-marks").html(data[0].totalactualmarks);
     var qaHTML = '';
     var savedanswer = '';
     qaHTML += "<div class='row'>";
@@ -129,7 +139,6 @@ TTS.forms.renderassignedassessmentinfo = function(data){
 };
 
 TTS.forms.ressave = function(savesend){
-
     var data = {};
     var aqaidanswer = {};
     var aqaid = '';
@@ -155,9 +164,7 @@ TTS.forms.ressave = function(savesend){
         data.isanswered = 1;
     else
         data.isanswered = 0;
-    
-    console.log(data);
-    
+     
 
     $.ajax({
         headers : {
