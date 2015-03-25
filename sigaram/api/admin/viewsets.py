@@ -4137,8 +4137,8 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
         cursor.execute(sql)
         result =  cursor.fetchone()
         aai = models.Assignassessmentinfo.objects.get(pk=pk)
-        aai.totalmarks     = int(result[0])
-        aai.totalactualmarks       = int(result[1])
+        aai.totalmarks          = int(result[0])
+        aai.totalactualmarks    = int(result[1])
         aai.save()
             
 
@@ -4359,6 +4359,7 @@ class ViewassignassessmentInfo(viewsets.ModelViewSet):
                aqa.id as assessmentqaid,
                ai.title,
                aaqai.answer,
+               aaqai.obtainedmark,
                ai.type,
                ai.instruction,
                aai.note,
@@ -4463,23 +4464,6 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
                 aaid.obtainedmark   = 0
             aaid.save()
 
-        sql = '''
-        SELECT SUM(aaqi.obtainedmark) AS totalobtainedmark,
-            SUM(aqa.actualmark) AS totalactualmark 
-        FROM assessmentqa aqa
-        INNER JOIN assignassessmentqainfo aaqi ON aaqi.assessmentqaid=aqa.id
-        WHERE aaqi.assignassessmentid = '%s'
-        GROUP BY aaqi.assignassessmentid 
-        '''%(int(pk))
-        cursor = connection.cursor()
-        cursor.execute(sql)
-        result =  cursor.fetchone()
-        aai = models.Assignassessmentinfo.objects.get(pk=pk)
-        aai.totalmarks     = int(result[0])
-        aai.totalactualmarks       = int(result[1])
-        aai.save()
-            
-
         aldata = {}
         aldata['pagename']       = 'viewassignresource'
         aldata['operation']      = 'Insert'
@@ -4574,10 +4558,30 @@ class teacherAssessmentInfoViewSet(viewsets.ModelViewSet):
             aai.obtainedmark     = int(v)
             aai.save()
 
-        aldata = {}
-        aldata['pagename']       = 'viewassopenendedanswer'
-        aldata['operation']      = 'Insert'
-        aldata['stringsentence'] = 'Answer mark addedd'
-        add_activitylog(request, aldata)
+        sql = '''
+        SELECT  SUM(aaqi.obtainedmark) AS totalobtainedmark,
+                SUM(aqa.actualmark) AS totalactualmark 
+        FROM assessmentqa aqa
+        INNER JOIN assignassessmentqainfo aaqi ON aaqi.assessmentqaid = aqa.id
+        WHERE aaqi.assignassessmentid = '%s'
+        GROUP BY aaqi.assignassessmentid 
+        '''%(int(pk))
+
+        print sql
+
+
+        # cursor = connection.cursor()
+        # cursor.execute(sql)
+        # result =  cursor.fetchone()
+        # aai = models.Assignassessmentinfo.objects.get(pk=pk)
+        # aai.totalmarks          = int(result[0])
+        # aai.totalactualmarks    = int(result[1])
+        # aai.save()
+
+        # aldata = {}
+        # aldata['pagename']       = 'viewassopenendedanswer'
+        # aldata['operation']      = 'Insert'
+        # aldata['stringsentence'] = 'Answer mark addedd'
+        # add_activitylog(request, aldata)
 
         return Response({'msg':True})
