@@ -284,8 +284,8 @@ mindmaps.ToolBarPresenter = function(eventBus, commandRegistry, view,
   var fileCommands = [ mindmaps.NewDocumentCommand,
                        mindmaps.OpenDocumentCommand, 
                        mindmaps.SaveDocumentCommand,
-                       // mindmaps.ExportCommand,
-                       //mindmaps.PrintCommand,
+                       mindmaps.ExportCommand,
+                       mindmaps.PrintCommand,
                        mindmaps.CloseDocumentCommand 
                       ];
   var fileButtons = commandsToButtons(fileCommands);

@@ -70,6 +70,10 @@
 <link rel="stylesheet" href="{%static "bower_components/summernote/dist/summernote.css" %}">
 <link type="text/css" rel="stylesheet" href="{%static "FlashWavRecorder/html/basic/basic.css"%}">
 <style>
+    .correct-answer{
+        color: green;
+        font-weight: bold;
+    }
     #addrec:hover, #admin-main-tbl tbody tr:hover{
         cursor: pointer;
     }
@@ -106,7 +110,11 @@
         font-size: 20px;
         cursor: pointer; 
         display: none;
-    }</style>
+    }
+    .answermark{
+        text-align:right;
+    }
+    </style>
 {% endblock morecss %}
 
 
@@ -118,24 +126,34 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 
 TTS.forms.renderassignedassessmentinfo = function(data){
+    console.log(data);
     $("#issaved").val(data[0].issaved);
     $("#title").html(data[0].title);
     $("#instruction").html(data[0].instruction);
     $("#note").html(data[0].note);
+    $("#correctanswer").html(data[0].correctanswer);
+    $("#obtainedmark").val(data[0].obtainedmark);
+    $("#actualmark").val(data[0].actualmark);
     $("#total-marks").html(data[0].totalmarks);
     $("#total-actual-marks").html(data[0].totalactualmarks);
     var qaHTML = '';
     var savedanswer = '';
+    var canswer = '';
     qaHTML += "<div class='row'>";
     $.each(data,function(idx,qtn){
-        qaHTML += "<div class='col-lg-12 question' id='"+qtn['assessmentqaid']+"'><strong>"+(idx+1)+". "+qtn['question']+"</strong></div><div style='margin-bottom:10px;' class='col-lg-12'>";
+        qaHTML += "<div class='col-lg-12 question' id='"+qtn['assessmentqaid']+"'><strong>"+(idx+1)+". "+qtn['question']+"</strong></div><div style='margin-bottom:10px;' class='col-lg-12'><div class='answermark'>"+data[idx].obtainedmark+"/"+data[idx].actualmark+"</div>";
         $.each(qtn['answeroption'].split(","),function(idy,ans){
             if(qtn['answer'] == ans){
                 savedanswer = "checked='checked'";
             }else{
                 savedanswer = "";
             }  
-            qaHTML += "<div class='col-lg-6'><input disabled "+savedanswer+" type='radio' name='answer_"+qtn['assessmentqaid']+"' value='"+ans+"'> "+ans+"</div>";
+            if(data[idx].correctanswer == ans){
+                canswer = "correct-answer";
+            }else{
+                canswer = "";
+            }
+            qaHTML += "<div class='col-lg-6'><input disabled "+savedanswer+" type='radio' name='answer_"+qtn['assessmentqaid']+"' value='"+ans+"'><label class="+canswer+">"+ans+"</label></div>";
         });
         qaHTML += "</div>";
     });
