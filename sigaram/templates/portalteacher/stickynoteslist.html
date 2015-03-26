@@ -156,7 +156,7 @@ TTS.forms.renderteacher = function(data){
     
     var count = 0
     for(var i in data){
-        var t = [];
+        var t = {};
         t.DT_RowId = data[i].id;
         t.slno=++count;
         t.title=data[i].title;
@@ -193,7 +193,6 @@ $(document).ready(function(){
     });
     $('#sticky-list-tbl').on('click', 'tbody tr', function(){
         window.location = 'sticky-notes?id='+this.id;
-        console.log();
     });
     $("#page-wrapper").on("click", "#addrec", function(){
         TTS.forms.showadminform();
