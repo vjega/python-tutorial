@@ -2326,8 +2326,39 @@ class StickyinfoViewSet(viewsets.ModelViewSet):
     queryset = models.Stickyinfo.objects.filter().order_by('-createddate')
     serializer_class = adminserializers.StickyinfoSerializer
 
+    def list(self, request):
+        schoolid   = request.session.get('schoolid')
+        classid   = request.session.get('classid')
+        section = request.session.get('section')
+        wherecond=''
+        
+        l =  request.user.groups.values_list('name',flat=True)[0]
+        if l == 'Teacher':
+            wherecond = "AND createdby='%s'" %(request.user.id)
+        sql = """
+        SELECT  title,
+                createdby,
+                schoolid,
+                classid,
+                section,
+                createddate 
+        FROM stickyinfo 
+        WHERE schoolid='%s'
+        %s
+        AND classid='%s'
+        AND section='%s'
+        """ %(schoolid,wherecond,classid,section)
+        cursor = connection.cursor()
+        #print sql
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
+
     def create(self, request):
-        print request.session.get('section')
         stickylist = models.Stickyinfo()
         stickydata =  json.loads(request.DATA.keys()[0])
         stickylist.title = stickydata.get('title')
