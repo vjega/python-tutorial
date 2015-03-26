@@ -2334,20 +2334,20 @@ class StickyinfoViewSet(viewsets.ModelViewSet):
         
         l =  request.user.groups.values_list('name',flat=True)[0]
         if l == 'Teacher':
-            wherecond = "AND createdby='%s'" %(request.user.id)
+            wherecond = "WHERE schoolid='%s' AND createdby='%s' AND classid='%s' AND section='%s'" %(schoolid,request.user.id,classid,section)
+        elif l == 'Student':
+            wherecond = "WHERE schoolid='%s' AND classid='%s' AND section='%s'" %(schoolid,classid,section)
         sql = """
-        SELECT  title,
+        SELECT  id,
+                title,
                 createdby,
                 schoolid,
                 classid,
                 section,
                 createddate 
         FROM stickyinfo 
-        WHERE schoolid='%s'
         %s
-        AND classid='%s'
-        AND section='%s'
-        """ %(schoolid,wherecond,classid,section)
+        """ %(wherecond)
         cursor = connection.cursor()
         #print sql
         cursor.execute(sql)
