@@ -2645,6 +2645,7 @@ class StudentWrittenWork(viewsets.ModelViewSet):
         WHERE awwi.studentid='%s'
         GROUP BY wwi.writtenworkid, awwi.answereddate
         ORDER BY awwi.assignwrittenworkid DESC''' % (request.user.username)
+        print sql
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
