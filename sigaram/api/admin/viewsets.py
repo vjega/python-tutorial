@@ -2349,7 +2349,7 @@ class StickyinfoViewSet(viewsets.ModelViewSet):
         %s
         """ %(wherecond)
         cursor = connection.cursor()
-        #print sql
+        print sql
         cursor.execute(sql)
         desc = cursor.description
         result =  [
@@ -2364,9 +2364,9 @@ class StickyinfoViewSet(viewsets.ModelViewSet):
         stickylist.title = stickydata.get('title')
         stickylist.isdeleted = 0
         stickylist.createdby = request.user.id
-        stickylist.schoolid     = request.session.get('schoolid')
-        stickylist.classid      = request.session.get('classid')
-        stickylist.section      = request.session.get('section')
+        stickylist.schoolid     = request.session.get('schoolid',0)
+        stickylist.classid      = request.session.get('classid',0)
+        stickylist.section      = request.session.get('section',0)
         stickylist.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         stickylist.save()
 
