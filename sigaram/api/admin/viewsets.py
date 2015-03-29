@@ -2347,9 +2347,10 @@ class StickyinfoViewSet(viewsets.ModelViewSet):
                 createddate 
         FROM stickyinfo 
         %s
+        ORDER BY createddate DESC
         """ %(wherecond)
         cursor = connection.cursor()
-        print sql
+        #print sql
         cursor.execute(sql)
         desc = cursor.description
         result =  [
