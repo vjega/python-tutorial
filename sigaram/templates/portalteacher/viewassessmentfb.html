@@ -127,14 +127,13 @@
     </div>
     <br />
     <div class="form-group">
-        <label for="folder_name" class="col-sm-7 control-label" id ="resource-ans">
+        <label for="folder_name" class="col-sm-2 control-label" style="text-align:center">
             {% trans "Answer" %}
         </label>
+        <div class="col-lg-10">
+            <input type="text" id="answer" class="form-control answer" name="answer" >
+        </div>
     </div>
-    <div>
-        <textarea class="summernote" id="answer" name="answer"></textarea>
-    </div>
-    <br />
     <div class="form-group">
         <div class="col-lg-2">
             <label>{% trans "Mark" %}:</label>
@@ -187,11 +186,17 @@ TTS.forms.editschool = function() {
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data    = $.parseJSON(TTS.utils.serilaizeJson("#newfolderfrm"));
-                var answer  = ''; 
+                // var answer  = ''; 
+                // alert($("#answer").val());return true;
+                // var answeroption = $(".answeroption").map(function(idx) {
+                //     return $(this).val();
+                // }).get().join(",");
+                //answer = $('input[name=answer]:checked').parent().next().children().val(); 
                 data['question']     = TTS.utils.summer_encode(data['question']);
-                data['answer'] = TTS.utils.summer_encode(data['answer']);
+                //data['answeroption'] = answeroption;
                 data['actualmark']   = $("#actualmark").val();
                 data['assessmentid'] = TTS.utils.getUrlParameter('id');
+                data['answer']       = $("#answer").val();
                 $.ajax({
                     headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -265,7 +270,7 @@ $(document).ready(function(){
         "url":"/api/admin/assessmentqainfo/?assessmentid="+assessmentid+"&format=json",
         "type":"GET"
     }).done(function(data){
-        //console.log(data);
+        console.log(data);
         TTS.forms.renderassessmentinfo(data);
         TTS.utils.ajaxloaderstop();
     });
