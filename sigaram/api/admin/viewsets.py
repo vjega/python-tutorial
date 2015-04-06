@@ -4551,7 +4551,7 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
                ai.id as assessmentid,
                aqa.id as assessmentqaid,
                ai.title,
-               aaqai.answer,
+               COALESCE(NULLIF(aaqai.answer ,NULL), '') AS answer,
                ai.type,
                ai.instruction,
                aai.note,
