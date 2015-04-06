@@ -214,13 +214,17 @@ $(document).ready(function(){
         if(x[0] == 'var') {
             if(x[2] =='Open ended') {
                 window.location = 'viewassignopenended?assignedid='+x[1];
-            } else {
+            } else if(x[2] =='Fill in the blank') {
+                window.location = 'viewassignopenended?assignedid='+x[1];
+            } else{
                 window.location = 'viewassignassessment?assignedid='+x[1];
             }
         }
         
         if(x[0] == 'vaa') {
             if(x[2] =='Open ended') {
+                window.location = 'viewopenendedanswer?assignedid='+x[1];
+            }else if(x[2] =='Fill in the blank') {
                 window.location = 'viewopenendedanswer?assignedid='+x[1];
             }else {
                 window.location = 'viewassessmentanswer?assignedid='+x[1];

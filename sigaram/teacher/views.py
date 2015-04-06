@@ -755,3 +755,9 @@ def viewstudentwrittenwork(request):
 @switchlanguage
 def viewstudentassessmentwork(request):
     return render(request, 'portalteacher/viewstudentassessmentwork.html')
+
+
+@login_required
+@switchlanguage
+def viewassessmentfb(request):
+    return render(request, 'portalteacher/viewassessmentfb.html')
