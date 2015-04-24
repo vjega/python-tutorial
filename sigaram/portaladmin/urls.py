@@ -126,5 +126,8 @@ urlpatterns = patterns('portaladmin.views',
                                                         name='viewstudentwrittenwork'),
     url(r'^viewstudentassessmentwork$',            'viewstudentassessmentwork',             
                                                         name='viewstudentassessmentwork'),
+    url(r'^statistics-writtenwork$',     'statisticswrittenwork',   name='statisticswrittenwork'),
+    url(r'^activitywrittenwork$',       'activitywrittenwork', 
+                                                         name="activitywrittenwork"), 
       #(r'^api/', include(v1_api.urls)),
 )

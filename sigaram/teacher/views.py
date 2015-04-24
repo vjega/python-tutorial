@@ -761,3 +761,15 @@ def viewstudentassessmentwork(request):
 @switchlanguage
 def viewassessmentfb(request):
     return render(request, 'portalteacher/viewassessmentfb.html')
+
+@login_required
+@switchlanguage
+def activitywrittenwork(request):
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    return render(request, 'portalteacher/activitywrittenwork.html', {'schools':schools})
+
+@login_required
+@switchlanguage
+def statisticswrittenwork(request):
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    return render(request, 'portaladmin/statisticswrittenwork.html', {'schools':schools})

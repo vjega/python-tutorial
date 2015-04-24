@@ -138,4 +138,7 @@ urlpatterns = patterns('teacher.views',
                                                         name='viewstudentassessmentwork'),
     url(r'^viewassessmentfb$',            'viewassessmentfb',             
                                                         name='viewassessmentfb'),
+    url(r'^activitywrittenwork$',       'activitywrittenwork', 
+                                                         name="activitywrittenwork"), 
+    url(r'^statistics-writtenwork$',     'statisticswrittenwork',   name='statisticswrittenwork'),
 )

@@ -73,6 +73,7 @@ router.register(r'statisticsstudent', 		viewsets.StatisticsstudentInfo)
 router.register(r'viewassignassessment', 	viewsets.ViewassignassessmentInfo)
 router.register(r'studentopenendedInfoViewSet', viewsets.studentopenendedInfoViewSet)
 router.register(r'teacherassessmentinfo', 	viewsets.teacherAssessmentInfoViewSet)
+router.register(r'activitywrittenwork', 	viewsets.activitywrittenworkInfoViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

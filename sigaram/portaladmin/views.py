@@ -696,3 +696,15 @@ def billboardviewassignmentanswer(request):
 @switchlanguage
 def mindmaplist(request):
     return render(request, 'portaladmin/mindmaplist.html',{'form':MindmaplistForm.MindmaplistForm()})
+
+@login_required
+@switchlanguage
+def statisticswrittenwork(request):
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    return render(request, 'portaladmin/statisticswrittenwork.html', {'schools':schools})
+
+@login_required
+@switchlanguage
+def activitywrittenwork(request):
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    return render(request, 'portaladmin/activitywrittenwork.html', {'schools':schools})

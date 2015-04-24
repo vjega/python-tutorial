@@ -4625,3 +4625,36 @@ class teacherAssessmentInfoViewSet(viewsets.ModelViewSet):
         # add_activitylog(request, aldata)
 
         return Response({'msg':True})
+
+class activitywrittenworkInfoViewSet(viewsets.ModelViewSet):
+    queryset = models.Assignresourceinfo.objects.all()
+    serializer_class = adminserializers.ActivityassignmentinfoSerializer
+
+    def list(self, request):
+        datecond = ''
+        if request.GET.get('fdate') and request.GET.get('tdate'):
+            datecond = "AND (awi.assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
+                request.GET.get('tdate'))
+        sql = '''
+            SELECT  wwi.writtenworktitle,
+                    wwi.description ,
+                    awi.assigntext,
+                    awi.answertext,
+                    date(awi.assigneddate) AS assigneddate,
+                    date(awi.answereddate) AS answereddate
+        FROM writtenworkinfo wwi
+        INNER JOIN assignwrittenworkinfo awi ON awi.writtenworkid=wwi.writtenworkid
+        WHERE awi.studentid ='%s'  
+        AND awi.isanswered =1
+        %s 
+        GROUP BY wwi.writtenworkid,awi.answereddate DESC
+        ORDER BY wwi.writtenworkid 
+        ''' % (request.GET.get('studentid'),datecond)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        desc = cursor.description
+        result =  [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+            ]
+        return Response(result)
