@@ -1543,7 +1543,7 @@ class StickynotesResource(viewsets.ModelViewSet):
         stickynotes = models.stickynotes()
         data = json.loads(dict(request.DATA).keys()[0])
         stickynotes.stickylistid = data.get('stickylistid')
-        stickynotes.stickytext = data.get('stickytext')
+        stickynotes.stickytext = summer_decode(data.get('stickytext'))
         stickynotes.attachment = data.get('attachment')
         stickynotes.name = data.get('name')
         stickynotes.xyz = data.get('xyz')
@@ -1557,7 +1557,7 @@ class StickynotesResource(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         stickynotes = models.stickynotes.objects.get(pk=pk)
         data =  json.loads(request.DATA.keys()[0])
-        stickynotes.stickytext = data.get('stickytext')
+        stickynotes.stickytext = summer_decode(data.get('stickytext'))
         stickynotes.attachment = data.get('attachment')
         stickynotes.name = data.get('name')
         stickynotes.xyz = data.get('xyz')

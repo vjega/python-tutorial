@@ -368,6 +368,7 @@ TTS.forms.showstickyform = function() {
                 var data = TTS.utils.serilaizeJson("#add-sticky");
                 var select_color = $("#preview_color").attr("class");
                 data = JSON.parse(data);
+                data['stickytext'] = TTS.utils.summer_encode(data['stickytext']);
                 data['color'] = select_color;
                 data['stickylistid'] = TTS.utils.getUrlParameter('id');
                 data['attachment'] = $("#uploadurl").val();
@@ -440,6 +441,7 @@ TTS.forms.editstickyform = function(edit_id, content, color) {
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-student");
                 data = JSON.parse(data);
+                data['stickytext'] = TTS.utils.summer_encode(data['stickytext']);
                 data['color'] = $("#preview_color").attr("class");
                 data['stickylistid'] = TTS.utils.getUrlParameter('id');
                 data['attachment'] = $("#uploadurl").val();
