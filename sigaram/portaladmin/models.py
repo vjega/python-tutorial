@@ -1107,6 +1107,8 @@ class stickynotes(models.Model):
     createdby = models.BigIntegerField()
     isdeleted = models.IntegerField()
     createddate = models.DateTimeField()
+    xposition = models.CharField(max_length=200)
+    yposition = models.CharField(max_length=200)
 
     class Meta:
         managed = False

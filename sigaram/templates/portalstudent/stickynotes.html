@@ -19,6 +19,7 @@
             <i id="showprint" class="fa fa-print fa-lg pull-right"></i>
             <i id="show" class="fa fa-expand fa-lg pull-right"></i>
             <i id="hide" class="fa fa-compress fa-lg pull-right"></i>
+            <i id="save" class="fa fa-floppy-o fa-lg pull-right"></i>
         </div><br />
         <div class="col-lg-12">
             <label>{% trans "Title" %}:</label>
@@ -47,7 +48,7 @@
 <link rel="stylesheet" href="{%static "css/color.css" %}">
 <link rel="stylesheet" href="{%static "ajaxuploader/css/fileuploader.css" %}">
 <style>
-#show{
+#show, #save{
     font-size: 20px;
     cursor: pointer; 
 }
@@ -539,7 +540,7 @@ TTS.forms.renderstickycomment = function(data){
 TTS.forms.renderstickynotes = function(data){
     var sticky_html = '';
     for(var i in data){
-        sticky_html += "<div id='sticky_note_"+data[i].id+"' class='sticky_note "+data[i].color+"'>";
+        sticky_html += "<div id='sticky_note_"+data[i].id+"' name = "+data[i].id+" class='sticky_note "+data[i].color+"'>";
         sticky_html += "<div class='sticky_header "+data[i].color+"_header'>";
         sticky_html += "<span class='pull-right deleterec'  name='"+data[i].id+"'></span>&nbsp;";
         sticky_html += "<span class='pull-right editrec'  name='"+data[i].id+"'><i class='fa fa-pencil'></i></span> &nbsp;";
@@ -610,7 +611,7 @@ TTS.forms.renderstickynotes = function(data){
 
 $(document).ready(function(){
 
-$("#show").click(function(){
+    $("#show").click(function(){
         $(".navbar-default").hide("medium");
         $("#page-wrapper").css({"marginLeft":"0px","marginTop":"-100px"});
         $("#hide").show();
@@ -630,6 +631,39 @@ $("#show").click(function(){
         $("#page-wrapper").css({"marginLeft":"250px","marginTop":"0px"});
         $("#hide").hide();
         $("#show").show();
+    });
+
+    $("#save").click(function(){
+        var values = [];
+        $(".sticky_note").each(function(){
+            values.push({
+                "left"  : $(this).offset().left,
+                "top"   : $(this).offset().top,
+                "sl_no" : $(this).attr("name")
+            });
+        });
+        //console.log(values);
+        //action: function(dialogItself){
+            //var data = TTS.utils.serilaizeJson("#add-student");
+            //data = JSON.parse(data);
+            //console.log(data);
+        //     data['stickytext'] = TTS.utils.summer_encode(data['stickytext']);
+        //     data['color'] = $("#preview_color").attr("class");
+        //     data['stickylistid'] = TTS.utils.getUrlParameter('id');
+        //     data['attachment'] = $("#uploadurl").val();
+        //     data['position'] = values;
+        //     $.ajax({
+        //         headers : {
+        //             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        //         },
+        //         type:'PUT',
+        //         data: JSON.stringify(data),
+        //         url : '/api/admin/stickynotes/'+edit_id
+        //     }).done(function( msg ) {
+        //         dialogItself.close();
+        //         location.reload();
+        //     });
+        //}    
     });
 
     $("#page-wrapper").on("click", "#addrec", function(){

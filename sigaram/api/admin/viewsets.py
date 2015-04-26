@@ -1548,6 +1548,8 @@ class StickynotesResource(viewsets.ModelViewSet):
         stickynotes.name = data.get('name')
         stickynotes.xyz = data.get('xyz')
         stickynotes.color = data.get('color')
+        stickynotes.xposition = data.get('xposition')
+        stickynotes.yposition = data.get('yposition')
         stickynotes.isdeleted = 0
         stickynotes.createdby = request.user.id
         stickynotes.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -1562,6 +1564,8 @@ class StickynotesResource(viewsets.ModelViewSet):
         stickynotes.name = data.get('name')
         stickynotes.xyz = data.get('xyz')
         stickynotes.color = data.get('color')
+        stickynotes.xposition = data.get('xposition')
+        stickynotes.yposition = data.get('yposition')
         stickynotes.isdeleted = 0
         stickynotes.createdby = request.user.id
         stickynotes.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -4160,7 +4164,6 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
             cursor.execute(sql)
         sql=''
         result=''
-        print(aaidata.get('aqaidanswer'))
         for k, v in dict(aaidata.get('aqaidanswer')).items():
             sql= '''
             SELECT actualmark,
@@ -4494,10 +4497,11 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
             result =  cursor.fetchone()
            
             aaid = models.AssignAssessmentQAInfo()
+
             aaid.assessmentqaid     = int(k)
             aaid.assessmentid       = int(aaidata.get('assessmentid'))
             aaid.assignassessmentid = int(pk)
-            aaid.answer             = str(v)
+            aaid.answer             = u"%s".encode('utf8') %v 
             if result[1] == str(v):
                 aaid.obtainedmark   = int(result[0])
             else:
