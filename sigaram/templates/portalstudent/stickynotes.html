@@ -540,7 +540,7 @@ TTS.forms.renderstickycomment = function(data){
 TTS.forms.renderstickynotes = function(data){
     var sticky_html = '';
     for(var i in data){
-        sticky_html += "<div id='sticky_note_"+data[i].id+"' name = "+data[i].id+" class='sticky_note "+data[i].color+"'>";
+        sticky_html += "<div  style='top:"+data[i].xposition+"px;left:"+data[i].yposition+"px' id='sticky_note_"+data[i].id+"' name = "+data[i].id+" class='sticky_note "+data[i].color+"'>";
         sticky_html += "<div class='sticky_header "+data[i].color+"_header'>";
         sticky_html += "<span class='pull-right deleterec'  name='"+data[i].id+"'></span>&nbsp;";
         sticky_html += "<span class='pull-right editrec'  name='"+data[i].id+"'><i class='fa fa-pencil'></i></span> &nbsp;";
@@ -642,28 +642,25 @@ $(document).ready(function(){
                 "sl_no" : $(this).attr("name")
             });
         });
-        //console.log(values);
-        //action: function(dialogItself){
-            //var data = TTS.utils.serilaizeJson("#add-student");
-            //data = JSON.parse(data);
-            //console.log(data);
-        //     data['stickytext'] = TTS.utils.summer_encode(data['stickytext']);
-        //     data['color'] = $("#preview_color").attr("class");
-        //     data['stickylistid'] = TTS.utils.getUrlParameter('id');
-        //     data['attachment'] = $("#uploadurl").val();
-        //     data['position'] = values;
-        //     $.ajax({
-        //         headers : {
-        //             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
-        //         },
-        //         type:'PUT',
-        //         data: JSON.stringify(data),
-        //         url : '/api/admin/stickynotes/'+edit_id
-        //     }).done(function( msg ) {
-        //         dialogItself.close();
-        //         location.reload();
-        //     });
-        //}    
+        var data = TTS.utils.serilaizeJson("#add-student");
+        data = JSON.parse(data);
+        //console.log(data);
+        //  data['stickytext'] = TTS.utils.summer_encode(data['stickytext']);
+        //  data['color'] = $("#preview_color").attr("class");
+        //  data['stickylistid'] = TTS.utils.getUrlParameter('id');
+        //  data['attachment'] = $("#uploadurl").val();
+        data = values;
+        $.ajax({
+            headers : {
+                'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+            },
+            type:'POST',
+            data: JSON.stringify(data),
+            url : '/api/admin/stickypositioninfo/'
+        }).done(function( msg ) {
+            location.reload();
+        });
+        
     });
 
     $("#page-wrapper").on("click", "#addrec", function(){
