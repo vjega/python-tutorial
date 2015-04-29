@@ -713,6 +713,7 @@ TTS.forms.getfiletype = function (filename,id){
         case 'mpg':
         case 'swf':
         case 'wmv':
+        case 'mov':
             type = "<div class='modelbox_center' name='"+id+"'><video width='320' height='240' controls><source src='/static/"+filename+"' type='video/mp4'></video></div>";
             break;
         default:
