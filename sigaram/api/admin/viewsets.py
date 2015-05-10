@@ -1602,15 +1602,14 @@ class StickypositioninfoViewSet(viewsets.ModelViewSet):
             sql ='''
                 UPDATE stickynotes SET xposition='%s',yposition='%s'
                     WHERE id='%s'
-
             '''%(rl.get('left'),rl.get('top'),rl.get('sl_no'))
-        cursor = connection.cursor()
-        cursor.execute(sql)
-        desc = cursor.description
-        result =  [
-                dict(zip([col[0] for col in desc], row))
-                for row in cursor.fetchall()
-            ]
+            cursor = connection.cursor()
+            cursor.execute(sql)
+            desc = cursor.description
+            result =  [
+                    dict(zip([col[0] for col in desc], row))
+                    for row in cursor.fetchall()
+                ]
         return Response(result)
 
 
