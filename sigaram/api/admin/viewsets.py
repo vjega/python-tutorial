@@ -1517,6 +1517,8 @@ class StickynotesResource(viewsets.ModelViewSet):
             s.stickytext,
             s.attachment,
             s.color,
+            s.xposition,
+            s.yposition,
             group_concat(sc.id SEPARATOR "~") as commetid,
             group_concat(sc.stickycomment SEPARATOR "~") as comments,
             group_concat(sc.commentby SEPARATOR "~") as commentby,
@@ -1587,6 +1589,29 @@ class StickynotesResource(viewsets.ModelViewSet):
         cursor.execute(sql)
         result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
         return Response(result)
+
+class StickypositioninfoViewSet(viewsets.ModelViewSet):
+    queryset = models.stickynotes.objects.all()
+    serializer_class = adminserializers.StickynotesSerializer
+
+    def create(self, request):
+        stickynotes = models.stickynotes()
+        data = json.loads(dict(request.DATA).keys()[0])
+        # data = {k:v[0] for k, v in dict(request.DATA).items()}  
+        for rl in data:
+            sql ='''
+                UPDATE stickynotes SET xposition='%s',yposition='%s'
+                    WHERE id='%s'
+            '''%(rl.get('left'),rl.get('top'),rl.get('sl_no'))
+            cursor = connection.cursor()
+            cursor.execute(sql)
+            desc = cursor.description
+            result =  [
+                    dict(zip([col[0] for col in desc], row))
+                    for row in cursor.fetchall()
+                ]
+        return Response(result)
+
 
 class StudentinfoViewSet(viewsets.ModelViewSet):
 
