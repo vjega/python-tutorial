@@ -160,8 +160,15 @@ TTS.forms.renderassignedresourceinfo = function(data){
     $(".summernote").code(data.answertext);
     $("#resource-title").html(data.resourcetitle);
     $("#resource-note").html(data.assigntext);
-
-    $("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.videourl+"');\" >{% trans 'View' %}</a>");
+    if (data.resourcetype=='video') {
+        $("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.videourl+"');\" >{% trans 'View' %}</a>");
+    } else if (data.resourcetype=='text') {
+        $("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.documenturl+"');\" >{% trans 'View' %}</a>");
+    }else if(data.resourcetype=='image') {
+        $("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.imageurl+"');\" >{% trans 'View' %}</a>");
+    } else {
+        $("#view-resource").html("<a href='#' onclick=\"openwindow('"+data.audiourl+"');\" >{% trans 'View' %}</a>");
+    }
 
     if(data.isrecord && data.answerurl){
         $("#show-recorder").prop('checked',true);

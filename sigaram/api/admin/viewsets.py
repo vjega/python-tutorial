@@ -1304,6 +1304,9 @@ class StudentAssignResource(viewsets.ModelViewSet):
                ari.isrecord,
                ari.answerurl,
                ri.videourl,
+               ri.audiourl,
+               ri.imageurl,
+               ri.documenturl,
                resourcetitle,
                date(assigneddate) as createddate,
                resourcetype,
@@ -1320,6 +1323,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         WHERE assignedid = %s
         ''' % pk
+        print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
