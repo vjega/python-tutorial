@@ -1323,7 +1323,7 @@ class StudentAssignResource(viewsets.ModelViewSet):
         INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
         WHERE assignedid = %s
         ''' % pk
-        print sql;
+        #print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         result = dict(zip([col[0] for col in cursor.description], cursor.fetchone()))
