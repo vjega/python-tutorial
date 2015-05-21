@@ -4526,7 +4526,8 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
             aaid.assessmentqaid     = int(k)
             aaid.assessmentid       = int(aaidata.get('assessmentid'))
             aaid.assignassessmentid = int(pk)
-            aaid.answer             = u"%s".encode('utf8') %v 
+            aaid.answer             = v 
+            print v
             if result[1] == str(v):
                 aaid.obtainedmark   = int(result[0])
             else:
