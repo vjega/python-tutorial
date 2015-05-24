@@ -345,7 +345,7 @@ TTS.forms.showstickyform = function() {
             ['color', ['color']],
             ['para', ['ul', 'ol', 'paragraph']],
             ['height', ['height']],
-            //['insert', ['picture', 'link']], // no insert buttons
+            ['insert', ['link']], // no insert buttons
             //['table', ['table']], // no table button
             //['help', ['help']] //no help button
           ]
@@ -550,6 +550,7 @@ TTS.forms.renderstickynotes = function(data) {
         }*/
         sticky_html += "</div>";
         var div_sticky_html = "";
+        var content = "";
         var attach_class = "with_out_attachement";
         if(data[i].attachment != ''){
             attach_class = "";
@@ -558,7 +559,15 @@ TTS.forms.renderstickynotes = function(data) {
             html_cont = TTS.forms.getfiletype(path,id);
             div_sticky_html += "<div class='attachements'>"+html_cont+"</div>";
         }
-        sticky_html += "<div  name='"+data[i].color+"' src='"+data[i].id+"' class='sticky_content "+attach_class+"'>"+data[i].stickytext+"</div>";
+        var str = data[i].stickytext;
+        if(str.indexOf("youtube.com") == -1){
+            content = data[i].stickytext;
+        }else{
+            attach_class = "";
+             var youtube_link = (data[i].stickytext).split('=');
+            content = "<iframe width='420' height='315' src='https://www.youtube.com/embed/"+youtube_link[1]+"' frameborder='0' allowfullscreen></iframe>";
+        }
+        sticky_html += "<div  name='"+data[i].color+"' src='"+data[i].id+"' class='sticky_content "+attach_class+"'>"+content+"</div>";
         sticky_html += div_sticky_html;
         sticky_html += "<div  class='sticky_footer'>";
         sticky_html += "<span class='pull-right sticky_comment' id='sticky_comment_"+data[i].id+"' name='"+data[i].id+"'><i class='fa fa-comment'></i></span>";
@@ -738,6 +747,7 @@ TTS.forms.getfiletype = function (filename,id){
                     "<source src='/static/"+filename+"' type='video/ogg'>"+
             "</video></div>";
             break;
+
         default:
             type = "<div class='modelbox_center'> <h4> Unkown file format <b>."+file_extention+"</b></h4></div>";
     }
