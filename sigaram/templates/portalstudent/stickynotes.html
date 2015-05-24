@@ -540,7 +540,7 @@ TTS.forms.renderstickycomment = function(data){
 TTS.forms.renderstickynotes = function(data) {
     var sticky_html = '';
     for(var i in data){
-        sticky_html += "<div  style='top:"+data[i].yposition+"px;left:"+data[i].xposition+"px' id='sticky_note_"+data[i].id+"' name = "+data[i].id+" class='sticky_note "+data[i].color+"'>";
+        sticky_html += "<div  style='top:"+data[i].yposition+";left:"+data[i].xposition+"' id='sticky_note_"+data[i].id+"' name = "+data[i].id+" class='sticky_note "+data[i].color+"'>";
         sticky_html += "<div class='sticky_header "+data[i].color+"_header'>";
         sticky_html += "<span class='pull-right deleterec'  name='"+data[i].id+"'></span>&nbsp;";
         sticky_html += "<span class='pull-right editrec'  name='"+data[i].id+"'><i class='fa fa-pencil'></i></span> &nbsp;";
@@ -634,25 +634,28 @@ $(document).ready(function(){
     });
 
     $("#save").click(function(){
-        // var values = [];
-        // $(".sticky_note").each(function(){
-        //     values.push({
-        //         "left"  : $(this).offset().left-321,
-        //         "top"   : $(this).offset().top-320,
-        //         "sl_no" : $(this).attr("name")
-        //     });
-        // });
         var values = [];
-        var x='';
         $(".sticky_note").each(function(){
-            x = $(this).position();
             values.push({
-                "left"  : x.left,
-                "top"   : x.top,
+                //"left"  : $(this).offset().left-321,
+                //"top"   : $(this).offset().top-320,
+                "left"  : $(this).css("left"),
+                "top"   : $(this).css("top"),
                 "sl_no" : $(this).attr("name")
             });
         });
-        console.log(values);
+        // console.log(values);
+        // return true;
+        // var values = [];
+        // var x='';
+        // $(".sticky_note").each(function(){
+        //     x = $(this).position();
+        //     values.push({
+        //         "left"  : x.left,
+        //         "top"   : x.top,
+        //         "sl_no" : $(this).attr("name")
+        //     });
+        // });
         var data = TTS.utils.serilaizeJson("#add-student");
         data = JSON.parse(data);
         //  data['stickytext'] = TTS.utils.summer_encode(data['stickytext']);
@@ -724,7 +727,16 @@ TTS.forms.getfiletype = function (filename,id){
         case 'swf':
         case 'wmv':
         case 'mov':
-            type = "<div class='modelbox_center' name='"+id+"'><video width='320' height='240' controls><source src='/static/"+filename+"' type='video/mp4'></video></div>";
+        case 'flv':
+        case 'vob':
+        case 'mkv':
+        case 'VOB':
+            type = "<div class='modelbox_center' name='"+id+"'><video width='320' height='240' controls>"+
+                    "<source src='/static/"+filename+"' type='video/mp4'>"+
+                    "<source src='/static/"+filename+"' type='video/x-ms-vob'>"+
+                    "<source src='/static/"+filename+"' type='video/webm'>"+
+                    "<source src='/static/"+filename+"' type='video/ogg'>"+
+            "</video></div>";
             break;
         default:
             type = "<div class='modelbox_center'> <h4> Unkown file format <b>."+file_extention+"</b></h4></div>";
