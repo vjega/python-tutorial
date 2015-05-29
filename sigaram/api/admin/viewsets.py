@@ -4492,18 +4492,19 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         data = {k:v[0] for k, v in dict(request.DATA).items()}
         aai = models.Assignassessmentinfo.objects.get(pk=pk)
-        aaidata =  json.loads(request.DATA.keys()[0])
+        # aaidata =  json.loads(request.DATA.keys()[0])
+        # print data;
         
-        if aaidata.get('issaved'):
-            aai.issaved = aaidata.get('issaved')
+        if data.get('issaved'):
+            aai.issaved = data.get('issaved')
 
-        if aaidata.get('isanswered'):
-            aai.isanswered = aaidata.get('isanswered')
+        if data.get('isanswered'):
+            aai.isanswered = data.get('isanswered')
 
         aai.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
         aai.save()
 
-        if aaidata.get('alreadysaved'):
+        if data.get('alreadysaved'):
             sql = """
                 DELETE FROM assignassessmentqainfo 
                 WHERE assignassessmentid='%s'
@@ -4514,7 +4515,9 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
         sql=''
         result=''
 
-        for k, v in dict(aaidata.get('aqaidanswer')).items():
+        # for k, v in data.get('aqaidanswer').items():
+        for k, v in data.get('aqaidanswer'):
+            print k,v;
             sql= '''
             SELECT actualmark,
                 answer
@@ -4530,8 +4533,8 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
             aaid.assessmentqaid     = int(k)
             aaid.assessmentid       = int(aaidata.get('assessmentid'))
             aaid.assignassessmentid = int(pk)
-            aaid.answer             = v 
-            print v
+            aaid.answer             = v
+
             if result[1] == str(v):
                 aaid.obtainedmark   = int(result[0])
             else:
