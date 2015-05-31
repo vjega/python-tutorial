@@ -151,8 +151,8 @@ TTS.forms.ressave = function(savesend){
         },
         url:"/api/admin/studentopenendedInfoViewSet/"+assignedid+"/",
         type:"PUT",
-        data:data
-        // data:JSON.stringify(data)
+        // data:data
+        data:JSON.stringify(data)
     }).done(function(data){
         if(data.msg)
             window.location = 'assignedassessmentlist';

@@ -4492,8 +4492,8 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         data = {k:v[0] for k, v in dict(request.DATA).items()}
         aai = models.Assignassessmentinfo.objects.get(pk=pk)
-        # aaidata =  json.loads(request.DATA.keys()[0])
-        # print data;
+        aaidata =  json.loads(request.DATA.keys()[0])
+        #print data;
         
         if data.get('issaved'):
             aai.issaved = data.get('issaved')
@@ -4515,9 +4515,8 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
         sql=''
         result=''
 
-        # for k, v in data.get('aqaidanswer').items():
-        for k, v in data.get('aqaidanswer'):
-            print k,v;
+        for k, v in aaidata.get('aqaidanswer').items():
+        # for k, v in dict(data.get('aqaidanswer')):
             sql= '''
             SELECT actualmark,
                 answer
@@ -4533,7 +4532,7 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
             aaid.assessmentqaid     = int(k)
             aaid.assessmentid       = int(aaidata.get('assessmentid'))
             aaid.assignassessmentid = int(pk)
-            aaid.answer             = v
+            aaid.answer             = summer_decode(v)
 
             if result[1] == str(v):
                 aaid.obtainedmark   = int(result[0])
