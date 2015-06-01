@@ -103,12 +103,12 @@
     <div>
         <textarea class="summernote" id="title"></textarea>
     </div>
-    <div class="form-group" class="col-sm-8">
+    <div class="form-group" style="display:none" class="col-sm-8">
         <label for="folder_name" class="col-sm-7 control-label" id ="resource-heade">
             {% trans "Reference" %}
         </label>
     </div>
-    <div>
+    <div style="display:none">
         <textarea class="summernote" id="instruction"></textarea>
     </div>
 </form>
@@ -242,12 +242,13 @@ TTS.forms.renderassignassessmentinfo = function(data){
 };
 
 TTS.forms.delassessment = function(id) {
+    var ids=id.split("_");
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'DELETE',
-        url : '/api/admin/assessmentinfo/'+id
+        url : '/api/admin/assessmentinfo/'+ids[0]
     }).done(function(msg) {
         window.location.reload();
     }).error(function(msg){
@@ -256,12 +257,13 @@ TTS.forms.delassessment = function(id) {
 };
 
 TTS.forms.deleteassessment = function(id) {
+    var ids=id.split("_");
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'DELETE',
-        url : '/api/admin/studentassignassessment/'+id
+        url : '/api/admin/studentassignassessment/'+ids[0]
     }).done(function(msg) {
         window.location.reload();
     }).error(function(msg){

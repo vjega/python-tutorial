@@ -196,7 +196,7 @@ TTS.forms.editschool = function() {
                 //data['answeroption'] = answeroption;
                 data['actualmark']   = $("#actualmark").val();
                 data['assessmentid'] = TTS.utils.getUrlParameter('id');
-                data['answer']       = $("#answer").val();
+                data['answer']       = TTS.utils.summer_encode($("#answer").val());
                 $.ajax({
                     headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -270,7 +270,6 @@ $(document).ready(function(){
         "url":"/api/admin/assessmentqainfo/?assessmentid="+assessmentid+"&format=json",
         "type":"GET"
     }).done(function(data){
-        console.log(data);
         TTS.forms.renderassessmentinfo(data);
         TTS.utils.ajaxloaderstop();
     });

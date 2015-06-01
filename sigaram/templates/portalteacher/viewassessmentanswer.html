@@ -126,7 +126,6 @@ window.TTS = window.TTS || {}
 TTS.forms = TTS.forms || {}
 
 TTS.forms.renderassignedassessmentinfo = function(data){
-    console.log(data);
     $("#issaved").val(data[0].issaved);
     $("#title").html(data[0].title);
     $("#instruction").html(data[0].instruction);
@@ -153,7 +152,11 @@ TTS.forms.renderassignedassessmentinfo = function(data){
             }else{
                 canswer = "";
             }
-            qaHTML += "<div class='col-lg-6'><input disabled "+savedanswer+" type='radio' name='answer_"+qtn['assessmentqaid']+"' value='"+ans+"'><label class="+canswer+">"+ans+"</label></div>";
+            if (data[idx].type !="Fill in the blank") {
+                qaHTML += "<div class='col-lg-6'><input disabled "+savedanswer+" type='radio' name='answer_"+qtn['  assessmentqaid']+"' value='"+ans+"'><label class="+canswer+">"+ans+"</label></div>";   
+            } else{
+                qaHTML += "<div class='col-lg-6'><u>"+data[idx].answer+"</u></div>";   
+            }
         });
         qaHTML += "</div>";
     });

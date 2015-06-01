@@ -126,6 +126,9 @@ $(document).ready(function(){
         var studentid = $(this).parent().parent().prop("id");
         if($("#type").val() == "Open ended"){
             window.location = 'viewassopenendedanswer?assessmentid='+assessmentid+'&studentid='+studentid;
+        }else if($("#type").val() == "Fill in the blank"){ 
+            window.location = 'viewassopenendedanswer?assessmentid='+assessmentid+'&studentid='+studentid;
+
         }else{
             window.location = 'viewassessmentanswer?assessmentid='+assessmentid+'&studentid='+studentid;
         }
