@@ -1658,9 +1658,14 @@ class StickyCommentsResource(viewsets.ModelViewSet):
         stickycomments.createdby = request.user.id
         stickycomments.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         stickycomments.save()
+
+        aldata = {}
+        aldata['pagename']       = 'stickycomments'
+        aldata['operation']      = 'Insert'
+        aldata['stringsentence'] = 'New Stickycomment Created'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
-
-
 class AssignedResourceStudents(viewsets.ModelViewSet):
     queryset = models.Assignresourceinfo.objects.all()
     serializer_class = adminserializers.MindmapSerializer
