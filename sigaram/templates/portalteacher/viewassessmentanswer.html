@@ -155,7 +155,7 @@ TTS.forms.renderassignedassessmentinfo = function(data){
             if (data[idx].type !="Fill in the blank") {
                 qaHTML += "<div class='col-lg-6'><input disabled "+savedanswer+" type='radio' name='answer_"+qtn['  assessmentqaid']+"' value='"+ans+"'><label class="+canswer+">"+ans+"</label></div>";   
             } else{
-                qaHTML += "<div class='col-lg-6'><u>"+data[idx].answer+"</u></div>";   
+                qaHTML += "<div class='col-lg-6'>"+data[idx].answer+"</div>";   
             }
         });
         qaHTML += "</div>";

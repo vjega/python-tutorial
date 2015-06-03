@@ -4222,6 +4222,7 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
         WHERE aaqi.assignassessmentid = '%s'
         GROUP BY aaqi.assignassessmentid 
         '''%(int(pk))
+       # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
@@ -4430,6 +4431,7 @@ class ViewassignassessmentInfo(viewsets.ModelViewSet):
         INNER JOIN auth_user au ON au.username=aai.studentid 
         WHERE assessmentid=%s
         ''' % request.GET.get('assessmentid')
+        #print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -4473,7 +4475,7 @@ class ViewassignassessmentInfo(viewsets.ModelViewSet):
         GROUP BY aqa.id, aai.assigneddate
         ORDER BY aai.assignedid DESC
         '''%(pk, studentid)
-       #print sql;
+        #print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -4489,6 +4491,7 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.AssignassessmentinfoSerializer
 
     def update(self, request, pk=None):
+        print pk;
         # data = {k:v[0] for k, v in dict(request.DATA).items()}
         aai = models.Assignassessmentinfo.objects.get(pk=pk)
         aaidata =  json.loads(request.DATA.keys()[0])
@@ -4503,12 +4506,29 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
         aai.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
         aai.save()
 
+        sql= '''
+            SELECT SUM(actualmark) AS actualmark,
+                answer
+            FROM assessmentqa
+            WHERE assessmentid = '%s'           
+            '''%(int(pk))
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result =  cursor.fetchone()
+
+        sql='''
+            UPDATE assignassessmentinfo SET totalactualmarks='%s'
+            WHERE assessmentid='%s'
+        '''%(int(result[0]),int(pk))
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result =  cursor.fetchone()
+
         if aaidata.get('alreadysaved'):
             sql = """
                 DELETE FROM assignassessmentqainfo 
                 WHERE assignassessmentid='%s'
                 """ % (int(pk))
-
             cursor = connection.cursor()
             cursor.execute(sql)
         sql=''
@@ -4516,7 +4536,6 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
 
         for k, v in dict(aaidata.get('aqaidanswer')).items():
         #for k, v in dict(aaidata.get('aqaidanswer').item()):
-            print v;
             sql= '''
             SELECT actualmark,
                 answer
@@ -4528,7 +4547,7 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
             result =  cursor.fetchone()
            
             aaid = models.AssignAssessmentQAInfo()
-
+            
             aaid.assessmentqaid     = int(k)
             aaid.assessmentid       = int(aaidata.get('assessmentid'))
             aaid.assignassessmentid = int(pk)
@@ -4541,7 +4560,26 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
                 aaid.save()
             except Exception as e:
                 print e
-
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result =  cursor.fetchone()
+        sql= '''
+            SELECT sum(obtainedmark) AS obtainedmark
+            FROM assignassessmentqainfo 
+            WHERE assessmentid = '%s'           
+            GROUP BY assessmentid
+            '''%(int(pk))
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result =  cursor.fetchone()
+        sql='''
+        UPDATE assignassessmentinfo SET totalmarks='%s'
+        WHERE assessmentid='%s'
+        '''%(int(result[0]),int(pk))
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result =  cursor.fetchone()
+           
         aldata = {}
         aldata['pagename']       = 'viewassignresource'
         aldata['operation']      = 'Insert'
