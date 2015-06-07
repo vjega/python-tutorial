@@ -723,6 +723,13 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, pk):
         models.Writtenworkinfo.objects.get(pk=pk).delete()
+
+        aldata = {}
+        aldata['pagename']       = 'WrittenWork'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a WrittenWork'
+        add_activitylog(request, aldata)
+
         return Response('"msg":"delete"')
 
     def retrieve(self, request, pk=None):
@@ -797,6 +804,11 @@ class WrittenworkinfoViewSet(viewsets.ModelViewSet):
             awwi.publisheddate = time.strftime('%Y-%m-%d %H:%M:%S')
             awwi.save()
         
+        aldata = {}
+        aldata['pagename']       = 'WrittenWork'
+        aldata['operation']      = 'Insert'
+        aldata['stringsentence'] = 'New WrittenWork added'
+        add_activitylog(request, aldata)        
         return Response(request.DATA)
 
 class ChapterinfoViewSet(viewsets.ModelViewSet):
@@ -1505,6 +1517,13 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         ''' % (pk,request.GET.get('createddate'))
         cursor = connection.cursor()
         cursor.execute(sql)
+
+        aldata = {}
+        aldata['pagename']       = 'assignedresourcelist'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Assignresourcelist Deleted'
+        add_activitylog(request, aldata)
+
         return Response('"msg":"delete"')
 
 class StickynotesResource(viewsets.ModelViewSet):
@@ -3609,6 +3628,12 @@ class AssessmentInfoViewSet(viewsets.ModelViewSet):
         assessment.createddate  = time.strftime('%Y-%m-%d %H:%M:%S')
         assessment.isdeleted    = 0
         assessment.save()
+
+        aldata = {}
+        aldata['pagename']       = 'Viewassessment'
+        aldata['operation']      = 'Insert'
+        aldata['stringsentence'] = 'New Assessment Added'
+        add_activitylog(request, aldata)
         return Response(request.DATA)
 
     def destroy(self, request, pk=None):
@@ -4705,7 +4730,7 @@ class teacherAssessmentInfoViewSet(viewsets.ModelViewSet):
         aldata = {}
         aldata['pagename']       = 'viewassopenendedanswer'
         aldata['operation']      = 'Insert'
-        aldata['stringsentence'] = 'Answer mark addedd'
+        aldata['stringsentence'] = 'Answer mark added'
         add_activitylog(request, aldata)
 
         return Response({'msg':True})

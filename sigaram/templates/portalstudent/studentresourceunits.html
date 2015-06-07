@@ -98,7 +98,7 @@ TTS.forms.renderchapterinfo = function(data){
 $(document).ready(function(){
     TTS.utils.ajaxloaderstart();
     $.ajax({
-        "url":"/api/admin/chapterinfo/?classid="+TTS.classid+"&section="+TTS.section+"&format=json",
+        "url":"/api/admin/chapterinfo/?categoryid="+TTS.categoryid+"&classid="+TTS.classid+"&section="+TTS.section+"&format=json",
         "type":"GET"
     }).done(function(data){
         TTS.forms.renderchapterinfo(data);

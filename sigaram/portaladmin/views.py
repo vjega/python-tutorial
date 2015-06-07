@@ -708,3 +708,9 @@ def statisticswrittenwork(request):
 def activitywrittenwork(request):
     schools = models.Schoolinfo.objects.all().order_by('schoolname')
     return render(request, 'portaladmin/activitywrittenwork.html', {'schools':schools})
+
+@login_required
+@switchlanguage
+def teacherstatistics(request):
+    schools = models.Schoolinfo.objects.all().order_by('schoolname')
+    return render(request, 'portaladmin/teacherstatistics.html', {'schools':schools})
