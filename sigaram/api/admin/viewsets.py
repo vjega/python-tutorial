@@ -4570,9 +4570,9 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
             WHERE assessmentid = '%s' 
             GROUP BY assessmentid          
             '''%(int(pk))
-        # print "*"*80
-        # print sql
-        # print "*"*80    
+        print "*"*80
+        print sql
+        print "*"*80    
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
