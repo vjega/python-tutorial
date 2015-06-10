@@ -4570,13 +4570,12 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
             WHERE assessmentid = '%s' 
             GROUP BY assessmentid          
             '''%(int(pk))
-        print "*"*80
-        print sql
-        print "*"*80    
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
-        logger.error(result)
+        # print "*"*80
+        # print result
+        # print "*"*80    
         logger.error("Pass 2")
         # if not result[0]:
         #     result[0] = 0
