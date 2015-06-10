@@ -4567,7 +4567,8 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
             SELECT SUM(actualmark) AS actualmark,
                 answer
             FROM assessmentqa
-            WHERE assessmentid = '%s'           
+            WHERE assessmentid = '%s' 
+            GROUP BY assessmentid          
             '''%(int(pk))
         print "*"*80
         print sql
