@@ -4573,9 +4573,9 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
-        # print "*"*80
-        # print result
-        # print "*"*80    
+        print "*"*80
+        print result
+        print "*"*80    
         logger.error("Pass 2")
         # if not result[0]:
         #     result[0] = 0
