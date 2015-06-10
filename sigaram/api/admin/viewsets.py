@@ -4548,9 +4548,6 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk=None):
         logger.error("Entering into function")
-        print "*"*80
-        print pk
-        print "*"*80
         # data = {k:v[0] for k, v in dict(request.DATA).items()}
         aai = models.Assignassessmentinfo.objects.get(pk=pk)
         aaidata =  json.loads(request.DATA.keys()[0])
@@ -4572,6 +4569,9 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
             FROM assessmentqa
             WHERE assessmentid = '%s'           
             '''%(int(pk))
+        print "*"*80
+        print sql
+        print "*"*80    
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
