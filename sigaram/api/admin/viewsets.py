@@ -11,6 +11,31 @@ from django.db.models import Q
 from django.db import connection
 from portaladmin import models
 import  adminserializers
+import logging, sys
+
+
+class SingleLevelFilter(logging.Filter):
+    def __init__(self, passlevel, reject):
+        self.passlevel = passlevel
+        self.reject = reject
+
+    def filter(self, record):
+        if self.reject:
+            return (record.levelno != self.passlevel)
+        else:
+            return (record.levelno == self.passlevel)
+
+h1 = logging.StreamHandler(sys.stdout)
+f1 = SingleLevelFilter(logging.INFO, False)
+h1.addFilter(f1)
+rootLogger = logging.getLogger()
+rootLogger.addHandler(h1)
+h2 = logging.StreamHandler(sys.stderr)
+f2 = SingleLevelFilter(logging.INFO, True)
+h2.addFilter(f2)
+rootLogger.addHandler(h2)
+logger = logging.getLogger("my.logger")
+logger.setLevel(logging.DEBUG)
 
 def loginname_to_userid(usertype, username):
     if usertype =='Admin':
@@ -4521,7 +4546,7 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.AssignassessmentinfoSerializer
 
     def update(self, request, pk=None):
-        print pk;
+        logger.error("Entering into function")
         # data = {k:v[0] for k, v in dict(request.DATA).items()}
         aai = models.Assignassessmentinfo.objects.get(pk=pk)
         aaidata =  json.loads(request.DATA.keys()[0])
@@ -4536,6 +4561,7 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
         aai.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
         aai.save()
 
+        logger.error("Pass 1")
         sql= '''
             SELECT SUM(actualmark) AS actualmark,
                 answer
@@ -4545,27 +4571,39 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
-
-        sql='''
-            UPDATE assignassessmentinfo SET totalactualmarks='%s'
-            WHERE assessmentid='%s'
-        '''%(int(result[0]),int(pk))
-        cursor = connection.cursor()
-        cursor.execute(sql)
-        result =  cursor.fetchone()
-
-        if aaidata.get('alreadysaved'):
-            sql = """
-                DELETE FROM assignassessmentqainfo 
-                WHERE assignassessmentid='%s'
-                """ % (int(pk))
+        logger.error(result)
+        logger.error("Pass 2")
+        if not result[0]:
+            result[0] = 0
+        try:
+            sql='''
+                UPDATE assignassessmentinfo SET totalactualmarks='%s'
+                WHERE assessmentid='%s'
+            '''%(int(result[0]),int(pk))
             cursor = connection.cursor()
             cursor.execute(sql)
+            result =  cursor.fetchone()
+        except Exception as e:
+            logger.error("Pass 2a")
+            logger.error(e)
+        try:
+            if aaidata.get('alreadysaved'):
+                sql = """
+                    DELETE FROM assignassessmentqainfo 
+                    WHERE assignassessmentid='%s'
+                    """ % (int(pk))
+                cursor = connection.cursor()
+                cursor.execute(sql)
+            logger.error("Pass 2c")
+        except Exception as e:
+            logger.error("Pass 2d")
         sql=''
         result=''
 
+        logger.error("Pass 3")
         for k, v in dict(aaidata.get('aqaidanswer')).items():
-        #for k, v in dict(aaidata.get('aqaidanswer').item()):
+            logger.error("Pass 4")
+            #print 'debug1'dd
             sql= '''
             SELECT actualmark,
                 answer
@@ -4576,20 +4614,26 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
             cursor.execute(sql)
             result =  cursor.fetchone()
            
+            logger.error("Pass 5")
+            #print 'debug2'
             aaid = models.AssignAssessmentQAInfo()
             
             aaid.assessmentqaid     = int(k)
             aaid.assessmentid       = int(aaidata.get('assessmentid'))
             aaid.assignassessmentid = int(pk)
             aaid.answer             = v
+            logger.error("Pass 6")
+            #print 'debug3'
             if result[1] == unicode(v):
+                logger.error("Pass 7")
+                #print 'debug4'
                 aaid.obtainedmark   = int(result[0])
             else:
                 aaid.obtainedmark   = 0
             try:
                 aaid.save()
             except Exception as e:
-                print e
+                logger.error(e)
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
