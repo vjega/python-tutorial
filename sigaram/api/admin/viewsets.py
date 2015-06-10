@@ -4578,13 +4578,16 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
         result =  cursor.fetchone()
         logger.error(result)
         logger.error("Pass 2")
-        if not result[0]:
-            result[0] = 0
+        # if not result[0]:
+        #     result[0] = 0
         try:
             sql='''
                 UPDATE assignassessmentinfo SET totalactualmarks='%s'
                 WHERE assessmentid='%s'
             '''%(int(result[0]),int(pk))
+            print "*"*80
+            print sql
+            print "*"*80 
             cursor = connection.cursor()
             cursor.execute(sql)
             result =  cursor.fetchone()
