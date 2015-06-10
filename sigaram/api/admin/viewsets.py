@@ -1531,6 +1531,7 @@ class StickynotesResource(viewsets.ModelViewSet):
     serializer_class = adminserializers.StickynotesSerializer
 
     def list(self, request):
+        print request, type(request)
         wherecond=''
         if request.GET.get('id'):
             wherecond="WHERE s.stickylistid=%s" % request.GET.get('id')
@@ -4521,7 +4522,9 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.AssignassessmentinfoSerializer
 
     def update(self, request, pk=None):
+        print "*"*80
         print pk;
+        print "*"*80
         # data = {k:v[0] for k, v in dict(request.DATA).items()}
         aai = models.Assignassessmentinfo.objects.get(pk=pk)
         aaidata =  json.loads(request.DATA.keys()[0])
