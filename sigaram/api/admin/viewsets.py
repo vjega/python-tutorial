@@ -1579,7 +1579,7 @@ class StickynotesResource(viewsets.ModelViewSet):
     serializer_class = adminserializers.StickynotesSerializer
 
     def list(self, request):
-        print request, type(request)
+        # print request, type(request)
         wherecond=''
         if request.GET.get('id'):
             wherecond="WHERE s.stickylistid=%s" % request.GET.get('id')
