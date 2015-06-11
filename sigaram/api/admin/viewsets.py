@@ -1439,25 +1439,47 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
             datecond = "AND (ari.assigneddate BETWEEN '{0} 00:00:00' AND '{1} 23:59:59')".format(request.GET.get('fdate'),
                 request.GET.get('tdate'))
 
-        sql = '''
-        SELECT assignedid AS id,
-               ri.resourceid,
-               resourcetitle,
-               ari.assigneddate as createddate,
-               resourcetype,
-               thumbnailurl,
-               ari.studentid,
-               ari.isanswered,
-               ari.issaved
-        FROM assignresourceinfo ari
-        INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
-        WHERE isdeleted=0
-              AND ari.assignedby='%s'
-              AND ari.IsDelete=0 
-              %s
-        GROUP BY resourceid, ari.assigneddate
-        ORDER BY assigneddate DESC''' % (request.user.username, datecond)
-
+        # sql = '''
+        # SELECT assignedid AS id,
+        #        ri.resourceid,
+        #        resourcetitle,
+        #        ari.assigneddate as createddate,
+        #        resourcetype,
+        #        thumbnailurl,
+        #        ari.studentid,
+        #        ari.isanswered,
+        #        ari.issaved
+        # FROM assignresourceinfo ari
+        # INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
+        # WHERE ari.IsDelete=0
+        #       AND ari.assignedby='%s'
+        #       %s
+        # GROUP BY resourceid, ari.assigneddate
+        # ORDER BY assigneddate DESC''' % (request.user.username, datecond)
+        # print sql;
+        sql ='''
+        SELECT id,resourceid,resourcetitle,createddate,resourcetype,thumbnailurl,studentid,isanswered,issaved
+        FROM
+        ( SELECT assignedid AS id,
+                       ri.resourceid,
+                       ri.resourcetitle,
+                       date(ari.assigneddate) as createddate,
+                       resourcetype,
+                       thumbnailurl,
+                       ari.studentid,
+                       ari.isanswered,
+                       ari.issaved
+                FROM assignresourceinfo ari
+                INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
+                WHERE ari.IsDelete=0  
+                    AND ari.assignedby='%s'   
+                    %s     
+                GROUP BY ri.resourceid,ari.assigneddate
+                ORDER BY assigneddate DESC
+        )AS TEMP
+        GROUP BY resourceid,createddate
+        ORDER BY createddate DESC
+        '''% (request.user.username, datecond)
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
         
@@ -4547,7 +4569,7 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.AssignassessmentinfoSerializer
 
     def update(self, request, pk=None):
-        logger.error("Entering into function")
+        # logger.error("Entering into function")
         # data = {k:v[0] for k, v in dict(request.DATA).items()}
         aai = models.Assignassessmentinfo.objects.get(pk=pk)
         aaidata =  json.loads(request.DATA.keys()[0])
@@ -4562,7 +4584,7 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
         aai.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
         aai.save()
 
-        logger.error("Pass 1")
+        # logger.error("Pass 1")
         sql= '''
             SELECT SUM(actualmark) AS actualmark,
                 answer
@@ -4570,16 +4592,16 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
             WHERE assessmentid = '%s' 
             GROUP BY assessmentid          
             '''%(int(pk))
-        print "*"*80
-        print sql
-        print "*"*80 
+        # print "*"*80
+        # print sql
+        # print "*"*80 
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
-        print "*"*80
-        print result
-        print "*"*80    
-        logger.error("Pass 2")
+        # print "*"*80
+        # print result
+        # print "*"*80    
+        # logger.error("Pass 2")
         # if not result[0]:
         #     result[0] = 0
         try:
@@ -4587,14 +4609,14 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
                 UPDATE assignassessmentinfo SET totalactualmarks='%s'
                 WHERE assessmentid='%s'
             '''%(int(result[0]),int(pk))
-            print "*"*80
-            print sql
-            print "*"*80 
+            # print "*"*80
+            # print sql
+            # print "*"*80 
             cursor = connection.cursor()
             cursor.execute(sql)
             result =  cursor.fetchone()
         except Exception as e:
-            logger.error("Pass 2a")
+            #logger.error("Pass 2a")
             logger.error(e)
         try:
             if aaidata.get('alreadysaved'):
@@ -4604,13 +4626,14 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
                     """ % (int(pk))
                 cursor = connection.cursor()
                 cursor.execute(sql)
-            logger.error("Pass 2c")
+            #logger.error("Pass 2c")
         except Exception as e:
-            logger.error("Pass 2d")
+            print e
+            # logger.error("Pass 2d")
         sql=''
         result=''
 
-        logger.error("Pass 3")
+        # logger.error("Pass 3")
         for k, v in dict(aaidata.get('aqaidanswer')).items():
             logger.error("Pass 4")
             #print 'debug1'dd
@@ -4624,7 +4647,7 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
             cursor.execute(sql)
             result =  cursor.fetchone()
            
-            logger.error("Pass 5")
+            # logger.error("Pass 5")
             #print 'debug2'
             aaid = models.AssignAssessmentQAInfo()
             
@@ -4632,10 +4655,10 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
             aaid.assessmentid       = int(aaidata.get('assessmentid'))
             aaid.assignassessmentid = int(pk)
             aaid.answer             = v
-            logger.error("Pass 6")
+            # logger.error("Pass 6")
             #print 'debug3'
             if result[1] == unicode(v):
-                logger.error("Pass 7")
+                # logger.error("Pass 7")
                 #print 'debug4'
                 aaid.obtainedmark   = int(result[0])
             else:

@@ -228,9 +228,9 @@ TTS.forms.renderteacher = function(data){
             { "title": "{% trans "Name" %}",
               "data" : "name"  
             },
-            { "title": "{% trans "Username" %}",
-              "data" : "username"  
-            }, 
+            // { "title": "{% trans "Username" %}",
+            //   "data" : "username"  
+            // }, 
             { "title": "{% trans "Email Id" %}",
               "data" : "emailid"  
             }, 
@@ -259,7 +259,7 @@ TTS.forms.renderteacher = function(data){
             t.image ="<img src='http://placehold.it/100x100'>";
         }
         t.name = data[i].firstname + " "+data[i].lastname;
-        t.username = data[i].username;
+        // t.username = data[i].username;
         t.emailid = data[i].emailid;
         t.edit = "<i class='tts-edit fa fa-pencil fa-lg'></i>";
         t.delete = "<i class='tts-delete fa fa-trash fa-lg'></i>";
