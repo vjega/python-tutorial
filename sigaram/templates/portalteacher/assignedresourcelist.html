@@ -134,7 +134,7 @@
             t.DT_RowId = data[i].resourceid+"_"+cdts;
             t.slno=++count;
             t.title=data[i].resourcetitle;
-            t.date=data[i].createddate;
+            t.date=TTS.utils.datetimeConvDate(data[i].createddate);
             t.del = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
             dataset.push(t);
         }
