@@ -1733,6 +1733,7 @@ class StickyCommentsResource(viewsets.ModelViewSet):
         add_activitylog(request, aldata)
 
         return Response(request.DATA)
+
 class AssignedResourceStudents(viewsets.ModelViewSet):
     queryset = models.Assignresourceinfo.objects.all()
     serializer_class = adminserializers.MindmapSerializer
@@ -1742,45 +1743,102 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
         studentcond = ''
         datetimecond = ''
         if request.GET.get('studentid'):
-            studentcond = "AND ari.studentid = '" + request.GET.get('studentid') + "'"
+            studentcond = "WHERE studentid = '" + request.GET.get('studentid') + "'"
 
         if request.GET.get('datetime'):
-            datetimecond = "AND ari.assigneddate = " + request.GET.get('datetime') + ""
+            datetimecond = "WHERE createddate = " + request.GET.get('datetime') + ""
 
-        sql = '''
-        SELECT assignedid AS id,
-               ari.rubric_id,
-               ari.assignedby,
-               ri.resourceid,
-               au.first_name as firstname,
-               au.last_name as lastname,
-               resourcetitle,
-               date(assigneddate) as createddate,
-               resourcetype,
-               thumbnailurl,
-               date(ari.answereddate) as answereddate,
-               ari.answertext,
-               ari.originaltext,
-               ari.studentid,
-               ari.isanswered,
-               ari.issaved,
-               ari.isbillboard,
-               ari.isclassroom,
-               ari.rubric_marks,
-               ari.rubric_n_mark,
-               ari.answerrating as rating,
-               ari.answerurl
-        FROM assignresourceinfo ari
-        INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
-        INNER JOIN  auth_user au on au.username = ari.studentid 
-        WHERE isdeleted=0
-              AND ari.resourceid=%s
-              AND ari.IsDelete=0 
-              %s
-              %s
-        GROUP BY ari.studentid
-        ORDER BY assigneddate DESC''' % (pk, studentcond, datetimecond)
-
+        # sql = '''
+        # SELECT assignedid AS id,
+        #        ari.rubric_id,
+        #        ari.assignedby,
+        #        ri.resourceid,
+        #        au.first_name as firstname,
+        #        au.last_name as lastname,
+        #        resourcetitle,
+        #        date(assigneddate) as createddate,
+        #        resourcetype,
+        #        thumbnailurl,
+        #        date(ari.answereddate) as answereddate,
+        #        ari.answertext,
+        #        ari.originaltext,
+        #        ari.studentid,
+        #        ari.isanswered,
+        #        ari.issaved,
+        #        ari.isbillboard,
+        #        ari.isclassroom,
+        #        ari.rubric_marks,
+        #        ari.rubric_n_mark,
+        #        ari.answerrating as rating,
+        #        ari.answerurl
+        # FROM assignresourceinfo ari
+        # INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
+        # INNER JOIN  auth_user au on au.username = ari.studentid 
+        # WHERE isdeleted=0
+        #       AND ari.resourceid=%s
+        #       AND ari.IsDelete=0 
+        #       %s
+        #       %s
+        # GROUP BY ari.studentid
+        # ORDER BY assigneddate DESC''' % (pk, studentcond, datetimecond)
+        # print sql;
+        sql ='''
+        SELECT  id,
+                rubric_id,
+                assignedby,
+                resourceid,
+                firstname,
+                lastname,
+                resourcetitle,
+                createddate,
+                resourcetype,
+                thumbnailurl,
+                answereddate,
+                answertext,
+                originaltext,
+                studentid,
+                isanswered,
+                issaved,
+                isbillboard,
+                isclassroom,
+                rubric_marks,
+                rubric_n_mark,
+                rating,answerurl
+        FROM ( 
+            SELECT assignedid AS id,
+                   ari.rubric_id,
+                   ari.assignedby,
+                   ri.resourceid,
+                   au.first_name as firstname,
+                   au.last_name as lastname,
+                   resourcetitle,
+                   date(assigneddate) as createddate,
+                   resourcetype,
+                   thumbnailurl,
+                   date(ari.answereddate) as answereddate,
+                   ari.answertext,
+                   ari.originaltext,
+                   ari.studentid,
+                   ari.isanswered,
+                   ari.issaved,
+                   ari.isbillboard,
+                   ari.isclassroom,
+                   ari.rubric_marks,
+                   ari.rubric_n_mark,
+                   ari.answerrating as rating,
+                   ari.answerurl
+            FROM assignresourceinfo ari
+            INNER JOIN  resourceinfo ri on ri.resourceid = ari.resourceid 
+            INNER JOIN  auth_user au on au.username = ari.studentid 
+            WHERE ari.IsDelete=0
+            AND ari.resourceid= '%s'
+        )AS temp
+        %s
+        %s
+        GROUP BY studentid
+        ORDER BY createddate DESC
+        '''% (pk, studentcond, datetimecond)
+        print sql
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
