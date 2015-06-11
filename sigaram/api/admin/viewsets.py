@@ -1838,7 +1838,7 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
         GROUP BY studentid
         ORDER BY createddate DESC
         '''% (pk, studentcond, datetimecond)
-        print sql
+        # print sql
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
