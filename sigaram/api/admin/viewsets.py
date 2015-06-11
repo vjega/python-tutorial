@@ -1376,14 +1376,14 @@ class StudentAssignResource(viewsets.ModelViewSet):
         for r in resource:
             for s in students:
                 
-                sql = """
-                DELETE FROM assignresourceinfo 
-                WHERE studentid='%s'
-                AND resourceid='%s'
-                """ % (str(s),int(r))
+                # sql = """
+                # DELETE FROM assignresourceinfo 
+                # WHERE studentid='%s'
+                # AND resourceid='%s'
+                # """ % (str(s),int(r))
 
-                cursor = connection.cursor()
-                cursor.execute(sql)
+                # cursor = connection.cursor()
+                # cursor.execute(sql)
 
                 ar = models.Assignresourceinfo()
                 ar.resourceid = int(r)
@@ -1480,6 +1480,7 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         GROUP BY resourceid,createddate
         ORDER BY createddate DESC
         '''% (request.user.username, datecond)
+        #print sql;
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
         
