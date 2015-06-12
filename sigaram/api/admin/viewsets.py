@@ -4632,7 +4632,7 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
         # data = {k:v[0] for k, v in dict(request.DATA).items()}
         aai = models.Assignassessmentinfo.objects.get(pk=pk)
         aaidata =  json.loads(request.DATA.keys()[0])
-        #print aaidata;
+        print aaidata,type(aaidata);
         
         if aaidata.get('issaved'):
             aai.issaved = aaidata.get('issaved')
