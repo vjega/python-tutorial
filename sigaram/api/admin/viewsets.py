@@ -185,7 +185,6 @@ class TeacherViewSet(viewsets.ModelViewSet):
         return Response(request.DATA)
 
     def update(self, request, pk=None):
-        #print request.GET.get('schoolid');
         teacher = models.Teacherinfo.objects.get(pk=pk)
         teacherdata =  json.loads(request.DATA.keys()[0])
         teacher.username = teacherdata.get('username')
@@ -4613,7 +4612,7 @@ class ViewassignassessmentInfo(viewsets.ModelViewSet):
         GROUP BY aqa.id, aai.assigneddate
         ORDER BY aai.assignedid DESC
         '''%(pk, studentid)
-        print sql;
+        # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
