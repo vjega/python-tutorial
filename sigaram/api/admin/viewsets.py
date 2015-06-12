@@ -4808,7 +4808,8 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
         INNER JOIN assessmentinfo ai on ai.id = aai.assessmentid 
         INNER JOIN assessmentqa aqa on aqa.assessmentid = aai.assessmentid 
         LEFT JOIN assignassessmentqainfo aaqai on aaqai.assessmentqaid = aqa.id
-        WHERE aai.studentid='%s' AND aai.assignedid='%s'
+        WHERE aai.studentid='%s' 
+        AND aai.assessmentid='%s'
         GROUP BY aqa.id, aai.assigneddate
         ORDER BY aai.assignedid DESC''' % (request.user.username, pk)
 
