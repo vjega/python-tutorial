@@ -151,7 +151,7 @@
            
             if (!data[i].issaved && !data[i].isanswered) {
                 var t = [];
-                t.DT_RowId = "var_"+data[i].id+"_"+data[i].type;
+                t.DT_RowId = "var_"+data[i].assessmentid+"_"+data[i].type;
                 t.slno=++count_new;
                 t.title=data[i].title;
                 t.date=TTS.utils.datetimeConvDate(data[i].createddate);
@@ -160,7 +160,7 @@
             }
             if (data[i].issaved && !data[i].isanswered) {
                 var t = [];
-                t.DT_RowId = "var_"+data[i].id+"_"+data[i].type;
+                t.DT_RowId = "var_"+data[i].assessmentid+"_"+data[i].type;
                 t.slno=++count_saved;
                 t.title=data[i].title;
                 t.date=TTS.utils.datetimeConvDate(data[i].createddate);
@@ -169,7 +169,7 @@
             }
             if (data[i].isanswered) {
                 var t = [];
-                t.DT_RowId = "vaa_"+data[i].id+"_"+data[i].type;
+                t.DT_RowId = "vaa_"+data[i].assessmentid+"_"+data[i].type;
                 t.slno=++count_answered;
                 t.title=data[i].title;
                 t.date=TTS.utils.datetimeConvDate(data[i].answereddate);
