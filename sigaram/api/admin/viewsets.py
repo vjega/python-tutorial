@@ -4400,6 +4400,7 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
               %s
         GROUP BY aai.assessmentid, aai.assigneddate
         ORDER BY aai.assignedid DESC''' % (request.user.username, datecond)
+        # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -4612,7 +4613,7 @@ class ViewassignassessmentInfo(viewsets.ModelViewSet):
         GROUP BY aqa.id, aai.assigneddate
         ORDER BY aai.assignedid DESC
         '''%(pk, studentid)
-        #print sql;
+        print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -4632,7 +4633,9 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
         # data = {k:v[0] for k, v in dict(request.DATA).items()}
         aai = models.Assignassessmentinfo.objects.get(pk=pk)
         aaidata =  json.loads(request.DATA.keys()[0])
-        print aaidata,type(aaidata);
+        # print "*"*80
+        # print aaidata
+        # print "*"*80
         
         if aaidata.get('issaved'):
             aai.issaved = aaidata.get('issaved')
@@ -4650,10 +4653,10 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
             FROM assessmentqa
             WHERE assessmentid = '%s' 
             GROUP BY assessmentid          
-            '''%(int(pk))
-        print "*"*80
-        print sql
-        print "*"*80 
+            '''%(int(aaidata.get('assessmentid')))
+        # print "*"*80
+        # print sql
+        # print "*"*80 
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
@@ -4667,7 +4670,7 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
             sql='''
                 UPDATE assignassessmentinfo SET totalactualmarks='%s'
                 WHERE assessmentid='%s'
-            '''%(int(result[0]),int(pk))
+            '''%(int(result[0]),int(aaidata.get('assessmentid')))
             # print "*"*80
             # print sql
             # print "*"*80 
@@ -4683,6 +4686,9 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
                     DELETE FROM assignassessmentqainfo 
                     WHERE assignassessmentid='%s'
                     """ % (int(pk))
+                # print "*"*80
+                # print sql
+                # print "*"*80 
                 cursor = connection.cursor()
                 cursor.execute(sql)
             #logger.error("Pass 2c")
@@ -4694,14 +4700,14 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
 
         # logger.error("Pass 3")
         for k, v in dict(aaidata.get('aqaidanswer')).items():
-            logger.error("Pass 4")
+            # logger.error("Pass 4")
             #print 'debug1'dd
             sql= '''
             SELECT actualmark,
                 answer
             FROM assessmentqa
             WHERE id = '%s'           
-            '''%(int(k))
+            '''%(int(k)) 
             cursor = connection.cursor()
             cursor.execute(sql)
             result =  cursor.fetchone()
@@ -4734,14 +4740,19 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
             FROM assignassessmentqainfo 
             WHERE assessmentid = '%s'           
             GROUP BY assessmentid
-            '''%(int(pk))
+            '''%(int(aaidata.get('assessmentid')))
+
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
         sql='''
         UPDATE assignassessmentinfo SET totalmarks='%s'
         WHERE assessmentid='%s'
-        '''%(int(result[0]),int(pk))
+        AND studentid='%s'
+        '''%(int(result[0]),int(aaidata.get('assessmentid')),request.user.username)
+        # print "*"*80
+        # print sql
+        # print "*"*80
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
@@ -4809,11 +4820,11 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
         INNER JOIN assessmentqa aqa on aqa.assessmentid = aai.assessmentid 
         LEFT JOIN assignassessmentqainfo aaqai on aaqai.assessmentqaid = aqa.id
         WHERE aai.studentid='%s' 
-        AND aai.assessmentid='%s'
+        AND aai.assignedid='%s'
         GROUP BY aqa.id, aai.assigneddate
         ORDER BY aai.assignedid DESC''' % (request.user.username, pk)
 
-        #print sql
+        # print sql
 
         cursor = connection.cursor()
         cursor.execute(sql)

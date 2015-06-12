@@ -151,7 +151,7 @@
            
             if (!data[i].issaved && !data[i].isanswered) {
                 var t = [];
-                t.DT_RowId = "var_"+data[i].assessmentid+"_"+data[i].type;
+                t.DT_RowId = "var_"+data[i].id+"_"+data[i].type+"_"+data[i].assessmentid;
                 t.slno=++count_new;
                 t.title=data[i].title;
                 t.date=TTS.utils.datetimeConvDate(data[i].createddate);
@@ -160,7 +160,7 @@
             }
             if (data[i].issaved && !data[i].isanswered) {
                 var t = [];
-                t.DT_RowId = "var_"+data[i].assessmentid+"_"+data[i].type;
+                t.DT_RowId = "var_"+data[i].id+"_"+data[i].type+"_"+data[i].assessmentid;
                 t.slno=++count_saved;
                 t.title=data[i].title;
                 t.date=TTS.utils.datetimeConvDate(data[i].createddate);
@@ -169,7 +169,7 @@
             }
             if (data[i].isanswered) {
                 var t = [];
-                t.DT_RowId = "vaa_"+data[i].assessmentid+"_"+data[i].type;
+                t.DT_RowId = "vaa_"+data[i].id+"_"+data[i].type+"_"+data[i].assessmentid;
                 t.slno=++count_answered;
                 t.title=data[i].title;
                 t.date=TTS.utils.datetimeConvDate(data[i].answereddate);
@@ -213,21 +213,21 @@ $(document).ready(function(){
         var x = this.id.split("_");
         if(x[0] == 'var') {
             if(x[2] =='Open ended') {
-                window.location = 'viewassignopenended?assignedid='+x[1];
+                window.location = 'viewassignopenended?assignedid='+x[1]+'&assessmentid='+x[3];
             } else if(x[2] =='Fill in the blank') {
-                window.location = 'viewassignopenended?assignedid='+x[1];
+                window.location = 'viewassignopenended?assignedid='+x[1]+'&assessmentid='+x[3];
             } else{
-                window.location = 'viewassignassessment?assignedid='+x[1];
+                window.location = 'viewassignassessment?assignedid='+x[1]+'&assessmentid='+x[3];
             }
         }
         
         if(x[0] == 'vaa') {
             if(x[2] =='Open ended') {
-                window.location = 'viewopenendedanswer?assignedid='+x[1];
+                window.location = 'viewopenendedanswer?assignedid='+x[1]+'&assessmentid='+x[3];
             }else if(x[2] =='Fill in the blank') {
-                window.location = 'viewopenendedanswer?assignedid='+x[1];
+                window.location = 'viewopenendedanswer?assignedid='+x[1]+'&assessmentid='+x[3];
             }else {
-                window.location = 'viewassessmentanswer?assignedid='+x[1];
+                window.location = 'viewassessmentanswer?assignedid='+x[1]+'&assessmentid='+x[3];
             }
         }
 
