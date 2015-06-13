@@ -130,6 +130,7 @@ TTS.forms.ressave = function(savesend){
     var aqaid = '';
     var answer = '';
     assignedid = TTS.utils.getUrlParameter('assignedid');
+    assessmentid = TTS.utils.getUrlParameter('assessmentid');
 
     $('.question').each(function(id,y) {
         aqaid  = $(this).prop("id");
@@ -156,7 +157,7 @@ TTS.forms.ressave = function(savesend){
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
-        url:"/api/admin/studentassessmentinfo/"+assignedid+"/",
+        url:"/api/admin/studentassessmentinfo/"+assignedid+"/?assessmentid="+assessmentid,
         type:"PUT",
         data:JSON.stringify(data)
     }).done(function(data){

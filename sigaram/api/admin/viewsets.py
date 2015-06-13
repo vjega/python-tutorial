@@ -4305,7 +4305,7 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
     serializer_class = adminserializers.AssignassessmentinfoSerializer
 
     def update(self, request, pk=None):
-        data = {k:v[0] for k, v in dict(request.DATA).items()}
+        # data = {k:v[0] for k, v in dict(request.DATA).items()}
         aai = models.Assignassessmentinfo.objects.get(pk=pk)
         aaidata =  json.loads(request.DATA.keys()[0])
         
@@ -4318,14 +4318,54 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
         aai.answereddate = time.strftime('%Y-%m-%d %H:%M:%S')
         aai.save()
 
-        if aaidata.get('alreadysaved'):
-            sql = """
-                DELETE FROM assignassessmentqainfo 
+        sql= '''
+            SELECT SUM(actualmark) AS actualmark,
+                answer
+            FROM assessmentqa
+            WHERE assessmentid = '%s' 
+            GROUP BY assessmentid          
+        '''%(int(aaidata.get('assessmentid')))
+        # print "*"*80
+        # print sql
+        # print "*"*80 
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result =  cursor.fetchone()
+        # print "*"*80
+        # print result
+        # print "*"*80    
+        # logger.error("Pass 2")
+        # if not result[0]:
+        #     result[0] = 0
+        try:
+            sql='''
+                UPDATE assignassessmentinfo SET totalactualmarks='%s'
                 WHERE assessmentid='%s'
-                """ % (int(pk))
-
+            '''%(int(result[0]),int(aaidata.get('assessmentid')))
+            # print "*"*80
+            # print sql
+            # print "*"*80 
             cursor = connection.cursor()
             cursor.execute(sql)
+            result =  cursor.fetchone()
+        except Exception as e:
+            #logger.error("Pass 2a")
+            logger.error(e)
+        try:
+            if aaidata.get('alreadysaved'):
+                sql = """
+                    DELETE FROM assignassessmentqainfo 
+                    WHERE assignassessmentid='%s'
+                    """ % (int(pk))
+                # print "*"*80
+                # print sql
+                # print "*"*80 
+                cursor = connection.cursor()
+                cursor.execute(sql)
+            #logger.error("Pass 2c")
+        except Exception as e:
+            print e
+        
         sql=''
         result=''
         for k, v in dict(aaidata.get('aqaidanswer')).items():
@@ -4334,7 +4374,7 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
                 answer
             FROM assessmentqa
             WHERE id = '%s'           
-            '''%(int(k))
+            '''%(int(k)) 
             cursor = connection.cursor()
             cursor.execute(sql)
             result =  cursor.fetchone()
@@ -4343,12 +4383,15 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
             aaid.assessmentqaid     = int(k)
             aaid.assessmentid       = int(aaidata.get('assessmentid'))
             aaid.assignassessmentid = int(pk)
-            aaid.answer             = str(v)
-            if result[1]==str(v):
+            aaid.answer             = v
+            if result[1]==unicode(v):
                 aaid.obtainedmark   = int(result[0])
             else:
                 aaid.obtainedmark   = 0
-            aaid.save()
+            try:
+                aaid.save()
+            except Exception as e:
+                logger.error(e)
 
         sql = '''
         SELECT SUM(aaqi.obtainedmark) AS totalobtainedmark,
@@ -4358,7 +4401,7 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
         WHERE aaqi.assignassessmentid = '%s'
         GROUP BY aaqi.assignassessmentid 
         '''%(int(pk))
-       # print sql;
+        print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
@@ -4731,9 +4774,9 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
                 aaid.save()
             except Exception as e:
                 logger.error(e)
-        cursor = connection.cursor()
-        cursor.execute(sql)
-        result =  cursor.fetchone()
+        # cursor = connection.cursor()
+        # cursor.execute(sql)
+        # result =  cursor.fetchone()
         sql= '''
             SELECT sum(obtainedmark) AS obtainedmark
             FROM assignassessmentqainfo 
