@@ -1475,14 +1475,19 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         # ORDER BY assigneddate DESC''' % (request.user.username, datecond)
         # print sql;
         sql ='''
-        SELECT id,resourceid,resourcetitle,createddate,resourcetype,thumbnailurl,studentid,isanswered,issaved
+        SELECT id,resourceid,resourcetitle,createddate,resourcetype,thumbnailurl,
+                documenturl,imageurl,audiourl,videourl,studentid,isanswered,issaved
         FROM
         ( SELECT assignedid AS id,
                        ri.resourceid,
                        ri.resourcetitle,
                        date(ari.assigneddate) as createddate,
                        resourcetype,
-                       thumbnailurl,
+                       ri.thumbnailurl,
+                       ri.documenturl,
+                       ri.imageurl,
+                       ri.audiourl,
+                       ri.videourl,
                        ari.studentid,
                        ari.isanswered,
                        ari.issaved
@@ -1497,7 +1502,7 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         GROUP BY resourceid,createddate
         ORDER BY createddate DESC
         '''% (request.user.username, datecond)
-        #print sql;
+        # print sql;
         #ORDER BY assigneddate DESC''' % (loginname_to_userid('Student', 'T0733732E'), datecond)
         cursor = connection.cursor()
         

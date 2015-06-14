@@ -60,7 +60,9 @@
                     <h3>{% trans "Title" %}:</h3>
                 </div><br />
                 <div id="resource-title"></div><br />
-                <div id="view-resource"></div>
+                <div id="view-resource">
+                    <a href="#" id="view-resource">{% trans 'View' %}</a>
+                </div>
                 </table>
             </div>
             <!-- <div class="row">
@@ -100,7 +102,22 @@ TTS.forms = TTS.forms || {}
 
 TTS.forms.renderassignedresourceinfo = function(data){
     $("#resource-title").html(data.resourcetitle);
-    $("#view-resource").html("<a href='#' onclick=\"TTS.forms.openwindow('"+data.videourl+"');\" >{% trans 'View' %}</a>");
+    // $("#view-resource").html("<a href='#' onclick=\"TTS.forms.openwindow('"+data.videourl+"');\" >{% trans 'View' %}</a>");
+    $("#view-resource").click(function(){
+        if (data.resourcetype == "video") {
+            window.open("/static/"+data.videourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
+        } 
+        if (data.resourcetype == "audio") {
+            window.open("/static/"+data.audiourl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
+        }
+        if (data.resourcetype === "text") {
+            window.open("/static/"+data.documenturl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
+        }
+
+        if (data.resourcetype === "image") {
+            window.open("/static/"+data.imageurl, "wdwSearch" ,top=100,left=100,width=1024,height=768,scrollbars=1,menu=0)
+        }
+    });
 };
 
 TTS.forms.openwindow = function(videourl) {
