@@ -101,6 +101,7 @@ TTS.forms = TTS.forms || {}
 
 
 TTS.forms.renderassignedresourceinfo = function(data){
+    // console.log(data.documenturl)
     $("#resource-title").html(data.resourcetitle);
     // $("#view-resource").html("<a href='#' onclick=\"TTS.forms.openwindow('"+data.videourl+"');\" >{% trans 'View' %}</a>");
     $("#view-resource").click(function(){
@@ -128,7 +129,7 @@ $(document).ready(function(){
     var resourceid = TTS.utils.getUrlParameter('resourceid');
     var timestamp = TTS.utils.getUrlParameter('dt');
     // var datetime = TTS.utils.timestamp_to_datetime(timestamp);
-    console.log(timestamp);
+    // console.log(timestamp);
     $.ajax({
         "url":"/api/admin/teacherassignedresource/"+resourceid+"/?format=json",
         "type":"GET"

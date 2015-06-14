@@ -1475,8 +1475,8 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
         # ORDER BY assigneddate DESC''' % (request.user.username, datecond)
         # print sql;
         sql ='''
-        SELECT id,resourceid,resourcetitle,createddate,resourcetype,thumbnailurl,
-                documenturl,imageurl,audiourl,videourl,studentid,isanswered,issaved
+        SELECT id,resourceid,resourcetitle,createddate,resourcetype,thumbnailurl,documenturl,
+               imageurl,audiourl,videourl,studentid,isanswered,issaved
         FROM
         ( SELECT assignedid AS id,
                        ri.resourceid,
@@ -1522,8 +1522,13 @@ class TeacherStudentAssignResource(viewsets.ModelViewSet):
                ri.videourl,
                resourcetitle,
                date(assigneddate) as createddate,
-               resourcetype,
-               thumbnailurl,
+               ri.resourcetype,
+               ri.thumbnailurl,
+               ri.thumbnailurl,
+               ri.documenturl,
+               ri.imageurl,
+               ri.audiourl,
+               ri.videourl,
                ari.answertext,
                ari.studentid,
                ari.isanswered,
