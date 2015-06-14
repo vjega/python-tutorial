@@ -38,10 +38,16 @@
 <link href="{%static "css/plugins/dataTables.bootstrap.css" %}" rel="stylesheet">
 <link href="{%static "bower_components/bootstrap3-dialog/dist/css/bootstrap-dialog.css" %}" rel="stylesheet">
 <link href="{%static "ajaxuploader/css/fileuploader.css" %}" rel="stylesheet">
-
+<link rel="stylesheet" href="{%static "css/color.css" %}">
+<link rel="stylesheet" href="{%static "css/base.css"%}">
+<link rel="stylesheet" href="{%static "css/energyblue.css"%}">
 <style>
     #addrec:hover, .tts-delete:hover{
         cursor: pointer;
+    }
+    #result {
+        padding: 10px;
+        width : 200px;
     }
 </style>
 {% endblock morecss %}
@@ -53,12 +59,15 @@
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
 <script src="{% static "js/tts.utils.js" %}"></script>
+<script src="{% static "js/jqx-all.js" %}"></script>
 {% endblock morescript %}
 
 {% block scriptcontent %}
 <script id="admin-form" type="text/x-jsrender">
     <div id="file-uploader">File Uploader Comes Here...</div> 
     {% crispy adminform %}
+    <div id="colorPicker"></div>
+</div>
 </script>
 
 <script>
@@ -67,6 +76,9 @@ TTS.forms = TTS.forms || {};
 
 /* ADMIN Crud Starts Here*/
 TTS.forms.addadmin = function(form, data) {
+    // data['color'] = $(".jqx-input").val();
+    // console.log(data);
+    // return true;
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -116,13 +128,21 @@ TTS.forms.showadminform = function() {
         message: $($('#admin-form').render()),
         onshown: function(){
             TTS.forms.upload();
+            $("#colorPicker").jqxColorPicker({
+                width: 100,
+                height: 150,
+                colorMode: 'hue'
+            });
+
         },
         buttons: [{
             label: '{% trans "Save" %}',
             cssClass: 'btn-primary',
             action: function(dialogItself){
                 var data = TTS.utils.serilaizeJson("#add-admin");
-                //console.log(data);
+                data = JSON.parse(data);
+                // data['color'] = "green";
+                data['color'] = ("#"+$(".jqx-input").val());
                 $("#add-admin").validate({
                     rules: {
                         username: {
@@ -152,7 +172,7 @@ TTS.forms.showadminform = function() {
                 if(!$("#add-admin").valid()){
                   return false;  
                 }
-                TTS.forms.addadmin(dialogItself, data); 
+                TTS.forms.addadmin(dialogItself, JSON.stringify(data)); 
             }
             },{
             label: '{% trans "Close" %}',

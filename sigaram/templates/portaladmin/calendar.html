@@ -94,7 +94,6 @@ TTS.forms.showcalform = function(start, end, allDay) {
 TTS.forms.saveCal = function () {
     var data = TTS.utils.serilaizeJson("#cal-event");
     data = JSON.parse(data);
-    data['color'] = "#337ab7";
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -108,7 +107,6 @@ TTS.forms.saveCal = function () {
             title: data.title,
             start: data.start,
             end: data.end,
-            color:data.color,
             alldayevents:$("#id_alldayevents").is(':checked')
         },
         true // make the event "stick"
@@ -140,7 +138,6 @@ TTS.forms.updatecalform = function(calEvent, jsEvent, view) {
                 action: function(dialogItself){
                     var data = TTS.utils.serilaizeJson("#cal-event");
                     data = JSON.parse(data);
-                    data['color'] = "#f0ad4e";
                     $.ajax({
                         headers : {
                         'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -181,8 +178,7 @@ TTS.forms.updatecalevent = function (event,type){
     var data = {
         "title" : event.title,
         "start" : event.start.format("YYYY-MM-DD HH:mm"),
-        "end"   : end_date,
-        "color" : event.color
+        "end"   : end_date
     }
     $.ajax({
         headers : {

@@ -338,18 +338,18 @@ TTS.forms.showstickyform = function() {
         message: $($('#sticky-form').render() +  $("#sticky-text").text()), 
         onshown: function(){
             $('.summernote').summernote({
-          toolbar: [
-            ['edit',['undo','redo']],
-            ['style', ['style']], // no style button
-            ['style', ['bold', 'italic', 'underline', 'clear']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['height', ['height']],
-            //['insert', ['picture', 'link']], // no insert buttons
-            //['table', ['table']], // no table button
-            //['help', ['help']] //no help button
-          ]
-    });
+                  toolbar: [
+                    ['edit',['undo','redo']],
+                    ['style', ['style']], // no style button
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    //['insert', ['picture', 'link']], // no insert buttons
+                    //['table', ['table']], // no table button
+                    //['help', ['help']] //no help button
+                  ]
+            });
             for (var i in colors) {
                $("#color-swatch").append("<div class='color "+colors[i]+"' name='"+colors[i]+"' ></div>");
             }

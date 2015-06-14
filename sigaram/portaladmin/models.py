@@ -129,6 +129,7 @@ class Admininfo(models.Model):
     isdelete = models.IntegerField()
     createdby = models.BigIntegerField()
     createddate = models.DateTimeField()
+    color = models.CharField(max_length=100)
     
     class Meta:
         managed = False

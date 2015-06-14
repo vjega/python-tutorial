@@ -77,6 +77,7 @@ class AdmininfoViewSet(viewsets.ModelViewSet):
         admin.isdelete = 0
         admin.createdby = request.user.id
         admin.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
+        admin.color = admindata.get('color')
         admin.save()
 
         aldata = {}
@@ -1120,6 +1121,14 @@ class CalendarViewSet(viewsets.ModelViewSet):
     def create(self, request):
         cal = models.Calendardetails()
         data = json.loads(dict(request.DATA).keys()[0])
+        sql ='''
+        SELECT color 
+        FROM admininfo
+        WHERE username='%s'
+        '''%(request.user.username)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result =  cursor.fetchone()
         #return Response({})
         #data = {k:v[0] for k,v in dict(request.DATA).items()}
         startdt = data.get('start')+":00"
@@ -1128,7 +1137,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title           = data.get('title')
         cal.start           = startdt
         cal.end             = enddt
-        cal.color           = data.get('color')
+        cal.color           = result[0]
         cal.allday          = data.get('alldayevents')
         cal.eventcreatedby  = request.user.username
         cal.eventeditedby   = request.user.username
@@ -1149,12 +1158,21 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal = models.Calendardetails.objects.get(pk=pk)  
         data = json.loads(dict(request.DATA).keys()[0])
         #data = {k:v[0] for k,v in dict(request.DATA).items()}
+        sql ='''
+        SELECT color 
+        FROM admininfo
+        WHERE username='%s'
+        '''%(request.user.username)
+        cursor = connection.cursor()
+        cursor.execute(sql)
+        result =  cursor.fetchone()
+
         startdt             = data.get('start')+":00"
         enddt               = data.get('end')+":00"
         cal.title           = data.get('title')
         cal.start           = startdt
         cal.end             = enddt
-        cal.color           = data.get('color')
+        cal.color           = result[0]
         cal.allday          = data.get('alldayevents')
         cal.eventcreatedby  = request.user.username
         cal.eventeditedby   = request.user.username
