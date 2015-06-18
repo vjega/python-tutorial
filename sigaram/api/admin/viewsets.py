@@ -3754,7 +3754,7 @@ class AssessmentInfoViewSet(viewsets.ModelViewSet):
         assessment = models.Assessmentinfo()
         cdata =  json.loads(request.DATA.keys()[0])
         assessment.title        = summer_decode(cdata.get('title'))
-        #assessment.instruction  = summer_decode(cdata.get('instruction'))
+        assessment.instruction  = summer_decode(cdata.get('instruction'))
         assessment.schoolid     = request.session.get('schoolid')
         assessment.classid      = request.session.get('classid')
         assessment.type         = str(cdata.get('type'))
@@ -4508,7 +4508,7 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
         GROUP BY aqa.id, aai.assigneddate
         ORDER BY aai.assignedid DESC''' % (request.user.username, pk)
 
-        #print sql
+        # print sql
 
         cursor = connection.cursor()
         cursor.execute(sql)
