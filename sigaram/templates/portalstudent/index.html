@@ -84,7 +84,7 @@
                 <div class="list-group">
                     {% autoescape off %}
                     {% for announce in announcement %}
-                        <a class="list-group-item">
+                        <a href="viewbulletinboard?id={{body.bulletinboardid}}" class="list-group-item">
                             <i class="fa fa-bullhorn fa-fw"></i> 
                             <span>{{announce.messagetitle}}</span>
                             <span class="pull-right text-muted small"><em>{{announce.posteddate}}</em>

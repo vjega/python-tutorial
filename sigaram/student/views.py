@@ -10,7 +10,8 @@ from student.forms import (StudentWorkForm,
                            StickyForm,
                            StickyCommentForm,
                            TopicsForm,
-                           StickyinfoForm)
+                           StickyinfoForm,
+                           MindmaplistForm)
 
 
 bulletinboard_uploader = AjaxFileUploader(UPLOAD_DIR='static/bulletinboard')
@@ -502,3 +503,13 @@ def viewstudentwrittenwork(request):
 @switchlanguage
 def viewstudentassessmentwork(request):
     return render(request, 'portalstudent/viewstudentassessmentwork.html')
+
+@login_required
+@switchlanguage
+def mindmaplist(request):
+    return render(request, 'portaladmin/mindmaplist.html',{'form':MindmaplistForm.MindmaplistForm()})
+
+@login_required
+@switchlanguage
+def richmindmap(request):
+    return render(request, 'portalstudent/richmindmap.html')  

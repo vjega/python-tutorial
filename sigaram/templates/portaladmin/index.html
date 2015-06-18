@@ -109,10 +109,9 @@
             <!-- /.panel-heading -->
             <div class="panel-body">
                 <div class="list-group">
-          
                 {% autoescape off %}
                 {% for body in announcement.body %}
-                    <a class="list-group-item">
+                    <a href="viewbulletinboard?id={{body.bulletinboardid}}" class="list-group-item">
                         <i class="fa fa-bullhorn fa-fw"></i> 
                         <span>{{body.messagetitle}}</span>
                         <span class="pull-right text-muted small"><em>{{body.posteddate}}</em>
@@ -239,6 +238,9 @@ $(document).ready(function(){
             var folder_id = $(this).attr("name");
             TTS.forms.deletenewfolder(folder_id)
         }
+    });
+    $(".announcement_head").click(function(){
+        $(this).css("background-color","yellow");
     });
 
 });

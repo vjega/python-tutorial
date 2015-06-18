@@ -154,7 +154,7 @@ TTS.forms.bulletinboardinfo = function(){
 
 TTS.forms.renderadmin = function(data){
     var headers = [
-            { "title": "{% trans "Select" %}",
+            { "title": "<input type='checkbox' id='selectall'>{% trans "Select" %}",
               "class": "text-center",
               "data":"id"  
             },
@@ -311,6 +311,26 @@ $(document).ready(function(){
             'csrf_name': 'csrfmiddlewaretoken',
             'csrf_xname': 'X-CSRFToken',
         },
+    });
+    $("body").on("click", "#selectall", function () {
+        if(this.checked) { 
+            $('.checkresourceid').each(function() { 
+                this.checked = true;               
+            });
+        }else{
+            $('.checkresourceid').each(function() { 
+                this.checked = false;                       
+            });        
+        }
+    });
+    // if all checkbox are selected, check the selectall checkbox
+    // and viceversa
+    $("body").on("click", ".checkresourceid",function(){
+        if($(".checkresourceid").length == $(".checkresourceid:checked").length) {
+            $("#selectall").attr("checked", "checked");
+        } else {
+            $("#selectall").removeAttr("checked");
+        }
     });
     
 });

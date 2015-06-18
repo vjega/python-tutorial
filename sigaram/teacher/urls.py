@@ -141,4 +141,6 @@ urlpatterns = patterns('teacher.views',
     url(r'^activitywrittenwork$',       'activitywrittenwork', 
                                                          name="activitywrittenwork"), 
     url(r'^statistics-writtenwork$',     'statisticswrittenwork',   name='statisticswrittenwork'),
+    url(r'^mindmaplist$',               'mindmaplist',  name='mindmapnew'),
+    url(r'^richmindmap$', 'richmindmap', name="richmindmap"),
 )

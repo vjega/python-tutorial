@@ -94,4 +94,6 @@ urlpatterns = patterns('student.views',
                                                         name='viewstudentwrittenwork'),
     url(r'^viewstudentassessmentwork$',            'viewstudentassessmentwork',             
                                                         name='viewstudentassessmentwork'),
+    url(r'^mindmaplist$',               'mindmaplist',  name='mindmapnew'),
+    url(r'^richmindmap$', 'richmindmap', name="richmindmap"),
 )

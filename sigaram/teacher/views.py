@@ -17,7 +17,8 @@ from teacher.forms import ( RubricsForm,
                             NewtopicForm,
                             MyprofileForm,
                             MyresourcelistForm,
-                            CalendarForm
+                            CalendarForm,
+                            MindmaplistForm
                             ) 
 
 from ajaxuploader.views import AjaxFileUploader  
@@ -772,4 +773,14 @@ def activitywrittenwork(request):
 @switchlanguage
 def statisticswrittenwork(request):
     schools = models.Schoolinfo.objects.all().order_by('schoolname')
-    return render(request, 'portaladmin/statisticswrittenwork.html', {'schools':schools})
+    return render(request, 'portalteacher/statisticswrittenwork.html', {'schools':schools})
+
+@login_required
+@switchlanguage
+def mindmaplist(request):
+    return render(request, 'portaladmin/mindmaplist.html',{'form':MindmaplistForm.MindmaplistForm()})
+
+@login_required
+@switchlanguage
+def richmindmap(request):
+    return render(request, 'portalteacher/richmindmap.html')  
