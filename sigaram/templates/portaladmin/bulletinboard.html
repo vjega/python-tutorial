@@ -154,7 +154,7 @@ TTS.forms.bulletinboardinfo = function(){
 
 TTS.forms.renderadmin = function(data){
     var headers = [
-            { "title": "<input type='checkbox' id='selectall' checked>{% trans "Select" %}",
+            { "title": "<input type='checkbox' id='selectall'>{% trans "Select" %}",
               "class": "text-center",
               "data":"id"  
             },
@@ -166,7 +166,7 @@ TTS.forms.renderadmin = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].username+"' value='"+data[i].adminid+"' checked/>";
+        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].username+"' value='"+data[i].adminid+"' />";
         t.name = data[i].firstname + " "+data[i].lastname;
         dataset.push(t);
     }
@@ -200,7 +200,7 @@ TTS.forms.renderteacher = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].username+"' value='"+data[i].username+"' checked/>";
+        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].username+"' value='"+data[i].username+"' />";
         t.name = data[i].firstname + " "+data[i].lastname;
         dataset.push(t);
     }
@@ -224,7 +224,7 @@ TTS.forms.renderadminschool = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].classid+"' value='"+data[i].classid+"' checked/>";
+        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].classid+"' value='"+data[i].classid+"' />";
         t.name = data[i].schoolname + " -"+data[i].shortname;
         dataset.push(t);
     }
@@ -325,13 +325,6 @@ $(document).ready(function(){
     });
     // if all checkbox are selected, check the selectall checkbox
     // and viceversa
-    $("body").on("click", ".checkresourceid",function(){
-        if($(".checkresourceid").length == $(".checkresourceid:checked").length) {
-            $("#selectall").attr("checked", "checked");
-        } else {
-            $("#selectall").removeAttr("checked");
-        }
-    });
     
 });
 </script>
