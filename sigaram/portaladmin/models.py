@@ -395,19 +395,43 @@ class Bulletinboardinfo(models.Model):
                         """%(req.session.get('stu_schoolid'), 
                              req.session.get('stu_classid'))
         sql = """
-        SELECT  bbi.bulletinboardid,
-                bbi.messagetitle,
-                bbi.message,
-                %s,
-                DATE(bbi.posteddate ) AS posteddate
-        FROM bulletinboardinfo bbi
-        INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
-        %s
-        %s
-        GROUP BY bbi.bulletinboardid
-        ORDER by bbi.bulletinboardid DESC
-        LIMIT 10"""% (fieldcond,joincond,wherecond)
-       # print sql;
+        SELECT  bulletinboardid,
+                messagetitle,
+                message,
+                selectall,
+                Postedby,
+                posteddate
+        FROM(
+            (SELECT  bbi.bulletinboardid,
+                    bbi.messagetitle,
+                    bbi.message,
+                    bmi.selectall,
+                    %s,
+                    DATE(bbi.posteddate ) AS posteddate
+            FROM bulletinboardinfo bbi
+            INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
+            %s
+            %s
+            GROUP BY bbi.bulletinboardid
+            ORDER by bbi.bulletinboardid DESC
+            LIMIT 10
+            )UNION(
+                SELECT  bbi.bulletinboardid,
+                    bbi.messagetitle,
+                    bbi.message,
+                    bmi.selectall,
+                    %s,
+                    DATE(bbi.posteddate ) AS posteddate
+                FROM bulletinboardinfo bbi
+                INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
+                %s
+                GROUP BY bbi.bulletinboardid
+                ORDER by bbi.bulletinboardid DESC
+                LIMIT 10
+            )
+        )AS TEMP
+        """% (fieldcond,joincond,wherecond,fieldcond,joincond)
+        # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         x = dictfetchall(cursor)
@@ -421,6 +445,7 @@ class Bulletinmappinginfo(models.Model):
     schoolid = models.BigIntegerField()
     classid = models.BigIntegerField()
     userid = models.CharField(max_length=10)
+    selectall = models.CharField(max_length=40)
 
     class Meta:
         managed = False

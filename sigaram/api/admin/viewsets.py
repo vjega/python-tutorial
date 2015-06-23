@@ -1654,6 +1654,13 @@ class StickynotesResource(viewsets.ModelViewSet):
         stickynotes.createdby = request.user.id
         stickynotes.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         stickynotes.save()
+        
+        aldata = {}
+        aldata['pagename']       = 'sticky-notes'
+        aldata['operation']      = 'Insert'
+        aldata['stringsentence'] = 'New stickynotes Created'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
 
     def update(self, request, pk=None):
@@ -1670,6 +1677,13 @@ class StickynotesResource(viewsets.ModelViewSet):
         stickynotes.createdby = request.user.id
         stickynotes.createddate = time.strftime('%Y-%m-%d %H:%M:%S')
         stickynotes.save()
+
+        aldata = {}
+        aldata['pagename']       = 'sticky-notes-list'
+        aldata['operation']      = 'Update'
+        aldata['stringsentence'] = 'New stickynotes Updated'
+        add_activitylog(request, aldata)
+
         return Response(request.DATA)
 
     def destroy(self, request, pk):
@@ -1952,6 +1966,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
             bmi.bulletinboardid = bbiid
             bmi.viewtype = 0    
             bmi.postedby = request.user.id
+            # bmi.selectall = ''
             bmi.userid = request.user.username
             if data.get('cattype') == 'schools':
                 bmi.schoolid = data.get('schoolid')
@@ -1966,6 +1981,7 @@ class Bulletinboardlist(viewsets.ModelViewSet):
             bmi.bulletinboardid = bbiid
             bmi.viewtype = 0    
             bmi.postedby = request.user.id
+            # bmi.selectall = ''
             if data.get('cattype') == 'schools':
                 bmi.schoolid = data.get('schoolid')
                 bmi.classid = rl
@@ -1975,7 +1991,18 @@ class Bulletinboardlist(viewsets.ModelViewSet):
                 bmi.classid = 0
                 bmi.userid = rl
             bmi.save()
-        
+            
+        if data.get('selectall') == 'True':
+            bmi = models.Bulletinmappinginfo()
+            bmi.bulletinboardid = bbiid
+            bmi.viewtype = 0    
+            bmi.selectall = data.get('cattype')    
+            bmi.postedby = request.user.id
+            bmi.userid = request.user.username
+            bmi.schoolid = 0
+            bmi.classid = 0
+            bmi.save()
+
         aldata = {}
         aldata['pagename']       = 'bulletinboard'
         aldata['operation']      = 'Insert'
@@ -2184,6 +2211,18 @@ class Bulletinmappinginfo(viewsets.ModelViewSet):
                 bulletmapping.save()
 
         return Response(request.DATA)
+        
+    def destroy(self, request, pk=None):
+        models.Bulletinmappinginfo.objects.get(pk=pk).delete()  
+
+        aldata = {}
+        aldata['pagename']       = 'bulletinboard'
+        aldata['operation']      = 'Delete'
+        aldata['stringsentence'] = 'Deleted a Announcement'
+        add_activitylog(request, aldata)
+
+
+        return Response('"msg":"delete"')
 
 class EditAnswerViewSet(viewsets.ModelViewSet):
     queryset = models.Editingtext.objects.all()
@@ -2564,7 +2603,7 @@ class StickyinfoViewSet(viewsets.ModelViewSet):
         aldata = {}
         aldata['pagename']       = 'sticky-notes-list'
         aldata['operation']      = 'Insert'
-        aldata['stringsentence'] = 'New stickynotes Created'
+        aldata['stringsentence'] = 'New stickynotes Title Created'
         add_activitylog(request, aldata)
 
         return Response(request.DATA)
@@ -4440,9 +4479,9 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
             
 
         aldata = {}
-        aldata['pagename']       = 'viewassignresource'
+        aldata['pagename']       = 'viewassignassessment'
         aldata['operation']      = 'Insert'
-        aldata['stringsentence'] = 'Answered For Resource'
+        aldata['stringsentence'] = 'Answered For Assessment'
         add_activitylog(request, aldata)
 
         return Response({'msg':True})
@@ -4828,9 +4867,9 @@ class studentopenendedInfoViewSet(viewsets.ModelViewSet):
         result =  cursor.fetchone()
            
         aldata = {}
-        aldata['pagename']       = 'viewassignresource'
+        aldata['pagename']       = 'viewassignopenended'
         aldata['operation']      = 'Insert'
-        aldata['stringsentence'] = 'Answered For Resource'
+        aldata['stringsentence'] = 'Answered For Assessment'
         add_activitylog(request, aldata)
 
         return Response({'msg':True})
@@ -4916,7 +4955,6 @@ class teacherAssessmentInfoViewSet(viewsets.ModelViewSet):
         data = {k:v[0] for k, v in dict(request.DATA).items()}
         # aai = models.Assignassessmentinfo.objects.get(pk=pk)
         aaidata =  json.loads(request.DATA.keys()[0])
-
         for k, v in dict(aaidata.get('obtainmark')).items():
             aai = models.AssignAssessmentQAInfo.objects.get(pk=k)
             aai.obtainedmark     = int(v)
@@ -4936,7 +4974,8 @@ class teacherAssessmentInfoViewSet(viewsets.ModelViewSet):
         sql ='''
         UPDATE assignassessmentinfo SET totalmarks='%s',totalactualmarks='%s'
         WHERE assessmentid = '%s'
-        '''%(int(result[0]),int(result[1]),int(pk))
+        AND studentid='%s'
+        '''%(int(result[0]),int(result[1]),int(pk),aaidata.get('studentid'))
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
@@ -4985,3 +5024,36 @@ class activitywrittenworkInfoViewSet(viewsets.ModelViewSet):
                 for row in cursor.fetchall()
             ]
         return Response(result)
+
+
+class BulletinboardselectallInfoViewSet(viewsets.ModelViewSet):
+    queryset = models.Classschoolmappinginfo.objects.all()
+    serializer_class = adminserializers.BulletinboardSerializer
+    
+    def retrieve(self, request, pk=None):
+        if  pk !="all": 
+            if pk=="admin" :
+                sql='''
+                SELECT username
+                FROM admininfo
+                '''
+            elif pk=="teacher":
+                sql='''
+                SELECT username
+                FROM teacherinfo
+                '''
+            elif pk=="schools":
+                sql='''
+                SELECT schoolid 
+                FROM schoolinfo 
+                '''
+            cursor = connection.cursor()
+            cursor.execute(sql)
+            desc = cursor.description
+            result =  [
+                    dict(zip([col[0] for col in desc], row))
+                    for row in cursor.fetchall()
+                ]
+            return Response(result)
+        else:
+            return Response('"msg":"update"')

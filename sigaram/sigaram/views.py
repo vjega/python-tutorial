@@ -38,6 +38,7 @@ def user_landing(request):
 
     if group == 'Teacher':
         from portaladmin.models import Teacherinfo
+        # from portaladmin.models import bulletinmappinginfo
         t = Teacherinfo.objects.filter(username=request.user.username)[0]
         request.session['schoolid'] = t.schoolid
         request.session['classid'] =  t.classid

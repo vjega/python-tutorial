@@ -159,7 +159,7 @@ class BulletinboardSerializer(serializers.HyperlinkedModelSerializer):
 class BulletinmappinginfoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Bulletinmappinginfo
-        fields = ('bulletinboardid','viewtype','schoolid','classid','adminid','teacherid',)
+        fields = ('bulletinboardid','userid')
 
 class TopicsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
