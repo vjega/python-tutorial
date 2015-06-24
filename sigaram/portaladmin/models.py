@@ -385,13 +385,13 @@ class Bulletinboardinfo(models.Model):
         elif l == 'Teacher' :
             fieldcond="au.first_name AS postedby"
             joincond="INNER JOIN auth_user au ON au.username = bmi.userid"
-            wherecond = "WHERE bmi.userid = '%s'"%req.user.username
+            wherecond = "WHERE bmi.userid = '%s' OR bmi.selectall='teacher' OR bmi.selectall='all'"%req.user.username
         
         else:
             fieldcond="'' AS postedby"
             joincond=""
             wherecond = """WHERE bmi.schoolid = '%s'
-                           AND bmi.classid = '%s' 
+                           AND bmi.classid = '%s' OR OR bmi.selectall='schools' OR bmi.selectall='all' 
                         """%(req.session.get('stu_schoolid'), 
                              req.session.get('stu_classid'))
         # sql = """
