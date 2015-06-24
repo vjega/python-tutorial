@@ -2213,14 +2213,13 @@ class Bulletinmappinginfo(viewsets.ModelViewSet):
         return Response(request.DATA)
         
     def destroy(self, request, pk=None):
-        models.Bulletinmappinginfo.objects.get(pk=pk).delete()  
-
+        models.Bulletinmappinginfo.objects.get(pk=pk).delete()
+        
         aldata = {}
         aldata['pagename']       = 'bulletinboard'
         aldata['operation']      = 'Delete'
         aldata['stringsentence'] = 'Deleted a Announcement'
         add_activitylog(request, aldata)
-
 
         return Response('"msg":"delete"')
 

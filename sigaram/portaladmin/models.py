@@ -394,44 +394,61 @@ class Bulletinboardinfo(models.Model):
                            AND bmi.classid = '%s' 
                         """%(req.session.get('stu_schoolid'), 
                              req.session.get('stu_classid'))
-        sql = """
-        SELECT  bulletinboardid,
-                messagetitle,
-                message,
-                selectall,
-                Postedby,
-                posteddate
-        FROM(
-            (SELECT  bbi.bulletinboardid,
-                    bbi.messagetitle,
-                    bbi.message,
-                    bmi.selectall,
-                    %s,
-                    DATE(bbi.posteddate ) AS posteddate
-            FROM bulletinboardinfo bbi
-            INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
-            %s
-            %s
-            GROUP BY bbi.bulletinboardid
-            ORDER by bbi.bulletinboardid DESC
-            LIMIT 10
-            )UNION(
-                SELECT  bbi.bulletinboardid,
-                    bbi.messagetitle,
-                    bbi.message,
-                    bmi.selectall,
-                    %s,
-                    DATE(bbi.posteddate ) AS posteddate
-                FROM bulletinboardinfo bbi
-                INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
-                %s
-                GROUP BY bbi.bulletinboardid
-                ORDER by bbi.bulletinboardid DESC
-                LIMIT 10
-            )
-        )AS TEMP
-        """% (fieldcond,joincond,wherecond,fieldcond,joincond)
+        # sql = """
+        # SELECT  bullet
+        #         bulletinboardid,
+        #         messagetitle,
+        #         message,
+        #         selectall,
+        #         Postedby,
+        #         posteddate
+        # FROM(
+        #     (SELECT  bbi.bulletinboardid,
+        #             bbi.messagetitle,
+        #             bbi.message,
+        #             bmi.selectall,
+        #             %s,
+        #             DATE(bbi.posteddate ) AS posteddate
+        #     FROM bulletinboardinfo bbi
+        #     INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
+        #     %s
+        #     %s
+        #     GROUP BY bbi.bulletinboardid
+        #     ORDER by bbi.bulletinboardid DESC
+        #     LIMIT 10
+        #     )UNION(
+        #         SELECT  bbi.bulletinboardid,
+        #             bbi.messagetitle,
+        #             bbi.message,
+        #             bmi.selectall,
+        #             %s,
+        #             DATE(bbi.posteddate ) AS posteddate
+        #         FROM bulletinboardinfo bbi
+        #         INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
+        #         %s
+        #         GROUP BY bbi.bulletinboardid
+        #         ORDER by bbi.bulletinboardid DESC
+        #         LIMIT 10
+        #     )
+        # )AS TEMP
+        # """% (fieldcond,joincond,wherecond,fieldcond,joincond)
         # print sql;
+        sql ='''
+        SELECT  bmi.bulletinmappingid,
+                bbi.bulletinboardid,
+                bbi.messagetitle,
+                bbi.message,
+                bmi.selectall,
+                %s,
+                DATE(bbi.posteddate ) AS posteddate
+        FROM bulletinboardinfo bbi
+        INNER JOIN bulletinmappinginfo bmi ON bbi.bulletinboardid = bmi.bulletinboardid
+        %s
+        %s
+        GROUP BY bbi.bulletinboardid
+        ORDER by bbi.bulletinboardid DESC
+        LIMIT 10
+        '''% (fieldcond,joincond,wherecond)
         cursor = connection.cursor()
         cursor.execute(sql)
         x = dictfetchall(cursor)
