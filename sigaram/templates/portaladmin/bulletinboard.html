@@ -37,6 +37,9 @@
         <span>
     </div>
 </div>
+<div class="row heading col-lg-12">
+    <span>{% trans "Select All" %}&nbsp;&nbsp;<input type='checkbox' value='false' id='select_all'></span>
+</div>
 <!-- <div class="row">
     <div class="col-lg-12">   
         <span>
@@ -152,9 +155,14 @@ TTS.forms.bulletinboardinfo = function(){
                 TTS.forms.renderadminschool(data);
         });
     }else{
-        $(".checkresourceid:checked").each(function(){
-            data.resourcelist.push($(this).prop("id"));
-        });        
+        if($('.checkresourceid').is(':checked')){
+            $(".checkresourceid:checked").each(function(){
+                data.resourcelist.push($(this).prop("id"));
+            });        
+        } else {
+            alert('The users are not selected');
+            return false;
+        }
     }
     $.ajax({
         headers : {
@@ -173,7 +181,7 @@ TTS.forms.bulletinboardinfo = function(){
 
 TTS.forms.renderadmin = function(data){
     var headers = [
-            { "title": "<input type='checkbox' id='selectall' checked>{% trans "Select" %}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type='checkbox' value='false' id='select_all'>{% trans "Select All" %}",
+            { "title": "<input type='checkbox' id='selectall'>{% trans "Select" %}",
               "class": "text-center",
               "data":"id"  
             },
@@ -185,7 +193,7 @@ TTS.forms.renderadmin = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].username+"' value='"+data[i].adminid+"' checked/>";
+        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].username+"' value='"+data[i].adminid+"'/>";
         t.name = data[i].firstname + " "+data[i].lastname;
         dataset.push(t);
     }

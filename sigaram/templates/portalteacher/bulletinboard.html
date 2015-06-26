@@ -17,6 +17,7 @@
                 <option value="admin">Administrator</option>
                 <option value="teacher">Teacher</option>
                 <option value="schools">Schools</option>
+                <option value="all">All</option>
             </select>
         </span>
     </div>
@@ -36,7 +37,19 @@
         <span>
     </div>
 </div>
-<br />
+<div class="row heading col-lg-12">
+    <span>{% trans "Select All" %}&nbsp;&nbsp;<input type='checkbox' value='false' id='select_all'></span>
+</div>
+<!-- <div class="row">
+    <div class="col-lg-12">   
+        <span>
+            <label class="heading">{% trans "Select All" %}</label>
+        </span>
+        <span>
+            <label class="heading"><input type="checkbox"/></label>
+        </span>
+    </div>
+</div><br />-->
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-default">
@@ -130,13 +143,27 @@ TTS.forms.bulletinboardinfo = function(){
     data.message = TTS.utils.summer_encode($("#announcement").code());
     data.cattype = $("#category").val();
     data.schoolid=$('#school_name').val();
+    data.selectall=$('#select_all').val();
     if($("#uploadurl").val()){
         data.attachmenturl = $("#uploadurl").val();
     }
-    $(".checkresourceid:checked").each(function(){
-        data.resourcelist.push($(this).prop("id"));
-    });
-    
+    if($('#select_all').is( ':checked' )) { 
+        $.ajax({
+            "url":"/api/admin/bulletinboardselectall/"+data.cattype+"/",
+            "type":"GET"
+        }).done(function(data){
+                TTS.forms.renderadminschool(data);
+        });
+    }else{
+        if($('.checkresourceid').is(':checked')){
+            $(".checkresourceid:checked").each(function(){
+                data.resourcelist.push($(this).prop("id"));
+            });        
+        } else {
+            alert('The users are not selected');
+            return false;
+        }
+    }
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
@@ -154,7 +181,7 @@ TTS.forms.bulletinboardinfo = function(){
 
 TTS.forms.renderadmin = function(data){
     var headers = [
-            { "title": "{% trans "Select" %}",
+            { "title": "<input type='checkbox' id='selectall'>{% trans "Select" %}",
               "class": "text-center",
               "data":"id"  
             },
@@ -166,7 +193,7 @@ TTS.forms.renderadmin = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].username+"' value='"+data[i].adminid+"' />";
+        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].username+"' value='"+data[i].adminid+"'/>";
         t.name = data[i].firstname + " "+data[i].lastname;
         dataset.push(t);
     }
@@ -200,7 +227,7 @@ TTS.forms.renderteacher = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].username+"' value='"+data[i].username+"' />";
+        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].username+"' value='"+data[i].username+"' checked/>";
         t.name = data[i].firstname + " "+data[i].lastname;
         dataset.push(t);
     }
@@ -224,7 +251,7 @@ TTS.forms.renderadminschool = function(data){
     var count = 0
     for(var i in data){
         var t = [];
-        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].classid+"' value='"+data[i].classid+"' />";
+        t.id = "<input type='checkbox' class='checkresourceid' name='checkresourceid' id='"+data[i].classid+"' value='"+data[i].classid+"' checked/>";
         t.name = data[i].schoolname + " -"+data[i].shortname;
         dataset.push(t);
     }
@@ -292,6 +319,33 @@ $(document).ready(function(){
                 TTS.forms.renderadminschool(data);
         });
     })
+    $("body").on("click", "#selectall", function () {
+        if(this.checked) { 
+            $('.checkresourceid').each(function() { 
+                this.checked = true;               
+            });
+        }else{
+            $('.checkresourceid').each(function() { 
+                this.checked = false;                       
+            });        
+        }
+    });
+    // if all checkbox are selected, check the selectall checkbox
+    // and viceversa
+    $("body").on("click", ".checkresourceid",function(){
+        if($(".checkresourceid").length == $(".checkresourceid:checked").length) {
+            $("#selectall").attr("checked", "checked");
+        } else {
+            $("#selectall").removeAttr("checked");
+        }
+    });
+    $("body").on("click", "#select_all", function () {
+        if(this.checked) { 
+            $(this).val('True');
+        }else{
+            $(this).val('False');
+        }
+    });
     var uploader = new qq.FileUploader({
         action: "/admin/bulletinboard-upload",
         element: $('#file-uploader')[0],

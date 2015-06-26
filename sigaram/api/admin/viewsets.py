@@ -2353,7 +2353,7 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
             ri.resourcetitle as title,
             concat(au.first_name,' ',au.last_name) as firstname,
             date(bbi.posteddate) as posteddate,
-            (SELECT count(*) 
+            (SELECT SUM(rating) 
                 FROM billboardratinginfo 
                 WHERE billboardid=bbi.billboardid) 
             AS rating
@@ -2373,7 +2373,7 @@ class BillboardResourceViewSet(viewsets.ModelViewSet):
             wwi.writtenworktitle as title,
             concat(au.first_name,' ',au.last_name) as firstname,
             date(bbi.posteddate) as posteddate,
-            (SELECT count(*) 
+            (SELECT SUM(rating)  
                 FROM billboardratinginfo 
                 WHERE billboardid=bbi.billboardid)
             AS rating
@@ -3731,6 +3731,10 @@ class PostinfoViewSet(viewsets.ModelViewSet):
         postinfo.posteddate = time.strftime('%Y-%m-%d %H:%M:%S')
         postinfo.save()
         return Response(request.DATA)
+
+    def destroy(self, request, pk):
+        models.Postinfo.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
 
 class RubricImportViewSet(viewsets.ModelViewSet):
 
