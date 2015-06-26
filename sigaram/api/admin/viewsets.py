@@ -1121,11 +1121,19 @@ class CalendarViewSet(viewsets.ModelViewSet):
     def create(self, request):
         cal = models.Calendardetails()
         data = json.loads(dict(request.DATA).keys()[0])
-        sql ='''
-        SELECT color 
-        FROM admininfo
-        WHERE username='%s'
-        '''%(request.user.username)
+        l =  request.user.groups.values_list('name',flat=True)[0]
+        if l == 'Admin' :
+            sql ='''
+            SELECT color 
+            FROM admininfo
+            WHERE username='%s'
+            '''%(request.user.username)
+        else:
+            sql ='''
+            SELECT color 
+            FROM teacherinfo
+            WHERE username='%s'
+            '''%(request.user.username)
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
@@ -1137,7 +1145,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title           = data.get('title')
         cal.start           = startdt
         cal.end             = enddt
-        cal.color           = result[0]
+        cal.color           = (result[0],'')
         cal.allday          = data.get('alldayevents')
         cal.eventcreatedby  = request.user.username
         cal.eventeditedby   = request.user.username
@@ -1158,11 +1166,19 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal = models.Calendardetails.objects.get(pk=pk)  
         data = json.loads(dict(request.DATA).keys()[0])
         #data = {k:v[0] for k,v in dict(request.DATA).items()}
-        sql ='''
-        SELECT color 
-        FROM admininfo
-        WHERE username='%s'
-        '''%(request.user.username)
+        l =  request.user.groups.values_list('name',flat=True)[0]
+        if l == 'Admin' :
+            sql ='''
+            SELECT color 
+            FROM admininfo
+            WHERE username='%s'
+            '''%(request.user.username)
+        else:
+            sql ='''
+            SELECT color 
+            FROM teacherinfo
+            WHERE username='%s'
+            '''%(request.user.username)
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
@@ -1172,7 +1188,7 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title           = data.get('title')
         cal.start           = startdt
         cal.end             = enddt
-        cal.color           = result[0]
+        cal.color           = (result[0],'')
         cal.allday          = data.get('alldayevents')
         cal.eventcreatedby  = request.user.username
         cal.eventeditedby   = request.user.username
