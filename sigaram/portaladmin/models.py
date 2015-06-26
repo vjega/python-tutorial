@@ -391,7 +391,7 @@ class Bulletinboardinfo(models.Model):
             fieldcond="'' AS postedby"
             joincond=""
             wherecond = """WHERE bmi.schoolid = '%s'
-                           AND bmi.classid = '%s' OR OR bmi.selectall='schools' OR bmi.selectall='all' 
+                           AND bmi.classid = '%s' OR bmi.selectall='schools' OR bmi.selectall='all' 
                         """%(req.session.get('stu_schoolid'), 
                              req.session.get('stu_classid'))
         # sql = """
