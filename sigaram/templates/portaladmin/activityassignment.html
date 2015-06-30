@@ -125,8 +125,8 @@
             t.DT_RowId = data[i].loginid;
             t.slno=++count;
             t.title=data[i].resourcetitle;
-            t.assigndate=TTS.utils.dateConv(data[i].assigneddate);
-            t.answerdate=TTS.utils.dateConv(data[i].answereddate);
+            t.assigndate=TTS.utils.datetimeConvDate(data[i].assigneddate);
+            t.answerdate=TTS.utils.datetimeConvDate(data[i].answereddate);
             dataset.push(t);
         }
         if (TTS.forms.table) {

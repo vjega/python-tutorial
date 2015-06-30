@@ -102,7 +102,7 @@ TTS.forms.renderbillboard = function(data){
             t.type = '{% trans "Written Work" %}';
         }
         t.student = data[i].firstname;
-        t.date = TTS.utils.dateConv(data[i].posteddate);
+        t.date = TTS.utils.datetimeConvDate(data[i].posteddate);
         t.marks = data[i].rating;
         t.delete="<i class='tts-delete fa fa-trash fa-lg'></i>";
         dataset.push(t);
@@ -117,12 +117,17 @@ TTS.forms.renderbillboard = function(data){
 };
 
 TTS.forms.delbillboard = function(id) {
+    id=id.split("_");
+    // alert(id[0]);
+    // alert(id[1]);
+    // alert(id[2]);
+    // alert(id[3]);
     $.ajax({
         headers : {
             'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
         },
         type:'DELETE',
-        url : '/api/admin/billboardresource/'+id
+        url : '/api/admin/billboardresource/'+id[3]
     }).done(function( msg ) {
         location.reload();
     }).error(function(msg){

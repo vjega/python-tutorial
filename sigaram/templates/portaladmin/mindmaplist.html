@@ -157,7 +157,7 @@ TTS.forms.renderteacher = function(data){
         t.DT_RowId = data[i].assignedid;
         t.slno=++count;
         t.title=data[i].assigntext;
-        t.date=data[i].assigneddate;
+        t.date=TTS.utils.datetimeConvDate(data[i].assigneddate);
         t.del = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);
     }

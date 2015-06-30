@@ -493,13 +493,13 @@ class StudentWrittenWorkDetailViewSet(viewsets.ModelViewSet):
         SELECT wwi.*,
             awwi.studentid
         FROM assignwrittenworkinfo awwi
-        INNER JOIN writtenworkinfo wwi on wwi.writtenworkid = awwi.assignwrittenworkid 
+        INNER JOIN writtenworkinfo wwi on wwi.writtenworkid = awwi.writtenworkid 
         WHERE isdeleted=0
               %s
         GROUP BY wwi.writtenworkid, awwi.answereddate
         ORDER BY awwi.assignwrittenworkid DESC''' % (wherecond)
 
-        #print sql
+        # print sql
 
         cursor = connection.cursor()
         cursor.execute(sql)
@@ -635,8 +635,8 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
             kwarg['categoryid'] = categoryid
 
         queryset = models.Resourceinfo.objects.filter(**kwarg).order_by('-createddate')
+        print queryset;
         serializer = adminserializers.ResourceinfoSerializer(queryset, many=True)
-        #print queryset;
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
@@ -658,6 +658,9 @@ class ResourceinfoViewSet(viewsets.ModelViewSet):
         #     categoryid = 2
         elif category == 'video':
             categoryid = 2
+
+        elif category == 'compo':
+            categoryid = 3
 
         ri.categoryid = categoryid
         ri.classid = int(ridata.get('classid'))
@@ -1896,7 +1899,7 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
         GROUP BY studentid
         ORDER BY createddate DESC
         '''% (pk, studentcond, datetimecond)
-        # print sql
+        print sql
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -4376,7 +4379,6 @@ class StudentassignedresourceInfoViewSet(viewsets.ModelViewSet):
         GROUP BY ari.studentid
         ORDER BY assigneddate DESC
         ''' % (pk, studentcond)
-
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description

@@ -217,8 +217,8 @@ TTS.forms.renderassignedresourceinfo = function(data){
     TTS.forms.studentid = data[0].studentid;
     $("#assignedid").val(data[0].id);
     $("#resource-title").html(data[0].resourcetitle);
-    $("#assigned-date").html(TTS.utils.dateConv(data[0].createddate));
-    $("#answerd-date").html(TTS.utils.dateConv(data[0].answereddate));
+    $("#assigned-date").html(TTS.utils.datetimeConvDate(data[0].createddate));
+    $("#answerd-date").html(TTS.utils.datetimeConvDate(data[0].answereddate));
     $("#student-name").html(data[0].firstname+" "+data[0].lastname);
     $("#student-answer").html(data[0].answertext);    
     $("#original-text").html(data[0].originaltext);
