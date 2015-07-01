@@ -1899,7 +1899,7 @@ class AssignedResourceStudents(viewsets.ModelViewSet):
         GROUP BY studentid
         ORDER BY createddate DESC
         '''% (pk, studentcond, datetimecond)
-        print sql
+        # print sql
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -4494,7 +4494,7 @@ class studentAssessmentInfoViewSet(viewsets.ModelViewSet):
         WHERE aaqi.assignassessmentid = '%s'
         GROUP BY aaqi.assignassessmentid 
         '''%(int(pk))
-        print sql;
+        # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         result =  cursor.fetchone()
