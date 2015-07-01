@@ -656,6 +656,11 @@ TTS.forms.commentlist = function(data){
               "data" : "date",
               "width": "100"
             },
+            { "title": "{% trans "Delete" %}",
+              "class": "text-center",
+              "data" : "delete",
+              "width": "100"
+            },
         ];
     var dataset = [];
     var count = 0
@@ -666,6 +671,7 @@ TTS.forms.commentlist = function(data){
         t.comment = data[i].comment;
         t.name = data[i].name;
         t.date = TTS.utils.datetimeConvDate(data[i].commenteddate);
+        t.delete =  "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);
     }
     $('#comment-list').dataTable({"language" : TTS.utils.datatable_ta,
@@ -673,6 +679,20 @@ TTS.forms.commentlist = function(data){
         "columns":  headers
     });        
 };
+
+TTS.forms.delcomment = function(id) {
+    $.ajax({
+        headers : {
+            'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
+        },
+        type:'DELETE',
+        url : '/api/admin/billboardcomment/'+id
+    }).done(function( msg ) {
+        location.reload();
+    }).error(function(msg){
+        alert("Something Bad Happended");
+    });
+}
 
 $(document).ready(function(){
     
@@ -717,6 +737,14 @@ $(document).ready(function(){
         TTS.forms.editanswerlist(spanid);
     });
 
+    $('#comment-list').on('click', '.tts-delete', function(e){
+        e.stopPropagation();
+        if (!window.confirm("Do you want to delete this record?")) {
+            return false;
+        }
+        TTS.forms.delcomment($(this).parent().parent().prop("id"));
+    });
+    
     /*$("body").on("click","a#sendnoticeboard", function(event){
         var assignedid = $("#assignedid").val();
         $.ajax({
