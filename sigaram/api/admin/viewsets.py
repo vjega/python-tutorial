@@ -3934,7 +3934,7 @@ class BillboardCommentViewSet(viewsets.ModelViewSet):
         INNER JOIN auth_user au ON au.username=bbci.commentedby
         WHERE billboardid = '%s' 
         """ % (billboardid)
-
+        # print sql;
         cursor = connection.cursor()
         cursor.execute(sql)
         desc = cursor.description
@@ -3944,6 +3944,11 @@ class BillboardCommentViewSet(viewsets.ModelViewSet):
         ]
 
         return Response(result)
+
+    def destroy(self, request, pk):
+        models.Billboardcommentinfo.objects.get(pk=pk).delete()
+        return Response('"msg":"delete"')
+
 
 class RichmindmapViewSet(viewsets.ModelViewSet):
     queryset = models.Assignmindmapinfo.objects.all()
