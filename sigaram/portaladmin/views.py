@@ -430,7 +430,7 @@ def studentprofile(request):
     #studentresourcetype_body = models.Teacherresourceinfo.objects.all()
     #studentresourcetype = {'head':studentresourcetype_head, 
                            #'body':studentresourcetype_body}
-    return render(request, 'portaladmin/studentprofile.html', 
+    return render(request, 'portalstudent/studentprofile.html', 
                   {"folders":folders})
 
 @login_required
@@ -442,7 +442,7 @@ def studentassignedresourcelist(request):
                          _('Date'),
                          _('Note')]
     studentslist = {'assigned_head':assigned_head}'''
-    return render(request, 'portaladmin/studentassignedresourcelist.html')
+    return render(request, 'portalstudent/studentassignedresourcelist.html')
 
 @login_required
 @switchlanguage
@@ -453,7 +453,7 @@ def studentassignedwrittenworklist(request):
                          _('Date'),
                          _('Note')]
     studentslist = {'assigned_head':assigned_head}'''
-    return render(request, 'portaladmin/studentassignedwrittenworklist.html')
+    return render(request, 'portalstudent/studentassignedwrittenworklist.html')
 
 @login_required
 @switchlanguage
@@ -464,22 +464,22 @@ def studentassignedassessmentlist(request):
                          _('Date'),
                          _('Note')]
     studentslist = {'assigned_head':assigned_head}'''
-    return render(request, 'portaladmin/studentassignedassessmentlist.html')
+    return render(request, 'portalstudent/studentassignedassessmentlist.html')
 
 @login_required
 @switchlanguage
 def viewstudentwork(request):
-    return render(request, 'portaladmin/viewstudentwork.html')
+    return render(request, 'portalstudent/viewstudentwork.html')
 
 @login_required
 @switchlanguage
 def viewstudentwrittenwork(request):
-    return render(request, 'portaladmin/viewstudentwrittenwork.html')
+    return render(request, 'portalstudent/viewstudentwrittenwork.html')
 
 @login_required
 @switchlanguage
 def viewstudentassessmentwork(request):
-    return render(request, 'portaladmin/viewstudentassessmentwork.html')
+    return render(request, 'portalstudent/viewstudentassessmentwork.html')
 
 @login_required
 @switchlanguage
