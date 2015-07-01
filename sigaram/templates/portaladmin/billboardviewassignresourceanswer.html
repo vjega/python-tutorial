@@ -25,7 +25,7 @@
         float: left;
         padding-right: 30px;
     }
-    #addrec:hover, #admin-main-tbl tbody tr:hover, #view-answer:hover{
+    #addrec:hover, #admin-main-tbl tbody tr:hover, #view-answer:hover, .tts-delete:hover{
         cursor: pointer;
     }
     #assignment-answer .col-lg-12 {
@@ -744,7 +744,7 @@ $(document).ready(function(){
         }
         TTS.forms.delcomment($(this).parent().parent().prop("id"));
     });
-    
+
     /*$("body").on("click","a#sendnoticeboard", function(event){
         var assignedid = $("#assignedid").val();
         $.ajax({
