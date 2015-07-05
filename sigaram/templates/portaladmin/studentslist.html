@@ -191,7 +191,7 @@ TTS.forms.showstudentform = function() {
 };
 
 
-TTS.forms.editstudent = function(id, data, username) {
+TTS.forms.editstudent = function(id, data) {
     BootstrapDialog.show({
         title: '{% trans "Edit Student" %}',
         message: $($('#student-form').render()),
@@ -223,7 +223,7 @@ TTS.forms.editstudent = function(id, data, username) {
                     },
                     type:'PUT',
                     data: data,
-                    url : '/api/admin/student/'+id+'/?username='+username
+                    url : '/api/admin/student/'+id
                 }).done(function( msg ) {
                     dialogItself.close();
                     location.reload();
@@ -277,7 +277,7 @@ TTS.forms.renderstudentlist = function(data){
     var count = 0
     for(var i in data){
         var t = {};
-        t.DT_RowId = data[i].username;
+        t.DT_RowId = data[i].studentid;
         t.slno = ++count;
        if (data[i].imageurl){
             t.image = "<img src='/static/"+data[i].imageurl+"' width='100' height='100'>";
@@ -384,20 +384,19 @@ $(document).ready(function(){
             }
         });
     })
-    $('#student-main-tbl').on('click', 'tbody tr', function(){
+    $('#student-main-tbl').on('click', 'tbody .studentname', function(){
         window.location = 'studentprofile?studentid='+this.id;
     });
     $('#student-main-tbl').on('click', '.tts-edit', function(e){
         e.stopPropagation();
         var id = $(this).parent().parent().prop('id');
-        var username = $(this).prop('id');
         $.ajax({
-            url: '/api/admin/student/'+id,
+            url: '/api/student/student/'+id,
             type: 'GET'
         }).done(function(data){
-            TTS.forms.editstudent(id,data,username);
+            TTS.forms.editstudent(id,data);
         })
-    });
+    });   
     $('#student-main-tbl').on('click', '.tts-delete', function(e){
         e.stopPropagation();
         if (!window.confirm("Do you want to delete this record?")) {
