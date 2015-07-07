@@ -1148,7 +1148,10 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title           = data.get('title')
         cal.start           = startdt
         cal.end             = enddt
-        cal.color           = (result[0],'')
+        if l == 'Admin' :
+            cal.color           = result[0]
+        else:
+            cal.color           = '#337ab7'
         cal.allday          = data.get('alldayevents')
         cal.eventcreatedby  = request.user.username
         cal.eventeditedby   = request.user.username
@@ -1191,7 +1194,10 @@ class CalendarViewSet(viewsets.ModelViewSet):
         cal.title           = data.get('title')
         cal.start           = startdt
         cal.end             = enddt
-        cal.color           = (result[0],'')
+        if l == 'Admin' :
+            cal.color           = result[0]
+        else:
+            cal.color           = '#337ab7'
         cal.allday          = data.get('alldayevents')
         cal.eventcreatedby  = request.user.username
         cal.eventeditedby   = request.user.username
