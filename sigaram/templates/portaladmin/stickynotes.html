@@ -644,8 +644,6 @@ $(document).ready(function(){
         var values = [];
         $(".sticky_note").each(function(){
             values.push({
-                //"left"  : $(this).offset().left-321,
-                //"top"   : $(this).offset().top-320,
                 "left"  : $(this).css("left"),
                 "top"   : $(this).css("top"),
                 "sl_no" : $(this).attr("name")
@@ -658,7 +656,7 @@ $(document).ready(function(){
         //  data['stickylistid'] = TTS.utils.getUrlParameter('id');
         //  data['attachment'] = $("#uploadurl").val();
         data = values;
-        console.log(data);
+        // console.log(data);
         $.ajax({
             headers : {
                 'X-CSRFToken' : TTS.utils.getCookie('csrftoken')
