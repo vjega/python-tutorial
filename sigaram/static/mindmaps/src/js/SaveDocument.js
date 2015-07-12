@@ -54,6 +54,7 @@ mindmaps.SaveDocumentView = function() {
     },
     onComplete : function() {
       if (self.saveToHddComplete) {
+        console.log("hdd");
         self.saveToHddComplete();
       }
     },
@@ -76,6 +77,7 @@ mindmaps.SaveDocumentView = function() {
   };
 
   this.hideSaveDialog = function() {
+    console.log("hide");
     $dialog.dialog("close");
   };
 
@@ -128,6 +130,7 @@ richmindmap = mindmapModel;
     var success = mindmapModel.saveToLocalStorage();
     if (success) {
       view.hideSaveDialog();
+      console.log("local");
     } else {
       eventBus.publish(mindmaps.Event.NOTIFICATION_ERROR, "Error while saving to local storage");
     }
@@ -142,6 +145,7 @@ richmindmap = mindmapModel;
   view.autoSaveCheckboxClicked = function(checked) {
     if (checked) {
       autosaveController.enable();
+      console.log("auto");
     } else {
       autosaveController.disable();
     }
@@ -156,7 +160,7 @@ richmindmap = mindmapModel;
   */
   view.fileNameRequested = function() {
     mindmaps.Util.trackEvent("Clicks", "hdd-save");
-
+    console.log("filename");
     return mindmapModel.getMindMap().getRoot().getCaption() + ".json";
   };
 
@@ -179,6 +183,7 @@ richmindmap = mindmapModel;
   view.saveToHddComplete = function() {
     var doc = mindmapModel.getDocument();
     eventBus.publish(mindmaps.Event.DOCUMENT_SAVED, doc);
+    console.log("saveto");
     view.hideSaveDialog();
   };
 

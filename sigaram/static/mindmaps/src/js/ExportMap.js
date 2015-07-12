@@ -13,8 +13,8 @@ mindmaps.ExportMapView = function() {
     width : "auto",
     height : "auto",
     close : function() {
-      $(this).dialog("destroy");
-      $(this).remove();
+      //$(this).dialog("destroy");
+     // $(this).remove();
     },
     open : function() {
       $(this).css({
@@ -46,7 +46,12 @@ mindmaps.ExportMapView = function() {
   };
 
   this.setImage = function($img) {
-    $("#export-preview").html($img);
+    //alert($("#export-preview").length);
+    $("body").find("#export-preview").each(function(){
+       //alert(1);
+        $(this).html($img);
+
+    });
   };
 };
 
@@ -59,7 +64,6 @@ mindmaps.ExportMapView = function() {
  */
 mindmaps.ExportMapPresenter = function(eventBus, mindmapModel, view) {
   var renderer = new mindmaps.StaticCanvasRenderer();
-
   this.go = function() {
     var $img = renderer.renderAsPNG(mindmapModel.getDocument());
     view.setImage($img);
@@ -68,6 +72,12 @@ mindmaps.ExportMapPresenter = function(eventBus, mindmapModel, view) {
     // centered, because the image is inserted too late
     setTimeout(function() {
       view.showDialog();
+      $("body").find("#export-preview").each(function(){
+
+        $(this).html($img);
+
+    });
     }, 30);
+
   };
 };

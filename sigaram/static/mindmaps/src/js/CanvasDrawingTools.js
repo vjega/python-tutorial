@@ -295,8 +295,8 @@ mindmaps.TextMetrics = (function() {
 
       // add some safety pixels for firefox, otherwise it doesnt render
       // right on textareas
-      var w = $div.width() + 2;
-      var h = $div.height() + 2;
+      var w = $div.width() + 15;
+      var h = $div.height() + 12;
 
       return {
         width : w,

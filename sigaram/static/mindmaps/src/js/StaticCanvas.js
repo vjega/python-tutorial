@@ -136,6 +136,7 @@ mindmaps.StaticCanvasRenderer = function() {
    */
   this.getImageData = function(document) {
     renderCanvas(document);
+    console.log($canvas[0]);
     return $canvas[0].toDataURL("image/png");
   };
 
@@ -176,7 +177,7 @@ mindmaps.StaticCanvasRenderer = function() {
     var map = document.mindmap;
     var root = prepareNodes(map);
     var dimensions = getMindMapDimensions(root);
-
+    //console.log(map);
     var width = dimensions.width;
     var height = dimensions.height;
     $canvas.attr({

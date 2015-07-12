@@ -47,10 +47,12 @@
 {% endblock morecss %}
 
 {% block morescript %}
+<script src="{%static "ajaxuploader/js/fileuploader.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/jquery.dataTables.js" %}"></script>
 <script src="{%static "js/plugins/dataTables/dataTables.bootstrap.js" %}"></script>
 <script src="{% static "bower_components/bootstrap3-dialog/dist/js/bootstrap-dialog.js" %}"></script>
 <script src="{% static "bower_components/jsrender/jsrender.min.js" %}"></script>
+<script src="{%static "bower_components/summernote/dist/summernote.min.js" %}"></script>
 <script src="{% static "js/tts.utils.js" %}"></script>
 {% endblock morescript %}
 
@@ -133,14 +135,21 @@ TTS.forms.renderteacher = function(data){
             { "title": "{% trans "Sl No." %}",
               "class": "text-center",
               "data":"slno",
-              "bSortable":false  
+              "bSortable":false
+              
+            },
+            { "title": "datedefault",
+              "data":"ddf"
+              
             },
             { "title": "{% trans "Title" %}",
               "class":"sticky_title",
               "data":"title"
+              
             },
             { "title": "{% trans "Date" %}",
-              "data":"date"
+              "data":"date",
+              "bSortable":false
             },
             { "title": "{% trans "Delete" %}",
               "class": "text-center",
@@ -153,27 +162,35 @@ TTS.forms.renderteacher = function(data){
     
     var count = 0
     for(var i in data){
-        var t = [];
+        var t = {};
         t.DT_RowId = data[i].assignedid;
         t.slno=++count;
+        t.ddf=data[i].assignedid;
         t.title=data[i].assigntext;
         t.date=TTS.utils.datetimeConvDate(data[i].assigneddate);
         t.del = "<span class='tts-delete'><i class='fa fa-trash fa-lg'></i></span>";
         dataset.push(t);
+        //console.log(data[i].assigneddate);
     }
-    if (TTS.forms.table) {
-        TTS.forms.table.fnClearTable();
-        TTS.forms.table.fnAddData(
-            dataset
-        );
-        return true;
-    }
+    
     TTS.forms.table = $('#mindmap-list-tbl').dataTable({"language" : TTS.utils.datatable_ta,
         "data":     dataset,
-        "columns":  headers
+        "columns":  headers,
+        "aaSorting": [[ 1, "desc" ]]
     });
     $("td.dataTables_empty").parent().hide();
-    
+    $('#mindmap-list-tbl').find("th:nth-child(2)").hide();
+    $('#mindmap-list-tbl td:nth-child(2)').hide();
+    $("body").on("click",function(){
+        $('#mindmap-list-tbl').find("td:nth-child(2)").hide();
+    });
+    $('#mindmap-list-tbl').on("click",function(){
+        setTimeout(function(){
+    $("body").click();
+      }, 200);
+        
+         
+    });
 };
 
 
@@ -201,6 +218,8 @@ $(document).ready(function(){
         }
         TTS.forms.delsticky($(this).parent().parent().prop("id"));
     });
+
+    
     
 });
 

@@ -8,6 +8,11 @@
 <link rel="stylesheet" href="{%static "mindmaps/src/css/Aristo/jquery-ui-1.8.7.custom.css" %}" />
 <link rel="stylesheet" href="{%static "mindmaps/src/css/minicolors/jquery.miniColors.css" %}">
 <style>
+@media print{
+  #side-menu{
+    display: none;
+  }
+}
 /*
 .node-container.ui-draggable {
     background-color: #D3D3D3;
@@ -43,7 +48,9 @@
     text-align: center;
     width: 120px;
 }
-
+#inspector-label-font-linethrough-underline .ui-button-text{
+  text-decoration: underline line-through;
+}
 </style>
 {% endblock morecss %}
 {% block scriptcontent %}
@@ -181,6 +188,10 @@
             type="checkbox" id="inspector-checkbox-font-linethrough" />
              <label
             for="inspector-checkbox-font-linethrough" id="inspector-label-font-linethrough">S</label>
+              <input
+            type="checkbox" id="inspector-checkbox-font-linethrough-underline" />
+             <label
+            for="inspector-checkbox-font-linethrough-underline" id="inspector-label-font-linethrough-underline">SU</label>
           </div>
         </td>
       </tr>
@@ -367,7 +378,18 @@ $(document).ready(function(){
 
 */
 });
- </script>
+  </script>
+  
+ 
+  <script>
+    $nocon = $.noConflict(true);
+    $nocon(document).ready( function() {
+    $nocon(".nav-second-level").hide();
+    $nocon(".arrow").click(function(){
+      $nocon(this).parent().parent().children("ul").slideToggle( "slow" );
+    });
+    });
+    </script>
  <script src="{% static "js/tts.utils.js" %}"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
   <script src="http://api.filepicker.io/v0/filepicker.js"></script>

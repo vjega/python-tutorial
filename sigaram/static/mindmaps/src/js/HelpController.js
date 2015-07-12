@@ -135,7 +135,7 @@ mindmaps.HelpController = function(eventBus, commandRegistry) {
           ".float-panel:has(#navigator)",
           {
             position : "bottomRight",
-            closeButton : true,
+            closeButton : false,
             maxWidth : 350,
             expires : 10000,
             title : "Navigation",

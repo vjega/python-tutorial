@@ -71,6 +71,7 @@ mindmaps.FloatPanel = function(caption, $container, $content) {
    * 
    * @param {jQuery} $content
    */
+
   this.setContent = function($content) {
     this.clearContent();
     $("div.ui-dialog-content", this.$widget).append($content);
@@ -87,13 +88,20 @@ mindmaps.FloatPanel = function(caption, $container, $content) {
    * @private
    */
   this.$widget = (function() {
+    if(caption == "Inspector"){
+  
+        caption = "Format";
+
+    }
     var $panel = $("#template-float-panel").tmpl({
       title : caption
     });
     
     // hide button
     $panel.find(".ui-dialog-titlebar-close").click(function() {
-      self.hide();
+      $panel.find(".ui-dialog-content").toggle();
+      $panel.find(".ui-dialog-content").parent().css({"min-width": "200px", "min-height": "0px"});
+
     });
 
     // add content panel

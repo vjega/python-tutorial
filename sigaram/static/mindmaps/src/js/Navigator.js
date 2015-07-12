@@ -409,7 +409,7 @@ mindmaps.NavigatorPresenter = function(eventBus, view, container,
   eventBus.subscribe(mindmaps.Event.NODE_CREATED, renderView);
   eventBus.subscribe(mindmaps.Event.NODE_DELETED, renderView);
   eventBus.subscribe(mindmaps.Event.NODE_OPENED, renderView);
-  eventBus.subscribe(mindmaps.Event.NODE_CLOSED, renderView);
+  //eventBus.subscribe(mindmaps.Event.NODE_CLOSED, renderView);
 
   eventBus.subscribe(mindmaps.Event.ZOOM_CHANGED, function(zoomFactor) {
     scale = zoomFactor;
